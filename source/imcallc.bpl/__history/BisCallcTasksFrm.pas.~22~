@@ -1,0 +1,81 @@
+unit BisCallcTasksFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls,
+  BisCallcTaskFrm, BisDataGridFrm;
+
+type
+  TBisCallcTasksFrameTasksFrame=class(TBisDataGridFrame)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcTasksFrame = class(TBisCallcTaskFrame)
+    PageControl: TPageControl;
+    TabSheetTasks: TTabSheet;
+  private
+    FTasksFrame: TBisCallcTasksFrameTasksFrame;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
+var
+  BisCallcTasksFrame: TBisCallcTasksFrame;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisCallcTasksFrameTasksFrame }
+
+constructor TBisCallcTasksFrameTasksFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  InsertClass:=TBisCallcDealFramePaymentInsertFormIface;
+  UpdateClass:=TBisCallcDealFramePaymentUpdateFormIface;
+  DeleteClass:=TBisCallcDealFramePaymentDeleteFormIface;
+  ViewingClass:=TBisCallcDealFramePaymentViewingFormIface;
+  Grid.NumberVisible:=true;
+  Grid.AutoResizeableColumns:=true;
+  ActionFilter.Visible:=false;
+  LabelCounter.Visible:=true;
+  with Provider do begin
+    ProviderName:='S_PAYMENTS';
+    with FieldNames do begin
+      AddKey('PAYMENT_ID');
+      AddInvisible('STATE');
+      AddInvisible('ACCOUNT_ID');
+      AddInvisible('DEAL_ID');
+      AddInvisible('DEAL_NUM');      
+      Add('DATE_PAYMENT','Дата платежа',80);
+      Add('USER_NAME','Кто ввел',100);
+      Add('AMOUNT','Сумма',70);
+      Add('PERIOD','Период',60);
+      Add('DESCRIPTION','Комментарий',200);
+      AddCalculate('STATE_NAME','Состояние',GetStateName,ftString,100,95);
+    end;
+    Orders.Add('DATE_PAYMENT');
+  end;
+end;
+
+{ TBisCallcTasksFrame }
+
+constructor TBisCallcTasksFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FTasksFrame:=TBisCallcTasksFrameTasksFrame.Create(Self);
+  FTasksFrame.Align:=alClient;
+  FTasksFrame.Parent:=TabSheetTasks;
+end;
+
+destructor TBisCallcTasksFrame.Destroy;
+begin
+  FTasksFrame.Free;
+  inherited Destroy;
+end;
+
+end.

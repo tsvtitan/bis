@@ -1,0 +1,565 @@
+unit BisSipMessages;
+
+interface
+
+uses Classes, Contnrs,
+     BisSipHeaders;
+
+type
+  TBisSipBody=class(TStringList)
+  public
+    function AsString: String;
+    function Length: Integer;
+  end;
+
+  TBisSipMessage=class(TObject)
+  private
+    FHeaders: TBisSipHeaders;
+    FBody: TBisSipBody;
+  protected
+    procedure GetHeader(Strings: TStrings); virtual;
+    procedure GetBody(Strings: TStrings); virtual;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure CopyFrom(Source: TBisSipMessage); virtual;
+
+    function AsString: String;
+
+    property Headers: TBisSipHeaders read FHeaders;
+    property Body: TBisSipBody read FBody;
+  end;
+
+  TBisSipMessageClass=class of TBisSipMessage;
+
+  TBisSipResponseCode=(rcUnknown,
+
+                       rcTrying,rcRinging,rcCallIsBeingForwarded,rcQueued,rcSessionProgress,
+
+                       rcOK,rcAccepted,
+
+                       rcMultipleChoices,rcMovedPermanently,rcMovedTemporarily,rcUseProxy,rcAlternativeService,
+
+                       rcBadRequest,rcUnauthorized,rcPaymentRequired,rcForbidden,rcNotFound,rcMethodNotAllowed,rcNotAcceptableClient,
+                       rcProxyAuthenticationRequired,rcRequestTimeout,rcGone,rcRequestEntityTooLarge,rcRequestURITooLarge,
+                       rcUnsupportedMediaType,rcUnsupportedURIScheme,rcBadExtension,rcExtensionRequired,rcIntervalTooBrief,
+                       rcTemporarilyUnavailable,rcCallLegOrTransactionDoesNotExist,rcLoopDetected,rcTooManyHops,rcAddressIncomplete,
+                       rcAmbiguous,rcBusyHere,rcRequestTerminated,rcNotAcceptableHere,rcBadEvent,rcRequestPending,rcUndecipherable,
+
+                       rcInternalServerError,rcNotImplemented,rcBadGateway,rcServiceUnavailable,rcServerTimeOut,
+                       rcSIPVersionNotSupported,rcMessageTooLarge,
+
+                       rcBusyEverywhere,rcDecline,rcDoesNotExistAnywhere,rcNotAcceptableGlobal);
+
+  TBisSipResponse=class(TBisSipMessage)
+  private
+    FCode: String;
+    FProtocol: String;
+    FDescription: String;
+    function GetResponseCode: TBisSipResponseCode;
+  public
+    constructor Create(Protocol, Code, Description: String);
+
+    property ResponseCode: TBisSipResponseCode read GetResponseCode;
+  end;
+
+  TBisSipRequest=class(TBisSipMessage)
+  private
+    FScheme, FUser, FHost, FPort, FProtocol: String;
+    function GetUri: String;
+  protected
+    procedure GetHeader(Strings: TStrings); override;
+    class function GetName: String; virtual;
+  public
+    constructor Create(Scheme, User, Host, Port, Protocol: String);
+    procedure CopyFrom(Source: TBisSipMessage); override;
+
+    property Uri: String read GetUri;
+    property Name: String read GetName;
+  end;
+
+  TBisSipRegisterRequest=class(TBisSipRequest)
+  protected
+    class function GetName: String; override;
+  public
+    constructor Create(Scheme, User, Host, Port, Protocol: String); overload;
+    constructor Create(Source: TBisSipRegisterRequest); overload;
+  end;
+
+  TBisSipInviteRequest=class(TBisSipRequest)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipCancelRequest=class(TBisSipRequest)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipMessages=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisSipMessage;
+  public
+    property Items[Index: Integer]: TBisSipMessage read GetItem; default;
+  end;
+
+  TBisSipResponses=class(TBisSipMessages)
+  private
+    function GetItem(Index: Integer): TBisSipResponse;
+  public
+    procedure Add(Response: TBisSipResponse);
+    function ParseResponse(const Lines: String): TBisSipResponse;
+    function CountBy(ResponseCode: TBisSipResponseCode): Integer;
+
+    property Items[Index: Integer]: TBisSipResponse read GetItem; default;
+  end;
+
+  TBisSipRequests=class(TBisSipMessages)
+  private
+    function GetItem(Index: Integer): TBisSipRequest;
+    function GetNextSequence: String;
+  public
+    procedure Add(Request: TBisSipRequest);
+    function FindRequest(Sequence: String): TBisSipRequest;
+    function GetRequest(Response: TBisSipResponse): TBisSipRequest;
+
+    property Items[Index: Integer]: TBisSipRequest read GetItem; default;
+    property NextSequence: String read GetNextSequence;
+  end;
+
+implementation
+
+uses Windows, SysUtils,
+     BisUtils, BisSdp;
+
+{ TBisSipBody }
+
+function TBisSipBody.AsString: String;
+begin
+  Result:=Trim(Text);
+end;
+
+function TBisSipBody.Length: Integer;
+begin
+  Result:=System.Length(AsString);
+end;
+
+{ TBisSipMessage }
+
+constructor TBisSipMessage.Create;
+begin
+  inherited Create;
+  FHeaders:=TBisSipHeaders.Create;
+  FBody:=TBisSipBody.Create;
+end;
+
+destructor TBisSipMessage.Destroy;
+begin
+  FBody.Free;
+  FHeaders.Free;
+  inherited Destroy;
+end;
+
+procedure TBisSipMessage.CopyFrom(Source: TBisSipMessage);
+begin
+  if Assigned(Source) then
+    FHeaders.CopyFrom(Source.Headers);
+end;
+
+procedure TBisSipMessage.GetHeader(Strings: TStrings);
+begin
+  FHeaders.GetStrings(Strings);
+end;
+
+procedure TBisSipMessage.GetBody(Strings: TStrings);
+begin
+  Strings.AddStrings(FBody);
+end;
+
+function TBisSipMessage.AsString: String;
+var
+  Strings, Temp: TStringList;
+begin
+  Strings:=TStringList.Create;
+  Temp:=TStringList.Create;
+  try
+    GetHeader(Strings);
+    if Strings.Count>0 then begin
+      GetBody(Temp);
+      if Temp.Count>0 then begin
+        Strings.Add('');
+        Strings.AddStrings(Temp);
+      end;
+    end;
+    Result:=Trim(Strings.Text);
+  finally
+    Temp.Free;
+    Strings.Free;
+  end;
+end;
+
+{ TBisSipResponse }
+
+constructor TBisSipResponse.Create(Protocol, Code, Description: String);
+begin
+  inherited Create;
+  FCode:=Code; 
+  FProtocol:=Protocol;
+  FDescription:=Description;
+end;
+
+(*{ TBisSipOKResponse }
+
+class function TBisSipOKResponse.GetName: String;
+begin
+  Result:='200';
+end;
+
+{ TBisSipBadRequestResponse }
+
+class function TBisSipBadRequestResponse.GetName: String;
+begin
+  Result:='400';
+end;
+
+{ TBisSipUnauthorizedResponse }
+
+class function TBisSipUnauthorizedResponse.GetName: String;
+begin
+  Result:='401';
+end;
+
+{ TBisSipPaymentRequiredResponse }
+
+class function TBisSipPaymentRequiredResponse.GetName: String;
+begin
+  Result:='402';
+end;
+
+{ TBisSipForbiddenResponse }
+
+class function TBisSipForbiddenResponse.GetName: String;
+begin
+  Result:='403';
+end;
+
+*)
+
+function TBisSipResponse.GetResponseCode: TBisSipResponseCode;
+var
+  ACode: Integer;
+begin
+  Result:=rcUnknown;
+  if TryStrToInt(FCode,ACode) then begin
+    case ACode of
+
+      100: Result:=rcTrying;
+      180: Result:=rcRinging;
+      181: Result:=rcCallIsBeingForwarded;
+      182: Result:=rcQueued;
+      183: Result:=rcSessionProgress;
+
+      200: Result:=rcOK;
+      202: Result:=rcAccepted;
+
+      300: Result:=rcMultipleChoices;
+      301: Result:=rcMovedPermanently;
+      302: Result:=rcMovedTemporarily;
+      305: Result:=rcUseProxy;
+
+      400: Result:=rcBadRequest;
+      401: Result:=rcUnauthorized;
+      402: Result:=rcPaymentRequired;
+      403: Result:=rcForbidden;
+      404: Result:=rcNotFound;
+      405: Result:=rcMethodNotAllowed;
+      406: Result:=rcNotAcceptableClient;
+      407: Result:=rcProxyAuthenticationRequired;
+      408: Result:=rcRequestTimeout;
+      410: Result:=rcGone;
+      413: Result:=rcRequestEntityTooLarge;
+      414: Result:=rcRequestURITooLarge;
+      415: Result:=rcUnsupportedMediaType;
+      416: Result:=rcUnsupportedURIScheme;
+      420: Result:=rcBadExtension;
+      421: Result:=rcExtensionRequired;
+      423: Result:=rcIntervalTooBrief;
+      480: Result:=rcTemporarilyUnavailable;
+      481: Result:=rcCallLegOrTransactionDoesNotExist;
+      482: Result:=rcLoopDetected;
+      483: Result:=rcTooManyHops;
+      484: Result:=rcAddressIncomplete;
+      485: Result:=rcAmbiguous;
+      486: Result:=rcBusyHere;
+      487: Result:=rcRequestTerminated;
+      488: Result:=rcNotAcceptableHere;
+      489: Result:=rcBadEvent;
+      491: Result:=rcRequestPending;
+      493: Result:=rcUndecipherable;
+
+      500: Result:=rcInternalServerError;
+      501: Result:=rcNotImplemented;
+      502: Result:=rcBadGateway;
+      503: Result:=rcServiceUnavailable;
+      504: Result:=rcServerTimeOut;
+      505: Result:=rcSIPVersionNotSupported;
+      513: Result:=rcMessageTooLarge;
+
+      600: Result:=rcBusyEverywhere;
+      603: Result:=rcDecline;
+      604: Result:=rcDoesNotExistAnywhere;
+      606: Result:=rcNotAcceptableGlobal;
+
+    end;
+  end;
+end;
+
+{ TBisSipRequest }
+
+constructor TBisSipRequest.Create(Scheme, User, Host, Port, Protocol: String);
+begin
+  inherited Create;
+  FScheme:=Scheme;
+  FUser:=User;
+  FHost:=Host;
+  FPort:=Port;
+  FProtocol:=Protocol;
+end;
+
+function TBisSipRequest.GetUri: String;
+begin
+  Result:=Format('%s%s%s%s',[iff(FScheme<>'',FScheme+':',''),
+                             iff(FUser<>'',FUser+'@',''),
+                             iff(FHost<>'',FHost,''),
+                             iff(FPort<>'',':'+FPort,'')]);
+  Result:=Trim(Result);
+end;
+
+procedure TBisSipRequest.GetHeader(Strings: TStrings);
+var
+  S: String;
+begin
+  if Assigned(Strings) then begin
+    S:=Format('%s %s %s',[GetName,GetUri,iff(FProtocol<>'',FProtocol,'')]);
+    Strings.Add(Trim(S));
+  end;
+  inherited GetHeader(Strings);
+end;
+
+class function TBisSipRequest.GetName: String;
+begin
+  Result:='';
+end;
+
+procedure TBisSipRequest.CopyFrom(Source: TBisSipMessage);
+var
+  Request: TBisSipRequest;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisSipRequest) then begin
+    Request:=TBisSipRequest(Source);
+
+    FScheme:=Request.FScheme;
+    FUser:=Request.FUser;
+    FHost:=Request.FHost;
+    FPort:=Request.FPort;
+    FProtocol:=Request.FProtocol;
+  end;
+end;
+
+{ TBisSipRegisterRequest }
+
+constructor TBisSipRegisterRequest.Create(Scheme, User, Host, Port, Protocol: String);
+begin
+  inherited Create(Scheme,User,Host,Port,Protocol)
+end;
+
+constructor TBisSipRegisterRequest.Create(Source: TBisSipRegisterRequest);
+begin
+  inherited Create('','','','','');
+  if Assigned(Source) then begin
+    CopyFrom(Source);
+  end;
+end;
+
+class function TBisSipRegisterRequest.GetName: String;
+begin
+  Result:='REGISTER';
+end;
+
+{ TBisSipInviteRequest }
+
+class function TBisSipInviteRequest.GetName: String;
+begin
+  Result:='INVITE';
+end;
+
+{ TBisSipCancelRequest }
+
+class function TBisSipCancelRequest.GetName: String;
+begin
+  Result:='CANCEL';
+end;
+
+{ TBisSipMessages }
+
+function TBisSipMessages.GetItem(Index: Integer): TBisSipMessage;
+begin
+  Result:=TBisSipMessage(inherited Items[Index]);
+end;
+
+{ TBisSipResponses }
+
+function TBisSipResponses.GetItem(Index: Integer): TBisSipResponse;
+begin
+  Result:=TBisSipResponse(inherited Items[Index]);
+end;
+
+procedure TBisSipResponses.Add(Response: TBisSipResponse);
+begin
+  inherited Add(Response);
+end;
+
+function TBisSipResponses.CountBy(ResponseCode: TBisSipResponseCode): Integer;
+var
+  i: Integer;
+  Item: TBisSipResponse;
+begin
+  Result:=0;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.ResponseCode=ResponseCode then
+      Inc(Result);
+  end;
+end;
+
+function TBisSipResponses.ParseResponse(const Lines: String): TBisSipResponse;
+
+  function ParseHeader(Strings: TStrings; Headers: TBisSipHeaders;
+                       var AProtocol, ACode, ADescription: String;
+                       var LastIndex: Integer): Boolean;
+  var
+    Temp: TStringList;
+    i: Integer;
+    S: String;
+  begin
+    Result:=Strings.Count>0;
+    if Result then begin
+      Temp:=TStringList.Create;
+      try
+        GetStringsByString(Strings[0],' ',Temp);
+        if Temp.Count>0 then begin
+          AProtocol:=Temp[0];
+          if Temp.Count>1 then begin
+            ACode:=Temp[1];
+            if Temp.Count>2 then begin
+              for i:=2 to Temp.Count-1 do
+                ADescription:=Trim(ADescription+' '+Temp[i]);
+            end;
+          end;
+        end;
+        Result:=(AProtocol<>'') and (ACode<>'');
+        if Result and (Strings.Count>1) then begin
+          for i:=1 to Strings.Count-1 do begin
+            S:=Trim(Strings[i]);
+            if S<>'' then
+              Headers.ParseHeader(S)
+            else begin
+              LastIndex:=i;
+              break
+            end;
+          end;
+        end;
+      finally
+        Temp.Free;
+      end;
+    end;
+  end;
+
+  function ParseBody(Strings: TStrings; LastIndex: Integer): String;
+  var
+    i: Integer;
+    Temp: TStringList;
+  begin
+    Temp:=TStringList.Create;
+    try
+      for i:=LastIndex to Strings.Count-1 do
+        Temp.Add(Strings[i]);
+      Result:=Trim(Temp.Text);
+    finally
+      Temp.Free;
+    end;
+  end;
+
+var
+  Strings: TStringList;
+  Headers: TBisSipHeaders;
+  AProtocol: String;
+  ACode: String;
+  ADescription: String;
+  LastIndex: Integer;
+begin
+  Result:=nil;
+  Strings:=TStringList.Create;
+  Headers:=TBisSipHeaders.Create;
+  try
+    Strings.Text:=Trim(Lines);
+    if ParseHeader(Strings,Headers,AProtocol,ACode,ADescription,LastIndex) then begin
+      Result:=TBisSipResponse.Create(AProtocol,ACode,ADescription);
+      Result.Headers.CopyFrom(Headers);
+      Result.Body.Text:=ParseBody(Strings,LastIndex);
+    end;
+  finally
+    Headers.Free;
+    Strings.Free;
+  end;
+end;
+
+
+{ TBisSipRequests }
+
+function TBisSipRequests.GetItem(Index: Integer): TBisSipRequest;
+begin
+  Result:=TBisSipRequest(inherited Items[Index]);
+end;
+
+function TBisSipRequests.GetNextSequence: String;
+begin
+  Result:=IntToStr(Count+1);
+end;
+
+procedure TBisSipRequests.Add(Request: TBisSipRequest);
+begin
+  inherited Add(Request);
+end;
+
+function TBisSipRequests.GetRequest(Response: TBisSipResponse): TBisSipRequest;
+var
+  Header: TBisSipHeader;
+  CSeqHeader: TBisSipCSeq;
+  Request: TBisSipRequest;
+begin
+  Result:=nil;
+  if Assigned(Response) then begin
+    Header:=Response.Headers.Find(TBisSipCSeq);
+    if Assigned(Header) and (Header is TBisSipCSeq) then begin
+      CSeqHeader:=TBisSipCSeq(Header);
+      Request:=FindRequest(CSeqHeader.Num);
+      if Assigned(Request) and AnsiSameText(Request.GetName,CSeqHeader.RequestName) then
+        Result:=Request;
+    end;
+  end;
+end;
+
+function TBisSipRequests.FindRequest(Sequence: String): TBisSipRequest;
+var
+  Index: Integer;
+begin
+  Result:=nil;
+  Index:=StrToIntDef(Sequence,-1)-1;
+  if (Index>=0) and (Index<=(Count-1)) then begin
+    Result:=Items[Index];
+  end;
+end;
+
+end.

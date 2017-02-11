@@ -1,0 +1,524 @@
+unit BisTaxiPhoneFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ImgList, StdCtrls, Buttons, Menus, ActnPopup,
+  BisFm, BisFrm, BisGradient;
+
+type
+  TBisTaxiPhoneFrame=class;
+
+  TBisTaxiPhoneCallKind=(pckUnknown,pckClient,pckDriver,pckDispatcher,pckAccount);
+
+  TBisTaxiPhoneFrameGetCallIdEvent=function (Frame: TBisTaxiPhoneFrame): Variant of object;
+
+  TBisTaxiPhoneFrame = class(TBisFrame)
+    ImageList: TImageList;
+    TimerTime: TTimer;
+    LabelName: TLabel;
+    ImageGroup: TImage;
+    LabelGroup: TLabel;
+    LabelDescription: TLabel;
+    ImageDirection: TImage;
+    LabelTime: TLabel;
+    ImageClose: TImage;
+    PopupActionBar: TPopupActionBar;
+    MenuItemClose: TMenuItem;
+    MenuItemHold: TMenuItem;
+    MenuItemSelect: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    MenuOrder: TMenuItem;
+    MenuItemOrderInsert: TMenuItem;
+    MenuItemOrderUpdate: TMenuItem;
+    MenuItemOrderView: TMenuItem;
+    MenuItemBlack: TMenuItem;
+    MenuItemTransfer: TMenuItem;
+    MenuItemConnect: TMenuItem;
+    LabelNum: TLabel;
+    ShapeNum: TShape;
+    TimerFlashing: TTimer;
+    procedure ImageCloseClick(Sender: TObject);
+    procedure TimerTimeTimer(Sender: TObject);
+    procedure FrameClick(Sender: TObject);
+    procedure MenuItemCloseClick(Sender: TObject);
+    procedure MenuItemHoldClick(Sender: TObject);
+    procedure PopupActionBarPopup(Sender: TObject);
+    procedure MenuItemSelectClick(Sender: TObject);
+    procedure MenuItemOrderInsertClick(Sender: TObject);
+    procedure TimerFlashingTimer(Sender: TObject);
+    procedure FrameResize(Sender: TObject);
+    procedure MenuItemBlackClick(Sender: TObject);
+  private
+    FGradient: TBisGradient;
+    FIncoming: Boolean;
+    FOnClose: TNotifyEvent;
+    FCallKind: TBisTaxiPhoneCallKind;
+    FStartTime: TDateTime;
+    FActive: Boolean;
+    FOnSelect: TNotifyEvent;
+    FOnHold: TNotifyEvent;
+    FCallResultId: Variant;
+    FNum: Integer;
+    FFlashing: Boolean;
+    FLastFlash: Boolean;
+    FTimer: Boolean;
+    FFinished: Boolean;
+    FInQueryCallResultId: Boolean;
+    FOnGetCallId: TBisTaxiPhoneFrameGetCallIdEvent;
+    procedure SetIncoming(const Value: Boolean);
+    procedure SetCallKind(const Value: TBisTaxiPhoneCallKind);
+    procedure SetCallName(const Value: String);
+    function GetCallName: String;
+    function GetCallDescription: String;
+    procedure SetCallDescription(const Value: String);
+    function GetCallGroup: String;
+    procedure SetCallGroup(const Value: String);
+    procedure SetActive(const Value: Boolean);
+    procedure Select;
+    procedure Close;
+    procedure Hold;
+    procedure SetNum(const Value: Integer);
+    procedure SetFlashing(const Value: Boolean);
+    procedure SetTimer(const Value: Boolean);
+    procedure SetFinished(const Value: Boolean);
+    procedure UpdateControls;
+    function CanBlackInsert: Boolean;
+    procedure BlackInsert;
+    function CanOrderInsert: Boolean;
+    procedure OrderInsert;
+    function GetCallId: Variant;
+  protected
+    procedure SetParent(AParent: TWinControl); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure AutoHeight;
+    procedure Disable;
+    function QueryCallResultId: Boolean;
+
+    property CallName: String read GetCallName write SetCallName;
+    property CallGroup: String read GetCallGroup write SetCallGroup;
+    property CallDescription: String read GetCallDescription write SetCallDescription;
+    property CallKind: TBisTaxiPhoneCallKind read FCallKind write SetCallKind;
+    property StartTime: TDateTime read FStartTime write FStartTime;
+
+    property Flashing: Boolean read FFlashing write SetFlashing;
+    property Incoming: Boolean read FIncoming write SetIncoming;
+    property Active: Boolean read FActive Write SetActive;
+    property Timer: Boolean read FTimer write SetTimer;
+    property Finished: Boolean read FFinished write SetFinished;
+
+    property Num: Integer read FNum write SetNum;
+
+    property OnClose: TNotifyEvent read FOnClose write FOnClose;
+    property OnSelect: TNotifyEvent read FOnSelect write FOnSelect;
+    property OnHold: TNotifyEvent read FOnHold write FOnHold;
+    property OnGetCallId: TBisTaxiPhoneFrameGetCallIdEvent read FOnGetCallId write FOnGetCallId;
+
+    property CallResultId: Variant read FCallResultId;
+    property CallId: Variant read GetCallId;
+    property InQueryCallResultId: Boolean read FInQueryCallResultId;
+    property CallResultQueried
+  end;
+
+implementation
+
+uses DateUtils,
+     BisUtils,
+     BisCore,
+     BisTaxiCallResultFm, BisTaxiDataBlackEditFm, BisTaxiOrdersFm, BisTaxiOrdersFrm,
+     BisTaxiOrderEditFm;
+
+{$R *.dfm}
+
+{ TBisTaxiPhoneFrame }
+
+constructor TBisTaxiPhoneFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FGradient:=TBisGradient.Create(nil);
+  FGradient.Parent:=Self;
+  FGradient.Align:=alClient;
+  FGradient.BeginColor:=clWhite;
+  FGradient.EndColor:=clSilver;
+  FGradient.OnClick:=OnClick;
+  FGradient.PopupMenu:=PopupMenu;
+  FStartTime:=Now;
+  FCallResultId:=Null;
+end;
+
+destructor TBisTaxiPhoneFrame.Destroy;
+begin
+ // Close;
+  FGradient.Free;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiPhoneFrame.Disable;
+begin
+  TimerTime.Enabled:=false;
+  LabelTime.Font.Color:=clWindowText;
+  FGradient.EndColor:=clSilver;
+  TimerFlashing.Enabled:=false;
+  LabelNum.Enabled:=false;
+  ShapeNum.Enabled:=false;
+  ImageDirection.Enabled:=false;
+  LabelTime.Enabled:=false;
+  ImageGroup.Enabled:=false;
+  LabelGroup.Enabled:=false;
+  LabelName.Enabled:=false;
+  LabelDescription.Enabled:=false;
+  ImageClose.Enabled:=true;
+end;
+
+procedure TBisTaxiPhoneFrame.SetNum(const Value: Integer);
+begin
+  FNum := Value;
+  LabelNum.Caption:=FormatFloat('#00',FNum);
+end;
+
+procedure TBisTaxiPhoneFrame.SetParent(AParent: TWinControl);
+begin
+  inherited SetParent(AParent);
+  if Assigned(AParent) and AParent.HandleAllocated then
+    FGradient.SendToBack;
+end;
+
+procedure TBisTaxiPhoneFrame.SetTimer(const Value: Boolean);
+begin
+  FTimer:=Value;
+  TimerTime.Enabled:=Value;
+end;
+
+procedure TBisTaxiPhoneFrame.SetIncoming(const Value: Boolean);
+var
+  Bmp: TBitmap;
+begin
+  FIncoming := Value;
+  Bmp:=TBitmap.Create;
+  try
+    if FIncoming then begin
+      if ImageList.GetBitmap(0,Bmp) then
+        ImageDirection.Picture.Assign(Bmp);
+    end else begin
+      if ImageList.GetBitmap(1,Bmp) then
+        ImageDirection.Picture.Assign(Bmp);
+    end;
+  finally
+    Bmp.Free;
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.SetCallGroup(const Value: String);
+begin
+  LabelGroup.Caption:=Value;
+  LabelGroup.Visible:=Trim(LabelGroup.Caption)<>'';
+end;
+
+procedure TBisTaxiPhoneFrame.SetFinished(const Value: Boolean);
+begin
+  FFinished:=Value;
+  if Finished then begin
+    SetActive(false);
+    Disable;
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.SetFlashing(const Value: Boolean);
+begin
+  SetActive(false);
+  FFlashing:=Value;
+  TimerFlashing.Enabled:=FFlashing;
+  if FFlashing then begin
+    FStartTime:=Now;
+    TimerTime.Enabled:=true;
+    LabelTime.Font.Color:=clRed;
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.SetActive(const Value: Boolean);
+begin
+  FFlashing:=false;
+  TimerFlashing.Enabled:=false;
+  FActive:=Value;
+  if FActive then begin
+    LabelTime.Font.Color:=clGreen;
+    FGradient.EndColor:=$00AAFF;
+  end else begin
+    LabelTime.Font.Color:=clWindowText;
+    FGradient.EndColor:=clSilver;
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.AutoHeight;
+begin
+  if LabelDescription.Visible then begin
+    Height:=40;
+  end else begin
+    Height:=20;
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.TimerFlashingTimer(Sender: TObject);
+begin
+  FLastFlash:=not FLastFlash;
+  if FLastFlash then begin
+    FGradient.EndColor:=$00AAFF;
+  end else begin
+    FGradient.EndColor:=clSilver;
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.TimerTimeTimer(Sender: TObject);
+begin
+  LabelTime.Caption:=FormatDateTime('nn:ss',Now-FStartTime);
+end;
+
+procedure TBisTaxiPhoneFrame.SetCallKind(const Value: TBisTaxiPhoneCallKind);
+var
+  Bmp: TBitmap;
+  Index: Integer;
+begin
+  Bmp:=TBitmap.Create;
+  try
+    FCallKind:=Value;
+    Index:=-1;
+    case FCallKind of
+      pckUnknown: Index:=6;
+      pckClient: Index:=2;
+      pckDriver: Index:=3;
+      pckDispatcher: Index:=4;
+      pckAccount: Index:=5;
+    end;
+    ImageGroup.Visible:=false;
+    if (Index<>-1) and LabelGroup.Visible then begin
+      if ImageList.GetBitmap(Index,Bmp) then begin
+        ImageGroup.Picture.Assign(Bmp);
+        ImageGroup.Visible:=true;
+      end;
+    end;
+  finally
+    Bmp.Free;
+  end;
+end;
+
+function TBisTaxiPhoneFrame.GetCallName: String;
+begin
+  Result:=LabelName.Caption;
+end;
+
+procedure TBisTaxiPhoneFrame.Hold;
+begin
+  if not Finished then begin
+    if Assigned(FOnHold) then
+      FOnHold(Self);
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.Select;
+begin
+  if not Finished then begin
+    if Assigned(FOnSelect) then
+      FOnSelect(Self);
+  end;
+end;
+
+function TBisTaxiPhoneFrame.QueryCallResultId: Boolean;
+var
+  Form: TBisTaxiCallResultForm;
+begin
+  Result:=false;
+  Form:=TBisTaxiCallResultForm.Create(nil);
+  FInQueryCallResultId:=true;
+  try
+    Form.Init;
+    if Form.RadioGroupCallResults.Items.Count>0 then begin
+      Form.Num:=LabelNum.Caption;
+      if Form.ShowModal=mrOk then begin
+        FCallResultId:=Form.CallResultId;
+        Result:=true;
+      end;
+    end;
+  finally
+    FInQueryCallResultId:=false;
+    Form.Free;
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.Close;
+begin
+  if FIncoming and not FFlashing then begin
+    if QueryCallResultId then
+      if Assigned(FOnClose) then
+        FOnClose(Self);
+  end else begin
+    if Assigned(FOnClose) then
+      FOnClose(Self);
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.FrameClick(Sender: TObject);
+begin
+  Select;
+end;
+
+procedure TBisTaxiPhoneFrame.UpdateControls;
+begin
+  LabelGroup.Width:=LabelName.Left-LabelGroup.Left-5;
+end;
+
+procedure TBisTaxiPhoneFrame.FrameResize(Sender: TObject);
+begin
+  UpdateControls;
+end;
+
+procedure TBisTaxiPhoneFrame.ImageCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TBisTaxiPhoneFrame.MenuItemBlackClick(Sender: TObject);
+begin
+  BlackInsert;
+end;
+
+procedure TBisTaxiPhoneFrame.MenuItemCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TBisTaxiPhoneFrame.MenuItemHoldClick(Sender: TObject);
+begin
+  Hold;
+end;
+
+procedure TBisTaxiPhoneFrame.MenuItemOrderInsertClick(Sender: TObject);
+begin
+  OrderInsert;
+end;
+
+procedure TBisTaxiPhoneFrame.MenuItemSelectClick(Sender: TObject);
+begin
+  Select;
+end;
+
+procedure TBisTaxiPhoneFrame.PopupActionBarPopup(Sender: TObject);
+begin
+  if Incoming then
+    MenuItemSelect.Enabled:=not Active
+  else
+    MenuItemSelect.Enabled:=not Flashing and not Active;
+
+  if Incoming then
+    MenuItemHold.Enabled:=Active and TimerTime.Enabled
+  else
+    MenuItemHold.Enabled:=not Flashing and Active and TimerTime.Enabled;
+
+  MenuItemTransfer.Enabled:=false;
+  MenuItemConnect.Enabled:=false;
+  MenuItemOrderInsert.Enabled:=CanOrderInsert;
+  MenuItemOrderUpdate.Enabled:=false;
+  MenuItemOrderView.Enabled:=false;
+  MenuOrder.Enabled:=MenuItemOrderInsert.Enabled and MenuItemOrderUpdate.Enabled and MenuItemOrderView.Enabled;
+  MenuItemBlack.Enabled:=CanBlackInsert;
+  MenuItemClose.Enabled:=true;
+end;
+
+procedure TBisTaxiPhoneFrame.SetCallName(const Value: String);
+begin
+  LabelName.Caption:=Value;
+  LabelName.Visible:=Trim(LabelName.Caption)<>'';
+end;
+
+function TBisTaxiPhoneFrame.GetCallDescription: String;
+begin
+  Result:=LabelDescription.Caption;
+end;
+
+procedure TBisTaxiPhoneFrame.SetCallDescription(const Value: String);
+begin
+  LabelDescription.Caption:=Value;
+  LabelDescription.Visible:=Trim(LabelDescription.Caption)<>'';
+end;
+
+function TBisTaxiPhoneFrame.GetCallGroup: String;
+begin
+  Result:=LabelGroup.Caption;
+end;
+
+function TBisTaxiPhoneFrame.GetCallId: Variant;
+begin
+  Result:=Null;
+  if Assigned(FOnGetCallId) then
+    Result:=FOnGetCallId(Self);
+end;
+
+function TBisTaxiPhoneFrame.CanBlackInsert: Boolean;
+var
+  AIface: TBisTaxiDataBlackInsertFormIface;
+begin
+  Result:=Trim(LabelName.Caption)<>'';
+  if Result then begin
+    AIface:=TBisTaxiDataBlackInsertFormIface.Create(nil);
+    try
+      AIface.Init;
+      Result:=AIface.CanShow;
+    finally
+      AIface.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.BlackInsert;
+var
+  AIface: TBisTaxiDataBlackInsertFormIface;
+begin
+  if CanBlackInsert then begin
+    AIface:=TBisTaxiDataBlackInsertFormIface.Create(nil);
+    try
+      AIface.Init;
+      AIface.ShowType:=stMdiChild;
+      AIface.Params.ParamByName('PHONE').SetNewValue(Trim(LabelName.Caption));
+      AIface.ChangesExists:=true;
+      AIface.ShowModal;
+    finally
+      AIface.Free;
+    end;
+  end;
+end;
+
+function TBisTaxiPhoneFrame.CanOrderInsert: Boolean;
+var
+  AIface: TBisTaxiOrdersFormIface;
+begin
+  Result:=Trim(LabelName.Caption)<>'';
+  if Result then begin
+    AIface:=TBisTaxiOrdersFormIface(Core.FindIface(TBisTaxiOrdersFormIface));
+    if Assigned(AIface) then begin
+      Result:=AIface.CanShow and Assigned(AIface.LastForm) and
+              Assigned(AIface.LastForm.OrdersFrame) and AIface.LastForm.OrdersFrame.CanInsertRecord;
+    end;
+  end;
+end;
+
+procedure TBisTaxiPhoneFrame.OrderInsert;
+var
+  OrdersIface: TBisTaxiOrdersFormIface;
+  OrdersFrame: TBisTaxiOrdersFrame;
+begin
+  if CanOrderInsert then begin
+    OrdersIface:=TBisTaxiOrdersFormIface(Core.FindIface(TBisTaxiOrdersFormIface));
+    if Assigned(OrdersIface) then begin
+      OrdersFrame:=OrdersIface.LastForm.OrdersFrame;
+      if Assigned(OrdersFrame) then
+        OrdersFrame.InsertRecordWithPhone(Trim(LabelName.Caption),GetCallId);
+    end;
+  end;
+end;
+
+end.
+

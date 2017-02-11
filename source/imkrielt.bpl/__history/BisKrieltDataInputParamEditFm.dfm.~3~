@@ -1,0 +1,176 @@
+inherited BisKrieltDataInputParamEditForm: TBisKrieltDataInputParamEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisKrieltDataInputParamEditForm'
+  ClientHeight = 318
+  ClientWidth = 412
+  ExplicitWidth = 420
+  ExplicitHeight = 352
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 280
+    Width = 412
+    ExplicitTop = 167
+    ExplicitWidth = 286
+    inherited ButtonOk: TButton
+      Left = 233
+      ExplicitLeft = 107
+    end
+    inherited ButtonCancel: TButton
+      Left = 330
+      ExplicitLeft = 204
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 412
+    Height = 280
+    ExplicitTop = -1
+    ExplicitWidth = 412
+    ExplicitHeight = 280
+    object LabelParam: TLabel
+      Left = 28
+      Top = 94
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1072#1088#1072#1084#1077#1090#1088':'
+      FocusControl = EditParam
+    end
+    object LabelType: TLabel
+      Left = 13
+      Top = 40
+      Width = 68
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1058#1080#1087' '#1086#1073#1098#1077#1082#1090#1072':'
+      FocusControl = EditType
+    end
+    object LabelPriority: TLabel
+      Left = 28
+      Top = 198
+      Width = 48
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1086#1088#1103#1076#1086#1082':'
+      FocusControl = EditPriority
+    end
+    object LabelOperation: TLabel
+      Left = 27
+      Top = 67
+      Width = 54
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1087#1077#1088#1072#1094#1080#1103':'
+      FocusControl = EditOperation
+    end
+    object LabelView: TLabel
+      Left = 12
+      Top = 13
+      Width = 69
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1042#1080#1076' '#1086#1073#1098#1077#1082#1090#1072':'
+      FocusControl = EditView
+    end
+    object EditParam: TEdit
+      Left = 89
+      Top = 91
+      Width = 168
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonParam: TButton
+      Left = 263
+      Top = 91
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1072#1088#1072#1084#1077#1090#1088
+      Caption = '...'
+      TabOrder = 1
+    end
+    object EditType: TEdit
+      Left = 89
+      Top = 37
+      Width = 168
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object ButtonType: TButton
+      Left = 263
+      Top = 37
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1090#1080#1087' '#1086#1073#1098#1077#1082#1090#1072
+      Caption = '...'
+      TabOrder = 3
+    end
+    object EditPriority: TEdit
+      Left = 84
+      Top = 195
+      Width = 73
+      Height = 21
+      TabOrder = 6
+    end
+    object EditOperation: TEdit
+      Left = 89
+      Top = 64
+      Width = 168
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 4
+    end
+    object ButtonOperation: TButton
+      Left = 263
+      Top = 64
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1086#1087#1077#1088#1072#1094#1080#1102
+      Caption = '...'
+      TabOrder = 5
+    end
+    object CheckBoxMain: TCheckBox
+      Left = 84
+      Top = 220
+      Width = 97
+      Height = 17
+      Caption = #1054#1089#1085#1086#1074#1085#1086#1081
+      TabOrder = 7
+    end
+    object CheckBoxVisible: TCheckBox
+      Left = 84
+      Top = 239
+      Width = 97
+      Height = 17
+      Caption = #1042#1080#1076#1080#1084#1099#1081
+      TabOrder = 8
+    end
+    object EditView: TEdit
+      Left = 89
+      Top = 10
+      Width = 168
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 9
+    end
+    object ButtonView: TButton
+      Left = 263
+      Top = 10
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1080#1076' '#1086#1073#1098#1077#1082#1090#1072
+      Caption = '...'
+      TabOrder = 10
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 336
+    Top = 16
+  end
+end

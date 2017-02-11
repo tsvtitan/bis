@@ -1,0 +1,38 @@
+package dws2ClassesLibrary;
+
+{$R *.res}
+{$R '..\ClassesLib\dws2ClassesLib.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS OFF}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScript II - Lists and Hashtables Library'}
+{$LIBSUFFIX '70'}
+{$IMPLICITBUILD OFF}
+
+requires
+  dws2Runtime,
+  vcl;
+
+contains
+  dws2ClassesLibModule in '..\ClassesLib\dws2ClassesLibModule.pas' {dws2ClassesLib: TDataModule},
+  dws2Hashtables in '..\ClassesLib\dws2Hashtables.pas';
+
+end.

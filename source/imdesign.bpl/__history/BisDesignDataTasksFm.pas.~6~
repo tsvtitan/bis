@@ -1,0 +1,96 @@
+unit BisDesignDataTasksFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataGridFm, BisDataFrm, BisDataGridFrm,
+  BisDesignDataTasksFrm;
+
+type
+  TBisDesignDataTasksForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  public
+    { Public declarations }
+  end;
+
+  TBisDesignDataTasksFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiDesignDataTasksForm: TBisDesignDataTasksForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisDesignDataTaskEditFm;
+
+{ TBisDesignDataTasksFormIface }
+
+constructor TBisDesignDataTasksFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDesignDataTasksForm;
+  FilterClass:=TBisDesignDataTaskEditFormIface;
+  InsertClass:=TBisDesignDataTaskInsertFormIface;
+  UpdateClass:=TBisDesignDataTaskUpdateFormIface;
+  DeleteClass:=TBisDesignDataTaskDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_TASKS';
+  with FieldNames do begin
+    AddKey('TASK_ID');
+    AddInvisible('APPLICATION_ID');
+    AddInvisible('ACCOUNT_ID');
+    AddInvisible('INTERFACE_ID');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('DATE_BEGIN');
+    AddInvisible('DATE_END');
+    AddInvisible('SCHEDULE');
+    AddInvisible('PRIORITY');
+    AddInvisible('PROC_NAME');
+    AddInvisible('COMMAND_STRING');
+    AddInvisible('REPEAT_ENABLED');
+    AddInvisible('REPEAT_TYPE');
+    AddInvisible('REPEAT_VALUE');
+    AddInvisible('REPEAT_COUNT');
+    AddInvisible('DAY_FREQUENCY');
+    AddInvisible('WEEK_FREQUENCY');
+    AddInvisible('MONDAY');
+    AddInvisible('TUESDAY');
+    AddInvisible('WEDNESDAY');
+    AddInvisible('THURSDAY');
+    AddInvisible('FRIDAY');
+    AddInvisible('SATURDAY');
+    AddInvisible('SUNDAY');
+    AddInvisible('MONTH_DAY');
+    AddInvisible('JANUARY');
+    AddInvisible('FEBRUARY');
+    AddInvisible('MARCH');
+    AddInvisible('APRIL');
+    AddInvisible('MAY');
+    AddInvisible('JUNE');
+    AddInvisible('JULY');
+    AddInvisible('AUGUST');
+    AddInvisible('SEPTEMBER');
+    AddInvisible('OCTOBER');
+    AddInvisible('NOVEMBER');
+    AddInvisible('DECEMBER');
+    AddInvisible('APPLICATION_NAME');
+    AddInvisible('USER_NAME');
+    AddInvisible('INTERFACE_NAME');
+    Add('NAME','Наименование',185);
+    Add('DATE_EXECUTE','Дата выполнения',115);
+    Add('RESULT_STRING','Результат выполнения',220);
+    AddCheckBox('ENABLED','Включен',30);
+  end;
+  Orders.Add('DATE_BEGIN');
+end;
+
+end.

@@ -1,0 +1,261 @@
+unit BisCallcHbookMenuEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ExtDlgs,
+  BisFm, BisDataEditFm, BisParam, BisControls;
+
+type
+  TBisCallcHbookMenuEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    LabelInterface: TLabel;
+    EditName: TEdit;
+    EditInterface: TEdit;
+    ButtonInterface: TButton;
+    LabelParent: TLabel;
+    EditParent: TEdit;
+    ButtonParent: TButton;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelPriority: TLabel;
+    EditPriority: TEdit;
+    LabelShortcut: TLabel;
+    HotKeyShortCut: THotKey;
+    ImagePicture: TImage;
+    ButtonLoad: TButton;
+    ButtonSave: TButton;
+    ButtonClear: TButton;
+    OpenPictureDialog: TOpenPictureDialog;
+    SavePictureDialog: TSavePictureDialog;
+    CheckBoxRefresh: TCheckBox;
+    procedure ButtonLoadClick(Sender: TObject);
+    procedure ButtonSaveClick(Sender: TObject);
+    procedure ButtonClearClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    procedure ChangeParam(Param: TBisParam); override;
+    procedure Execute; override;
+  end;
+
+  TBisKrieltHbookMenuEditFormIface=class(TBisDataEditFormIface)
+  private
+    procedure PictureIdChange(Param: TBisParam);
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookMenuInsertFormIface=class(TBisKrieltHbookMenuEditFormIface)
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookMenuInsertChildFormIface=class(TBisKrieltHbookMenuEditFormIface)
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookMenuUpdateFormIface=class(TBisKrieltHbookMenuEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookMenuDeleteFormIface=class(TBisKrieltHbookMenuEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookMenuEditForm: TBisCallcHbookMenuEditForm;
+
+implementation
+
+uses BisKrieltHbookInterfacesFm, BisKrieltHbookMenusFm, BisPicture, BisProvider,
+     BisFilterGroups, BisKrieltMainFm;
+
+{$R *.dfm}
+
+{ TBisKrieltHbookMenuEditFormIface }
+
+constructor TBisKrieltHbookMenuEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltHbookMenuEditForm;
+  with Params do begin
+    with AddKey('MENU_ID') do begin
+      Older('OLD_MENU_ID');
+      OnChange:=PictureIdChange;
+    end;
+    AddEditDataSelect('PARENT_ID','EditParent','LabelParent','ButtonParent',
+                      TBisKrieltHbookMenusFormIface,'PARENT_NAME',false,false,'MENU_ID','NAME');
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription',false);
+    AddHotKey('SHORTCUT','HotKeyShortCut','LabelShortcut');
+    AddEditInteger('PRIORITY','EditPriority','LabelPriority',true);
+    AddEditDataSelect('INTERFACE_ID','EditInterface','LabelInterface','ButtonInterface',
+                      TBisKrieltHbookInterfacesFormIface,'INTERFACE_NAME',false,false,'','NAME');
+    AddInvisible('PICTURE');
+  end;
+end;
+
+procedure TBisKrieltHbookMenuEditFormIface.PictureIdChange(Param: TBisParam);
+var
+  AProvider: TBisProvider;
+  ParamPicture: TBisParam;
+begin
+  ParamPicture:=Param.Find('PICTURE');
+  if Assigned(ParamPicture) then begin
+    AProvider:=TBisProvider.Create(Self);
+    try
+      AProvider.ProviderName:='S_MENUS';
+      AProvider.FieldNames.AddInvisible('PICTURE');
+      AProvider.FilterGroups.Add.Filters.Add('MENU_ID',fcEqual,Param.Value);
+      AProvider.Open;
+      if AProvider.Active and not AProvider.IsEmpty then begin
+        ParamPicture.SetNewValue(AProvider.FieldByName('PICTURE').AsString);
+      end;
+    finally
+      AProvider.Free;
+    end;
+  end;
+end;
+
+{ TBisKrieltHbookMenuInsertFormIface }
+
+constructor TBisKrieltHbookMenuInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_MENU';
+end;
+
+function TBisKrieltHbookMenuInsertFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then begin
+    if Assigned(ParentProvider) and ParentProvider.Active and not ParentProvider.IsEmpty then begin
+      with LastForm.Provider do begin
+        Params.ParamByName('PARENT_ID').SetNewValue(ParentProvider.FieldByName('PARENT_ID').Value);
+        Params.ParamByName('PARENT_NAME').SetNewValue(ParentProvider.FieldByName('PARENT_NAME').Value);
+      end;
+    end;
+  end;
+end;
+
+{ TBisKrieltHbookMenuInsertChildFormIface }
+
+constructor TBisKrieltHbookMenuInsertChildFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_MENU';
+  Caption:='Создать дочернее меню';
+end;
+
+
+function TBisKrieltHbookMenuInsertChildFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then begin
+    if Assigned(ParentProvider) and ParentProvider.Active and not ParentProvider.IsEmpty then begin
+      with LastForm.Provider do begin
+        Params.ParamByName('PARENT_ID').SetNewValue(ParentProvider.FieldByName('MENU_ID').Value);
+        Params.ParamByName('PARENT_NAME').SetNewValue(ParentProvider.FieldByName('NAME').Value);
+      end;
+    end;
+  end;
+end;
+
+{ TBisKrieltHbookMenuUpdateFormIface }
+
+constructor TBisKrieltHbookMenuUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_MENU';
+end;
+
+{ TBisKrieltHbookMenuDeleteFormIface }
+
+constructor TBisKrieltHbookMenuDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_MENU';
+end;
+
+{ TBisKrieltHbookMenuEditForm }
+
+procedure TBisCallcHbookMenuEditForm.ChangeParam(Param: TBisParam);
+var
+  AEmpty: Boolean;
+  Stream: TMemoryStream;
+begin
+  inherited ChangeParam(Param);
+  if AnsiSameText(Param.ParamName,'PICTURE') then begin
+    AEmpty:=Param.Empty;
+    if AEmpty then
+      ImagePicture.Picture.Assign(nil)
+    else begin
+      Stream:=TMemoryStream.Create;
+      try
+        Param.SaveToStream(Stream);
+        Stream.Position:=0;
+        TBisPicture(ImagePicture.Picture).LoadFromStream(Stream);
+      finally
+        Stream.Free;
+      end;
+    end;
+    ButtonLoad.Enabled:=AEmpty;
+    ButtonSave.Enabled:=not AEmpty;
+    ButtonClear.Enabled:=ButtonSave.Enabled;
+  end;
+end;
+
+procedure TBisCallcHbookMenuEditForm.Execute;
+begin
+  inherited Execute;
+  if CheckBoxRefresh.Checked then
+    MainIface.RefreshMenus;
+end;
+
+procedure TBisCallcHbookMenuEditForm.ButtonClearClick(Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.Find('PICTURE');
+  if Assigned(Param) then begin
+    Param.Clear;
+    UpdateButtonState;
+  end;
+end;
+
+procedure TBisCallcHbookMenuEditForm.ButtonLoadClick(Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.Find('PICTURE');
+  if Assigned(Param) then begin
+    if OpenPictureDialog.Execute then begin
+      Param.LoadFromFile(OpenPictureDialog.FileName);
+      UpdateButtonState;
+    end;
+  end;
+end;
+
+
+procedure TBisCallcHbookMenuEditForm.ButtonSaveClick(Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.Find('PICTURE');
+  if Assigned(Param) then begin
+    SavePictureDialog.FileName:=EditName.Text;
+    if SavePictureDialog.Execute then
+      Param.SaveToFile(SavePictureDialog.FileName);
+  end;
+end;
+
+end.

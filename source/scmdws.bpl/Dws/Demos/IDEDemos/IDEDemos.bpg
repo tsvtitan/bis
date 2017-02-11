@@ -1,0 +1,29 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = Simple.exe Optimized.exe Advanced.exe ClassCompletion.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+Simple.exe: CodeInsight\Simple.dpr
+  $(DCC)
+
+Advanced.exe: CodeInsight\Advanced.dpr
+  $(DCC)
+
+Optimized.exe: CodeInsight\Optimized.dpr
+  $(DCC)
+
+ClassCompletion.exe: ClassCompletion\ClassCompletion.dpr
+  $(DCC)
+
+

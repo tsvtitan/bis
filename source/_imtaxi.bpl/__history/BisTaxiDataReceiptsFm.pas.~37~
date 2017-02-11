@@ -1,0 +1,153 @@
+unit BisTaxiDataReceiptsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataFrm, BisDataGridFm, BisDataGridFrm, BisDataEditFm;
+
+type
+  TBisTaxiDataReceiptsFrame=class(TBisDataGridFrame)
+  private
+    FGroupToday: String;
+    FGroupArchive: String;
+    FFilterMenuItemToday: TBisDataFrameFilterMenuItem;
+    FFilterMenuItemArchive: TBisDataFrameFilterMenuItem;
+    FAccountId: Variant;
+    FUserName: String;
+  protected
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure OpenRecords; override;
+
+    property FilterMenuItemToday: TBisDataFrameFilterMenuItem read FFilterMenuItemToday;
+    property FilterMenuItemArchive: TBisDataFrameFilterMenuItem read FFilterMenuItemArchive;
+
+    property AccountId: Variant read FAccountId write FAccountId;
+    property UserName: String read FUserName write FUserName;
+  end;
+
+  TBisTaxiDataReceiptsForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataReceiptsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataReceiptsForm: TBisTaxiDataReceiptsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses DateUtils,
+     BisUtils, BisConsts, BisOrders, BisFilterGroups, BisCore, BisParam,
+     BisTaxiDataReceiptEditFm, BisTaxiDataReceiptFilterFm;
+
+{ TBisTaxiDataReceiptsFrame }
+
+constructor TBisTaxiDataReceiptsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(Aowner);
+  FilterClass:=TBisTaxiDataReceiptFilterFormIface;
+  InsertClass:=TBisTaxiDataReceiptInsertFormIface;
+  UpdateClass:=TBisTaxiDataReceiptUpdateFormIface;
+  DeleteClass:=TBisTaxiDataReceiptDeleteFormIface;
+  with Provider do begin
+    ProviderName:='S_RECEIPTS';
+    with FieldNames do begin
+      AddKey('RECEIPT_ID');
+      AddInvisible('RECEIPT_TYPE_ID');
+      AddInvisible('ACCOUNT_ID');
+      AddInvisible('WHO_CREATE_ID');
+      AddInvisible('WHO_USER_NAME');
+      AddInvisible('DATE_CREATE');
+      AddInvisible('DESCRIPTION');
+      Add('DATE_RECEIPT','Дата',110);
+      Add('USER_NAME','Счет',110);
+      Add('SUM_RECEIPT','Сумма',70).DisplayFormat:='#0.00';
+      Add('RECEIPT_TYPE_NAME','Вид поступления',110);
+    end;
+    Orders.Add('DATE_RECEIPT',otDesc);
+  end;
+
+  FGroupToday:=GetUniqueID;
+  FGroupArchive:=GetUniqueID;
+
+  FFilterMenuItemToday:=CreateFilterMenuItem('За сутки');
+  FFilterMenuItemToday.Checked:=true;
+
+  FFilterMenuItemArchive:=CreateFilterMenuItem('Архив');
+
+  FAccountId:=Null;
+end;
+
+procedure TBisTaxiDataReceiptsFrame.BeforeIfaceExecute(AIface: TBisDataEditFormIface);
+var
+  Param: TBisParam;
+begin
+  inherited BeforeIfaceExecute(AIface);
+  if Assigned(AIface) then begin
+    with AIface.Params do begin
+      ParamByName('USER_NAME').Value:=FUserName;
+      Param:=ParamByName('ACCOUNT_ID');
+      Param.Value:=FAccountId;
+      if not Param.Empty then
+        Param.ExcludeModes(AllParamEditModes);
+    end;
+  end;
+end;
+
+procedure TBisTaxiDataReceiptsFrame.OpenRecords;
+var
+  Group1, Group2: TBisFilterGroup;
+  D: TDateTime;
+begin
+
+  D:=Core.ServerDate;
+
+  with FFilterMenuItemToday do begin
+    Group1:=FilterGroups.Find(FGroupToday);
+    if Assigned(Group1) then
+      FilterGroups.Remove(Group1);
+    Group1:=FilterGroups.AddByName(FGroupToday,foAnd,True);
+    Group1.Filters.Add('DATE_RECEIPT',fcGreater,IncDay(D,-1));
+    Group1.Filters.Add('DATE_RECEIPT',fcEqualLess,D);
+  end;
+
+  with FFilterMenuItemArchive do begin
+    Group2:=FilterGroups.Find(FGroupArchive);
+    if Assigned(Group2) then
+      FilterGroups.Remove(Group2);
+    Group2:=FilterGroups.AddByName(FGroupArchive,foAnd,True);
+    Group2.Filters.Add('DATE_RECEIPT',fcEqualLess,IncDay(D,-1));
+  end;
+
+  inherited OpenRecords;
+end;
+
+
+{ TBisTaxiDataReceiptsFormIface }
+
+constructor TBisTaxiDataReceiptsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataReceiptsForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+end;
+
+{ TBisTaxiDataReceiptsForm }
+
+class function TBisTaxiDataReceiptsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataReceiptsFrame;
+end;
+
+end.

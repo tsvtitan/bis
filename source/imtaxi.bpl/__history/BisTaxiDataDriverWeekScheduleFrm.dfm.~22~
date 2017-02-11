@@ -1,0 +1,100 @@
+inherited BisTaxiDataDriverWeekScheduleFrame: TBisTaxiDataDriverWeekScheduleFrame
+  Height = 186
+  ParentFont = False
+  ExplicitHeight = 186
+  inherited PanelData: TPanel
+    Height = 157
+    ExplicitHeight = 157
+    inherited GridPattern: TDBGrid
+      Height = 134
+    end
+    object PanelBottom: TPanel
+      Left = 0
+      Top = 134
+      Width = 450
+      Height = 23
+      Align = alBottom
+      BevelOuter = bvNone
+      TabOrder = 1
+      object LabelSum: TLabel
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 437
+        Height = 17
+        Margins.Right = 10
+        Align = alClient
+        Alignment = taRightJustify
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Layout = tlCenter
+        ExplicitLeft = 433
+        ExplicitWidth = 7
+        ExplicitHeight = 13
+      end
+    end
+  end
+  inherited ControlBar: TControlBar
+    inherited ToolBarRefresh: TToolBar
+      inherited ToolButtonRefresh: TToolButton
+        ExplicitWidth = 36
+      end
+      inherited ToolButtonFilter: TToolButton
+        ExplicitWidth = 36
+      end
+      inherited ToolButtonReport: TToolButton
+        ExplicitWidth = 36
+      end
+    end
+    inherited ToolBarEdit: TToolBar
+      Visible = False
+      inherited ToolButtonInsert: TToolButton
+        ExplicitWidth = 36
+      end
+    end
+  end
+  inherited ActionList: TActionList
+    inherited ActionFilter: TAction
+      Visible = False
+    end
+    inherited ActionView: TAction
+      Visible = False
+    end
+    inherited ActionInsert: TAction
+      Visible = False
+    end
+    inherited ActionDuplicate: TAction
+      Visible = False
+    end
+    inherited ActionUpdate: TAction
+      Visible = False
+    end
+    inherited ActionDelete: TAction
+      Visible = False
+    end
+    object ActionClear: TAction
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+      Hint = #1054#1095#1080#1089#1090#1080#1090#1100' '#1075#1088#1072#1092#1080#1082
+      OnExecute = ActionClearExecute
+      OnUpdate = ActionClearUpdate
+    end
+    object ActionClearAll: TAction
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1074#1089#1077
+      Hint = #1054#1095#1080#1089#1090#1080#1090#1100' '#1074#1077#1089#1100' '#1075#1088#1072#1092#1080#1082
+      OnUpdate = ActionClearAllUpdate
+    end
+  end
+  inherited Popup: TPopupActionBar
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemClear: TMenuItem
+      Action = ActionClear
+    end
+  end
+end

@@ -1,0 +1,21 @@
+unit BisKrieltReports;
+
+interface
+
+uses BisModules, BisIfaceModules;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisKrieltReportsFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  TestIface:=AModule.Ifaces.AddClass(TBisTesFormIface);
+end;
+
+end.

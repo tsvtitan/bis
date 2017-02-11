@@ -1,0 +1,353 @@
+unit BisCryptUtils;
+
+interface
+
+{$R BisCryptConsts.res}
+
+uses Classes, SysUtils,
+     BisCrypter;
+
+type
+             
+  TBisCryptInfo=packed record
+    Algorithm: TBisCipherAlgorithm;
+    Mode: TBisCipherMode;
+    K12: Byte;
+    K01: Byte;
+    K16: Byte;
+    K03: Byte;
+    K11: Byte;
+    K06: Byte;
+    K14: Byte;
+    K07: Byte;
+    K13: Byte;
+    K05: Byte;
+    K09: Byte;
+    K15: Byte;
+    K04: Byte;
+    K10: Byte;
+    K02: Byte;
+    K08: Byte;
+  end;
+  PBisCryptInfo=^TBisCryptInfo;
+
+var
+ CryptInfo: TBisCryptInfo;
+
+function DefaultCipherAlgorithm: TBisCipherAlgorithm;
+function DefaultCipherMode: TBisCipherMode;
+function DefaultHashAlgorithm: TBisHashAlgorithm;
+function DefaultHashFormat: TBisHashFormat;
+function DefaultKey: String;
+procedure SetCryptInfo(var ACryptInfo: TBisCryptInfo; CipherAlgorithm: TBisCipherAlgorithm;
+                       CipherMode: TBisCipherMode; Key: String);
+procedure GetCryptInfo(ACryptInfo: TBisCryptInfo; var CipherAlgorithm: TBisCipherAlgorithm;
+                       var CipherMode: TBisCipherMode; var Key: String);
+function GetCryptInfoFromResource(var CryptInfo: TBisCryptInfo): Boolean;
+procedure CryptInfoSaveToFile(FileName: String; CryptInfo: TBisCryptInfo);
+procedure CryptInfoLoadFromFile(FileName: String; var CryptInfo: TBisCryptInfo);
+function GetDefaultCryptInfo: TBisCryptInfo;
+function GetHashCryptInfo(ACryptInfo: TBisCryptInfo): String;
+
+function MD5(const S: String): String;
+
+procedure CrypterEncodeStream(Key: string; Source, Dest: TStream; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode);
+procedure CrypterDecodeStream(Key: string; Source, Dest: TStream; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode);
+function CrypterEncodeString(Key: string; S: String; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): string;
+function CrypterDecodeString(Key: string; S: String; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): string;
+function CrypterEncodeBytes(Key: String; B: TBytes; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): TBytes;
+function CrypterDecodeBytes(Key: String; B: TBytes; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): TBytes;
+
+
+implementation
+
+uses BisConsts;
+
+function DefaultCipherAlgorithm: TBisCipherAlgorithm;
+begin
+  Result:=CryptInfo.Algorithm;
+end;
+
+function DefaultCipherMode: TBisCipherMode;
+begin
+  Result:=CryptInfo.Mode;
+end;
+
+function DefaultHashAlgorithm: TBisHashAlgorithm;
+begin
+  Result:=haMD5;
+end;
+
+function DefaultHashFormat: TBisHashFormat;
+begin
+  Result:=hfHEX;
+end;
+
+function DefaultKey: String;
+
+  function Calc(K: Byte): String;
+  begin
+    Result:=IntToHex(K,2);
+  end;
+
+begin
+  with CryptInfo do begin
+    Result:=Calc(K01)+Calc(K02)+Calc(K03)+Calc(K04)+Calc(K05)+Calc(K06)+Calc(K07)+Calc(K08)+
+            Calc(K09)+Calc(K10)+Calc(K11)+Calc(K12)+Calc(K13)+Calc(K14)+Calc(K15)+Calc(K16);
+  end;            
+end;
+
+procedure SetCryptInfo(var ACryptInfo: TBisCryptInfo; CipherAlgorithm: TBisCipherAlgorithm;
+                       CipherMode: TBisCipherMode; Key: String);
+
+  function Calc(Position: Integer): Byte;
+  var
+    S: String;
+  begin
+    S:=Copy(Key,2*Position-1,2);
+    Result:=StrToInt(HexDisplayPrefix+S);
+  end;
+                         
+begin
+  if (Trim(Key)<>'') and (Length(Key)=32) then begin
+    FillChar(ACryptInfo,SizeOf(ACryptInfo),0);
+    with ACryptInfo do begin
+      Algorithm:=CipherAlgorithm;
+      Mode:=CipherMode;
+      K01:=Calc(01);
+      K02:=Calc(02);
+      K03:=Calc(03);
+      K04:=Calc(04);
+      K05:=Calc(05);
+      K06:=Calc(06);
+      K07:=Calc(07);
+      K08:=Calc(08);
+      K09:=Calc(09);
+      K10:=Calc(10);
+      K11:=Calc(11);
+      K12:=Calc(12);
+      K13:=Calc(13);
+      K14:=Calc(14);
+      K15:=Calc(15);
+      K16:=Calc(16);
+    end;
+  end;  
+end;
+
+procedure GetCryptInfo(ACryptInfo: TBisCryptInfo; var CipherAlgorithm: TBisCipherAlgorithm;
+                       var CipherMode: TBisCipherMode; var Key: String);
+begin
+  CipherAlgorithm:=ACryptInfo.Algorithm;
+  CipherMode:=ACryptInfo.Mode;
+end;                       
+
+function GetCryptInfoFromStream(Stream: TStream; var CryptInfo: TBisCryptInfo): Boolean;
+var
+  Old: Int64;
+begin
+  Result:=false;
+  if Assigned(Stream) then begin
+    Old:=Stream.Position;
+    try
+      Stream.Position:=0;
+      FillChar(CryptInfo,SizeOf(CryptInfo),0);
+      if Stream.Size=SizeOf(CryptInfo) then begin
+        Stream.Read(CryptInfo,SizeOf(CryptInfo));
+        Result:=true;
+      end;
+    finally
+      Stream.Position:=Old;
+    end;
+  end;
+end;
+
+function GetCryptInfoFromResource(var CryptInfo: TBisCryptInfo): Boolean;
+var
+  Stream: TResourceStream;
+begin
+  try
+    Stream:=TResourceStream.Create(HInstance,STBisCryptInfo,PChar(SBisInfo));
+    try
+      Result:=GetCryptInfoFromStream(Stream,CryptInfo);
+    finally
+      Stream.Free;
+    end;
+  except
+    Result:=false;
+  end;
+end;
+
+procedure CryptInfoSaveToFile(FileName: String; CryptInfo: TBisCryptInfo);
+var
+  Stream: TMemoryStream;
+begin
+  Stream:=TMemoryStream.Create;
+  try
+    Stream.Write(CryptInfo,SizeOf(CryptInfo));
+    Stream.SaveToFile(FileName);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure CryptInfoLoadFromFile(FileName: String; var CryptInfo: TBisCryptInfo);
+var
+  Stream: TMemoryStream;
+begin
+  Stream:=TMemoryStream.Create;
+  try
+    Stream.LoadFromFile(FileName);
+    GetCryptInfoFromStream(Stream,CryptInfo);
+  finally
+    Stream.Free;
+  end;
+end;
+
+// 92 0C 79 34 68 8D E6 FC C4 39 2C FF 5C 7B 7A 65
+
+function GetDefaultCryptInfo: TBisCryptInfo;
+begin
+  FillChar(Result,SizeOf(Result),0);
+  with Result do begin
+    Algorithm:=caRC5;
+    Mode:=cmCTS;
+    K01:=$92;
+    K02:=$0C;
+    K03:=$79;
+    K04:=$34;
+    K05:=$68;
+    K06:=$8D;
+    K07:=$E6;
+    K08:=$FC;
+    K09:=$C4;
+    K10:=$39;
+    K11:=$2C;
+    K12:=$FF;
+    K13:=$5C;
+    K14:=$7B;
+    K15:=$7A;
+    K16:=$65;
+{    K01:=146; // 92
+    K02:=12;  // 0C
+    K03:=121; // 79
+    K04:=52;  // 34
+    K05:=104; // 68
+    K06:=141; // 8D
+    K07:=230; // E6
+    K08:=252; // FC
+    K09:=196; // C4
+    K10:=57;  // 39
+    K11:=44;  // 2C
+    K12:=255; // FF
+    K13:=92;  // 5C
+    K14:=123; // 7B
+    K15:=122; // 7A
+    K16:=101; // 65}
+  end;
+end;
+
+function GetHashCryptInfo(ACryptInfo: TBisCryptInfo): String;
+var
+  Stream: TMemoryStream;
+  Crypter: TBisCrypter;
+begin
+  Stream:=TMemoryStream.Create;
+  Crypter:=TBisCrypter.Create;
+  try
+    Stream.Write(ACryptInfo,SizeOf(ACryptInfo));
+    Stream.Position:=0;
+    Result:=Crypter.HashStream(Stream,haMD5,hfHEX); 
+  finally
+    Crypter.Free;
+    Stream.Free;
+  end;
+end;
+
+function MD5(const S: String): String;
+var
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    Result:=Crypter.HashString(S,haMD5,hfHEX);
+  finally
+    Crypter.Free;
+  end;
+end;
+
+procedure CrypterEncodeStream(Key: string; Source, Dest: TStream; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode);
+var
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    Crypter.EncodeStream(Key,Source,Dest,Algorithm,Mode);
+  finally
+    Crypter.Free;
+  end;
+end;
+
+procedure CrypterDecodeStream(Key: string; Source, Dest: TStream; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode);
+var
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    Crypter.DecodeStream(Key,Source,Dest,Algorithm,Mode);
+  finally
+    Crypter.Free;
+  end;
+end;
+
+function CrypterEncodeString(Key: string; S: String; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): string;
+var
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    Result:=Crypter.EncodeString(Key,S,Algorithm,Mode);
+  finally
+    Crypter.Free;
+  end;
+end;
+
+function CrypterDecodeString(Key: string; S: String; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): string;
+var
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    Result:=Crypter.DecodeString(Key,S,Algorithm,Mode);
+  finally
+    Crypter.Free;
+  end;
+end;
+
+function CrypterEncodeBytes(Key: string; B: TBytes; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): TBytes;
+var
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    Result:=Crypter.EncodeBytes(Key,B,Algorithm,Mode);
+  finally
+    Crypter.Free;
+  end;
+end;
+
+function CrypterDecodeBytes(Key: string; B: TBytes; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): TBytes;
+var
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    Result:=Crypter.DecodeBytes(Key,B,Algorithm,Mode);
+  finally
+    Crypter.Free;
+  end;
+end;
+
+initialization
+  CryptInfo:=GetDefaultCryptInfo;
+
+end.

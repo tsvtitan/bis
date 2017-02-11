@@ -1,0 +1,204 @@
+========================= Packet 0 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+REGISTER sip:195.112.242.242 SIP/2.0
+Via: SIP/2.0/UDP 192.168.1.3:5075;rport;branch=z9hG4bKF1CDE572CD
+From: <sip:2026672@195.112.242.242>;tag=33B21BA5A
+To: <sip:2026672@195.112.242.242>
+Call-ID: B0536B18158F42B39EAA75A546700DAD
+CSeq: 1 REGISTER
+Contact: <sip:2026672@192.168.1.3:5075>;expires=3000;q=0.90
+User-Agent: SipClient 2.97
+Allow: INVITE, ACK, BYE, CANCEL, INFO, MESSAGE
+Max-Forwards: 20
+Expires: 3000
+Content-Length: 0
+
+========================= Packet 1 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 401 Unauthorized
+Via: SIP/2.0/UDP 192.168.1.3:5075;received=95.188.95.231;branch=z9hG4bKF1CDE572CD;rport=5075
+From: <sip:2026672@195.112.242.242>;tag=33B21BA5A
+To: <sip:2026672@195.112.242.242>;tag=SDuqrq599-n8bk8f53bx
+Call-ID: B0536B18158F42B39EAA75A546700DAD
+CSeq: 1 REGISTER
+Contact: <sip:2026672-3c0npg3ud0i7f+uoig8aic7trgc@195.112.242.242:5060>;q=0.9;expires=3000
+Expires: 3000
+WWW-Authenticate: Digest realm="10.25.60.4",nonce="4d174e084f849d62c4066f686bdb69ab66ea3ce9",opaque="8f392633cbe58392749784bedf500af9",qop="auth"
+Content-Length: 0
+
+========================= Packet 2 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+REGISTER sip:195.112.242.242 SIP/2.0
+Via: SIP/2.0/UDP 192.168.1.3:5075;rport;branch=z9hG4bK76A42E0300
+From: <sip:2026672@195.112.242.242>;tag=9743E3037
+To: <sip:2026672@195.112.242.242>
+Call-ID: B0536B18158F42B39EAA75A546700DAD
+User-Agent: SipClient 2.97
+CSeq: 2 REGISTER
+Contact: <sip:2026672@192.168.1.3:5075>;expires=3000;q=0.90
+Authorization: Digest username="2026672",realm="10.25.60.4",nonce="4d174e084f849d62c4066f686bdb69ab66ea3ce9",uri="sip:195.112.242.242",response="7fcd80fac04e7372550fddcb61a69813",qop="auth",cnonce="8f392633cbe58392749784bedf500af9",nc=00000001,opaque="8f392633cbe58392749784bedf500af9",algorithm=MD5
+Allow: INVITE, ACK, BYE, CANCEL, INFO, MESSAGE
+Max-Forwards: 20
+Expires: 3000
+Content-Length: 0
+
+========================= Packet 3 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 192.168.1.3:5075;received=95.188.95.231;branch=z9hG4bK76A42E0300;rport=5075
+From: <sip:2026672@195.112.242.242>;tag=9743E3037
+To: <sip:2026672@195.112.242.242>;tag=SDuqrq599-l65rjd0b3v
+Call-ID: B0536B18158F42B39EAA75A546700DAD
+CSeq: 2REGISTER
+Contact: <sip:2026672@192.168.1.3:5075>;expires=30;q=0.9
+Content-Length: 0
+
+========================= Packet 4 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+INVITE sip:2026672@192.168.1.3:5075 SIP/2.0
+Via: SIP/2.0/UDP 195.112.242.242:5060;branch=z9hG4bKfa008m000o2grfgcb580.1
+Accept: application/sdp
+Allow: INVITE,ACK,CANCEL,BYE,INFO,PRACK,UPDATE,OPTIONS,REGISTER,REFER,SUBSCRIBE
+Call-ID: SDkjfme01-38db5da8fa23f2c6960a4e2283559f49-a86o3f0
+Contact: "3912374863" <sip:3912374863@195.112.242.242:5060;user=phone;transport=udp>
+CSeq: 332 INVITE
+Expires: 3600
+From: "3912374863" <sip:3912374863@195.112.242.242:5060;user=phone;cpc=ordinary>;tag=SDkjfme01-nsv3iwhy8h
+To: "2026672" <sip:2026672@195.112.242.242:5060>
+Organization: IskraTel
+User-Agent: SI3000
+Max-Forwards: 69
+Subject: Call from SI3000
+P-Asserted-Identity: "3912374863" <sip:3912374863@10.25.60.4:5060;user=phone>
+Privacy: none
+Content-Length: 191
+Content-Type: application/sdp
+Content-Disposition: session;handling=required
+
+v=0
+o=- 3420427 7862775 IN IP4 195.112.242.242
+s=-
+c=IN IP4 195.112.242.242
+b=AS:64
+t=0 0
+m=audio 16798 RTP/AVP 8 0
+a=rtpmap:8 PCMA/8000
+a=rtpmap:0 PCMU/8000
+a=ptime:20
+a=sendrecv
+
+========================= Packet 5 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+SIP/2.0 100 Trying
+Via: SIP/2.0/UDP 195.112.242.242:5060;branch=z9hG4bKfa008m000o2grfgcb580.1
+To: "2026672" <sip:2026672@195.112.242.242:5060>;tag=AF048C9DE
+From: "3912374863" <sip:3912374863@195.112.242.242:5060;user=phone;cpc=ordinary>;tag=SDkjfme01-nsv3iwhy8h
+Call-ID: SDkjfme01-38db5da8fa23f2c6960a4e2283559f49-a86o3f0
+CSeq: 332 INVITE
+Content-Length: 0
+
+========================= Packet 6 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+SIP/2.0 180 Ringing
+Via: SIP/2.0/UDP 195.112.242.242:5060;branch=z9hG4bKfa008m000o2grfgcb580.1
+To: "2026672" <sip:2026672@195.112.242.242:5060>;tag=AF048C9DE
+From: "3912374863" <sip:3912374863@195.112.242.242:5060;user=phone;cpc=ordinary>;tag=SDkjfme01-nsv3iwhy8h
+Call-ID: SDkjfme01-38db5da8fa23f2c6960a4e2283559f49-a86o3f0
+CSeq: 332 INVITE
+Content-Length: 0
+
+========================= Packet 7 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 195.112.242.242:5060;branch=z9hG4bKfa008m000o2grfgcb580.1
+To:"2026672" <sip:2026672@195.112.242.242:5060>;tag=AF048C9DE
+From: "3912374863" <sip:3912374863@195.112.242.242:5060;user=phone;cpc=ordinary>;tag=SDkjfme01-nsv3iwhy8h
+Call-ID: SDkjfme01-38db5da8fa23f2c6960a4e2283559f49-a86o3f0
+CSeq: 332 INVITE
+Contact: <sip:2026672@192.168.1.3:5075>
+Allow: INVITE, ACK, CANCEL, BYE
+Content-Type: application/sdp
+Content-Length: 182
+
+v=0
+o=- 2959 0 IN IP4 192.168.1.3
+s=Delphi SIP component
+c=IN IP4 192.168.1.3
+t=0 0
+m=audio 22002 RTP/AVP 0 101
+a=rtpmap:101 telephone-event/8000
+a=fmtp:101 0-16
+a=sendrecv
+
+========================= Packet 8 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+ACK sip:2026672@192.168.1.3:5075 SIP/2.0
+Via: SIP/2.0/UDP 195.112.242.242:5060;branch=z9hG4bKbkdm6u00bghgrdcit4o0.1
+Call-ID: SDkjfme01-38db5da8fa23f2c6960a4e2283559f49-a86o3f0
+CSeq: 332 ACK
+From: "3912374863" <sip:3912374863@195.112.242.242:5060;user=phone;cpc=ordinary>;tag=SDkjfme01-nsv3iwhy8h
+To: "2026672" <sip:2026672@195.112.242.242:5060>;tag=AF048C9DE
+Max-Forwards: 69
+Content-Length: 0
+
+========================= Packet 9 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+BYE sip:2026672@192.168.1.3:5075 SIP/2.0
+Via: SIP/2.0/UDP 195.112.242.242:5060;branch=z9hG4bKbkdm6u00bghgrdcit4o0cd0002g61.1
+Call-ID: SDkjfme01-38db5da8fa23f2c6960a4e2283559f49-a86o3f0
+CSeq: 333 BYE
+From: "3912374863" <sip:3912374863@195.112.242.242:5060;user=phone;cpc=ordinary>;tag=SDkjfme01-nsv3iwhy8h
+To: "2026672" <sip:2026672@195.112.242.242:5060>;tag=AF048C9DE
+Reason: Q.850;cause=16;text="Normal call clearing"
+Max-Forwards: 69
+Content-Length: 0
+
+========================= Packet 10 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 195.112.242.242:5060;branch=z9hG4bKbkdm6u00bghgrdcit4o0cd0002g61.1
+From: "3912374863" <sip:3912374863@195.112.242.242:5060;user=phone;cpc=ordinary>;tag=SDkjfme01-nsv3iwhy8h
+To: "2026672" <sip:2026672@195.112.242.242:5060>;tag=AF048C9DE
+Call-ID: SDkjfme01-38db5da8fa23f2c6960a4e2283559f49-a86o3f0
+CSeq: 333 BYE
+Content-Length: 0
+
+========================= Packet 11 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+REGISTER sip:195.112.242.242 SIP/2.0
+Via: SIP/2.0/UDP 192.168.1.3:5075;rport;branch=z9hG4bK84BFA70319
+From: <sip:2026672@195.112.242.242>;tag=9743E3037
+To: <sip:2026672@195.112.242.242>
+Call-ID: B0536B18158F42B39EAA75A546700DAD
+CSeq: 4 REGISTER
+Contact: *
+Allow: INVITE, ACK, BYE, CANCEL, INFO, MESSAGE
+Max-Forwards: 20
+Expires: 0
+Content-Length: 0
+
+========================= Packet 12 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 401 Unauthorized
+Via: SIP/2.0/UDP 192.168.1.3:5075;received=95.188.95.231;branch=z9hG4bK84BFA70319;rport=5075
+From: <sip:2026672@195.112.242.242>;tag=9743E3037
+To: <sip:2026672@195.112.242.242>;tag=SDuqrq599-dkgl405eqa
+Call-ID: B0536B18158F42B39EAA75A546700DAD
+CSeq: 4 REGISTER
+Contact: *
+Expires: 0
+WWW-Authenticate: Digest realm="10.25.60.4",nonce="4d174e1ef9730efd396a206cb4f3968fb66a996e",opaque="63e8907d8a770220c87c1e69789ae5f5",qop="auth"
+Content-Length: 0

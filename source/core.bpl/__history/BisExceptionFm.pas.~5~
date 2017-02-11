@@ -1,0 +1,32 @@
+unit BisExceptionFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisFm, ExtCtrls, Buttons, StdCtrls;
+
+type
+  TBisExceptionForm = class(TBisForm)
+    iIcon: TImage;
+    bTimer: TSpeedButton;
+    Timer: TTimer;
+    ButtonOk: TButton;
+    ButtonDetail: TButton;
+    MemoMessage: TMemo;
+    LabelCode: TLabel;
+    EditCode: TEdit;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BisExceptionForm: TBisExceptionForm;
+
+implementation
+
+{$R *.dfm}
+
+end.

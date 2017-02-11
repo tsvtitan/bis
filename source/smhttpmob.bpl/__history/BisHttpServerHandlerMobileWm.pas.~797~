@@ -1,0 +1,581 @@
+unit BisHttpServerHandlerMobileWm;
+
+interface
+
+uses
+  SysUtils, Classes, HTTPApp, DB, Contnrs,
+  BisLogger, BisHttpServerHandlers;
+
+type
+
+  TBisHttpServerHandlerMobileWebModule = class(TWebModule)
+    procedure BisHttpServerHandlerMobileWebModuleDefaultAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+  private
+    FHandler: TBisHttpServerHandler;
+  public
+    property Handler: TBisHttpServerHandler read FHandler write FHandler;
+  end;
+
+var
+  BisHttpServerHandlerMobileWebModule: TBisHttpServerHandlerMobileWebModule;
+
+implementation
+
+{$R *.dfm}
+
+uses Windows, Variants, StrUtils,
+     AlXmlDoc,
+     BisConsts, BisUtils, BisProvider, BisCore, BisConnections, BisDataSet,
+     BisValues, BisFilterGroups,
+     BisHttpServerHandlerMobileConsts;
+
+type
+  TBisOutMessage=class(TObject)
+  private
+    FText: String;
+    FId: Variant;
+  public
+    property Id: Variant read FId write FId; 
+    property Text: String read FText write FText;
+  end;
+
+  TBisOutMessages=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisOutMessage;
+  public
+    function AddMessage(Id: Variant; Text: String): TBisOutMessage;
+
+    property Items[Index: Integer]: TBisOutMessage read GetItem;
+  end;
+
+
+{ TBisOutMessages }
+
+function TBisOutMessages.AddMessage(Id: Variant; Text: String): TBisOutMessage;
+begin
+  Result:=TBisOutMessage.Create;
+  Result.Text:=Text;
+  Result.Id:=Id;
+  inherited Add(Result);
+end;
+
+function TBisOutMessages.GetItem(Index: Integer): TBisOutMessage;
+begin
+  Result:=TBisOutMessage(inherited Items[Index]);
+end;
+
+{ TBisHttpServerHandlerMessageWebModule }
+
+procedure TBisHttpServerHandlerMobileWebModule.BisHttpServerHandlerMobileWebModuleDefaultAction(Sender: TObject;
+          Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+  CodeMessages: TBisProvider;
+
+  procedure LoggerWrite(Message: String; LogType: TBisLoggerType=ltInformation);
+  begin
+    if Assigned(Core) and Assigned(Core.Logger) then
+      Core.Logger.Write(Message,LogType,Copy(Self.Name,4,Length(Self.Name)));
+  end;
+
+  function ReadStream(Stream: TMemoryStream; var UserName, TextIn: String): Boolean;
+  var
+    Xml: TALXMLDocument;
+    i,j: Integer;
+    Node,DataNode: TALXMLNode;
+  begin
+    Result:=false;
+    if Stream.Size>0 then begin
+      Xml:=TALXMLDocument.Create(nil);
+      try
+        Xml.LoadFromStream(Stream);
+        for i:=0 to Xml.ChildNodes.Count-1 do begin
+          Node:=Xml.ChildNodes[i];
+          if AnsiSameText(Node.NodeName,'d') then begin
+            DataNode:=Node;
+            for j:=0 to DataNode.ChildNodes.Count-1 do begin
+              Node:=DataNode.ChildNodes[j];
+              if AnsiSameText(Node.NodeName,'u') then UserName:=Trim(VarToStr(Node.NodeValue));
+              if AnsiSameText(Node.NodeName,'t') then TextIn:=VarToStr(Node.NodeValue);
+            end;
+          end;
+        end;
+        Result:=(Xml.ChildNodes.Count>0) and (Length(UserName)>0);
+      finally
+        Xml.Free;
+      end;
+    end;
+  end;
+
+  function WriteStream(TextOut: String; Messages: TBisOutMessages): String;
+  var
+    Xml: TALXMLDocument;
+    DataNode: TALXMLNode;
+    ResultNode: TALXMLNode;
+    MessagesNode: TALXMLNode;
+    i: Integer;
+    Item: TBisOutMessage;
+  begin
+    Xml:=TALXMLDocument.Create(nil);
+    try
+      Xml.Active:=true;
+      DataNode:=Xml.AddChild('d');
+      ResultNode:=DataNode.AddChild('r');
+      ResultNode.NodeValue:=iff(TextOut<>'',TextOut,Null);
+      MessagesNode:=DataNode.AddChild('m');
+      for i:=0 to Messages.Count-1 do begin
+        Item:=Messages.Items[i];
+        MessagesNode.AddChild('i').NodeValue:=Item.Text;
+      end;
+      Result:=Trim(Xml.XML.Text);
+    finally
+      Xml.Free;
+    end;
+  end;
+
+  function GetConnection: TBisConnection;
+  begin
+    Result:=nil;
+    if Assigned(Core) and Assigned(Core.Connection) then
+      Result:=Core.Connection;
+  end;
+
+  function AccountExists(UserName: String; var Contact: String; var SenderId, FirmId: Variant): Boolean;
+  var
+    P: TBisProvider;
+  begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_ACCOUNTS';
+      with P.FieldNames do begin
+        AddInvisible('ACCOUNT_ID');
+        AddInvisible('PHONE');
+        AddInvisible('FIRM_ID');
+      end;
+      with P.FilterGroups.Add do begin
+        Filters.Add('LOCKED',fcEqual,0);
+        Filters.Add('USER_NAME',fcEqual,UserName);
+        Filters.Add('PHONE',fcIsNotNull,Null);
+      end;
+      P.Open;
+      Result:=P.Active and not P.Empty;
+      if Result then begin
+        Contact:=P.FieldByName('PHONE').AsString;
+        SenderId:=P.FieldByName('ACCOUNT_ID').Value;
+        FirmId:=P.FieldByName('FIRM_ID').Value;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+
+  function IncomingGranted(SenderId: Variant): Boolean;
+  var
+    P: TBisProvider;
+  begin
+    Result:=false;
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='GET_INCOMING_GRANTED';
+      with P.Params do begin
+        AddInvisible('ACCOUNT_ID').Value:=SenderId;
+        AddInvisible('TYPE_MESSAGE').Value:=DefaultTypeMessage;
+        AddInvisible('GRANTED',ptOutput);
+      end;
+      P.Execute;
+      if P.Success then
+        Result:=P.ParamByName('GRANTED').AsBoolean;
+    finally
+      P.Free;
+    end;
+  end;
+
+  procedure RefreshCodeMessages;
+  var
+    P: TBisProvider;
+  begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_CODE_MESSAGES';
+      with P.FieldNames do begin
+        AddInvisible('CODE_MESSAGE_ID');
+        AddInvisible('CODE');
+        AddInvisible('PROC_NAME');
+        AddInvisible('COMMAND_STRING');
+        AddInvisible('ANSWER');
+      end;
+      P.FilterGroups.Add.Filters.Add('ENABLED',fcEqual,1);
+      P.Orders.Add('CODE');
+      P.Open;
+      if P.Active then begin
+        CodeMessages.Close;
+        CodeMessages.CreateTable(P);
+        CodeMessages.CopyRecords(P);
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+
+  function GetCodeMessageId(TextIn: String; var RetCode,ProcName, CommandString, Answer: String): Variant;
+
+    function FindByDelimeter(Code, Delimeter: String): Boolean;
+    var
+      S: String;
+      APos: Integer;
+    begin
+      Result:=false;
+      APos:=AnsiPos(Delimeter,TextIn);
+      if APos>0 then begin
+        S:=Copy(TextIn,1,APos-1);
+        Result:=AnsiSameText(S,Code);
+      end;
+    end;
+
+    function CheckCodeByDelimeter(Code: String): Boolean;
+    begin
+      Result:=AnsiSameText(Code,TextIn);
+      if not Result then
+        Result:=FindByDelimeter(Code,':');
+      if not Result then
+        Result:=FindByDelimeter(Code,'=');
+      if not Result then
+        Result:=FindByDelimeter(Code,'-');
+      if not Result then
+        Result:=FindByDelimeter(Code,' ');
+    end;
+
+    function FindByCode(var NewCode: String): Boolean;
+    var
+      Str: TStringList;
+      i: Integer;
+    begin
+      Result:=CheckCodeByDelimeter(NewCode);
+      if not Result then begin
+        Str:=TStringList.Create;
+        try
+          GetStringsByString(NewCode,';',Str);
+          for i:=0 to Str.Count-1 do begin
+            if CheckCodeByDelimeter(Str[i]) then begin
+              NewCode:=Str[i];
+              Result:=true;
+              break;
+            end;
+          end;
+        finally
+          Str.Free;
+        end;
+      end;
+    end;
+
+  var
+    CodeMessageId: Variant;
+    LCode: Integer;
+    LTextIn: Integer;
+    NewCode: String;
+    Code: String;
+  begin
+    Result:=Null;
+    TextIn:=Trim(TextIn);
+    LTextIn:=Length(TextIn);
+    if (LTextIn>0) and CodeMessages.Active and not CodeMessages.IsEmpty then begin
+      CodeMessages.First;
+      while not CodeMessages.Eof do begin
+        CodeMessageId:=CodeMessages.FieldByName('CODE_MESSAGE_ID').Value;
+        Code:=Trim(CodeMessages.FieldByName('CODE').AsString);
+        LCode:=Length(Code);
+        NewCode:=Code;
+        if (LCode>0) and FindByCode(NewCode) then begin
+          RetCode:=NewCode;
+          ProcName:=CodeMessages.FieldByName('PROC_NAME').AsString;
+          CommandString:=CodeMessages.FieldByName('COMMAND_STRING').AsString;
+          Answer:=CodeMessages.FieldByName('ANSWER').AsString;
+          Result:=CodeMessageId;
+          exit;
+        end;
+        CodeMessages.Next;
+      end;
+    end;
+  end;
+
+  procedure ExecuteProc(ProcName: String; InMessageId: Variant);
+  var
+    P: TBisProvider;
+  begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:=ProcName;
+      with P.Params do begin
+        AddInvisible('ACCOUNT_ID').Value:=Core.AccountId;
+        AddInvisible('IN_MESSAGE_ID').Value:=InMessageId;
+      end;
+      P.Execute;
+      if P.Success then ;
+    finally
+      P.Free;
+    end;
+  end;
+
+  procedure ExecuteCommand(Code,CommandString: String; Contact,TextIn: String; SenderId, CodeMessageId, InMessageId: Variant);
+  var
+    S: String;
+    i: Integer;
+    Params: TBisValues;
+    Param: TBisValue;
+    StartupInfo: TStartupInfo;
+    ProcessInfo: TProcessInformation;
+    Ret: Boolean;
+  begin
+    Params:=TBisValues.Create;
+    try
+      Params.Add('IN_MESSAGE_ID',VarToStrDef(InMessageId,''));
+      Params.Add('SENDER_ID',VarToStrDef(SenderId,''));
+      Params.Add('CODE_MESSAGE_ID',VarToStrDef(CodeMessageId,''));
+      Params.Add('TEXT_IN',TextIn);
+      Params.Add('CONTACT',Contact);
+      Params.Add('CODE',Code);
+
+      S:=CommandString;
+      for i:=0 to Params.Count-1 do begin
+        Param:=Params.Items[i];
+        S:=StringReplace(S,'%'+Param.Name,'"'+VarToStrDef(Param.Value,'')+'"',[rfReplaceAll, rfIgnoreCase]);
+      end;
+
+      FillChar(StartupInfo,SizeOf(TStartupInfo),0);
+      with StartupInfo do begin
+        cb:=SizeOf(TStartupInfo);
+        wShowWindow:=SW_SHOWDEFAULT;
+      end;
+      Ret:=CreateProcess(nil,PChar(S),nil,nil,False,
+                         NORMAL_PRIORITY_CLASS,nil,nil,StartupInfo, ProcessInfo);
+      if not Ret then
+        raise Exception.Create(SysErrorMessage(GetLastError));
+
+    finally
+      Params.Free;
+    end;
+  end;
+
+  function WriteMessage(Contact, TextIn: String; SenderId, CodeMessageId, FirmId: Variant): Variant;
+  var
+    P: TBisProvider;
+  begin
+    Result:=Null;
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='I_IN_MESSAGE';
+      with P.Params do begin
+        AddKey('IN_MESSAGE_ID');
+        AddInvisible('SENDER_ID').Value:=SenderId;
+        AddInvisible('CODE_MESSAGE_ID').Value:=CodeMessageId;
+        AddInvisible('DATE_SEND').Value:=Core.ServerDate;
+        AddInvisible('TEXT_IN').Value:=TextIn;
+        AddInvisible('DATE_IN').Value:=Null;
+        AddInvisible('TYPE_MESSAGE').Value:=DefaultTypeMessage;
+        AddInvisible('CONTACT').Value:=Contact;
+        AddInvisible('CHANNEL').Value:=Request.RemoteAddr; // Need to special IP and Port
+//        AddInvisible('CHANNEL').Value:=FormatEx('%s:%s',[Request.GetFieldByName('REMOTE_IP'),Request.GetFieldByName('REMOTE_PORT')]);
+        AddInvisible('FIRM_ID').Value:=FirmId;
+        AddInvisible('OPERATOR_ID').Value:=Null;
+      end;
+      P.Execute;
+      if P.Success then begin
+        Result:=P.Params.ParamByName('IN_MESSAGE_ID').Value;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+
+  procedure SelectMessages(SenderId: Variant; Messages: TBisOutMessages);
+
+    procedure LockMessage(Item: TBisOutMessage);
+    var
+      P: TBisProvider;
+    begin
+      P:=TBisProvider.Create(nil);
+      try
+        P.ProviderName:='LOCK_OUT_MESSAGE';
+        with P.Params do begin
+          AddInvisible('OUT_MESSAGE_ID').Value:=Item.Id;
+          AddInvisible('LOCKED').Value:=GetUniqueID;
+          AddInvisible('CHANNEL').Value:=Request.Host;
+        end;
+        P.Execute;
+        if P.Success then ;
+      finally
+        P.Free;
+      end;
+    end;
+    
+  var
+    P: TBisProvider;
+    i: Integer;
+    S: String;
+    Field: TField;
+  begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_OUT_MESSAGES';
+      with P do begin
+        with FieldNames do begin
+          AddInvisible('OUT_MESSAGE_ID');
+          AddInvisible('CREATOR_ID');
+          AddInvisible('RECIPIENT_ID');
+          AddInvisible('DATE_CREATE');
+          AddInvisible('TEXT_OUT');
+          AddInvisible('CONTACT');
+          AddInvisible('DELIVERY');
+          AddInvisible('FLASH');
+          AddInvisible('DESCRIPTION');
+          AddInvisible('CREATOR_NAME');
+          AddInvisible('RECIPIENT_NAME');
+          AddInvisible('RECIPIENT_PHONE');
+        end;
+        with FilterGroups.Add do begin
+          Filters.Add('RECIPIENT_ID',fcEqual,SenderId).CheckCase:=true;
+          Filters.Add('DATE_OUT',fcIsNull,Null);
+          Filters.Add('TYPE_MESSAGE',fcEqual,DefaultTypeMessage);
+        end;
+        with Orders do begin
+          Add('PRIORITY');
+          Add('DATE_BEGIN');
+        end;
+      end;
+      P.Open;
+      if P.Active and not P.IsEmpty then begin
+
+        P.First;
+        while not P.Eof do begin
+          S:=P.FieldByName('TEXT_OUT').AsString;
+          for i:=0 to P.Fields.Count-1 do begin
+            Field:=P.Fields[i];
+            if not AnsiSameText(Field.FieldName,'TEXT_OUT') then
+              S:=StringReplace(S,'%'+Field.FieldName,VarToStrDef(Field.Value,''),[rfReplaceAll, rfIgnoreCase]);
+          end;
+          LockMessage(Messages.AddMessage(P.FieldByName('OUT_MESSAGE_ID').Value,S));
+          P.Next;
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+
+  procedure UpdateMessages(SenderId: Variant; Messages: TBisOutMessages; Sent: Boolean);
+
+    procedure UnLockMessage(Item: TBisOutMessage);
+    var
+      P: TBisProvider;
+    begin
+      P:=TBisProvider.Create(nil);
+      try
+        P.ProviderName:='UNLOCK_OUT_MESSAGE';
+        with P.Params do begin
+          AddInvisible('OUT_MESSAGE_ID').Value:=Item.Id;
+          AddInvisible('SENT').Value:=Integer(Sent);
+        end;
+        P.Execute;
+        if P.Success then ;
+      finally
+        P.Free;
+      end;
+    end;
+    
+  var
+    i: Integer;
+  begin
+    for i:=0 to Messages.Count-1 do
+      UnLockMessage(Messages.Items[i]);
+  end;
+
+var
+  RealContent: String;
+  RequestStream: TMemoryStream;
+  UserName: String;
+  SenderId, FirmId: Variant;
+  TextIn: String;
+  Contact: String;
+  ProcName: String;
+  CommandString: String;
+  Answer: String;
+  RetCode: String;
+  CodeMessageId: Variant;
+  InMessageId: Variant;
+  OutMessages: TBisOutMessages;
+  TextOut: String;
+  OrderId: Variant;
+begin
+  Sleep(1000);
+  Handled:=false;
+  if Assigned(FHandler) then begin
+    try
+      RequestStream:=TMemoryStream.Create;
+      try
+        RealContent:=Utf8ToAnsi(Request.Content);
+        RequestStream.WriteBuffer(Pointer(RealContent)^,Length(RealContent));
+        RequestStream.Position:=0;
+
+        SenderId:=Null;
+        UserName:='';
+        TextIn:='';
+        Contact:='';
+
+        if ReadStream(RequestStream,UserName,TextIn) then begin
+
+          if AccountExists(UserName,Contact,SenderId,FirmId) and
+             IncomingGranted(SenderId) then begin
+             
+            CodeMessages:=TBisProvider.Create(nil);
+            OutMessages:=TBisOutMessages.Create;
+            TextOut:='';
+            try
+              Answer:='';
+              OrderId:=Null;
+              try
+                if Trim(TextIn)<>'' then
+                  RefreshCodeMessages;
+                ProcName:='';
+                CommandString:='';
+                CodeMessageId:=GetCodeMessageId(TextIn,RetCode,ProcName,CommandString,Answer);
+                InMessageId:=WriteMessage(Contact,TextIn,SenderId,CodeMessageId,FirmId);
+                if not VarIsNull(InMessageId) then begin
+                  if not VarIsNull(CodeMessageId) then begin
+                    if Trim(ProcName)<>'' then begin
+                      ExecuteProc(ProcName,InMessageId);
+                    end;
+                    if Trim(CommandString)<>'' then
+                      ExecuteCommand(RetCode,CommandString,Contact,TextIn,SenderId,CodeMessageId,InMessageId);
+                  end;
+                end;
+                SelectMessages(SenderId,OutMessages);
+                TextOut:=WriteStream(Answer,OutMessages);
+                Response.Content:=AnsiToUtf8(TextOut);
+                Response.SendResponse;
+                Handled:=Response.Sent;
+                UpdateMessages(SenderId,OutMessages,Handled);
+              except
+                On E: Exception do begin
+                  Response.Content:=AnsiToUtf8(Trim(E.Message));
+                  Handled:=true;
+                  raise;
+                end;
+              end;
+            finally
+              CodeMessages.Free;
+              OutMessages.Free;
+            end;
+          end;
+        end;
+      finally
+        RequestStream.Free;
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(E.Message,ltError);
+      end;
+    end;
+  end;
+end;
+
+end.

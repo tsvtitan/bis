@@ -1,0 +1,51 @@
+unit BisCallcHandbookFirmTypesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm;
+
+type
+  TBiCallcHandbookFirmTypesForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHandbookFirmTypesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHandbookFirmTypesForm: TBiCallcHandbookFirmTypesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHandbookAccountsEditFm;
+
+{ TBisCallcHandbookFirmTypesFormIface }
+
+constructor TBisCallcHandbookFirmTypesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBiCallcHandbookFirmTypesForm;
+  InsertClass:=TBisCallcHandbookFirmTypesInsertFormIface;
+  UpdateClass:=TBisCallcHandbookFirmTypesUpdateFormIface;
+  DeleteClass:=TBisCallcHandbookFirmTypesDeleteFormIface;
+  Caption:='Типы организаций';
+  ProviderName:='S_FIRM_TYPES';
+  with FieldNames do begin
+    AddKey('FIRM_TYPE_ID');
+    Add('NAME','Наименование',100);
+    Add('DESCRIPTION','Описание',150);
+    AddInvisible('PRIORITY');
+  end;
+  Orders.Add('NAME');
+end;
+
+end.

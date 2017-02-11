@@ -1,0 +1,42 @@
+package dws2FTPLibrary;
+
+{$R *.res}
+{$R '..\FTPLib\dws2FTPLib.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS OFF}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScript II - FTP Library'}
+{$LIBSUFFIX '60'}
+{$IMPLICITBUILD OFF}
+
+
+requires
+  dws2Runtime,
+  vcl,
+  dbrtl,
+  adortl,
+  indy;
+
+contains
+  dws2FTPModule in '..\FTPLib\dws2FTPModule.pas' {dws2FTPLib: TDataModule},
+  ftpobjunit in '..\FTPLib\ftpobjunit.pas';
+
+end.

@@ -1,0 +1,45 @@
+package dws2MFLibrary;
+
+{$R *.res}
+{$R '..\MFLib\dws2MFLib.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScript II - MFLib'}
+{$LIBSUFFIX '70'}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vcl,
+  dws2Runtime;
+
+contains
+  RegExpr in '..\MFLib\RegExpr.pas',
+  ProcessViewer in '..\MFLib\ProcessViewer.pas',
+  dws2MFLoader in '..\MFLib\dws2MFLoader.pas',
+  dws2MFLibFuncs in '..\MFLib\dws2MFLibFuncs.pas',
+  dws2MFLibUtils in '..\MFLib\dws2MFLibUtils.pas',
+  dws2MFLibModule in '..\MFLib\dws2MFLibModule.pas' {dws2MFLib: TDataModule},
+  ZipUnzip in '..\MFLib\ZipUnzip.pas',
+  dws2MFZipLibModule in '..\MFLib\dws2MFZipLibModule.pas' {dws2MFZipLib: TDataModule};
+
+end.

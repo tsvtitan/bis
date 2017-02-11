@@ -1,0 +1,1107 @@
+unit BisParams;
+
+interface
+
+uses Classes, Contnrs, Controls, DB, Variants,
+     BisFilterGroups,
+     BisParam, BisParamInvisible, BisParamKey, BisParamEdit, BisParamMemo,
+     BisParamEditInteger, BisParamCheckBox, BisParamEditDataSelect, BisParamComboBox,
+     BisParamEditDate, BisParamEditFloat, BisParamEditCurrency, BisParamEditCalc,
+     BisParamComboBoxDataSelect,
+     BisParamEditDateTime, BisParamRichEdit, BisParamHotKey, BisParamImage,
+     BisParamColorBox, BisParamPopupDataSelect, BisParamCalculate, BisParamSynEdit;
+
+const
+  AllParamTypes=[ptUnknown, ptInput, ptOutput, ptInputOutput, ptResult];
+
+type
+
+  TBisParams=class(TObjectList)
+  private
+    FOnChange: TBisParamChangeEvent;
+    FOnKeyDown: TKeyEvent;
+    FUnique: Boolean;
+    FReadDataOnlyInvisible: Boolean;
+    FProviderName: String;
+    FEnabled: Boolean;
+    FOnFindComponent: TBisParamFindComponentEvent;
+    FID: String;
+    function GetItem(Index: Integer): TBisParam;
+    procedure SetOnChange(const Value: TBisParamChangeEvent);
+    procedure SetOnKeyDown(const Value: TKeyEvent);
+    function GetEmpty: Boolean;
+    procedure SetEnabled(const Value: Boolean);
+    procedure SetOnFindComponent(const Value: TBisParamFindComponentEvent);
+  protected
+    function AddClass(AClass: TBisParamClass): TBisParam;
+    function Add(ParamName: String; ParamClass: TBisParamClass): TBisParam;
+    function GetParamClassByName(AClassName: String): TBisParamClass;
+  public
+    constructor Create; virtual;
+    function Find(ParamName: String; Counter: Integer=0): TBisParam;
+    function ParamByName(ParamName: String; Counter: Integer=0): TBisParam;
+    function FindByDuplicate(ParamName: String): TBisParam;
+    function ValueByParam(ParamFormat, ParamName: String): Variant;
+
+    function AddInvisible(ParamName: String; ParamType: TParamType=ptInput): TBisParamInvisible;
+    function AddKey(ParamName: String; ParamType: TParamType=ptInput): TBisParamKey;
+    function AddKeyValue(ParamName: String; Value: Variant; ParamType: TParamType=ptInput): TBisParamKey;
+    function AddEdit(ParamName, EditName, LabelName: String; Required: Boolean=false; IsKey: Boolean=false): TBisParamEdit;
+    function AddMemo(ParamName, MemoName, LabelName: String; Required: Boolean=false): TBisParamMemo;
+    function AddEditInteger(ParamName, EditName, LabelName: String; Required: Boolean=false): TBisParamEditInteger;
+    function AddCheckBox(ParamName, CheckBoxName: String): TBisParamCheckBox; overload;
+    function AddCheckBox(ParamName, CheckBoxName: String; Value: Variant): TBisParamCheckBox; overload;
+    function AddEditDataSelect(ParamName, EditName, LabelName, ButtonName: String;
+                               DataClass: TComponentClass; DataName: String; Required: Boolean=false; IsKey: Boolean=false;
+                               Alias: String=''; DataAlias: String=''): TBisParamEditDataSelect; overload;
+    function AddEditDataSelect(ParamName, EditName, LabelName, ButtonName: String;
+                               DataClass: String; DataName: String; Required: Boolean=false; IsKey: Boolean=false;
+                               Alias: String=''; DataAlias: String=''): TBisParamEditDataSelect; overload;
+    function AddComboBox(ParamName, ComboBoxName, LabelName: String; Required: Boolean=false): TBisParamComboBox;
+    function AddComboBoxIndex(ParamName, ComboBoxName, LabelName: String; Required: Boolean=false): TBisParamComboBox;
+    function AddComboBoxTextIndex(ParamName, ComboBoxName, LabelName: String; Required: Boolean=false): TBisParamComboBox;
+    function AddComboBoxText(ParamName, ComboBoxName, LabelName: String; Required: Boolean=false): TBisParamComboBox;
+    function AddEditDate(ParamName, DateTimePickerName, LabelName: String; Required: Boolean=false): TBisParamEditDate;
+    function AddEditFloat(ParamName, EditName, LabelName: String; Required: Boolean=false): TBisParamEditFloat;
+    function AddEditCurrency(ParamName, EditName, LabelName: String; Required: Boolean=false): TBisParamEditCurrency;
+    function AddEditCalc(ParamName, EditName, LabelName: String; Required: Boolean=false): TBisParamEditCalc;
+    function AddComboBoxDataSelect(ParamName, ComboBoxName, LabelName, ButtonName: String;
+                                   DataClass: TComponentClass; DataName: String; Required: Boolean=false; IsKey: Boolean=false;
+                                   Alias: String=''; DataAlias: String=''): TBisParamComboBoxDataSelect; overload;
+    function AddComboBoxDataSelect(ParamName, ComboBoxName, LabelName, ButtonName: String;
+                                   DataClass: String; DataName: String; Required: Boolean=false; IsKey: Boolean=false;
+                                   Alias: String=''; DataAlias: String=''): TBisParamComboBoxDataSelect; overload;
+    function AddComboBoxDataSelect(ParamName, ComboBoxName, LabelName: String;
+                                   ProviderName: String; DataName: String; Required: Boolean=false; IsKey: Boolean=false;
+                                   Alias: String=''; DataAlias: String=''): TBisParamComboBoxDataSelect; overload;
+
+    function AddEditDateTime(ParamName, DateTimePickerDateName, DateTimePickerTimeName, LabelName: String; Required: Boolean=false): TBisParamEditDateTime;
+    function AddRichEdit(ParamName, RichEditName, LabelName: String; Required: Boolean=false): TBisParamRichEdit;
+    function AddHotKey(ParamName, HotKeyName, LabelName: String; Required: Boolean=false): TBisParamHotKey;
+    function AddImage(ParamName, ImageName: String; Required: Boolean=false): TBisParamImage;
+    function AddColorBox(ParamName, ColorBoxName, LabelName: String; Required: Boolean=false): TBisParamColorBox;
+    function AddCalculate(ParamName: String; OnGetValue: TBisParamCalculateGetValueEvent): TBisParamCalculate;
+    function AddPopupDataSelect(ParamName, EditName, LabelName: String;
+                               DataClass: TComponentClass; DataName: String; Required: Boolean=false; IsKey: Boolean=false;
+                               Alias: String=''; DataAlias: String=''): TBisParamPopupDataSelect;
+    function AddSynEdit(ParamName, SynEditName, LabelName: String; Required: Boolean=false): TBisParamSynEdit;
+
+    procedure CopyFrom(Source: TBisParams; WithClear: Boolean=true; WithReset: Boolean=true;
+                       ParamTypes: TParamTypes=AllParamTypes; WithAdd: Boolean=true);
+    procedure CopyToFilterGroups(FilterGroups: TBisFilterGroups);
+    procedure RefreshByDataSet(ADataSet: TDataSet; WithValue: Boolean=true; WithAuto: Boolean=true);
+
+
+    procedure LinkControls(AParent: TWinControl);
+    procedure ValueToStored;
+    procedure SetAutoValue;
+    procedure ApplyMode(Mode: TBisParamEditMode);
+    procedure Refresh;
+
+    procedure WriteData(Writer: TWriter);
+    procedure ReadData(Reader: TReader);
+
+    procedure SaveToStream(Stream: TStream);
+    procedure LoadFromStream(Stream: TStream);
+
+    function PrepareMessage(Message: String): String;
+
+    property Items[Index: Integer]: TBisParam read GetItem;
+    property Empty: Boolean read GetEmpty;
+    property Unique: Boolean read FUnique write FUnique;
+    property ReadDataOnlyInvisible: Boolean read FReadDataOnlyInvisible write FReadDataOnlyInvisible;
+    property ProviderName: String read FProviderName write FProviderName;
+    property Enabled: Boolean read FEnabled write SetEnabled;
+    property ID: String read FID write FID; 
+
+    property OnChange: TBisParamChangeEvent read FOnChange write SetOnChange;
+    property OnKeyDown: TKeyEvent read FOnKeyDown write SetOnKeyDown;
+    property OnFindComponent: TBisParamFindComponentEvent read FOnFindComponent write SetOnFindComponent;
+  end;
+
+  TBisPackageParams=class(TObjectList)
+  private
+    FReadDataOnlyInvisible: Boolean;
+    function GetItem(Index: Integer): TBisParams;
+  public
+    function Add: TBisParams;
+    function Find(const ID: String): TBisParams;
+    procedure CopyFrom(Source: TBisPackageParams; WithClear: Boolean=true; WithReset: Boolean=true; ParamTypes: TParamTypes=AllParamTypes);
+    procedure DeleteByProvider(ProviderName: String);
+
+    procedure WriteData(Writer: TWriter);
+    procedure ReadData(Reader: TReader);
+
+    procedure SaveToStream(Stream: TStream);
+    procedure LoadFromStream(Stream: TStream);
+
+    property ReadDataOnlyInvisible: Boolean read FReadDataOnlyInvisible write FReadDataOnlyInvisible;
+
+    property Items[Index: Integer]: TBisParams read GetItem;
+  end;
+
+implementation
+
+uses SysUtils, DBConsts, TypInfo,
+     BisCore, BisConsts, BisUtils, BisVariants;
+
+
+{ TBisPackageParams }
+
+function TBisPackageParams.Add: TBisParams;
+begin
+  Result:=TBisParams.Create;
+  inherited Add(Result);
+end;
+
+function TBisPackageParams.GetItem(Index: Integer): TBisParams;
+begin
+  Result:=TBisParams(inherited Items[Index]);
+end;
+
+procedure TBisPackageParams.DeleteByProvider(ProviderName: String);
+var
+  i: Integer;
+  Params: TBisParams;
+begin
+  for i:=Count-1 downto 0 do begin
+    Params:=Items[i];
+    if AnsiSameText(Params.ProviderName,ProviderName) then
+      Delete(i);
+  end;
+end;
+
+function TBisPackageParams.Find(const ID: String): TBisParams;
+var
+  Item: TBisParams;
+  i: Integer;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.ID,ID) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+procedure TBisPackageParams.CopyFrom(Source: TBisPackageParams; WithClear: Boolean; WithReset: Boolean; ParamTypes: TParamTypes);
+var
+  i: Integer;
+  ItemSource,Item: TBisParams;
+begin
+  if WithClear then
+    Clear;
+  if Assigned(Source) then begin
+    for i:=0 to Source.Count-1 do begin
+      ItemSource:=Source.Items[i];
+      Item:=Find(ItemSource.ID);
+      if not Assigned(Item) then
+        Item:=Add;
+      if Assigned(Item) then begin
+        Item.ReadDataOnlyInvisible:=FReadDataOnlyInvisible;
+        Item.CopyFrom(ItemSource,WithClear,WithReset,ParamTypes);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisPackageParams.WriteData(Writer: TWriter);
+var
+  i: Integer;
+  Item: TBisParams;
+begin
+  Writer.WriteListBegin;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    Item.WriteData(Writer);
+  end;
+  Writer.WriteListEnd;
+end;
+
+procedure TBisPackageParams.ReadData(Reader: TReader);
+var
+  Item: TBisParams;
+begin
+  Reader.ReadListBegin;
+  while not Reader.EndOfList do begin
+    Item:=Add;
+    if Assigned(Item) then begin
+      Item.ReadData(Reader);
+    end;
+  end;
+  Reader.ReadListEnd;
+end;
+
+procedure TBisPackageParams.SaveToStream(Stream: TStream);
+var
+  Writer: TWriter;
+begin
+  Writer:=TWriter.Create(Stream,WriterBufferSize);
+  try
+    WriteData(Writer);
+  finally
+    Writer.Free;
+  end;
+end;
+
+procedure TBisPackageParams.LoadFromStream(Stream: TStream);
+var
+  Reader: TReader;
+begin
+  Reader:=TReader.Create(Stream,ReaderBufferSize);
+  try
+    ReadData(Reader);
+  finally
+    Reader.Free;
+  end;
+end;
+
+
+{ TBisParams }
+
+constructor TBisParams.Create;
+begin
+  inherited Create;
+  FUnique:=true;
+  FEnabled:=true;
+  FId:=GetUniqueId;
+end;
+
+function TBisParams.AddClass(AClass: TBisParamClass): TBisParam;
+begin
+  Result:=nil;
+  if Assigned(AClass) then begin
+    Result:=AClass.Create;
+    if Assigned(Result) then begin
+      Result.OnChange:=FOnChange;
+      Result.OnFind:=Find;
+      inherited Add(Result);
+    end;
+  end;
+end;
+
+procedure TBisParams.CopyFrom(Source: TBisParams; WithClear: Boolean; WithReset: Boolean; ParamTypes: TParamTypes; WithAdd: Boolean);
+var
+  i: Integer;
+  Param: TBisParam;
+  Item: TBisParam;
+begin
+  if WithClear then
+    Clear;
+  if Assigned(Source) then begin
+    Unique:=Source.Unique;
+    FProviderName:=Source.ProviderName;
+    for i:=0 to Source.Count-1 do begin
+      Param:=Source.Items[i];
+      if Param.ParamType in ParamTypes then begin
+        Item:=Find(Param.ParamName);
+        if Assigned(Item) and (Item.ParamType in ParamTypes) then
+          if not Unique and WithAdd then begin
+            Item:=AddClass(TBisParamClass(Param.ClassType));
+            if Assigned(Item) then
+              Item.CopyFrom(Param,WithReset);
+          end else
+            Item.CopyFrom(Param,WithReset)
+        else
+          if not Assigned(Item) or not Unique then
+            if WithAdd then begin
+              Item:=AddClass(TBisParamClass(Param.ClassType));
+              if Assigned(Item) then
+                Item.CopyFrom(Param,WithReset);
+            end;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisParams.CopyToFilterGroups(FilterGroups: TBisFilterGroups);
+var
+  Param: TBisParam;
+  i: Integer;
+begin
+  if Assigned(FilterGroups) then begin
+    for i:=0 to Count-1 do begin
+      Param:=Items[i];
+      Param.CopyToFilterGroups(FilterGroups);
+    end;
+  end;
+end;
+
+function TBisParams.Find(ParamName: String; Counter: Integer=0): TBisParam;
+var
+  i: Integer;
+  Item: TBisParam;
+  CounterI: Integer;
+begin
+  Result:=nil;
+  CounterI:=0;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.ParamName,ParamName)  then begin
+      if CounterI=Counter then begin
+        Result:=Item;
+        exit;
+      end;
+      Inc(CounterI);
+    end;
+  end;
+end;
+
+function TBisParams.FindByDuplicate(ParamName: String): TBisParam;
+var
+  i: Integer;
+  Item: TBisParam;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.Duplicates.IndexOf(ParamName)<>-1 then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisParams.ParamByName(ParamName: String; Counter: Integer=0): TBisParam;
+begin
+  Result:=Find(ParamName,Counter);
+  if not Assigned(Result) then
+    raise Exception.CreateFmt(SParameterNotFound,[ParamName]);
+end;
+
+procedure TBisParams.SetOnChange(const Value: TBisParamChangeEvent);
+var
+  i: Integer;
+begin
+  FOnChange := Value;
+  for i:=0 to Count-1 do begin
+    if not Assigned(Items[i].OnChange) then
+      Items[i].OnChange:=FOnChange;
+  end;
+end;
+
+procedure TBisParams.SetOnFindComponent(const Value: TBisParamFindComponentEvent);
+var
+  i: Integer;
+begin
+  FOnFindComponent := Value;
+  for i:=0 to Count-1 do begin
+    Items[i].OnFindComponent:=FOnFindComponent;
+  end;
+end;
+
+procedure TBisParams.SetOnKeyDown(const Value: TKeyEvent);
+var
+  i: Integer;
+begin
+  FOnKeyDown := Value;
+  for i:=0 to Count-1 do begin
+    Items[i].OnKeyDown:=FOnKeyDown;
+  end;
+end;
+
+function TBisParams.ValueByParam(ParamFormat,ParamName: String): Variant;
+var
+  Str: TStringList;
+  i: Integer;
+  P: TBisParam;
+  V: Variant;
+  Args: TBisVariants;
+begin
+  Result:=Null;
+  if Trim(ParamFormat)<>'' then begin
+    Str:=TStringList.Create;
+    Args:=TBisVariants.Create;
+    try
+      GetStringsByString(ParamName,SFieldDelim,Str);
+      for i:=0 to Str.Count-1 do begin
+        P:=Find(Str.Strings[i]);
+        V:=Null;
+        if Assigned(P) then
+          V:=P.Value;
+        Args.Add(V);
+      end;
+      Result:=FormatEx(ParamFormat,Args);
+    finally
+      Args.Free;
+      Str.Free;
+    end;
+  end else
+    Result:=ParamByName(ParamName).Value;
+end;
+
+procedure TBisParams.ValueToStored;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    Items[i].ValueToStored;
+  end;
+end;
+
+procedure TBisParams.SetAutoValue;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    Items[i].SetAutoValue;
+  end;
+end;
+
+procedure TBisParams.SetEnabled(const Value: Boolean);
+var
+  i: Integer;
+begin
+  FEnabled := Value;
+  for i:=0 to Count-1 do begin
+    Items[i].Enabled:=FEnabled;
+  end;
+end;
+
+function TBisParams.GetEmpty: Boolean;
+var
+  i: Integer;
+begin
+  Result:=true;
+  for i:=0 to Count-1 do begin
+    Result:=Items[i].Empty;
+    if not Result then begin
+      exit;
+    end;
+  end;
+end;
+
+procedure TBisParams.ApplyMode(Mode: TBisParamEditMode);
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    if not (Mode in Items[i].Modes) then
+      Items[i].Enabled:=false;
+  end;
+end;
+
+procedure TBisParams.Refresh;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    Items[i].Refresh;
+  end;
+end;
+
+function TBisParams.GetItem(Index: Integer): TBisParam;
+begin
+  Result:=TBisParam(inherited Items[Index]);
+end;
+
+procedure TBisParams.LinkControls(AParent: TWinControl);
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    Items[i].LinkControls(AParent);
+  end;
+end;
+
+function TBisParams.Add(ParamName: String; ParamClass: TBisParamClass): TBisParam;
+var
+  Flag: Boolean;
+begin
+  Result:=Find(ParamName);
+  Flag:=not Assigned(Result) or not FUnique;
+  if Flag and Assigned(ParamClass) then begin
+    Result:=AddClass(ParamClass);
+    Result.ParamName:=ParamName;
+  end;
+end;
+
+function TBisParams.AddInvisible(ParamName: String; ParamType: TParamType): TBisParamInvisible;
+begin
+  Result:=TBisParamInvisible(Add(ParamName,TBisParamInvisible));
+  if Assigned(Result) then
+    Result.ParamType:=ParamType;
+end;
+
+function TBisParams.AddKey(ParamName: String; ParamType: TParamType): TBisParamKey;
+begin
+  Result:=TBisParamKey(Add(ParamName,TBisParamKey));
+  if Assigned(Result) then begin
+    Result.IsKey:=true;
+    Result.ParamType:=ParamType;
+  end;
+end;
+
+function TBisParams.AddKeyValue(ParamName: String; Value: Variant; ParamType: TParamType=ptInput): TBisParamKey;
+begin
+  Result:=AddKey(ParamName,ParamType);
+  if Assigned(Result) then begin
+    if not VarIsEmpty(Value) then
+      Result.Value:=Value;
+  end;
+end;
+
+function TBisParams.AddEdit(ParamName, EditName, LabelName: String; Required: Boolean; IsKey: Boolean): TBisParamEdit;
+begin
+  Result:=TBisParamEdit(Add(ParamName,TBisParamEdit));
+  if Assigned(Result) then begin
+    Result.EditName:=EditName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+    Result.IsKey:=IsKey;
+  end;
+end;
+
+function TBisParams.AddMemo(ParamName, MemoName, LabelName: String; Required: Boolean): TBisParamMemo;
+begin
+  Result:=TBisParamMemo(Add(ParamName,TBisParamMemo));
+  if Assigned(Result) then begin
+    Result.MemoName:=MemoName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddEditInteger(ParamName, EditName, LabelName: String; Required: Boolean): TBisParamEditInteger;
+begin
+  Result:=TBisParamEditInteger(Add(ParamName,TBisParamEditInteger));
+  if Assigned(Result) then begin
+    Result.EditName:=EditName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddCheckBox(ParamName, CheckBoxName: String): TBisParamCheckBox;
+begin
+  Result:=TBisParamCheckBox(Add(ParamName,TBisParamCheckBox));
+  if Assigned(Result) then begin
+    Result.CheckBoxName:=CheckBoxName;
+    Result.Required:=true;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddCheckBox(ParamName, CheckBoxName: String; Value: Variant): TBisParamCheckBox;
+begin
+  Result:=AddCheckBox(ParamName,CheckBoxName);
+  if Assigned(Result) then begin
+    Result.Value:=Value;
+  end;
+end;
+
+function TBisParams.AddEditDataSelect(ParamName, EditName, LabelName, ButtonName: String;
+                                      DataClass: TComponentClass; DataName: String; Required, IsKey: Boolean;
+                                      Alias, DataAlias: String): TBisParamEditDataSelect;
+begin
+  Result:=TBisParamEditDataSelect(Add(ParamName,TBisParamEditDataSelect));
+  if Assigned(Result) then begin
+    Result.ButtonName:=ButtonName;
+    Result.DataClass:=DataClass;
+    Result.DataName:=DataName;
+    Result.IsKey:=IsKey;
+
+    if Trim(Alias)<>'' then
+      Result.Alias:=Alias
+    else Result.Alias:=ParamName;
+    if Trim(DataAlias)<>'' then
+      Result.DataAlias:=DataAlias
+    else Result.DataAlias:=DataName;
+
+    Result.ParamType:=ptInput;
+
+    AddEdit(DataName,EditName,LabelName,Required);
+  end;
+end;
+
+function TBisParams.AddEditDataSelect(ParamName, EditName, LabelName, ButtonName: String;
+                                      DataClass: String; DataName: String; Required, IsKey: Boolean;
+                                      Alias, DataAlias: String): TBisParamEditDataSelect; 
+begin
+  Result:=nil;
+  if Assigned(Core) then begin
+    Result:=AddEditDataSelect(ParamName,EditName,LabelName,ButtonName,
+                              Core.FindIfaceClass(DataClass),DataName,Required,IsKey,
+                              Alias,DataAlias);
+    if Assigned(Result) then
+      Result.DataClassName:=DataClass;
+  end;
+end;
+
+function TBisParams.AddComboBox(ParamName, ComboBoxName, LabelName: String; Required: Boolean): TBisParamComboBox;
+begin
+  Result:=TBisParamComboBox(Add(ParamName,TBisParamComboBox));
+  if Assigned(Result) then begin
+    Result.ComboBoxName:=ComboBoxName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddComboBoxIndex(ParamName, ComboBoxName, LabelName: String; Required: Boolean): TBisParamComboBox;
+begin
+  Result:=AddComboBox(ParamName,ComboBoxName,LabelName,Required);
+  if Assigned(Result) then begin
+    Result.Mode:=cmIndex;
+  end;
+end;
+
+function TBisParams.AddComboBoxTextIndex(ParamName, ComboBoxName, LabelName: String; Required: Boolean): TBisParamComboBox;
+begin
+  Result:=AddComboBox(ParamName,ComboBoxName,LabelName,Required);
+  if Assigned(Result) then begin
+    Result.Mode:=cmTextIndex;
+  end;
+end;
+
+function TBisParams.AddComboBoxText(ParamName, ComboBoxName, LabelName: String; Required: Boolean): TBisParamComboBox;
+begin
+  Result:=AddComboBox(ParamName,ComboBoxName,LabelName,Required);
+  if Assigned(Result) then begin
+    Result.Mode:=cmText;
+  end;
+end;
+
+function TBisParams.AddEditDate(ParamName, DateTimePickerName, LabelName: String; Required: Boolean): TBisParamEditDate;
+begin
+  Result:=TBisParamEditDate(Add(ParamName,TBisParamEditDate));
+  if Assigned(Result) then begin
+    Result.DateTimePickerName:=DateTimePickerName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddEditFloat(ParamName, EditName, LabelName: String; Required: Boolean): TBisParamEditFloat;
+begin
+  Result:=TBisParamEditFloat(Add(ParamName,TBisParamEditFloat));
+  if Assigned(Result) then begin
+    Result.EditName:=EditName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddEditCurrency(ParamName, EditName, LabelName: String; Required: Boolean): TBisParamEditCurrency;
+begin
+  Result:=TBisParamEditCurrency(Add(ParamName,TBisParamEditCurrency));
+  if Assigned(Result) then begin
+    Result.EditName:=EditName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddEditCalc(ParamName, EditName, LabelName: String; Required: Boolean): TBisParamEditCalc;
+begin
+  Result:=TBisParamEditCalc(Add(ParamName,TBisParamEditCalc));
+  if Assigned(Result) then begin
+    Result.EditName:=EditName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddComboBoxDataSelect(ParamName, ComboBoxName, LabelName, ButtonName: String;
+                                          DataClass: TComponentClass; DataName: String; Required, IsKey: Boolean;
+                                          Alias, DataAlias: String): TBisParamComboBoxDataSelect;
+begin
+  Result:=TBisParamComboBoxDataSelect(Add(ParamName,TBisParamComboBoxDataSelect));
+  if Assigned(Result) then begin
+    Result.ButtonName:=ButtonName;
+    Result.DataClass:=DataClass;
+    Result.DataName:=DataName;
+    Result.IsKey:=IsKey;
+    Result.Required:=Required;
+
+    if Trim(Alias)<>'' then
+      Result.Alias:=Alias
+    else Result.Alias:=ParamName;
+
+    if Trim(DataAlias)<>'' then
+      Result.DataAlias:=DataAlias
+    else Result.DataAlias:=DataName;
+
+    Result.ParamType:=ptInput;
+
+    AddComboBoxText(DataName,ComboBoxName,LabelName,Required);
+  end;
+end;
+
+function TBisParams.AddComboBoxDataSelect(ParamName, ComboBoxName, LabelName, ButtonName: String;
+                                          DataClass: String; DataName: String; Required, IsKey: Boolean;
+                                          Alias, DataAlias: String): TBisParamComboBoxDataSelect;
+begin
+  Result:=nil;
+  if Assigned(Core) then begin
+    Result:=AddComboBoxDataSelect(ParamName,ComboBoxName,LabelName,ButtonName,
+                                  Core.FindIfaceClass(DataClass),DataName,Required,IsKey,
+                                  Alias,DataAlias);
+    if Assigned(Result) then
+      Result.DataClassName:=DataClass;
+  end;
+end;
+
+function TBisParams.AddComboBoxDataSelect(ParamName, ComboBoxName, LabelName,
+                                          ProviderName, DataName: String; Required, IsKey: Boolean;
+                                          Alias, DataAlias: String): TBisParamComboBoxDataSelect;
+begin
+  Result:=AddComboBoxDataSelect(ParamName,ComboBoxName,LabelName,'',nil,DataName,Required,IsKey,Alias,DataAlias);
+  if Assigned(Result) then begin
+    Result.ProviderName:=ProviderName;
+  end;
+end;
+
+function TBisParams.AddPopupDataSelect(ParamName, EditName, LabelName: String;
+                                      DataClass: TComponentClass; DataName: String; Required, IsKey: Boolean;
+                                      Alias, DataAlias: String): TBisParamPopupDataSelect;
+begin
+  Result:=TBisParamPopupDataSelect(Add(ParamName,TBisParamPopupDataSelect));
+  if Assigned(Result) then begin
+    Result.EditName:=EditName;
+    Result.LabelName:=LabelName;
+    Result.DataClass:=DataClass;
+    Result.DataName:=DataName;
+    Result.IsKey:=IsKey;
+    Result.Required:=Required;
+
+    if Trim(Alias)<>'' then
+      Result.Alias:=Alias
+    else Result.Alias:=ParamName;
+
+    if Trim(DataAlias)<>'' then
+      Result.DataAlias:=DataAlias
+    else Result.DataAlias:=DataName;
+
+  end;
+end;
+
+function TBisParams.AddEditDateTime(ParamName, DateTimePickerDateName, DateTimePickerTimeName, LabelName: String;
+                                    Required: Boolean): TBisParamEditDateTime;
+begin
+  Result:=TBisParamEditDateTime(Add(ParamName,TBisParamEditDateTime));
+  if Assigned(Result) then begin
+    Result.DateTimePickerName:=DateTimePickerDateName;
+    Result.DateTimePickerTimeName:=DateTimePickerTimeName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddRichEdit(ParamName, RichEditName, LabelName: String; Required: Boolean): TBisParamRichEdit;
+begin
+  Result:=TBisParamRichEdit(Add(ParamName,TBisParamRichEdit));
+  if Assigned(Result) then begin
+    Result.RichEditName:=RichEditName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddSynEdit(ParamName, SynEditName, LabelName: String; Required: Boolean): TBisParamSynEdit;
+begin
+  Result:=TBisParamSynEdit(Add(ParamName,TBisParamSynEdit));
+  if Assigned(Result) then begin
+    Result.SynEditName:=SynEditName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddHotKey(ParamName, HotKeyName, LabelName: String;  Required: Boolean): TBisParamHotKey;
+begin
+  Result:=TBisParamHotKey(Add(ParamName,TBisParamHotKey));
+  if Assigned(Result) then begin
+    Result.HotKeyName:=HotKeyName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddImage(ParamName, ImageName: String;  Required: Boolean): TBisParamImage;
+begin
+  Result:=TBisParamImage(Add(ParamName,TBisParamImage));
+  if Assigned(Result) then begin
+    Result.ImageName:=ImageName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddColorBox(ParamName, ColorBoxName, LabelName: String; Required: Boolean): TBisParamColorBox;
+begin
+  Result:=TBisParamColorBox(Add(ParamName,TBisParamColorBox));
+  if Assigned(Result) then begin
+    Result.ColorBoxName:=ColorBoxName;
+    Result.LabelName:=LabelName;
+    Result.Required:=Required;
+    Result.ParamType:=ptInput;
+  end;
+end;
+
+function TBisParams.AddCalculate(ParamName: String; OnGetValue: TBisParamCalculateGetValueEvent): TBisParamCalculate;
+begin
+  Result:=TBisParamCalculate(Add(ParamName,TBisParamCalculate));
+  if Assigned(Result) then begin
+    Result.ParamType:=ptInput;
+    Result.OnGetValue:=OnGetValue;
+  end;
+end;
+
+procedure TBisParams.RefreshByDataSet(ADataSet: TDataSet; WithValue, WithAuto: Boolean);
+
+  function FindFieldByParam(Param: TBisParam): TField;
+  var
+    i: Integer;
+  begin
+    for i:=0 to Param.Duplicates.Count-1 do begin
+      Result:=ADataSet.FindField(Param.Duplicates[i]);
+      if Assigned(Result) then
+        exit;
+    end;
+    Result:=ADataSet.FindField(Param.ParamName);
+  end;
+
+  procedure SetParam(Field: TField; Param: TBisParam);
+  var
+    ASize: Integer;
+    APrecision: Integer;
+    ADataType: TFieldType;
+    AValue: Variant;
+  const
+    SPrecision='Precision';
+  begin
+    ASize:=Field.Size;
+    APrecision:=0;
+    ADataType:=Field.DataType;
+    AValue:=Field.Value;
+
+    if IsPublishedProp(Field,SPrecision) then
+      APrecision:=GetOrdProp(Field,SPrecision);
+
+    case Field.DataType of
+      ftBlob, ftOraBlob, ftMemo: begin
+        ASize:=0;
+      end;
+{      ftFMTBcd: begin
+        ASize:=0;
+      end;}
+    end;
+    Param.DataType:=ADataType;
+    Param.Size:=ASize;
+    Param.Precision:=APrecision;
+
+    if WithValue and not ADataSet.IsEmpty then
+      Param.SetNewValue(AValue);
+
+    if WithAuto then
+      Param.SetAutoValue;
+  end;
+
+var
+  List: TList;
+  Names: TStringList;
+  i: Integer;
+  j: Integer;
+  Param: TBisParam;
+  Field: TField;
+  Args: TBisVariants;
+  V: Variant;
+  Flag: Boolean;
+begin
+  if Assigned(ADataSet) then begin
+    if ADataSet.Active then begin
+      List:=TList.Create;
+      Names:=TStringList.Create;
+      Args:=TBisVariants.Create;
+      try
+        for i:=0 to Count-1 do begin
+          Param:=Items[i];
+//          Field:=ADataSet.FindField(Param.ParamName);
+          Field:=FindFieldByParam(Param);
+          if Assigned(Field) then
+            SetParam(Field,Param)
+          else
+            List.Add(Param);
+        end;
+
+        if WithValue and not ADataSet.IsEmpty then begin
+          for i:=0 to List.Count-1 do begin
+            Param:=TBisParam(List.Items[i]);
+            Names.Clear;
+            Args.Clear;
+            Flag:=true;
+            GetStringsByString(Param.ParamName,SFieldDelim,Names);
+            for j:=0 to Names.Count-1 do begin
+              Field:=ADataSet.FindField(Names[j]);
+              if Assigned(Field) then begin
+                Args.Add(Field.Value);
+//                Flag:=Flag and not VarIsNull(Field.Value);
+              end else
+                Flag:=false;
+            end;
+            if Flag then begin
+              V:=FormatEx(Param.ParamFormat,Args);
+              Param.SetNewValue(V);
+            end;
+          end;
+        end;
+
+      finally
+        Args.Free;
+        Names.Free;
+        List.Free;
+      end;
+    end;
+  end;
+end;
+
+function TBisParams.GetParamClassByName(AClassName: String): TBisParamClass;
+begin
+  Result:=nil;
+  if AnsiSameText(AClassName,TBisParamInvisible.ClassName) then Result:=TBisParamInvisible;
+  if AnsiSameText(AClassName,TBisParamKey.ClassName) then Result:=TBisParamKey;
+  if AnsiSameText(AClassName,TBisParamEdit.ClassName) then Result:=TBisParamEdit;
+  if AnsiSameText(AClassName,TBisParamMemo.ClassName) then Result:=TBisParamMemo;
+  if AnsiSameText(AClassName,TBisParamEditInteger.ClassName) then Result:=TBisParamEditInteger;
+  if AnsiSameText(AClassName,TBisParamCheckBox.ClassName) then Result:=TBisParamCheckBox;
+  if AnsiSameText(AClassName,TBisParamComboBox.ClassName) then Result:=TBisParamComboBox;
+  if AnsiSameText(AClassName,TBisParamEditDate.ClassName) then Result:=TBisParamEditDate;
+  if AnsiSameText(AClassName,TBisParamEditFloat.ClassName) then Result:=TBisParamEditFloat;
+  if AnsiSameText(AClassName,TBisParamEditDateTime.ClassName) then Result:=TBisParamEditDateTime;
+  if AnsiSameText(AClassName,TBisParamRichEdit.ClassName) then Result:=TBisParamRichEdit;
+  if AnsiSameText(AClassName,TBisParamSynEdit.ClassName) then Result:=TBisParamSynEdit;
+  if AnsiSameText(AClassName,TBisParamHotKey.ClassName) then Result:=TBisParamHotKey;
+  if AnsiSameText(AClassName,TBisParamColorBox.ClassName) then Result:=TBisParamColorBox;
+  if AnsiSameText(AClassName,TBisParamPopupDataSelect.ClassName) then Result:=TBisParamPopupDataSelect;
+  if AnsiSameText(AClassName,TBisParamCalculate.ClassName) then Result:=TBisParamCalculate;
+end;
+
+procedure TBisParams.WriteData(Writer: TWriter);
+var
+  i: Integer;
+  Item: TBisParam;
+begin
+  Writer.WriteString(FProviderName);
+  Writer.WriteString(FID);
+  Writer.WriteListBegin;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    Writer.WriteString(Item.ClassName);
+    Writer.WriteString(Item.ParamName);
+    Writer.WriteInteger(Integer(Item.ParamType));
+    Writer.WriteString(Item.ParamFormat);
+    Writer.WriteVariant(Item.Value);
+    Writer.WriteInteger(Integer(Item.DataType));
+    Writer.WriteBoolean(Item.IsKey);
+    Writer.WriteVariant(Item.DefaultValue);
+    Writer.WriteInteger(Item.Size);
+    Writer.WriteInteger(Item.Precision);
+    Writer.WriteBoolean(Item.Required);
+    Writer.WriteVariant(Item.StoredValue);
+    Writer.WriteVariant(Item.OldValue);
+    Writer.WriteInteger(Integer(Item.Alignment));
+//    Writer.WriteInteger(Item.Modes);
+    Writer.WriteBoolean(Item.Visible);
+    Writer.WriteBoolean(Item.Enabled);
+    Writer.WriteInteger(Integer(Item.FilterCondition));
+    Writer.WriteString(Item.FilterCaption);
+    Writer.WriteString(Item.Olders.Text);
+    Item.WriteData(Writer);
+  end;
+  Writer.WriteListEnd;
+end;
+
+procedure TBisParams.ReadData(Reader: TReader);
+var
+  AClass: TBisParamClass;
+  Item: TBisParam;
+begin
+  FProviderName:=Reader.ReadString;
+  FID:=Reader.ReadString;
+  Reader.ReadListBegin;
+  while not Reader.EndOfList do begin
+    AClass:=GetParamClassByName(Reader.ReadString);
+    if FReadDataOnlyInvisible then
+      AClass:=TBisParamInvisible;
+
+    if Assigned(AClass) then begin
+      Item:=Add(Reader.ReadString,AClass);
+      if Assigned(Item) then begin
+        Item.ParamType:=TParamType(Reader.ReadInteger);
+        Item.ParamFormat:=Reader.ReadString;
+        Item.Value:=Reader.ReadVariant;
+        Item.DataType:=TFieldType(Reader.ReadInteger);
+        Item.IsKey:=Reader.ReadBoolean;
+        Item.DefaultValue:=Reader.ReadVariant;
+        Item.Size:=Reader.ReadInteger;
+        Item.Precision:=Reader.ReadInteger;
+        Item.Required:=Reader.ReadBoolean;
+        Item.StoredValue:=Reader.ReadVariant;
+        Item.OldValue:=Reader.ReadVariant;
+        Item.Alignment:=TAlignment(Reader.ReadInteger);
+    //    Item.Modes:=Reader.ReadInteger;
+        Item.Visible:=Reader.ReadBoolean;
+        Item.Enabled:=Reader.ReadBoolean;
+        Item.FilterCondition:=TBisFilterCondition(Reader.ReadInteger);
+        Item.FilterCaption:=Reader.ReadString;
+        Item.Olders.Text:=Reader.ReadString;
+        Item.ReadData(Reader);
+      end;
+    end;
+  end;
+  Reader.ReadListEnd;
+end;
+
+procedure TBisParams.SaveToStream(Stream: TStream);
+var
+  Writer: TWriter;
+begin
+  Writer:=TWriter.Create(Stream,WriterBufferSize);
+  try
+    WriteData(Writer);
+  finally
+    Writer.Free;
+  end;
+end;
+
+procedure TBisParams.LoadFromStream(Stream: TStream);
+var
+  Reader: TReader;
+begin
+  Reader:=TReader.Create(Stream,ReaderBufferSize);
+  try
+    ReadData(Reader);
+  finally
+    Reader.Free;
+  end;
+end;
+
+function TBisParams.PrepareMessage(Message: String): String;
+var
+  i: Integer;
+  Param: TBisParam;
+begin
+  Result:=Message;
+  for i:=0 to Count-1 do begin
+    Param:=Items[i];
+    Result:=StringReplace(Result,'%'+Param.ParamName,Param.AsString,[rfReplaceAll,rfIgnoreCase]);
+  end;
+end;
+
+
+end.

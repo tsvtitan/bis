@@ -1,0 +1,10 @@
+{
+Demo: Catching Delphi exceptions
+}
+var a : Float;
+try
+  a := StrToInt('h');
+except
+  on e: EDelphi do
+    PrintLn(e.ExceptionClass + ', ' + e.Message);
+end;

@@ -1,0 +1,79 @@
+unit BisKrieltDataParamsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList, DB,
+  BisFm, BisDataGridFm, BisFieldNames, BisDataFrm;
+
+type
+  TBisKrieltDataParamsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  public
+    { Public declarations }
+  end;
+
+  TBisKrieltDataParamsFormIface=class(TBisDataGridFormIface)
+  private
+    function GetParamTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;  
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataParamsForm: TBisKrieltDataParamsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisKrieltDataParamEditFm, BisKrieltDataParamsFrm;
+
+{ TBisKrieltDataParamsFormIface }
+
+constructor TBisKrieltDataParamsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataParamsForm;
+  FilterClass:=TBisKrieltDataParamFilterFormIface;
+  InsertClass:=TBisKrieltDataParamInsertFormIface;
+  UpdateClass:=TBisKrieltDataParamUpdateFormIface;
+  DeleteClass:=TBisKrieltDataParamDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_PARAMS';
+  with FieldNames do begin
+    AddKey('PARAM_ID');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('PARAM_TYPE');
+    AddInvisible('MAX_LENGTH');
+    AddInvisible('SORTING');
+    AddInvisible('LOCKED');
+    Add('NAME','Наименование',300);
+    AddCalculate('PARAM_TYPE_NAME','Тип параметра',GetParamTypeName,ftString,100,100);
+    AddCheckBox('LOCKED',)
+  end;
+  Orders.Add('NAME');
+end;
+
+function TBisKrieltDataParamsFormIface.GetParamTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S: String;
+begin
+  Result:=Null;
+  S:=GetParamTypeByIndex(DataSet.FieldByName('PARAM_TYPE').AsInteger);
+  if Trim(S)<>'' then
+    Result:=S;
+end;
+
+{ TBisKrieltDataParamsForm }
+
+class function TBisKrieltDataParamsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisKrieltDataParamsFrame;
+end;
+
+end.

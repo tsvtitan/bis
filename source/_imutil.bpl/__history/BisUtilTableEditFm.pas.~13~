@@ -1,0 +1,42 @@
+unit BisUtilTableEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisFm, BisDialogFm, BisUtilTableEditFrm;
+
+type
+  TBisUtilTableEditForm = class(TBisDialogForm)
+  private
+    FTableEdit: TBisUtilTableEditFrame;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property TableEdit: TBisUtilTableEditFrame read FTableEdit;
+  end;
+
+var
+  BisUtilTableEditForm: TBisUtilTableEditForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisUtilTableEditForm }
+
+constructor TBisUtilTableEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FTableEdit:=TBisUtilTableEditFrame.Create(Self);
+end;
+
+destructor TBisUtilTableEditForm.Destroy;
+begin
+  FTableEdit.Free;
+  inherited Destroy;
+end;
+
+end.

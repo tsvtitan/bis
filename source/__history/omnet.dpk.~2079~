@@ -1,0 +1,59 @@
+package omnet;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core;
+
+contains
+  RasUtils in 'omnet.bpl\Ras\RasUtils.pas',
+  Ras in 'omnet.bpl\Ras\Ras.pas',
+  RasHelperClasses in 'omnet.bpl\Ras\RasHelperClasses.pas',
+  Lmcons in 'omnet.bpl\Ras\Lmcons.pas',
+  LmErr in 'omnet.bpl\Ras\LmErr.pas',
+  IdHTTP in 'omnet.bpl\Indy\Protocols\IdHTTP.pas',
+  IdContext in 'omnet.bpl\Indy\Core\IdContext.pas',
+  IdCustomHTTPServer in 'omnet.bpl\Indy\Protocols\IdCustomHTTPServer.pas',
+  IdFTP in 'omnet.bpl\Indy\Protocols\IdFTP.pas',
+  IdIOHandler in 'omnet.bpl\Indy\Core\IdIOHandler.pas',
+  IdUDPServer in 'omnet.bpl\Indy\Core\IdUDPServer.pas',
+  IdUDPClient in 'omnet.bpl\Indy\Core\IdUDPClient.pas',
+  IdTCPClient in 'omnet.bpl\Indy\Core\IdTCPClient.pas',
+  IdUDPBase in 'omnet.bpl\Indy\Core\IdUDPBase.pas',
+  IdDNSResolver in 'omnet.bpl\Indy\Protocols\IdDNSResolver.pas',
+  IdMessage in 'omnet.bpl\Indy\Protocols\IdMessage.pas',
+  IdSocketHandle in 'omnet.bpl\Indy\Core\IdSocketHandle.pas',
+  IdExceptionCore in 'omnet.bpl\Indy\Core\IdExceptionCore.pas',
+  IdHTTPServer in 'omnet.bpl\Indy\Protocols\IdHTTPServer.pas',
+  IdIOHandlerStack in 'omnet.bpl\Indy\Core\IdIOHandlerStack.pas',
+  BisNetInit in 'omnet.bpl\BisNetInit.pas',
+  BisRtp in 'omnet.bpl\BisRtp.pas',
+  BisSdp in 'omnet.bpl\BisSdp.pas',
+  BisSip in 'omnet.bpl\BisSip.pas',
+  BisSmpp in 'omnet.bpl\BisSmpp.pas',
+  BisUdpServer in 'omnet.bpl\BisUdpServer.pas';
+
+end.

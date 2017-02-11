@@ -1,0 +1,19 @@
+/* Создание процедуры снятия блокировки задания */
+
+CREATE PROCEDURE /*PREFIX*/UNLOCK_TASK
+  @TASK_ID VARCHAR(32)
+AS
+BEGIN
+  IF (@TASK_ID IS NOT NULL) BEGIN
+    BEGIN TRANSACTION;
+    UPDATE /*PREFIX*/TASKS
+       SET ACCOUNT_ID=NULL,
+           RESULT_ID=NULL,
+           DATE_BEGIN=NULL,
+           PERFORMER_ID=NULL 
+     WHERE TASK_ID=@TASK_ID; 
+    COMMIT TRANSACTION;
+  END;
+END;
+
+--

@@ -1,0 +1,1 @@
+select * from S_APARTMENT_OBJECT_PARAMS

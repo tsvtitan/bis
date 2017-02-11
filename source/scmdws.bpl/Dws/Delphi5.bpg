@@ -1,0 +1,31 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = dws2Runtime50_20.bpl dws2VCLRuntime50_20.bpl dcldws250_20.bpl \
+  dws2SynEditUtilsRuntime50_20.bpl
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+
+dws2Runtime50_20.bpl: Delphi5\dws2Runtime50_20.dpk
+  $(DCC)
+
+dws2VCLRuntime50_20.bpl: Delphi5\dws2VCLRuntime50_20.dpk
+  $(DCC)
+
+dcldws250_20.bpl: Delphi5\dcldws250_20.dpk
+  $(DCC)
+
+dws2SynEditUtilsRuntime50_20.bpl: Delphi5\dws2SynEditUtilsRuntime50_20.dpk
+  $(DCC)
+
+

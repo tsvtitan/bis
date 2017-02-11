@@ -1,0 +1,115 @@
+unit BisKrieltDataPresentationColumnsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList,
+  BisFm, BisDataGridFm, BisDataGridFrm, BisDataFrm, BisDataEditFm;
+
+type
+  TBisKrieltDataPresentationColumnsFrame=class(TBisDataGridFrame)
+  private
+    FPresentationId: Variant;
+    FPresentationName: String;
+  protected
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); override;
+  public
+    property PresentationId: Variant read FPresentationId write FPresentationId;
+    property PresentationName: String read FPresentationName write FPresentationName;
+  end;
+
+  TBisKrieltDataPresentationColumnsForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisKrieltDataPresentationColumnsFormIface=class(TBisDataGridFormIface)
+  private
+    FPresentationId: Variant;
+    FPresentationName: String;
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property PresentationId: Variant read FPresentationId write FPresentationId;
+    property PresentationName: String read FPresentationName write FPresentationName;
+
+  end;
+
+var
+  BisKrieltDataPresentationColumnsForm: TBisKrieltDataPresentationColumnsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisKrieltDataPresentationColumnEditFm, BisParam;
+
+{ TBisKrieltDataPresentationColumnsFrame }
+
+procedure TBisKrieltDataPresentationColumnsFrame.BeforeIfaceExecute(AIface: TBisDataEditFormIface);
+var
+  ParamId: TBisParam;
+begin
+  inherited BeforeIfaceExecute(AIface);
+  if Assigned(AIface) then begin
+    ParamId:=AIface.Params.Find('PRESENTATION_ID');
+    if Assigned(ParamId) and not VarIsNull(FPresentationId) then begin
+      ParamId.Value:=FPresentationId;
+      AIface.Params.ParamByName('PRESENTATION_NAME').Value:=FPresentationName;
+      ParamId.ExcludeModes(AllParamEditModes);
+    end;
+  end;
+end;
+
+{ TBisKrieltDataPresentationColumnsFormIface }
+
+constructor TBisKrieltDataPresentationColumnsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FPresentationId:=Null;
+  FormClass:=TBisKrieltDataPresentationColumnsForm;
+  FilterClass:=TBisKrieltDataPresentationColumnFilterFormIface;
+  InsertClass:=TBisKrieltDataPresentationColumnInsertFormIface;
+  UpdateClass:=TBisKrieltDataPresentationColumnUpdateFormIface;
+  DeleteClass:=TBisKrieltDataPresentationColumnDeleteFormIface;
+  Permissions.Enabled:=true;
+  FilterOnShow:=true;
+  ProviderName:='S_PRESENTATION_COLUMNS';
+  with FieldNames do begin
+    AddKey('PRESENTATION_ID');
+    AddKey('COLUMN_ID');
+    AddInvisible('COLUMN_GROUP');
+    AddInvisible('VALUE_DEFAULT');
+    AddInvisible('VISIBLE');
+    AddInvisible('USE_DEPEND');
+    AddInvisible('NOT_EMPTY');
+    Add('COLUMN_NAME','Колонка',150);
+    Add('PRESENTATION_NAME','Представление',150);
+    Add('PRIORITY','Порядок',50);
+  end;
+  Orders.Add('PRESENTATION_NAME');
+  Orders.Add('PRIORITY');
+end;
+
+function TBisKrieltDataPresentationColumnsFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then begin
+    with TBisKrieltDataPresentationColumnsForm(Result) do begin
+      TBisKrieltDataPresentationColumnsFrame(DataFrame).PresentationId:=FPresentationId;
+      TBisKrieltDataPresentationColumnsFrame(DataFrame).PresentationName:=FPresentationName;
+    end;
+  end;
+end;
+
+{ TBisKrieltDataPresentationColumnsForm }
+
+class function TBisKrieltDataPresentationColumnsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisKrieltDataPresentationColumnsFrame;
+end;
+
+end.

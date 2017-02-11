@@ -1,0 +1,173 @@
+unit BisTaxiDataBlackEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB,
+  BisDataEditFm, BisParam, BisControls, ImgList;
+
+type
+  TBisTaxiDataBlackEditForm = class(TBisDataEditForm)                                                       
+    LabelPhone: TLabel;
+    EditPhone: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelAccount: TLabel;
+    EditAccount: TEdit;
+    LabelDateCreate: TLabel;
+    DateTimePickerCreate: TDateTimePicker;
+    DateTimePickerCreateTime: TDateTimePicker;
+    GroupBoxAddress: TGroupBox;
+    LabelStreet: TLabel;
+    EditStreet: TEdit;
+    LabelHouse: TLabel;
+    EditHouse: TEdit;
+    LabelFlat: TLabel;
+    EditFlat: TEdit;
+    ButtonStreet: TButton;
+  private
+  public
+    procedure BeforeShow; override;
+    procedure ChangeParam(Param: TBisParam); override;
+  end;
+
+  TBisTaxiDataBlackEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataBlackFilterFormIface=class(TBisTaxiDataBlackEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataBlackInsertFormIface=class(TBisTaxiDataBlackEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataBlackUpdateFormIface=class(TBisTaxiDataBlackEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataBlackDeleteFormIface=class(TBisTaxiDataBlackEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataBlackEditForm: TBisTaxiDataBlackEditForm;
+
+implementation
+
+uses BisUtils, BisTaxiConsts, BisCore, BisParamEditDataSelect, BisValues;
+
+{$R *.dfm}
+
+{ TBisTaxiDataBlackEditFormIface }
+
+constructor TBisTaxiDataBlackEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataBlackEditForm;
+  with Params do begin
+    AddKey('BLACK_ID').Older('OLD_BLACK_ID');
+    AddInvisible('LOCALITY_ID',ptUnknown);
+    AddInvisible('LOCALITY_PREFIX',ptUnknown);
+    AddInvisible('LOCALITY_NAME',ptUnknown);
+    AddInvisible('STREET_PREFIX',ptUnknown);
+    AddInvisible('STREET_NAME',ptUnknown);
+    AddInvisible('ACCOUNT_ID');
+    AddEdit('PHONE','EditPhone','LabelPhone',true);
+    with AddEditDataSelect('STREET_ID','EditStreet','LabelStreet','ButtonStreet',
+                            SClassDataStreetsFormIface,'STREET_PREFIX;STREET_NAME;LOCALITY_PREFIX;LOCALITY_NAME',
+                            false,false,'STREET_ID','PREFIX;NAME;LOCALITY_PREFIX;LOCALITY_NAME') do begin
+      DataAliasFormat:='%s%s %s%s';
+      ExcludeModes([emFilter]);
+    end;
+    AddEdit('HOUSE','EditHouse','LabelHouse');
+    AddEdit('FLAT','EditFlat','LabelFlat');
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+    AddEdit('USER_NAME','EditAccount','LabelAccount',true).ExcludeModes(AllParamEditModes);
+    AddEditDateTime('DATE_CREATE','DateTimePickerCreate','DateTimePickerCreateTime','LabelDateCreate',true).ExcludeModes(AllParamEditModes);
+  end;
+end;
+
+
+{ TBisTaxiDataBlackFilterFormIface }
+
+constructor TBisTaxiDataBlackFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Фильтр черного списка';
+end;
+
+{ TBisTaxiDataBlackInsertFormIface }
+
+constructor TBisTaxiDataBlackInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Permissions.Enabled:=true;
+//  Available:=true;
+  ProviderName:='I_BLACK';
+  ParentProviderName:='S_BLACKS';
+  Caption:='Добавить в черный список';
+  SMessageSuccess:='Запись в черном списке успешно создана.';
+end;
+
+{ TBisTaxiDataBlackUpdateFormIface }
+
+constructor TBisTaxiDataBlackUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_BLACK';
+  Caption:='Изменить в черном списке';
+end;
+
+{ TBisTaxiDataBlackDeleteFormIface }
+
+constructor TBisTaxiDataBlackDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_BLACK';
+  Caption:='Удалить в черном списке';
+end;
+
+{ TBisTaxiDataBlackEditForm }
+
+procedure TBisTaxiDataBlackEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  if Mode in [emInsert,emDuplicate] then begin
+    with Provider.Params do begin
+      Find('ACCOUNT_ID').SetNewValue(Core.AccountId);
+      Find('USER_NAME').SetNewValue(Core.AccountUserName);
+      Find('DATE_CREATE').SetNewValue(Core.ServerDate);
+    end;
+    UpdateButtonState;
+  end;
+end;
+
+procedure TBisTaxiDataBlackEditForm.ChangeParam(Param: TBisParam);
+var
+  StreetParam: TBisParamEditDataSelect;
+  V: TBisValue;
+begin
+  inherited ChangeParam(Param);
+
+  if AnsiSameText(Param.ParamName,'STREET_PREFIX;STREET_NAME;LOCALITY_PREFIX;LOCALITY_NAME') then begin
+    StreetParam:=TBisParamEditDataSelect(Provider.Params.ParamByName('STREET_ID'));
+    if StreetParam.Empty then begin
+      Provider.Params.ParamByName('LOCALITY_ID').Value:=Null;
+    end else begin
+      V:=StreetParam.Values.Find('LOCALITY_ID');
+      if Assigned(V) then
+        Provider.Params.ParamByName('LOCALITY_ID').Value:=V.Value;
+    end;
+  end;
+
+end;
+
+end.

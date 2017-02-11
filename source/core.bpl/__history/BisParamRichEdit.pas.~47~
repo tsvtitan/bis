@@ -1,0 +1,197 @@
+unit BisParamRichEdit;
+
+interface
+
+uses Windows, Classes, Controls, StdCtrls, DB, 
+     BisParam, BisControls;
+
+type
+
+  TBisParamRichEdit=class(TBisParam)
+  private
+    FRichEdit: TRichEdit;
+    FLabelRichEdit: TLabel;
+    FRichEditName: String;
+    FLabelName: String;
+    FOldRichEditChange: TNotifyEvent;
+    FOldRichEditKeyDown: TKeyEvent;
+
+    procedure RichEditChange(Sender: TObject);
+    procedure RichEditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure SetEnabled(const Value: Boolean);
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetEmpty: Boolean; override;
+    function GetSize: Integer; override;
+    procedure SetSize(const Value: Integer); override;
+    function GetCaption: String; override;
+    function GetControl: TWinControl; override;
+//    procedure SetEnabled(const Value: Boolean); override;
+    procedure GetControls(List: TList); override;
+
+    property RichEdit: TRichEdit read FRichEdit write FRichEdit;
+    property LabelRichEdit: TLabel read FLabelRichEdit;
+  public
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+    property RichEditName: String read FRichEditName write FRichEditName;
+    property LabelName: String read FLabelName write FLabelName;
+  end;
+
+implementation
+
+uses Variants, Graphics,
+     BisUtils, BisConsts;
+
+
+{ TBisParamRichEdit }
+
+constructor TBisParamRichEdit.Create;
+begin
+  inherited Create;
+  DataType:=ftString;
+end;
+
+procedure TBisParamRichEdit.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamRichEdit) then begin
+    RichEditName:=TBisParamRichEdit(Source).RichEditName;
+    LabelName:=TBisParamRichEdit(Source).LabelName;
+  end;
+end;
+
+procedure TBisParamRichEdit.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FRichEdit:=TRichEdit(DoFindComponent(FRichEditName));
+    if Assigned(FRichEdit) then begin
+      FOldRichEditChange:=FRichEdit.OnChange;
+      FOldRichEditKeyDown:=FRichEdit.OnKeyDown;
+      FRichEdit.OnChange:=RichEditChange;
+      FRichEdit.OnKeyDown:=RichEditKeyDown;
+      FRichEdit.MaxLength:=inherited GetSize;
+      FRichEdit.Color:=iff(FRichEdit.Color=clBtnFace,ColorControlReadOnly,FRichEdit.Color);
+      FLabelRichEdit:=TLabel(DoFindComponent(FLabelName));
+      if Assigned(FLabelRichEdit) then
+        FLabelRichEdit.FocusControl:=FRichEdit;
+    end;
+    Value:=TempValue;
+  end;
+  inherited LinkControls(Parent);
+  if Assigned(FRichEdit) then begin
+  end;
+end;
+
+function TBisParamRichEdit.GetValue: Variant;
+var
+  Stream: TMemoryStream;
+  AValue: String;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FRichEdit) then begin
+    Stream:=TMemoryStream.Create;
+    try
+      FRichEdit.Lines.SaveToStream(Stream);
+      Stream.Position:=0;
+      SetLength(AValue,Stream.Size);
+      Stream.ReadBuffer(Pointer(AValue)^,Stream.Size);
+      Result:=iff(not Empty,AValue,Result);
+    finally
+      Stream.Free;
+    end;
+  end;
+end;
+
+procedure TBisParamRichEdit.SetValue(const AValue: Variant);
+var
+  Stream: TMemoryStream;
+  S: String;
+begin
+  if not VarSameValue(Value,AValue) then begin
+    if Assigned(FRichEdit) then begin
+      Stream:=TMemoryStream.Create;
+      FRichEdit.OnChange:=nil;
+      try
+        S:=VarToStrDef(AValue,'');
+        Stream.WriteBuffer(Pointer(S)^,Length(S));
+        Stream.Position:=0;
+        FRichEdit.Lines.LoadFromStream(Stream);
+      finally
+        FRichEdit.OnChange:=RichEditChange;
+        Stream.Free;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamRichEdit.GetCaption: String;
+begin
+  Result:=inherited GetCaption;
+  if Assigned(FLabelRichEdit) then
+    Result:=FLabelRichEdit.Caption;   
+end;
+
+function TBisParamRichEdit.GetControl: TWinControl;
+begin
+  Result:=FRichEdit;
+end;
+
+function TBisParamRichEdit.GetEmpty: Boolean;
+begin
+  Result:=true;
+  if Assigned(FRichEdit) then
+    Result:=FRichEdit.Lines.Text='';
+end;
+
+function TBisParamRichEdit.GetSize: Integer;
+begin
+  Result:=inherited GetSize;
+  if Assigned(FRichEdit) then
+    Result:=FRichEdit.MaxLength;
+end;
+
+procedure TBisParamRichEdit.GetControls(List: TList);
+begin
+  inherited;
+
+end;
+
+{procedure TBisParamRichEdit.SetEnabled(const Value: Boolean);
+begin
+  inherited SetEnabled(Value);
+  if Assigned(FLabelRichEdit) then
+    FLabelRichEdit.Enabled:=false;
+end;}
+
+procedure TBisParamRichEdit.SetSize(const Value: Integer);
+begin
+  if Size<>Value then
+    if Assigned(FRichEdit) then
+      FRichEdit.MaxLength:=Value
+    else
+      inherited SetSize(Value);
+end;
+
+procedure TBisParamRichEdit.RichEditChange(Sender: TObject);
+begin
+  DoChange(Self);
+  if Assigned(FOldRichEditChange) then
+    FOldRichEditChange(Sender);
+end;
+
+procedure TBisParamRichEdit.RichEditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  DoKeyDown(Sender,Key,Shift);
+  if Assigned(FOldRichEditKeyDown) then 
+    FOldRichEditKeyDown(Sender,Key,Shift);
+end;
+
+end.

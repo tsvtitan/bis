@@ -1,0 +1,354 @@
+unit SipClientFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls,
+
+  IdTimerQueue, IdSipMessage, IdSipRegistration, IdConnectionBindings, IdSystem,
+  IdSipTransport, IdSipUdpTransport, IdSipTransaction, IdSipMockLocator, IdRoutingTable,
+  IdSipStackInterface, IdSdp, IdSipCore, IdSipAuthentication, IdSipUserAgent,
+
+  BisSipStack;
+
+type
+  TIdSipStackInterface=class(IdSipStackInterface.TIdSipStackInterface)
+
+  end;
+
+  TSipClientForm = class(TForm,
+                         IIdSipTransportListener,
+                         IIdSipTransportSendingListener)
+    GroupBoxRegister: TGroupBox;
+    LabelHost: TLabel;
+    EditHost: TEdit;
+    LabelPort: TLabel;
+    EditPort: TEdit;
+    LabelUserName: TLabel;
+    EditUserName: TEdit;
+    LabelPassword: TLabel;
+    EditPassword: TEdit;
+    ButtonRegister: TButton;
+    ButtonUnRegister: TButton;
+    GroupBoxCall: TGroupBox;
+    GroupBoxLog: TGroupBox;
+    MemoLog: TMemo;
+    ButtonInvite: TButton;
+    procedure ButtonRegisterClick(Sender: TObject);
+    procedure ButtonUnRegisterClick(Sender: TObject);
+    procedure ButtonInviteClick(Sender: TObject);
+
+  private
+{    FRegHandle: TIdSipHandle;
+    FCallHandle: TIdSipHandle;
+    FDispatcher: TIdSipTransactionDispatcher;
+    FLocator: TIdSipMockLocator;
+    FTransport:  TIdSipUdpTransport;
+    FTimerQueue: TIdThreadedTimerQueue;
+    FConfiguration: TStringList;
+    FStack: TIdSipStackInterface;
+    FUserAgent: TIdSipUserAgent;
+
+    FSentAcks:       TIdSipRequestList;
+    FSentRequests:   TIdSipRequestList;
+    FSentResponses:  TIdSipResponseList;}
+
+    FStack: TBisSipStack;
+
+    procedure UpdateButtons;
+    procedure LogMessage(Msg: String);
+    procedure OnException(FailedMessage: TIdSipMessage;
+                          E: Exception;
+                          const Reason: String);
+    procedure OnReceiveRequest(Request: TIdSipRequest;
+                               Receiver: TIdSipTransport;
+                               Source: TIdConnectionBindings);
+    procedure OnReceiveResponse(Response: TIdSipResponse;
+                                Receiver: TIdSipTransport;
+                                Source: TIdConnectionBindings);
+    procedure OnRejectedMessage(const Msg: String;
+                                const Reason: String;
+                                Source: TIdConnectionBindings);
+    procedure OnSendRequest(Request: TIdSipRequest;
+                            Sender: TIdSipTransport;
+                            Destination: TIdConnectionBindings);
+    procedure OnSendResponse(Response: TIdSipResponse;
+                             Sender: TIdSipTransport;
+                             Destination: TIdConnectionBindings);
+
+    procedure CMSUCCESS(var Msg: TIdSipEventMessage); message CM_SUCCESS;
+    procedure CMFAIL(var Msg: TIdSipEventMessage); message CM_FAIL;
+
+    procedure ReceiveNotify(Data: TIdSipStackInterfaceEventMethod);
+
+    procedure StackTransportMessage(AStack: );
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+  end;
+
+var
+  SipClientForm: TSipClientForm;
+
+implementation
+
+uses PluggableLogging;
+
+{$R *.dfm}
+
+procedure LoggerProc(Description: String; SourceDesc: String; Severity: TSeverityLevel; EventRef: Cardinal; DebugInfo: String);
+begin
+  if not Assigned(SipClientForm) then
+    SipClientForm.LogMessage(Format('%s'+#13#10+'%s'+#13#10+'%s',[Description,SourceDesc,DebugInfo]));
+end;
+
+{ TSipClientForm }
+
+constructor TSipClientForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+(*  TIdSipTransportRegistry.RegisterTransportType(UdpTransport,TIdSipUdpTransport);
+
+  FTimerQueue:=TIdThreadedTimerQueue.Create(true);
+
+  FLocator:=TIdSipMockLocator.Create;
+
+  FTransport:=TIdSipUdpTransport.Create;
+  FTransport.ClearBindings;
+  FTransport.HostName:='192.168.1.2';
+  FTransport.AddBinding('192.168.1.2',5060);
+  FTransport.RoutingTable:=TIdRoutingTable.PlatformRoutingTable(OsType).Create;
+  FTransport.RoutingTable.DefaultIpAddress:='192.168.1.2';
+  FTransport.Timer:=FTimerQueue;
+  FTransport.Start;
+
+  FDispatcher:=TIdSipTransactionDispatcher.Create(FTimerQueue,FLocator);
+  FDispatcher.Transports.Add(FTransport);
+{  FDispatcher.AddTransportBinding(UdpTransport,'192.168.1.2',5060);
+  FDispatcher.Transports[0].AddTransportListener(Self);
+  FDispatcher.Transports[0].AddTransportSendingListener(Self);}
+
+  FTransport.AddTransportListener(Self);
+  FTransport.AddTransportSendingListener(Self);
+
+  FConfiguration:=TStringList.Create;
+
+  FStack:=TIdSipStackInterface.Create(Handle,FTimerQueue,FConfiguration);
+  FStack.UserAgent.Dispatcher:=FDispatcher;
+  FStack.UserAgent.From.Value:='sip:2026672@195.112.242.242';
+  FStack.UserAgent.Username:=EditUserName.Text;
+  FStack.UserAgent.HostName:='195.112.242.242';
+  FStack.UserAgent.UserAgentName:='SIP Client';
+  FStack.UserAgent.UseInboundConnections:=true;
+  FStack.UserAgent.UseGruu:=false;
+  FStack.Resume;
+
+  FSentAcks      := TIdSipRequestList.Create;
+  FSentRequests  := TIdSipRequestList.Create;
+  FSentResponses := TIdSipResponseList.Create;
+
+  FRegHandle:=InvalidHandle;
+  FCallHandle:=InvalidHandle;
+
+  Logger:=LoggerProc;*)
+
+  FStack:=TBisSipStack.Create(nil);
+  FStack.OnTransportMessage:=StackTransportMessage;
+  FStack.LocalHost:='192.168.1.3';
+  FStack.LocalPort:=5060;
+
+end;
+
+destructor TSipClientForm.Destroy;
+begin
+  FStack.Free;
+{  FSentResponses.Free;
+  FSentRequests.Free;
+  FSentAcks.Free;
+
+  FStack.Free;
+  FConfiguration.Free;
+//  FTransport.Free;
+//  FDispatcher.Free;
+  FLocator.Free;
+  FTimerQueue.Free;}
+  inherited Destroy;
+end;
+
+procedure TSipClientForm.LogMessage(Msg: String);
+begin
+  MemoLog.Lines.Add(DateTimeToStr(Now)+' - '+Msg);
+  MemoLog.Lines.Add('==========================')
+end;
+
+procedure TSipClientForm.CMFAIL(var Msg: TIdSipEventMessage);
+begin
+  ReceiveNotify(Msg.Data);
+
+end;
+
+procedure TSipClientForm.CMSUCCESS(var Msg: TIdSipEventMessage);
+begin
+  ReceiveNotify(Msg.Data);
+end;
+
+procedure TSipClientForm.OnException(FailedMessage: TIdSipMessage; E: Exception; const Reason: String);
+begin
+  LogMessage(Format('OnException: %s (%s)',[E.Message,Reason]));
+end;
+
+procedure TSipClientForm.OnReceiveRequest(Request: TIdSipRequest; Receiver: TIdSipTransport;
+  Source: TIdConnectionBindings);
+begin
+  LogMessage('OnReceiveRequest:'+#13#10+Request.AsString);
+end;
+
+procedure TSipClientForm.OnReceiveResponse(Response: TIdSipResponse; Receiver: TIdSipTransport;
+  Source: TIdConnectionBindings);
+
+{  function  CreateAuthorization(Challenge: TIdSipResponse): TIdSipAuthorizationHeader;
+  var
+    ChallengeHeader: TIdSipAuthenticateHeader;
+    RealmInfo:       TIdRealmInfo;
+  begin
+    ChallengeHeader := Challenge.AuthenticateHeader;
+
+    FStack.UserAgent.Keyring.AddKey(ChallengeHeader,FSentRequests.Last.RequestUri.AsString,FStack.UserAgent.Username);
+
+    RealmInfo := FStack.UserAgent.Keyring.Find(ChallengeHeader.Realm,
+                                               FSentRequests.Last.RequestUri.AsString);
+
+    Result := RealmInfo.CreateAuthorization(Challenge,
+                                            FSentRequests.Last.Method,
+                                            FSentRequests.Last.Body,
+                                            EditPassword.Text);
+  end;}
+
+{var
+  AuthCreds: TIdSipAuthorizationHeader;
+  Action:          TIdSipAction;}
+begin
+{  LogMessage('OnReceiveResponse:'+#13#10+Response.AsString);
+  if Response.IsAuthenticationChallenge then begin
+    if Response.HasWWWAuthenticate then begin
+//      FStack.UserAgent.re
+
+      AuthCreds:=CreateAuthorization(Response);
+      if Assigned(AuthCreds) then begin
+//        FStack.Authenticate(FRegHandle,AuthCreds);
+//        FStack.Send(FRegHandle);
+      end;
+
+
+    end;
+  end;}
+end;
+
+procedure TSipClientForm.OnRejectedMessage(const Msg, Reason: String; Source: TIdConnectionBindings);
+begin
+  LogMessage(Format('OnRejectedMessage: %s',[Reason])+#13#10+Msg);
+end;
+
+procedure TSipClientForm.OnSendRequest(Request: TIdSipRequest; Sender: TIdSipTransport;
+  Destination: TIdConnectionBindings);
+begin
+  LogMessage('OnSendRequest:'+#13#10+Request.AsString);
+
+{  if Request.IsAck then
+    FSentAcks.AddCopy(Request)
+  else
+    FSentRequests.AddCopy(Request);}
+end;
+
+procedure TSipClientForm.OnSendResponse(Response: TIdSipResponse; Sender: TIdSipTransport;
+  Destination: TIdConnectionBindings);
+begin
+  LogMessage('OnSendResponse:'+#13#10+Response.AsString);
+end;
+
+procedure TSipClientForm.ReceiveNotify(Data: TIdSipStackInterfaceEventMethod);
+begin
+  try
+    LogMessage('ReceiveNotify:'+#13#10+Data.Data.AsString);
+
+{    case Data.Event of
+      CM_CALL_ENDED:          Self.NotifyOfEndedCall(Data.Data as TIdCallEndedData);
+      CM_CALL_ESTABLISHED:    Self.NotifyOfEstablishedCall(Data.Data as TIdSessionData);
+      CM_CALL_PROGRESS:       Self.NotifyOfCallProgress(Data.Data as TIdSessionProgressData);
+      CM_CALL_REFERRAL:       Self.NotifyOfCallReferral(Data.Data as TIdSessionReferralData);
+      CM_CALL_REMOTE_MODIFY_REQUEST:
+                              Self.NotifyOfRemoteModifyRequest(Data.Data as TIdSessionData);
+      CM_CALL_REQUEST_NOTIFY: Self.NotifyOfIncomingCall(Data.Data as TIdSessionData);
+      CM_NETWORK_FAILURE:     Self.NotifyOfNetworkFailure(Data.Data as TIdFailData);
+      CM_SUBSCRIPTION_ESTABLISHED:
+                              Self.NotifyOfSubscriptionEstablished(Data.Data as TIdSubscriptionData);
+      CM_SUBSCRIPTION_RECV_NOTIFY:
+                              Self.NotifyOfReceivedNotify(Data.Data as TIdSubscriptionData);
+      CM_SUBSCRIPTION_EXPIRED:Self.NotifyOfSubscriptionExpired(Data.Data as TIdSubscriptionData);
+      CM_SUBSCRIPTION_REQUEST_NOTIFY:
+                              Self.NotifyOfSubscriptionRequest(Data.Data as TIdSubscriptionRequestData);
+
+      CM_DEBUG_DROPPED_MSG:   Self.NotifyOfDroppedMessage(Data.Data as TIdDebugMessageData);
+      CM_DEBUG_RECV_MSG:      Self.NotifyOfReceivedMsg(Data.Data as TIdDebugMessageData);
+      CM_DEBUG_SEND_MSG:      Self.NotifyOfSentMsg(Data.Data as TIdDebugSendMessageData);
+    end;}
+  finally
+    Data.Free;
+  end;
+end;
+
+procedure TSipClientForm.UpdateButtons;
+begin
+  ButtonRegister.Enabled:=not FStack.Registered;
+  ButtonUnRegister.Enabled:=not ButtonRegister.Enabled;
+end;
+
+procedure TSipClientForm.ButtonRegisterClick(Sender: TObject);
+begin
+  FStack.UserName:=EditUserName.Text;
+  FStack.Password:=EditPassword.Text;
+  FStack.RemoteHost:=EditHost.Text;
+//  FStack.RemoteHost:='sion.vezdefon.ru';
+  FStack.RemotePort:=StrToIntDef(EditPort.Text,5060);
+
+  if FStack.Register then begin
+    ShowMessage('Register Ok');
+  end else begin
+    ShowMessage('Register Fail');
+  end;
+  UpdateButtons;
+end;
+
+procedure TSipClientForm.ButtonUnRegisterClick(Sender: TObject);
+begin
+  if FStack.Registered then
+    FStack.UnRegister;
+  UpdateButtons;  
+end;
+
+procedure TSipClientForm.ButtonInviteClick(Sender: TObject);
+{var
+  Source: TIdSipAddressHeader;
+  Destination: TIdSipAddressHeader;}
+begin
+{  Source:=TIdSipAddressHeader.Create;
+  Destination:=TIdSipAddressHeader.Create;
+  try
+    Source.Value:='sip:2026672@192.168.1.2';
+
+    Destination.Value:='sip:2932332@195.112.242.242';
+
+    FCallHandle:=FStack.MakeCall(Source,Destination,'',SdpMimeType,70);
+    if FCallHandle<>InvalidHandle then begin
+      FStack.Send(FCallHandle);
+    end;
+  finally
+    Destination.Free;
+    Source.Free;
+  end;}
+end;
+
+end.

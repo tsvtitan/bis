@@ -1,0 +1,334 @@
+unit BisUtilTableEditFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrls, ExtCtrls, DB, DBGrids, DBClient, ClipBrd, Buttons,
+  Grids, Menus,
+  BisProvider, BisControls;
+
+type
+  TBisUtilTableEditFrame = class(TFrame)
+    PanelTop: TPanel;
+    ButtonLoad: TButton;
+    ButtonSave: TButton;
+    ButtonCreate: TButton;
+    PanelGrid: TPanel;
+    Splitter: TSplitter;
+    PanelBottom: TPanel;
+    GroupBoxValue: TGroupBox;
+    PanelValue: TPanel;
+    PanelValueButton: TPanel;
+    DataSource: TDataSource;
+    OpenDialog: TOpenDialog;
+    SaveDialog: TSaveDialog;
+    ButtonClear: TButton;
+    DBNavigator: TDBNavigator;
+    LabelTableName: TLabel;
+    EditTableName: TEdit;
+    ButtonLoadValue: TButton;
+    ButtonSaveValue: TButton;
+    btUpColumns: TBitBtn;
+    btDownColumns: TBitBtn;
+    PanelMemo: TPanel;
+    DBMemoValue: TDBMemo;
+    LabelFilter: TLabel;
+    EditFilter: TEdit;
+    ButtonApply: TButton;
+    DBGrid: TDBGrid;
+    LabelCount: TLabel;
+    ButtonClearValue: TButton;
+    ButtonEditorValue: TButton;
+    PopupMenuEditor: TPopupMenu;
+    MenuItemEditorTable: TMenuItem;
+    N1: TMenuItem;
+    procedure ButtonCreateClick(Sender: TObject);
+    procedure ButtonLoadClick(Sender: TObject);
+    procedure ButtonSaveClick(Sender: TObject);
+    procedure ButtonGenClick(Sender: TObject);
+    procedure ButtonClearClick(Sender: TObject);
+    procedure ButtonLoadValueClick(Sender: TObject);
+    procedure ButtonSaveValueClick(Sender: TObject);
+    procedure btUpColumnsClick(Sender: TObject);
+    procedure btDownColumnsClick(Sender: TObject);
+    procedure ButtonApplyClick(Sender: TObject);
+    procedure DBGridCellClick(Column: TColumn);
+    procedure DBGridColEnter(Sender: TObject);
+    procedure DBGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure ButtonClearValueClick(Sender: TObject);
+    procedure MenuItemEditorTableClick(Sender: TObject);
+    procedure ButtonEditorValueClick(Sender: TObject);
+  private
+    FDataSet: TBisProvider;
+    FFileName: String;
+    procedure DataSetAfterInsert(DataSet: TDataSet);
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure RefreshCount;
+
+    property DataSet: TBisProvider read FDataSet;
+    property FileName: String read FFileName write FFileName;
+  end;
+
+implementation
+
+{$R *.dfm}
+
+uses BisUtils, BisDialogs, BisDBTableEditFm, BisUtilTableEditFm;
+
+constructor TBisUtilTableEditFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FDataSet:=TBisProvider.Create(Self);
+  FDataSet.AfterInsert:=DataSetAfterInsert;
+  FDataSet.AfterDelete:=DataSetAfterInsert;
+  FDataSet.AfterCancel:=DataSetAfterInsert;
+  FDataSet.AfterPost:=DataSetAfterInsert;
+
+  DataSource.DataSet:=FDataSet;
+end;
+
+procedure TBisUtilTableEditFrame.DataSetAfterInsert(DataSet: TDataSet);
+begin
+  RefreshCount;
+end;
+
+procedure TBisUtilTableEditFrame.DBGridCellClick(Column: TColumn);
+begin
+  if Assigned(DBGrid.SelectedField) then begin
+    DBMemoValue.DataField:=Column.FieldName;
+    DBMemoValue.LoadMemo;
+  end else DBMemoValue.DataField:='';
+end;
+
+procedure TBisUtilTableEditFrame.DBGridColEnter(Sender: TObject);
+begin
+  if Assigned(DBGrid.SelectedField) then begin
+    DBMemoValue.DataField:=DBGrid.SelectedField.FieldName;
+    DBMemoValue.LoadMemo;
+  end else DBMemoValue.DataField:='';
+end;
+
+procedure TBisUtilTableEditFrame.DBGridDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  OldBrush: TBrush;
+  AGrid: TDbGrid;
+begin
+  AGrid:=TDbGrid(Sender);
+  if not (gdFocused in State) and (gdSelected in State) then begin
+    OldBrush:=TBrush.Create;
+    OldBrush.Assign(AGrid.Canvas.Brush);
+    try
+      AGrid.Canvas.Brush.Color:=clGray;
+      AGrid.Canvas.FillRect(Rect);
+      AGrid.Canvas.Font.Color:=clHighlightText;
+      AGrid.Canvas.TextOut(Rect.Left+2,Rect.Top+2,Column.Field.Text);
+    finally
+      AGrid.Canvas.Brush.Assign(OldBrush);
+      OldBrush.Free;
+    end;
+  end else
+    AGrid.DefaultDrawColumnCell(Rect,DataCol,Column,State);
+end;
+
+procedure TBisUtilTableEditFrame.ButtonCreateClick(Sender: TObject);
+var
+  Form: TBisDBTableEditForm;
+begin
+  Form:=TBisDBTableEditForm.Create(FDataSet);
+  try
+    if Form.ShowModal=mrOk then begin
+      if ShowQuestion('Сохранить в файл?')=mrYes then begin
+        if SaveDialog.Execute then begin
+          if FDataSet.Active then begin
+            FDataSet.SaveToFile(SaveDialog.FileName);
+            DBMemoValue.DataField:=FDataSet.Fields[0].FieldName;
+          end;
+        end;
+      end;
+      RefreshCount;
+    end;
+  finally
+    Form.Free;
+  end;
+end;
+
+procedure TBisUtilTableEditFrame.ButtonLoadClick(Sender: TObject);
+begin
+  if OpenDialog.Execute then begin
+    DBMemoValue.DataField:='';
+    FDataSet.LoadFromFile(OpenDialog.FileName);
+    EditTableName.Text:=FDataSet.TableName;
+    DBMemoValue.DataField:=FDataSet.Fields[0].FieldName;
+    RefreshCount;
+  end;
+end;
+
+procedure TBisUtilTableEditFrame.ButtonSaveClick(Sender: TObject);
+begin
+  if SaveDialog.Execute then begin
+    if FDataSet.Active then begin
+      FDataSet.TableName:=EditTableName.Text;
+      FDataSet.SaveToFile(SaveDialog.FileName);
+    end;
+  end;
+end;
+
+procedure TBisUtilTableEditFrame.ButtonGenClick(Sender: TObject);
+var
+  S: String;
+begin
+  S:=GetUniqueID;
+  Clipboard.AsText:=S;
+  if ShowQuestion(Format('Заменить значение на %s?',[S]))=mrYes then
+    if FDataSet.Active and (Trim(DBMemoValue.DataField)<>'') then begin
+      FDataSet.Edit;
+      FDataSet.FieldByName(DBMemoValue.DataField).Value:=S;
+      FDataSet.Post;
+    end;
+end;
+
+procedure TBisUtilTableEditFrame.ButtonClearClick(Sender: TObject);
+begin
+  EditTableName.Text:='';
+  FDataSet.EmptyTable;
+  FDataSet.Close;
+  FDataSet.FieldDefs.Clear;
+  RefreshCount;
+end;
+
+procedure TBisUtilTableEditFrame.ButtonClearValueClick(Sender: TObject);
+begin
+  if FDataSet.Active and (Trim(DBMemoValue.DataField)<>'')then begin
+    FDataSet.Edit;
+    FDataSet.FieldByName(DBMemoValue.DataField).Value:=Null;
+    FDataSet.Post;
+  end;
+end;
+
+procedure TBisUtilTableEditFrame.ButtonLoadValueClick(Sender: TObject);
+var
+  Stream: TFileStream;
+  AValue: String;
+begin
+  if FDataSet.Active and (Trim(DBMemoValue.DataField)<>'') then begin
+    if OpenDialog.Execute then begin
+      Stream:=TFileStream.Create(OpenDialog.FileName,fmOpenRead or fmShareDenyWrite);
+      try
+        SetLength(AValue,Stream.Size);
+        Stream.Read(Pointer(AValue)^,Stream.Size);
+        FDataSet.Edit;
+        FDataSet.FieldByName(DBMemoValue.DataField).Value:=AValue;
+        FDataSet.Post;
+      finally
+        Stream.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisUtilTableEditFrame.ButtonSaveValueClick(Sender: TObject);
+var
+  Stream: TFileStream;
+  AValue: String;
+begin
+  if FDataSet.Active and (Trim(DBMemoValue.DataField)<>'') and not FDataSet.IsEmpty then begin
+    if SaveDialog.Execute then begin
+      Stream:=TFileStream.Create(SaveDialog.FileName,fmCreate);
+      try
+        AValue:=FDataSet.FieldByName(DBMemoValue.DataField).Value;
+        Stream.Write(Pointer(AValue)^,Length(AValue));
+      finally
+        Stream.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisUtilTableEditFrame.btUpColumnsClick(Sender: TObject);
+begin
+  FDataSet.MoveData(true);
+end;
+
+procedure TBisUtilTableEditFrame.btDownColumnsClick(Sender: TObject);
+begin
+  FDataSet.MoveData(false);
+end;
+
+procedure TBisUtilTableEditFrame.ButtonApplyClick(Sender: TObject);
+var
+  FieldName: String;
+begin
+  if Trim(EditFilter.Text)<>'' then begin
+    if Assigned(DBGrid.SelectedField) then begin
+      FieldName:=DBGrid.SelectedField.FieldName;
+      DataSet.Filter:=Format('%s=%s',[FieldName,QuotedStr(EditFilter.Text)]);
+      DataSet.Filtered:=true;
+      RefreshCount;
+    end;
+  end else begin
+    DataSet.Filter:='';
+    DataSet.Filtered:=false;
+    RefreshCount;
+  end;
+end;
+
+procedure TBisUtilTableEditFrame.RefreshCount;
+var
+  Count: Integer;
+begin
+  Count:=0;
+  if DataSet.Active then
+    Count:=DataSet.RecordCount;
+  LabelCount.Caption:=FormatEx('Всего: %d',[Count]);
+  LabelCount.Update;
+end;
+
+procedure TBisUtilTableEditFrame.ButtonEditorValueClick(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  Pt:=Point(ButtonEditorValue.Left,ButtonEditorValue.Top+ButtonEditorValue.height);
+  Pt:=PanelValueButton.ClientToScreen(Pt);
+  PopupMenuEditor.Popup(Pt.X,Pt.Y);
+end;
+
+procedure TBisUtilTableEditFrame.MenuItemEditorTableClick(Sender: TObject);
+var
+  AForm: TBisUtilTableEditForm;
+  Field: TField;
+  Stream: TMemoryStream;
+begin
+  if FDataSet.Active and (Trim(DBMemoValue.DataField)<>'') then begin
+    Field:=FDataSet.FindField(DBMemoValue.DataField);
+    if Field.IsBlob then begin
+      AForm:=TBisUtilTableEditForm.Create(nil);
+      Stream:=TMemoryStream.Create;
+      try
+        if not Field.IsNull then begin
+          TBlobField(Field).SaveToStream(Stream);
+          Stream.Position:=0;
+          AForm.TableEdit.DataSet.LoadFromStream(Stream);
+          AForm.TableEdit.RefreshCount;
+        end;
+        if AForm.ShowModal=mrOk then begin
+          Stream.Clear;
+          AForm.TableEdit.DataSet.SaveToStream(Stream);
+          Stream.Position:=0;
+          FDataSet.Edit;
+          TBlobField(Field).LoadFromStream(Stream);
+          FDataSet.Post;
+        end;
+      finally
+        Stream.Free;
+        AForm.Free;
+      end;
+    end;
+  end;
+end;
+
+
+end.

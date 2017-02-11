@@ -1,0 +1,191 @@
+inherited BisTaxiChargeEditForm: TBisTaxiChargeEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisTaxiChargeEditForm'
+  ClientHeight = 267
+  ClientWidth = 489
+  ExplicitWidth = 497
+  ExplicitHeight = 301
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 229
+    Width = 489
+    ExplicitTop = 229
+    ExplicitWidth = 489
+    inherited ButtonOk: TButton
+      Left = 310
+      ExplicitLeft = 310
+    end
+    inherited ButtonCancel: TButton
+      Left = 406
+      ExplicitLeft = 406
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 489
+    Height = 229
+    ExplicitWidth = 489
+    ExplicitHeight = 229
+    object LabelDescription: TLabel
+      Left = 50
+      Top = 96
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1087#1080#1089#1072#1085#1080#1077':'
+      FocusControl = MemoDescription
+    end
+    object LabelSum: TLabel
+      Left = 66
+      Top = 69
+      Width = 37
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1057#1091#1084#1084#1072':'
+      FocusControl = EditSum
+    end
+    object LabelAccount: TLabel
+      Left = 77
+      Top = 42
+      Width = 26
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1057#1095#1077#1090':'
+      FocusControl = EditAccount
+    end
+    object LabelDateCharge: TLabel
+      Left = 194
+      Top = 69
+      Width = 29
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1044#1072#1090#1072':'
+      FocusControl = DateTimePickerCharge
+    end
+    object LabelType: TLabel
+      Left = 30
+      Top = 15
+      Width = 73
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1042#1080#1076' '#1089#1087#1080#1089#1072#1085#1080#1103':'
+      FocusControl = ComboBoxType
+    end
+    object LabelWho: TLabel
+      Left = 43
+      Top = 200
+      Width = 60
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akLeft, akBottom]
+      Caption = #1050#1090#1086' '#1089#1086#1079#1076#1072#1083':'
+      FocusControl = EditWho
+    end
+    object LabelDateCreate: TLabel
+      Left = 274
+      Top = 200
+      Width = 29
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akLeft, akBottom]
+      Caption = #1044#1072#1090#1072':'
+      FocusControl = DateTimePickerCreate
+    end
+    object MemoDescription: TMemo
+      Left = 109
+      Top = 93
+      Width = 368
+      Height = 98
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      ScrollBars = ssVertical
+      TabOrder = 6
+    end
+    object EditSum: TEdit
+      Left = 109
+      Top = 66
+      Width = 75
+      Height = 21
+      Constraints.MaxWidth = 300
+      TabOrder = 3
+    end
+    object DateTimePickerCharge: TDateTimePicker
+      Left = 229
+      Top = 66
+      Width = 88
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      TabOrder = 4
+    end
+    object DateTimePickerChargeTime: TDateTimePicker
+      Left = 323
+      Top = 66
+      Width = 74
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 5
+    end
+    object EditAccount: TEdit
+      Left = 109
+      Top = 39
+      Width = 181
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 1
+    end
+    object ButtonAccount: TButton
+      Left = 296
+      Top = 39
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1091#1095#1077#1090#1085#1091#1102' '#1079#1072#1087#1080#1089#1100
+      Caption = '...'
+      TabOrder = 2
+    end
+    object ComboBoxType: TComboBox
+      Left = 109
+      Top = 12
+      Width = 181
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 0
+      TabOrder = 0
+    end
+    object EditWho: TEdit
+      Left = 109
+      Top = 197
+      Width = 155
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 7
+    end
+    object DateTimePickerCreate: TDateTimePicker
+      Left = 309
+      Top = 197
+      Width = 88
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      TabOrder = 8
+    end
+    object DateTimePickerCreateTime: TDateTimePicker
+      Left = 403
+      Top = 197
+      Width = 74
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 9
+    end
+  end
+end

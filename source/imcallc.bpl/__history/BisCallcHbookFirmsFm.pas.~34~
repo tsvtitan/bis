@@ -1,0 +1,69 @@
+unit BisCallcHbookFirmsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataTreeFm, StdCtrls, ExtCtrls, ComCtrls, BisDataGridFm, ActnList;
+
+type
+  TBisCallcHbookFirmsForm = class(TBisDataTreeForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookFirmsFormIface=class(TBisDataTreeFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookFirmsForm: TBisCallcHbookFirmsForm;
+
+implementation
+
+uses BisCallcHbookFirmEditFm;
+
+{$R *.dfm}
+
+{ TBisCallcHbookFirmsFormIface }
+
+constructor TBisCallcHbookFirmsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookFirmsForm;
+  InsertClass:=TBisCallcHbookFirmInsertFormIface;
+  UpdateClass:=TBisCallcHbookFirmUpdateFormIface;
+  DeleteClass:=TBisCallcHbookFirmDeleteFormIface;
+  ProviderName:='S_FIRMS';
+  with FieldNames do begin
+    AddKey('FIRM_ID');
+    AddParentKey('PARENT_ID');
+    AddInvisible('PARENT_SMALL_NAME');
+    AddInvisible('FIRM_TYPE_ID');
+    AddInvisible('FIRM_TYPE_NAME');
+    AddInvisible('INN');
+    AddInvisible('PAYMENT_ACCOUNT');
+    AddInvisible('BANK');
+    AddInvisible('BIK');
+    AddInvisible('CORR_ACCOUNT');
+    AddInvisible('LEGAL_ADDRESS');
+    AddInvisible('POST_ADDRESS');
+    AddInvisible('FAX');
+    AddInvisible('EMAIL');
+    AddInvisible('SITE');
+    AddInvisible('OKONH');
+    AddInvisible('OKPO');
+    AddInvisible('KPP');
+    AddInvisible('DIRECTOR');
+    AddInvisible('ACCOUNTANT');
+    AddInvisible('CONTACT_FACE');
+    Add('SMALL_NAME','Краткое наименование',150);
+    Add('FULL_NAME','Полное наименование',200);
+    Add('PHONE','Телефоны',100);
+  end;
+end;
+
+end.

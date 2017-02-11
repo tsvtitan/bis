@@ -1,0 +1,38 @@
+unit BisProviderTest;
+
+interface
+
+uses BisModules, BisProviderModules;
+
+procedure InitProviderModule(AModule: TBisProviderModule); stdcall;
+
+exports
+  InitProviderModule;
+
+implementation
+
+
+uses BisProvider, BisDataSet, BisDialogs;
+
+type
+
+  TBisProviderTest=class(TBisProvider)
+  public
+    procedure Execute(DataSet: TBisDataSet); override;
+  end;
+
+
+procedure InitProviderModule(AModule: TBisProviderModule); stdcall;
+begin
+  AModule.Providers.Add(TBisProviderTest);
+end;
+
+{ TBisProviderTest }
+
+procedure TBisProviderTest.Execute(DataSet: TBisDataSet);
+begin
+  if Assigned(DataSet) then
+    ShowInfo(DataSet.ProviderName);
+end;
+
+end.

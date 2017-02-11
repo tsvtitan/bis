@@ -1,0 +1,58 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>SessionManager Demonstration</title>
+</head>
+
+<body>
+<h1>SessionManager Demonstration</h1>
+<%
+if (Request.Param('Name') = 'dws') and (Request.Param('Password') = 'test') then
+begin
+  // Login successfull. Change the session state
+  Session.ClientState := dwstateULI;
+%>
+  <h2>Login successfull!</h2>
+  <p><a href="start.dws?tid=<%=TID%>">Return</a> now to the previous page and look how it changed!</p>
+<%
+end
+else
+begin
+%>
+  <h2>Login failed!</h2>
+  <p><a href="start.dws?tid=<%=TID%>">Return</a> to the previous page and try again.</p>
+<%
+end;
+%>
+<h3>Session</h3>
+<p>The current state of the session record</p>
+<pre>
+<%
+Send('SessionManager.Version: '); SendLn(SessionManager.Version);
+
+Sendln('Sessionstate: ' + inttostr(Session.ClientState));
+
+case Session.clientState of
+  dwStateLOFF :  sendln(' end session and log off');
+  dwStateTOUT : sendln(' session timed out');
+  dwStateNLI : sendln(' user is not logged in ');
+  dwStatePRF : sendln(' still to proof session ');
+  dwStateGLI : sendln(' logged in as guest ');
+  dwStateULI : sendln(' user is logged in, session exists ');
+  dwStateNAT : sendln(' logged in on higher level ');
+  dwStateVIP : sendln(' logged in on VIP level ');
+  dwStateSU  : sendln(' logged in on SU level ');
+end;
+
+SendLn('User.AnsiNick: ' + Session.Param('AnsiNick'));
+SendLn('User.ActiveUsers: ' + IntToStr(Session.ActiveUsers));
+SendLn('User.IpAddr: ' + Session.IpAddr);
+SendLn('User.SBrand: ' + Session.SBrand);
+SendLn('User.TLogin: ' + FormatDateTime('dddddd tt', Session.TLogin));
+SendLn('User.TLastAction: ' + FormatDateTime('dddddd tt', Session.TLastAction));
+%>
+</pre>
+</body>
+</html>

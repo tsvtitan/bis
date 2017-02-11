@@ -1,0 +1,56 @@
+unit BisTaxiDataReceiptFilterFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, StdCtrls, ComCtrls, ExtCtrls,
+  BisTaxiDataReceiptEditFm;
+
+type
+  TBisTaxiDataReceiptFilterForm = class(TBisTaxiDataReceiptEditForm)
+    LabelDateReceiptTo: TLabel;
+    DateTimePickerReceiptTo: TDateTimePicker;
+    DateTimePickerReceiptToTime: TDateTimePicker;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisTaxiDataReceiptFilterFormIface=class(TBisTaxiDataReceiptEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataReceiptFilterForm: TBisTaxiDataReceiptFilterForm;
+
+implementation
+
+uses DateUtils,
+     BisFilterGroups, BisParam, BisPeriodFm;
+
+{$R *.dfm}
+
+{ TBisTaxiDataReceiptFilterFormIface }
+
+constructor TBisTaxiDataReceiptFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataReceiptFilterForm;
+  with Params do begin
+    Unique:=false;
+    with ParamByName('DATE_RECEIPT') do begin
+      Modes:=[emFilter];
+      FilterCondition:=fcEqualGreater;
+    end;
+    with AddEditDateTime('DATE_RECEIPT','DateTimePickerReceiptTo','DateTimePickerReceiptToTime','LabelDateReceiptTo') do begin
+      Modes:=[emFilter];
+      FilterCondition:=fcEqualLess;
+    end;
+  end;
+  Caption:='Фильтр поступлений';
+end;
+
+end.

@@ -1,0 +1,23 @@
+unit BisRpmFR;
+
+interface
+
+uses BisReportModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitReportModule(AModule: TBisReportModule); stdcall;
+
+exports
+  InitReportModule;
+
+implementation
+
+uses BisFastReportFm;
+
+procedure InitReportModule(AModule: TBisReportModule); stdcall;
+begin
+  AModule.ReportClass:=TBisFastReportFormIface;
+  AModule.ReportEditorClass:=
+end;
+
+end.

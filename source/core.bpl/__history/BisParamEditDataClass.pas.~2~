@@ -1,0 +1,197 @@
+unit BisParamEditDataClass;
+
+interface
+
+uses Classes, Controls, DB, StdCtrls, Windows,
+     BisFilterGroups,
+     BisParam, BisParamInvisible, BisParamEdit;
+
+type
+  TBisParamEditDataClass=class;
+
+  TBisParamEditDataCheckValueEvent=procedure (Def: TBisParamEditDataClass; var NewValue: Variant; var CanSet: Boolean) of object;
+
+  TBisParamEditDataClass=class(TBisParamInvisible)
+  private
+    FButtonName: String;
+    FDataClass: TComponentClass;
+    FAlias: String;
+    FDataAlias: String;
+    FParamEdit: TBisParamEdit;
+    FButton: TButton;
+    FOldButtonClick: TNotifyEvent;
+    FOldEditKeyDown: TKeyEvent;
+    FDataName: String;
+    FFilterGroups: TBisFilterGroups;
+    FOnCheckValue: TBisParamEditDataCheckValueEvent;
+
+    procedure ParamEditLinkControls(AParent: TWinControl);
+    procedure ButtonClick(Sender: TObject);
+    procedure EditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure DoCheckValue(var NewValue: Variant; var CanSet: Boolean);
+
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    procedure CopyFrom(Source: TBisParam); override;
+    procedure LinkControls(AParent: TWinControl); override;
+    function Select: Boolean;
+
+    property ButtonName: String read FButtonName write FButtonName;
+    property DataClass: TComponentClass read FDataClass write FDataClass;
+    property Alias: String read FAlias write FAlias;
+    property DataAlias: String read FDataAlias write FDataAlias;
+    property Button: TButton read FButton;
+    property DataName: String read FDataName write FDataName;
+    property FilterGroups: TBisFilterGroups read FFilterGroups;
+
+    property OnCheckValue: TBisParamEditDataCheckValueEvent read FOnCheckValue write FOnCheckValue;
+  end;
+
+implementation
+
+uses Variants,
+     BisDataFm, BisDataSet, BisUtils;
+
+{ TBisParamEditDataClass }
+
+constructor TBisParamEditDataClass.Create;
+begin
+  inherited Create;
+  FFilterGroups:=TBisFilterGroups.Create;
+end;
+
+destructor TBisParamEditDataClass.Destroy;
+begin
+  FFilterGroups.Free;
+  inherited Destroy;
+end;
+
+procedure TBisParamEditDataClass.CopyFrom(Source: TBisParam);
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisParamEditDataClass) then begin
+    ButtonName:=TBisParamEditDataClass(Source).ButtonName;
+    DataClass:=TBisParamEditDataClass(Source).DataClass;
+    Alias:=TBisParamEditDataClass(Source).Alias;
+    DataAlias:=TBisParamEditDataClass(Source).DataAlias;
+    DataName:=TBisParamEditDataClass(Source).DataName;
+    FilterGroups.CopyFrom(TBisParamEditDataClass(Source).FilterGroups);
+  end;
+end;
+
+procedure TBisParamEditDataClass.ParamEditLinkControls(AParent: TWinControl);
+begin
+  if Assigned(FParamEdit) and Assigned(FParamEdit.Edit) then begin
+    FOldEditKeyDown:=FParamEdit.Edit.OnKeyDown;
+    FParamEdit.Edit.OnKeyDown:=EditKeyDown;
+  end;
+end;
+
+procedure TBisParamEditDataClass.LinkControls(AParent: TWinControl);
+begin
+  if Assigned(AParent) then begin
+    FButton:=TButton(AParent.FindComponent(FButtonName));
+    if Assigned(FButton) then begin
+      if VarIsNull(DefaultValue) then begin
+        DefaultValue:=Value;
+      end;
+      FOldButtonClick:=FButton.OnClick;
+      FButton.OnClick:=ButtonClick;
+
+      FParamEdit:=TBisParamEdit(Find(FDataName));
+      if Assigned(FParamEdit) then begin
+        FParamEdit.ParamType:=ptUnknown;
+        FParamEdit.OnLinkControls:=ParamEditLinkControls;
+      end;
+    end;
+  end;
+  inherited LinkControls(AParent);
+  if Assigned(FButton) then begin
+  end;
+end;
+
+function TBisParamEditDataClass.Select: Boolean;
+var
+  Iface: TBisDataFormIface;
+  DataSet: TBisDataSet;
+  Field: TField;
+  CanSet: Boolean;
+  NewValue: Variant;
+begin
+  Result:=false;
+  if Assigned(FDataClass) then begin
+    if IsClassParent(FDataClass,TBisDataFormIface) then begin
+      Iface:=TBisDataFormIfaceClass(FDataClass).Create(nil);
+      DataSet:=TBisDataSet.Create(nil);
+      try
+        Iface.FilterGroups.CopyFrom(FFilterGroups,false);
+        Iface.LocateFields:=Alias;
+        Iface.LocateValues:=Value;
+        if Iface.SelectInto(DataSet) then begin
+          if DataSet.Active and not DataSet.IsEmpty then begin
+            Field:=DataSet.FindField(Alias);
+            if Assigned(Field) then begin
+              CanSet:=true;
+              NewValue:=Field.Value;
+              DoCheckValue(NewValue,CanSet);
+              if CanSet then begin
+                Value:=NewValue;
+                if Assigned(FParamEdit) then begin
+                  Field:=DataSet.FindField(DataAlias);
+                  if Assigned(Field) then
+                    FParamEdit.Value:=Field.Value;
+                end;
+                Result:=true;
+              end;
+            end;
+          end;
+        end;
+      finally
+        DataSet.Free;
+        Iface.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisParamEditDataClass.ButtonClick(Sender: TObject);
+begin
+  Select;
+  if Assigned(FOldButtonClick) then
+    FOldButtonClick(Sender);
+end;
+
+procedure TBisParamEditDataClass.EditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Assigned(FParamEdit) and Assigned(FParamEdit.Edit) then begin
+    case Key of
+      VK_DELETE, VK_BACK: begin
+        if (Shift=[]) and (FParamEdit.Edit.SelLength=Length(FParamEdit.Edit.Text)) then begin
+          if not Required then begin
+
+            Value:=Null;
+            FParamEdit.Value:=Null;
+          end;
+        end;
+      end;
+      VK_UP: begin
+        if (Shift=[ssAlt]) then
+          if Assigned(FButton) and FButton.Enabled then
+            FButton.Click;
+      end;
+    end;
+  end;
+
+  if Assigned(FOldEditKeyDown) then
+    FOldEditKeyDown(Sender,Key,Shift);
+end;
+
+procedure TBisParamEditDataClass.DoCheckValue(var NewValue: Variant;  var CanSet: Boolean);
+begin
+  if Assigned(FOnCheckValue) then
+    FOnCheckValue(Self,NewValue,CanSet);
+end;
+
+
+end.

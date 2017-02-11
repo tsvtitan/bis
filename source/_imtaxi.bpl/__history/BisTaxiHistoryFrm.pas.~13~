@@ -1,0 +1,182 @@
+unit BisTaxiHistoryFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin, StdCtrls,
+  ExtCtrls, Grids, DBGrids,
+  VirtualTrees, VirtualDBTreeEx,
+  BisDataGridFrm, BisFieldNames, BisDBTree;
+
+type
+  TBisTaxiHistoryFrame = class(TBisDataGridFrame)
+  private
+    function GetTimeProcess(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+    procedure GridBeforeCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+                                  Column: TColumnIndex; CellRect: TRect);
+    procedure GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode;
+                            Column: TColumnIndex; TextType: TVSTTextType);
+    procedure GridGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+                                var Ghosted: Boolean; var ImageIndex: Integer);                            
+    function GetNewDriverName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure EnableControls(AEnabled: Boolean); override;
+
+  end;
+
+implementation
+
+uses BisValues, BisUtils;
+
+{$R *.dfm}
+
+{ TBisTaxiHistoryFrame }
+
+constructor TBisTaxiHistoryFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  ActionFilter.Visible:=false;
+  ActionView.Visible:=false;
+  ActionInsert.Visible:=false;             
+  ActionDuplicate.Visible:=false;
+  ActionUpdate.Visible:=false;
+  ActionDelete.Visible:=false;
+  LabelCounter.Visible:=true;
+
+  with Provider do begin
+    ProviderName:='S_ORDERS';
+    with FieldNames do begin
+      AddKey('ORDER_ID');
+      AddInvisible('CAR_CALLSIGN');
+      AddInvisible('DRIVER_NAME');
+      Add('DATE_HISTORY','Дата истории',130);
+      Add('WHO_HISTORY','Кто создал историю',100);
+      AddCalculate('TIME_PROCESS','Время обработки',GetTimeProcess,ftDateTime,0,60).DisplayFormat:='hh:nn.ss';
+      Add('ACTION_NAME','Действие',140);
+      Add('RESULT_NAME','Результат',140);
+      Add('DATE_BEGIN','Время начала',110);
+      Add('DATE_END','Время окончания',110);
+      Add('WHO_PROCESS','Кто обработал',100);
+      Add('COST_RATE','Стоимость',40).DisplayFormat:='#0';
+      AddCalculate('NEW_DRIVER_NAME','Водитель',GetNewDriverName,ftString,150,100);
+      
+      Add('ACTION_BRUSH_COLOR','Цвет фона действия',50).Visible:=false;
+      Add('ACTION_FONT_COLOR','Цвет шрифта действия',50).Visible:=false;
+      Add('RESULT_BRUSH_COLOR','Цвет фона результата',50).Visible:=false;
+      Add('RESULT_FONT_COLOR','Цвет шрифта результата',50).Visible:=false;
+      Add('TYPE_PROCESS','Тип обработки',20).Visible:=false;
+    end;
+    Orders.Add('DATE_HISTORY');
+    Orders.Add('DATE_BEGIN');
+  end;
+
+  Grid.OnPaintText:=GridPaintText;
+  Grid.OnBeforeCellPaint:=GridBeforeCellPaint;
+  Grid.OnGetImageIndex:=GridGetImageIndex;
+end;
+
+procedure TBisTaxiHistoryFrame.EnableControls(AEnabled: Boolean);
+begin
+  inherited EnableControls(AEnabled);
+end;
+
+function TBisTaxiHistoryFrame.GetNewDriverName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S1, S2: String;
+begin
+  Result:=Null;
+  if DataSet.Active and not DataSet.IsEmpty then begin
+    S1:=DataSet.FieldByName('DRIVER_NAME').AsString;
+    S2:=DataSet.FieldByName('CAR_CALLSIGN').AsString;
+    Result:=FormatEx('%s - %s',[S2,S1]);
+    if Trim(Result)='-' then
+      Result:=Null;
+  end;
+end;
+
+function TBisTaxiHistoryFrame.GetTimeProcess(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  FieldDateBegin: TField;
+  FieldDateEnd: TField;
+begin
+  Result:=Null;
+  FieldDateBegin:=DataSet.FieldByName('DATE_BEGIN');
+  FieldDateEnd:=DataSet.FieldByName('DATE_END');
+  if not VarIsNull(FieldDateBegin.Value) and not VarIsNull(FieldDateEnd.Value) then begin
+    Result:=FieldDateEnd.AsDateTime-FieldDateBegin.AsDateTime;
+  end;
+end;
+
+procedure TBisTaxiHistoryFrame.GridBeforeCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+                                                   Column: TColumnIndex; CellRect: TRect);
+var
+  Data: PBisDBTreeNode;
+  DataKey: PDBVTData;
+  DateKeyFocused: PDBVTData;
+  ActionColor: Variant;
+  ResultColor: Variant;
+  AColor: TColor;
+begin
+  Data:=Grid.GetDBNodeData(Node);
+  DataKey:=Grid.GetNodeData(Node);
+  DateKeyFocused:=Grid.GetNodeData(Grid.FocusedNode);
+  if Assigned(Data) and Assigned(DataKey) and Assigned(DateKeyFocused) then begin
+    if Assigned(Data.Values){ and (DataKey.Hash<>DateKeyFocused.Hash)}  then begin
+      ActionColor:=Data.Values.GetValue('ACTION_BRUSH_COLOR');
+      ResultColor:=Data.Values.GetValue('RESULT_BRUSH_COLOR');
+      AColor:=TColor(VarToIntDef(ActionColor,clWindow));
+      if not VarIsNull(ResultColor) then
+        AColor:=TColor(VarToIntDef(ResultColor,clWindow));
+      TargetCanvas.Brush.Style:=bsSolid;
+      TargetCanvas.Brush.Color:=AColor;
+      TargetCanvas.FillRect(CellRect);
+    end;
+  end;
+end;
+
+procedure TBisTaxiHistoryFrame.GridGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+                                                 var Ghosted: Boolean; var ImageIndex: Integer);
+var
+  Data: PBisDBTreeNode;
+  TypeProcess: Integer;
+begin
+  Data:=Grid.GetDBNodeData(Node);
+  if Assigned(Data) and Assigned(Data.Values) and (Column=1) then begin
+    TypeProcess:=VarToIntDef(Data.Values.GetValue('TYPE_PROCESS'),1);
+    if TypeProcess=0 then
+      ImageIndex:=16
+    else ImageIndex:=17;
+  end;
+end;
+
+procedure TBisTaxiHistoryFrame.GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode;
+                                             Column: TColumnIndex; TextType: TVSTTextType);
+var
+  Data: PBisDBTreeNode;
+  DataKey: PDBVTData;
+  DateKeyFocused: PDBVTData;
+  ActionColor: Variant;
+  ResultColor: Variant;
+  AColor: TColor;
+  Flag: Boolean;
+begin
+  Data:=Grid.GetDBNodeData(Node);
+  DataKey:=Grid.GetNodeData(Node);
+  DateKeyFocused:=Grid.GetNodeData(Grid.FocusedNode);
+  if Assigned(Data) and Assigned(DataKey) and Assigned(DateKeyFocused) then begin
+    Flag:=((DataKey.Hash=DateKeyFocused.Hash) and (Column<>Grid.FocusedColumn)) or (DataKey.Hash<>DateKeyFocused.Hash);
+    if Assigned(Data.Values) and Flag then begin
+      ActionColor:=Data.Values.GetValue('ACTION_FONT_COLOR');
+      ResultColor:=Data.Values.GetValue('RESULT_FONT_COLOR');
+      AColor:=TColor(VarToIntDef(ActionColor,clWindowText));
+      if not VarIsNull(ResultColor) then
+        AColor:=TColor(VarToIntDef(ResultColor,clWindowText));
+      TargetCanvas.Font.Color:=AColor;
+    end;
+  end;
+end;
+
+end.

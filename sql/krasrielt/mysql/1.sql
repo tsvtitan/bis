@@ -1,0 +1,1 @@
+drop view s_apartment_object_params

@@ -1,0 +1,20 @@
+/* Изменение процедуры удаления меню */
+
+CREATE OR REPLACE PROCEDURE /*PREFIX*/D_MENU
+(
+  OLD_MENU_ID IN VARCHAR2
+)
+AS
+BEGIN
+  DELETE FROM /*PREFIX*/APPLICATION_MENUS
+        WHERE MENU_ID=OLD_MENU_ID;
+
+	DELETE FROM /*PREFIX*/MENUS
+        WHERE MENU_ID=OLD_MENU_ID;
+END;
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

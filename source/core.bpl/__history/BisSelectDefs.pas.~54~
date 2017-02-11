@@ -1,0 +1,297 @@
+unit BisSelectDefs;
+
+interface
+
+uses Windows, Classes, Contnrs, DB, Graphics, Types, Variants,
+     BisCoreObjects;
+
+type
+  TBisSelectDefs=class;
+  TBisSelectDef=class;
+
+  TBisSelectDefAlignment=(daDefault,daLeft,daCenter,daRight);
+  TBisSelectDefFuncType=(ftNone,ftSum);
+
+  TBisSelectDefCalcEvent=function(Def: TBisSelectDef): Variant of object;
+  TBisSelectDefDrawEvent=procedure(Def: TBisSelectDef; Canvas: TCanvas; Rect: TRect) of object;
+
+  TBisSelectDef=class(TObject)
+  private
+    FFieldName: String;
+    FCaption: String;
+    FWidth: Integer;
+    FAlignment: TBisSelectDefAlignment;
+    FIsKey: Boolean;
+    FVisible: Boolean;
+    FPrecision: Integer;
+    FDataType: TFieldType;
+    FSize: Integer;
+    FDuplicates: TStringList;
+    FDisplayFormat: string;
+    FCalcName: String;
+    FOnCalc: TBisSelectDefCalcEvent;
+    FOnDraw: TBisSelectDefDrawEvent;
+    FFuncType: TBisSelectDefFuncType;
+    function GetCalculated: Boolean;
+  public
+    constructor Create(FieldDefs: TBisSelectDefs); reintroduce;
+    destructor Destroy; override;
+    
+    procedure Draw(Canvas: TCanvas; Rect: TRect);
+    function Calc: Variant;
+
+    procedure CopyFrom(Source: TBisSelectDef);
+
+    property FieldName: String read FFieldName write FFieldName;
+    property Caption: String read FCaption write FCaption;
+    property Width: Integer read FWidth write FWidth;
+    property Alignment: TBisSelectDefAlignment read FAlignment write FAlignment;
+    property IsKey: Boolean read FIsKey write FisKey;
+    property Visible: Boolean read FVisible write FVisible;
+    property DataType: TFieldType read FDataType write FDataType;
+    property Size: Integer read FSize write FSize;
+    property Precision: Integer read FPrecision write FPrecision;
+    property DisplayFormat: string read FDisplayFormat write FDisplayFormat;
+    property CalcName: String read FCalcName write FCalcName;
+    property FuncType: TBisSelectDefFuncType read FFuncType write FFuncType;
+
+    property Duplicates: TStringList read FDuplicates;
+    property Calculated: Boolean read GetCalculated;
+
+    property OnCalc: TBisSelectDefCalcEvent read FOnCalc write FOnCalc;
+    property OnDraw: TBisSelectDefDrawEvent read FOnDraw write FOnDraw;
+  end;
+
+  TBisSelectDefs=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisSelectDef;
+    procedure DefaultDrawCheck(Def: TBisSelectDef; Canvas: TCanvas; Rect: TRect);
+    procedure DefaultDrawRadio(Def: TBisSelectDef; Canvas: TCanvas; Rect: TRect);
+  public
+    function Find(const FieldName: string): TBisSelectDef;
+
+    function Add(const FieldName,Caption: string; Width: Integer=0): TBisSelectDef;
+    function AddInvisible(const FieldName: string): TBisSelectDef;
+    function AddKey(const FieldName: string): TBisSelectDef;
+    function AddCalc(const FieldName,Caption,CalcName: string; OnCalc: TBisSelectDefCalcEvent;
+                     DataType: TFieldType; Size: Integer=0; Width: Integer=0; AddCalcName: Boolean=true): TBisSelectDef;
+    function AddDraw(const FieldName, Caption, CalcName: String; OnDraw: TBisSelectDefDrawEvent; Width: Integer=0): TBisSelectDef;
+    function AddDrawCheck(const FieldName, Caption, CalcName: String; Width: Integer=0; AddCalcName: Boolean=true): TBisSelectDef;
+    function AddDrawRadio(const FieldName, Caption, CalcName: String; Width: Integer=0; AddCalcName: Boolean=true): TBisSelectDef;
+
+    procedure CopyFrom(Source: TBisSelectDefs; IsClear: Boolean=true);
+
+    property Items[Index: Integer]: TBisSelectDef read GetItem;
+  end;
+
+implementation
+
+uses SysUtils;
+
+{ TBisSelectDef }
+
+function TBisSelectDef.Calc: Variant;
+begin
+  Result:=Unassigned;
+  if Assigned(FOnCalc) then
+    Result:=FOnCalc(Self);
+end;
+
+constructor TBisSelectDef.Create(FieldDefs: TBisSelectDefs);
+begin
+  inherited Create;
+  FDuplicates:=TStringList.Create;
+end;
+
+destructor TBisSelectDef.Destroy;
+begin
+  FDuplicates.Free;
+  inherited Destroy;
+end;
+
+
+procedure TBisSelectDef.Draw(Canvas: TCanvas; Rect: TRect);
+begin
+  if Assigned(FOnDraw) then
+    FOnDraw(Self,Canvas,Rect);
+end;
+
+function TBisSelectDef.GetCalculated: Boolean;
+begin
+  Result:=Assigned(FOnCalc) or Assigned(FOnDraw);
+end;
+
+procedure TBisSelectDef.CopyFrom(Source: TBisSelectDef);
+begin
+  if Assigned(Source) then begin
+    FieldName:=Source.FieldName;
+    Caption:=Source.Caption;
+    Width:=Source.Width;
+    Alignment:=Source.Alignment;
+    IsKey:=Source.IsKey;
+    Visible:=Source.Visible;
+    DataType:=Source.DataType;
+    Size:=Source.Size;
+    Precision:=Source.Precision;
+    DisplayFormat:=Source.DisplayFormat;
+    CalcName:=Source.CalcName;
+    Field: TField read FField write FField;
+    FuncType: TBisSelectDefFuncType read FFuncType write FFuncType;
+    Duplicates: TStringList read FDuplicates;
+    OnCalc: TBisSelectDefCalcEvent read FOnCalc write FOnCalc;
+    OnDraw: TBisSelectDefDrawEvent read FOnDraw write FOnDraw;
+  end;
+end;
+
+{ TBisSelectDefs }
+
+function TBisSelectDefs.Add(const FieldName, Caption: string; Width: Integer): TBisSelectDef;
+begin
+  Result:=nil;
+  if not Assigned(Find(FieldName)) then begin
+    Result:=TBisSelectDef.Create(Self);
+    Result.FieldName:=FieldName;
+    Result.Caption:=Caption;
+    Result.Width:=Width;
+    Result.Visible:=true;
+    inherited Add(Result);
+  end;
+end;
+
+function TBisSelectDefs.AddCalc(const FieldName, Caption, CalcName: string; OnCalc: TBisSelectDefCalcEvent;
+                                DataType: TFieldType; Size, Width: Integer; AddCalcName: Boolean): TBisSelectDef;
+begin
+  Result:=Add(FieldName,Caption,Width);
+  if Assigned(Result) then begin
+    Result.CalcName:=CalcName;
+    Result.OnCalc:=OnCalc;
+    Result.DataType:=DataType;
+    Result.Size:=Size;
+    if AddCalcName then
+      AddInvisible(CalcName);
+  end;
+end;
+
+function TBisSelectDefs.AddDraw(const FieldName, Caption, CalcName: String; OnDraw: TBisSelectDefDrawEvent;
+                                Width: Integer): TBisSelectDef;
+begin
+  Result:=Add(FieldName,Caption,Width);
+  if Assigned(Result) then begin
+    Result.CalcName:=CalcName;
+    Result.OnDraw:=OnDraw;
+    Result.DataType:=ftString;
+    Result.Size:=1;
+  end;
+end;
+
+function TBisSelectDefs.AddDrawCheck(const FieldName, Caption, CalcName: String;
+                                     Width: Integer; AddCalcName: Boolean): TBisSelectDef;
+begin
+  Result:=AddDraw(FieldName,Caption,CalcName,DefaultDrawCheck,Width);
+  if Assigned(Result) then begin
+    if AddCalcName then
+      AddInvisible(CalcName);
+  end;
+end;
+
+function TBisSelectDefs.AddDrawRadio(const FieldName, Caption, CalcName: String;
+                                     Width: Integer; AddCalcName: Boolean): TBisSelectDef;
+begin
+  Result:=AddDraw(FieldName,Caption,CalcName,DefaultDrawRadio,Width);
+  if Assigned(Result) then begin
+    if AddCalcName then
+      AddInvisible(CalcName);
+  end;
+end;
+
+function TBisSelectDefs.AddInvisible(const FieldName: string): TBisSelectDef;
+begin
+  Result:=Add(FieldName,'');
+  if Assigned(Result) then
+    Result.Visible:=false;
+end;
+
+function TBisSelectDefs.AddKey(const FieldName: string): TBisSelectDef;
+begin
+  Result:=AddInvisible(FieldName);
+  if Assigned(Result) then
+    Result.IsKey:=true;
+end;
+
+procedure TBisSelectDefs.CopyFrom(Source: TBisSelectDefs; IsClear: Boolean);
+var
+  i: Integer;
+  Def: TBisSelectDef;
+  DefSource: TBisSelectDef;
+begin
+  if Assigned(Source) then begin
+    if IsClear then
+      Clear;
+    for i:=0 to Source.Count-1 do begin
+      DefSource:=Source.Items[i];
+      Def:=Add(DefSource.FieldName,DefSource.Caption,DefSource.Width);
+      if Assigned(Def) then
+        Def.CopyFrom(DefSource);
+    end;
+  end; 
+end;
+
+procedure TBisSelectDefs.DefaultDrawCheck(Def: TBisSelectDef; Canvas: TCanvas; Rect: TRect);
+{var
+  NewRect: TRect;
+  FCalcDef: TBisSelectDef;}
+begin
+{  FCalcDef:=Find(Def.CalcName);
+  if Assigned(FCalcDef) and Assigned(FCalcDef.Field) then begin
+    if FCalcDef.Field.DataSet.Active and not FCalcDef.Field.DataSet.IsEmpty then begin
+      NewRect.Right:=Rect.Right;
+      NewRect.Left:=Rect.Left;
+      NewRect.Top:=Rect.Top+2;
+      NewRect.Bottom:=Rect.Bottom-2;
+      if Boolean(FCalcDef.Field.AsInteger) then
+        DrawFrameControl(Canvas.Handle,NewRect,DFC_BUTTON,DFCS_CHECKED)
+      else
+        DrawFrameControl(Canvas.Handle,NewRect,DFC_BUTTON,DFCS_BUTTONCHECK);
+    end;
+  end;}
+end;
+
+procedure TBisSelectDefs.DefaultDrawRadio(Def: TBisSelectDef; Canvas: TCanvas; Rect: TRect);
+{var
+  NewRect: TRect;
+  FCalcDef: TBisSelectDef;}
+begin
+{  FCalcDef:=Find(Def.CalcName);
+  if Assigned(FCalcDef) and Assigned(FCalcDef.Field) then begin
+    if FCalcDef.Field.DataSet.Active and not FCalcDef.Field.DataSet.IsEmpty then begin
+      NewRect.Right:=Rect.Right;
+      NewRect.Left:=Rect.Left;
+      NewRect.Top:=Rect.Top+3;
+      NewRect.Bottom:=Rect.Bottom-2;
+      if Boolean(FCalcDef.Field.AsInteger) then
+        DrawFrameControl(Canvas.Handle,NewRect,DFC_BUTTON,DFCS_BUTTONRADIO or DFCS_CHECKED)
+      else
+        DrawFrameControl(Canvas.Handle,NewRect,DFC_BUTTON,DFCS_BUTTONRADIO);
+    end;
+  end;}
+end;
+
+function TBisSelectDefs.Find(const FieldName: string): TBisSelectDef;
+var
+  i: Integer;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do
+    if AnsiSameText(Items[i].FieldName,FieldName) then begin
+      Result:=Items[i];
+      exit;
+    end;
+end;
+
+function TBisSelectDefs.GetItem(Index: Integer): TBisSelectDef;
+begin
+  Result:=TBisSelectDef(inherited Items[Index]);
+end;
+
+end.
+

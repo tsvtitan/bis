@@ -1,0 +1,47 @@
+package cmuibase;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core;
+
+contains
+  BisUIBaseConnection in 'cmuibase.bpl\BisUIBaseConnection.pas',
+  BisUIBaseConsts in 'cmuibase.bpl\BisUIBaseConsts.pas',
+  uib in 'cmuibase.bpl\uib25\source\uib.pas',
+  uibase in 'cmuibase.bpl\uib25\source\uibase.pas',
+  uibavl in 'cmuibase.bpl\uib25\source\uibavl.pas',
+  uibcloner in 'cmuibase.bpl\uib25\source\uibcloner.pas',
+  uibconst in 'cmuibase.bpl\uib25\source\uibconst.pas',
+  uibdataset in 'cmuibase.bpl\uib25\source\uibdataset.pas',
+  uibdescriptor in 'cmuibase.bpl\uib25\source\uibdescriptor.pas',
+  uiberror in 'cmuibase.bpl\uib25\source\uiberror.pas',
+  uibkeywords in 'cmuibase.bpl\uib25\source\uibkeywords.pas',
+  uiblib in 'cmuibase.bpl\uib25\source\uiblib.pas',
+  uibmetadata in 'cmuibase.bpl\uib25\source\uibmetadata.pas',
+  uibsqlparser in 'cmuibase.bpl\uib25\source\uibsqlparser.pas';
+
+end.

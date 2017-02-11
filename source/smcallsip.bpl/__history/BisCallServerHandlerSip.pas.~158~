@@ -1,0 +1,652 @@
+unit BisCallServerHandlerSip;
+
+interface
+
+uses Windows, Classes, ZLib, mmSystem, SyncObjs,
+     IdGlobal, IdSocketHandle, IdUDPServer,
+     BisEvents, BisCrypter,
+     BisSipPhone, BisSipClient, BisSip, BisSdp, BisRtp, BisThreads, BisAudioWave, 
+     BisCallServerHandlerModules, BisCallServerHandlers,
+     BisCallServerChannels;
+
+type
+  TBisCallServerHandlerSip=class;
+
+  TBisCallServerChannelSips=class;
+
+  TBisCallServerChannelSip=class(TBisCallServerChannel)
+  private
+    FHandler: TBisCallServerHandlerSip;
+    FLine: TBisSipPhoneLine;
+    FCreatorId: Variant;
+    FDateCreate: TDateTime;
+    FCallId: Variant;
+    FCallerId: Variant;
+    FCallerPhone: Variant;
+    FDirection: TBisCallServerChannelDirection;
+  protected
+    function GetActive: Boolean; override;
+    function GetDirection: TBisCallServerChannelDirection; override;
+    function GetCallerPhone: Variant; override;
+    function GetCallerDiversion: Variant; override;
+    function GetCreatorId: Variant; override;
+    function GetDateCreate: TDateTime; override;
+    function GetChannelName: String; override;
+    function GetInFormat: PWaveFormatEx; override;
+    function GetInDataSize: LongWord; override;
+    function GetInPacketTime: Word; override;
+    function GetOutFormat: PWaveFormatEx; override;
+    function GetOutDataSize: LongWord; override;
+    function GetOutPacketTime: Word; override;
+  public
+    constructor Create(AChannels: TBisCallServerChannels); override;
+    destructor Destroy; override;
+    procedure Dial(Acceptor: Variant; AcceptorType: TBisCallServerChannelAcceptorType); override;
+    procedure Answer; override;
+    procedure Hangup; override;
+    procedure Hold; override;
+    procedure UnHold; override;
+    procedure Send(const Data: Pointer; const DataSize: Cardinal); override;
+  end;
+
+  TBisCallServerChannelSips=class(TBisCallServerChannels)
+  private
+    FHandler: TBisCallServerHandlerSip;
+    function GetItem(Index: Integer): TBisCallServerChannelSip;
+  protected
+    procedure DoItemRemove(Item: TObject); override;
+  public
+    function Find(Line: TBisSipPhoneLine): TBisCallServerChannelSip; reintroduce;
+    function LockFind(Line: TBisSipPhoneLine): TBisCallServerChannelSip;
+    function Add(Line: TBisSipPhoneLine; Direction: TBisCallServerChannelDirection; CallId: Variant): TBisCallServerChannelSip; reintroduce;
+    function AddIncoming(Line: TBisSipPhoneLine): TBisCallServerChannelSip;
+    function LockAddIncoming(Line: TBisSipPhoneLine): TBisCallServerChannelSip;
+    function AddOutgoing(CallId, CallerId, CallerPhone: Variant): TBisCallServerChannelSip;
+    function LockAddOutgoing(CallId, CallerId, CallerPhone: Variant): TBisCallServerChannelSip;
+
+    property Items[Index: Integer]: TBisCallServerChannelSip read GetItem; default;
+  end;
+
+  TBisCallServerHandlerSip=class(TBisCallServerHandler)
+  private
+    FPhone: TBisSipPhone;
+    FConnected: Boolean;
+    FSSendData: String;
+    FSReceiveData: String;
+    function GetChannels: TBisCallServerChannelSips;
+    procedure PhoneSend(Phone: TBisSipPhone; Host: String; Port: Integer; Data: String);
+    procedure PhoneReceive(Sender: TBisSipPhone; Host: String; Port: Integer; Data: String);
+    procedure PhoneError(Sender: TBisSipPhone; const Message: String);
+    procedure PhoneLineCreate(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+    procedure PhoneLineDestroy(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+    function PhoneLineCheck(Phone: TBisSipPhone; Line: TBisSipPhoneLine; Message: TBisSipMessage): Boolean;
+    procedure PhoneLineRing(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+    procedure PhoneLineConnect(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+    procedure PhoneLineDisconnect(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+    procedure PhoneLineInData(Sender: TBisSipPhone; Line: TBisSipPhoneLine; const Data: Pointer; const DataSize: Cardinal);
+    procedure PhoneLineHold(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+    procedure PhoneLineTimeout(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+    procedure PhoneLineDtmf(Phone: TBisSipPhone; Line: TBisSipPhoneLine; const Code: Char);
+  protected
+    function GetChannelsClass: TBisCallServerChannelsClass; override;
+    function GetBusy: Boolean; override;
+    function GetConnected: Boolean; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure Connect; override;
+    procedure Disconnect; override;
+    function AddOutgoingChannel(CallId,CallerId,CallerPhone: Variant): TBisCallServerChannel; override;
+
+    property Channels: TBisCallServerChannelSips read GetChannels;
+
+  published
+    property SSendData: String read FSSendData write FSSendData;
+    property SReceiveData: String read FSReceiveData write FSReceiveData;
+  end;
+
+procedure InitCallServerHandlerModule(AModule: TBisCallServerHandlerModule); stdcall;
+
+exports
+  InitCallServerHandlerModule;
+
+implementation
+
+uses SysUtils, Variants, DB,
+     WaveUtils,
+     BisCore, BisConsts, BisProvider, BisFilterGroups, BisUtils, BisConfig,
+     BisLogger, BisDeadlocks,
+     BisCallServerHandlerSipConsts;
+
+procedure InitCallServerHandlerModule(AModule: TBisCallServerHandlerModule); stdcall;
+begin
+  AModule.HandlerClass:=TBisCallServerHandlerSip;
+end;
+
+{ TBisCallServerChannelSip }
+
+constructor TBisCallServerChannelSip.Create(AChannels: TBisCallServerChannels);
+begin
+  inherited Create(AChannels);
+  FCreatorId:=Core.AccountId;
+  FDateCreate:=Core.ServerDate;
+  FCallId:=Null;
+  FCallerId:=Null;
+  FCallerPhone:=Null;
+end;
+
+destructor TBisCallServerChannelSip.Destroy;
+begin
+  FLine:=nil;
+  inherited Destroy;
+end;
+
+function TBisCallServerChannelSip.GetActive: Boolean;
+begin
+  Result:=inherited GetActive;
+  if Assigned(FLine) then
+    Result:=FLine.Active;
+end;
+
+function TBisCallServerChannelSip.GetCallerDiversion: Variant;
+begin
+  Result:=inherited GetCallerDiversion;
+  if Assigned(FLine) and (FLine.Direction=ldIncoming) then
+    Result:=iff(FLine.DiversionNumber<>'',FLine.DiversionNumber,Null);
+end;
+
+function TBisCallServerChannelSip.GetCallerPhone: Variant;
+begin
+  Result:=inherited GetCallerPhone;
+  if Assigned(FLine) and (FLine.Direction=ldIncoming) then
+    Result:=iff(FLine.Number<>'',FLine.Number,Null);
+end;
+
+function TBisCallServerChannelSip.GetChannelName: String;
+begin
+  Result:=inherited GetChannelName;
+  if Assigned(FHandler) then
+    Result:=Result+FHandler.FPhone.UserName;
+end;
+
+function TBisCallServerChannelSip.GetCreatorId: Variant;
+begin
+  Result:=FCreatorId;
+end;
+
+function TBisCallServerChannelSip.GetDateCreate: TDateTime;
+begin
+  Result:=FDateCreate;
+end;
+
+function TBisCallServerChannelSip.GetDirection: TBisCallServerChannelDirection;
+begin
+  Result:=inherited GetDirection;
+  if Assigned(FLine) then begin
+    case FLine.Direction of
+      ldIncoming: Result:=cdIncoming;
+      ldOutgoing: Result:=cdOutgoing;
+    end;
+  end else
+    Result:=FDirection;
+end;
+
+function TBisCallServerChannelSip.GetInFormat: PWaveFormatEx;
+begin
+  Result:=inherited GetInFormat;
+  if Assigned(FLine) then
+    Result:=FLine.RemoteFormat;
+end;
+
+function TBisCallServerChannelSip.GetInPacketTime: Word;
+begin
+  Result:=inherited GetInPacketTime;
+  if Assigned(FLine) then
+    Result:=FLine.RemotePacketTime;
+end;
+
+function TBisCallServerChannelSip.GetInDataSize: LongWord;
+begin
+  Result:=inherited GetInDataSize;
+  if Assigned(FLine) then
+    Result:=FLine.RemotePayloadLength;
+end;
+
+function TBisCallServerChannelSip.GetOutFormat: PWaveFormatEx;
+begin
+  Result:=inherited GetOutFormat;
+  if Assigned(FLine) then
+    Result:=FLine.LocalFormat;
+end;
+
+function TBisCallServerChannelSip.GetOutPacketTime: Word;
+begin
+  Result:=inherited GetOutPacketTime;
+  if Assigned(FLine) then
+    Result:=FLine.LocalPacketTime;
+end;
+
+function TBisCallServerChannelSip.GetOutDataSize: LongWord;
+begin
+  Result:=inherited GetOutDataSize;
+  if Assigned(FLine) then
+    Result:=FLine.LocalPayloadLength;
+end;
+
+procedure TBisCallServerChannelSip.Dial(Acceptor: Variant; AcceptorType: TBisCallServerChannelAcceptorType);
+begin
+  inherited Dial(Acceptor,AcceptorType);
+  if Assigned(FLine) and not VarIsNull(Acceptor) and (AcceptorType=catPhone) then
+    FLine.Dial(VarToStrDef(Acceptor,''));
+end;
+
+procedure TBisCallServerChannelSip.Answer;
+begin
+  inherited Answer;
+  if Assigned(FLine) then
+    FLine.Answer;
+end;
+
+procedure TBisCallServerChannelSip.Hangup;
+begin
+  inherited Hangup;
+  if Assigned(FLine) then
+    FLine.Hangup;
+end;
+
+procedure TBisCallServerChannelSip.Hold;
+begin
+  inherited Hold;
+  if Assigned(FLine) then
+    FLine.Hold;
+end;
+
+procedure TBisCallServerChannelSip.UnHold;
+begin
+  inherited UnHold;
+  if Assigned(FLine) then
+    FLine.UnHold;
+end;
+
+procedure TBisCallServerChannelSip.Send(const Data: Pointer; const DataSize: Cardinal);
+begin
+  if Assigned(FLine) then
+    FLine.Send(Data,DataSize,false);
+end;
+
+{ TBisCallServerChannelSips }
+
+function TBisCallServerChannelSips.Add(Line: TBisSipPhoneLine; Direction: TBisCallServerChannelDirection; CallId: Variant): TBisCallServerChannelSip;
+begin
+  Result:=TBisCallServerChannelSip(AddClass(TBisCallServerChannelSip,false));
+  if Assigned(Result) then begin
+    Result.FCallId:=CallId;
+    Result.FHandler:=FHandler;
+    Result.FLine:=Line;
+    Result.FDirection:=Direction;
+  end;
+end;
+
+function TBisCallServerChannelSips.AddIncoming(Line: TBisSipPhoneLine): TBisCallServerChannelSip;
+begin
+  Result:=Add(Line,cdIncoming,Null);
+  if Assigned(Result) then
+    DoChannelCreate(Result);
+end;
+
+function TBisCallServerChannelSips.LockAddIncoming(Line: TBisSipPhoneLine): TBisCallServerChannelSip;
+begin
+  Lock;
+  try
+    Result:=AddIncoming(Line);
+  finally
+    UnLock;
+  end;
+end;
+
+function TBisCallServerChannelSips.AddOutgoing(CallId, CallerId, CallerPhone: Variant): TBisCallServerChannelSip;
+begin
+  Result:=Add(FHandler.FPhone.AddLine(ldOutgoing),cdOutgoing,CallId);
+  if Assigned(Result) then begin
+    Result.FCallerId:=CallerId;
+    Result.FCallerPhone:=CallerPhone;
+    DoChannelCreate(Result);
+  end;
+end;
+
+procedure TBisCallServerChannelSips.DoItemRemove(Item: TObject);
+{var
+  Line: TBisSipPhoneLine; }
+begin
+ { Line:=nil;
+  if Assigned(Item) and (Item is TBisCallServerChannelSip) then
+    Line:=TBisCallServerChannelSip(Item).FLine;    }
+
+  inherited DoItemRemove(Item);
+
+{  if Assigned(Line) then
+    FHandler.FPhone.Lines.LockRemove(Line);  }
+  
+end;
+
+function TBisCallServerChannelSips.LockAddOutgoing(CallId, CallerId, CallerPhone: Variant): TBisCallServerChannelSip;
+begin
+  Lock;
+  try
+    Result:=AddOutgoing(CallId,CallerId,CallerPhone);
+  finally
+    UnLock;
+  end;
+end;
+
+function TBisCallServerChannelSips.Find(Line: TBisSipPhoneLine): TBisCallServerChannelSip;
+var
+  i: Integer;
+  Item: TBisCallServerChannelSip;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.FLine=Line then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisCallServerChannelSips.LockFind(Line: TBisSipPhoneLine): TBisCallServerChannelSip;
+begin
+  Lock;
+  try
+    Result:=Find(Line);
+  finally
+    UnLock;
+  end;
+end;
+
+function TBisCallServerChannelSips.GetItem(Index: Integer): TBisCallServerChannelSip;
+begin
+  Result:=TBisCallServerChannelSip(inherited Items[Index]);
+end;
+
+{ TBisCallServerHandlerSip }
+
+constructor TBisCallServerHandlerSip.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Channels.FHandler:=Self;
+
+  FPhone:=TBisSipPhone.Create(nil);
+  FPhone.CollectRemotePackets:=false;
+  FPhone.CollectLocalPackets:=false;
+  FPhone.TransportMode:=tmUDP;
+  FPhone.ThreadOptions:=AllPhoneThreadOptions;
+  FPhone.HoldMode:=lhmEmulate;
+  FPhone.SweepInterval:=0;
+
+  FPhone.OnSend:=PhoneSend;
+  FPhone.OnReceive:=PhoneReceive;
+  FPhone.OnError:=PhoneError;
+  FPhone.OnLineCreate:=PhoneLineCreate;
+  FPhone.OnLineDestroy:=PhoneLineDestroy;
+  FPhone.OnLineCheck:=PhoneLineCheck;
+  FPhone.OnLineRing:=PhoneLineRing;
+  FPhone.OnLineConnect:=PhoneLineConnect;
+  FPhone.OnLineDisconnect:=PhoneLineDisconnect;
+  FPhone.OnLineInData:=PhoneLineInData;
+  FPhone.OnLineHold:=PhoneLineHold;
+  FPhone.OnLineTimeout:=PhoneLineTimeout;
+  FPhone.OnLineDtmf:=PhoneLineDtmf;
+
+  FSSendData:='Отправлены данные на %s:%d => %s';
+  FSReceiveData:='Получены данные от %s:%d => %s';
+end;
+
+destructor TBisCallServerHandlerSip.Destroy;
+begin
+  Disconnect;
+  FPhone.Free;
+  inherited Destroy;
+end;
+
+function TBisCallServerHandlerSip.GetBusy: Boolean;
+begin
+  Result:=FPhone.Busy;
+end;
+
+function TBisCallServerHandlerSip.GetChannels: TBisCallServerChannelSips;
+begin
+  Result:=TBisCallServerChannelSips(inherited Channels);
+end;
+
+function TBisCallServerHandlerSip.GetChannelsClass: TBisCallServerChannelsClass;
+begin
+  Result:=TBisCallServerChannelSips;
+end;
+
+procedure TBisCallServerHandlerSip.Init;
+begin
+  inherited Init;
+
+  with Params do begin
+    FPhone.Scheme:=AsString(SParamScheme);
+    FPhone.Protocol:=AsString(SParamProtocol);
+    FPhone.UserName:=AsString(SParamUserName);
+    FPhone.Password:=AsString(SParamPassword);
+    FPhone.RemoteHost:=AsString(SParamRemoteHost);
+    FPhone.RemotePort:=AsInteger(SParamRemotePort,FPhone.RemotePort);
+    FPhone.LocalHost:=AsString(SParamLocalHost);
+    FPhone.LocalPort:=AsInteger(SParamLocalPort,FPhone.LocalPort);
+    FPhone.UserAgent:=AsString(SParamUserAgent);
+    FPhone.Expires:=AsInteger(SParamExpires,FPhone.Expires);
+    FPhone.MaxForwards:=AsInteger(SParamMaxForwards,FPhone.MaxForwards);
+    FPhone.MaxActiveLines:=AsInteger(SParamMaxActiveLines,FPhone.MaxActiveLines);
+    FPhone.KeepAliveInterval:=AsInteger(SParamKeepAliveInterval,FPhone.KeepAliveInterval);
+    FPhone.UseReceived:=AsBoolean(SParamUseReceived,FPhone.UseReceived);
+    FPhone.UseRport:=AsBoolean(SParamUseRport,FPhone.UseRport);
+    FPhone.UseTrasnportNameInUri:=AsBoolean(SParamUseTrasnportNameInUri,FPhone.UseTrasnportNameInUri);
+    FPhone.UsePortInUri:=AsBoolean(SParamUsePortInUri,FPhone.UsePortInUri);
+    FPhone.UseGlobalSequence:=AsBoolean(SParamUseGlobalSequence,FPhone.UseGlobalSequence);
+    FPhone.RequestRetryCount:=AsInteger(SParamRequestRetryCount,FPhone.RequestRetryCount);
+    FPhone.RequestTimeOut:=AsInteger(SParamRequestTimeOut,FPhone.RequestTimeOut);
+    FPhone.RtpLocalPort:=AsInteger(SParamRtpLocalPort,FPhone.RtpLocalPort);
+
+    FPhone.AudioDriverName:=AsString(SParamAudioDriverName,FPhone.AudioDriverName);
+    FPhone.AudioFormatName:=AsString(SParamAudioFormatName,FPhone.AudioFormatName);
+    FPhone.AudioChannels:=AsInteger(SParamAudioChannels,FPhone.AudioChannels);
+    FPhone.AudioSamplesPerSec:=AsInteger(SParamAudioSamplesPerSec,FPhone.AudioSamplesPerSec);
+    FPhone.AudioBitsPerSample:=AsInteger(SParamAudioBitsPerSample,FPhone.AudioBitsPerSample);
+
+    FPhone.ConfirmCount:=AsInteger(SParamConfirmCount,FPhone.ConfirmCount);
+    FPhone.SweepInterval:=AsInteger(SParamSweepInterval,FPhone.SweepInterval);
+
+    FPhone.DtmfEnabled:=AsBoolean(SParamDtmfEnabled,FPhone.DtmfEnabled);
+    FPhone.DtmfThreshold:=AsInteger(SParamDtmfThreshold,FPhone.DtmfThreshold);
+    FPhone.DtmfTimeout:=AsInteger(SParamDtmfTimeout,FPhone.DtmfTimeout);
+
+    FPhone.DetectBusyEnabled:=AsBoolean(SParamDetectBusyEnabled,FPhone.DetectBusyEnabled);
+    FPhone.DetectBusyThreshold:=AsInteger(SParamDetectBusyThreshold,FPhone.DetectBusyThreshold);
+    FPhone.DetectBusyTimeout:=AsInteger(SParamDetectBusyTimeout,FPhone.DetectBusyTimeout);
+    FPhone.DetectBusyMaxCount:=AsInteger(SParamDetectBusyMaxCount,FPhone.DetectBusyMaxCount);
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.PhoneSend(Phone: TBisSipPhone; Host: String; Port: Integer; Data: String);
+var
+  S: String;
+begin
+  S:=Data;
+  if Trim(S)='' then
+    S:=VisibleControlCharacters(S);
+  S:=Trim(S);
+  LoggerWrite(FormatEx(FSSendData,[Host,Port,S]));
+end;
+
+procedure TBisCallServerHandlerSip.PhoneReceive(Sender: TBisSipPhone; Host: String; Port: Integer; Data: String);
+var
+  S: String;
+begin
+  S:=Data;
+  if Trim(S)='' then
+    S:=VisibleControlCharacters(S);
+  S:=Trim(S);
+  LoggerWrite(FormatEx(FSReceiveData,[Host,Port,S]));
+end;
+
+procedure TBisCallServerHandlerSip.PhoneLineCreate(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+begin
+  if Assigned(Line) then begin
+    case Line.Direction of
+      ldIncoming: Channels.LockAddIncoming(Line);
+      ldOutgoing: ;
+    end;
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.PhoneLineDestroy(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+var
+  Channel: TBisCallServerChannelSip;
+begin
+  Channel:=Channels.LockFind(Line);
+  if Assigned(Channel) then begin
+    Channels.LockRemove(Channel);
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.PhoneError(Sender: TBisSipPhone; const Message: String);
+begin
+  LoggerWrite(Message,ltError);
+end;
+
+function TBisCallServerHandlerSip.PhoneLineCheck(Phone: TBisSipPhone; Line: TBisSipPhoneLine; Message: TBisSipMessage): Boolean;
+var
+  Channel: TBisCallServerChannelSip;
+begin
+  Result:=false;
+  Channel:=Channels.LockFind(Line);
+  if Assigned(Channel) then begin
+    case Line.Direction of
+      ldIncoming: Result:=Channel.DoCheck;
+      ldOutgoing: Result:=Channel.DoCheck;
+    end;
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.PhoneLineRing(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+var
+  Channel: TBisCallServerChannelSip;
+begin
+  Channel:=Channels.LockFind(Line);
+  if Assigned(Channel) then begin
+    Channel.DoRing;
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.PhoneLineConnect(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+var
+  Channel: TBisCallServerChannelSip;
+begin
+  Channel:=Channels.LockFind(Line);
+  if Assigned(Channel) then begin
+    Channel.DoConnect;
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.PhoneLineDisconnect(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+var
+  Channel: TBisCallServerChannelSip;
+begin
+  Channel:=Channels.LockFind(Line);
+  if Assigned(Channel) then begin
+    Channel.DoDisconnect;
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.PhoneLineInData(Sender: TBisSipPhone; Line: TBisSipPhoneLine;
+                                                   const Data: Pointer; const DataSize: Cardinal);
+var
+  Channel: TBisCallServerChannelSip;
+begin
+  Channel:=Channels.LockFind(Line);
+  if Assigned(Channel) then begin
+    Channel.DoData(Data,DataSize);
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.PhoneLineHold(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+var
+  Channel: TBisCallServerChannelSip;
+begin
+  Channel:=Channels.LockFind(Line);
+  if Assigned(Channel) then begin
+    Channel.DoHold;
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.PhoneLineTimeout(Sender: TBisSipPhone; Line: TBisSipPhoneLine);
+var
+  Channel: TBisCallServerChannelSip;
+begin
+  Channel:=Channels.LockFind(Line);
+  if Assigned(Channel) then begin
+    Channel.DoTimeout;
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.PhoneLineDtmf(Phone: TBisSipPhone; Line: TBisSipPhoneLine; const Code: Char);
+var
+  Channel: TBisCallServerChannelSip;
+begin
+  Channel:=Channels.LockFind(Line);
+  if Assigned(Channel) then
+    Channel.DoCode(Code);
+end;
+
+function TBisCallServerHandlerSip.AddOutgoingChannel(CallId, CallerId, CallerPhone: Variant): TBisCallServerChannel;
+begin
+  Result:=Channels.LockAddOutgoing(CallId,CallerId,CallerPhone);
+end;
+
+function TBisCallServerHandlerSip.GetConnected: Boolean;
+begin
+  Result:=FConnected;
+end;
+
+procedure TBisCallServerHandlerSip.Connect;
+begin
+  Disconnect;
+  if not Connected and Enabled then begin
+    LoggerWrite(SConnect);
+    try
+      inherited Connect;
+      FPhone.Lines.Clear;
+      FPhone.Connect;
+      FConnected:=true;
+      LoggerWrite(SConnectSuccess);
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SConnectFail,[E.Message]),ltError);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallServerHandlerSip.Disconnect;
+begin
+  if Connected then begin
+    LoggerWrite(SDisconnect);
+    try
+      inherited Disconnect;
+      FPhone.Lines.Clear;
+      FPhone.Disconnect;
+      FConnected:=false;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SDisconnectFail,[E.Message]),ltError);
+      end;
+    end;
+  end;
+end;
+
+end.

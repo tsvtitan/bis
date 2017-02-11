@@ -1,0 +1,131 @@
+inherited BisTaxiDataReceiptFilterForm: TBisTaxiDataReceiptFilterForm
+  Caption = 'BisTaxiDataReceiptFilterForm'
+  ClientWidth = 525
+  ExplicitWidth = 533
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Width = 525
+    ExplicitWidth = 525
+    inherited ButtonOk: TButton
+      Left = 346
+      ExplicitLeft = 346
+    end
+    inherited ButtonCancel: TButton
+      Left = 442
+      ExplicitLeft = 442
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 525
+    ExplicitWidth = 525
+    inherited LabelSum: TLabel
+      Left = 308
+      ExplicitLeft = 308
+    end
+    inherited LabelDateReceipt: TLabel
+      Left = 46
+      Width = 38
+      Caption = #1044#1072#1090#1072' '#1089':'
+      ExplicitLeft = 46
+      ExplicitWidth = 38
+    end
+    inherited LabelDateCreate: TLabel
+      Left = 299
+      ExplicitLeft = 299
+    end
+    object LabelDateReceiptTo: TLabel [7]
+      Left = 267
+      Top = 96
+      Width = 45
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1044#1072#1090#1072' '#1087#1086':'
+      FocusControl = DateTimePickerReceiptTo
+    end
+    inherited MemoDescription: TMemo
+      Width = 423
+      TabOrder = 8
+      ExplicitWidth = 423
+    end
+    inherited EditSum: TEdit
+      Left = 349
+      Width = 57
+      ExplicitLeft = 349
+      ExplicitWidth = 57
+    end
+    inherited DateTimePickerReceipt: TDateTimePicker
+      TabOrder = 14
+    end
+    inherited DateTimePickerReceiptTime: TDateTimePicker
+      TabOrder = 13
+    end
+    inherited EditAccount: TEdit
+      Width = 289
+      ExplicitWidth = 289
+    end
+    inherited ButtonAccount: TButton
+      Left = 385
+      ExplicitLeft = 385
+    end
+    inherited ComboBoxType: TComboBox
+      Width = 289
+      ExplicitWidth = 289
+    end
+    inherited EditWho: TEdit
+      Width = 172
+      Color = clWindow
+      ReadOnly = False
+      TabOrder = 9
+      ExplicitWidth = 172
+    end
+    inherited DateTimePickerCreate: TDateTimePicker
+      Left = 340
+      TabOrder = 11
+      ExplicitLeft = 340
+    end
+    inherited DateTimePickerCreateTime: TDateTimePicker
+      Left = 434
+      TabOrder = 12
+      ExplicitLeft = 434
+    end
+    inherited ButtonWho: TButton
+      Left = 263
+      TabOrder = 10
+      ExplicitLeft = 263
+    end
+    inherited ComboBoxFirm: TComboBox
+      Width = 194
+      ExplicitWidth = 194
+    end
+    object DateTimePickerReceiptTo: TDateTimePicker
+      Left = 318
+      Top = 93
+      Width = 88
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      TabOrder = 5
+    end
+    object DateTimePickerReceiptToTime: TDateTimePicker
+      Left = 412
+      Top = 93
+      Width = 74
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 6
+    end
+    object ButtonDateReceipt: TButton
+      Left = 492
+      Top = 93
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1077#1088#1080#1086#1076
+      Caption = '...'
+      TabOrder = 7
+      OnClick = ButtonDateReceiptClick
+    end
+  end
+end

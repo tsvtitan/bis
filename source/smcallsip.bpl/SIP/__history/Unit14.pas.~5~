@@ -1,0 +1,40 @@
+unit Unit14;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TForm14 = class(TForm)
+    LabelHost: TLabel;
+    EditHost: TEdit;
+    LabelPort: TLabel;
+    EditPort: TEdit;
+    LabelUserName: TLabel;
+    EditUserName: TEdit;
+    LabelPassword: TLabel;
+    EditPassword: TEdit;
+    ButtonRegister: TButton;
+    ButtonUnRegister: TButton;
+    procedure ButtonRegisterClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form14: TForm14;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm14.ButtonRegisterClick(Sender: TObject);
+begin
+  //
+end;
+
+end.

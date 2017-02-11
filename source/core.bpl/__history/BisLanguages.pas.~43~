@@ -1,0 +1,48 @@
+unit BisLanguages;
+
+interface
+
+uses Contnrs,
+     BisObject, BisLocalBase, BisDataSet;
+
+type
+
+  TBisLanguages=class(TBisObject)
+  private
+    FDataSet: TBisDataSet;
+    FLocalBase: TBisLocalBase;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    procedure Open;
+
+    property LocalBase: TBisLocalBase read FLocalBase write FLocalBase;
+  end;
+
+implementation
+
+uses BisCoreConsts;
+
+{ TBisLanguages }
+
+constructor TBisLanguages.Create;
+begin
+  inherited Create;
+  FDataSet:=TBisDataSet.Create(nil);
+end;
+
+destructor TBisLanguages.Destroy;
+begin
+  FDataSet.Free;
+  inherited Destroy;
+end;
+
+procedure TBisLanguages.Open;
+begin
+  if Assigned(FLocalBase) then begin
+    if FLocalBase.ReadParam
+
+  end;
+end;
+
+end.

@@ -1,0 +1,60 @@
+unit BisParamEditInteger;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisParamEdit, BisControls;
+
+type
+
+  TBisParamEditInteger=class(TBisParamEdit)
+ private
+    FEditInteger: TEditInteger;
+    property Edit;
+  protected
+    function GetValue: Variant; override;  
+  public
+    constructor Create; override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+    property EditInteger: TEditInteger read FEditInteger;
+  end;
+
+
+implementation
+
+uses SysUtils,
+     BisUtils;
+
+{ TBisParamEditInteger }
+
+constructor TBisParamEditInteger.Create; 
+begin
+  inherited Create;
+  DataType:=ftInteger;
+end;
+
+procedure TBisParamEditInteger.LinkControls(Parent: TWinControl);
+var
+  AEdit: TEdit; 
+begin
+  inherited LinkControls(Parent);
+  if Assigned(Edit) then begin
+    AEdit:=
+    FEditInteger:=ReplaceEditToEditInteger(Edit);
+    Edit:=TEdit(FEditInteger);
+    if Assigned(LabelEdit) then
+      LabelEdit.FocusControl:=Edit;
+  end;
+end;
+
+function TBisParamEditInteger.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FEditInteger) then
+    Result:=iff(not Empty,FEditInteger.Value,Result);
+end;
+
+
+
+end.

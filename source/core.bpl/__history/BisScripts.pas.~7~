@@ -1,0 +1,31 @@
+unit BisScripts;
+
+interface
+
+uses Classes,
+     BisObject, BisCoreObjects;
+
+type
+
+  TBisScript=class(TBisCoreObject)
+  end;
+
+  TBisScriptClass=class of TBisScript;
+
+  TBisScripts=class(TBisCoreObjects)
+  private
+    function GetItems(Index: Integer): TBisScript;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    function AddClass(AClass: TBisScriptClass; const ObjectName: String=''): TBisScript;
+    function AddScript(AScript: TBisScript): Boolean;
+
+    procedure Connect;
+
+    property Items[Index: Integer]: TBisScript read GetItems;
+  end;
+
+implementation
+
+end.

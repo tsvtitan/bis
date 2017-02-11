@@ -1,0 +1,46 @@
+// ---------------------------------------------------------------------
+// This program is used to test the evaluation of variable during
+// execution, even in subroutines.
+// Add a breakpoint into TestTip functions and check the value of
+// the variablel simply by move the mouse over them
+// ---------------------------------------------------------------------
+
+procedure TestTip(a: integer);
+var
+	x: integer;
+	y: integer;
+begin
+	println(a);
+	if a >= 5 then
+		x := 1
+	else
+		x := 2;
+	ShowMessage(IntToStr(x));
+	y := x + 1;
+	x := a;
+	y := y + 1;
+end;
+
+procedure TestTip2(a: integer);
+var
+  x: integer;
+begin
+  x := 3;
+  testTip(a);
+  testTip(x);
+end;
+
+procedure testTip3(a: integer);
+var
+  x: integer;
+begin
+  x := 10;
+  testTip2(a);
+end;
+
+var x: integer;
+
+x := 20;
+
+testTip3(5);
+

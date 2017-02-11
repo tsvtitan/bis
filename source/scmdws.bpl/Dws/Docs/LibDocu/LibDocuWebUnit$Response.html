@@ -1,0 +1,553 @@
+<html>
+<body>
+<h1>Class Response</h1>
+<b>Declaration</b><br>
+
+<pre>Response = class(TObject)
+  <a href="#WebUnit$Response$Allow">property Allow: String read GetAllow write SetAllow</a>;
+  <a href="#WebUnit$Response$Content">property Content: String read GetContent write SetContent</a>;
+  <a href="#WebUnit$Response$ContentEncoding">property ContentEncoding: String read GetContentEncoding write SetContentEncoding</a>;
+  <a href="#WebUnit$Response$ContentLength">property ContentLength: Integer read GetContentLength write SetContentLength</a>;
+  <a href="#WebUnit$Response$ContentType">property ContentType: String read GetContentType write SetContentType</a>;
+  <a href="#WebUnit$Response$ContentVersion">property ContentVersion: String read GetContentVersion write SetContentVersion</a>;
+  <a href="#WebUnit$Response$Cookie">function Cookie(Index: Integer): TCookie</a>;
+  <a href="#WebUnit$Response$CookieByName">function CookieByName(Name: String): TCookie</a>;
+  <a href="#WebUnit$Response$CookieCount">function CookieCount: Integer</a>;
+  <a href="#WebUnit$Response$Date">property Date: DateTime read GetDate write SetDate</a>;
+  <a href="#WebUnit$Response$DerivedFrom">property DerivedFrom: String read GetDerivedFrom write SetDerivedFrom</a>;
+  <a href="#WebUnit$Response$Expires">property Expires: DateTime read GetExpires write SetExpires</a>;
+  <a href="#WebUnit$Response$GetAllow">function GetAllow: String</a>;
+  <a href="#WebUnit$Response$GetContent">function GetContent: String</a>;
+  <a href="#WebUnit$Response$GetContentEncoding">function GetContentEncoding: String</a>;
+  <a href="#WebUnit$Response$GetContentLength">function GetContentLength: Integer</a>;
+  <a href="#WebUnit$Response$GetContentType">function GetContentType: String</a>;
+  <a href="#WebUnit$Response$GetContentVersion">function GetContentVersion: String</a>;
+  <a href="#WebUnit$Response$GetDate">function GetDate: DateTime</a>;
+  <a href="#WebUnit$Response$GetDerivedFrom">function GetDerivedFrom: String</a>;
+  <a href="#WebUnit$Response$GetExpires">function GetExpires: DateTime</a>;
+  <a href="#WebUnit$Response$GetLastModified">function GetLastModified: DateTime</a>;
+  <a href="#WebUnit$Response$GetLocation">function GetLocation: String</a>;
+  <a href="#WebUnit$Response$GetLogMessage">function GetLogMessage: String</a>;
+  <a href="#WebUnit$Response$GetRealm">function GetRealm: String</a>;
+  <a href="#WebUnit$Response$GetReasonString">function GetReasonString: String</a>;
+  <a href="#WebUnit$Response$GetServer">function GetServer: String</a>;
+  <a href="#WebUnit$Response$GetStatusCode">function GetStatusCode: Integer</a>;
+  <a href="#WebUnit$Response$GetTitle">function GetTitle: String</a>;
+  <a href="#WebUnit$Response$GetVersion">function GetVersion: String</a>;
+  <a href="#WebUnit$Response$LastModified">property LastModified: DateTime read GetLastModified write SetLastModified</a>;
+  <a href="#WebUnit$Response$Location">property Location: String read GetLocation write SetLocation</a>;
+  <a href="#WebUnit$Response$LogMessage">property LogMessage: String read GetLogMessage write SetLogMessage</a>;
+  <a href="#WebUnit$Response$NewCookie">function NewCookie: TCookie</a>;
+  <a href="#WebUnit$Response$Realm">property Realm: String read GetRealm write SetRealm</a>;
+  <a href="#WebUnit$Response$ReasonString">property ReasonString: String read GetReasonString write SetReasonString</a>;
+  <a href="#WebUnit$Response$SendRedirect">procedure SendRedirect(Uri: String)</a>;
+  <a href="#WebUnit$Response$Server">property Server: String read GetServer write SetServer</a>;
+  <a href="#WebUnit$Response$SetAllow">procedure SetAllow(Value: String)</a>;
+  <a href="#WebUnit$Response$SetContent">procedure SetContent(Value: String)</a>;
+  <a href="#WebUnit$Response$SetContentEncoding">procedure SetContentEncoding(Value: String)</a>;
+  <a href="#WebUnit$Response$SetContentLength">procedure SetContentLength(Value: Integer)</a>;
+  <a href="#WebUnit$Response$SetContentType">procedure SetContentType(Value: String)</a>;
+  <a href="#WebUnit$Response$SetContentVersion">procedure SetContentVersion(Value: String)</a>;
+  <a href="#WebUnit$Response$SetDate">procedure SetDate(Value: DateTime)</a>;
+  <a href="#WebUnit$Response$SetDerivedFrom">procedure SetDerivedFrom(Value: String)</a>;
+  <a href="#WebUnit$Response$SetExpires">procedure SetExpires(Value: DateTime)</a>;
+  <a href="#WebUnit$Response$SetLastModified">procedure SetLastModified(Value: DateTime)</a>;
+  <a href="#WebUnit$Response$SetLocation">procedure SetLocation(Value: String)</a>;
+  <a href="#WebUnit$Response$SetLogMessage">procedure SetLogMessage(Value: String)</a>;
+  <a href="#WebUnit$Response$SetRealm">procedure SetRealm(Value: String)</a>;
+  <a href="#WebUnit$Response$SetReasonString">procedure SetReasonString(Value: String)</a>;
+  <a href="#WebUnit$Response$SetServer">procedure SetServer(Value: String)</a>;
+  <a href="#WebUnit$Response$SetStatusCode">procedure SetStatusCode(Value: Integer)</a>;
+  <a href="#WebUnit$Response$SetTitle">procedure SetTitle(Value: String)</a>;
+  <a href="#WebUnit$Response$SetVersion">procedure SetVersion(Value: String)</a>;
+  <a href="#WebUnit$Response$StatusCode">property StatusCode: Integer read GetStatusCode write SetStatusCode</a>;
+  <a href="#WebUnit$Response$Title">property Title: String read GetTitle write SetTitle</a>;
+  <a href="#WebUnit$Response$Version">property Version: String read GetVersion write SetVersion</a>;
+end;</pre>
+<b>Description</b>
+<p></p>
+
+<hr>
+
+    <h2><a name=WebUnit$Response$Allow>Property Response.Allow</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Allow: String read GetAllow write SetAllow;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$Content>Property Response.Content</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Content: String read GetContent write SetContent;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$ContentEncoding>Property Response.ContentEncoding</a></h2>
+    <b>Declaration</b><br>
+    <pre>property ContentEncoding: String read GetContentEncoding write SetContentEncoding;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$ContentLength>Property Response.ContentLength</a></h2>
+    <b>Declaration</b><br>
+    <pre>property ContentLength: Integer read GetContentLength write SetContentLength;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$ContentType>Property Response.ContentType</a></h2>
+    <b>Declaration</b><br>
+    <pre>property ContentType: String read GetContentType write SetContentType;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$ContentVersion>Property Response.ContentVersion</a></h2>
+    <b>Declaration</b><br>
+    <pre>property ContentVersion: String read GetContentVersion write SetContentVersion;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$Cookie>Method Response.Cookie</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Cookie(Index: Integer): TCookie;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$CookieByName>Method Response.CookieByName</a></h2>
+    <b>Declaration</b><br>
+    <pre>function CookieByName(Name: String): TCookie;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$CookieCount>Method Response.CookieCount</a></h2>
+    <b>Declaration</b><br>
+    <pre>function CookieCount: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$Date>Property Response.Date</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Date: DateTime read GetDate write SetDate;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$DerivedFrom>Property Response.DerivedFrom</a></h2>
+    <b>Declaration</b><br>
+    <pre>property DerivedFrom: String read GetDerivedFrom write SetDerivedFrom;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$Expires>Property Response.Expires</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Expires: DateTime read GetExpires write SetExpires;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetAllow>Method Response.GetAllow</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetAllow: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetContent>Method Response.GetContent</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetContent: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetContentEncoding>Method Response.GetContentEncoding</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetContentEncoding: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetContentLength>Method Response.GetContentLength</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetContentLength: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetContentType>Method Response.GetContentType</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetContentType: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetContentVersion>Method Response.GetContentVersion</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetContentVersion: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetDate>Method Response.GetDate</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetDate: DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetDerivedFrom>Method Response.GetDerivedFrom</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetDerivedFrom: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetExpires>Method Response.GetExpires</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetExpires: DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetLastModified>Method Response.GetLastModified</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetLastModified: DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetLocation>Method Response.GetLocation</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetLocation: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetLogMessage>Method Response.GetLogMessage</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetLogMessage: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetRealm>Method Response.GetRealm</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetRealm: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetReasonString>Method Response.GetReasonString</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetReasonString: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetServer>Method Response.GetServer</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetServer: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetStatusCode>Method Response.GetStatusCode</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetStatusCode: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetTitle>Method Response.GetTitle</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetTitle: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$GetVersion>Method Response.GetVersion</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetVersion: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$LastModified>Property Response.LastModified</a></h2>
+    <b>Declaration</b><br>
+    <pre>property LastModified: DateTime read GetLastModified write SetLastModified;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$Location>Property Response.Location</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Location: String read GetLocation write SetLocation;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$LogMessage>Property Response.LogMessage</a></h2>
+    <b>Declaration</b><br>
+    <pre>property LogMessage: String read GetLogMessage write SetLogMessage;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$NewCookie>Method Response.NewCookie</a></h2>
+    <b>Declaration</b><br>
+    <pre>function NewCookie: TCookie;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$Realm>Property Response.Realm</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Realm: String read GetRealm write SetRealm;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$ReasonString>Property Response.ReasonString</a></h2>
+    <b>Declaration</b><br>
+    <pre>property ReasonString: String read GetReasonString write SetReasonString;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$Self>Property Response.Self</a></h2>
+    <b>Declaration</b><br>
+    <pre>Self;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SendRedirect>Method Response.SendRedirect</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SendRedirect(Uri: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$Server>Property Response.Server</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Server: String read GetServer write SetServer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetAllow>Method Response.SetAllow</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetAllow(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetContent>Method Response.SetContent</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetContent(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetContentEncoding>Method Response.SetContentEncoding</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetContentEncoding(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetContentLength>Method Response.SetContentLength</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetContentLength(Value: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetContentType>Method Response.SetContentType</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetContentType(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetContentVersion>Method Response.SetContentVersion</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetContentVersion(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetDate>Method Response.SetDate</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetDate(Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetDerivedFrom>Method Response.SetDerivedFrom</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetDerivedFrom(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetExpires>Method Response.SetExpires</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetExpires(Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetLastModified>Method Response.SetLastModified</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetLastModified(Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetLocation>Method Response.SetLocation</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetLocation(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetLogMessage>Method Response.SetLogMessage</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetLogMessage(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetRealm>Method Response.SetRealm</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetRealm(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetReasonString>Method Response.SetReasonString</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetReasonString(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetServer>Method Response.SetServer</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetServer(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetStatusCode>Method Response.SetStatusCode</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetStatusCode(Value: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetTitle>Method Response.SetTitle</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetTitle(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$SetVersion>Method Response.SetVersion</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetVersion(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$StatusCode>Property Response.StatusCode</a></h2>
+    <b>Declaration</b><br>
+    <pre>property StatusCode: Integer read GetStatusCode write SetStatusCode;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$Title>Property Response.Title</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Title: String read GetTitle write SetTitle;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=WebUnit$Response$Version>Property Response.Version</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Version: String read GetVersion write SetVersion;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+</body>
+</html>

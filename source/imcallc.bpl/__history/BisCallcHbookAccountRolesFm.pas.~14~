@@ -1,0 +1,51 @@
+unit BisCallcHbookAccountRolesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBisCallcHbookAccountRolesForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookAccountRolesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHbookAccountRolesForm: TBisCallcHbookAccountRolesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisCallcHbookAccountRoleEditFm;
+
+{ TBisCallcHbookAccountRolesFormIface }
+
+constructor TBisCallcHbookAccountRolesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookAccountRolesForm;
+  InsertClass:=TBisCallcHbookAccountRoleInsertFormIface;
+  UpdateClass:=TBisCallcHbookAccountRoleUpdateFormIface;
+  DeleteClass:=TBisCallcHbookAccountRoleDeleteFormIface;
+  ProviderName:='S_ACCOUNT_ROLES';
+  with FieldNames do begin
+    AddKey('ROLE_ID');
+    AddKey('ACCOUNT_ID');
+    Add('ROLE_NAME','Роль',150);
+    Add('USER_NAME','Логин',150);
+  end;
+  Orders.Add('ROLE_NAME');
+  Orders.Add('ROLE_NAME');
+end;
+
+end.

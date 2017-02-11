@@ -1,0 +1,20 @@
+unit BisUtils;
+
+interface
+
+uses Classes;
+
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+procedure FreeAndNilEx(var Obj: TObject);
+
+implementation
+
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+begin
+  if IsTrue then Result:=ValueTrue
+  else Result:=ValueFalse;
+end;
+
+
+
+end.

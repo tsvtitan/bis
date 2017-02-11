@@ -1,0 +1,52 @@
+unit BisDataUpdateFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataEditFm, StdCtrls, ExtCtrls, Contnrs, BisFm;
+
+type
+  TBisDataUpdateForm = class(TBisDataEditForm)
+  private
+    { Private declarations }
+  public
+    procedure Execute; override;
+    procedure Init; override;
+  end;
+
+  TBisDataUpdateFormIface=class(TBisDataEditFormIface)
+  protected
+    function GetFormClass: TBisFormClass; override;
+  end;
+
+  TBisDataUpdateFormIfaceClass=class of TBisDataUpdateFormIface;
+
+var
+  BisDataUpdateForm: TBisDataUpdateForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisDataUpdateFormIface }
+
+function TBisDataUpdateFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisDataUpdateForm;
+end;
+
+{ TBisDataUpdateForm }
+
+procedure TBisDataUpdateForm.Execute;
+begin
+  inherited Execute;
+end;
+
+procedure TBisDataUpdateForm.Init;
+begin
+  inherited Init;
+  DataSet.RefreshParamByParent;
+end;
+
+end.

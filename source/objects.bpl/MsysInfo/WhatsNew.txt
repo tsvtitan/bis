@@ -1,0 +1,79 @@
+Version 5.6 (//2001)
+  + Added Performance Library objects (NT & 9x)
+  + Added Microsoft ADO detection (TEngines)
+  + Added NT Service Pack 6a detection (TOperatingSystem)
+  + Added Windows XP detection (TOperatingSystem)
+  + Added DVD Region detection (TOperatingSystem, only >Win95)
+  + Added Product Key and Product ID (TOperatingSystem)
+  + TPrinters reimplemented and Port info added
+  * Memory leaks removed (except in TPerfLibNT. There's over 2000 leaks and i have no idea to remove it.
+                          Can anybody help?)
+
+Version 5.5 (06/11/2001)
+  * Fixed bug in TDisk.SetDisk causing bad UNC displaying
+  * Fixed bug in TDisplay.GetInfo causing AV
+  * Fixed TMCPUUsage under Win9x
+
+Version 5.4 (05/31/2001)
+ * Fixed bug in TStartup causing Access violation.
+ + Added apps run from WIN.INI in TStartup.
+ + Added new component TMCPUUsage for CPU usage watching.
+
+Version 5.3 (05/14/2001)
+ * Control Panel applet renamed to MSI.cpl
+ * CPU Cache and CPUID detection bugs fixed in TCPU.
+ * TMedia now enumerates all sound devices.
+ * TDisk.DriveType property renamed to MediaType.
+ * Network, Sound and Display properties detecting reimplemented and fixed (now TDevices is used to obtain installed adapters).
+ * TDisplay.Adapters reanemd to TDisplay.Adapter and cast to string.
+ * TDisplay.DACs renamed to TDisplay.DAC and cast to string.
+ * TDisplay.Chipsets renamed to TDisplay.Chipset and cast to string.
+ * TDisplay.Memories renamed to TDisplay.Memory and cast to integer.
+ + Pentium IV detection added in TCPU.
+ + Added Startup programs enumeration (TStartup).
+ + Added installed software enumeration (TSoftware).
+ + Added Windows NT and 2000 specific information in TOperatingSystem (TNTSpecific).
+ + TNetword.CardAdapterIndex property added. Identifies what item in TNetwork.Adapters is physical network card.
+ + TMedia.GamePortIndex property added. Identifies what item in TMedia.Devices is GamePort.
+ + TMedia.SoundCardIndex property added. Identifies what item in TMedia.Devices is physical sound card.
+ - TDisplay.Accelerators property removed (it seems to be never used).
+ - TCPU.BusSpeed property removed (this value was only estimated and in many causes was wrong).
+ - TDisk.Model property removed (never used).
+
+Version 5.2 (03/16/2001)
+ + Added component and property editor
+ + Added Microsoft DAO detection
+ + Added process enumeration
+ + Added NT product type identification
+ + Added Control Panel applet based on this component
+ * Report format changed
+ * CPU Cache detection reimplemented
+
+Version 5.1
+ + Enhanced CPU name recognition
+ + Fixed bugs in device detection
+
+Version 5.0
+ + Reimplemented and rearranged CPU detection
+ + Added device class recognition
+ + Fixed bugs in device detection
+ + Demo application rearranged
+ * Source split to more files
+
+Version 4.5
+ + Reimplemented device detection. Now all installed devices are detected
+ - TDevices published properties removed except Printers (renamed)
+ + New TDevices public property DeviceCount and Devices[Index] added
+ + Delphi 3 compatibility forced
+
+Version 4.4
+ + Reimplemented CPU features detection
+ + Added new CPU features detection (3D Now!, SIMD...)
+ * All TCPUFeatures properties renamed
+ + Added TCPU properties VendorID_Raw and Vendor_Raw
+
+Version 4.3
+ + Added additional device detection (Infrared, Image, Tape...) 
+ + Fixed some user reported bugs
+
+Previous releases were not documented.

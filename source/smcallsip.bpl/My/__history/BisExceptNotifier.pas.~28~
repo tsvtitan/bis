@@ -1,0 +1,106 @@
+unit BisExceptNotifier;
+
+interface
+
+uses Classes, SysUtils, Contnrs,
+     JclDebug,
+     BisObject;
+
+type
+
+  TBisExceptNotifier=class;
+
+  TBisExceptNotifierExceptionEvent=procedure (Notifier: TBisExceptNotifier; const E: Exception; const OSException: Boolean) of object;
+
+  TBisExceptNotifier=class(TBisObject)
+  private
+    FIngnoreExceptions: TClassList;
+    FOnException: TBisExceptNotifierExceptionEvent;
+    procedure ExceptNotifier(ExceptObj: TObject; ExceptAddr: Pointer; OSException: Boolean; PException: Pointer);
+  protected
+    procedure DoException(const E: Exception; const OSException: Boolean); virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure GetStack(Strings: TStrings);
+
+    property IngnoreExceptions: TClassList read FIngnoreExceptions;
+
+    property OnException: TBisExceptNotifierExceptionEvent read FOnException write FOnException;
+  end;
+
+
+implementation
+
+uses Windows, Registry,
+     JclHookExcept,
+     BisThreads;
+
+{ TBisExceptNotifier }
+
+constructor TBisExceptNotifier.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FIngnoreExceptions:=TClassList.Create;
+  FIngnoreExceptions.Add(EAbort);
+  FIngnoreExceptions.Add(EExternalException);
+  FIngnoreExceptions.Add(ERegistryException);
+
+  JclStackTrackingOptions:=[stStack, stExceptFrame, stRawMode, stAllModules, stStaticModuleList,
+                            stDelayedTrace, stTraceAllExceptions{, stMainThreadOnly}];
+  JclStartExceptionTracking;
+  JclAddExceptNotifier(ExceptNotifier,npNormal);
+end;
+
+destructor TBisExceptNotifier.Destroy;
+begin
+  JclRemoveExceptNotifier(ExceptNotifier);
+  JclStopExceptionTracking;
+  FIngnoreExceptions.Free;
+  inherited Destroy;
+end;
+
+procedure TBisExceptNotifier.DoException(const E: Exception; const OSException: Boolean);
+begin
+  if Assigned(FOnException) then
+    FOnException(Self,E,OSException);
+end;
+
+procedure TBisExceptNotifier.ExceptNotifier(ExceptObj: TObject; ExceptAddr: Pointer; OSException: Boolean; PException: Pointer);
+var
+  ThreadInfo: PBisThreadNameInfo;
+  P: PExceptionRecord;
+  Flag: Boolean;
+begin
+  P:=PExceptionRecord(PException);
+  if OSException and Assigned(P) and (P^.ExceptionCode=ThreadNameAddress) then begin
+    ThreadInfo:=@P^.ExceptionInformation;
+    if Assigned(ThreadInfo) then ;
+    exit;
+  end else begin
+    Flag:=true;
+    if Assigned(ExceptObj) and (ExceptObj) then
+
+    if FIngnoreExceptions.IndexOf(ExceptObj.ClassType)=-1 then
+      if ExceptObj is Exception then
+        DoException(Exception(ExceptObj),OSException)
+      else
+        DoException(nil,OSException);
+  end;
+end;
+
+procedure TBisExceptNotifier.GetStack(Strings: TStrings);
+var
+  Info: TJclStackInfoList;
+begin
+  if Assigned(Strings) then begin
+    Info:=TJclStackInfoList.Create(true,0,nil);
+    try
+      Info.AddToStrings(Strings,True,True,True,True);
+    finally
+      Info.Free;
+    end;
+  end;
+end;
+
+end.

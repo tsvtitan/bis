@@ -1,0 +1,24 @@
+inherited BisTaxiPhoneFrame: TBisTaxiPhoneFrame
+inherited PopupActionBar: TPopupActionBar
+    object N1: TMenuItem [4]
+      Caption = '-'
+    end
+    object MenuItemOrder: TMenuItem [5]
+      Caption = #1047#1072#1082#1072#1079
+      Enabled = False
+      object MenuItemOrderInsert: TMenuItem
+        Caption = #1057#1086#1079#1076#1072#1090#1100
+        Default = True
+        OnClick = MenuItemOrderInsertClick
+      end
+    end
+    object MenuItemBlack: TMenuItem [6]
+      Caption = #1063#1105#1088#1085#1099#1081' '#1089#1087#1080#1089#1086#1082
+      Enabled = False
+      OnClick = MenuItemBlackClick
+    end
+    object N2: TMenuItem [7]
+      Caption = '-'
+    end
+  end
+end

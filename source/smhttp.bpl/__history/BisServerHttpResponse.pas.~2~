@@ -1,0 +1,44 @@
+unit BisServerHttpResponse;
+
+interface
+
+uses HTTPApp,
+     IdContext, IdCustomHTTPServer;
+
+type
+
+  TSeoSvrHttpResponse = class(TWebResponse)
+  protected
+    FContent: string;
+    FRequestInfo: TIdHTTPRequestInfo;
+    FResponseInfo: TIdHTTPResponseInfo;
+    FSent: Boolean;
+    FThread: TIdPeerThread;
+
+    function GetContent: string; override;
+    function GetDateVariable(Index: Integer): TDateTime; override;
+    function GetStatusCode: Integer; override;
+    function GetIntegerVariable(Index: Integer): Integer; override;
+    function GetLogMessage: string; override;
+    function GetStringVariable(Index: Integer): string; override;
+    procedure SetContent(const AValue: string); override;
+    procedure SetContentStream(AValue: TStream); override;
+    procedure SetStatusCode(AValue: Integer); override;
+    procedure SetStringVariable(Index: Integer; const Value: string); override;
+    procedure SetDateVariable(Index: Integer; const Value: TDateTime); override;
+    procedure SetIntegerVariable(Index: Integer; Value: Integer); override;
+    procedure SetLogMessage(const Value: string); override;
+    procedure MoveCookiesAndCustomHeaders;
+  public
+    constructor Create(AHTTPRequest: TWebRequest; AThread: TIdPeerThread;
+     ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+    procedure SendRedirect(const URI: string); override;
+    procedure SendResponse; override;
+    procedure SendStream(AStream: TStream); override;
+    function Sent: Boolean; override;
+  end;
+
+
+implementation
+
+end.

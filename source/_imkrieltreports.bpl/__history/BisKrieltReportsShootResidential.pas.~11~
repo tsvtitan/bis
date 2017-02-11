@@ -1,0 +1,353 @@
+unit BisKrieltReportsShootResidential;
+
+interface
+
+uses Controls, BisProvider, BisKrieltReportsUtils, BisFilterGroups, SysUtils,
+  BisKrieltReportsFm;
+
+procedure ExportShootApartmentsKrs(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+procedure ExportShootApartmentsOthers(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+procedure ExportShootHousesCottagesTownHousesKrs(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+procedure ExportShootHousesCottagesTownHousesOthers(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+procedure ExportShootOutsideHouses(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+procedure ExportShootDatchasInPoint(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+procedure ExportShootDatchasOutPoint(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+
+implementation
+
+procedure ExportShootApartmentsKrs(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+var Provider: TBisProvider;
+  LastRow: Integer;
+  Excel, Sheet: Variant;
+  XLSNew, SDateBegin, SDateEnd: String;
+begin
+
+  SDateBegin:=ConvertDateTime(DateBegin,'Begin');
+  SDateEnd:=ConvertDateTime(DateEnd,'End');
+
+  Provider:=TBisProvider.Create(nil);
+  Provider.ProviderName:='S_SHOOT_APARTMENTS_KRS_EXPORT';      //
+
+  with Provider, FieldNames do begin
+    AddInvisible('OBJECT_ID');          //
+    AddInvisible('VIEW_ID');            //
+    AddInvisible('TYPE_ID');            //
+    AddInvisible('OPERATION_ID');       //
+    AddInvisible('DATE_BEGIN');         //
+    AddInvisible('ACCOUNT_ID');         //
+    AddInvisible('USER_NAME');          //
+    AddInvisible('PHONE');              //
+    AddInvisible('Населенный пункт');   //
+    AddInvisible('Район');   //
+    AddInvisible('Комн');   //
+    AddInvisible('Примечание');   //
+  end;
+
+  with Provider, FilterGroups do begin
+    Add(foAnd);
+    Items[0].Filters.Add('DATE_BEGIN',fcEqualGreater,SDateBegin);
+    Items[0].Filters.Add('DATE_BEGIN',fcEqualLess,SDateEnd);
+    Items[0].Filters.Add('Населенный пункт',fcEqual,'Красноярск г.');   //
+  end;
+
+  with Provider, Orders do begin
+    Add('DATE_BEGIN');              //
+  end;
+
+  Provider.Open;
+  Provider.First;
+  BisKrieltReportsForm.Height:=343;
+  SetProgressBarToNull(BisKrieltReportsForm, Provider);
+
+  {_____________________________________________________________________________}
+
+  XLSNew:=CopyExcelDocToNew('shoot_apartments_krs.xls','Сниму_квартиры_в_г._Красноярск');
+  Excel:=OpenExcelDoc(XLSNew);
+  Sheet:=Excel.ActiveSheet;
+
+  Sheet.Range['A1']:='сниму в аренду жилье';
+  Sheet.Range['C1']:='квартиры';
+
+  LastRow:=5;
+
+  Repeat
+    Sheet.Range['A'+IntToStr(LastRow-1)]:=Provider.FieldByName('Район').AsString;
+    Sheet.Range['B'+IntToStr(LastRow-1)]:=Provider.FieldByName('Комн').AsString;
+    Sheet.Range['C'+IntToStr(LastRow-1)]:=Provider.FieldByName('Примечание').AsString;
+    Sheet.Range['D'+IntToStr(LastRow-1)]:=Provider.FieldByName('PHONE').AsString;
+    ExtendPosProgressBar(BisKrieltReportsForm);
+    Provider.Next;
+    if Provider.Eof=True then Break;
+
+    InsertExcelRows(Sheet,4,4,'L',LastRow);
+    Sheet.Rows[LastRow]:='';
+    LastRow:=LastRow+1;
+  Until False;
+
+  Excel.Visible:=True;
+  Provider.Close;
+
+  {_____________________________________________________________________________}
+
+  Provider.Free;
+
+end;
+
+procedure ExportShootApartmentsOthers(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+var Provider: TBisProvider;
+  LastRow: Integer;
+  Excel, Sheet: Variant;
+  XLSNew, SDateBegin, SDateEnd: String;
+begin
+
+  SDateBegin:=ConvertDateTime(DateBegin,'Begin');
+  SDateEnd:=ConvertDateTime(DateEnd,'End');
+
+  Provider:=TBisProvider.Create(nil);
+  Provider.ProviderName:='S_SHOOT_APARTMENTS_OTHERS_EXPORT';      //
+
+  with Provider, FieldNames do begin
+    AddInvisible('OBJECT_ID');          //
+    AddInvisible('VIEW_ID');            //
+    AddInvisible('TYPE_ID');            //
+    AddInvisible('OPERATION_ID');       //
+    AddInvisible('DATE_BEGIN');         //
+    AddInvisible('ACCOUNT_ID');         //
+    AddInvisible('USER_NAME');          //
+    AddInvisible('PHONE');              //
+    AddInvisible('Населенный пункт');   //
+    AddInvisible('Комн');   //
+    AddInvisible('Примечание');   //
+  end;
+
+  with Provider, FilterGroups do begin
+    Add(foAnd);
+    Items[0].Filters.Add('DATE_BEGIN',fcEqualGreater,SDateBegin);
+    Items[0].Filters.Add('DATE_BEGIN',fcEqualLess,SDateEnd);
+    Items[0].Filters.Add('Населенный пункт',fcNotEqual,'Красноярск г.');   //
+  end;
+
+  with Provider, Orders do begin
+    Add('DATE_BEGIN');              //
+  end;
+
+  Provider.Open;
+  Provider.First;
+  BisKrieltReportsForm.Height:=343;
+  SetProgressBarToNull(BisKrieltReportsForm, Provider);
+
+  {_____________________________________________________________________________}
+
+  XLSNew:=CopyExcelDocToNew('shoot_apartments_others.xls','Сниму_квартиры_в_других_населенных_пунктах');
+  Excel:=OpenExcelDoc(XLSNew);
+  Sheet:=Excel.ActiveSheet;
+
+  Sheet.Range['A1']:='сниму в аренду жилье';
+  Sheet.Range['C1']:='квартиры';
+
+  LastRow:=5;
+
+  Repeat
+    Sheet.Range['A'+IntToStr(LastRow-1)]:=Provider.FieldByName('Населенный пункт').AsString;
+    Sheet.Range['B'+IntToStr(LastRow-1)]:=Provider.FieldByName('Комн').AsString;
+    Sheet.Range['C'+IntToStr(LastRow-1)]:=Provider.FieldByName('Примечание').AsString;
+    Sheet.Range['D'+IntToStr(LastRow-1)]:=Provider.FieldByName('PHONE').AsString;
+    ExtendPosProgressBar(BisKrieltReportsForm);
+    Provider.Next;
+    if Provider.Eof=True then Break;
+
+    InsertExcelRows(Sheet,4,4,'L',LastRow);
+    Sheet.Rows[LastRow]:='';
+    LastRow:=LastRow+1;
+  Until False;
+
+  Excel.Visible:=True;
+  Provider.Close;
+
+  {_____________________________________________________________________________}
+
+  Provider.Free;
+
+end;
+
+procedure ExportShootHousesCottagesTownHousesKrs(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+var Provider: TBisProvider;
+  LastRow: Integer;
+  Excel, Sheet: Variant;
+  XLSNew, SDateBegin, SDateEnd: String;
+begin
+
+  SDateBegin:=ConvertDateTime(DateBegin,'Begin');
+  SDateEnd:=ConvertDateTime(DateEnd,'End');
+
+  Provider:=TBisProvider.Create(nil);
+  Provider.ProviderName:='S_SHOOT_HOUSES_COTTAGES_TOWN_HOUSES_KRS_EXPORT';      //
+
+  with Provider, FieldNames do begin
+    AddInvisible('OBJECT_ID');          //
+    AddInvisible('VIEW_ID');            //
+    AddInvisible('TYPE_ID');            //
+    AddInvisible('OPERATION_ID');       //
+    AddInvisible('DATE_BEGIN');         //
+    AddInvisible('ACCOUNT_ID');         //
+    AddInvisible('USER_NAME');          //
+    AddInvisible('PHONE');              //
+    AddInvisible('Населенный пункт');   //
+    AddInvisible('Район');   //
+    AddInvisible('Комн');   //
+    AddInvisible('Примечание');   //
+  end;
+
+  with Provider, FilterGroups do begin
+    Add(foAnd);
+    Items[0].Filters.Add('DATE_BEGIN',fcEqualGreater,SDateBegin);
+    Items[0].Filters.Add('DATE_BEGIN',fcEqualLess,SDateEnd);
+    Items[0].Filters.Add('Населенный пункт',fcEqual,'Красноярск г.');   //
+  end;
+
+  with Provider, Orders do begin
+    Add('DATE_BEGIN');              //
+  end;
+
+  Provider.Open;
+  Provider.First;
+  BisKrieltReportsForm.Height:=343;
+  SetProgressBarToNull(BisKrieltReportsForm, Provider);
+
+  {_____________________________________________________________________________}
+
+  XLSNew:=CopyExcelDocToNew('shoot_houses_cottages_town_houses_krs.xls','Сниму_дома,_коттеджи,_таунхаусы_в_г._Красноярск');
+  Excel:=OpenExcelDoc(XLSNew);
+  Sheet:=Excel.ActiveSheet;
+
+  Sheet.Range['A1']:='сниму в аренду жилье';
+  Sheet.Range['C1']:='дома, коттеджи, таунхаусы';
+
+  LastRow:=5;
+
+  Repeat
+    Sheet.Range['A'+IntToStr(LastRow-1)]:=Provider.FieldByName('Район').AsString;
+    Sheet.Range['B'+IntToStr(LastRow-1)]:=Provider.FieldByName('Комн').AsString;
+    Sheet.Range['C'+IntToStr(LastRow-1)]:=Provider.FieldByName('Примечание').AsString;
+    Sheet.Range['D'+IntToStr(LastRow-1)]:=Provider.FieldByName('PHONE').AsString;
+    ExtendPosProgressBar(BisKrieltReportsForm);
+    Provider.Next;
+    if Provider.Eof=True then Break;
+
+    InsertExcelRows(Sheet,4,4,'L',LastRow);
+    Sheet.Rows[LastRow]:='';
+    LastRow:=LastRow+1;
+  Until False;
+
+  Excel.Visible:=True;
+  Provider.Close;
+
+  {_____________________________________________________________________________}
+
+  Provider.Free;
+
+end;
+
+procedure ExportShootHousesCottagesTownHousesOthers(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+var Provider: TBisProvider;
+  LastRow: Integer;
+  Excel, Sheet: Variant;
+  XLSNew, SDateBegin, SDateEnd: String;
+begin
+
+  SDateBegin:=ConvertDateTime(DateBegin,'Begin');
+  SDateEnd:=ConvertDateTime(DateEnd,'End');
+
+  Provider:=TBisProvider.Create(nil);
+  Provider.ProviderName:='S_SHOOT_HOUSES_COTTAGES_TOWN_HOUSES_OTHERS_EXPORT';      //
+
+  with Provider, FieldNames do begin
+    AddInvisible('OBJECT_ID');          //
+    AddInvisible('VIEW_ID');            //
+    AddInvisible('TYPE_ID');            //
+    AddInvisible('OPERATION_ID');       //
+    AddInvisible('DATE_BEGIN');         //
+    AddInvisible('ACCOUNT_ID');         //
+    AddInvisible('USER_NAME');          //
+    AddInvisible('PHONE');              //
+    AddInvisible('Населенный пункт');   //
+    AddInvisible('Примечание');   //
+  end;
+
+  with Provider, FilterGroups do begin
+    Add(foAnd);
+    Items[0].Filters.Add('DATE_BEGIN',fcEqualGreater,SDateBegin);
+    Items[0].Filters.Add('DATE_BEGIN',fcEqualLess,SDateEnd);
+    Items[0].Filters.Add('Населенный пункт',fcNotEqual,'Красноярск г.');   //
+  end;
+
+  with Provider, Orders do begin
+    Add('DATE_BEGIN');              //
+  end;
+
+  Provider.Open;
+  Provider.First;
+  BisKrieltReportsForm.Height:=343;
+  SetProgressBarToNull(BisKrieltReportsForm, Provider);
+
+  {_____________________________________________________________________________}
+
+  XLSNew:=CopyExcelDocToNew('shoot_houses_cottages_town_houses_others.xls','Сниму_дома,_коттеджи,_таунхаусы_в_других_населенных_пунктах');
+  Excel:=OpenExcelDoc(XLSNew);
+  Sheet:=Excel.ActiveSheet;
+
+  Sheet.Range['A1']:='сниму в аренду жилье';
+  Sheet.Range['C1']:='дома, коттеджи, таунхаусы';
+
+  LastRow:=5;
+
+  Repeat
+    Sheet.Range['A'+IntToStr(LastRow-1)]:=Provider.FieldByName('Населенный пункт').AsString;
+    Sheet.Range['B'+IntToStr(LastRow-1)]:=Provider.FieldByName('Примечание').AsString;
+    Sheet.Range['C'+IntToStr(LastRow-1)]:=Provider.FieldByName('PHONE').AsString;
+    ExtendPosProgressBar(BisKrieltReportsForm);
+    Provider.Next;
+    if Provider.Eof=True then Break;
+
+    InsertExcelRows(Sheet,4,4,'L',LastRow);
+    Sheet.Rows[LastRow]:='';
+    LastRow:=LastRow+1;
+  Until False;
+
+  Excel.Visible:=True;
+  Provider.Close;
+
+  {_____________________________________________________________________________}
+
+  Provider.Free;
+
+end;
+
+procedure ExportShootOutsideHouses(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+var Provider: TBisProvider;
+  LastRow: Integer;
+  Excel, Sheet: Variant;
+  XLSNew, SDateBegin, SDateEnd: String;
+begin
+
+end;
+
+procedure ExportShootDatchasInPoint(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+var Provider: TBisProvider;
+  LastRow: Integer;
+  Excel, Sheet: Variant;
+  XLSNew, SDateBegin, SDateEnd: String;
+begin
+
+end;
+
+procedure ExportShootDatchasOutPoint(BisKrieltReportsForm: TBisKrieltReportsForm; DateBegin, DateEnd: TDate);
+var Provider: TBisProvider;
+  LastRow: Integer;
+  Excel, Sheet: Variant;
+  XLSNew, SDateBegin, SDateEnd: String;
+begin
+
+end;
+
+end.

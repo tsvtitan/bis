@@ -1,0 +1,19 @@
+/* Создание процедуры изменения описания водителя */
+
+CREATE PROCEDURE /*PREFIX*/U_DRIVER_DESC
+(
+  DRIVER_ID VARCHAR(32),
+  DESCRIPTION VARCHAR(250)
+)
+AS
+BEGIN
+  UPDATE /*PREFIX*/DRIVERS
+     SET DESCRIPTION=:DESCRIPTION
+   WHERE DRIVER_ID=:DRIVER_ID;
+END;
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

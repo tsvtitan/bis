@@ -1,0 +1,35 @@
+type TClassB = class;
+
+type
+  TClassA = class
+    FText: string;
+    FClassB: TClassB;
+    function GetB: TClassB;
+  end;
+
+function TClassA.GetB;
+begin
+  Result := FClassB;
+end;
+
+type 
+  TClassB = class
+    FClassA: TClassA;
+    function GetA: TClassA;
+  end;
+
+function TClassB.GetA;
+begin
+  Result := FClassA;
+end;
+
+var a: TClassA;
+
+a := TClassA.Create;
+
+a.FClassB := TClassB.Create;
+a.FClassB.FClassA := TClassA.Create;
+
+a.GetB.GetA.FText := 'Hello';
+
+PrintLn(a.GetB.GetA.FText);

@@ -1,0 +1,92 @@
+unit BisParamInvisible;
+
+interface
+
+uses Classes,
+     BisParam;
+
+type
+
+  TBisParamInvisible=class(TBisParam)
+  private
+    FValue: Variant;
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+  public
+    constructor Create; override;
+    procedure LoadFromStream(Stream: TStream);
+    procedure SaveToStream(Stream: TStream);
+    procedure LoadFromFile(const FileName: String);
+    procedure SaveToFile(const FileName: String);
+  end;
+
+implementation
+
+uses Variants, Sysutils,
+     BisUtils;
+
+{ TBisParamInvisible }
+
+constructor TBisParamInvisible.Create;
+begin
+  inherited Create;
+  FValue:=Null;
+end;
+
+function TBisParamInvisible.GetValue: Variant;
+begin
+  Result:=FValue;
+end;
+
+procedure TBisParamInvisible.SetValue(const AValue: Variant);
+begin
+  FValue:=AValue;
+  DataType:=GetFieldTypeByVarType(VarType(FValue));
+  inherited SetValue(AValue);
+end;
+
+procedure TBisParamInvisible.LoadFromStream(Stream: TStream);
+var
+  Buffer: String;
+begin
+  SetLength(Buffer,Stream.Size);
+  Stream.Read(Pointer(Buffer)^,Stream.Size);
+  Value:=Buffer;
+end;
+
+procedure TBisParamInvisible.SaveToStream(Stream: TStream);
+var
+  Buffer: String;
+begin
+  Buffer:=VarToStrDef(Value,'');
+  Stream.Write(Pointer(Buffer)^,Length(Buffer));
+end;
+
+
+procedure TBisParamInvisible.LoadFromFile(const FileName: String);
+var
+  Stream: TFileStream;
+begin
+  Stream:=TFileStream.Create(FileName,fmOpenRead or fmShareDenyWrite);
+  try
+    LoadFromStream(Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure TBisParamInvisible.SaveToFile(const FileName: String);
+var
+  Stream: TFileStream;
+begin
+  Stream:=TFileStream.Create(FileName,fmCreate);
+  try
+    SaveToStream(Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+
+end.

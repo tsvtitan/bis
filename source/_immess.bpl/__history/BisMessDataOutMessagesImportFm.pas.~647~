@@ -1,0 +1,724 @@
+unit BisMessDataOutMessagesImportFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ActnList, ImgList, ExtCtrls, Buttons, StdCtrls, ComCtrls, Grids, DBGrids, DB,
+  BisFm, BisExecuteFm, BisDataSet, BisControls;
+
+type
+  TBisMessDataOutMessagesImportForm = class(TBisExecuteForm)
+    PanelControlsTop: TPanel;
+    LabelAccount: TLabel;
+    EditAccount: TEdit;
+    ButtonAccount: TButton;
+    LabelDateBegin: TLabel;
+    DateTimePickerBegin: TDateTimePicker;
+    DateTimePickerBeginTime: TDateTimePicker;
+    DateTimePickerEnd: TDateTimePicker;
+    DateTimePickerEndTime: TDateTimePicker;
+    CheckBoxOffset: TCheckBox;
+    EditOffset: TEdit;
+    UpDownOffset: TUpDown;
+    PanelControlsBottom: TPanel;
+    LabelCountCaption: TLabel;
+    PanelGrid: TPanel;
+    CheckBoxDateEnd: TCheckBox;
+    Grid: TDBGrid;
+    DataSource: TDataSource;
+    ButtonLoad: TButton;
+    ActionLoad: TAction;
+    ProgressBar: TProgressBar;
+    OpenDialog: TOpenDialog;
+    Bevel: TBevel;
+    LabelPreview: TLabel;
+    LabelFile: TLabel;
+    LabelCount: TLabel;
+    LabelPriority: TLabel;
+    ComboBoxPriority: TComboBox;
+    ButtonRecount: TButton;
+    procedure ActionLoadExecute(Sender: TObject);
+    procedure ActionLoadUpdate(Sender: TObject);
+    procedure FormResize(Sender: TObject);
+    procedure CheckBoxOffsetClick(Sender: TObject);
+    procedure CheckBoxDateEndClick(Sender: TObject);
+    procedure ButtonAccountClick(Sender: TObject);
+    procedure ButtonRecountClick(Sender: TObject);
+  private
+    FDataSet: TBisDataSet;
+    FTemp: TBisDataSet;
+    FPostion: Integer;
+    FAllCount: Integer;
+    FAccountId: Variant;
+    FLoading: Boolean;
+    FError: String;
+    FSNeedValue: String;
+    FSDateEndLessBegin: String;
+    procedure BeforeProcess;
+    procedure AfterProcess;
+    procedure UpdateLabelCount(Count: Integer);
+    procedure AlignColumnsWidth(Grid: TDBGrid);
+    function GetMessageCount(L: Integer): Integer;
+    function PrepareContact(S: String): String;
+    procedure LoadFromXls(FileName: String);
+    procedure LoadFromTxtDelim(FileName: String; Delim: String);
+    procedure LoadFromXml(FileName: String);
+    function CheckFields: Boolean;
+    function GetAllCount: Integer;
+    procedure SyncProgress;
+    procedure SyncError;
+    procedure RecountDateBegin;
+  protected
+    procedure ThreadExecute(AThread: TBisExecuteFormThread); override;
+    procedure DoTerminate; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function CanStart: Boolean; override;
+    procedure Start; override;
+
+    function CanLoad: Boolean;
+    procedure Load;
+  published
+    property SNeedValue: String read FSNeedValue write FSNeedValue;
+    property SDateEndLessBegin: String read FSDateEndLessBegin write FSDateEndLessBegin;
+  end;
+
+  TBisMessDataOutMessagesImportFormIface=class(TBisExecuteFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisMessDataOutMessagesImportForm: TBisMessDataOutMessagesImportForm;
+
+implementation
+
+uses ActiveX, ComObj, DateUtils,
+     ALXmlDoc,
+     BisConsts, BisUtils, BisCore, BisDataFm, BisProvider, BisDialogs,
+     BisMessConsts, BisMessDataAccountsFm;
+
+{$R *.dfm}
+
+type
+  THackGrid=class(TDBGrid)
+  end;
+  
+{ TBisMessDataOutMessagesImportFormIface }
+
+constructor TBisMessDataOutMessagesImportFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisMessDataOutMessagesImportForm;
+end;
+
+{ TBisMessDataOutMessagesImportForm }
+
+constructor TBisMessDataOutMessagesImportForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  SizesStored:=true;
+
+  FDataSet:=TBisDataSet.Create(Self);
+  with FDataSet.FieldDefs do begin
+    Add('NUM',ftInteger);
+    Add('CONTACT',ftString,100);
+    Add('TEXT',ftString,4000);
+    Add('SYMBOL_COUNT',ftInteger);
+    Add('MESSAGE_COUNT',ftInteger);
+    Add('DATE_BEGIN',ftDateTime);
+  end;
+  FDataSet.CreateTable;
+  with TDateTimeField(FDataSet.FieldByName('DATE_BEGIN')) do begin
+    DisplayFormat:=LongTimeFormat+' '+ShortDateFormat;
+  end;
+
+  FTemp:=TBisDataSet.Create(Self);
+  FTemp.CreateTable(FDataSet);
+
+  DataSource.DataSet:=FDataSet;
+
+  EditAccount.Color:=ColorControlReadOnly;
+  LabelFile.Caption:='';
+  FAllCount:=0;
+  UpdateLabelCount(0);
+
+  FAccountId:=Null;
+
+  DateTimePickerBegin.DateTime:=Core.ServerDate;
+  DateTimePickerBeginTime.DateTime:=DateTimePickerBegin.DateTime;
+  DateTimePickerEnd.DateTime:=DateTimePickerBegin.DateTime;
+  DateTimePickerEndTime.DateTime:=DateTimePickerBegin.DateTime;
+
+  CheckBoxOffsetClick(nil);
+  CheckBoxDateEndClick(nil);
+
+  FSNeedValue:='Необходимо ввести значение в поле: %s.';
+  FSDateEndLessBegin:='Дата окончание не может меньше даты начала.';
+end;
+
+destructor TBisMessDataOutMessagesImportForm.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.RecountDateBegin;
+var
+  OldCursor: TCursor;
+  Position: Integer;
+  DBegin: TDateTime;
+begin
+  OldCursor:=Screen.Cursor;
+  Screen.Cursor:=crHourGlass;
+  ProgressBar.Position:=0;
+  ProgressBar.Visible:=true;
+  FDataSet.BeginUpdate(true);
+  try
+    Position:=1;
+    ProgressBar.Max:=FDataSet.RecordCount;
+    DBegin:=DateOf(DateTimePickerBegin.DateTime)+TimeOf(DateTimePickerBeginTime.DateTime);
+    FDataSet.First;
+    while not FDataSet.Eof do begin
+      FDataSet.Edit;
+      FDataSet.FieldByName('DATE_BEGIN').Value:=DBegin;
+      if CheckBoxOffset.Checked then
+        DBegin:=IncSecond(DBegin,UpDownOffset.Position);
+      FDataSet.Post;
+      ProgressBar.Position:=Position;
+      ProgressBar.Update;
+      Inc(Position);
+      FDataSet.Next;
+    end;
+  finally
+    FDataSet.EndUpdate;
+    ProgressBar.Visible:=false;
+    Screen.Cursor:=OldCursor;
+  end;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.FormResize(Sender: TObject);
+begin
+  LabelFile.EllipsisPosition:=epNone;
+  AlignColumnsWidth(Grid);
+  LabelFile.EllipsisPosition:=epPathEllipsis;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.ActionLoadExecute(Sender: TObject);
+begin
+  Load;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.ActionLoadUpdate(Sender: TObject);
+begin
+  ActionLoad.Enabled:=CanLoad;
+end;
+
+function TBisMessDataOutMessagesImportForm.CanLoad: Boolean;
+begin
+  Result:=not Working;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.BeforeProcess;
+begin
+  ProgressBar.Position:=0;
+  ProgressBar.Visible:=true;
+  FDataSet.DisableControls;
+  EnableControl(PanelControlsTop,false);
+  EnableControl(PanelGrid,false);
+  Update;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.AfterProcess;
+begin
+  EnableControl(PanelControlsTop,true);
+  EnableControl(PanelGrid,true);
+  ProgressBar.Visible:=false;
+  FDataSet.First;
+  FDataSet.EnableControls;
+  CheckBoxOffsetClick(nil);
+  CheckBoxDateEndClick(nil);
+  Update;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.CheckBoxDateEndClick(Sender: TObject);
+begin
+  DateTimePickerEnd.Enabled:=CheckBoxDateEnd.Checked;
+  DateTimePickerEnd.Color:=iff(DateTimePickerEnd.Enabled,clWindow,ColorControlReadOnly);
+  DateTimePickerEndTime.Enabled:=CheckBoxDateEnd.Checked;
+  DateTimePickerEndTime.Color:=iff(DateTimePickerEndTime.Enabled,clWindow,ColorControlReadOnly);
+end;
+
+procedure TBisMessDataOutMessagesImportForm.CheckBoxOffsetClick(Sender: TObject);
+begin
+  EditOffset.Enabled:=CheckBoxOffset.Checked;
+  EditOffset.Color:=iff(EditOffset.Enabled,clWindow,ColorControlReadOnly);
+  UpDownOffset.Enabled:=CheckBoxOffset.Checked;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.UpdateLabelCount(Count: Integer);
+begin
+  FAllCount:=FAllCount+Count;
+  LabelCount.Caption:=IntToStr(FAllCount);
+  LabelCount.Update;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.AlignColumnsWidth(Grid: TDBGrid);
+var
+  i: Integer;
+  w1,w2: Integer;
+  Col: TColumn;
+  r: Extended;
+begin
+  w1:=0;
+  for i:=0 to Grid.Columns.Count-1 do begin
+    Col:=Grid.Columns.Items[i];
+    if Col.Visible then
+      w1:=w1+Col.Width;
+  end;
+  w2:=Grid.ClientWidth-THackGrid(Grid).ColWidths[0]-Grid.Columns.Count-GetSystemMetrics(SM_CYVSCROLL);
+
+  for i:=0 to Grid.Columns.Count-1 do begin
+    Col:=Grid.Columns.Items[i];
+    if Col.Visible and (w1>0) then begin
+      r:=w2*Col.Width/w1;
+      Col.Width:=Trunc(r);
+    end;
+  end;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.ButtonAccountClick(Sender: TObject);
+var
+  AClass: TBisDataFormIfaceClass;
+  AIface: TBisDataFormIface;
+  P: TBisProvider;
+begin
+  AClass:=TBisMessDataAccountsFormIface;
+  if not IsMainModule then
+    AClass:=TBisDataFormIfaceClass(Core.FindIfaceClass(SIfaceClassDataAccountsFormIface));
+  if Assigned(AClass) then begin
+    AIface:=AClass.Create(nil);
+    P:=TBisProvider.Create(nil);
+    try
+      AIface.LocateFields:='ACCOUNT_ID';
+      AIface.LocateValues:=FAccountId;
+      if AIface.SelectInto(P) then begin
+        FAccountId:=P.FieldByName('ACCOUNT_ID').Value;
+        EditAccount.Text:=P.FieldByName('USER_NAME').AsString;
+      end;
+    finally
+      P.Free;
+      AIface.Free;
+    end;
+  end;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.ButtonRecountClick(Sender: TObject);
+begin
+  RecountDateBegin;
+end;
+
+function TBisMessDataOutMessagesImportForm.GetMessageCount(L: Integer): Integer;
+begin
+  if L<=70 then
+    Result:=1
+  else
+    Result:=(L div 67)+1;
+end;
+
+function TBisMessDataOutMessagesImportForm.PrepareContact(S: String): String;
+var
+  L: Integer;
+  F: String;
+begin
+  Result:=S;
+  L:=Length(S);
+  if L>0 then begin
+    F:=Copy(S,1,1);
+    if F[1] in ['7','8'] then
+      Result:='+7'+Copy(S,2,Length(S));
+  end;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.LoadFromTxtDelim(FileName: String; Delim: String);
+var
+  Strings: TStringList;
+  Fields: TStringList;
+  i,j: Integer;
+  S: String;
+  Flag: Boolean;
+  L,MC: Integer;
+  DBegin: TDateTime;
+begin
+  Strings:=TStringList.Create;
+  Fields:=TStringList.Create;
+  try
+    Strings.LoadFromFile(FileName);
+    FAllCount:=0;
+    UpdateLabelCount(0);
+    DBegin:=DateOf(DateTimePickerBegin.DateTime)+TimeOf(DateTimePickerBeginTime.DateTime);
+    ProgressBar.Max:=Strings.Count;
+    for i:=0 to Strings.Count-1 do begin
+      Fields.Clear;
+      GetStringsByString(Strings.Strings[i],Delim,Fields);
+      if Fields.Count>1 then begin
+        Flag:=false;
+        for j:=0 to Fields.Count-1 do begin
+          S:=Trim(Fields.Strings[j]);
+          if j=0 then begin
+            Flag:=S<>'';
+            if Flag then begin
+              FDataSet.Append;
+              FDataSet.FieldByName('NUM').AsInteger:=i+1;
+              FDataSet.FieldByName('CONTACT').AsString:=PrepareContact(S);
+            end;
+          end;
+          if (j=1) and Flag then
+            FDataSet.FieldByName('TEXT').AsString:=S;
+        end;
+        if Flag then begin
+          L:=Length(FDataSet.FieldByName('TEXT').AsString);
+          FDataSet.FieldByName('SYMBOL_COUNT').AsInteger:=L;
+          MC:=GetMessageCount(L);
+          FDataSet.FieldByName('MESSAGE_COUNT').AsInteger:=MC;
+          FDataSet.FieldByName('DATE_BEGIN').Value:=DBegin;
+          if CheckBoxOffset.Checked then
+            DBegin:=IncSecond(DBegin,UpDownOffset.Position);
+          FDataSet.Post;
+          UpdateLabelCount(MC);
+        end;
+      end;
+      ProgressBar.Position:=i;
+      ProgressBar.Update;
+    end;
+  finally
+    Fields.Free;
+    Strings.Free;
+  end;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.LoadFromXls(FileName: String);
+var
+  Excel: OleVariant;
+  WorkBook: OleVariant;
+  Sheet: OleVariant;
+  V: OleVariant;
+  S: String;
+  i,j: Integer;
+  RowCount: Integer;
+  ColCount: Integer;
+  Data: OleVariant;
+  Range: OleVariant;
+  L,MC: Integer;
+  Flag: Boolean;
+  DBegin: TDateTime;
+const
+  ColumnCount=2;
+begin
+  Excel:=CreateOleObject('Excel.Application');
+  try
+    if not VarIsEmpty(Excel) then begin
+      RowCount:=0;
+      ColCount:=0;
+      Excel.WorkBooks.Open(FileName);
+      WorkBook:=Excel.WorkBooks.Item[1];
+      Sheet:=WorkBook.Sheets.Item[1];
+      Range:=Excel.Selection;
+      if not VarIsEmpty(Range) then begin
+        RowCount:=Range.Rows.Count;
+        ColCount:=Range.Columns.Count;
+      end;
+      if (RowCount<=0) or (ColCount<ColumnCount) then begin
+        RowCount:=Sheet.Rows.Count;
+        ColCount:=Sheet.Columns.Count;
+        Range:=Sheet;
+      end;
+      if (RowCount>0) and (ColCount>=ColumnCount) then begin
+        Range:=Range.Range[Range.Cells[1,1],Range.Cells[RowCount,ColumnCount]];
+        Data:=Range.Value;
+        FDataSet.EmptyTable;
+        FAllCount:=0;
+        UpdateLabelCount(0);
+        DBegin:=DateOf(DateTimePickerBegin.DateTime)+TimeOf(DateTimePickerBeginTime.DateTime);
+        ProgressBar.Max:=RowCount;
+        for i:=1 to RowCount do begin
+          Flag:=false;
+          for j:=1 to ColumnCount do begin
+            V:=Data[i,j];
+            S:=Trim(VarToStrDef(V,''));
+            if j=1 then begin
+              Flag:=S<>'';
+              if Flag then begin
+                FDataSet.Append;
+                FDataSet.FieldByName('NUM').AsInteger:=i;
+                FDataSet.FieldByName('CONTACT').AsString:=PrepareContact(S);
+              end;
+            end;
+            if (j=2) and Flag then
+              FDataSet.FieldByName('TEXT').AsString:=S;
+          end;
+          if Flag then begin
+            L:=Length(FDataSet.FieldByName('TEXT').AsString);
+            FDataSet.FieldByName('SYMBOL_COUNT').AsInteger:=L;
+            MC:=GetMessageCount(L);
+            FDataSet.FieldByName('MESSAGE_COUNT').AsInteger:=MC;
+            FDataSet.FieldByName('DATE_BEGIN').Value:=DBegin;
+            if CheckBoxOffset.Checked then
+              DBegin:=IncSecond(DBegin,UpDownOffset.Position);
+            FDataSet.Post;
+            UpdateLabelCount(MC);
+          end;
+          ProgressBar.Position:=i;
+          ProgressBar.Update;
+        end;
+      end;
+    end;
+  finally
+    if not VarIsEmpty(Excel) then begin
+      Excel.Quit;
+      VarClear(Excel);
+    end;
+  end;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.LoadFromXml(FileName: String);
+var
+  Xml: TALXMLDocument;
+  i,j,x: Integer;
+  Node,Packet,Item: TALXMLNode;
+  Version: String;
+  Login, Password: String;
+  Contact, Text: String;
+  L,MC: Integer;
+  DBegin: TDateTime;
+begin
+  Xml:=TALXMLDocument.Create(nil);
+  try
+    Xml.LoadFromFile(FileName);
+    for i:=0 to Xml.ChildNodes.Count-1 do begin
+      Node:=Xml.ChildNodes[i];
+      if AnsiSameText(Node.NodeName,'packet') then begin
+        Packet:=Node;
+        Version:=Trim(VarToStrDef(Packet.Attributes['version'],''));
+        if (Version='') or AnsiSameText(Version,'1.0') then begin
+          for j:=0 to Packet.ChildNodes.Count-1 do begin
+            Node:=Packet.ChildNodes[j];
+            if AnsiSameText(Node.NodeName,'account') then begin
+              Login:=Node.Attributes['login'];
+              Password:=Node.Attributes['password'];
+            end;
+            if AnsiSameText(Node.NodeName,'messages') then begin
+              DBegin:=DateOf(DateTimePickerBegin.DateTime)+TimeOf(DateTimePickerBeginTime.DateTime);
+              for x:=0 to Node.ChildNodes.Count-1 do begin
+                Item:=Node.ChildNodes[x];
+                Contact:=Trim(Item.Attributes['contact']);
+                Text:=Trim(Item.Attributes['text']);
+                if Contact<>'' then begin
+                  FDataSet.Append;
+                  FDataSet.FieldByName('NUM').AsInteger:=x+1;
+                  FDataSet.FieldByName('CONTACT').AsString:=PrepareContact(Contact);
+                  FDataSet.FieldByName('TEXT').AsString:=Text;
+                  L:=Length(Text);
+                  FDataSet.FieldByName('SYMBOL_COUNT').AsInteger:=L;
+                  MC:=GetMessageCount(L);
+                  FDataSet.FieldByName('MESSAGE_COUNT').AsInteger:=MC;
+                  FDataSet.FieldByName('DATE_BEGIN').Value:=DBegin;
+                  if CheckBoxOffset.Checked then
+                    DBegin:=IncSecond(DBegin,UpDownOffset.Position);
+                  FDataSet.Post;
+                  FDataSet.Post;
+                end;
+              end;
+            end;
+          end;
+        end;
+      end;
+    end;
+  finally
+    Xml.Free;
+  end;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.Load;
+begin
+  if CanLoad then begin
+    if OpenDialog.Execute then begin
+      LabelFile.Caption:=OpenDialog.FileName;
+      BeforeProcess;
+      FLoading:=false;
+      try
+        case OpenDialog.FilterIndex of
+          1: LoadFromXls(OpenDialog.FileName);
+          2: LoadFromTxtDelim(OpenDialog.FileName,#9);
+          3: LoadFromTxtDelim(OpenDialog.FileName,';');
+          4: LoadFromXml(OpenDialog.FileName);
+        end;
+      finally
+        FLoading:=false;
+        AfterProcess;
+      end;
+    end;
+  end;
+end;
+
+function TBisMessDataOutMessagesImportForm.CanStart: Boolean;
+begin
+  Result:=inherited CanStart and not FLoading and 
+          FDataSet.Active and not FDataSet.Empty and
+          (ComboBoxPriority.ItemIndex<>-1);
+end;
+
+function TBisMessDataOutMessagesImportForm.CheckFields: Boolean;
+var
+  DBegin,DEnd,DLast: TDateTime;
+  Flag: Boolean;
+begin
+  Result:=true;
+  if Trim(EditAccount.Text)='' then begin
+    ShowError(FormatEx(FSNeedValue,[LabelAccount.Caption]));
+    Result:=false;
+    exit;
+  end;
+  if CheckBoxDateEnd.Checked then begin
+    DBegin:=DateOf(DateTimePickerBegin.DateTime)+TimeOf(DateTimePickerBeginTime.DateTime);
+    DEnd:=DateOf(DateTimePickerEnd.DateTime)+TimeOf(DateTimePickerEndTime.DateTime);
+    Flag:=DEnd<DBegin;
+    if not Flag then
+      if FDataSet.Active and not FDataSet.Empty then begin
+        DLast:=FDataSet.FieldByName('DATE_BEGIN').AsDateTime;
+        Flag:=DEnd<DLast;
+      end;
+    if Flag then begin
+      ShowError(FormatEx(FSDateEndLessBegin,[LabelAccount.Caption]));
+      Result:=false;
+      exit;
+    end;
+  end;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.Start;
+begin
+  if CanStart and CheckFields then begin
+    FDataSet.BeginUpdate(true);
+    try
+      FTemp.EmptyTable;
+      FTemp.CopyRecords(FDataSet);
+    finally
+      FDataSet.EndUpdate;
+    end;
+    ProgressBar.Max:=FTemp.RecordCount;
+    BeforeProcess;
+    inherited Start;
+  end;
+end;
+
+function TBisMessDataOutMessagesImportForm.GetAllCount: Integer;
+begin
+  FDataSet.DisableControls;
+  try
+    Result:=0;
+    FDataSet.First;
+    while not FDataSet.Eof do begin
+      Result:=Result+FDataSet.FieldByName('MESSAGE_COUNT').AsInteger;
+      FDataSet.Next;
+    end;
+  finally
+    FDataSet.EnableControls;
+  end;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.DoTerminate;
+begin
+  inherited DoTerminate;
+  FDataSet.EmptyTable;
+  FDataSet.CopyRecords(FTemp);
+  FAllCount:=GetAllCount;
+  UpdateLabelCount(0);
+  AfterProcess;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.SyncError;
+begin
+  if Trim(FError)<>'' then
+    ShowError(FError);
+end;
+
+procedure TBisMessDataOutMessagesImportForm.SyncProgress;
+begin
+  ProgressBar.Position:=FPostion;
+  ProgressBar.Update;
+end;
+
+procedure TBisMessDataOutMessagesImportForm.ThreadExecute(AThread: TBisExecuteFormThread);
+
+  function Import: Boolean;
+  var
+    P: TBisProvider;
+  begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=false;
+      P.ProviderName:='I_OUT_MESSAGE';
+      with P.Params do begin
+        AddInvisible('OUT_MESSAGE_ID').Value:=GetUniqueID;
+        AddInvisible('CREATOR_ID').Value:=FAccountId;
+        AddInvisible('RECIPIENT_ID').Value:=Null;
+        AddInvisible('DATE_CREATE').Value:=Core.ServerDate;
+        AddInvisible('TEXT_OUT').Value:=FTemp.FieldByName('TEXT').Value;
+        AddInvisible('DATE_OUT').Value:=Null;
+        AddInvisible('TYPE_MESSAGE').Value:=0; // SMS
+        AddInvisible('CONTACT').Value:=FTemp.FieldByName('CONTACT').Value;
+        AddInvisible('DESCRIPTION').Value:=Null;
+        AddInvisible('PRIORITY').Value:=ComboBoxPriority.ItemIndex;
+        AddInvisible('LOCKED').Value:=Null;
+        AddInvisible('DATE_BEGIN').Value:=FTemp.FieldByName('DATE_BEGIN').Value;
+        AddInvisible('DATE_END').Value:=Null;
+        if CheckBoxDateEnd.Checked then
+          AddInvisible('DATE_END').Value:=DateOf(DateTimePickerEnd.DateTime)+TimeOf(DateTimePickerEndTime.DateTime);
+      end;
+      P.Execute;
+      Result:=P.Success;
+    finally
+      P.Free;
+    end;
+  end;
+  
+var
+  Success: Boolean;
+  Flag: Boolean;
+begin
+  Success:=true;
+  try
+    if FTemp.Active and not FTemp.Empty then begin
+      try
+        FError:='';
+        FPostion:=0;
+        FTemp.First;
+        while not FTemp.Eof do begin
+          if AThread.Terminated then
+            break;
+          Flag:=true;
+          if Import then begin
+            FTemp.Delete;
+            Flag:=false;
+          end else
+            Success:=false;
+          Inc(FPostion);
+          AThread.Synchronize(SyncProgress);
+          if Flag then
+            FTemp.Next;
+        end;
+      except
+        On E: Exception do begin
+          FError:=E.Message;
+          AThread.Synchronize(SyncError);
+        end;
+      end;
+    end;
+  finally
+    AThread.Success:=Success;
+  end;
+end;
+
+end.

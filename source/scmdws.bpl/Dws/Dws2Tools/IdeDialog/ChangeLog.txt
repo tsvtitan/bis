@@ -1,0 +1,103 @@
+5/8/2003 by Mark Ericksen
+
+Intro:
+
+This round of changes does not include all of the IDE 
+stuff. You may encounter some issues with dependencies
+on the new CVS version of SynEdit. Please let me know
+what issues you encounter. Once we get the baseline
+established I will complete the integration of the IDE 
+enhancements. There is some more polish needed in 
+several areas so there's more to do before it can be 
+a full public release. 
+
+I welcome all feedback and questions! If you don't
+like something then speak up!
+
+Change log:
+
+Major changes...
+===================================================
++ Renamed component to Tdws2IdeDialog
++ Removed AFLabsAboutBox.pas from package
++ Restructured component to use events to access 
+  scripts (Load/Save/SaveAs).
++ Removed dws2CompilerBeta (differences were moved 
+  to dws2Compiler)
++ Changed component graphic.
++ Register component on DWS2 tab.
+
+
+Change in logic of working with scripts...
+===================================================
+I wanted to decouple the editor from the component so 
+it can remove the 'event chains' and allows the 
+editor to be embedded in other ways. I did this 
+through a new unit called "dwsIDETypes.pas". This
+defines the types and interfaces needed.
+
+I also changed the editor to NOT KNOW anything about 
+files. This means a script can be obtained from 
+anywhere. Also, this allows the user to load 
+a script and perhaps decrypt it (if encrypted) before 
+loading it into the editor.
+
+With our scripts (at my work), they will be encrypted 
+in a database available to our application. When you 
+'open' a script the event will fire and our app will 
+show a dialog listing all the scripts that can be 
+openned and once selected, the script can be loaded.
+
+- Removed OpenDialog and SaveDialog
++ Added SaveDialog to demo main form
++ Created OnLoadScript event
++ Created OnSaveScript event 
++ Created OnSaveAsScript event 
++ Created OnAboutBox event to allow customization
++ Created OnHelp event to allow customization
++ Created unit "dwsIDETypes.pas"
+= NOTE: I kept the OnSaved event (not sure how you use it). 
+  I have no reason to keep it. We can remove if desired.
+
+Editor changes...
+===================================================
++ Made appearance more configurable. You have your 
+  style, I have mine. :)
++ Added /SOME/ IDE code enhancements
+  + Added TreeView (needs improved integration)
+  + Added ClassCompletion (CTRL+SHIFT+C, on popup menu)
+    Not yet completed, I broke it recently while trying
+    to add support for property arrays.
+  + "Find Declaration" jump (CTRL+SHIFT+UP) Jump from 
+    method declaration to implementation. Will also 
+    jump on functions if there is a forward declared.
++ Changed the main menu (not ideal but good enough)
++ Changed arrangement of menu buttons.
++ Added "SynEditTypes" to implementation uses (needed
+  for new CVS SynEdit code)
++ MemoInputOutput added scroll bars (if you would run
+  BubbleSort but add "DoBubbleSort;" as last line the
+  output would be off the edge of output)
++ MemoInputOutput.ReadOnly := True (don't let people 
+  type there)
++ Fixed bug: CBImmediateKeyPress(). An immediate eval
+  of something without a "?" would AV. Changed to set
+  text to command if no "?" is provided. Why is that 
+  used anyway?
++ Tried to change ToolTip debug hint to not throw AVs
+  but it still needs to be reworked using SynEdit hints.
+
+Other changes...
+===================================================
++ frm_EditorConfirmReplace - position ScreenCenter
++ frm_EditorSearch - position ScreenCenter
++ dws2ThreadedDebugger.pas - Added "const" to params 
+  for "SetProcedureName" (const Params: array of variant)
++ Moved global variables used for SynEdit find/replace 
+  forms to be unit local (below implementation). No 
+  reason I know of to share it with the world. Could
+  conflict with other SynEdit users?
++ Added TODO items to code.. some areas need completion
+  or fixing.
++ Updated Demo to work with new component type and format
++ stuff I'm sure I forgot... ;)

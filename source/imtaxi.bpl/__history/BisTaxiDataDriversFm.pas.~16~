@@ -1,0 +1,113 @@
+unit BisTaxiDataDriversFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataFrm, BisDataGridFm, BisTaxiDataDriversFrm;
+
+type
+  TBisTaxiDataDriversForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;    
+  public
+    constructor Create(AOwner: TComponent); override;
+
+  end;
+
+  TBisTaxiDataDriversFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataDriversForm: TBisTaxiDataDriversForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisUtils, BisTaxiDataDriverEditFm, BisConsts, BisFilterGroups;
+
+{ TBisTaxiDataDriversFormIface }
+
+constructor TBisTaxiDataDriversFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataDriversForm;
+  ViewClass:=TBisTaxiDataDriverViewFormIface;
+  FilterClass:=TBisTaxiDataDriverFilterFormIface;
+  InsertClass:=TBisTaxiDataDriverInsertFormIface;
+  UpdateClass:=TBisTaxiDataDriverUpdateFormIface;
+  DeleteClass:=TBisTaxiDataDriverDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_DRIVERS';
+  with FieldNames do begin
+    AddKey('DRIVER_ID');
+    AddInvisible('CALC_ID');
+    AddInvisible('CAR_ID');
+    AddInvisible('METHOD_ID');
+    AddInvisible('PHONE_HOME');
+    AddInvisible('LICENSE');
+    AddInvisible('CATEGORIES');
+    AddInvisible('INSURANCE');
+    AddInvisible('HEALTH_CERT');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('ADDICT_CERT');
+    AddInvisible('PASSPORT');
+    AddInvisible('PLACE_BIRTH');
+    AddInvisible('DATE_BIRTH');
+    AddInvisible('ADDRESS_RESIDENCE');
+    AddInvisible('ADDRESS_ACTUAL');
+    AddInvisible('LOCKED');
+    AddInvisible('PATRONYMIC');
+    AddInvisible('CALC_NAME');
+    AddInvisible('SURNAME');
+    AddInvisible('NAME');
+    AddInvisible('CAR_COLOR');
+    AddInvisible('CAR_TYPE_NAME');
+    AddInvisible('CAR_TYPE_FONT_COLOR');
+    AddInvisible('CAR_TYPE_BRUSH_COLOR');
+    AddInvisible('MIN_BALANCE');
+    AddInvisible('PRIORITY');
+    AddInvisible('DATE_PRIORITY');
+    AddInvisible('MIN_HOURS');
+    AddInvisible('METHOD_NAME');
+    AddInvisible('DATE_CREATE');
+    Add('CAR_CALLSIGN','Позывной',40);
+    Add('USER_NAME','Логин',140);
+    Add('PHONE','Телефон',80);
+    Add('CAR_BRAND','Марка автомобиля',105);
+    Add('CAR_STATE_NUM','Номер автомобиля',85);
+  end;
+  Orders.Add('USER_NAME');
+end;
+
+{ TBisTaxiDataDriversForm }
+
+constructor TBisTaxiDataDriversForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  if Assigned(DataFrame) then begin
+
+    with DataFrame.CreateFilterMenuItem('Активные') do begin
+      FilterGroups.AddVisible.Filters.Add('LOCKED',fcNotEqual,1);
+      Checked:=true;
+    end;
+
+    with DataFrame.CreateFilterMenuItem('Заблокированные') do begin
+      FilterGroups.AddVisible.Filters.Add('LOCKED',fcEqual,1);
+    end;
+
+  end;
+
+end;
+
+class function TBisTaxiDataDriversForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataDriversFrame;
+end;
+
+end.

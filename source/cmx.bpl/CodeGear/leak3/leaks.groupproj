@@ -1,0 +1,64 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{1ab84d05-11ea-479e-80c4-7698b6a348ad}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="app.dproj" />
+    <Projects Include="conn.dproj" />
+    <Projects Include="core.dproj" />
+    <Projects Include="thread.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+<BorlandProject xmlns=""><Default.Personality></Default.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="conn">
+    <MSBuild Projects="conn.dproj" Targets="" />
+  </Target>
+  <Target Name="conn:Clean">
+    <MSBuild Projects="conn.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="conn:Make">
+    <MSBuild Projects="conn.dproj" Targets="Make" />
+  </Target>
+  <Target Name="thread">
+    <MSBuild Projects="thread.dproj" Targets="" />
+  </Target>
+  <Target Name="thread:Clean">
+    <MSBuild Projects="thread.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="thread:Make">
+    <MSBuild Projects="thread.dproj" Targets="Make" />
+  </Target>
+  <Target Name="core">
+    <MSBuild Projects="core.dproj" Targets="" />
+  </Target>
+  <Target Name="core:Clean">
+    <MSBuild Projects="core.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="core:Make">
+    <MSBuild Projects="core.dproj" Targets="Make" />
+  </Target>
+  <Target Name="app">
+    <MSBuild Projects="app.dproj" Targets="" />
+  </Target>
+  <Target Name="app:Clean">
+    <MSBuild Projects="app.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="app:Make">
+    <MSBuild Projects="app.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="conn;thread;core;app" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="conn:Clean;thread:Clean;core:Clean;app:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="conn:Make;thread:Make;core:Make;app:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

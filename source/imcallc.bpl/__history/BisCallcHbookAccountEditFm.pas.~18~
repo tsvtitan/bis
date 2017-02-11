@@ -1,0 +1,121 @@
+unit BisCallcHbookAccountEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisCallcHbookAccountEditForm = class(TBisDataEditForm)
+    LabelUserName: TLabel;
+    EditUserName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelPassword: TLabel;
+    EditPassword: TEdit;
+    LabelDbUserName: TLabel;
+    EditDbUserName: TEdit;
+    LabelDbPassword: TLabel;
+    EditDbPassword: TEdit;
+    CheckBoxLocked: TCheckBox;
+    LabelSurname: TLabel;
+    EditSurname: TEdit;
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelPatronymic: TLabel;
+    EditPatronymic: TEdit;
+    LabelPhone: TLabel;
+    EditPhone: TEdit;
+    LabelEmail: TLabel;
+    EditEmail: TEdit;
+    LabelFirm: TLabel;
+    EditFirm: TEdit;
+    ButtonFirm: TButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookAccountEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookAccountInsertFormIface=class(TBisCallcHbookAccountEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookAccountUpdateFormIface=class(TBisCallcHbookAccountEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookAccountDeleteFormIface=class(TBisCallcHbookAccountEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookAccountEditForm: TBisCallcHbookAccountEditForm;
+
+implementation
+
+uses BisCallcHbookFirmsFm, BisFilterGroups;
+
+{$R *.dfm}
+
+{ TBisCallcHbookAccountEditFormIface }
+
+constructor TBisCallcHbookAccountEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookAccountEditForm;
+  with Params do begin
+    AddKey('ACCOUNT_ID').Older('OLD_ACCOUNT_ID');
+    AddInvisible('IS_ROLE').Value:=0;
+    AddInvisible('AUTO_CREATED').Value:=0;
+    AddEdit('USER_NAME','EditUserName','LabelUserName',true);
+    AddCheckBox('LOCKED','CheckBoxLocked');
+    AddEdit('PASSWORD','EditPassword','LabelUserName');
+    AddEdit('SURNAME','EditSurname','LabelSurname');
+    AddEdit('NAME','EditName','LabelName');
+    AddEdit('PATRONYMIC','EditPatronymic','LabelPatronymic');
+    AddEdit('PHONE','EditPhone','LabelPhone');
+    AddEditData('FIRM_ID','EditFirm','LabelFirm','ButtonFirm',
+                TBisCallcHbookFirmsFormIface,'FIRM_SMALL_NAME',false,false,'','SMALL_NAME');
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+    AddEdit('DB_USER_NAME','EditDbUserName','LabelDbUserName');
+    AddEdit('DB_PASSWORD','EditDbPassword','LabelDbPassword');
+    AddEdit('EMAIL','EditEmail','LabelEmail');
+  end;
+end;
+
+{ TBisCallcHbookAccountInsertFormIface }
+
+constructor TBisCallcHbookAccountInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_ACCOUNT';
+end;
+
+{ TBisCallcHbookAccountUpdateFormIface }
+
+constructor TBisCallcHbookAccountUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_ACCOUNT';
+end;
+
+{ TBisCallcHbookAccountDeleteFormIface }
+
+constructor TBisCallcHbookAccountDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_ACCOUNT';
+end;
+
+end.

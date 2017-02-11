@@ -1,0 +1,40 @@
+inherited BisTaxiDataScoresFrame: TBisTaxiDataScoresFrame
+  ParentFont = False
+  inherited PanelData: TPanel
+    inherited GridPattern: TDBGrid
+      Height = 101
+    end
+    object PanelBottom: TPanel
+      Left = 0
+      Top = 101
+      Width = 450
+      Height = 23
+      Align = alBottom
+      BevelOuter = bvNone
+      TabOrder = 1
+      ExplicitTop = 141
+      ExplicitWidth = 520
+      object LabelSum: TLabel
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 437
+        Height = 17
+        Margins.Right = 10
+        Align = alClient
+        Alignment = taRightJustify
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Layout = tlCenter
+        ExplicitLeft = 433
+        ExplicitWidth = 7
+        ExplicitHeight = 13
+      end
+    end
+  end
+end

@@ -1,0 +1,57 @@
+
+======================= CLIENT ===========================
+
+REGISTER sip:195.112.242.242 SIP/2.0
+Via: SIP/2.0/UDP 192.168.1.3:5075;rport;branch=z9hG4bKDC3978E006
+From: <sip:2026672@195.112.242.242>;tag=E18842253
+To: <sip:2026672@195.112.242.242>
+Call-ID: 12CA5CD9D1404A13A44FA099BFF3B303
+CSeq: 1 REGISTER
+Contact: <sip:2026672@192.168.1.3:5075>;expires=3000;q=0.90
+User-Agent: SipClient 2.97
+Allow: INVITE, ACK, BYE, CANCEL, INFO, MESSAGE
+Max-Forwards: 20
+Expires: 3000
+Content-Length: 0
+
+
+====================== SERVER ===========================
+
+SIP/2.0 401 Unauthorized
+Via: SIP/2.0/UDP 192.168.1.3:5075;received=95.188.95.231;branch=z9hG4bKDC3978E006;rport=5075
+From: <sip:2026672@195.112.242.242>;tag=E18842253
+To: <sip:2026672@195.112.242.242>;tag=SDki4f599-rpjg32ikds
+Call-ID: 12CA5CD9D1404A13A44FA099BFF3B303
+CSeq: 1 REGISTER
+Contact: <sip:2026672-3c0npg3ud0i7f+uoig8aic7trgc@195.112.242.242:5060>;q=0.9;expires=3000
+Expires: 3000
+WWW-Authenticate: Digest realm="10.25.60.4",nonce="4d05a478f928516bf0138ba203a61aa9ebdd4278",opaque="4f1a183af75e8b3604115dce5efd75ac",qop="auth"
+Content-Length: 0
+
+======================= CLIENT ===========================
+
+REGISTER sip:195.112.242.242 SIP/2.0
+Via: SIP/2.0/UDP 192.168.1.3:5075;rport;branch=z9hG4bK0E83C62B75
+From: <sip:2026672@195.112.242.242>;tag=227A42BC1
+To: <sip:2026672@195.112.242.242>
+Call-ID: 12CA5CD9D1404A13A44FA099BFF3B303
+User-Agent: SipClient 2.97
+CSeq: 2 REGISTER
+Contact: <sip:2026672@192.168.1.3:5075>;expires=3000;q=0.90
+Authorization: Digest username="2026672",realm="10.25.60.4",nonce="4d05a478f928516bf0138ba203a61aa9ebdd4278",uri="sip:195.112.242.242",response="d9101076c72351a47c76175555d251f7",qop="auth",cnonce="4f1a183af75e8b3604115dce5efd75ac",nc=00000001,opaque="4f1a183af75e8b3604115dce5efd75ac",algorithm=MD5
+Allow: INVITE, ACK, BYE, CANCEL, INFO, MESSAGE
+Max-Forwards: 20
+Expires: 3000
+Content-Length: 0
+
+====================== SERVER ===========================
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 192.168.1.3:5075;received=95.188.95.231;branch=z9hG4bK0E83C62B75;rport=5075
+From: <sip:2026672@195.112.242.242>;tag=227A42BC1
+To: <sip:2026672@195.112.242.242>;tag=SDki4f599-bpfd8m184d
+Call-ID: 12CA5CD9D1404A13A44FA099BFF3B303
+CSeq: 2 REGISTER
+Contact: <sip:2026672@192.168.1.3:5075>;expires=30;q=0.9
+Content-Length: 0
+

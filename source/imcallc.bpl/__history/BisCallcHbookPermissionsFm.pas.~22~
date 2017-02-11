@@ -1,0 +1,56 @@
+unit BisCallcHbookPermissionsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBisCallcHbookPermissionsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookPermissionsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHbookPermissionsForm: TBisCallcHbookPermissionsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHbookAccountEditFm;
+
+{ TBisCallcHbookPermissionsFormIface }
+
+constructor TBisCallcHbookPermissionsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookPermissionsForm;
+  InsertClass:=TBisCallcHbookAccountInsertFormIface;
+  UpdateClass:=TBisCallcHbookAccountUpdateFormIface;
+  DeleteClass:=TBisCallcHbookAccountDeleteFormIface;
+  ProviderName:='S_PERMISSIONS';
+  with FieldNames do begin
+    AddKey('PERMISSION_ID');
+    AddInvisible('ACCOUNT_ID');
+    AddInvisible('INTERFACE_ID');
+    AddInvisible('RIGHT_ACCESS');
+    Add('USER_NAME','Роль (Учетная запись)',100);
+    Add('INTERFACE_NAME','Интерфейс',200);
+    Add('RIGHT_ACCESS','Право',100);
+    Add('VALUE','Значение',100);
+  end;
+  Orders.Add('USER_NAME');
+  Orders.Add('INTERFACE_NAME');
+  Orders.Add('RIGHT_ACCESS');
+end;
+
+end.

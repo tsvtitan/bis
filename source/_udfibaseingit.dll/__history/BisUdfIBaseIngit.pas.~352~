@@ -1,0 +1,163 @@
+unit BisUdfIBaseIngit;
+
+interface
+
+uses SysUtils;
+
+procedure Init;
+procedure Done;
+
+function MAP_DISTANCE(var Lat1,Lon1: Double; var Lat2,Lon2: Double): Double; cdecl; export;
+
+exports
+  MAP_DISTANCE;
+
+implementation
+
+uses Windows, ActiveX, Forms, OleCtrls,
+     GWXLib_TLB, AsyncCalls,
+     BisUdfIBaseIngitConfig, BisUdfIBaseIngitLog;
+
+var
+  FLock: TRTLCriticalSection;
+  FConfig: TBisUdfIBaseIngitConfig;
+  FLog: TBisUdfIBaseIngitLog;
+  FMapFile: String;
+
+procedure LogWrite(Message: String; LogType: TBisUdfIBaseIngitLogType=ltInformation);
+begin
+  if Assigned(FLog) then
+    FLog.Write(Message,LogType);
+end;
+
+function MAP_DISTANCE(MapFile: PChar; var Lat1,Lon1: Double; var Lat2,Lon2: Double): Double; cdecl;
+var
+  Route: IGWRoute;
+  pname: string;
+  Form: TForm;
+  Map: TGWControl;
+  T: TDateTime;
+  S: String;
+begin
+  EnterCriticalSection(FLock);
+  T:=Time;
+  CoInitialize(nil);
+  try
+    Result:=0.0;
+    S:=
+    if FileExists(FMapFile) then begin
+      try
+        Form:=TForm.Create(nil);
+        Form.Visible:=false;
+        Form.HandleNeeded;
+
+        Map:=TGWControl.Create(nil);
+        Map.Parent:=Form;
+        try
+
+          Map.MapName:=FMapFile;
+          if Map.MapAttached=0 then
+            Map.DoObjectVerb(OLEIVERB_SHOW);
+
+          if Map.MapAttached>0 then begin
+
+            Route:=Map.CreateGWRoute('') as IGWRoute;
+            if Assigned(Route) then begin
+              Route.DeletePoints;
+
+              pname:=Route.GetPointName(Lat1,Lon1);
+              Route.AddPoint(Lat1,Lon1,GWX_RoutePointStart,pname,0);
+
+              pname:=Route.GetPointName(Lat2,Lon2);
+              Route.AddPoint(Lat2,Lon2,GWX_RoutePointFinish,pname,1);
+
+              if Route.CalculateRoute>0 then begin
+                Result:=Route.RouteLength;
+              end;
+
+            end;
+
+          end;
+        finally
+          Map.Free;
+          Form.Free;
+        end;
+      except
+        On E: Exception do begin
+          OutputDebugString(PChar(E.Message));
+          LogWrite(E.Message,ltError);
+        end;
+      end;
+    end;
+  finally
+    LogWrite(FormatDateTime('nn:ss.zzz',Time-T));
+    LeaveCriticalSection(FLock);
+  end;
+end;
+
+function ExpandFileNameEx(FileName: String): String;
+var
+  Dir: String;
+  ModuleName: String;
+begin
+  Result:=ExpandFileName(FileName);
+  ModuleName:=GetModuleName(HInstance);
+  Dir:=ExtractFileDir(ModuleName);
+  if SetCurrentDir(Dir) then
+    Result:=ExpandFileName(FileName);
+end;
+
+procedure Init;
+var
+  ModuleName: String;
+  ConfigFile: String;
+  LogFile: String;
+begin
+  InitializeCriticalSection(FLock);
+  try
+    
+    ModuleName:=GetModuleName(HInstance);
+    ConfigFile:=ChangeFileExt(ModuleName,'.ini');
+
+    if FileExists(ConfigFile) then begin
+
+      FConfig:=TBisUdfIBaseIngitConfig.Create(nil);
+      FConfig.Init(ConfigFile);
+
+      LogFile:=FConfig.ReadString('Main','Log','');
+      LogFile:=ExpandFileNameEx(LogFile);
+
+      if Trim(LogFile)<>'' then begin
+        FLog:=TBisUdfIBaseIngitLog.Create(nil);
+        FLog.Init(LogFile);
+      end;
+
+      FMapFile:=FConfig.ReadString('Main','Map','');
+      FMapFile:=ExpandFileNameEx(FMapFile);
+    end;
+
+  except
+    On E: Exception do begin
+      OutputDebugString(PChar(E.Message));
+      LogWrite(E.Message,ltError);
+    end;
+  end;
+end;
+
+procedure Done;
+begin
+  DeleteCriticalSection(FLock);
+
+  if Assigned(FLog) then begin
+    FLog.Free;
+    FLog:=nil;
+  end;
+
+  if Assigned(FConfig) then begin
+    FConfig.Free;
+    FConfig:=nil;
+  end;
+end;
+
+
+end.

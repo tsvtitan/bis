@@ -1,0 +1,28 @@
+
+============================ CLIENT ================================
+
+REGISTER sip:195.112.242.242 SIP/2.0
+Via: SIP/2.0/UDP 192.168.1.3:5075;rport;branch=z9hG4bK39CBA682D0
+From: <sip:2026672@195.112.242.242>;tag=227A42BC1
+To: <sip:2026672@195.112.242.242>
+Call-ID: 12CA5CD9D1404A13A44FA099BFF3B303
+CSeq: 4 REGISTER
+Contact: *
+Allow: INVITE, ACK, BYE, CANCEL, INFO, MESSAGE
+Max-Forwards: 20
+Expires: 0
+Content-Length: 0
+
+============================= SERVER ================================
+
+SIP/2.0 401 Unauthorized
+Via: SIP/2.0/UDP 192.168.1.3:5075;received=95.188.95.231;branch=z9hG4bK39CBA682D0;rport=5075
+From: <sip:2026672@195.112.242.242>;tag=227A42BC1
+To: <sip:2026672@195.112.242.242>;tag=SDki4f599-b5k57rv3jp
+Call-ID: 12CA5CD9D1404A13A44FA099BFF3B303
+CSeq: 4 REGISTER
+Contact: *
+Expires: 0
+WWW-Authenticate: Digest realm="10.25.60.4",nonce="4d05a5c4926d272e77ae1c2938ab5a71ae9ecf13",opaque="d620ec481b785e3602540a79da6bce79",qop="auth"
+Content-Length: 0
+

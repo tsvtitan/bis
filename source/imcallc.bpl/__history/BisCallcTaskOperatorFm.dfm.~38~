@@ -1,0 +1,136 @@
+inherited BisCallcTaskOperatorForm: TBisCallcTaskOperatorForm
+  Left = 432
+  Top = 219
+  Caption = #1047#1072#1076#1072#1085#1080#1077' '#1086#1087#1077#1088#1072#1090#1086#1088#1072
+  Font.Name = 'Tahoma'
+  Position = poDefault
+  WindowState = wsMaximized
+  ExplicitLeft = 432
+  ExplicitTop = 219
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelTask: TPanel
+    Height = 133
+    ExplicitHeight = 133
+    inherited GroupBoxTask: TGroupBox
+      Height = 130
+      ExplicitHeight = 137
+      inherited PanelControls: TPanel
+        Height = 113
+        ExplicitWidth = 555
+        inherited LabelAction: TLabel
+          Left = 13
+          Width = 77
+          ExplicitLeft = 13
+          ExplicitWidth = 77
+        end
+        inherited LabelDateBegin: TLabel
+          Left = 277
+          Width = 69
+          Anchors = [akTop, akRight]
+          ExplicitLeft = 277
+          ExplicitWidth = 69
+        end
+        inherited LabelTime: TLabel
+          Left = 488
+          Width = 34
+          Anchors = [akTop, akRight]
+          ExplicitLeft = 488
+          ExplicitWidth = 34
+        end
+        inherited LabelDescription: TLabel
+          Left = 19
+          Width = 71
+          ExplicitLeft = 19
+          ExplicitWidth = 71
+        end
+        inherited LabelResult: TLabel
+          Left = 33
+          Top = 87
+          Width = 57
+          ExplicitLeft = 33
+          ExplicitTop = 87
+          ExplicitWidth = 57
+        end
+        object LabelNextDate: TLabel [5]
+          Left = 279
+          Top = 87
+          Width = 66
+          Height = 13
+          Anchors = [akTop, akRight]
+          Caption = #1057#1083#1077#1076#1091#1102#1097#1077#1077':'
+        end
+        inherited EditDateBegin: TEdit
+          Anchors = [akTop, akRight]
+        end
+        inherited EditTime: TEdit
+          Anchors = [akTop, akRight]
+        end
+        inherited MemoDescription: TMemo
+          Width = 481
+          Height = 46
+          Anchors = [akLeft, akTop, akRight]
+          ExplicitWidth = 481
+          ExplicitHeight = 46
+        end
+        inherited ComboBoxResult: TComboBox
+          Left = 96
+          Top = 84
+          Width = 169
+          TabOrder = 5
+          ExplicitLeft = 96
+          ExplicitTop = 84
+          ExplicitWidth = 169
+        end
+        inherited ButtonExecute: TButton
+          Top = 84
+          Height = 21
+          Anchors = [akTop, akRight]
+          TabOrder = 8
+          ExplicitTop = 84
+          ExplicitHeight = 21
+        end
+        object ButtonDescription: TButton
+          Left = 583
+          Top = 32
+          Width = 21
+          Height = 46
+          Anchors = [akTop, akRight]
+          Caption = '...'
+          TabOrder = 4
+        end
+        object DateTimePickerNext: TDateTimePicker
+          Left = 351
+          Top = 84
+          Width = 88
+          Height = 21
+          Anchors = [akTop, akRight]
+          Date = 39507.457070671300000000
+          Time = 39507.457070671300000000
+          TabOrder = 6
+        end
+        object DateTimePickerNextTime: TDateTimePicker
+          Left = 445
+          Top = 84
+          Width = 73
+          Height = 21
+          Anchors = [akTop, akRight]
+          Date = 39507.457070671300000000
+          Time = 39507.457070671300000000
+          Kind = dtkTime
+          TabOrder = 7
+        end
+      end
+    end
+  end
+  inherited PanelFrame: TPanel
+    Top = 133
+    Height = 296
+    ExplicitTop = 123
+    ExplicitWidth = 622
+    ExplicitHeight = 306
+  end
+  inherited TimerRefresh: TTimer
+    Left = 165
+  end
+end

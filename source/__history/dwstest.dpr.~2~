@@ -1,0 +1,16 @@
+program dwstest;
+
+uses
+  Forms,
+  Unit5 in 'dwstest.exe\Unit5.pas' {Form5},
+  NewUnit in 'dwstest.exe\NewUnit.pas' {Form1};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm5, Form5);
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.

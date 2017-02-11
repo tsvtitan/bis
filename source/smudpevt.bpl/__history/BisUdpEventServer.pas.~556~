@@ -1,0 +1,685 @@
+unit BisUdpEventServer;
+
+interface
+
+uses Classes, Contnrs, ZLib,
+     IdUDPServer, IdGlobal, IdSocketHandle, IdHttp,
+
+     BisObject, BisServers, BisServerModules, BisDataSet, BisCore, BisLogger,
+     BisCrypter, BisConnections, BisNotifyEvents, BisUdpServer;
+
+type
+  TBisUdpEventServer=class;
+
+  TBisUdpServer=class(BisUdpServer.TBisUdpServer)
+  private
+    FServer: TBisUdpEventServer;
+    FServerName: String;
+    function DecodeString(S: String): String;
+    function DecompressString(S: String): String;
+  protected
+    procedure DoUDPRead(AData: TIdBytes; ABinding: TIdSocketHandle); override;
+    procedure DoOnUDPException(ABinding: TIdSocketHandle; const AMessage: String; const AExceptionClass: TClass);  override;
+
+    property Server: TBisUdpEventServer read FServer write FServer;
+  public
+    constructor Create(AOnwer: TComponent); reintroduce;
+    destructor Destroy; override;
+
+    property ServerName: String read FServerName write FServerName;
+  end;
+
+  TBisUdpEventServer=class(TBisServer)
+  private
+    FIP: String;
+    FPort: String;
+    FServer: TBisUdpServer;
+    FSReadData: String;
+    FWhiteList: TStringList;
+    FBlackList: TStringList;
+    FSAccessDenied: String;
+    FAfterLoginEvent: TBisNotifyEvent;
+    FUseCrypter: Boolean;
+    FCrypterAlgorithm: TBisCipherAlgorithm;
+    FCrypterKey: String;
+    FCrypterMode: TBisCipherMode;
+    FCompressorLevel: TCompressionLevel;
+    FUseCompressor: Boolean;
+    FExtendedLog: Boolean;
+    FConnectionUpdate: Boolean;
+    FWhoamiUrl: String;
+    FSData: String;
+    FSProcessData: String;
+    FSExecuteEventStart: String;
+    FSExecuteEventFail: String;
+    FSWhoami: String;
+    FIPs, FPorts: TStringList;
+    FSWithSession: String;
+
+    procedure ChangeParams(Sender: TObject);
+    procedure AfterLoginEvent(Sender: TObject);
+    procedure ConnectionUpdate(Empty: Boolean);
+    function Whoami(var IP, Host: String): Boolean;
+  protected
+    function GetStarted: Boolean; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+
+    procedure Start; override;
+    procedure Stop; override;
+
+    property ExtendedLog: Boolean read FExtendedLog;
+    property WhiteList: TStringList read FWhiteList;
+    property BlackList: TStringList read FBlackList;
+    property UseCrypter: Boolean read FUseCrypter;
+    property CrypterAlgorithm: TBisCipherAlgorithm read FCrypterAlgorithm;
+    property CrypterMode: TBisCipherMode read FCrypterMode;
+    property CrypterKey: String read FCrypterKey;
+    property UseCompressor: Boolean read FUseCompressor;
+    property CompressorLevel: TCompressionLevel read FCompressorLevel; 
+
+  published
+
+    property SReadData: String read FSReadData write FSReadData;
+    property SData: String read FSData write FSData;
+    property SAccessDenied: String read FSAccessDenied write FSAccessDenied;
+    property SProcessData: String read FSProcessData write FSProcessData;
+    property SExecuteEventStart: String read FSExecuteEventStart write FSExecuteEventStart;
+    property SExecuteEventFail: String read FSExecuteEventFail write FSExecuteEventFail;
+    property SWithSession: String read FSWithSession write FSWithSession;
+    property SWhoami: String read FSWhoami write FSWhoami;
+  end;
+
+procedure InitServerModule(AModule: TBisServerModule); stdcall;
+
+exports
+  InitServerModule;
+
+implementation
+
+uses SysUtils, Dialogs, Variants,
+     IdAssignedNumbers, IdException, IdStackWindows, IdStack,
+     BisConsts, BisUtils, BisProvider, BisNetUtils, BisConfig, BisEvents,
+     BisExceptNotifier,  BisDataParams, BisConnectionUtils,
+     BisUdpEventServerConsts;
+
+
+procedure InitServerModule(AModule: TBisServerModule); stdcall;
+begin
+  AModule.ServerClass:=TBisUdpEventServer;
+end;
+
+{ TBisUdpServer }
+
+constructor TBisUdpServer.Create(AOnwer: TComponent);
+begin
+  inherited Create;
+  ThreadedEvent:=true;
+end;
+
+destructor TBisUdpServer.Destroy;
+begin
+  OnUDPRead:=nil;
+  Active:=false;
+  inherited Destroy;
+end;
+
+function TBisUdpServer.DecodeString(S: String): String;
+var
+  Crypter: TBisCrypter;
+begin
+  Result:='';
+  if Assigned(FServer) then begin
+    Crypter:=TBisCrypter.Create;
+    try
+      Result:=Crypter.DecodeString(FServer.CrypterKey,S,FServer.CrypterAlgorithm,FServer.CrypterMode);
+    finally
+      Crypter.Free;
+    end;
+  end;
+end;
+
+function TBisUdpServer.DecompressString(S: String): String;
+var
+  Zip: TDecompressionStream;
+  Count: Integer;
+  Buffer: array[0..1023] of Char;
+  Stream: TStringStream;
+begin
+  Result:='';
+  if Assigned(FServer) then begin
+    Stream:=TStringStream.Create(S);
+    try
+      Stream.Position:=0;
+      Zip:=TDecompressionStream.Create(Stream);
+      try
+        repeat
+          Count:=Zip.Read(Buffer,SizeOf(Buffer));
+          Result:=Result+Copy(Buffer,1,Count);
+        until Count=0;
+      finally
+        Zip.Free;
+      end;
+    finally
+      Stream.Free;
+    end;
+  end;
+end;
+
+procedure TBisIdUdpServer.DoOnUDPException(ABinding: TIdSocketHandle; const AMessage: String;
+                                           const AExceptionClass: TClass);
+begin
+  if Assigned(FServer) then
+    FServer.LoggerWrite(AMessage,ltError);
+end;
+
+procedure TBisIdUdpServer.DoUDPRead(AData: TIdBytes; ABinding: TIdSocketHandle);
+var
+  ID: String;
+
+  function CanRead: Boolean;
+  begin
+    Result:=true;
+    if FServer.WhiteList.Count>0 then
+      Result:=MatchIP(ABinding.PeerIP,FServer.WhiteList);
+    if Result and (FServer.BlackList.Count>0)  then
+      Result:=not MatchIP(ABinding.PeerIP,FServer.BlackList);
+  end;
+
+  procedure ReadEventParams(EventName: String; Config: TBisConfig; InParams: TBisEventParams);
+  var
+    P: TBisEventParam;
+    i: Integer;
+    Values: TStringList;
+    N,V: String;
+  begin
+    Values:=TStringList.Create;
+    try
+      P:=nil;
+      Config.ReadSectionValues(EventName,Values);
+      for i:=0 to Values.Count-1 do begin
+        N:=Values.Names[i];
+        if Trim(N)<>'' then begin
+          V:=Values.ValueFromIndex[i];
+          P:=InParams.Add(N,V);
+        end else begin
+          if Assigned(P) then
+            P.Value:=VarToStrDef(P.Value,'')+#13#10+Values.Strings[i];
+        end;
+      end;
+    finally
+      Values.Free;
+    end;
+  end;
+
+  function ValidSessionId(InParams: TBisEventParams): Boolean;
+  var
+    P: TBisEventParam;
+  begin
+    Result:=false;
+    if Core.Logged then begin
+      P:=InParams.Find(SParamSessionId);
+      if Assigned(P) then
+        Result:=VarSameValue(Core.SessionId,P.Value);
+    end else
+      Result:=Assigned(Core.LoginIface) and not Core.LoginIface.Enabled and VarIsNull(Core.SessionId);
+  end;
+
+  function ExecuteEvent(EventName: String; InParams: TBisEventParams): Boolean;
+  var
+    i: Integer;
+    Event: TBisEvent;
+    Events: TBisEvents;
+    Flag: Boolean;
+    Ret: Boolean;
+  begin
+    Core.Events.Lock;
+    Events:=TBisEvents.Create;
+    try
+      Events.OwnsObjects:=false;
+      Result:=false;
+      Flag:=true;
+      Core.Events.GetEvents(EventName,Events);
+      for i:=0 to Events.Count-1 do begin
+        Event:=Events.Items[i];
+        if Assigned(Event) then begin
+          try
+            Ret:=Event.Execute(InParams);
+            if Flag then begin
+              Flag:=false;
+              Result:=Ret; 
+            end else
+              Result:=Result and Ret;
+          except
+            on E: Exception do
+              FServer.LoggerWrite(FormatEx(FServer.FSExecuteEventFail,[ID,Event.Name,E.Message]),ltError);
+          end;
+        end;
+      end;
+    finally
+      Events.Free;
+      Core.Events.UnLock;
+    end;
+  end;
+  
+  procedure ProcessData(S: String);
+  var
+    Config: TBisConfig;
+    Events: TStringList;
+    i: Integer;
+    InParams: TBisEventParams;
+    EventName: String;
+    SessionId: Variant;
+    S2: String;
+  begin
+    Config:=TBisConfig.Create(nil);
+    Events:=TStringList.Create;
+    try
+      Config.Text:=Trim(S);
+      Config.ReadSections(Events);
+      for i:=0 to Events.Count-1 do begin
+        InParams:=TBisEventParams.Create;
+        try
+          try
+            EventName:=Events[i];
+            ReadEventParams(EventName,Config,InParams);
+            if ValidSessionId(InParams) then begin
+              S2:='';
+              SessionId:=Core.SessionId;
+              if not VarIsNull(SessionId) then
+                S2:=FormatEx(FServer.FSWithSession,[SessionId]);
+              FServer.LoggerWrite(Trim(FormatEx(FServer.FSExecuteEventStart,[ID,EventName,S2])));
+              ExecuteEvent(EventName,InParams);
+            end;
+          except
+            on E: Exception do
+              FServer.LoggerWrite(FormatEx(FServer.SProcessData,[ID,E.Message]),ltError);
+          end;
+        finally
+          InParams.Free;
+        end;
+      end;
+    finally
+      Events.Free;
+      Config.Free;
+    end;
+  end;
+  
+var
+  S: String;
+begin
+  ID:=GetUniqueID;
+  if Assigned(FServer) then begin
+    try
+      try
+        FServer.Working:=true;
+        if CanRead then begin
+          S:=BytesToString(AData);
+
+          FServer.LoggerWrite(FormatEx(FServer.SReadData,[ID,ABinding.PeerIP,ABinding.PeerPort]));
+
+          if FServer.UseCrypter then
+            S:=DecodeString(S);
+
+          if FServer.UseCompressor then
+            S:=DecompressString(S);
+
+          S:=Trim(S);
+          
+          if FServer.ExtendedLog then
+            FServer.LoggerWrite(FormatEx(FServer.SData,[ID,S]));
+
+          ProcessData(S);
+
+        end else
+          FServer.LoggerWrite(FormatEx(FServer.SAccessDenied,[ID]));
+      finally
+        FServer.Working:=false;
+      end;
+    except
+      On E: Exception do begin
+        FServer.LoggerWrite(E.Message,ltError);
+      end;           
+    end;
+  end;
+end;
+
+{ TBisUdpEventServer }
+
+constructor TBisUdpEventServer.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Params.OnChange:=ChangeParams;
+
+  FServer:=TBisIdUdpServer.Create(Self);
+  FServer.Server:=Self;
+  FServer.ThreadedEvent:=true;
+  FServer.ThreadName:='UdpEvent';
+
+  FWhiteList:=TStringList.Create;
+  FBlackList:=TStringList.Create;
+
+  FIPs:=TStringList.Create;
+  FPorts:=TStringList.Create;
+
+  FSReadData:='%s: чтение данных от ip-адреса %s:%d';
+  FSData:='%s: %s';
+  FSAccessDenied:='%s: доступ запрещен.';
+  FSProcessData:='%s: обработка данных прошла неудачно. %s';
+  FSWithSession:='сессия %s';
+  FSExecuteEventStart:='%s: выполнение события %s %s';
+  FSExecuteEventFail:='%s: выполнение события %s прошла неудачно. %s';
+  FSWhoami:='Определение ip-адреса и хоста от %s';
+
+  if Assigned(Core) then begin
+    FAfterLoginEvent:=Core.AfterLoginEvents.Add(AfterLoginEvent);
+  end;
+end;
+
+destructor TBisUdpEventServer.Destroy;
+begin
+  if Assigned(Core) then begin
+    Core.AfterLoginEvents.Remove(FAfterLoginEvent)
+  end;
+
+  FPorts.Free;
+  FIPs.Free;
+  FBlackList.Free;
+  FWhiteList.Free;
+  FServer.Free;
+  inherited Destroy;
+end;
+
+function TBisUdpEventServer.GetStarted: Boolean;
+begin
+  Result:=FServer.Active;
+end;
+
+procedure TBisUdpEventServer.Init;
+begin
+  inherited Init;
+end;
+
+procedure TBisUdpEventServer.AfterLoginEvent(Sender: TObject);
+begin
+  if FServer.Active and Assigned(Core) and
+     Assigned(Core.Connection) and Core.Connection.Connected then begin
+    ConnectionUpdate(false);
+  end;
+end;
+
+procedure TBisUdpEventServer.ChangeParams(Sender: TObject);
+begin
+
+  with Params do begin
+    FIP:=AsString(SParamIP);
+    FPort:=AsString(SParamPort);
+    FExtendedLog:=AsBoolean(SParamExtendedLog);
+    FConnectionUpdate:=AsBoolean(SParamConnectionUpdate);
+    FWhoamiUrl:=AsString(SParamWhoamiUrl);
+    FWhiteList.Text:=AsString(SParamWhiteList);
+    FBlackList.Text:=AsString(SParamBlackList);
+    FUseCrypter:=AsBoolean(SParamUseCrypter);
+    FCrypterAlgorithm:=AsEnumeration(SParamCrypterAlgorithm,TypeInfo(TBisCipherAlgorithm),FCrypterAlgorithm);
+    FCrypterMode:=AsEnumeration(SParamCrypterMode,TypeInfo(TBisCipherMode),FCrypterMode);
+    FCrypterKey:=AsString(SParamCrypterKey);
+    FUseCompressor:=AsBoolean(SParamUseCompressor);
+    FCompressorLevel:=AsEnumeration(SParamCompressorLevel,TypeInfo(TCompressionLevel),FCompressorLevel);
+  end;
+
+  FIPs.Clear;
+  GetStringsByString(FIP,';',FIPs);
+
+  FPorts.Clear;
+  GetStringsByString(FPort,';',FPorts);
+   
+end;
+
+function TBisUdpEventServer.Whoami(var IP, Host: String): Boolean;
+var
+  Http: TIdHttp;
+  Str: TStringList;
+begin
+  Result:=false;
+  if Trim(FWhoamiUrl)<>'' then begin
+    LoggerWrite(FormatEx(FSWhoami,[FWhoamiUrl]));
+    try
+      Http:=TIdHttp.Create(nil);
+      Str:=TStringList.Create;
+      try
+        Http.Request.UserAgent:='';
+
+        Str.Text:=Http.Get(FWhoamiUrl);
+        if Str.Count>0 then begin
+          IP:=Trim(Str[0]);
+          if Str.Count>1 then
+            Host:=Trim(Str[1]);
+        end;
+
+        Result:=Trim(IP)<>'';
+
+        if Result then
+          LoggerWrite(Trim(Str.Text));
+      finally
+        Str.Free;
+        Http.Free;
+      end;
+    except
+      On E: Exception do
+        LoggerWrite(E.Message,ltError);
+    end;
+  end;
+end;
+
+procedure TBisUdpEventServer.ConnectionUpdate(Empty: Boolean);
+
+  function GetIP(ExternalIP: String; var FirstIP: String): String;
+  var
+    List: TStringList;
+    i: Integer;
+    Index: Integer;
+  begin
+    List:=TStringList.Create;
+    try
+      Result:=ExternalIP;
+      FirstIP:=Result;
+      GetIPList(List);
+      if List.Count>0 then begin
+        Index:=List.IndexOf(Result);
+        if Index<>-1 then
+          List.Delete(Index);
+        Index:=List.IndexOf('0.0.0.0');
+        if Index<>-1 then
+          List.Delete(Index);
+        List.Sort;
+        for i:=0 to List.Count-1 do
+          Result:=Iff(Trim(Result)='',List[i],Result+';'+List[i]);
+
+        if Trim(FirstIP)='' then
+          FirstIP:=List[0];
+      end;
+    finally
+      List.Free;
+    end;
+  end;
+
+  function GetListenIP: String;
+  var
+    i: Integer;
+    SocketHandle: TIdSocketHandle;
+    List: TStringList;
+    Index: Integer;
+  begin
+    List:=TStringList.Create;
+    try
+      Result:='';
+      for i:=0 to FServer.Bindings.Count-1 do begin
+        SocketHandle:=FServer.Bindings.Items[i];
+        Index:=List.IndexOf(SocketHandle.IP);
+        if Index=-1 then begin
+          List.Add(SocketHandle.IP);
+          Result:=iff(Trim(Result)='',SocketHandle.IP,Result+';'+SocketHandle.IP);
+        end;
+      end;
+    finally
+      List.Free;
+    end;
+  end;
+
+  function GetListenPort: String;
+  var
+    i: Integer;
+    SocketHandle: TIdSocketHandle;
+    S: String;
+    List: TStringList;
+    Index: Integer;
+  begin
+    List:=TStringList.Create;
+    try
+      for i:=0 to FServer.Bindings.Count-1 do begin
+        SocketHandle:=FServer.Bindings.Items[i];
+        S:=IntToStr(SocketHandle.Port);
+        Index:=List.IndexOf(S);
+        if Index=-1 then begin
+          List.Add(S);
+          Result:=iff(Trim(Result)='',S,Result+';'+S);
+        end;
+      end;
+    finally
+      List.Free;
+    end;
+  end;
+
+  function GetHost(ExternalHost, FirstIP: String): String;
+  begin
+    Result:=ExternalHost;
+    if Trim(Result)='' then begin
+      try
+        Result:=GWindowsStack.HostByAddress(FirstIP);
+      except
+      end;
+    end;
+  end;
+
+var
+  Params: TBisConfig;
+  ExternalIP: String;
+  ExternalHost: String;
+  FirstIP: String;
+begin
+  if FConnectionUpdate and Assigned(Core) then begin
+    Params:=TBisConfig.Create(nil);
+    try
+      if (FServer.Bindings.Count>0) then begin
+        if not Empty then begin
+          Whoami(ExternalIP,ExternalHost);
+          with Params do begin
+            Write(Self.ObjectName,SParamIP,GetIP(ExternalIP,FirstIP));
+            Write(Self.ObjectName,SParamPort,GetListenPort);
+            Write(Self.ObjectName,SParamHost,GetHost(ExternalHost,FirstIP));
+            Write(Self.ObjectName,SParamUseCrypter,FUseCrypter);
+            Write(Self.ObjectName,SParamCrypterAlgorithm,FCrypterAlgorithm);
+            Write(Self.ObjectName,SParamCrypterMode,FCrypterMode);
+            Write(Self.ObjectName,SParamCrypterKey,FCrypterKey);
+            Write(Self.ObjectName,SParamUseCompressor,FUseCompressor);
+            Write(Self.ObjectName,SParamCompressorLevel,FCompressorLevel);
+          end;
+        end else
+          Params.AddSection(Self.ObjectName);
+      end;
+      DefaultUpdate(Params);
+    finally
+      Params.Free;
+    end;
+  end;
+end;
+
+procedure TBisUdpEventServer.Start;
+
+
+  procedure AssignBindings;
+
+    procedure AddServerBinding(AIP: String; APort: Integer);
+    var
+      First: Integer;
+      MaxPort: Integer;
+      SocketHandle: TIdSocketHandle;
+    begin
+      try
+        First:=APort;
+        MaxPort:=POWER_2;
+        while First<MaxPort do begin
+          if not UDPPortExists(AIP,First) then begin
+            SocketHandle:=nil;
+            try
+              SocketHandle:=FServer.Bindings.Add;
+              SocketHandle.IP:=AIP;
+              SocketHandle.Port:=First;
+              FServer.Active:=true;
+              break;
+            except
+              on E: Exception do begin
+                if Assigned(SocketHandle) then begin
+                  FServer.Bindings.Delete(SocketHandle.Index);
+                end;
+                FServer.Active:=false;
+                Inc(First);
+              end;
+            end;
+          end else
+            Inc(First);
+        end;
+      finally
+        FServer.Active:=false;
+      end;
+    end;
+
+
+  var
+    AIP, APort: String;
+  begin
+    FServer.Active:=false;
+    FServer.Bindings.Clear;
+    for AIP in FIPs do begin
+      for APort in FPorts do begin
+        AddServerBinding(AIP,StrToIntDef(APort,IdPORT_HTTP));
+      end;
+    end;
+  end;
+
+begin
+  LoggerWrite(SStart);
+  try
+    AssignBindings;
+    ConnectionUpdate(false);
+    FServer.Active:=true;
+    LoggerWrite(SStartSuccess);
+  except
+    On E: Exception do begin
+      LoggerWrite(FormatEx(SStartFail,[E.Message]),ltError);
+    end;
+  end;
+end;
+
+procedure TBisUdpEventServer.Stop;
+begin
+  LoggerWrite(SStop);
+  try
+    ConnectionUpdate(true);
+    FServer.Active:=false;
+    FServer.Bindings.Clear;
+    LoggerWrite(SStopSuccess);
+  except
+    On E: Exception do begin
+      LoggerWrite(FormatEx(SStopFail,[E.Message]),ltError);
+    end;
+  end;
+end;
+
+initialization
+  ExceptNotifierIgnores.Add(EIdConnClosedGracefully);
+  ExceptNotifierIgnores.Add(EIdException);
+
+end.

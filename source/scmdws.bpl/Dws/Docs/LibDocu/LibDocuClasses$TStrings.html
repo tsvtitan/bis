@@ -1,0 +1,346 @@
+<html>
+<body>
+<h1>Class TStrings</h1>
+<b>Declaration</b><br>
+
+<pre>TStrings = class(TObject)
+  <a href="#Classes$TStrings$Add">function Add(Str: String): Integer</a>;
+  <a href="#Classes$TStrings$AddObject">function AddObject(S: String; AObject: TObject): Integer</a>;
+  <a href="#Classes$TStrings$AddStrings">procedure AddStrings(Strings: TStringList)</a>;
+  <a href="#Classes$TStrings$Clear">procedure Clear</a>;
+  <a href="#Classes$TStrings$CommaText">property CommaText: String read GetCommaText write SetCommaText</a>;
+  <a href="#Classes$TStrings$Count">property Count: Integer read GetCount</a>;
+  <a href="#Classes$TStrings$Create">constructor Create</a>;
+  <a href="#Classes$TStrings$Delete">procedure Delete(Index: Integer)</a>;
+  <a href="#Classes$TStrings$Destroy">destructor Destroy</a>;
+  <a href="#Classes$TStrings$Exchange">procedure Exchange(Index1: Integer; Index2: Integer)</a>;
+  <a href="#Classes$TStrings$Get">function Get(Index: Integer): String</a>;
+  <a href="#Classes$TStrings$GetCommaText">function GetCommaText: String</a>;
+  <a href="#Classes$TStrings$GetCount">function GetCount: Integer</a>;
+  <a href="#Classes$TStrings$GetNames">function GetNames(s: String): String</a>;
+  <a href="#Classes$TStrings$GetObjects">function GetObjects(Index: Integer): TObject</a>;
+  <a href="#Classes$TStrings$GetStrings">function GetStrings(Index: Integer): String</a>;
+  <a href="#Classes$TStrings$GetText">function GetText: String</a>;
+  <a href="#Classes$TStrings$GetValues">function GetValues(Str: String): String</a>;
+  <a href="#Classes$TStrings$IndexOf">function IndexOf(Str: String): Integer</a>;
+  <a href="#Classes$TStrings$IndexOfName">function IndexOfName(Str: String): Integer</a>;
+  <a href="#Classes$TStrings$IndexOfObject">function IndexOfObject(AObject: TObject): Integer</a>;
+  <a href="#Classes$TStrings$Insert">procedure Insert(Index: Integer; Str: String)</a>;
+  <a href="#Classes$TStrings$InsertObject">procedure InsertObject(Index: Integer; S: String; AObject: TObject)</a>;
+  <a href="#Classes$TStrings$LoadFromFile">procedure LoadFromFile(FileName: String)</a>;
+  <a href="#Classes$TStrings$Move">procedure Move(CurIndex: Integer; NewIndex: Integer)</a>;
+  <a href="#Classes$TStrings$Names">property Names[s: String]: String read GetNames</a>;
+  <a href="#Classes$TStrings$Objects">property Objects[x: Integer]: TObject read GetObjects write SetObjects</a>;
+  <a href="#Classes$TStrings$SaveToFile">procedure SaveToFile(FileName: String)</a>;
+  <a href="#Classes$TStrings$SetCommaText">procedure SetCommaText(Value: String)</a>;
+  <a href="#Classes$TStrings$SetObjects">procedure SetObjects(Index: Integer; Value: TObject)</a>;
+  <a href="#Classes$TStrings$SetStrings">procedure SetStrings(Index: Integer; Value: String)</a>;
+  <a href="#Classes$TStrings$SetText">procedure SetText(Value: String)</a>;
+  <a href="#Classes$TStrings$SetValues">procedure SetValues(Str: String; Value: String)</a>;
+  <a href="#Classes$TStrings$Strings">property Strings[x: Integer]: String read GetStrings write SetStrings; default</a>;
+  <a href="#Classes$TStrings$Text">property Text: String read GetText write SetText</a>;
+  <a href="#Classes$TStrings$Values">property Values[s: String]: String read GetValues write SetValues</a>;
+end;</pre>
+<b>Description</b>
+<p>A wrapper for the Delphi class TStrings. See Delphi help for more information. </p>
+
+<hr>
+
+    <h2><a name=Classes$TStrings$Add>Method TStrings.Add</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Add(Str: String): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$AddObject>Method TStrings.AddObject</a></h2>
+    <b>Declaration</b><br>
+    <pre>function AddObject(S: String; AObject: TObject): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$AddStrings>Method TStrings.AddStrings</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure AddStrings(Strings: TStringList);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Clear>Method TStrings.Clear</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Clear;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$CommaText>Property TStrings.CommaText</a></h2>
+    <b>Declaration</b><br>
+    <pre>property CommaText: String read GetCommaText write SetCommaText;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Count>Property TStrings.Count</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Count: Integer read GetCount;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Create>Method TStrings.Create</a></h2>
+    <b>Declaration</b><br>
+    <pre>constructor Create;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Delete>Method TStrings.Delete</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Delete(Index: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Destroy>Method TStrings.Destroy</a></h2>
+    <b>Declaration</b><br>
+    <pre>destructor Destroy;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Exchange>Method TStrings.Exchange</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Exchange(Index1: Integer; Index2: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Get>Method TStrings.Get</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Get(Index: Integer): String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$GetCommaText>Method TStrings.GetCommaText</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetCommaText: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$GetCount>Method TStrings.GetCount</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetCount: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$GetNames>Method TStrings.GetNames</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetNames(s: String): String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$GetObjects>Method TStrings.GetObjects</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetObjects(Index: Integer): TObject;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$GetStrings>Method TStrings.GetStrings</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetStrings(Index: Integer): String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$GetText>Method TStrings.GetText</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetText: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$GetValues>Method TStrings.GetValues</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetValues(Str: String): String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$IndexOf>Method TStrings.IndexOf</a></h2>
+    <b>Declaration</b><br>
+    <pre>function IndexOf(Str: String): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$IndexOfName>Method TStrings.IndexOfName</a></h2>
+    <b>Declaration</b><br>
+    <pre>function IndexOfName(Str: String): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$IndexOfObject>Method TStrings.IndexOfObject</a></h2>
+    <b>Declaration</b><br>
+    <pre>function IndexOfObject(AObject: TObject): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Insert>Method TStrings.Insert</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Insert(Index: Integer; Str: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$InsertObject>Method TStrings.InsertObject</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure InsertObject(Index: Integer; S: String; AObject: TObject);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$LoadFromFile>Method TStrings.LoadFromFile</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure LoadFromFile(FileName: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Move>Method TStrings.Move</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Move(CurIndex: Integer; NewIndex: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Names>Property TStrings.Names</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Names[s: String]: String read GetNames;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Objects>Property TStrings.Objects</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Objects[x: Integer]: TObject read GetObjects write SetObjects;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$SaveToFile>Method TStrings.SaveToFile</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SaveToFile(FileName: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Self>Method TStrings.Self</a></h2>
+    <b>Declaration</b><br>
+    <pre>Self;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$SetCommaText>Method TStrings.SetCommaText</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetCommaText(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$SetObjects>Method TStrings.SetObjects</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetObjects(Index: Integer; Value: TObject);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$SetStrings>Method TStrings.SetStrings</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetStrings(Index: Integer; Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$SetText>Method TStrings.SetText</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetText(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$SetValues>Method TStrings.SetValues</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetValues(Str: String; Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Strings>Property TStrings.Strings</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Strings[x: Integer]: String read GetStrings write SetStrings; default;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Text>Property TStrings.Text</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Text: String read GetText write SetText;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=Classes$TStrings$Values>Property TStrings.Values</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Values[s: String]: String read GetValues write SetValues;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+</body>
+</html>

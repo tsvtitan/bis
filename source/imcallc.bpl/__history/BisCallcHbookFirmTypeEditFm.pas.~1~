@@ -1,0 +1,89 @@
+unit BisCallcHbookFirmTypeEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisCallcHbookFirmTypeEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelPriority: TLabel;
+    EditPriority: TEdit;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookFirmTypesEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookFirmTypesInsertFormIface=class(TBisCallcHbookFirmTypesEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookFirmTypesUpdateFormIface=class(TBisCallcHbookFirmTypesEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookFirmTypesDeleteFormIface=class(TBisCallcHbookFirmTypesEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookFirmTypeEditForm: TBisCallcHbookFirmTypeEditForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisCallcHbookFirmTypesEditFormIface }
+
+constructor TBisCallcHbookFirmTypesEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookFirmTypesEditForm;
+  with Params do begin
+    AddKey('FIRM_TYPE_ID').Duplicate('OLD_FIRM_TYPE_ID');
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription',false);
+    AddEditInteger('PRIORITY','EditPriority','LabelPriority',true);
+  end;
+end;
+
+{ TBisCallcHbookFirmTypesInsertFormIface }
+
+constructor TBisCallcHbookFirmTypesInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_FIRM_TYPE';
+end;
+
+{ TBisCallcHbookFirmTypesUpdateFormIface }
+
+constructor TBisCallcHbookFirmTypesUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_FIRM_TYPE';
+end;
+
+{ TBisCallcHbookFirmTypesDeleteFormIface }
+
+constructor TBisCallcHbookFirmTypesDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_FIRM_TYPE';
+end;
+
+end.

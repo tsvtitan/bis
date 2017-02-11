@@ -1,0 +1,62 @@
+uses Script, SysUtils, Forms, Dialogs;
+
+procedure ShowInfo(S: String; Flag: Boolean=true);
+begin
+  S:=S+'-internal';
+  Dialogs.ShowInfo(S,True);
+end;
+
+procedure ObjClick(Sender1: TObject);
+begin
+  ShowInfo(TControl(Sender1).Name);
+end;
+
+var
+  b: TButton;
+
+
+var
+  obj: TForm;
+
+var
+  Ret: Integer;
+
+
+Obj:=TForm.Create(nil);
+try
+
+  b:=TButton.Create(obj);
+  b.Parent:=obj;
+  b.Name:='Button1';
+  
+  b.Left:=100;
+  b.Top:=100;
+  b.Width:=100;
+  b.OnClick:=ObjClick;
+
+  Obj.Name:='Form1';
+  Obj.Caption:='Привет';
+
+  b.Caption:=Obj.Caption;
+
+  Obj.OnClick:=ObjClick;
+ 
+//  Ret:=Obj.ShowModal;
+  Obj.Show;
+  ShowInfo(IntToStr(Ret));
+
+ 
+finally
+ // Obj2.Free;
+ // Obj.Free;
+end;
+
+{var
+  i: Integer;
+
+var
+  v: Integer;
+
+for i:=0 to 100000 do begin
+  v:=i;
+end;}

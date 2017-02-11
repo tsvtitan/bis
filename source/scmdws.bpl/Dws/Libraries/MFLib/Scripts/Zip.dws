@@ -1,0 +1,31 @@
+procedure ZipAndView;
+var
+  Zip: TZip;
+  SL: TStringList;
+  i: Integer;
+begin
+  Zip := TZip.Create;
+  try
+    Zip.AddDirNames := True;
+    Zip.AddSeparateDirs := True;
+    if Zip.Add(Zip_Add, 'C:\Test.zip', '*') = 0 then
+    begin
+      SL := Zip.List('C:\Test.zip');
+      try
+        if SL.Count > 0 then
+        begin
+          PrintLn('Content of C:\Test.zip');
+          PrintLn('');
+          for i := 0 to SL.Count - 1 do
+            PrintLn(SL.Strings(i));
+        end;
+      finally
+        SL.Free;
+      end;
+    end;
+  finally
+    Zip.Free;
+  end;
+end;
+
+ZipAndView;

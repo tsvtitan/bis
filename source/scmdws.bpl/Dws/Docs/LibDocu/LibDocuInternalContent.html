@@ -1,0 +1,1320 @@
+<h1>Unit Internal</h1><h2>Dependencies</h2><ul><li>None.</li></ul><hr>
+<h2><a name=Internal$Abs>Function Abs</a></h2>
+<b>Declaration</b><br>
+<pre>function Abs(v: Float): Float</pre>
+<b>Description</b>
+<p>Returns an absolute value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$AnsiCompareStr>Function AnsiCompareStr</a></h2>
+<b>Declaration</b><br>
+<pre>function AnsiCompareStr(str1: String; str2: String): Integer</pre>
+<b>Description</b>
+<p>Compares strings based on the current locale with case 
+sensitivity.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$AnsiCompareText>Function AnsiCompareText</a></h2>
+<b>Declaration</b><br>
+<pre>function AnsiCompareText(str1: String; str2: String): Integer</pre>
+<b>Description</b>
+<p>Compares strings based on the current locale without 
+case sensitivity.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$AnsiLowerCase>Function AnsiLowerCase</a></h2>
+<b>Declaration</b><br>
+<pre>function AnsiLowerCase(str: String): String</pre>
+<b>Description</b>
+<p>Returns a string that is a copy of the given string 
+converted to lower case.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$AnsiUpperCase>Function AnsiUpperCase</a></h2>
+<b>Declaration</b><br>
+<pre>function AnsiUpperCase(str: String): String</pre>
+<b>Description</b>
+<p>Converts a string to upper case.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$AppendStringToFile>Function AppendStringToFile</a></h2>
+<b>Declaration</b><br>
+<pre>procedure AppendStringToFile(fileName: String; data: String)</pre>
+<b>Description</b>
+<p>Adds string to file
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ArcCos>Function ArcCos</a></h2>
+<b>Declaration</b><br>
+<pre>function ArcCos(v: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the inverse cosine of a given number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ArcCosh>Function ArcCosh</a></h2>
+<b>Declaration</b><br>
+<pre>function ArcCosh(v: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the inverse hyperbolic cosine of a given 
+number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ArcSin>Function ArcSin</a></h2>
+<b>Declaration</b><br>
+<pre>function ArcSin(v: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the inverse sine of a given number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ArcSinh>Function ArcSinh</a></h2>
+<b>Declaration</b><br>
+<pre>function ArcSinh(v: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the inverse hyperbolic sine of a given 
+number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ArcTan>Function ArcTan</a></h2>
+<b>Declaration</b><br>
+<pre>function ArcTan(v: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the arctangent of a given number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ArcTanh>Function ArcTanh</a></h2>
+<b>Declaration</b><br>
+<pre>function ArcTanh(v: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the inverse hyperbolic tangent of a given 
+number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ChangeFileExt>Function ChangeFileExt</a></h2>
+<b>Declaration</b><br>
+<pre>function ChangeFileExt(fName: String; ext: String): String</pre>
+<b>Description</b>
+<p>Changes the extension of a file name.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$CharAt>Function CharAt</a></h2>
+<b>Declaration</b><br>
+<pre>function CharAt(s: String; x: Integer): String</pre>
+<b>Description</b>
+<p>Returns the character at position 'x' in the string 's'. Because there are no characters in DWSII the return value is a string of length 1 that contains the character.</p>
+
+<br><hr>
+
+<h2><a name=Internal$ChDir>Function ChDir</a></h2>
+<b>Declaration</b><br>
+<pre>procedure ChDir(s: String)</pre>
+<b>Description</b>
+<p>Changes the current directory. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Chr>Function Chr</a></h2>
+<b>Declaration</b><br>
+<pre>function Chr(x: Integer): String</pre>
+<b>Description</b>
+<p>Returns the ANSI character with index 'x'. Because there are no characters in DWSII the return value is a string of length 1 that contains the character.</p>
+
+<br><hr>
+
+<h2><a name=Internal$CleanupGlobalVars>Function CleanupGlobalVars</a></h2>
+<b>Declaration</b><br>
+<pre>procedure CleanupGlobalVars</pre>
+<b>Description</b>
+<p>Returns an absolute value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$CompareStr>Function CompareStr</a></h2>
+<b>Declaration</b><br>
+<pre>function CompareStr(str1: String; str2: String): Integer</pre>
+<b>Description</b>
+<p>Compares two strings case sensitively.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$CompareText>Function CompareText</a></h2>
+<b>Declaration</b><br>
+<pre>function CompareText(str1: String; str2: String): Integer</pre>
+<b>Description</b>
+<p>Compares two strings by ordinal value without case 
+sensitivity.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Copy>Function Copy</a></h2>
+<b>Declaration</b><br>
+<pre>function Copy(str: String; Index: Integer; Len: Integer): String</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$Cos>Function Cos</a></h2>
+<b>Declaration</b><br>
+<pre>function Cos(a: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the cosine of an angle.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Cosh>Function Cosh</a></h2>
+<b>Declaration</b><br>
+<pre>function Cosh(a: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the hyperbolic cosine of an angle.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Cotan>Function Cotan</a></h2>
+<b>Declaration</b><br>
+<pre>function Cotan(a: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the cotangent of an angle. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$CreateDir>Function CreateDir</a></h2>
+<b>Declaration</b><br>
+<pre>function CreateDir(dir: String): Boolean</pre>
+<b>Description</b>
+<p>Creates a new directory.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Date>Function Date</a></h2>
+<b>Declaration</b><br>
+<pre>function Date: DateTime</pre>
+<b>Description</b>
+<p>Returns the current date.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$DateTimeToStr>Function DateTimeToStr</a></h2>
+<b>Declaration</b><br>
+<pre>function DateTimeToStr(dt: DateTime): String</pre>
+<b>Description</b>
+<p>Converts a TDateTime value to a string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$DateToStr>Function DateToStr</a></h2>
+<b>Declaration</b><br>
+<pre>function DateToStr(dt: DateTime): String</pre>
+<b>Description</b>
+<p>Converts a TDateTime value to a string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$DayOfWeek>Function DayOfWeek</a></h2>
+<b>Declaration</b><br>
+<pre>function DayOfWeek(dt: DateTime): Integer</pre>
+<b>Description</b>
+<p>Returns the day of the week for a specified date.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$DecodeDate>Function DecodeDate</a></h2>
+<b>Declaration</b><br>
+<pre>procedure DecodeDate(dt: DateTime; var y: Integer; var m: Integer; var d: Integer)</pre>
+<b>Description</b>
+<p>Returns Year, Month, and Day values for a TDateTime 
+value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$DecodeTime>Function DecodeTime</a></h2>
+<b>Declaration</b><br>
+<pre>procedure DecodeTime(dt: DateTime; var h: Integer; var m: Integer; var s: Integer; var ms: Integer)</pre>
+<b>Description</b>
+<p>Breaks a TDateTime value into hours, minutes, 
+seconds, and milliseconds.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$DegToRad>Function DegToRad</a></h2>
+<b>Declaration</b><br>
+<pre>function DegToRad(a: Float): Float</pre>
+<b>Description</b>
+<p>Returns the value of a degree measurement expressed 
+in radians.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Delete>Function Delete</a></h2>
+<b>Declaration</b><br>
+<pre>procedure Delete(var S: String; Index: Integer; Len: Integer)</pre>
+<b>Description</b>
+<p>Removes a substring from a string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$DeleteFile>Function DeleteFile</a></h2>
+<b>Declaration</b><br>
+<pre>function DeleteFile(fileName: String): Boolean</pre>
+<b>Description</b>
+<p>Deletes a file from disk.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$EncodeDate>Function EncodeDate</a></h2>
+<b>Declaration</b><br>
+<pre>function EncodeDate(y: Integer; m: Integer; d: Integer): DateTime</pre>
+<b>Description</b>
+<p>Returns a TDateTime value that represents a specified 
+Year, Month, and Day.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$EncodeTime>Function EncodeTime</a></h2>
+<b>Declaration</b><br>
+<pre>function EncodeTime(h: Integer; m: Integer; s: Integer; ms: Integer): DateTime</pre>
+<b>Description</b>
+<p>Returns a TDateTime value for a specified Hour, Min, 
+Sec, and MSec.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ErrorDlg>Function ErrorDlg</a></h2>
+<b>Declaration</b><br>
+<pre>procedure ErrorDlg(msg: String)</pre>
+<b>Description</b>
+<p>Displays a error-message box with an OK button.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Exp>Function Exp</a></h2>
+<b>Declaration</b><br>
+<pre>function Exp(v: Float): Float</pre>
+<b>Description</b>
+<p>Returns the exponential of X.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ExtractFileDir>Function ExtractFileDir</a></h2>
+<b>Declaration</b><br>
+<pre>function ExtractFileDir(fName: String): String</pre>
+<b>Description</b>
+<p>Extracts the drive and directory parts from FileName. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ExtractFileDrive>Function ExtractFileDrive</a></h2>
+<b>Declaration</b><br>
+<pre>function ExtractFileDrive(fName: String): String</pre>
+<b>Description</b>
+<p>Returns the drive portion of a file name.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ExtractFileExt>Function ExtractFileExt</a></h2>
+<b>Declaration</b><br>
+<pre>function ExtractFileExt(fName: String): String</pre>
+<b>Description</b>
+<p>Returns the extension portions of a file name.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ExtractFileName>Function ExtractFileName</a></h2>
+<b>Declaration</b><br>
+<pre>function ExtractFileName(fName: String): String</pre>
+<b>Description</b>
+<p>Extracts the name and extension parts of a file name. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ExtractFilePath>Function ExtractFilePath</a></h2>
+<b>Declaration</b><br>
+<pre>function ExtractFilePath(fName: String): String</pre>
+<b>Description</b>
+<p>Returns the drive and directory portions of a file name. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$FileExists>Function FileExists</a></h2>
+<b>Declaration</b><br>
+<pre>function FileExists(fileName: String): Boolean</pre>
+<b>Description</b>
+<p>Tests if a specified file exists.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$FileSearch>Function FileSearch</a></h2>
+<b>Declaration</b><br>
+<pre>function FileSearch(name: String; dirList: String): String</pre>
+<b>Description</b>
+<p>Searches a specified directory path for a file.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$FloatToStr>Function FloatToStr</a></h2>
+<b>Declaration</b><br>
+<pre>function FloatToStr(f: Float): String</pre>
+<b>Description</b>
+<p>Converts a floating point value to a string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$FormatDateTime>Function FormatDateTime</a></h2>
+<b>Declaration</b><br>
+<pre>function FormatDateTime(frm: String; dt: DateTime): String</pre>
+<b>Description</b>
+<p>Formats a TDateTime value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Frac>Function Frac</a></h2>
+<b>Declaration</b><br>
+<pre>function Frac(v: Float): Float</pre>
+<b>Description</b>
+<p>Returns the fractional part of a real number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$GetCurrentDir>Function GetCurrentDir</a></h2>
+<b>Declaration</b><br>
+<pre>function GetCurrentDir: String</pre>
+<b>Description</b>
+<p>Returns the name of the current directory.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Hypot>Function Hypot</a></h2>
+<b>Declaration</b><br>
+<pre>function Hypot(x: Float; y: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the length of the hypotenuse.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Inc>Function Inc</a></h2>
+<b>Declaration</b><br>
+<pre>function Inc(var a: Integer; b: Integer): Integer</pre>
+<b>Description</b>
+<p>Returns a date shifted by a specified number of months.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$IncMonth>Function IncMonth</a></h2>
+<b>Declaration</b><br>
+<pre>function IncMonth(dt: DateTime; nb: Integer): DateTime</pre>
+<b>Description</b>
+<p>Returns a date shifted by a specified number of months.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$InformationDlg>Function InformationDlg</a></h2>
+<b>Declaration</b><br>
+<pre>procedure InformationDlg(msg: String)</pre>
+<b>Description</b>
+<p>Displays a message box with an OK button.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$InputBox>Function InputBox</a></h2>
+<b>Declaration</b><br>
+<pre>function InputBox(aCaption: String; aPrompt: String; aDefault: String): String</pre>
+<b>Description</b>
+<p>Displays an input dialog box that lets the user enter a 
+string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Insert>Function Insert</a></h2>
+<b>Declaration</b><br>
+<pre>procedure Insert(src: String; var S: String; Index: Integer)</pre>
+<b>Description</b>
+<p>Inserts a substring into a string beginning at a specified 
+point.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Int>Function Int</a></h2>
+<b>Declaration</b><br>
+<pre>function Int(v: Float): Float</pre>
+<b>Description</b>
+<p>Returns the integer part of a real number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$IntToHex>Function IntToHex</a></h2>
+<b>Declaration</b><br>
+<pre>function IntToHex(v: Integer; digits: Integer): String</pre>
+<b>Description</b>
+<p>Returns the hex representation of an integer.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$IntToStr>Function IntToStr</a></h2>
+<b>Declaration</b><br>
+<pre>function IntToStr(i: Integer): String</pre>
+<b>Description</b>
+<p>Converts an integer to a string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$IsDelimiter>Function IsDelimiter</a></h2>
+<b>Declaration</b><br>
+<pre>function IsDelimiter(delims: String; s: String; index: Integer): Boolean</pre>
+<b>Description</b>
+<p>Indicates whether a specified character in a string 
+matches one of a set of delimiters.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$IsLeapYear>Function IsLeapYear</a></h2>
+<b>Declaration</b><br>
+<pre>function IsLeapYear(year: Integer): Boolean</pre>
+<b>Description</b>
+<p>Indicates whether a specified year is a leap year.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$LastDelimiter>Function LastDelimiter</a></h2>
+<b>Declaration</b><br>
+<pre>function LastDelimiter(delims: String; s: String): Boolean</pre>
+<b>Description</b>
+<p>Returns the byte index in S of the last character that 
+matches any character in the Delimiters AnsiString.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Length>Function Length</a></h2>
+<b>Declaration</b><br>
+<pre>function Length(str: String): Integer</pre>
+<b>Description</b>
+<p>Returns the number of characters in a string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Ln>Function Ln</a></h2>
+<b>Declaration</b><br>
+<pre>function Ln(v: Float): Float</pre>
+<b>Description</b>
+<p>Returns the natural log of a real expression.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$LoadStringFromFile>Function LoadStringFromFile</a></h2>
+<b>Declaration</b><br>
+<pre>function LoadStringFromFile(fileName: String): String</pre>
+<b>Description</b>
+<p>Loads String from File
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Log10>Function Log10</a></h2>
+<b>Declaration</b><br>
+<pre>function Log10(v: Float): Float</pre>
+<b>Description</b>
+<p>Calculates log base 10.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Log2>Function Log2</a></h2>
+<b>Declaration</b><br>
+<pre>function Log2(v: Float): Float</pre>
+<b>Description</b>
+<p>Calculates log base 2.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$LogN>Function LogN</a></h2>
+<b>Declaration</b><br>
+<pre>function LogN(n: Float; x: Float): Float</pre>
+<b>Description</b>
+<p>Calculates the log of X for a specified base.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$LowerCase>Function LowerCase</a></h2>
+<b>Declaration</b><br>
+<pre>function LowerCase(str: String): String</pre>
+<b>Description</b>
+<p>Converts an ASCII string to lowercase.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Max>Function Max</a></h2>
+<b>Declaration</b><br>
+<pre>function Max(v1: Float; v2: Float): Float</pre>
+<b>Description</b>
+<p>Returns the greater of two numeric values.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Min>Function Min</a></h2>
+<b>Declaration</b><br>
+<pre>function Min(v1: Float; v2: Float): Float</pre>
+<b>Description</b>
+<p>Returns the lesser of two numeric values.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Now>Function Now</a></h2>
+<b>Declaration</b><br>
+<pre>function Now: DateTime</pre>
+<b>Description</b>
+<p>Returns the current date and time.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Null>Constant Null</a></h2>
+<b>Declaration</b><br>
+<pre>const Null: Variant = </pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$OkCancelDlg>Function OkCancelDlg</a></h2>
+<b>Declaration</b><br>
+<pre>function OkCancelDlg(msg: String): Boolean</pre>
+<b>Description</b>
+<p>Displays a message box with OK/Cancel buttons.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Ord>Function Ord</a></h2>
+<b>Declaration</b><br>
+<pre>function Ord(s: String): Integer</pre>
+<b>Description</b>
+<p>Returns the ANSI index of the first index in the string 's'.</p>
+
+<br><hr>
+
+<h2><a name=Internal$Pi>Function Pi</a></h2>
+<b>Declaration</b><br>
+<pre>function Pi: Float</pre>
+<b>Description</b>
+<p>Returns 3.1415926535897932385. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Pos>Function Pos</a></h2>
+<b>Declaration</b><br>
+<pre>function Pos(subStr: String; str: String): Integer</pre>
+<b>Description</b>
+<p>Returns the index value of the first character in a 
+specified substring that occurs in a given string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Power>Function Power</a></h2>
+<b>Declaration</b><br>
+<pre>function Power(base: Float; exponent: Float): Float</pre>
+<b>Description</b>
+<p>Raises Base to any power.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$QuestionDlg>Function QuestionDlg</a></h2>
+<b>Declaration</b><br>
+<pre>function QuestionDlg(msg: String): Boolean</pre>
+<b>Description</b>
+<p>Displays a message box with yes/no buttons.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$QuotedStr>Function QuotedStr</a></h2>
+<b>Declaration</b><br>
+<pre>function QuotedStr(str: String): String</pre>
+<b>Description</b>
+<p>Returns the quoted version of a string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$RadToDeg>Function RadToDeg</a></h2>
+<b>Declaration</b><br>
+<pre>function RadToDeg(a: Float): Float</pre>
+<b>Description</b>
+<p>Converts radians to degrees.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$RandG>Function RandG</a></h2>
+<b>Declaration</b><br>
+<pre>function RandG(mean: Float; stdDev: Float): Float</pre>
+<b>Description</b>
+<p>Generates random numbers with Gaussian distribution.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Random>Function Random</a></h2>
+<b>Declaration</b><br>
+<pre>function Random: Float</pre>
+<b>Description</b>
+<p>Generates random numbers.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$RandomInt>Function RandomInt</a></h2>
+<b>Declaration</b><br>
+<pre>function RandomInt(range: Integer): Integer</pre>
+<b>Description</b>
+<p>Generates random numbers within a specified range.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Randomize>Function Randomize</a></h2>
+<b>Declaration</b><br>
+<pre>procedure Randomize</pre>
+<b>Description</b>
+<p>Initializes the random number generator with a random 
+value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$RandSeed>Function RandSeed</a></h2>
+<b>Declaration</b><br>
+<pre>function RandSeed: Integer</pre>
+<b>Description</b>
+<p>RandSeed stores the built-in random number generator's 
+seed. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ReadGlobalVar>Function ReadGlobalVar</a></h2>
+<b>Declaration</b><br>
+<pre>function ReadGlobalVar(n: String): Variant</pre>
+<b>Description</b>
+<p>Returns an absolute value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ReadGlobalVarDef>Function ReadGlobalVarDef</a></h2>
+<b>Declaration</b><br>
+<pre>function ReadGlobalVarDef(n: String; d: Variant): Variant</pre>
+<b>Description</b>
+<p>Returns an absolute value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$RemoveDir>Function RemoveDir</a></h2>
+<b>Declaration</b><br>
+<pre>function RemoveDir(dir: String): Boolean</pre>
+<b>Description</b>
+<p>Deletes an existing empty directory.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$RenameFile>Function RenameFile</a></h2>
+<b>Declaration</b><br>
+<pre>function RenameFile(oldName: String; newName: String): Boolean</pre>
+<b>Description</b>
+<p>Changes a file name.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Round>Function Round</a></h2>
+<b>Declaration</b><br>
+<pre>function Round(v: Float): Integer</pre>
+<b>Description</b>
+<p>Returns the value of X rounded to the nearest whole 
+number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$SaveStringToFile>Function SaveStringToFile</a></h2>
+<b>Declaration</b><br>
+<pre>procedure SaveStringToFile(fileName: String; data: String)</pre>
+<b>Description</b>
+<p>Saves a string to a file
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$SetCharAt>Function SetCharAt</a></h2>
+<b>Declaration</b><br>
+<pre>procedure SetCharAt(var s: String; x: Integer; c: String)</pre>
+<b>Description</b>
+<p>Returns an absolute value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$SetCurrentDir>Function SetCurrentDir</a></h2>
+<b>Declaration</b><br>
+<pre>function SetCurrentDir(dir: String): Boolean</pre>
+<b>Description</b>
+<p>Sets the current directory. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$SetLength>Function SetLength</a></h2>
+<b>Declaration</b><br>
+<pre>procedure SetLength(var S: String; NewLength: Integer)</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$SetRandSeed>Function SetRandSeed</a></h2>
+<b>Declaration</b><br>
+<pre>procedure SetRandSeed(seed: Integer)</pre>
+<b>Description</b>
+<p>RandSeed stores the built-in random number generator's 
+seed. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$ShowMessage>Function ShowMessage</a></h2>
+<b>Declaration</b><br>
+<pre>procedure ShowMessage(msg: String)</pre>
+<b>Description</b>
+<p>Displays a message box with an OK button.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Sin>Function Sin</a></h2>
+<b>Declaration</b><br>
+<pre>function Sin(a: Float): Float</pre>
+<b>Description</b>
+<p>Returns the sine of the angle in radians.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Sinh>Function Sinh</a></h2>
+<b>Declaration</b><br>
+<pre>function Sinh(a: Float): Float</pre>
+<b>Description</b>
+<p>Returns the hyperbolic sine of an angle.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Sqr>Function Sqr</a></h2>
+<b>Declaration</b><br>
+<pre>function Sqr(v: Float): Float</pre>
+<b>Description</b>
+<p>Returns the square of a number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Sqrt>Function Sqrt</a></h2>
+<b>Declaration</b><br>
+<pre>function Sqrt(v: Float): Float</pre>
+<b>Description</b>
+<p>Returns the square root of X.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$StringOfChar>Function StringOfChar</a></h2>
+<b>Declaration</b><br>
+<pre>function StringOfChar(Ch: String; Count: Integer): String</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$StrToDate>Function StrToDate</a></h2>
+<b>Declaration</b><br>
+<pre>function StrToDate(str: String): DateTime</pre>
+<b>Description</b>
+<p>Converts a string to a TDateTime value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$StrToDateTime>Function StrToDateTime</a></h2>
+<b>Declaration</b><br>
+<pre>function StrToDateTime(str: String): DateTime</pre>
+<b>Description</b>
+<p>Converts a string to a TDateTime value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$StrToFloat>Function StrToFloat</a></h2>
+<b>Declaration</b><br>
+<pre>function StrToFloat(str: String): Float</pre>
+<b>Description</b>
+<p>Converts a given string to a floating-point value. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$StrToFloatDef>Function StrToFloatDef</a></h2>
+<b>Declaration</b><br>
+<pre>function StrToFloatDef(str: String; def: Float): Float</pre>
+<b>Description</b>
+<p>Converts a given string to a floating-point value. 
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$StrToInt>Function StrToInt</a></h2>
+<b>Declaration</b><br>
+<pre>function StrToInt(str: String): Integer</pre>
+<b>Description</b>
+<p>Converts a string that represents an integer (decimal or 
+hex notation) to a number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$StrToIntDef>Function StrToIntDef</a></h2>
+<b>Declaration</b><br>
+<pre>function StrToIntDef(str: String; def: Integer): Integer</pre>
+<b>Description</b>
+<p>Converts a string that represents an integer (decimal or 
+hex notation) to a number.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$StrToTime>Function StrToTime</a></h2>
+<b>Declaration</b><br>
+<pre>function StrToTime(str: String): DateTime</pre>
+<b>Description</b>
+<p>Converts a string to a TDateTime value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Tan>Function Tan</a></h2>
+<b>Declaration</b><br>
+<pre>function Tan(a: Float): Float</pre>
+<b>Description</b>
+<p>Returns the tangent of X.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Tanh>Function Tanh</a></h2>
+<b>Declaration</b><br>
+<pre>function Tanh(a: Float): Float</pre>
+<b>Description</b>
+<p>Returns the hyperbolic tangent of X.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Time>Function Time</a></h2>
+<b>Declaration</b><br>
+<pre>function Time: DateTime</pre>
+<b>Description</b>
+<p>Returns the current time.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$TimeToStr>Function TimeToStr</a></h2>
+<b>Declaration</b><br>
+<pre>function TimeToStr(dt: DateTime): String</pre>
+<b>Description</b>
+<p>Returns a string that represents a TDateTime value.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Trim>Function Trim</a></h2>
+<b>Declaration</b><br>
+<pre>function Trim(str: String): String</pre>
+<b>Description</b>
+<p>Trims leading and trailing spaces and control characters 
+from a string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$TrimLeft>Function TrimLeft</a></h2>
+<b>Declaration</b><br>
+<pre>function TrimLeft(str: String): String</pre>
+<b>Description</b>
+<p>Trims leading spaces and control characters from a 
+string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$TrimRight>Function TrimRight</a></h2>
+<b>Declaration</b><br>
+<pre>function TrimRight(str: String): String</pre>
+<b>Description</b>
+<p>Trims trailing spaces and control characters from a 
+string.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Trunc>Function Trunc</a></h2>
+<b>Declaration</b><br>
+<pre>function Trunc(v: Float): Integer</pre>
+<b>Description</b>
+<p>Truncates a real number to an integer.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$Unassigned>Constant Unassigned</a></h2>
+<b>Declaration</b><br>
+<pre>const Unassigned: Variant = </pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$UpperCase>Function UpperCase</a></h2>
+<b>Declaration</b><br>
+<pre>function UpperCase(str: String): String</pre>
+<b>Description</b>
+<p>Returns a copy of a string in uppercase.
+</p>
+
+<br><hr>
+
+<h2><a name=Internal$varAny>Constant varAny</a></h2>
+<b>Declaration</b><br>
+<pre>varAny = 257</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varArray>Constant varArray</a></h2>
+<b>Declaration</b><br>
+<pre>varArray = 8192</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$VarAsType>Function VarAsType</a></h2>
+<b>Declaration</b><br>
+<pre>function VarAsType(v: Variant; VarType: Integer): Variant</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varBoolean>Constant varBoolean</a></h2>
+<b>Declaration</b><br>
+<pre>varBoolean = 11</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varByRef>Constant varByRef</a></h2>
+<b>Declaration</b><br>
+<pre>varByRef = 16384</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varByte>Constant varByte</a></h2>
+<b>Declaration</b><br>
+<pre>varByte = 17</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$VarClear>Function VarClear</a></h2>
+<b>Declaration</b><br>
+<pre>procedure VarClear(var v: Variant)</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varCurrency>Constant varCurrency</a></h2>
+<b>Declaration</b><br>
+<pre>varCurrency = 6</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varDate>Constant varDate</a></h2>
+<b>Declaration</b><br>
+<pre>varDate = 7</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varDispatch>Constant varDispatch</a></h2>
+<b>Declaration</b><br>
+<pre>varDispatch = 9</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varDouble>Constant varDouble</a></h2>
+<b>Declaration</b><br>
+<pre>varDouble = 5</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varEmpty>Constant varEmpty</a></h2>
+<b>Declaration</b><br>
+<pre>varEmpty = 0</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varError>Constant varError</a></h2>
+<b>Declaration</b><br>
+<pre>varError = 10</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varInt64>Constant varInt64</a></h2>
+<b>Declaration</b><br>
+<pre>varInt64 = 20</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varInteger>Constant varInteger</a></h2>
+<b>Declaration</b><br>
+<pre>varInteger = 3</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$VarIsEmpty>Function VarIsEmpty</a></h2>
+<b>Declaration</b><br>
+<pre>function VarIsEmpty(v: Variant): Boolean</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$VarIsNull>Function VarIsNull</a></h2>
+<b>Declaration</b><br>
+<pre>function VarIsNull(v: Variant): Boolean</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varLongWord>Constant varLongWord</a></h2>
+<b>Declaration</b><br>
+<pre>varLongWord = 19</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varNull>Constant varNull</a></h2>
+<b>Declaration</b><br>
+<pre>varNull = 1</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varOleStr>Constant varOleStr</a></h2>
+<b>Declaration</b><br>
+<pre>varOleStr = 8</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varShortInt>Constant varShortInt</a></h2>
+<b>Declaration</b><br>
+<pre>varShortInt = 16</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varSingle>Constant varSingle</a></h2>
+<b>Declaration</b><br>
+<pre>varSingle = 4</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varSmallint>Constant varSmallint</a></h2>
+<b>Declaration</b><br>
+<pre>varSmallint = 2</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varStrArg>Constant varStrArg</a></h2>
+<b>Declaration</b><br>
+<pre>varStrArg = 72</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varString>Constant varString</a></h2>
+<b>Declaration</b><br>
+<pre>varString = 256</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$VarToStr>Function VarToStr</a></h2>
+<b>Declaration</b><br>
+<pre>function VarToStr(v: Variant): String</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varTypeMask>Constant varTypeMask</a></h2>
+<b>Declaration</b><br>
+<pre>varTypeMask = 4095</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varUnknown>Constant varUnknown</a></h2>
+<b>Declaration</b><br>
+<pre>varUnknown = 13</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varVariant>Constant varVariant</a></h2>
+<b>Declaration</b><br>
+<pre>varVariant = 12</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$varWord>Constant varWord</a></h2>
+<b>Declaration</b><br>
+<pre>varWord = 18</pre>
+<b>Description</b>
+<p></p>
+
+<br><hr>
+
+<h2><a name=Internal$WriteGlobalVar>Function WriteGlobalVar</a></h2>
+<b>Declaration</b><br>
+<pre>procedure WriteGlobalVar(n: String; v: Variant)</pre>
+<b>Description</b>
+<p>Returns an absolute value.
+</p>
+
+<br><hr>

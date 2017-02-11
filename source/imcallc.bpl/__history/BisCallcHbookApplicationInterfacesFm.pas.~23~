@@ -1,0 +1,57 @@
+unit BisCallcHbookApplicationInterfacesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBisCallcHbookApplicationInterfacesForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookApplicationInterfacesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHbookApplicationInterfacesForm: TBisCallcHbookApplicationInterfacesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisCallcHbookApplicationInterfaceEditFm;
+
+{ TBisCallcHbookApplicationInterfacesFormIface }
+
+constructor TBisCallcHbookApplicationInterfacesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookApplicationInterfacesForm;
+  InsertClass:=TBisCallcHbookApplicationInterfaceInsertFormIface;
+  UpdateClass:=TBisCallcHbookApplicationInterfaceUpdateFormIface;
+  DeleteClass:=TBisCallcHbookApplicationInterfaceDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_APPLICATION_INTERFACES';
+  with FieldNames do begin
+    AddKey('APPLICATION_ID');
+    AddKey('ACCOUNT_ID');
+    AddKey('INTERFACE_ID');
+    Add('APPLICATION_NAME','Приложение',100);
+    Add('USER_NAME','Роль (учетная запись)',100);
+    Add('INTERFACE_NAME','Интерфейс',250);
+    Add('PRIORITY','Порядок выполнения',50);
+    AddCheckBox('AUTO_RUN','Автозапуск',50);
+  end;
+  Orders.Add('APPLICATION_NAME');
+  Orders.Add('USER_NAME');
+  Orders.Add('PRIORITY');
+end;
+
+end.

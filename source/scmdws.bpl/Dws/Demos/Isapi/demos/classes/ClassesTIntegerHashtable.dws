@@ -1,0 +1,43 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>TIntegerHashtable Demonstration</title>
+</head>
+
+<body>
+<pre>
+<%
+var lst: TIntegerHashtable = TIntegerHashtable.Create;
+
+type
+ TString = class
+   Value: String;
+   constructor Create(V: String);
+ end;
+
+constructor TString.Create(V: String);
+begin
+  Value := V;
+end;
+
+lst.Put(1, TString.Create('Eins'));
+lst.Put(2, TString.Create('Zwei'));
+lst.Put(3, TString.Create('Drei'));
+lst.Put(4, TString.Create('Vier'));
+
+SendLn(lst.Size);
+
+SendLn(lst.HasKey(2));
+SendLn(lst.HasKey(5));
+lst.RemoveKey(2);
+SendLn(lst.HasKey(2));
+
+SendLn(TString(lst.Get(4)).Value);
+
+%>
+</pre>
+</body>
+
+</html>

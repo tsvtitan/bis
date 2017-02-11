@@ -1,0 +1,193 @@
+<html>
+<body>
+<h1>Class TADOConnection</h1>
+<b>Declaration</b><br>
+
+<pre>TADOConnection = class(TObject)
+  <a href="#ADO$TADOConnection$BeginTrans">procedure BeginTrans</a>;
+  <a href="#ADO$TADOConnection$Close">procedure Close</a>;
+  <a href="#ADO$TADOConnection$CommandTimeout">property CommandTimeout: Integer read GetCommandTimeout write SetCommandTimeout</a>;
+  <a href="#ADO$TADOConnection$CommitTrans">procedure CommitTrans</a>;
+  <a href="#ADO$TADOConnection$ConnectionString">property ConnectionString: String read GetConnectionString write SetConnectionString</a>;
+  <a href="#ADO$TADOConnection$Create">constructor Create(ConnectionString: String)</a>;
+  <a href="#ADO$TADOConnection$DatasetCount">function DatasetCount: Integer</a>;
+  <a href="#ADO$TADOConnection$Execute">function Execute(sSQL: String): TADODataset</a>;
+  <a href="#ADO$TADOConnection$ExecuteSQL">procedure ExecuteSQL(sSQL: String)</a>;
+  <a href="#ADO$TADOConnection$Free">destructor Free</a>;
+  <a href="#ADO$TADOConnection$GetCommandTimeout">function GetCommandTimeout: Integer</a>;
+  <a href="#ADO$TADOConnection$GetConnectionString">function GetConnectionString: String</a>;
+  <a href="#ADO$TADOConnection$GetDataset">function GetDataset(sSQL: String): TADODataset</a>;
+  <a href="#ADO$TADOConnection$Open">procedure Open</a>;
+  <a href="#ADO$TADOConnection$RollbackTrans">procedure RollbackTrans</a>;
+  <a href="#ADO$TADOConnection$SetCommandTimeout">procedure SetCommandTimeout(Value: Integer)</a>;
+  <a href="#ADO$TADOConnection$SetConnectionString">procedure SetConnectionString(Value: String)</a>;
+  <a href="#ADO$TADOConnection$State">function State: Integer</a>;
+  <a href="#ADO$TADOConnection$Version">function Version: String</a>;
+end;</pre>
+<b>Description</b>
+<p></p>
+
+<hr>
+
+    <h2><a name=ADO$TADOConnection$BeginTrans>Method TADOConnection.BeginTrans</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure BeginTrans;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$Close>Method TADOConnection.Close</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Close;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$CommandTimeout>Property TADOConnection.CommandTimeout</a></h2>
+    <b>Declaration</b><br>
+    <pre>property CommandTimeout: Integer read GetCommandTimeout write SetCommandTimeout;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$CommitTrans>Method TADOConnection.CommitTrans</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure CommitTrans;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$ConnectionString>Property TADOConnection.ConnectionString</a></h2>
+    <b>Declaration</b><br>
+    <pre>property ConnectionString: String read GetConnectionString write SetConnectionString;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$Create>Method TADOConnection.Create</a></h2>
+    <b>Declaration</b><br>
+    <pre>constructor Create(ConnectionString: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$DatasetCount>Method TADOConnection.DatasetCount</a></h2>
+    <b>Declaration</b><br>
+    <pre>function DatasetCount: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$Execute>Method TADOConnection.Execute</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Execute(sSQL: String): TADODataset;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$ExecuteSQL>Method TADOConnection.ExecuteSQL</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure ExecuteSQL(sSQL: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$Free>Method TADOConnection.Free</a></h2>
+    <b>Declaration</b><br>
+    <pre>destructor Free;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$GetCommandTimeout>Method TADOConnection.GetCommandTimeout</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetCommandTimeout: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$GetConnectionString>Method TADOConnection.GetConnectionString</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetConnectionString: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$GetDataset>Method TADOConnection.GetDataset</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetDataset(sSQL: String): TADODataset;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$Open>Method TADOConnection.Open</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Open;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$RollbackTrans>Method TADOConnection.RollbackTrans</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure RollbackTrans;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$Self>Method TADOConnection.Self</a></h2>
+    <b>Declaration</b><br>
+    <pre>Self;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$SetCommandTimeout>Method TADOConnection.SetCommandTimeout</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetCommandTimeout(Value: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$SetConnectionString>Method TADOConnection.SetConnectionString</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetConnectionString(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$State>Method TADOConnection.State</a></h2>
+    <b>Declaration</b><br>
+    <pre>function State: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADOConnection$Version>Method TADOConnection.Version</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Version: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+</body>
+</html>

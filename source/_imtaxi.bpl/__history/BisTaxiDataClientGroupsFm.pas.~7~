@@ -1,0 +1,57 @@
+unit BisTaxiDataClientGroupsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList,
+  BisDataTreeFm, BisDataGridFm;
+
+type
+  TBisTaxiDataClientGroupsForm = class(TBisDataTreeForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisTaxiDataClientGroupsFormIface=class(TBisDataTreeFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataClientGroupsForm: TBisTaxiDataClientGroupsForm;
+
+implementation
+
+uses BisDesignDataMenuEditFm;
+
+{$R *.dfm}
+
+{ TBisTaxiDataClientGroupsFormIface }
+
+constructor TBisTaxiDataClientGroupsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataClientGroupsForm;
+{  FilterClass:=TBisDesignDataMenuEditFormIface;
+  InsertClasses.Add(TBisDesignDataMenuInsertFormIface);
+  InsertClasses.Add(TBisDesignDataMenuInsertChildFormIface);
+  UpdateClass:=TBisDesignDataMenuUpdateFormIface;
+  DeleteClass:=TBisDesignDataMenuDeleteFormIface;}
+  Permissions.Enabled:=true;
+  ProviderName:='S_CLIENT_GROUPS';
+  with FieldNames do begin
+    AddKey('CLIENT_GROUP_ID');
+    AddParentKey('PARENT_ID');
+    AddInvisible('DESCRIPTION');
+    Add('NAME','Наименование',225);
+    Add('PARENT_NAME','Родитель',175);
+    Add('PRIORITY','Порядок',50);
+  end;
+  Orders.Add('LEVEL');
+  Orders.Add('PRIORITY');
+end;
+
+end.

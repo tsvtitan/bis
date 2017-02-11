@@ -1,0 +1,21 @@
+unit BisUtil;
+
+interface
+
+uses BisModules, BisIfaceModules;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisQEdtFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  QEdtIface:=AModule.Ifaces.AddClass(TBisQEdtFormIface);
+end;
+
+end.

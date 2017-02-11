@@ -1,0 +1,54 @@
+package ominfo;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core;
+
+contains
+  MiTeC_PSAPI in 'ominfo.bpl\MsysInfo\Source\MiTeC_PSAPI.pas',
+  MiTeC_Routines in 'ominfo.bpl\MsysInfo\Source\MiTeC_Routines.pas',
+  MiTeC_ToolHelp32 in 'ominfo.bpl\MsysInfo\Source\MiTeC_ToolHelp32.pas',
+  MSI_APM in 'ominfo.bpl\MsysInfo\Source\MSI_APM.PAS',
+  MSI_CPU in 'ominfo.bpl\MsysInfo\Source\MSI_CPU.PAS',
+  MSI_CPUUsage in 'ominfo.bpl\MsysInfo\Source\MSI_CPUUsage.pas',
+  MSI_DetailDlg in 'ominfo.bpl\MsysInfo\Source\MSI_DetailDlg.pas',
+  MSI_Devices in 'ominfo.bpl\MsysInfo\Source\MSI_Devices.pas',
+  MSI_DirectX in 'ominfo.bpl\MsysInfo\Source\MSI_DirectX.pas',
+  MSI_Disk in 'ominfo.bpl\MsysInfo\Source\MSI_Disk.pas',
+  MSI_Display in 'ominfo.bpl\MsysInfo\Source\MSI_Display.pas',
+  MSI_Engines in 'ominfo.bpl\MsysInfo\Source\MSI_Engines.pas',
+  MSI_Machine in 'ominfo.bpl\MsysInfo\Source\MSI_Machine.pas',
+  MSI_Media in 'ominfo.bpl\MsysInfo\Source\MSI_Media.pas',
+  MSI_Memory in 'ominfo.bpl\MsysInfo\Source\MSI_Memory.pas',
+  MSI_Network in 'ominfo.bpl\MsysInfo\Source\MSI_Network.pas',
+  MSI_OS in 'ominfo.bpl\MsysInfo\Source\MSI_OS.pas',
+  MSI_Printers in 'ominfo.bpl\MsysInfo\Source\MSI_Printers.pas',
+  MSI_Processes in 'ominfo.bpl\MsysInfo\Source\MSI_Processes.pas',
+  MSI_Software in 'ominfo.bpl\MsysInfo\Source\MSI_Software.pas',
+  MSI_Startup in 'ominfo.bpl\MsysInfo\Source\MSI_Startup.pas';
+
+end.

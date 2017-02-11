@@ -1,0 +1,287 @@
+unit BisFieldDefs;
+
+uses Classes, Contnrs, DB, Graphics, Types, Variants,
+     BisCoreObjects;
+
+type
+  TBisProviderFieldDefs=class;
+  TBisProviderFieldDef=class;
+  
+  TBisProviderFieldDefAlignment=(daDefault,daLeft,daCenter,daRight);
+
+  TBisProviderFieldDefCalcEvent=function(Def: TBisProviderFieldDef): Variant of object;
+  TBisProviderFieldDefDrawEvent=procedure(Def: TBisProviderFieldDef; Canvas: TCanvas; Rect: TRect) of object;
+
+  TBisProviderFieldDef=class(TObject)
+  private
+    FFieldName: String;
+    FCaption: String;
+    FWidth: Integer;
+    FAlignment: TBisProviderFieldDefAlignment;
+    FIsKey: Boolean;
+    FVisible: Boolean;
+    FFieldKind: TFieldKind;
+    FPrecision: Integer;
+    FDataType: TFieldType;
+    FSize: Integer;
+    FDuplicates: TStringList;
+    FDisplayFormat: string;
+    FCalcName: String;
+    FOnCalc: TBisProviderFieldDefCalcEvent;
+    FOnDraw: TBisProviderFieldDefDrawEvent;
+    FField: TField;
+  public
+    constructor Create(FieldDefs: TBisProviderFieldDefs); reintroduce;
+    destructor Destroy; override;
+    
+    procedure Draw(Canvas: TCanvas; Rect: TRect); 
+    function Calc: Variant;
+
+    property FieldName: String read FFieldName write FFieldName;
+    property Caption: String read FCaption write FCaption;
+    property Width: Integer read FWidth write FWidth;
+    property Alignment: TBisProviderFieldDefAlignment read FAlignment write FAlignment;
+    property IsKey: Boolean read FIsKey write FisKey;
+    property Visible: Boolean read FVisible write FVisible;
+    property FieldKind: TFieldKind read FFieldKind write FFieldKind;
+    property DataType: TFieldType read FDataType write FDataType;
+    property Size: Integer read FSize write FSize;
+    property Precision: Integer read FPrecision write FPrecision;
+    property DisplayFormat: string read FDisplayFormat write FDisplayFormat;
+    property CalcName: String read FCalcName write FCalcName;
+    property Field: TField read FField write FField;
+
+    property Duplicates: TStringList read FDuplicates;
+
+    property OnCalc: TBisProviderFieldDefCalcEvent read FOnCalc write FOnCalc;
+    property OnDraw: TBisProviderFieldDefDrawEvent read FOnDraw write FOnDraw; 
+  end;
+
+  TBisProviderFieldDefs=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisProviderFieldDef;
+    procedure DefaultDrawCheck(Def: TBisProviderFieldDef; Canvas: TCanvas; Rect: TRect);
+    procedure DefaultDrawRadio(Def: TBisProviderFieldDef; Canvas: TCanvas; Rect: TRect);
+  public
+    function Find(const FieldName: string): TBisProviderFieldDef;
+
+    function Add(const FieldName,Caption: string; Width: Integer=0): TBisProviderFieldDef;
+    function AddInvisible(const FieldName: string): TBisProviderFieldDef;
+    function AddKey(const FieldName: string): TBisProviderFieldDef;
+    function AddCalc(const FieldName,Caption,CalcName: string; OnCalc: TBisProviderFieldDefCalcEvent;
+                     DataType: TFieldType; Size: Integer=0; Width: Integer=0; AddCalcName: Boolean=true): TBisProviderFieldDef;
+    function AddDraw(const FieldName, Caption, CalcName: String; OnDraw: TBisProviderFieldDefDrawEvent; Width: Integer=0): TBisProviderFieldDef;
+    function AddDrawCheck(const FieldName, Caption, CalcName: String; Width: Integer=0; AddCalcName: Boolean=true): TBisProviderFieldDef;
+    function AddDrawRadio(const FieldName, Caption, CalcName: String; Width: Integer=0; AddCalcName: Boolean=true): TBisProviderFieldDef;
+
+    property Items[Index: Integer]: TBisProviderFieldDef read GetItem;
+  end;
+
+  TBisProviderParam=class(TObject)
+
+  end;
+
+  TBisProviderParams=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisProviderParam;
+  public
+    property Items[Index: Integer]: TBisProviderParam read GetItem;
+  end;
+
+  TBisProvider=class;
+
+  TBisProviderGetRecordsEvent=function(Sender: TBisProvider; ADataSet: TDataSet): String of object;
+
+  TBisProvider=class(TBisCoreObject)
+  private
+    FProviderName: String;
+    FFieldDefs: TBisProviderFieldDefs;
+    FParams: TBisProviderParams;
+    FOnGetRecords: TBisProviderGetRecordsEvent;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure GetRecords(ADataSet: TDataSet);
+
+    property ProviderName: String read FProviderName write FProviderName;
+    property FieldDefs: TBisProviderFieldDefs read FFieldDefs;
+    property Params: TBisProviderParams read FParams;
+
+    property OnGetRecords: TBisProviderGetRecordsEvent read FOnGetRecords write FOnGetRecords;
+
+  end;
+
+  TBisProviderClass=class of TBisProvider;
+
+implementation
+
+uses SysUtils,
+     BisCore, BisDataSet;
+
+{ TBisProviderFieldDef }
+
+function TBisProviderFieldDef.Calc: Variant;
+begin
+  Result:=Unassigned;
+  if Assigned(FOnCalc) then
+    Result:=FOnCalc(Self);
+end;
+
+constructor TBisProviderFieldDef.Create(FieldDefs: TBisProviderFieldDefs);
+begin
+  inherited Create;
+  FDuplicates:=TStringList.Create;
+end;
+
+destructor TBisProviderFieldDef.Destroy;
+begin
+  FDuplicates.Free;
+  inherited Destroy;
+end;
+
+
+procedure TBisProviderFieldDef.Draw(Canvas: TCanvas; Rect: TRect);
+begin
+  if Assigned(FOnDraw) then
+    FOnDraw(Self,Canvas,Rect);
+end;
+
+{ TBisProviderFieldDefs }
+
+function TBisProviderFieldDefs.Add(const FieldName, Caption: string; Width: Integer): TBisProviderFieldDef;
+begin
+  Result:=nil;
+  if not Assigned(Find(FieldName)) then begin
+    Result:=TBisProviderFieldDef.Create(Self);
+    Result.FieldName:=FieldName;
+    Result.Caption:=Caption;
+    Result.Width:=Width;
+    Result.Visible:=true;
+    inherited Add(Result);
+  end;
+end;
+
+function TBisProviderFieldDefs.AddCalc(const FieldName, Caption, CalcName: string; OnCalc: TBisProviderFieldDefCalcEvent;
+                                       DataType: TFieldType; Size, Width: Integer; AddCalcName: Boolean): TBisProviderFieldDef;
+begin
+  Result:=Add(FieldName,Caption,Width);
+  if Assigned(Result) then begin
+    Result.FieldKind:=fkCalculated;
+    Result.CalcName:=CalcName;
+    Result.OnCalc:=OnCalc;
+    Result.DataType:=DataType;
+    Result.Size:=Size;
+    if AddCalcName then
+      AddInvisible(CalcName);
+  end;
+end;
+
+function TBisProviderFieldDefs.AddDraw(const FieldName, Caption, CalcName: String; OnDraw: TBisProviderFieldDefDrawEvent;
+                                       Width: Integer): TBisProviderFieldDef;
+begin
+  Result:=Add(FieldName,Caption,Width);
+  if Assigned(Result) then begin
+    Result.FieldKind:=fkCalculated;
+    Result.CalcName:=CalcName;
+    Result.OnDraw:=OnDraw;
+    Result.DataType:=ftString;
+    Result.Size:=1;
+  end;
+end;
+
+function TBisProviderFieldDefs.AddDrawCheck(const FieldName, Caption, CalcName: String;
+                                            Width: Integer; AddCalcName: Boolean): TBisProviderFieldDef;
+begin
+  Result:=AddDraw(FieldName,Caption,CalcName,DefaultDrawCheck,Width);
+  if Assigned(Result) then begin
+    if AddCalcName then
+      AddInvisible(CalcName);
+  end;
+end;
+
+function TBisProviderFieldDefs.AddDrawRadio(const FieldName, Caption, CalcName: String;
+                                            Width: Integer; AddCalcName: Boolean): TBisProviderFieldDef;
+begin
+  Result:=AddDraw(FieldName,Caption,CalcName,DefaultDrawRadio,Width);
+  if Assigned(Result) then begin
+    if AddCalcName then
+      AddInvisible(CalcName);
+  end;
+end;
+
+function TBisProviderFieldDefs.AddInvisible(const FieldName: string): TBisProviderFieldDef;
+begin
+  Result:=Add(FieldName,'');
+  if Assigned(Result) then
+    Result.Visible:=false;
+end;
+
+function TBisProviderFieldDefs.AddKey(const FieldName: string): TBisProviderFieldDef;
+begin
+  Result:=AddInvisible(FieldName);
+  if Assigned(Result) then
+    Result.IsKey:=true;
+end;
+
+procedure TBisProviderFieldDefs.DefaultDrawCheck(Def: TBisProviderFieldDef; Canvas: TCanvas; Rect: TRect);
+begin
+
+end;
+
+procedure TBisProviderFieldDefs.DefaultDrawRadio(Def: TBisProviderFieldDef; Canvas: TCanvas; Rect: TRect);
+begin
+
+end;
+
+function TBisProviderFieldDefs.Find(const FieldName: string): TBisProviderFieldDef;
+var
+  i: Integer;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do
+    if AnsiSameText(Items[i].FieldName,FieldName) then begin
+      Result:=Items[i];
+      exit;
+    end;
+end;
+
+function TBisProviderFieldDefs.GetItem(Index: Integer): TBisProviderFieldDef;
+begin
+  Result:=TBisProviderFieldDef(inherited Items[Index]);
+end;
+
+{ TBisProviderParams }
+
+function TBisProviderParams.GetItem(Index: Integer): TBisProviderParam;
+begin
+  Result:=TBisProviderParam(inherited Items[Index]);
+end;
+
+{ TBisProvider }
+
+constructor TBisProvider.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FFieldDefs:=TBisProviderFieldDefs.Create;
+  FParams:=TBisProviderParams.Create;
+end;
+
+destructor TBisProvider.Destroy;
+begin
+  FParams.Free;
+  FFieldDefs.Free;
+  inherited Destroy;
+end;
+
+procedure TBisProvider.GetRecords(ADataSet: TDataSet);
+begin
+  if Assigned(FOnGetRecords) then begin
+    FOnGetRecords(Self,ADataSet);
+  end else begin
+
+  end;
+end;
+
+end.
+

@@ -1,0 +1,90 @@
+unit BisTaxiDataInMessagesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList, DB,
+  BisDataFrm, BisDataEditFm, BisDataGridFrm, BisDataGridFm, BisFieldNames,
+  BisMessDataInMessagesFm;
+                                                                                                          
+type
+  TBisTaxiDataInMessagesFrame=class(TBisMessDataInMessagesFrame)
+  private
+    FOrderId: Variant;
+  protected
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property OrderId: Variant read FOrderId write FOrderId;
+  end;
+
+  TBisTaxiDataInMessagesForm = class(TBisMessDataInMessagesForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataInMessagesFormIface=class(TBisMessDataInMessagesFormIface)
+  protected
+    class function GetFormClass: TBisFormClass; override;
+  end;
+
+var
+  BisTaxiDataInMessagesForm: TBisTaxiDataInMessagesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses DateUtils,
+     BisCore, BisUtils, BisConsts, BisVariants, BisOrders, BisFilterGroups, BisParam,
+     BisTaxiDataInMessageEditFm, BisTaxiDataInMessageFilterFm;
+
+{ TBisTaxiDataInMessagesFrame }
+
+constructor TBisTaxiDataInMessagesFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FilterClass:=TBisTaxiDataInMessageFilterFormIface;
+  ViewClass:=TBisTaxiDataInMessageViewFormIface;
+  InsertClass:=TBisTaxiDataInMessageInsertFormIface;
+  UpdateClass:=TBisTaxiDataInMessageUpdateFormIface;
+  DeleteClass:=TBisTaxiDataInMessageDeleteFormIface;
+
+  Provider.FieldNames.AddInvisible('ORDER_ID');
+
+  FOrderId:=Null;
+end;
+
+procedure TBisTaxiDataInMessagesFrame.BeforeIfaceExecute(AIface: TBisDataEditFormIface);
+var
+  POrder: TBisParam;
+begin
+  inherited BeforeIfaceExecute(AIface);
+  if Assigned(AIface) then begin
+    with AIface.Params do begin
+      POrder:=Find('ORDER_ID');
+      if Assigned(POrder) then
+        POrder.Value:=FOrderId;
+    end;
+  end;
+end;
+
+{ TBisTaxiDataInMessagesFormIface }
+
+class function TBisTaxiDataInMessagesFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=
+end;
+
+{ TBisTaxiDataInMessagesForm }
+
+class function TBisTaxiDataInMessagesForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataInMessagesFrame;
+end;
+
+
+end.

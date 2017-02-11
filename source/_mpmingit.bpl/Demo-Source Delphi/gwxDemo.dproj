@@ -1,0 +1,86 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{3978944d-372a-4fe4-bce4-fa70b1ed31f0}</ProjectGuid>
+    <MainSource>gwxDemo.dpr</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>gwxDemo.exe</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_Define>DEBUG</DCC_Define>
+    <DCC_UnitSearchPath>E:\Distr\Ingit\03.04.2009\GWX_DOCUM\Demo-Source Delphi</DCC_UnitSearchPath>
+    <DCC_ResourcePath>E:\Distr\Ingit\03.04.2009\GWX_DOCUM\Demo-Source Delphi</DCC_ResourcePath>
+    <DCC_ObjPath>E:\Distr\Ingit\03.04.2009\GWX_DOCUM\Demo-Source Delphi</DCC_ObjPath>
+    <DCC_IncludePath>E:\Distr\Ingit\03.04.2009\GWX_DOCUM\Demo-Source Delphi</DCC_IncludePath>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">OOO Firma Ingit</VersionInfoKeys><VersionInfoKeys Name="FileDescription">GWX Demo</VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName">gwxDemo</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">Copyright (c) 2005 OOO Firma INGIT</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments">http://www.ingit.ru</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">gwxDemo.dpr</Source></Source></Delphi.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="gwxDemo.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="BmpOpt.pas">
+      <Form>BitmapOptForm</Form>
+    </DCCReference>
+    <DCCReference Include="ContextSrch.pas">
+      <Form>ContextSearchForm</Form>
+    </DCCReference>
+    <DCCReference Include="DbErrors.pas">
+      <Form>DbErrForm</Form>
+    </DCCReference>
+    <DCCReference Include="DbSelect.pas">
+      <Form>DbForm</Form>
+    </DCCReference>
+    <DCCReference Include="MainForm.pas">
+      <Form>MapForm</Form>
+    </DCCReference>
+    <DCCReference Include="MapList.pas">
+      <Form>MapListForm</Form>
+    </DCCReference>
+    <DCCReference Include="MDBFTable.pas" />
+    <DCCReference Include="ObjList.pas">
+      <Form>ObjListForm</Form>
+    </DCCReference>
+    <DCCReference Include="ObjProp.pas">
+      <Form>ObjectForm</Form>
+    </DCCReference>
+    <DCCReference Include="ObjStatus.pas">
+      <Form>ObjStatusForm</Form>
+    </DCCReference>
+    <DCCReference Include="ObPropTbl.pas">
+      <Form>ObjPropTable</Form>
+    </DCCReference>
+    <DCCReference Include="PrepareTable.pas">
+      <Form>PrepareTableForm</Form>
+    </DCCReference>
+    <DCCReference Include="RouteParams.pas">
+      <Form>RouteParamsForm</Form>
+    </DCCReference>
+    <DCCReference Include="RtVars.pas">
+      <Form>RouteVariants</Form>
+    </DCCReference>
+    <DCCReference Include="SelectMap.pas">
+      <Form>SelectMapForm</Form>
+    </DCCReference>
+    <DCCReference Include="TableColumns.pas">
+      <Form>TableColumnForm</Form>
+    </DCCReference>
+    <DCCReference Include="TreeViewForm.pas">
+      <Form>TreeForm</Form>
+    </DCCReference>
+  </ItemGroup>
+</Project>

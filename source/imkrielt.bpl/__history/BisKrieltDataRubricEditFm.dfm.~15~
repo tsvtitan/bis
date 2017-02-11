@@ -1,0 +1,298 @@
+inherited BisKrieltDataRubricEditForm: TBisKrieltDataRubricEditForm
+  Left = 424
+  Top = 189
+  Caption = 'BisKrieltDataRubricEditForm'
+  ClientHeight = 493
+  ClientWidth = 575
+  ExplicitWidth = 583
+  ExplicitHeight = 527
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 455
+    Width = 575
+    ExplicitTop = 332
+    ExplicitWidth = 362
+    inherited ButtonOk: TButton
+      Left = 396
+      ExplicitLeft = 183
+    end
+    inherited ButtonCancel: TButton
+      Left = 492
+      ExplicitLeft = 279
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 575
+    Height = 455
+    ExplicitWidth = 362
+    ExplicitHeight = 332
+    object LabelName: TLabel
+      Left = 29
+      Top = 39
+      Width = 77
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077':'
+      FocusControl = EditName
+    end
+    object LabelView: TLabel
+      Left = 83
+      Top = 138
+      Width = 23
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1042#1080#1076':'
+      FocusControl = EditView
+    end
+    object LabelParent: TLabel
+      Left = 53
+      Top = 12
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1056#1086#1076#1080#1090#1077#1083#1100':'
+      FocusControl = EditParent
+    end
+    object LabelDescription: TLabel
+      Left = 53
+      Top = 66
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1087#1080#1089#1072#1085#1080#1077':'
+      FocusControl = MemoDescription
+    end
+    object LabelPriority: TLabel
+      Left = 77
+      Top = 365
+      Width = 48
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1086#1088#1103#1076#1086#1082':'
+      FocusControl = EditPriority
+    end
+    object LabelType: TLabel
+      Left = 84
+      Top = 165
+      Width = 22
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1058#1080#1087':'
+      FocusControl = EditType
+    end
+    object LabelOperation: TLabel
+      Left = 52
+      Top = 192
+      Width = 54
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1087#1077#1088#1072#1094#1080#1103':'
+      FocusControl = EditOperation
+    end
+    object LabelParam: TLabel
+      Left = 53
+      Top = 219
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1072#1088#1072#1084#1077#1090#1088':'
+      FocusControl = EditParam
+    end
+    object LabelRubricType: TLabel
+      Left = 39
+      Top = 246
+      Width = 67
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akLeft, akBottom]
+      Caption = #1058#1080#1087' '#1088#1091#1073#1088#1080#1082#1080':'
+      FocusControl = ComboBoxRubricType
+    end
+    object LabelCond: TLabel
+      Left = 60
+      Top = 273
+      Width = 46
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akLeft, akBottom]
+      Caption = #1059#1089#1083#1086#1074#1080#1077':'
+      FocusControl = ComboBoxCond
+    end
+    object Label1: TLabel
+      Left = 54
+      Top = 300
+      Width = 52
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1047#1085#1072#1095#1077#1085#1080#1077':'
+      FocusControl = Edit1
+    end
+    object EditName: TEdit
+      Left = 112
+      Top = 36
+      Width = 238
+      Height = 21
+      MaxLength = 100
+      TabOrder = 2
+    end
+    object EditView: TEdit
+      Left = 112
+      Top = 135
+      Width = 211
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 4
+    end
+    object ButtonView: TButton
+      Left = 329
+      Top = 135
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1080#1076
+      Caption = '...'
+      TabOrder = 5
+    end
+    object EditParent: TEdit
+      Left = 112
+      Top = 9
+      Width = 211
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonParent: TButton
+      Left = 329
+      Top = 9
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1088#1086#1076#1080#1090#1077#1083#1100#1089#1082#1091#1102' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1102
+      Caption = '...'
+      TabOrder = 1
+    end
+    object MemoDescription: TMemo
+      Left = 112
+      Top = 63
+      Width = 238
+      Height = 66
+      TabOrder = 3
+    end
+    object EditPriority: TEdit
+      Left = 131
+      Top = 362
+      Width = 75
+      Height = 21
+      TabOrder = 6
+    end
+    object EditType: TEdit
+      Left = 112
+      Top = 162
+      Width = 211
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 7
+    end
+    object ButtonType: TButton
+      Left = 329
+      Top = 162
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1090#1080#1087
+      Caption = '...'
+      TabOrder = 8
+    end
+    object EditOperation: TEdit
+      Left = 112
+      Top = 189
+      Width = 211
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 9
+    end
+    object ButtonOperation: TButton
+      Left = 329
+      Top = 189
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1086#1087#1077#1088#1072#1094#1080#1102
+      Caption = '...'
+      TabOrder = 10
+    end
+    object EditParam: TEdit
+      Left = 112
+      Top = 216
+      Width = 211
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 11
+    end
+    object ButtonParam: TButton
+      Left = 329
+      Top = 216
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1072#1088#1072#1084#1077#1090#1088
+      Caption = '...'
+      TabOrder = 12
+    end
+    object ComboBoxRubricType: TComboBox
+      Left = 112
+      Top = 243
+      Width = 193
+      Height = 21
+      Style = csDropDownList
+      Anchors = [akLeft, akRight, akBottom]
+      ItemHeight = 13
+      TabOrder = 13
+      Items.Strings = (
+        #1085#1077' '#1086#1087#1088#1077#1076#1077#1083#1077#1085#1072
+        #1087#1088#1080#1074#1103#1079#1082#1072' '#1082' '#1074#1080#1076#1091
+        #1087#1088#1080#1074#1103#1079#1082#1072' '#1082' '#1090#1080#1087#1091
+        #1087#1088#1080#1074#1103#1079#1082#1072' '#1082' '#1086#1087#1077#1088#1072#1094#1080#1080
+        #1087#1088#1080#1074#1103#1079#1082#1072' '#1082' '#1087#1072#1088#1072#1084#1077#1090#1088#1091)
+    end
+    object ComboBoxCond: TComboBox
+      Left = 112
+      Top = 270
+      Width = 193
+      Height = 21
+      Style = csDropDownList
+      Anchors = [akLeft, akRight, akBottom]
+      ItemHeight = 13
+      TabOrder = 14
+      Items.Strings = (
+        #1088#1072#1074#1085#1086
+        #1073#1086#1083#1100#1096#1077
+        #1084#1077#1085#1100#1096#1077
+        #1085#1077' '#1088#1072#1074#1085#1086
+        #1073#1086#1083#1100#1096#1077' '#1080#1083#1080' '#1088#1072#1074#1085#1086
+        #1084#1077#1085#1100#1096#1077' '#1080#1083#1080' '#1088#1072#1074#1085#1086
+        #1087#1086#1093#1086#1078#1077' '#1085#1072
+        #1085#1077' '#1087#1086#1093#1086#1078#1077' '#1085#1072
+        #1087#1091#1089#1090#1086
+        #1085#1077' '#1087#1091#1089#1090#1086)
+    end
+    object Edit1: TEdit
+      Left = 112
+      Top = 297
+      Width = 238
+      Height = 21
+      MaxLength = 100
+      TabOrder = 15
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 144
+    Top = 72
+  end
+end

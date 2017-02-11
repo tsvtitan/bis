@@ -1,0 +1,83 @@
+unit BisParamKey;
+
+interface
+
+uses DB,
+     BisParam;
+
+type
+
+  TBisParamKey=class(TBisParam)
+  private
+    FFirstValue: Boolean;
+    FValue: Variant;
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetSize: Integer; override;
+    function GetAuto: Boolean; override;
+  public
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisParam); override;
+    procedure Reset; override;
+  end;
+
+implementation
+
+uses Variants,
+     BisUtils;
+
+{ TBisParamKey }
+
+procedure TBisParamKey.CopyFrom(Source: TBisParam);
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisParamKey) then begin
+
+  end;
+end;
+
+constructor TBisParamKey.Create;
+begin
+  inherited Create;
+  FValue:=Null;
+  DataType:=ftString;
+  FFirstValue:=true;
+
+end;
+
+function TBisParamKey.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if FFirstValue then begin
+    FValue:=GetUniqueID;
+    Result:=FValue;
+    FFirstValue:=false;
+  end else
+    Result:=FValue;
+end;
+
+procedure TBisParamKey.Reset;
+begin
+  inherited Reset;
+  FFirstValue:=true;
+end;
+
+procedure TBisParamKey.SetValue(const AValue: Variant);
+begin
+  FValue:=AValue;
+  FFirstValue:=false;
+  inherited SetValue(AValue);
+end;
+
+function TBisParamKey.GetAuto: Boolean;
+begin
+  Result:=true;
+end;
+
+function TBisParamKey.GetSize: Integer;
+begin
+  Result:=Length(GetUniqueID);
+end;
+
+end.

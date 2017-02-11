@@ -1,0 +1,108 @@
+unit BisAudioSpectr;
+
+interface
+
+uses Classes, mmSystem,
+     WaveUtils,
+     FftSpec;
+
+type
+  TBisAudioSpectr=class;
+
+  TBisAudioSpectrDetectEvent=procedure (Sender: TBisAudioSpectr; const Freq,Level: Word) of objectl
+
+  TBisAudioSpectr=class(TObject)
+  private
+    FLowFreq: Word;
+    FSamplesPerSec: Integer;
+    FBitsPerSample: Integer;
+    FChannels: Integer;
+    FIndex: Integer;
+    FOnDetect: TNotifyEvent;
+    FThreshold: Word;
+    FHighFreq: Word;
+
+    procedure Detect;
+  protected
+    procedure DoDetect; virtual;
+  public
+    constructor Create; virtual;
+    destructor Destroy; override;
+
+    function SetFormat(SamplesPerSec, BitsPerSample, Channels: Integer): Boolean; overload;
+    function SetFormat(Format: TPCMFormat): Boolean; overload;
+    function SetFormat(Format: PWaveFormatEx): Boolean; overload;
+
+    function Write(const Data: Pointer; Size: Cardinal): Boolean;
+
+    property LowFreq: Word read FLowFreq write FLowFreq;
+    property HighFreq: Word read FHighFreq write FHighFreq;
+    property Threshold: Word read FThreshold write FThreshold;
+    property OnDetect: TNotifyEvent read FOnDetect write FOnDetect;
+  end;
+
+implementation
+
+{ TBisAudioSpectr }
+
+constructor TBisAudioSpectr.Create;
+begin
+  inherited Create;
+
+  FThreshold:=900;
+  FIndex:=0;
+end;
+
+destructor TBisAudioSpectr.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TBisAudioSpectr.DoDetect;
+begin
+  if Assigned(FOnDetect) then
+    FOnDetect(Self);
+end;
+
+function TBisAudioSpectr.SetFormat(SamplesPerSec, BitsPerSample, Channels: Integer): Boolean;
+begin
+  Result:=false;
+  if ((SamplesPerSec>0) and (BitsPerSample>=8) and (Channels>=1)) then begin
+
+    FSamplesPerSec:=SamplesPerSec;
+    FBitsPerSample:=BitsPerSample;
+    FChannels:=Channels;
+
+    Result:=true;
+  end;
+end;
+
+function TBisAudioSpectr.SetFormat(Format: PWaveFormatEx): Boolean;
+begin
+  Result:=false;
+  if Assigned(Format) then
+    Result:=SetFormat(Format.nSamplesPerSec,Format.wBitsPerSample,Format.nChannels);
+end;
+
+function TBisAudioSpectr.SetFormat(Format: TPCMFormat): Boolean;
+var
+  F: TWaveFormatEx;
+begin
+  SetPCMAudioFormatS(@F,Format);
+  Result:=SetFormat(@F);
+end;
+
+procedure TBisAudioSpectr.Detect;
+begin
+  FIndex:=0;
+end;
+
+function TBisAudioSpectr.Write(const Data: Pointer; Size: Cardinal): Boolean;
+begin
+  Result:=false;
+  if Assigned(Data) and (Size>0) then begin
+
+  end;
+end;
+
+end.

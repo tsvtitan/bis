@@ -1,0 +1,59 @@
+unit Unit15;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls,
+
+  BisSpeech;
+
+type
+  TSpeechForm = class(TForm)
+    Label1: TLabel;
+    Memo1: TMemo;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    FSpeech: TBisSpeech;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+  end;
+
+var
+  SpeechForm: TSpeechForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TSpeechForm }
+
+constructor TSpeechForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  
+  FSpeech:=TBisSpeech.Create(nil);
+end;
+
+destructor TSpeechForm.Destroy;
+begin
+  FSpeech.Free;
+  inherited Destroy;
+end;
+
+procedure TSpeechForm.Button1Click(Sender: TObject);
+begin
+  //
+end;
+
+procedure TSpeechForm.Button2Click(Sender: TObject);
+begin
+  //
+end;
+
+end.

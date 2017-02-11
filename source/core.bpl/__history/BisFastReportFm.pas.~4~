@@ -1,0 +1,28 @@
+unit BisFastReportFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ComCtrls,
+  BisReportFm;
+
+type
+  TBisFastReportForm = class(TBisReportForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisFastReportFormIface=class(TBisReportFormIface)
+  end;
+
+var
+  BisFastReportForm: TBisFastReportForm;
+
+implementation
+
+{$R *.dfm}
+
+end.

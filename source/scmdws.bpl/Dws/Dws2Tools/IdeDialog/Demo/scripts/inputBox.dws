@@ -1,0 +1,14 @@
+// -------------------------------------------------------------------
+// Demo: Tdws2Unit and Tdws2Func
+//
+// The functions Input() and ShowMessage() are
+// defined in the Tdws2Unit component on this form.
+//
+// Have a look at their OnEval event.
+// -------------------------------------------------------------------
+
+var name: string;
+
+name := Input('Tdws2Func Demo', 'What''s your name?');
+
+ShowMessage('Your name is "' + name + '"');

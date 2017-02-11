@@ -1,0 +1,272 @@
+object BisPeriodForm: TBisPeriodForm
+  Left = 612
+  Top = 189
+  Caption = #1042#1099#1073#1086#1088' '#1087#1077#1088#1080#1086#1076#1072
+  ClientHeight = 245
+  ClientWidth = 249
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = True
+  PixelsPerInch = 96
+  TextHeight = 13
+  object LabelBegin: TLabel
+    Left = 91
+    Top = 125
+    Width = 9
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'c:'
+    FocusControl = DateTimePickerBegin
+  end
+  object PanelButton: TPanel
+    Left = 0
+    Top = 204
+    Width = 249
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 14
+    DesignSize = (
+      249
+      41)
+    object ButtonOk: TButton
+      Left = 85
+      Top = 9
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Caption = #1054#1050
+      Default = True
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object ButtonCancel: TButton
+      Left = 166
+      Top = 9
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Cancel = True
+      Caption = #1054#1090#1084#1077#1085#1072
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+  object RadioButtonQuarter: TRadioButton
+    Left = 10
+    Top = 43
+    Width = 75
+    Height = 17
+    Caption = #1050#1074#1072#1088#1090#1072#1083':'
+    TabOrder = 3
+    OnClick = RadioButtonQuarterClick
+  end
+  object RadioButtonMonth: TRadioButton
+    Left = 10
+    Top = 70
+    Width = 75
+    Height = 17
+    Caption = #1052#1077#1089#1103#1094':'
+    TabOrder = 6
+    OnClick = RadioButtonQuarterClick
+  end
+  object RadioButtonDay: TRadioButton
+    Left = 10
+    Top = 96
+    Width = 75
+    Height = 17
+    Caption = #1044#1077#1085#1100':'
+    TabOrder = 9
+    OnClick = RadioButtonQuarterClick
+  end
+  object RadioButtonInterval: TRadioButton
+    Left = 10
+    Top = 124
+    Width = 75
+    Height = 17
+    Caption = #1048#1085#1090#1077#1088#1074#1072#1083':'
+    TabOrder = 11
+    OnClick = RadioButtonQuarterClick
+  end
+  object EditQuarter: TEdit
+    Left = 107
+    Top = 41
+    Width = 117
+    Height = 21
+    ReadOnly = True
+    TabOrder = 4
+    Text = '0'
+    OnChange = EditQuarterChange
+  end
+  object UpDownQuarter: TUpDown
+    Left = 224
+    Top = 41
+    Width = 15
+    Height = 21
+    Associate = EditQuarter
+    Min = -4
+    Max = 4
+    TabOrder = 5
+    OnChangingEx = UpDownQuarterChangingEx
+  end
+  object EditMonth: TEdit
+    Left = 107
+    Top = 68
+    Width = 117
+    Height = 21
+    ReadOnly = True
+    TabOrder = 7
+    Text = '0'
+    OnChange = EditMonthChange
+  end
+  object UpDownMonth: TUpDown
+    Left = 224
+    Top = 68
+    Width = 15
+    Height = 21
+    Associate = EditMonth
+    Min = -4
+    Max = 4
+    TabOrder = 8
+    OnChangingEx = UpDownMonthChangingEx
+  end
+  object DateTimePickerDay: TDateTimePicker
+    Left = 107
+    Top = 95
+    Width = 133
+    Height = 21
+    Date = 36907.446560219900000000
+    Time = 36907.446560219900000000
+    DateFormat = dfLong
+    TabOrder = 10
+  end
+  object RadioButtonYear: TRadioButton
+    Left = 10
+    Top = 16
+    Width = 75
+    Height = 17
+    Caption = #1043#1086#1076':'
+    Checked = True
+    TabOrder = 0
+    TabStop = True
+    OnClick = RadioButtonQuarterClick
+  end
+  object EditYear: TEdit
+    Left = 107
+    Top = 14
+    Width = 117
+    Height = 21
+    ReadOnly = True
+    TabOrder = 1
+    Text = '2001'
+    OnChange = EditQuarterChange
+  end
+  object UpDownYear: TUpDown
+    Left = 224
+    Top = 14
+    Width = 16
+    Height = 21
+    Associate = EditYear
+    Min = 1950
+    Max = 2050
+    Position = 2001
+    TabOrder = 2
+    Thousands = False
+    OnChangingEx = UpDownYearChangingEx
+  end
+  object PanelPeriod: TPanel
+    Left = 10
+    Top = 147
+    Width = 234
+    Height = 53
+    BevelOuter = bvNone
+    TabOrder = 13
+    object RadioButtonIntervalDate: TRadioButton
+      Left = 16
+      Top = 4
+      Width = 61
+      Height = 17
+      Caption = #1087#1086' '#1076#1072#1090#1091':'
+      Checked = True
+      TabOrder = 0
+      TabStop = True
+      OnClick = RadioButtonIntervalDateClick
+    end
+    object DateTimePickerEnd: TDateTimePicker
+      Left = 96
+      Top = 2
+      Width = 133
+      Height = 21
+      Date = 36907.446560219900000000
+      Time = 36907.446560219900000000
+      DateFormat = dfLong
+      TabOrder = 1
+    end
+    object ComboBoxPeriod: TComboBox
+      Left = 96
+      Top = 29
+      Width = 133
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      ItemIndex = 0
+      TabOrder = 3
+      Text = '1 '#1076#1077#1085#1100
+      Items.Strings = (
+        '1 '#1076#1077#1085#1100
+        '2 '#1076#1085#1103
+        '3 '#1076#1085#1103
+        '4 '#1076#1085#1103
+        '5 '#1076#1085#1077#1081
+        '6 '#1076#1085#1077#1081
+        '1 '#1085#1077#1076#1077#1083#1103
+        '2 '#1085#1077#1076#1077#1083#1080
+        '3 '#1085#1077#1076#1077#1083#1080
+        '4 '#1085#1077#1076#1077#1083#1080
+        '1 '#1084#1077#1089#1103#1094
+        '2 '#1084#1077#1089#1103#1094#1072
+        '3 '#1084#1077#1089#1103#1094#1072
+        '4 '#1084#1077#1089#1103#1094#1072
+        '5 '#1084#1077#1089#1103#1094#1077#1074
+        '6 '#1084#1077#1089#1103#1094#1077#1074
+        '7 '#1084#1077#1089#1103#1094#1077#1074
+        '8 '#1084#1077#1089#1103#1094#1077#1074
+        '9 '#1084#1077#1089#1103#1094#1077#1074
+        '10 '#1084#1077#1089#1103#1094#1077#1074
+        '11 '#1084#1077#1089#1103#1094#1077#1074
+        '1 '#1075#1086#1076
+        '2 '#1075#1086#1076#1072
+        '3 '#1075#1086#1076#1072
+        '4 '#1075#1086#1076#1072
+        '5 '#1083#1077#1090
+        '6 '#1083#1077#1090
+        '7 '#1083#1077#1090
+        '8 '#1083#1077#1090
+        '9 '#1083#1077#1090
+        '10 '#1083#1077#1090)
+    end
+    object RadioButtonIntervalPeriod: TRadioButton
+      Left = 16
+      Top = 31
+      Width = 74
+      Height = 17
+      Caption = #1079#1072' '#1087#1077#1088#1080#1086#1076':'
+      TabOrder = 2
+      OnClick = RadioButtonIntervalDateClick
+    end
+  end
+  object DateTimePickerBegin: TDateTimePicker
+    Left = 106
+    Top = 122
+    Width = 133
+    Height = 21
+    Date = 36907.446560219900000000
+    Time = 36907.446560219900000000
+    DateFormat = dfLong
+    TabOrder = 12
+  end
+end

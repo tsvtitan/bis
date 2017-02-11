@@ -1,0 +1,224 @@
+unit BisParamComboBox;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisControls;
+
+type
+  TBisParamComboBoxMode=(cmIndex,cmTextIndex,cmText);
+
+  TBisParamComboBox=class(TBisParam)
+  private
+    FComboBox: TComboBox;
+    FLabelComboBox: TLabel;
+    FComboBoxName: String;
+    FLabelName: String;
+    FMode: TBisParamComboBoxMode;
+    FOldComboBoxChange: TNotifyEvent;
+    FFilterEnabled: Boolean;
+
+    procedure ComboBoxChange(Sender: TObject);
+    procedure SetMode(const Value: TBisParamComboBoxMode);
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetEmpty: Boolean; override;
+    function GetSize: Integer; override;
+    procedure SetSize(const ASize: Integer); override;
+    function GetCaption: String; override;
+    function GetControl: TWinControl; override;
+//    procedure SetEnabled(const Value: Boolean); override;
+    procedure GetControls(List: TList); override;
+    function UseInFilter: Boolean; override;
+  public
+    constructor Create; override;
+    procedure LinkControls(Parent: TWinControl); override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+    procedure Clear; override;
+
+    property ComboBoxName: String read FComboBoxName write FComboBoxName;
+    property LabelName: String read FLabelName write FLabelName;
+    property ComboBox: TComboBox read FComboBox;
+    property LabelComboBox: TLabel read FLabelComboBox;
+    property Mode: TBisParamComboBoxMode read FMode write SetMode;
+    property FilterEnabled: Boolean read FFilterEnabled write FFilterEnabled;
+  end;
+
+implementation
+
+uses SysUtils, Variants, Graphics,
+     BisUtils, BisConsts;
+
+{ TBisParamComboBox }
+
+constructor TBisParamComboBox.Create;
+begin
+  inherited;
+  Mode:=cmIndex;
+  FFilterEnabled:=true;
+end;
+
+procedure TBisParamComboBox.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamComboBox) then begin
+    ComboBoxName:=TBisParamComboBox(Source).ComboBoxName;
+    LabelName:=TBisParamComboBox(Source).LabelName;
+    Mode:=TBisParamComboBox(Source).Mode;
+  end;
+end;
+
+procedure TBisParamComboBox.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FComboBox:=TComboBox(DoFindComponent(FComboBoxName));
+    if Assigned(FComboBox) then begin
+      FOldComboBoxChange:=FComboBox.OnChange;
+      FComboBox.OnChange:=ComboBoxChange;
+      FComboBox.MaxLength:=inherited GetSize;
+      FComboBox.Color:=iff(FComboBox.Color=clBtnFace,ColorControlReadOnly,FComboBox.Color);
+      FLabelComboBox:=TLabel(DoFindComponent(FLabelName));
+      if Assigned(FLabelComboBox) then
+        FLabelComboBox.FocusControl:=FComboBox;
+    end;
+    Value:=TempValue;
+  end;
+  inherited LinkControls(Parent);
+  if Assigned(FComboBox) then begin
+  end;
+end;
+
+procedure TBisParamComboBox.SetMode(const Value: TBisParamComboBoxMode);
+begin
+  FMode := Value;
+  case FMode of
+    cmIndex: DataType:=ftInteger;
+    cmTextIndex: DataType:=ftString;
+    cmText: DataType:=ftString;
+  end;
+end;
+
+function TBisParamComboBox.GetValue: Variant;
+var
+  S: String;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FComboBox) then
+    case FMode of
+      cmIndex: Result:=iff(not Empty,FComboBox.ItemIndex,Result);
+      cmTextIndex: begin
+        S:=FComboBox.Text;
+        if FComboBox.ItemIndex<>-1 then
+          S:=FComboBox.Items[FComboBox.ItemIndex];
+        Result:=iff(not Empty,S,Result);
+      end;
+      cmText: Result:=iff(not Empty,FComboBox.Text,Result);
+    end;
+end;
+
+procedure TBisParamComboBox.SetValue(const AValue: Variant);
+begin
+  if not VarSameValue(Value,AValue) then begin
+    if Assigned(FComboBox) then begin
+      FComboBox.OnChange:=nil;
+      try
+        case FMode of
+          cmIndex: begin
+            FComboBox.ItemIndex:=VarToIntDef(AValue,-1);
+          end;
+          cmTextIndex: begin
+            FComboBox.ItemIndex:=FComboBox.Items.IndexOf(VarToStrDef(AValue,''));
+//            FComboBox.Text:=VarToStrDef(AValue,'');
+          end;
+          cmText: begin
+            FComboBox.Text:=VarToStrDef(AValue,'');
+          end;
+        end;
+      finally
+        FComboBox.OnChange:=ComboBoxChange;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamComboBox.GetControl: TWinControl;
+begin
+  Result:=FComboBox;
+end;
+
+procedure TBisParamComboBox.GetControls(List: TList);
+begin
+  inherited GetControls(List);
+  if Assigned(List) then
+    List.Add(FLabelComboBox);
+end;
+
+{procedure TBisParamComboBox.SetEnabled(const Value: Boolean);
+begin
+  inherited SetEnabled(Value);
+  if Assigned(FLabelComboBox) then
+    FLabelComboBox.Enabled:=Value;
+end;}
+
+function TBisParamComboBox.GetCaption: String;
+begin
+  Result:=inherited GetCaption;
+  if Assigned(FLabelComboBox) then
+    Result:=FLabelComboBox.Caption;
+end;
+
+function TBisParamComboBox.GetEmpty: Boolean;
+begin
+  if Assigned(FComboBox) then begin
+    Result:=true;
+    case FMode of
+      cmIndex: Result:=FComboBox.ItemIndex=-1;
+      cmTextIndex: Result:=FComboBox.Items.IndexOf(FComboBox.Text)=-1;
+      cmText: Result:=FComboBox.Text='';
+    end;
+  end else
+    Result:=inherited GetEmpty;
+end;
+
+function TBisParamComboBox.GetSize: Integer;
+begin
+  Result:=inherited GetSize;
+  if Assigned(FComboBox) then
+    Result:=FComboBox.MaxLength;
+end;
+
+procedure TBisParamComboBox.SetSize(const ASize: Integer);
+begin
+  if Size<>ASize then
+    if Assigned(FComboBox) then
+      FComboBox.MaxLength:=ASize
+    else
+      inherited SetSize(ASize);
+end;
+
+procedure TBisParamComboBox.Clear;
+begin
+  inherited Clear;
+  if Assigned(FComboBox) then
+    FComboBox.Clear;
+end;
+
+procedure TBisParamComboBox.ComboBoxChange(Sender: TObject);
+begin
+  DoChange(Self);
+  if Assigned(FOldComboBoxChange) then
+    FOldComboBoxChange(Sender);
+end;
+
+function TBisParamComboBox.UseInFilter: Boolean;
+begin
+  Result:=inherited UseInFilter and FFilterEnabled;
+end;
+
+
+end.

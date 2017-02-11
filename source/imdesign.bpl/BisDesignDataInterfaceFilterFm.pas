@@ -1,0 +1,150 @@
+unit BisDesignDataInterfaceFilterFm;
+
+interface
+                                                                                                        
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ImgList,
+  BisDataEditFm, BisControls, BisInterfaces, BisParam;
+
+type
+
+  TBisDesignDataInterfaceFilterForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    ComboBoxType: TComboBox;
+    LabelType: TLabel;
+    LabelModuleName: TLabel;
+    ComboBoxModuleName: TComboBox;
+    LabelModuleInterface: TLabel;
+    ComboBoxModuleInterface: TComboBox;
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure ChangeParam(Param: TBisParam); override;
+  end;
+
+  TBisDesignDataInterfaceFilterFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDesignDataInterfaceFilterForm: TBisDesignDataInterfaceFilterForm;
+
+function GetInterfaceTypeByIndex(Index: Integer): String;
+
+implementation
+
+{$R *.dfm}
+
+uses TypInfo,
+     BisCore, BisIfaceModules, BisIfaces, BisUtils, BisDialogs, BisConsts;
+
+function GetInterfaceTypeByIndex(Index: Integer): String;
+begin
+  Result:='';
+  case TBisInterfaceType(Index) of
+    itInternal: Result:='Внутренний';
+    itScript: Result:='Скрипт';
+    itReport: Result:='Отчет';
+    itDocument: Result:='Документ';
+  end;
+end;
+
+{ TBisDesignDataInterfaceFilterFormIface }
+
+constructor TBisDesignDataInterfaceFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDesignDataInterfaceFilterForm;
+  with Params do begin
+    AddKey('INTERFACE_ID').Older('OLD_INTERFACE_ID');
+    AddComboBox('INTERFACE_TYPE','ComboBoxType','LabelType',true);
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription',false);
+    AddComboBoxTextIndex('MODULE_NAME','ComboBoxModuleName','LabelModuleName',false);
+    AddComboBoxTextIndex('MODULE_INTERFACE','ComboBoxModuleInterface','LabelModuleInterface',false);
+  end;
+end;
+
+{ TBisDesignDataInterfaceFilterForm }
+
+constructor TBisDesignDataInterfaceFilterForm.Create(AOwner: TComponent);
+var
+  i: Integer;
+  PInfo: PTypeInfo;
+  PData: PTypeData;
+  Module: TBisIfaceModule;
+begin
+  inherited Create(AOwner);
+
+  ComboBoxType.Clear;
+  PData:=nil;
+  PInfo:=TypeInfo(TBisInterfaceType);
+  if Assigned(PInfo) then
+    PData:=GetTypeData(PInfo);
+  if Assigned(PData) then
+    for i:=PData.MinValue to PData.MaxValue do begin
+      ComboBoxType.Items.Add(GetInterfaceTypeByIndex(i));
+    end;
+
+  ComboBoxModuleName.Clear;
+  for i:=0 to Core.IfaceModules.Count-1 do begin
+    Module:=Core.IfaceModules.Items[i];
+    if Module.Enabled then
+      ComboBoxModuleName.Items.AddObject(Module.ObjectName,Module);
+  end;
+
+end;
+
+procedure TBisDesignDataInterfaceFilterForm.ChangeParam(Param: TBisParam);
+var
+  i: Integer;
+  Module: TBisIfaceModule;
+  AClass: TBisIfaceClass;
+//  Iface: TBisIface;
+  Flag: Boolean;
+begin
+  inherited ChangeParam(Param);
+
+  if AnsiSameText(Param.ParamName,'MODULE_NAME') then begin
+    if ComboBoxModuleName.ItemIndex<>-1 then begin
+      ComboBoxModuleInterface.Clear;
+      Module:=TBisIfaceModule(ComboBoxModuleName.Items.Objects[ComboBoxModuleName.ItemIndex]);
+      if Assigned(Module) then begin
+        for i:=0 to Module.Classes.Count-1 do begin
+          AClass:=Module.Classes.Items[i];
+{          Iface:=AClass.Create(nil);
+          try
+            Iface.Init;
+            if Iface.Available then}
+              ComboBoxModuleInterface.Items.AddObject(AClass.GetObjectName,TObject(AClass));
+{          finally
+            Iface.Free;
+          end;}
+        end;
+{        for i:=0 to Module.Ifaces.Count-1 do begin
+          Iface:=Module.Ifaces.Items[i];
+          if Iface.Available then
+            ComboBoxModuleInterface.Items.AddObject(Iface.ObjectName,Iface);
+        end;}
+      end;
+    end else
+      ComboBoxModuleInterface.Clear;
+  end;
+
+  if AnsiSameText(Param.ParamName,'INTERFACE_TYPE') then begin
+    Flag:=(TBisInterfaceType(ComboBoxType.ItemIndex)=itInternal) or (ComboBoxType.ItemIndex=-1);
+    if not Flag then begin
+      ComboBoxModuleName.ItemIndex:=-1;
+      ComboBoxModuleInterface.ItemIndex:=-1;
+    end;
+  end;
+
+end;
+
+end.

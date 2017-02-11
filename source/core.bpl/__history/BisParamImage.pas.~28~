@@ -1,0 +1,119 @@
+unit BisParamImage;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB, Graphics, ExtCtrls,
+     BisParam;
+
+type
+
+  TBisParamImage=class(TBisParam)
+  private
+    FImage: TImage;
+    FImageName: String;
+
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetEmpty: Boolean; override;
+    function GetControl: TWinControl; override;
+  public
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+    property ImageName: String read FImageName write FImageName;
+    property Image: TImage read FImage write FImage;
+  end;
+
+implementation
+
+uses Variants,
+     BisUtils, BisConsts, BisPicture;
+
+{ TBisParamImage }
+
+constructor TBisParamImage.Create;
+begin
+  inherited Create;
+  DataType:=ftBlob;
+end;
+
+procedure TBisParamImage.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamImage) then begin
+    ImageName:=TBisParamImage(Source).ImageName;
+  end;
+end;
+
+procedure TBisParamImage.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FImage:=TImage(DoFindComponent(FImageName));
+    if Assigned(FImage) then begin
+    end;
+    Value:=TempValue;
+  end;
+  inherited LinkControls(Parent);
+  if Assigned(FImage) then begin
+  end;
+end;
+
+function TBisParamImage.GetValue: Variant;
+var
+  Stream: TMemoryStream;
+  AValue: String;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FImage) then begin
+    Stream:=TMemoryStream.Create;
+    try
+      TBisPicture(FImage.Picture).SaveToStream(Stream);
+      Stream.Position:=0;
+      SetLength(AValue,Stream.Size);
+      Stream.ReadBuffer(Pointer(AValue)^,Stream.Size);
+      Result:=iff(not Empty,AValue,Result);
+    finally
+      Stream.Free;
+    end;
+  end;
+end;
+
+procedure TBisParamImage.SetValue(const AValue: Variant);
+var
+  Stream: TMemoryStream;
+  S: String;
+begin
+  if not VarSameValue(Value,AValue) then begin
+    if Assigned(FImage) then begin
+      Stream:=TMemoryStream.Create;
+      try
+        S:=VarToStrDef(AValue,'');
+        Stream.WriteBuffer(Pointer(S)^,Length(S));
+        Stream.Position:=0;
+        TBisPicture(FImage.Picture).LoadFromStream(Stream);
+      finally
+        Stream.Free;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamImage.GetControl: TWinControl;
+begin
+  Result:=nil;
+end;
+
+function TBisParamImage.GetEmpty: Boolean;
+begin
+  Result:=true;
+  if Assigned(FImage) then
+    Result:=TBisPicture(FImage.Picture).Empty;
+end;
+
+end.

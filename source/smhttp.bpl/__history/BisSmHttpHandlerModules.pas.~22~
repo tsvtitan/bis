@@ -1,0 +1,69 @@
+unit BisSmHttpHandlerModules;
+
+interface
+
+uses Classes,
+     BisObject, BisModules, BisDataSet, BisSmHttpHandlers;
+
+type
+  TBisSmHttpHandlerModule=class;
+
+  TBisSmHttpHandlerModuleInitProc=procedure (AModule: TBisSmHttpHandlerModule); stdcall;
+
+  TBisSmHttpHandlerModule=class(TBisModule)
+  private
+    FInitProc: TBisSmHttpHandlerModuleInitProc;
+    FTable: TBisDataSet;
+    FHandlers: TBisSmHttpHandlers;
+  protected
+    procedure DoInitProc(AModule: TBisModule); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
+  TBisSmHttpHandlerModules=class(TBisModules)
+  end;
+
+implementation
+
+uses Windows, SysUtils, DB,
+     BisConsts, BisLogger, BisUtils;
+
+{ TBisSmHttpHandlerModule }
+
+constructor TBisSmHttpHandlerModule.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FHandlers:=TBisSmHttpHandlers.Create(Self);
+  FTable:=TBisDataSet.Create(Self);
+  
+end;
+
+destructor TBisSmHttpHandlerModule.Destroy;
+begin
+  FHandlers.Free;
+  FTable.Free;
+  inherited Destroy;
+end;
+
+procedure TBisSmHttpHandlerModule.DoInitProc(AModule: TBisModule);
+begin
+  @FInitProc:=GetProcAddress(Module,PChar(SInitServerModule));
+  if Assigned(@FInitProc) then begin
+    try
+      FInitProc(Self);
+      RefreshServers;
+      FServers.Init;
+      LoggerWrite(FormatEx(SInitSuccess,[FileName]));
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SInitFailed,[FileName,E.Message]),ltError);
+      end;
+    end;
+  end else begin
+    LoggerWrite(FormatEx(SInitProcNotFound,[FileName]),ltError);
+  end;
+end;
+
+end.

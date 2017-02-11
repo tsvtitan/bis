@@ -1,0 +1,16 @@
+program testfreq;
+
+uses
+  Forms,
+  MainFm in 'MainFm.pas' {MainForm},
+  BisAudioWave in '..\BisAudioWave.pas',
+  BisAudioFreq in '..\BisAudioFreq.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TMainForm, MainForm);
+  Application.Run;
+end.

@@ -1,0 +1,44 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{c5d1027e-4873-4d06-a4b0-b72b1f80cfb0}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="E:\Downloads\delphi\Ehlib\ehlibrus\Delphi9.Vcl\EhLib90.dproj" />
+    <Projects Include="EhLib90.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="EhLib90">
+    <MSBuild Projects="EhLib90.dproj" Targets="" />
+  </Target>
+  <Target Name="EhLib90:Clean">
+    <MSBuild Projects="EhLib90.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="EhLib90:Make">
+    <MSBuild Projects="EhLib90.dproj" Targets="Make" />
+  </Target>
+  <Target Name="EhLib90">
+    <MSBuild Projects="E:\Downloads\delphi\Ehlib\ehlibrus\Delphi9.Vcl\EhLib90.dproj" Targets="" />
+  </Target>
+  <Target Name="EhLib90:Clean">
+    <MSBuild Projects="E:\Downloads\delphi\Ehlib\ehlibrus\Delphi9.Vcl\EhLib90.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="EhLib90:Make">
+    <MSBuild Projects="E:\Downloads\delphi\Ehlib\ehlibrus\Delphi9.Vcl\EhLib90.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="EhLib90;EhLib90" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="EhLib90:Clean;EhLib90:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="EhLib90:Make;EhLib90:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

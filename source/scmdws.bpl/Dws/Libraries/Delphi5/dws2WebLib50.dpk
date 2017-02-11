@@ -1,0 +1,45 @@
+package dws2WebLib50;
+
+{$R *.RES}
+{$R '..\WebLib\dws2WebLib.dcr'}
+{$R '..\WebLib\dws2SessionLib.dcr'}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS OFF}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScript II - Web Library'}
+{$IMPLICITBUILD OFF}
+
+requires
+  INDY50,
+  INET50,
+  dws2Runtime50_20;
+
+contains
+  dws2WebLibModule in '..\WebLib\dws2WebLibModule.pas' {dws2WebLib: TDataModule},
+  dws2WebBasics in '..\WebLib\dws2WebBasics.pas',
+  dws2SessionLibModule in '..\WebLib\dws2SessionLibModule.pas' {dws2SessionLib: TDataModule},
+  MatlusMultipartParser in '..\WebLib\MatlusMultipartParser.pas',
+  dws2SessionGlobals in '..\WebLib\dws2SessionGlobals.pas',
+  dws2PageProducer in '..\WebLib\dws2PageProducer.pas',
+  dws2PageloaderModule in '..\WebLib\dws2PageloaderModule.pas' {dws2Pageloader: TDataModule},
+  dws2SessionBasics in '..\WebLib\dws2SessionBasics.pas';
+
+end.

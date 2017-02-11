@@ -1,0 +1,19 @@
+unit BisDataUpdate;
+
+interface
+
+uses Classes, Contnrs,
+     BisFm, BisDataEditFm;
+
+type
+
+  TBisDataUpdateFormIface=class(TBisDataEditFormIface)
+  protected
+    function GetFormClass: TBisFormClass; override;
+  end;
+
+  TBisDataUpdateFormIfaceClass=class of TBisDataUpdateFormIface;
+
+implementation
+
+end.

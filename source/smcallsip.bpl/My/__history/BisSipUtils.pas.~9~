@@ -1,0 +1,24 @@
+unit BisSipUtils;
+
+interface
+
+function GetBranch: String;
+
+implementation
+
+uses BisUtils, BisCrypter;
+
+function GetBranch: String;
+var
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    Result:=Crypter.HashString(GetUniqueID,haMD4,hfHEX);
+    Result:='z9hG4bK'+Result;
+  finally
+    Crypter.Free;
+  end;
+end;
+
+end.

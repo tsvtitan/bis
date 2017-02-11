@@ -1,0 +1,1 @@
+ball.exe /config imball.ini /noupdate

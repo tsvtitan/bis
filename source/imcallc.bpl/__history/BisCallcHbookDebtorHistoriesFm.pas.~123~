@@ -1,0 +1,206 @@
+unit BisCallcHbookDebtorHistoriesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, DB,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList, DBCtrls,
+  BisFieldNames, BisDataEditFm, BisControls;
+
+type
+  TBisCallcHbookDebtorHistoriesForm = class(TBisDataGridForm)
+    PanelControls: TPanel;
+    GroupBoxControls: TGroupBox;
+    PanelDescription: TPanel;
+    DBMemoDescription: TDBMemo;
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookDebtorHistorieDeleteFormIface=class(TBisDataEditFormIface)
+  public
+    procedure Execute; override;
+  end;
+
+  TBisCallcHbookDebtorHistoriesFormIface=class(TBisDataGridFormIface)
+  private
+    FFieldName: String;
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property FieldName: String read FFieldName write FFieldName;
+  end;
+
+var
+  BisCallcHbookDebtorHistoriesForm: TBisCallcHbookDebtorHistoriesForm;
+
+function SelectDebtorHistory(ADebtorId: Variant; AFieldName,ACaption: String; var OutValue: Variant): Boolean;
+procedure GetDebtorHistoryExists(ADebtorId: Variant; Fields: TStrings);
+
+implementation
+
+uses BisConsts, BisProvider, BisFilterGroups, BisOrders, BisDialogs, BisDataSet;
+
+{$R *.dfm}
+
+function SelectDebtorHistory(ADebtorId: Variant; AFieldName,ACaption: String; var OutValue: Variant): Boolean;
+
+  function GetDebtorFIO(var InValue: Variant): String;
+  var
+    P: TBisProvider;
+  begin
+    Result:='';
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=false;
+      P.ProviderName:='S_DEBTORS';
+      with P.FieldNames do begin
+        AddInvisible('SURNAME');
+        AddInvisible('NAME');
+        AddInvisible('PATRONYMIC');
+        AddInvisible(AFieldName);
+      end;
+      P.FilterGroups.Add.Filters.Add('DEBTOR_ID',fcEqual,ADebtorId);
+      P.Open;
+      if P.Active and not P.IsEmpty then begin
+        Result:=P.FieldByName('SURNAME').AsString+' '+
+                P.FieldByName('NAME').AsString+' '+
+                P.FieldByName('PATRONYMIC').AsString;
+        InValue:=P.FieldByName(AFieldName).Value;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+
+var
+  Iface: TBisCallcHbookDebtorHistoriesFormIface;
+  P: TBisProvider;
+  InValue: Variant;
+begin
+  Result:=false;
+  Iface:=TBisCallcHbookDebtorHistoriesFormIface.Create(nil);
+  P:=TBisProvider.Create(nil);
+  try
+    with Iface do begin
+      Init;
+      Caption:='История: '+GetDebtorFIO(InValue);
+      ProviderName:='S_HISTORIES';
+      with FieldNames.Add(AFieldName,ACaption,240) do begin
+        IsKey:=true;
+        FuncType:=ftDistinct;
+      end;
+      FieldNames.Add('DATE_HISTORY','Дата истории',110);
+//      FieldNames.AddInvisible('HISTORY_ID');
+      with FilterGroups.Add do begin
+        Filters.Add('DEBTOR_ID',fcEqual,ADebtorId);
+        Filters.Add(AFieldName,fcIsNotNull,Null);
+        Filters.Add(AFieldName,fcNotEqual,'');
+        Filters.Add(AFieldName,fcNotEqual,InValue);
+      end;
+      Orders.Add('DATE_HISTORY',otDesc);
+      Orders.Add(AFieldName);
+      FieldName:=AFieldName;
+    end;
+    if Iface.SelectInto(P) then begin
+      Result:=P.Active and not P.IsEmpty;
+      if Result then
+        OutValue:=P.FieldByName(AFieldName).Value;
+    end;
+  finally
+    P.Free;
+    Iface.Free;
+  end;
+end;
+
+procedure GetDebtorHistoryExists(ADebtorId: Variant; Fields: TStrings);
+var
+  P: TBisProvider;
+  i: Integer;
+  Field: TField;
+  Flag: Integer;
+begin
+  P:=TBisProvider.Create(nil);
+  try
+    P.ProviderName:='HISTORY_EXISTS';
+    for i:=0 to Fields.Count-1 do begin
+      P.FieldNames.AddInvisible(Fields[i]);
+    end;
+    P.Params.AddInvisible('DEBTOR_ID').Value:=ADebtorId;
+    P.OpenMode:=omex
+    P.Open;
+    if P.Active and not P.IsEmpty then begin
+      for i:=0 to Fields.Count-1 do begin
+        Field:=P.FindField(Fields[i]);
+        if Assigned(Field) and TryStrToInt(Field.AsString,Flag) then begin
+          Fields.Objects[i]:=Pointer(Flag);
+        end;
+      end;
+    end;
+  finally
+    P.Free;
+  end;
+end;
+
+{ TBisCallcHbookDebtorHistorieDeleteFormIface }
+
+procedure TBisCallcHbookDebtorHistorieDeleteFormIface.Execute;
+var
+  Provider: TBisProvider;
+begin
+  if Assigned(ParentProvider) and ParentProvider.Active and not ParentProvider.IsEmpty then begin
+    if ShowQuestion('Удалить текущую историю?',mbNo)=mrYes then begin
+      Provider:=TBisProvider.Create(Self);
+      try
+        Provider.ProviderName:='D_HISTORY';
+        Provider.ParentDataSet:=ParentProvider;
+        Provider.Params.AddKeyValue('HISTORY_ID',ParentProvider.FieldByName('HISTORY_ID').Value).Older('OLD_HISTORY_ID');
+        Provider.Execute;
+        Provider.DeleteFromParent;
+      finally
+        Provider.Free;
+      end;
+    end;
+  end;
+end;
+
+{ TBisCallcHbookDebtorHistoriesFormIface }
+
+constructor TBisCallcHbookDebtorHistoriesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookDebtorHistoriesForm;
+//  DeleteClass:=TBisCallcHbookDebtorHistorieDeleteFormIface;
+end;
+
+function TBisCallcHbookDebtorHistoriesFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(LastForm) and Assigned(LastForm.DataFrame) then begin
+    TBisCallcHbookDebtorHistoriesForm(LastForm).DBMemoDescription.DataField:=FFieldName;
+    with LastForm.DataFrame do begin
+      ActionFilter.Visible:=false;
+      ActionViewing.Visible:=false;
+      ActionInsert.Visible:=false;
+      ActionDuplicate.Visible:=false;
+      ActionUpdate.Visible:=false;
+      ActionDelete.Visible:=false;
+    end;
+  end;
+end;
+
+{ BisCallcHbookDebtorHistoriessForm }
+
+constructor TBisCallcHbookDebtorHistoriesForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  if Assigned(DataFrame) then begin
+    DBMemoDescription.DataSource:=DataFrame.DataSource;
+  end;
+end;
+
+end.

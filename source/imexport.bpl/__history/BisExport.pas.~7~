@@ -1,0 +1,26 @@
+unit BisExport;
+
+interface
+
+uses BisIfaceModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisCore,
+     BisExportFm, BisExportMainFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  with AModule.Ifaces do begin
+    AddClass(TBisExportMainFormIface);
+    AddClass(TBisExportFormIface);
+  end;
+end;
+
+end.

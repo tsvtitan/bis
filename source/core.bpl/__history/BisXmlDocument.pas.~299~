@@ -1,0 +1,301 @@
+unit BisXmlDocument;
+
+interface
+
+uses Classes, Variants, Contnrs,
+     ALXmlDoc,
+     BisObject, BisCoreObjects;
+
+type
+  TBisXmlDocumentNodes=class;
+
+  TBisXmlDocumentNodeType=(ntUnknown,ntElement,ntAttribute,ntText);
+
+  TBisXmlDocumentNode=class(TObject)
+  private
+    FChildNodes: TBisXmlDocumentNodes;
+    ALNode: TALXMLNode;
+    FNodeName: String;
+    FNodeValue: Variant;
+    FNodeType: TBisXmlDocumentNodeType;
+    function GetNodeValue: Variant;
+    function GetNodeName: String;
+    procedure SetNodeName(const Value: String);
+    procedure SetNodeValue(const Value: Variant);
+    function GetNodeType: TBisXmlDocumentNodeType;
+//    function GetALNodeType: TALXmlNodeType;
+  protected
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function Empty: Boolean;
+
+    property ChildNodes: TBisXmlDocumentNodes read FChildNodes;
+    property NodeName: String read GetNodeName write SetNodeName;
+    property NodeValue: Variant read GetNodeValue write SetNodeValue;
+    property NodeType: TBisXmlDocumentNodeType read GetNodeType write FNodeType;
+
+  end;
+
+  TBisXmlDocument=class;
+
+  TBisXmlDocumentNodes=class(TObjectList)
+  private
+    FDocument: TBisXmlDocument;
+    function GetItem(Index: Integer): TBisXmlDocumentNode;
+    procedure RefreshFromALList(ALList: TALXMLNodeList);
+    procedure RefreshToALList(ALList: TALXMLNodeList; ALParentNode: TALXMLNode=nil);
+  protected
+    property Document: TBisXmlDocument read FDocument write FDocument;
+  public
+    constructor Create;
+    function AddNode(NodeName: String; NodeType: TBisXmlDocumentNodeType=ntElement): TBisXmlDocumentNode;
+
+    property Items[Index: Integer]: TBisXmlDocumentNode read GetItem;
+  end;
+
+  TBisXmlDocument=class(TBisCoreObject)
+  private
+    FDocument: TALXmlDocument;
+    FNodes: TBisXmlDocumentNodes;
+    FVersion: String;
+    FEncoding: String;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+
+    procedure LoadFromFile(const FileName: String);
+    procedure LoadFromStream(Stream: TStream);
+    procedure SaveToFile(const FileName: String);
+    procedure SaveToStream(Stream: TStream);
+
+    function Empty: Boolean;
+    procedure Clear;
+    function GetDefaultXml: String;
+
+    property Version: String read FVersion write FVersion;
+    property Encoding: String read FEncoding write FEncoding;
+
+    property Nodes: TBisXmlDocumentNodes read FNodes;
+  end;
+
+implementation
+
+uses SysUtils,
+     BisUtils;
+
+{ TBisXmlDocumentNode }
+
+constructor TBisXmlDocumentNode.Create;
+begin
+  inherited Create;
+  FChildNodes:=TBisXmlDocumentNodes.Create;
+end;
+
+destructor TBisXmlDocumentNode.Destroy;
+begin
+  ALNode:=nil;
+  FChildNodes.Free;
+  inherited Destroy;
+end;
+
+function TBisXmlDocumentNode.Empty: Boolean;
+begin
+  Result:=true;
+  if Assigned(ALNode) then
+    Result:=not ALNode.IsTextElement;
+  
+end;
+
+function TBisXmlDocumentNode.GetNodeValue: Variant;
+begin
+  Result:=FNodeValue;
+  if Assigned(ALNode) then
+    Result:=ALNode.NodeValue;
+end;
+
+procedure TBisXmlDocumentNode.SetNodeValue(const Value: Variant);
+begin
+  FNodeValue:=Value;
+  if Assigned(ALNode) then
+    ALNode.NodeValue:=Value;
+end;
+
+procedure TBisXmlDocumentNode.SetNodeName(const Value: String);
+begin
+  FNodeName:=Value;
+{  if Assigned(ALNode) then
+    ALNode.NodeName:=Value;}
+end;
+
+function TBisXmlDocumentNode.GetNodeName: String;
+begin
+  Result:=FNodeName;
+  if Assigned(ALNode) then
+    Result:=ALNode.NodeName;
+end;
+
+function TBisXmlDocumentNode.GetNodeType: TBisXmlDocumentNodeType;
+begin
+  Result:=FNodeType;
+  if Assigned(ALNode) then begin
+    case ALNode.NodeType of
+      ALXmlDoc.ntReserved: Result:=ntUnknown;
+      ALXmlDoc.ntElement: Result:=ntElement;
+      ALXmlDoc.ntAttribute: Result:=ntAttribute;
+      ALXmlDoc.ntText: Result:=ntText;
+    end;
+  end;
+end;
+
+{function TBisXmlDocumentNode.GetALNodeType: TALXmlNodeType;
+begin
+  Result:=ntReserved;
+  case NodeType of
+    ntUnknown: Result:=ntReserved;
+    ntElement: Result:=ALXmlDoc.ntElement;
+    ntAttribute: Result:=ALXmlDoc.ntAttribute;
+    ntText: Result:=ALXmlDoc.ntText;
+  end;
+end;}
+
+{ TBisXmlDocumentNodes }
+
+constructor TBisXmlDocumentNodes.Create;
+begin
+  inherited Create(true);
+end;
+
+function TBisXmlDocumentNodes.AddNode(NodeName: String; NodeType: TBisXmlDocumentNodeType): TBisXmlDocumentNode;
+begin
+  Result:=TBisXmlDocumentNode.Create;
+  Result.FNodeName:=NodeName;
+  Result.NodeType:=NodeType;
+  Result.ChildNodes.Document:=FDocument;
+  Add(Result);
+end;
+
+function TBisXmlDocumentNodes.GetItem(Index: Integer): TBisXmlDocumentNode;
+begin
+  Result:=TBisXmlDocumentNode(inherited Items[Index]);
+end;
+
+procedure TBisXmlDocumentNodes.RefreshFromALList(ALList: TALXMLNodeList);
+var
+  Node: TBisXmlDocumentNode;
+  ALNode: TALXMLNode;
+  i: Integer;
+begin
+  if Assigned(ALList) then begin
+    for i:=0 to ALList.Count-1 do begin
+      ALNode:=ALList.NodeByIndex[i];
+      if Assigned(ALNode) then begin
+        Node:=AddNode(ALNode.NodeName);
+        Node.ALNode:=ALNode;
+        Node.ChildNodes.RefreshFromALList(ALNode.ChildNodes);
+      end;
+    end;
+  end else
+    Clear;
+end;
+
+procedure TBisXmlDocumentNodes.RefreshToALList(ALList: TALXMLNodeList; ALParentNode: TALXMLNode);
+var
+  i: Integer;
+  Node: TBisXmlDocumentNode;
+  ALNode: TALXMLNode;
+begin
+  if Assigned(ALList) and Assigned(FDocument) then begin
+    for i:=0 to Count-1 do begin
+      Node:=Items[i];
+      if not Assigned(ALParentNode) then
+        ALNode:=FDocument.FDocument.AddChild(Node.NodeName)
+      else ALNode:=ALParentNode.AddChild(Node.NodeName);
+
+      if Assigned(ALNode) then begin
+        ALNode.NodeValue:=Node.NodeValue;
+        Node.ALNode:=ALNode;
+        Node.ChildNodes.RefreshToALList(Node.ALNode.ChildNodes,Node.ALNode);
+      end;
+
+    end;
+  end;
+end;
+
+{ TBisXmlDocument }
+
+constructor TBisXmlDocument.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FDocument:=TALXMLDocument.Create(Self);
+
+  FNodes:=TBisXmlDocumentNodes.Create;
+  FNodes.Document:=Self;
+
+  FVersion:='1.0';
+  FEncoding:='windows-1251';
+end;
+
+destructor TBisXmlDocument.Destroy;
+begin
+  FNodes.Free;
+  FDocument.Free;
+  inherited Destroy;
+end;
+
+function TBisXmlDocument.Empty: Boolean;
+begin
+  Result:=FNodes.Count=0;
+end;
+
+function TBisXmlDocument.GetDefaultXml: String;
+begin
+  Result:=Format('<?xml version="%s" encoding="%s" standalone="yes"?>',[FVersion,FEncoding]);
+end;
+
+procedure TBisXmlDocument.LoadFromFile(const FileName: String);
+begin
+  FNodes.Clear;
+  FDocument.Options:=FDocument.Options-[doNodeAutoIndent];
+  FDocument.LoadFromFile(FileName);
+  FNodes.RefreshFromALList(FDocument.ChildNodes);
+end;
+
+procedure TBisXmlDocument.LoadFromStream(Stream: TStream);
+begin
+  FNodes.Clear;
+  FDocument.Options:=FDocument.Options-[doNodeAutoIndent];
+  FDocument.LoadFromStream(Stream);
+  FNodes.RefreshFromALList(FDocument.ChildNodes);
+end;
+
+procedure TBisXmlDocument.SaveToFile(const FileName: String);
+begin
+  if not FDocument.IsEmptyDoc then
+    FDocument.ChildNodes.Clear;
+
+  FDocument.LoadFromXML(GetDefaultXml);
+//  FDocument.Options:=FDocument.Options+[doNodeAutoIndent];
+  FNodes.RefreshToALList(FDocument.ChildNodes);
+  FDocument.SaveToFile(FileName);
+end;
+
+procedure TBisXmlDocument.SaveToStream(Stream: TStream);
+begin
+  if not FDocument.IsEmptyDoc then
+    FDocument.ChildNodes.Clear;
+
+  FDocument.LoadFromXML(GetDefaultXml);
+//  FDocument.Options:=FDocument.Options+[doNodeAutoIndent];
+  FNodes.RefreshToALList(FDocument.ChildNodes);
+  FDocument.SaveToStream(Stream);
+end;
+
+procedure TBisXmlDocument.Clear;
+begin
+  FNodes.Clear;
+end;
+
+
+end.

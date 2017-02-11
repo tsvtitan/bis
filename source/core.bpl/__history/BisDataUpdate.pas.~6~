@@ -1,0 +1,27 @@
+unit BisDataUpdate;
+
+interface
+
+uses Classes, Contnrs,
+     BisFm, BisDataEditFm;
+
+type
+
+  TBisDataUpdateFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDataUpdateFormIfaceClass=class of TBisDataUpdateFormIface;
+
+implementation
+
+{ TBisDataUpdateFormIface }
+
+constructor TBisDataUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  UseParentDataSet:=true;
+end;
+
+end.

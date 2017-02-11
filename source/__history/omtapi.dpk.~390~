@@ -1,0 +1,61 @@
+package omtapi;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  vcl,
+  rtl;
+
+contains
+  tapi in 'omtapi.bpl\TAPI\Std\tapi.pas',
+  TAPIAddress in 'omtapi.bpl\TAPI\Std\TAPIAddress.pas',
+  TAPICall in 'omtapi.bpl\TAPI\Std\TAPICall.pas',
+  TAPIConference in 'omtapi.bpl\TAPI\Std\TAPIConference.pas',
+  TAPICurVer in 'omtapi.bpl\TAPI\Std\TAPICurVer.pas',
+  TAPIDevices in 'omtapi.bpl\TAPI\Std\TAPIDevices.pas',
+  TAPIForward in 'omtapi.bpl\TAPI\Std\TAPIForward.pas',
+  TAPIHelpfunc in 'omtapi.bpl\TAPI\Std\TAPIHelpfunc.pas',
+  TAPILineConfigDlg in 'omtapi.bpl\TAPI\Std\TAPILineConfigDlg.pas',
+  TAPILines in 'omtapi.bpl\TAPI\Std\TAPILines.pas',
+  TAPILists in 'omtapi.bpl\TAPI\Std\TAPILists.pas',
+  TAPIMediaCtl in 'omtapi.bpl\TAPI\Std\TAPIMediaCtl.pas',
+  TAPIObj in 'omtapi.bpl\TAPI\Std\TAPIObj.pas',
+  TAPIPhone in 'omtapi.bpl\TAPI\Std\TAPIPhone.pas',
+  TAPIPhoneConfigDlg in 'omtapi.bpl\TAPI\Std\TAPIPhoneConfigDlg.pas',
+  TAPIProv in 'omtapi.bpl\TAPI\Std\TAPIProv.pas',
+  TAPIRedirect in 'omtapi.bpl\TAPI\Std\TAPIRedirect.pas',
+  TAPIServices in 'omtapi.bpl\TAPI\Std\TAPIServices.pas',
+  TAPISystem in 'omtapi.bpl\TAPI\Std\TAPISystem.pas',
+  TAPIThread in 'omtapi.bpl\TAPI\Std\TAPIThread.pas',
+  TAPITon in 'omtapi.bpl\TAPI\Std\TAPITon.pas',
+  TAPITrans in 'omtapi.bpl\TAPI\Std\TAPITrans.pas',
+  TAPIWave in 'omtapi.bpl\TAPI\Std\TAPIWave.pas',
+  TAPIAgent in 'omtapi.bpl\TAPI\ACD\TAPIAgent.pas',
+  ACDProxy in 'omtapi.bpl\TAPI\ACD\ACDProxy.pas',
+  BisTapi in 'omtapi.bpl\BisTapi.pas';
+
+end.

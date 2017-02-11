@@ -1,0 +1,36 @@
+package dws2IBXLib50;
+
+{$R *.RES}
+{$R '..\IbxLib\dws2IbxLib.dcr'}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD OFF}
+
+requires
+  ibxpress,
+  dws2Runtime50_20;
+
+contains
+  dws2IbxModule in '..\IbxLib\dws2IbxModule.pas' {dws2IBXLibrary: TDataModule},
+  dws2IbxDataSrc in '..\IbxLib\dws2IbxDataSrc.pas';
+
+end.

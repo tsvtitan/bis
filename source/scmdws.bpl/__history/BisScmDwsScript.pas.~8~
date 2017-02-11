@@ -1,0 +1,30 @@
+unit BisScmDwsScript;
+
+interface
+
+uses Classes,
+     dws2Comp,
+     BisScript;
+
+type
+
+  TBisDelphiWebScriptII=class(TDelphiWebScriptII)
+  end;
+
+  TBisScmDwsScript=class(TBisScript)
+  public
+    constructor Create(AOwner: TComponent); override;
+
+  end;
+
+implementation
+
+{ TBisScmDwsScript }
+
+constructor TBisScmDwsScript.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+end;
+
+end.

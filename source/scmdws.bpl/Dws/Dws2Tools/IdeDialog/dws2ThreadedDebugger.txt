@@ -1,0 +1,43 @@
+dws2ThreadedDebugger
+by Fabio Augusto Dal Castel
+fdcastel@yahoo.com
+------------------------
+
+This project was created to fill the lack of
+a local debugger component for DWSII.
+
+The original code was written by Danilo Luiz
+Rheinheimer for his Remote Debugger.
+
+If anyone has some tips about "To Do" list
+below, please tell me.
+
+
+
+To do:
+------------------------
+
+- Support to multiple files (includes?)
+- Support to multiple programs at time
+- Identify lines with executable code (statements)
+- Make a "remote" version
+- Execute statements during debug
+
+
+
+Log changes:
+------------------------
+
+v1.2: Debugger thread changed to fiber to avoid problems
+        with non-threadsafe VCL code
+        (Thanks to Mark Erickssen!)        
+
+v1.1: Core evaluate routines rewritten
+        (much better evaluation support)
+      Modify values of evaluated variables/fields
+      Program execution now runs on a secondary thread
+        (controlled by debugger)
+      Fixed A/V when resetting program execution
+        (Thanks to Roberto Cornacchia!)
+
+v1.0: Initial release (named as Tdws2NotSoSimpleDebugger).

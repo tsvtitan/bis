@@ -1,0 +1,678 @@
+unit BisDBTree;
+
+interface
+
+uses Classes, ImgList, Windows, Graphics, Controls, DBGrids,
+     VirtualTrees, VirtualDBTreeEx,
+     BisOrders;
+
+type
+
+  TBisDBTreeSortingEvent=procedure(Sender: TObject; FieldName: String; OrderType: TBisOrderType; var Success: Boolean) of object;
+  TBisDBTreeSearchingEvent=procedure(Sender: TObject; FieldName: String; Text: String; var Success: Boolean) of object;
+
+  TBisDBTreeNode=record
+    Caption: String;
+    Values: array of Variant;
+    NormalIndex: Integer;
+    LastIndex: Integer;
+    OpenIndex: Integer;
+  end;
+  PBisDBTreeNode=^TBisDBTreeNode;
+
+  TBisDBTreeColumn=class(TVirtualTreeColumn)
+  private
+    FFieldName: String;
+  published
+    property FieldName: String read FFieldName write FFieldName;
+  end;
+
+  TBisDBTree=class(TBaseVirtualDBTreeEx)
+  private
+    FNormalIndex: Integer;
+    FLastIndex: Integer;
+    FOpenIndex: Integer;
+    FIndicators: TImageList;
+    FNavigatorColumn: TVirtualTreeColumn;
+    FNavigatorVisible: Boolean;
+    FDefaultTextDrawing: Boolean;
+    FOldPaintInfo: TVTPaintInfo;
+    FOldDrawFormat: Cardinal;
+    FSearchEnabled: Boolean;
+    FSearchColor: TColor;
+    FRowColor: TColor;
+    FSortEnabled: Boolean;
+    FOnSorting: TBisDBTreeSortingEvent;
+    FNumberVisible: Boolean;
+    FChessVisible: Boolean;
+    FChessColor: TColor;
+    FSortColumnColor: TColor;
+    FSortColumnVisible: Boolean;
+    FOnSearching: TBisDBTreeSearchingEvent;
+
+    procedure CreateNavigatorColumn;
+    procedure DestroyNavigatorColumn;
+    procedure SetNavigatorVisible(const Value: Boolean);
+    procedure DefaultTextDrawing(Text: WideString; Rect: TRect);
+    procedure SetSearchEnabled(const Value: Boolean);
+    procedure SetNumberVisible(const Value: Boolean);
+    procedure ResizeNavigatorColumn;
+    procedure SetChessVisible(const Value: Boolean);
+    procedure SetChessColor(const Value: TColor);
+    procedure SetSortColumnColor(const Value: TColor);
+    procedure SetSortColumnVisible(const Value: Boolean);
+    function GetVisibleIndex(Node: PVirtualNode): Cardinal;
+  protected
+    function GetColumnClass: TVirtualTreeColumnClass; override;
+    function DoMouseWheelUp(Shift: TShiftState; MousePos: TPoint): Boolean; override;
+    function DoMouseWheelDown(Shift: TShiftState; MousePos: TPoint): Boolean; override;
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+
+    procedure DoReadNodeFromDB(Node: PVirtualNode); override;
+    function DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+                             var Ghosted: Boolean; var Index: Integer): TCustomImageList; override;
+    procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;  var Text: WideString); override;
+    procedure DoAfterCellPaint(Canvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; CellRect: TRect); override;
+    function DoFocusChanging(OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex): Boolean; override;
+    procedure DoBeforeCellPaint(Canvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; CellRect: TRect); override;
+    procedure DoPaintText(Node: PVirtualNode; const Canvas: TCanvas; Column: TColumnIndex; TextType: TVSTTextType); override;
+    procedure DoTextDrawing(var PaintInfo: TVTPaintInfo; Text: WideString; CellRect: TRect; DrawFormat: Cardinal); override;
+    function DoIncrementalSearch(Node: PVirtualNode; const Text: WideString): Integer; override;
+    procedure DoHeaderDragged(Column: TColumnIndex; OldPosition: TColumnPosition); override;
+    procedure DoHeaderDraggedOut(Column: TColumnIndex; DropPosition: TPoint); override;
+    procedure DoHeaderClick(Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+    function DoCompare(Node1, Node2: PVirtualNode; Column: TColumnIndex): Integer; Override;
+
+    procedure DoSorting(FieldName: String; OrderType: TBisOrderType; var Success: Boolean); virtual;
+    procedure DoSearching(FieldName: String; Text: String; var Success: Boolean); virtual;
+
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure CancelIncrementalSearch; override;
+
+    property NormalIndex: Integer read FNormalIndex write FNormalIndex;
+    property LastIndex: Integer read FLastIndex write FLastIndex;
+    property OpenIndex: Integer read FOpenIndex write FOpenIndex;
+    property NavigatorVisible: Boolean read FNavigatorVisible write SetNavigatorVisible;
+    property SearchEnabled: Boolean read FSearchEnabled write SetSearchEnabled;
+    property SearchColor: TColor read FSearchColor write FSearchColor;
+    property RowColor: TColor read FRowColor write FRowColor;
+    property SortEnabled: Boolean read FSortEnabled write FSortEnabled;
+    property NumberVisible: Boolean read FNumberVisible write SetNumberVisible;
+    property ChessVisible: Boolean read FChessVisible write SetChessVisible;
+    property ChessColor: TColor read FChessColor write SetChessColor;
+    property SortColumnColor: TColor read FSortColumnColor write SetSortColumnColor;
+    property SortColumnVisible: Boolean read FSortColumnVisible write SetSortColumnVisible;
+
+    property OnSorting: TBisDBTreeSortingEvent read FOnSorting write FOnSorting;
+    property OnSearching: TBisDBTreeSearchingEvent read FOnSearching write FOnSearching; 
+
+  end;
+
+implementation
+
+uses Variants, SysUtils, StrUtils;
+
+{ TBisDBTree }
+
+const
+  bmArrow = 'DBGARROW';
+  bmEdit = 'DBEDIT';
+  bmInsert = 'DBINSERT';
+  bmMultiDot = 'DBMULTIDOT';
+  bmMultiArrow = 'DBMULTIARROW';
+
+
+constructor TBisDBTree.Create(AOwner: TComponent);
+var
+  Bmp: TBitmap;
+begin
+  inherited Create(AOwner);
+
+  DBNodeDataSize:=SizeOf(TBisDBTreeNode);
+
+  FNormalIndex:=-1;
+  FLastIndex:=-1;
+  FOpenIndex:=-1;
+
+  Bmp := TBitmap.Create;
+  try
+    Bmp.LoadFromResourceName(HInstance, bmArrow);
+    FIndicators := TImageList.CreateSize(Bmp.Width, Bmp.Height);
+    FIndicators.AddMasked(Bmp, clWhite);
+    Bmp.LoadFromResourceName(HInstance, bmEdit);
+    FIndicators.AddMasked(Bmp, clWhite);
+    Bmp.LoadFromResourceName(HInstance, bmInsert);
+    FIndicators.AddMasked(Bmp, clWhite);
+    Bmp.LoadFromResourceName(HInstance, bmMultiDot);
+    FIndicators.AddMasked(Bmp, clWhite);
+    Bmp.LoadFromResourceName(HInstance, bmMultiArrow);
+    FIndicators.AddMasked(Bmp, clWhite);
+  finally
+    Bmp.Free;
+  end;
+
+  IncrementalSearchDirection:=sdForward;
+  IncrementalSearchStart:=ssLastHit;
+  
+  FSearchColor:=clRed;
+  FRowColor:=$00F2F3E9;
+  FChessColor:=$00EEEEEE;
+  FSortColumnColor:=$00D8FEFE;
+end;
+
+destructor TBisDBTree.Destroy;
+begin
+  DestroyNavigatorColumn;
+  FIndicators.Free;
+  inherited Destroy;
+end;
+
+procedure TBisDBTree.CreateNavigatorColumn;
+begin
+  if not Assigned(FNavigatorColumn) then begin
+    FNavigatorColumn:=TVirtualTreeColumn(Header.Columns.Insert(0));
+    FNavigatorColumn.Options:=FNavigatorColumn.Options-[coAllowClick,coDraggable,coEnabled,coResizable,
+                                                        coParentColor,coShowDropMark,coAutoSpring]+[coFixed];
+    FNavigatorColumn.Alignment:=taRightJustify;
+    FNavigatorColumn.Position:=0;
+    ResizeNavigatorColumn;
+  end;
+end;
+
+procedure TBisDBTree.DestroyNavigatorColumn;
+begin
+  if Assigned(FNavigatorColumn) then begin
+    Header.Columns.Delete(FNavigatorColumn.Index);
+    FNavigatorColumn:=nil;
+  end;
+end;
+
+function TBisDBTree.GetColumnClass: TVirtualTreeColumnClass;
+begin
+  Result:=TBisDBTreeColumn;
+end;
+
+procedure TBisDBTree.CancelIncrementalSearch;
+begin
+  inherited CancelIncrementalSearch;
+  InvalidateNode(FocusedNode);
+end;
+
+procedure TBisDBTree.KeyDown(var Key: Word; Shift: TShiftState);
+begin
+  if FSearchEnabled and (Key=VK_ESCAPE) then begin
+    CancelIncrementalSearch;
+  end;
+  inherited KeyDown(Key,Shift);
+end;
+
+procedure TBisDBTree.ResizeNavigatorColumn;
+var
+  W: Integer;
+  L: Integer;
+  S: String;
+begin
+  if Assigned(FNavigatorColumn) then begin
+    W:=IndicatorWidth+1;
+    if FNumberVisible then begin
+      S:=IntToStr(TotalCount);
+      L:=Length(S);
+      W:=W+Canvas.TextWidth(DupeString('9',L))+L+1;
+    end;
+    FNavigatorColumn.MaxWidth:=W;
+    FNavigatorColumn.MinWidth:=W;
+    FNavigatorColumn.Width:=W;
+  end;
+end;
+
+procedure TBisDBTree.SetChessColor(const Value: TColor);
+begin
+  FChessColor := Value;
+  Invalidate;
+end;
+
+procedure TBisDBTree.SetChessVisible(const Value: Boolean);
+begin
+  FChessVisible := Value;
+  Invalidate;
+end;
+
+procedure TBisDBTree.SetNavigatorVisible(const Value: Boolean);
+begin
+  if FNavigatorVisible<>Value then begin
+    FNavigatorVisible:=Value;
+    if FNavigatorVisible then begin
+      Header.MainColumn:=1;
+      DestroyNavigatorColumn;
+      CreateNavigatorColumn;
+    end else begin
+      DestroyNavigatorColumn;
+      Header.MainColumn:=0;
+    end;
+  end;
+end;
+
+procedure TBisDBTree.SetNumberVisible(const Value: Boolean);
+begin
+  FNumberVisible := Value;
+  if FNumberVisible then
+    NavigatorVisible:=true;
+  ResizeNavigatorColumn;
+end;
+
+procedure TBisDBTree.SetSearchEnabled(const Value: Boolean);
+begin
+  FSearchEnabled := Value;
+  if FSearchEnabled then begin
+    IncrementalSearch:=isAll;
+  end else begin
+    IncrementalSearch:=isNone;
+  end;
+end;
+
+procedure TBisDBTree.SetSortColumnColor(const Value: TColor);
+begin
+  FSortColumnColor := Value;
+  Invalidate;
+end;
+
+procedure TBisDBTree.SetSortColumnVisible(const Value: Boolean);
+begin
+  FSortColumnVisible := Value;
+  Invalidate;
+end;
+
+procedure TBisDBTree.DoReadNodeFromDB(Node: PVirtualNode);
+var
+  Data: PBisDBTreeNode;
+  i: Integer;
+  Column: TBisDBTreeColumn;
+  NewCount: Integer;
+  StartI: Integer;
+begin
+  Data:=GetDBNodeData(Node);
+  if Assigned(Data) then begin
+    Data.Caption:=ViewField.AsString;
+    Data.NormalIndex:=FNormalIndex;
+    Data.LastIndex:=FLastIndex;
+    Data.OpenIndex:=FOpenIndex;
+    if Header.Columns.Count>0 then begin
+      NewCount:=Header.Columns.Count;
+      StartI:=0;
+      if Assigned(FNavigatorColumn) then begin
+        StartI:=1;
+        NewCount:=NewCount-1;
+      end;
+      SetLength(Data.Values,NewCount);
+      for i:=StartI to Header.Columns.Count-1 do begin
+        Column:=TBisDBTreeColumn(Header.Columns.Items[i]);
+        Data.Values[i-StartI]:=DataSource.DataSet.FieldValues[Column.FieldName];
+      end;
+    end;
+  end;
+end;
+
+function TBisDBTree.DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind;  Column: TColumnIndex;
+                                    var Ghosted: Boolean;  var Index: Integer): TCustomImageList;
+var
+  Data: PBisDBTreeNode;
+begin
+  Data:=GetDBNodeData(Node);
+  if Assigned(Data) then begin
+    if Column=Header.MainColumn then begin
+      case Kind of
+        ikNormal,ikSelected: begin
+           if Node.ChildCount=0 then begin
+             Index:=Data.LastIndex;
+           end else begin
+             if vsExpanded in Node.States then
+               Index:=Data.OpenIndex
+             else
+               Index:=Data.NormalIndex;
+           end;
+        end;
+      end;
+    end;
+  end;
+  Result:=inherited DoGetImageIndex(Node,Kind,Column,Ghosted,Index);
+end;
+
+procedure TBisDBTree.DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: WideString);
+var
+  Data: PBisDBTreeNode;
+  Index: Integer;
+begin
+  Data:=GetDBNodeData(Node);
+  if Assigned(Data) then begin
+    Index:=Column;
+    if Assigned(FNavigatorColumn) then begin
+      if Index=0 then
+        Text:=''
+      else begin
+        Index:=Index-1;
+      end;
+    end;
+    if (Header.Columns.Count>0) and (Index>-1) then begin
+      Text:=VarToStrDef(Data.Values[Index],'')
+    end else
+      Text:=Data.Caption;
+  end else
+    inherited DoGetText(Node,Column,TextType,Text);
+end;
+
+function TBisDBTree.DoMouseWheelDown(Shift: TShiftState; MousePos: TPoint): Boolean;
+var
+  OldNode: PVirtualNode;
+begin
+  inherited DoMouseWheelDown(Shift,MousePos);
+  OldNode:=FocusedNode;
+  FocusedNode:=GetNext(OldNode);
+  if Assigned(FocusedNode) then begin
+    Selected[FocusedNode]:=True;
+    ScrollIntoView(FocusedNode,true);
+    Selected[OldNode]:=false;
+  end else
+    FocusedNode:=OldNode;
+  Result:=true;
+end;
+
+function TBisDBTree.DoMouseWheelUp(Shift: TShiftState; MousePos: TPoint): Boolean;
+var
+  OldNode: PVirtualNode;
+begin
+  inherited DoMouseWheelUp(Shift,MousePos);
+  OldNode:=FocusedNode;
+  FocusedNode:=GetPrevious(OldNode);
+  if Assigned(FocusedNode) then begin
+    Selected[FocusedNode]:=True;
+    ScrollIntoView(FocusedNode,true);
+    Selected[OldNode]:=false;
+  end else
+    FocusedNode:=OldNode;
+  Result:=true;
+end;
+
+procedure TBisDBTree.DoPaintText(Node: PVirtualNode; const Canvas: TCanvas; Column: TColumnIndex; TextType: TVSTTextType);
+begin
+  inherited DoPaintText(Node,Canvas,Column,TextType);
+end;
+
+procedure TBisDBTree.DoTextDrawing(var PaintInfo: TVTPaintInfo; Text: WideString; CellRect: TRect; DrawFormat: Cardinal);
+begin
+  inherited DoTextDrawing(PaintInfo,Text,CellRect,DrawFormat);
+  if not FDefaultTextDrawing then begin
+    FOldPaintInfo:=PaintInfo;
+    FOldDrawFormat:=DrawFormat;
+  end;
+end;
+
+procedure TBisDBTree.DefaultTextDrawing(Text: WideString; Rect: TRect);
+begin
+  FDefaultTextDrawing:=true;
+  try
+    DoTextDrawing(FOldPaintInfo,Text,Rect,FOldDrawFormat);
+  finally
+    FDefaultTextDrawing:=false;
+  end;
+end;
+
+procedure TBisDBTree.DoAfterCellPaint(Canvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; CellRect: TRect);
+var
+  RightBorderFlag,
+  NormalButtonStyle,
+  NormalButtonFlags: Cardinal;
+  Index: Integer;
+  L: Integer;
+  T: Integer;
+  W: Integer;
+  H: Integer;
+  Rect: TRect;
+  S: String;
+begin
+  if Assigned(FNavigatorColumn) then begin
+    if Column=0 then begin
+      if toShowVertGridLines in TreeOptions.PaintOptions then
+        Inc(CellRect.Right);
+      if toShowHorzGridLines in TreeOptions.PaintOptions then
+        Inc(CellRect.Bottom);
+
+      RightBorderFlag := BF_RIGHT;
+      case Header.Style of
+        hsThickButtons:
+          begin
+            NormalButtonStyle := BDR_RAISEDINNER or BDR_RAISEDOUTER;
+            NormalButtonFlags := BF_LEFT or BF_TOP or BF_BOTTOM or BF_MIDDLE or BF_SOFT or BF_ADJUST;
+          end;
+        hsFlatButtons:
+          begin
+            NormalButtonStyle := BDR_RAISEDINNER;
+            NormalButtonFlags := BF_LEFT or BF_TOP or BF_BOTTOM or BF_MIDDLE or BF_ADJUST;
+          end;
+      else
+        begin
+          NormalButtonStyle := BDR_RAISEDINNER;
+          NormalButtonFlags := BF_RECT or BF_MIDDLE or BF_SOFT or BF_ADJUST;
+        end;
+      end;
+      DrawEdge(Canvas.Handle, CellRect, NormalButtonStyle, NormalButtonFlags or RightBorderFlag);
+
+      L:=CellRect.Right - FIndicators.Width - 3;
+
+      if Node=FocusedNode then begin
+        Index:=0;
+        if dbtsEditing in DBStatus then
+          Index:=1;
+        if dbtsInsert in DBStatus then
+          Index:=2;
+
+        T:=(CellRect.Bottom-CellRect.Top) div 2 - FIndicators.Height div 2 - 1;
+        FIndicators.Draw(Canvas,CellRect.Left+L,CellRect.Top+T,Index);
+      end;
+
+      if FNumberVisible then begin
+        if Column=0 then begin
+//          S:=IntToStr(Node.Index+1);
+          S:=IntToStr(GetVisibleIndex(Node));
+          Rect:=CellRect;
+          Rect.Left:=Rect.Left;
+          Rect.Right:=L;
+          DefaultTextDrawing(S,Rect);
+        end;
+      end;
+    end;
+  end;
+
+  if (Node=FocusedNode) then begin
+    if Column=FocusedColumn then begin
+      if FSearchEnabled and (Length(SearchBuffer)>0) then begin
+        S:=Copy(Text[Node,Column],1,Length(SearchBuffer));
+        W:=Canvas.TextWidth(S);
+        H:=Canvas.TextHeight(S);
+        Rect:=GetDisplayRect(Node,Column,true,false);
+        Rect.Left:=Rect.Left+TextMargin;
+        Rect.Right:=Rect.Left+W+1;
+        Rect.Top:=(CellRect.Bottom - CellRect.Top) div 2 - H div 2;
+        Rect.Bottom:=(CellRect.Bottom - CellRect.Top) div 2 + H div 2 + 1;
+        Canvas.Brush.Color:=FSearchColor;
+        Canvas.FillRect(Rect);
+        Rect.Left:=Rect.Left+TextMargin;
+        Rect.Right:=Rect.Right;
+        DefaultTextDrawing(S,Rect);
+      end;
+    end;
+  end;
+
+  inherited DoAfterCellPaint(Canvas,Node,Column,CellRect);
+end;
+
+function TBisDBTree.DoFocusChanging(OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex): Boolean;
+begin
+  Result:=inherited DoFocusChanging(OldNode,NewNode,OldColumn,NewColumn);
+  if Assigned(FNavigatorColumn) then
+    Result:=Result and (NewColumn>0);
+end;
+
+function TBisDBTree.GetVisibleIndex(Node: PVirtualNode): Cardinal;
+begin
+  Result:=0;
+  while Assigned(Node) and (Node <> RootNode) do begin
+    if vsVisible in Node.States then begin
+      if Node <> RootNode then
+        Inc(Result);
+    end;
+    Node:=GetPreviousVisible(Node);
+  end;
+end;
+
+procedure TBisDBTree.DoBeforeCellPaint(Canvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; CellRect: TRect);
+var
+  InChess: Boolean;
+begin
+
+  if FSortColumnVisible then begin
+    if Column=Header.SortColumn then begin
+      Canvas.Brush.Color:=FSortColumnColor;
+      Canvas.FillRect(CellRect);
+    end;
+  end;
+
+  if FChessVisible then begin
+    InChess:=Odd(GetVisibleIndex(Node));
+    if InChess then begin
+      Canvas.Brush.Color:=FChessColor;
+      Canvas.FillRect(CellRect);
+    end;
+  end;
+
+
+  if (Node=FocusedNode) then begin
+    if Column<>FocusedColumn then begin
+      Canvas.Brush.Color:=FRowColor;
+      Canvas.FillRect(CellRect);
+    end;
+  end;
+
+  inherited DoBeforeCellPaint(Canvas,Node,Column,CellRect);
+end;
+
+function TBisDBTree.DoCompare(Node1, Node2: PVirtualNode; Column: TColumnIndex): Integer;
+var
+  S1, S2: String;
+begin
+  if (Header.SortColumn<>NoColumn) and Assigned(Node1) and Assigned(Node2) and
+     (Column=Header.SortColumn) then begin
+    S1:=AnsiUpperCase(Text[Node1,Column]);
+    S2:=AnsiUpperCase(Text[Node2,Column]);
+    if S1>S2 then
+      Result:=1
+    else Result:=-1;
+  end else
+    Result:=inherited DoCompare(Node1,Node2,Column);
+end;
+
+procedure TBisDBTree.DoSearching(FieldName, Text: String; var Success: Boolean);
+begin
+  if Assigned(FOnSearching) then
+    FOnSearching(Self,FieldName,Text,Success);
+end;
+
+function TBisDBTree.DoIncrementalSearch(Node: PVirtualNode; const Text: WideString): Integer;
+var
+{  Column: TBisDBTreeColumn;
+  Success: Boolean;}
+  S: String;
+  APos: Integer;
+begin
+  Result:=1;
+  if FocusedColumn<>NoColumn then begin
+{    Column:=TBisDBTreeColumn(Header.Columns[FocusedColumn]);
+    Success:=false;
+    DoSearching(Column.FieldName,Text,Success);
+    if Success then
+      Result:=0;}
+    if Assigned(Node) then begin
+      S:=Self.Text[Node,FocusedColumn];
+      APos:=AnsiPos(AnsiUpperCase(Text),AnsiUpperCase(S));
+      if APos=1 then
+        Result:=0;
+    
+    end;
+  end;
+end;
+
+procedure TBisDBTree.DoSorting(FieldName: String; OrderType: TBisOrderType;  var Success: Boolean);
+begin
+  if Assigned(FOnSorting) then begin
+    FOnSorting(Self,FieldName,OrderType,Success);
+  end;
+end;
+
+procedure TBisDBTree.DoHeaderClick(Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  Success: Boolean;
+  OrderType: TBisOrderType;
+begin
+  if FSortEnabled and (Column>-1) then begin
+    if Button = mbLeft then begin
+      OrderType:=otNone;
+      if Header.SortColumn <> Column then begin
+        OrderType:=otAsc;
+      end else begin
+        case Header.SortDirection of
+          sdAscending: OrderType:=otDesc;
+          sdDescending: OrderType:=otNone;
+        end;
+      end;
+      Success:=true;
+      DoSorting(TBisDBTreeColumn(Header.Columns[Column]).FieldName,OrderType,Success);
+      if Success then begin
+        case OrderType of
+          otNone: begin
+            Header.SortColumn:=NoColumn;
+            SortTree(NoColumn,Header.SortDirection);
+          end;
+          otAsc: begin
+            Header.SortDirection:=sdAscending;
+            Header.SortColumn:=Column;
+            SortTree(Column,Header.SortDirection);
+          end;
+          otDesc: begin
+            Header.SortDirection:=sdDescending;
+            Header.SortColumn:=Column;
+            SortTree(Column,Header.SortDirection);
+          end;
+        end;
+      end;
+    end;
+  end else
+    inherited DoHeaderClick(Column,Button,Shift,X,Y);
+end;
+
+procedure TBisDBTree.DoHeaderDragged(Column: TColumnIndex; OldPosition: TColumnPosition);
+begin
+  if Assigned(FNavigatorColumn) then begin
+    if FNavigatorColumn.Position>Header.Columns[Column].Position then
+      Header.Columns[Column].Position:=OldPosition;
+  end;
+ { if Header.MainColumn<>-1 then begin
+    if Header.MainColumn=Column then begin
+      if Assigned(FNavigatorColumn) then
+        Header.Columns[Column].Position:=FNavigatorColumn.Position+1
+      else
+        Header.Columns[Column].Position:=0;
+    end else begin
+      if Header.Columns[Header.MainColumn].Position>Header.Columns[Column].Position then
+        Header.Columns[Column].Position:=OldPosition;
+    end;
+  end; }
+  inherited DoHeaderDragged(Column,OldPosition);
+end;
+
+procedure TBisDBTree.DoHeaderDraggedOut(Column: TColumnIndex; DropPosition: TPoint);
+begin
+  inherited DoHeaderDraggedOut(Column,DropPosition);
+end;
+
+end.

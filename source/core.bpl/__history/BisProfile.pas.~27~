@@ -1,0 +1,35 @@
+unit BisProfile;
+
+interface
+
+uses BisObject, BisConfig{, BisConnections};
+
+type
+
+  TBisProfile=class(TBisConfig)
+  private
+{    FConnection: TBisConnection;
+    FSession: String;}
+  public
+    procedure Load; override;
+
+{    property Connection: TBisConnection read FConnection write FConnection;
+    property Session: String read FSession write FSession;}
+  end;
+
+implementation
+
+uses SysUtils;
+
+{ TBisProfile }
+
+procedure TBisProfile.Load;
+begin
+{  if Assigned(FConnection) and
+     FConnection.Connected and
+    (Trim(FSession)<>'') then begin
+    Text:=FConnection.GetProfile(FSession);
+  end;}
+end;
+
+end.

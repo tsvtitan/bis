@@ -1,0 +1,88 @@
+/* Создание процедуры закрытия смены со снятием со стоянки */
+
+CREATE PROCEDURE /*PREFIX*/CODE_SHIFT_CLOSE
+(
+  ACCOUNT_ID VARCHAR(32),
+  IN_MESSAGE_ID VARCHAR(32)
+)
+AS
+  DECLARE CONTACT VARCHAR(100);
+  DECLARE SENDER_ID VARCHAR(32);
+  DECLARE S VARCHAR(1000);
+  DECLARE CNT INTEGER;
+  DECLARE D TIMESTAMP;
+  DECLARE DATE_BEGIN TIMESTAMP;
+  DECLARE SHIFT_ID VARCHAR(32);
+  DECLARE HOURS NUMERIC(10,1);
+BEGIN
+  SELECT CONTACT, SENDER_ID
+    FROM /*PREFIX*/IN_MESSAGES
+   WHERE IN_MESSAGE_ID=:IN_MESSAGE_ID
+    INTO :CONTACT, :SENDER_ID;
+
+  IF ((CONTACT IS NOT NULL) AND (SENDER_ID IS NOT NULL)) THEN BEGIN
+
+    SELECT COUNT(*)
+      FROM /*PREFIX*/DRIVERS
+     WHERE DRIVER_ID=:SENDER_ID
+      INTO :CNT;
+
+    IF (CNT>0) THEN BEGIN
+
+      SELECT COUNT(*)
+        FROM /*PREFIX*/ORDERS
+       WHERE DRIVER_ID=:SENDER_ID
+         AND PARENT_ID IS NULL
+         AND DATE_HISTORY IS NULL
+         AND FINISHED<>1
+        INTO :CNT;
+
+      IF (CNT>0) THEN BEGIN
+
+        S='Вы не можете закрыть смену во время выполнения заказа';
+
+        INSERT INTO /*PREFIX*/OUT_MESSAGES (OUT_MESSAGE_ID,CREATOR_ID,RECIPIENT_ID,DATE_CREATE,
+                                            TEXT_OUT,DATE_OUT,TYPE_MESSAGE,CONTACT,DESCRIPTION,PRIORITY,LOCKED)
+                                     VALUES (/*PREFIX*/GET_UNIQUE_ID(),:ACCOUNT_ID,:SENDER_ID,CURRENT_TIMESTAMP,
+                                             :S,NULL,0,:CONTACT,NULL,1,NULL);
+
+      END ELSE BEGIN
+
+        FOR SELECT DATE_BEGIN, SHIFT_ID
+              FROM /*PREFIX*/SHIFTS
+             WHERE ACCOUNT_ID=:SENDER_ID
+               AND DATE_END IS NULL
+              INTO :DATE_BEGIN, :SHIFT_ID DO BEGIN
+
+          D=CURRENT_TIMESTAMP;
+          HOURS=CAST((D-DATE_BEGIN)*(1e0*24) AS NUMERIC(10,1));
+
+          S='Ваша смена закрыта в '||/*PERFIX*/FORMAT_DATETIME('hh:nn:ss dd.mm.yyyy',D)||'.';
+          S=S||' Длительность = '||CAST(HOURS AS VARCHAR(30))||' ч. ';
+
+          UPDATE /*PREFIX*/PARK_STATES
+             SET DATE_OUT=:D
+           WHERE DRIVER_ID=:SENDER_ID;
+
+          UPDATE /*PREFIX*/SHIFTS
+             SET DATE_END=:D
+           WHERE SHIFT_ID=:SHIFT_ID;
+
+          INSERT INTO /*PREFIX*/OUT_MESSAGES (OUT_MESSAGE_ID,CREATOR_ID,RECIPIENT_ID,DATE_CREATE,
+                                              TEXT_OUT,DATE_OUT,TYPE_MESSAGE,CONTACT,DESCRIPTION,PRIORITY,LOCKED)
+                                      VALUES (/*PREFIX*/GET_UNIQUE_ID(),:ACCOUNT_ID,:SENDER_ID,CURRENT_TIMESTAMP,
+                                              :S,NULL,0,:CONTACT,NULL,1,NULL);
+        END
+
+      END
+
+    END
+
+  END
+END
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

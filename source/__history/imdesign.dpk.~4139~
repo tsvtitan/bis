@@ -1,0 +1,92 @@
+package imdesign;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core;
+
+contains
+  BisDesignInit in 'imdesign.bpl\BisDesignInit.pas',
+  BisDesignConsts in 'imdesign.bpl\BisDesignConsts.pas',
+  BisDesignMainFm in 'imdesign.bpl\BisDesignMainFm.pas' {BisDesignMainForm},
+  BisDesignDataAccountEditFm in 'imdesign.bpl\BisDesignDataAccountEditFm.pas' {BisDesignDataAccountEditForm},
+  BisDesignDataAccountsFm in 'imdesign.bpl\BisDesignDataAccountsFm.pas' {BisDesignDataAccountsForm},
+  BisDesignDataApplicationEditFm in 'imdesign.bpl\BisDesignDataApplicationEditFm.pas' {BisDesignDataApplicationEditForm},
+  BisDesignDataApplicationInterfaceEditFm in 'imdesign.bpl\BisDesignDataApplicationInterfaceEditFm.pas' {BisDesignDataApplicationInterfaceEditForm},
+  BisDesignDataApplicationInterfacesFm in 'imdesign.bpl\BisDesignDataApplicationInterfacesFm.pas' {BisDesignDataApplicationInterfacesForm},
+  BisDesignDataApplicationsFm in 'imdesign.bpl\BisDesignDataApplicationsFm.pas' {BisDesignDataApplicationsForm},
+  BisDesignDataFirmTypeEditFm in 'imdesign.bpl\BisDesignDataFirmTypeEditFm.pas' {BisDesignDataFirmTypeEditForm},
+  BisDesignDataFirmTypesFm in 'imdesign.bpl\BisDesignDataFirmTypesFm.pas' {BisDesignDataFirmTypesForm},
+  BisDesignDataInterfaceEditFm in 'imdesign.bpl\BisDesignDataInterfaceEditFm.pas' {BisDesignDataInterfaceEditForm},
+  BisDesignDataInterfacesFm in 'imdesign.bpl\BisDesignDataInterfacesFm.pas' {BisDesignDataInterfacesForm},
+  BisDesignDataMenuEditFm in 'imdesign.bpl\BisDesignDataMenuEditFm.pas' {BisDesignDataMenuEditForm},
+  BisDesignDataMenusFm in 'imdesign.bpl\BisDesignDataMenusFm.pas' {BisDesignDataMenusForm},
+  BisDesignDataPermissionEditFm in 'imdesign.bpl\BisDesignDataPermissionEditFm.pas' {BisDesignDataPermissionEditForm},
+  BisDesignDataPermissionsFm in 'imdesign.bpl\BisDesignDataPermissionsFm.pas' {BisDesignDataPermissionsForm},
+  BisDesignDataProfileEditFm in 'imdesign.bpl\BisDesignDataProfileEditFm.pas' {BisDesignDataProfileEditForm},
+  BisDesignDataProfilesFm in 'imdesign.bpl\BisDesignDataProfilesFm.pas' {BisDesignDataProfilesForm},
+  BisDesignDataReportEditFm in 'imdesign.bpl\BisDesignDataReportEditFm.pas' {BisDesignDataReportEditForm},
+  BisDesignDataReportsFm in 'imdesign.bpl\BisDesignDataReportsFm.pas' {BisDesignDataReportsForm},
+  BisDesignDataReportsFrm in 'imdesign.bpl\BisDesignDataReportsFrm.pas' {BisDesignDataReportsFrame: TFrame},
+  BisDesignDataRoleEditFm in 'imdesign.bpl\BisDesignDataRoleEditFm.pas' {BisDesignDataRoleEditForm},
+  BisDesignDataRolesAndAccountsFm in 'imdesign.bpl\BisDesignDataRolesAndAccountsFm.pas' {BisDesignDataRolesAndAccountsForm},
+  BisDesignDataRolesFm in 'imdesign.bpl\BisDesignDataRolesFm.pas' {BisDesignDataRolesForm},
+  BisDesignDataSessionsFm in 'imdesign.bpl\BisDesignDataSessionsFm.pas' {BisDesignDataSessionsForm},
+  BisDesignDataAccountRolesFm in 'imdesign.bpl\BisDesignDataAccountRolesFm.pas' {BisDesignDataAccountRolesForm},
+  BisDesignDataAccountRoleEditFm in 'imdesign.bpl\BisDesignDataAccountRoleEditFm.pas' {BisDesignDataAccountRoleEditForm},
+  BisDesignJournalActionsFm in 'imdesign.bpl\BisDesignJournalActionsFm.pas' {BisDesignJournalActionsForm},
+  BisDesignJournalActionEditFm in 'imdesign.bpl\BisDesignJournalActionEditFm.pas' {BisDesignJournalActionEditForm},
+  BisDesignDataDocumentsFm in 'imdesign.bpl\BisDesignDataDocumentsFm.pas' {BisDesignDataDocumentsForm},
+  BisDesignDataDocumentEditFm in 'imdesign.bpl\BisDesignDataDocumentEditFm.pas' {BisDesignDataDocumentEditForm},
+  BisDesignDataConstsFm in 'imdesign.bpl\BisDesignDataConstsFm.pas' {BisDesignDataConstsForm},
+  BisDesignDataConstEditFm in 'imdesign.bpl\BisDesignDataConstEditFm.pas' {BisDesignDataConstEditForm},
+  BisDesignDataScriptsFm in 'imdesign.bpl\BisDesignDataScriptsFm.pas' {BisDesignDataScirptsForm},
+  BisDesignDataScriptsFrm in 'imdesign.bpl\BisDesignDataScriptsFrm.pas' {BisDesignDataScriptsFrame: TFrame},
+  BisDesignDataScriptEditFm in 'imdesign.bpl\BisDesignDataScriptEditFm.pas' {BisDesignDataScriptEditForm},
+  BisDesignDataLocksFm in 'imdesign.bpl\BisDesignDataLocksFm.pas' {BisDesignDataLocksForm},
+  BisDesignDataLockEditFm in 'imdesign.bpl\BisDesignDataLockEditFm.pas' {BisDesignDataLockEditForm},
+  BisDesignDataLocalityEditFm in 'imdesign.bpl\BisDesignDataLocalityEditFm.pas' {BisDesignDataLocalityEditForm},
+  BisDesignDataLocalitiesFm in 'imdesign.bpl\BisDesignDataLocalitiesFm.pas' {BisDesignDataLocalitiesForm},
+  BisDesignDataStreetsFm in 'imdesign.bpl\BisDesignDataStreetsFm.pas' {BisDesignDataStreetsForm},
+  BisDesignDataStreetEditFm in 'imdesign.bpl\BisDesignDataStreetEditFm.pas' {BisDesignDataStreetEditForm},
+  BisDesignDataLocalitiesFrm in 'imdesign.bpl\BisDesignDataLocalitiesFrm.pas' {BisDesignDataLocalitiesFrame: TFrame},
+  BisDesignDataInterfaceFilterFm in 'imdesign.bpl\BisDesignDataInterfaceFilterFm.pas' {BisDesignDataInterfaceFilterForm},
+  BisDesignDataInterfacesFrm in 'imdesign.bpl\BisDesignDataInterfacesFrm.pas' {BisDesignDataInterfacesFrame: TFrame},
+  BisDesignDataApplicationsFrm in 'imdesign.bpl\BisDesignDataApplicationsFrm.pas' {BisDesignDataApplicationsFrame: TFrame},
+  BisDesignDataTasksFm in 'imdesign.bpl\BisDesignDataTasksFm.pas' {BisDesignDataTasksForm},
+  BisDesignDataTaskEditFm in 'imdesign.bpl\BisDesignDataTaskEditFm.pas' {BisDesignDataTaskEditForm},
+  BisDesignDataExchangesFm in 'imdesign.bpl\BisDesignDataExchangesFm.pas' {BisDesignDataExchangesFrom},
+  BisDesignDataExchangeEditFm in 'imdesign.bpl\BisDesignDataExchangeEditFm.pas' {BisDesignDataExchangeEditForm},
+  BisDesignExchangeFm in 'imdesign.bpl\BisDesignExchangeFm.pas' {BisDesignExchangeForm},
+  BisDesignDataAlarmsFm in 'imdesign.bpl\BisDesignDataAlarmsFm.pas' {BisDesignDataAlarmsForm},
+  BisDesignDataAlarmEditFm in 'imdesign.bpl\BisDesignDataAlarmEditFm.pas' {BisDesignDataAlarmEditForm},
+  BisDesignDataAlarmFilterFm in 'imdesign.bpl\BisDesignDataAlarmFilterFm.pas' {BisDesignDataAlarmFilterForm},
+  BisDesignDataTasksFrm in 'imdesign.bpl\BisDesignDataTasksFrm.pas' {BisDesignDataTasksFrame: TFrame},
+  BisDesignDataFirmsFm in 'imdesign.bpl\BisDesignDataFirmsFm.pas' {BisDesignDataFirmsForm},
+  BisDesignDataFirmEditFm in 'imdesign.bpl\BisDesignDataFirmEditFm.pas' {BisDesignDataFirmEditForm},
+  BisDesignDataSessionsFrm in 'imdesign.bpl\BisDesignDataSessionsFrm.pas' {BisDesignDataSessionsFrame: T};
+
+end.

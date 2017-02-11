@@ -1,0 +1,66 @@
+unit BisNames;
+
+interface
+
+uses Classes, Contnrs;
+
+type
+
+  TBisName=class(TObject)
+  private
+    FName: String;
+  public
+    property Name: String read FName write FName;
+  end;
+
+  TBisNameClass=class of TBisName;
+
+  TBisNames=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisName;
+  protected
+    function GetNameClass: TBisNameClass; virtual;
+  public
+    function Find(Name: String): TBisName;
+    function Add(Name: String): TBisName;
+
+    property Items[Index: Integer]: TBisName read GetItem;
+  end;
+
+implementation
+
+uses SysUtils;
+
+{ TBisNames }
+
+function TBisNames.GetNameClass: TBisNameClass;
+begin
+  Result:=TBisName;
+end;
+
+function TBisNames.Find(Name: String): TBisName;
+var
+  i: Integer;
+  Item: TBisName;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.Name,Name) then begin
+      Result:=Item;
+      Break;
+    end;
+  end;
+end;
+
+function TBisNames.Add(Name: String): TBisName;
+begin
+  Result:=nil;
+end;
+
+function TBisNames.GetItem(Index: Integer): TBisName;
+begin
+  Result:=TBisName(inherited Items[Index]);
+end;
+
+end.

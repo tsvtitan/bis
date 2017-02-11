@@ -1,0 +1,38 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Includes Demonstration</title>
+</head>
+
+<body>
+<h1>Includes Demonstration</h1>
+<p>There are two different kind of includes:</p>
+<h2>HTML Includes</h2>
+<p>If you have a navigation bar or 
+something similar that is part of many pages you can place the HTML code of
+this navigation bar in a new file and include it in all other pages</p>
+<p>If the included HTML file contains embedded DWS scripts the script are executed!</p>
+<pre>
+{$ADAPTER 'htmlinc.dws'}
+</pre>
+<% 
+{$ADAPTER 'htmlinc.dws'}
+%>
+<h2>Script Includes</h2>
+<p>Maybe you use some common constants on you website. E. g. the e-mail 
+address of the web master. Or maybe you have some utility function that should be
+available in different pages. In this case you should place this script code
+in a new file and include it in evey page where your need this code:</p>
+<p>Script includes musn't contain any HTML code!</p>
+<pre>
+{$INCLUDE 'codeinc.dws'}
+SendLn('Webmaster: ' + CNST_WebMaster);
+</pre>
+<%
+{$INCLUDE 'codeinc.dws'}
+SendLn('Webmaster: ' + CNST_WebMaster);
+%>
+</body>
+</html>

@@ -1,0 +1,167 @@
+inherited BisTaxiDriverShiftDeleteForm: TBisTaxiDriverShiftDeleteForm
+  Left = 513
+  Top = 212
+  Caption = 'BisTaxiDriverShiftDeleteForm'
+  ClientHeight = 202
+  ClientWidth = 392
+  ExplicitWidth = 400
+  ExplicitHeight = 236
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 164
+    Width = 392
+    ExplicitTop = 164
+    ExplicitWidth = 392
+    inherited ButtonOk: TButton
+      Left = 213
+      ExplicitLeft = 213
+    end
+    inherited ButtonCancel: TButton
+      Left = 309
+      ExplicitLeft = 309
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 392
+    Height = 164
+    ExplicitWidth = 392
+    ExplicitHeight = 164
+    object LabelDriver: TLabel
+      Left = 22
+      Top = 13
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1042#1086#1076#1080#1090#1077#1083#1100':'
+      FocusControl = EditDriver
+    end
+    object LabelDateBegin: TLabel
+      Left = 134
+      Top = 94
+      Width = 73
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1042#1088#1077#1084#1103' '#1085#1072#1095#1072#1083#1072':'
+      FocusControl = DateTimePickerBegin
+      ExplicitLeft = 70
+    end
+    object LabelCar: TLabel
+      Left = 10
+      Top = 40
+      Width = 65
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1040#1074#1090#1086#1084#1086#1073#1080#1083#1100':'
+      FocusControl = EditCar
+    end
+    object LabelPark: TLabel
+      Left = 92
+      Top = 67
+      Width = 47
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1057#1090#1086#1103#1085#1082#1072':'
+      FocusControl = EditPark
+      ExplicitLeft = 28
+    end
+    object LabelDateEnd: TLabel
+      Left = 116
+      Top = 121
+      Width = 91
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1042#1088#1077#1084#1103' '#1086#1082#1086#1085#1095#1072#1085#1080#1103':'
+      FocusControl = DateTimePickerEnd
+      ExplicitLeft = 52
+    end
+    object EditDriver: TEdit
+      Left = 81
+      Top = 10
+      Width = 272
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object DateTimePickerBegin: TDateTimePicker
+      Left = 293
+      Top = 91
+      Width = 88
+      Height = 21
+      Anchors = [akTop, akRight]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      TabOrder = 4
+    end
+    object DateTimePickerBeginTime: TDateTimePicker
+      Left = 213
+      Top = 91
+      Width = 74
+      Height = 21
+      Anchors = [akTop, akRight]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 3
+    end
+    object EditCar: TEdit
+      Left = 81
+      Top = 37
+      Width = 300
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 1
+    end
+    object EditPark: TEdit
+      Left = 145
+      Top = 64
+      Width = 236
+      Height = 21
+      Anchors = [akTop, akRight]
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object DateTimePickerEnd: TDateTimePicker
+      Left = 293
+      Top = 118
+      Width = 88
+      Height = 21
+      Anchors = [akTop, akRight]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      TabOrder = 6
+    end
+    object DateTimePickerEndTime: TDateTimePicker
+      Left = 213
+      Top = 118
+      Width = 74
+      Height = 21
+      Anchors = [akTop, akRight]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 5
+    end
+    object CheckBoxLocked: TCheckBox
+      Left = 213
+      Top = 143
+      Width = 97
+      Height = 17
+      Hint = #1047#1072#1073#1083#1086#1082#1080#1088#1086#1074#1072#1090#1100' '#1074#1086#1076#1080#1090#1077#1083#1103
+      Anchors = [akTop, akRight]
+      Caption = #1041#1083#1086#1082#1080#1088#1086#1074#1082#1072
+      TabOrder = 7
+    end
+  end
+end

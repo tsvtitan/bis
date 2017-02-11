@@ -1,0 +1,23 @@
+unit BisTestInit;
+
+interface
+
+uses BisModules, BisIfaceModules;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisTestFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  TestIface:=AModule.Ifaces.AddClass(TBisTestFormIface);
+
+  AModule.Classes.Add(TBisTestFormIface);
+end;
+
+end.

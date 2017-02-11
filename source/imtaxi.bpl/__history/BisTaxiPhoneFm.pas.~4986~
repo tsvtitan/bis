@@ -1,0 +1,267 @@
+unit BisTaxiPhoneFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  ExtCtrls, Menus, ActnPopup, ImgList, ComCtrls, StdCtrls, Buttons, Tabs,
+  BisFm,
+  BisCallPhoneFm, BisCallPhoneFrm,
+  BisControls;
+
+type
+  TBisTaxiPhoneFormSelectPhoneType=(sptNone,sptClient,sptDriver,sptDispatcher,sptAccount);
+
+  TBisTaxiPhoneForm = class(TBisCallPhoneForm)
+    PopupActionBarPhone: TPopupActionBar;
+    MenuItemAccountPhone: TMenuItem;
+    MenuItemDriverPhone: TMenuItem;
+    MenuItemClientPhone: TMenuItem;
+    MenuItemDispatcherPhone: TMenuItem;
+    procedure ButtonSelectClick(Sender: TObject);
+    procedure ComboBoxAcceptorTypeChange(Sender: TObject);
+    procedure PopupActionBarPhonePopup(Sender: TObject);
+    procedure MenuItemClientPhoneClick(Sender: TObject);
+    procedure MenuItemDriverPhoneClick(Sender: TObject);
+    procedure MenuItemAccountPhoneClick(Sender: TObject);
+    procedure MenuItemDispatcherPhoneClick(Sender: TObject);
+  private
+    FSelectPhoneType: TBisTaxiPhoneFormSelectPhoneType;
+
+    function CanSelectDriverPhone: Boolean;
+    procedure SelectDriverPhone;
+    function CanSelectClientPhone: Boolean;
+    procedure SelectClientPhone;
+    function CanSelectDispatcherPhone: Boolean;
+    procedure SelectDispatcherPhone;
+  protected
+    class function GetCallPhoneFrameClass: TBisCallPhoneFrameClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
+  TBisTaxiPhoneFormIface=class(TBisCallPhoneFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiPhoneForm: TBisTaxiPhoneForm;
+
+implementation
+
+uses
+     BisDataSet,
+     BisCallPhoneMessages,
+     BisTaxiDataDriversFm, BisTaxiDataClientsFm, BisTaxiDataDispatchersFm,
+     BisTaxiPhoneFrm;
+
+{$R *.dfm}
+
+{ TBisTaxiPhoneFormIface }
+
+constructor TBisTaxiPhoneFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiPhoneForm;
+end;
+
+
+{ TBisTaxiPhoneForm }
+
+constructor TBisTaxiPhoneForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+destructor TBisTaxiPhoneForm.Destroy;
+begin
+  inherited Destroy;
+end;
+
+class function TBisTaxiPhoneForm.GetCallPhoneFrameClass: TBisCallPhoneFrameClass;
+begin
+  Result:=TBisTaxiPhoneFrame;
+end;
+
+procedure TBisTaxiPhoneForm.MenuItemAccountPhoneClick(Sender: TObject);
+begin
+  SelectAccountPhone;
+end;
+
+procedure TBisTaxiPhoneForm.MenuItemClientPhoneClick(Sender: TObject);
+begin
+  SelectClientPhone;
+end;
+
+procedure TBisTaxiPhoneForm.MenuItemDispatcherPhoneClick(Sender: TObject);
+begin
+  SelectDispatcherPhone;
+end;
+
+procedure TBisTaxiPhoneForm.MenuItemDriverPhoneClick(Sender: TObject);
+begin
+  SelectDriverPhone;
+end;
+
+procedure TBisTaxiPhoneForm.PopupActionBarPhonePopup(Sender: TObject);
+begin
+  MenuItemAccountPhone.Enabled:=CanSelectAccountPhone;
+  MenuItemDriverPhone.Enabled:=CanSelectDriverPhone;
+  MenuItemClientPhone.Enabled:=CanSelectClientPhone;
+  MenuItemDispatcherPhone.Enabled:=CanSelectDispatcherPhone;
+end;
+
+procedure TBisTaxiPhoneForm.ComboBoxAcceptorTypeChange(Sender: TObject);
+{var
+  NewAcceptorType: TBisTaxiPhoneAcceptorType;}
+begin
+  inherited ComboBoxAcceptorTypeChange(Sender);
+{  NewAcceptorType:=GetAcceptorType;
+  if FOldAcceptorType<>NewAcceptorType then begin
+    case NewAcceptorType of
+      atPhone: begin
+//        ComboBoxAcceptor.ReadOnly:=false;
+        ComboBoxAcceptor.Color:=clWindow;
+        ComboBoxAcceptor.Text:=FPhone;
+        ButtonSelect.Enabled:=CanSelectAccountPhone or CanSelectDriverPhone or
+                              CanSelectClientPhone or CanSelectDispatcherPhone;
+      end;
+      atAccount: begin
+//        ComboBoxAcceptor.ReadOnly:=true;
+        ComboBoxAcceptor.Color:=clBtnFace;
+        ComboBoxAcceptor.Text:=FAccount;
+        ButtonSelect.Enabled:=CanSelectAccount;
+      end;
+      atComputer: begin
+//        ComboBoxAcceptor.ReadOnly:=false;
+        ComboBoxAcceptor.Color:=clWindow;
+        ComboBoxAcceptor.Text:=FComputer;
+        ButtonSelect.Enabled:=CanSelectComputer;
+      end;
+      atSession: begin
+//        ComboBoxAcceptor.ReadOnly:=true;
+        ComboBoxAcceptor.Color:=clBtnFace;
+        ComboBoxAcceptor.Text:=FSession;
+        ButtonSelect.Enabled:=CanSelectSession;
+      end;
+    end;
+    FOldAcceptorType:=NewAcceptorType;
+  end;
+  if FBeforeShowed and ComboBoxAcceptor.CanFocus then
+    ComboBoxAcceptor.SetFocus;}
+end;
+
+function TBisTaxiPhoneForm.CanSelectDriverPhone: Boolean;
+begin
+  with TBisTaxiDataDriversFormIface.CreateInited(nil) do begin
+    try
+      Result:=CanShow;
+    finally
+      Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiPhoneForm.SelectDriverPhone;
+var
+  AIface: TBisTaxiDataDriversFormIface;
+  DS: TBisDataSet;
+begin
+  if CanSelectDriverPhone then begin
+    AIface:=TBisTaxiDataDriversFormIface.Create(nil);
+    DS:=TBisDataSet.Create(nil);
+    try
+      if AIface.SelectInto(DS) then begin
+        Acceptor:=DS.FieldByName('PHONE').AsString;
+        FSelectPhoneType:=sptDriver;
+        UpdateDialButton;
+      end;
+    finally
+      DS.Free;
+      AIface.Free;
+    end;
+  end;
+end;
+
+function TBisTaxiPhoneForm.CanSelectClientPhone: Boolean;
+begin
+  with TBisTaxiDataClientsFormIface.CreateInited(nil) do begin
+    try
+      Result:=CanShow;
+    finally
+      Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiPhoneForm.SelectClientPhone;
+var
+  AIface: TBisTaxiDataClientsFormIface;
+  DS: TBisDataSet;
+begin
+  if CanSelectClientPhone then begin
+    AIface:=TBisTaxiDataClientsFormIface.Create(nil);
+    DS:=TBisDataSet.Create(nil);
+    try
+      if AIface.SelectInto(DS) then begin
+        ComboBoxAcceptor.Text:=DS.FieldByName('PHONE').AsString;
+        FSelectPhoneType:=sptClient;
+        UpdateDialButton;
+      end;
+    finally
+      DS.Free;
+      AIface.Free;
+    end;
+  end;
+end;
+
+function TBisTaxiPhoneForm.CanSelectDispatcherPhone: Boolean;
+begin
+  with TBisTaxiDataDispatchersFormIface.CreateInited(nil) do begin
+    try
+      Result:=CanShow;
+    finally
+      Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiPhoneForm.SelectDispatcherPhone;
+var
+  AIface: TBisTaxiDataDispatchersFormIface;
+  DS: TBisDataSet;
+begin
+  if CanSelectDispatcherPhone then begin
+    AIface:=TBisTaxiDataDispatchersFormIface.Create(nil);
+    DS:=TBisDataSet.Create(nil);
+    try
+      if AIface.SelectInto(DS) then begin
+        ComboBoxAcceptor.Text:=DS.FieldByName('PHONE').AsString;
+        FSelectPhoneType:=sptDispatcher;
+        UpdateDialButton;
+      end;
+    finally
+      DS.Free;
+      AIface.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiPhoneForm.ButtonSelectClick(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  case AcceptorType of
+    atPhone: begin            
+      Pt:=TabSheetPhone.ClientToScreen(Point(ButtonSelect.Left,ButtonSelect.Top+ButtonSelect.Height));
+      PopupActionBarPhone.Popup(Pt.X,Pt.Y);
+    end;
+    atAccount: SelectAccount;
+    atComputer: SelectComputer;
+    atSession: SelectSession;
+  end;
+end;
+
+end.

@@ -1,0 +1,44 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{5954f290-c550-4f1a-bad6-aaf6a10ca283}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="Delphi7\dws2Runtime.dproj" />
+    <Projects Include="Delphi7\dws2VCLRuntime.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="dws2Runtime">
+    <MSBuild Projects="Delphi7\dws2Runtime.dproj" Targets="" />
+  </Target>
+  <Target Name="dws2Runtime:Clean">
+    <MSBuild Projects="Delphi7\dws2Runtime.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="dws2Runtime:Make">
+    <MSBuild Projects="Delphi7\dws2Runtime.dproj" Targets="Make" />
+  </Target>
+  <Target Name="dws2VCLRuntime">
+    <MSBuild Projects="Delphi7\dws2VCLRuntime.dproj" Targets="" />
+  </Target>
+  <Target Name="dws2VCLRuntime:Clean">
+    <MSBuild Projects="Delphi7\dws2VCLRuntime.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="dws2VCLRuntime:Make">
+    <MSBuild Projects="Delphi7\dws2VCLRuntime.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="dws2Runtime;dws2VCLRuntime" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="dws2Runtime:Clean;dws2VCLRuntime:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="dws2Runtime:Make;dws2VCLRuntime:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

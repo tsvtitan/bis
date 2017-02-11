@@ -1,0 +1,502 @@
+unit BisAlarmsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, ComCtrls, SynEdit, 
+  BisObject, BisCoreObjects, BisFm, BisGradient, BisEvents, BisSynEdit,
+  BisControls;
+
+type
+  TBisAlarmType=(atInfo,atWarning,atError);
+
+  TBisAlarm=class(TBisCoreObject)
+  private
+    FID: String;
+    FSenderName: String;
+    FTypeAlarm: TBisAlarmType;
+    FText: String;
+    FDateBegin: TDateTime;
+  public
+    procedure WriteData(Writer: TWriter);
+    procedure ReadData(Reader: TReader);
+
+    property ID: String read FID write FID;
+    property SenderName: String read FSenderName write FSenderName;
+    property DateBegin: TDateTime read FDateBegin write FDateBegin;
+    property TypeAlarm: TBisAlarmType read FTypeAlarm write FTypeAlarm;
+    property Text: String read FText write FText;
+  end;
+
+  TBisAlarmClass=class of TBisAlarm;
+
+  TBisAlarms=class(TBisCoreObjects)
+  private
+    function GetItem(Index: Integer): TBisAlarm;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    function FindByID(ID: String): TBisAlarm;
+    function Add(ID: String): TBisAlarm; reintroduce;
+
+    procedure WriteData(Writer: TWriter);
+    procedure ReadData(Reader: TReader);
+    procedure SaveToStream(Stream: TStream);
+    procedure LoadFromStream(Stream: TStream);
+
+    procedure CopyFrom(Source: TBisAlarms; WithClear: Boolean);
+
+    property Items[Index: Integer]: TBisAlarm read GetItem;
+  end;
+
+  TBisAlarmsForm = class(TBisForm)
+    StatusBar: TStatusBar;
+    PanelCaption: TPanel;
+    Image: TImage;
+    Memo: TMemo;
+    LabelCaption: TLabel;
+    Bevel: TBevel;
+    GridPanel: TGridPanel;
+    PanelLeft: TPanel;
+    PanelNavigator: TPanel;
+    LabeCounter: TLabel;
+    BitBtnPrior: TBitBtn;
+    BitBtnNext: TBitBtn;
+    PanelRight: TPanel;
+    procedure BitBtnPriorClick(Sender: TObject);
+    procedure BitBtnNextClick(Sender: TObject);
+    procedure MemoChange(Sender: TObject);
+    procedure MemoClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
+  private
+    FAlarms: TBisAlarms;
+    FMemo: TBisSynEdit;
+    FOldCaption: String;
+    FGradient: TBisGradient;
+    FSCaption: String;
+    FCurrentIndex: Integer;
+    FSStatus: String;
+    FSCounter: String;
+
+    procedure SetAlarmByIndex(Index: Integer);
+    function EqualAlarms(NewAlarms: TBisAlarms): Boolean;
+    procedure UpdateScrollBars;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    function CanShow: Boolean; override;
+    procedure BeforeShow; override;
+  published
+    property SCounter: String read FSCounter write FSCounter;
+    property SCaption: String read FSCaption write FSCaption;
+    property SStatus: String read FSStatus write FSStatus;
+  end;
+
+  TBisAlarmsFormIface=class(TBisFormIface)
+  private
+    FAlaramEvent: TBisEvent;
+    FShowTimer: TTimer;
+    procedure ShowTimerOnTimer(Sender: TObject);
+    function EventHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
+var
+  BisAlarmsForm: TBisAlarmsForm;
+
+implementation
+
+uses BisCore, BisDialogs, BisUtils, BisConsts, BisCrypter;
+
+{$R *.dfm}
+
+{ TBisAlarm }
+
+procedure TBisAlarm.ReadData(Reader: TReader);
+begin
+  FID:=Reader.ReadString;
+  Caption:=Reader.ReadString;
+  FSenderName:=Reader.ReadString;
+  FDateBegin:=Reader.ReadDate;
+  FTypeAlarm:=TBisAlarmType(Reader.ReadInteger);
+  FText:=Reader.ReadString;
+end;
+
+procedure TBisAlarm.WriteData(Writer: TWriter);
+begin
+  Writer.WriteString(FID);
+  Writer.WriteString(Caption);
+  Writer.WriteString(FSenderName);
+  Writer.WriteDate(FDateBegin);
+  Writer.WriteInteger(Integer(FTypeAlarm));
+  Writer.WriteString(FText);
+end;
+
+{ TBisAlarms }
+
+procedure TBisAlarms.CopyFrom(Source: TBisAlarms; WithClear: Boolean);
+var
+  i: Integer;
+  Item, Alarm: TBisAlarm;
+begin
+  if WithClear then
+    Clear;
+  if Assigned(Source) then begin
+    for i:=0 to Source.Count-1 do begin
+      Item:=Source.Items[i];
+      Alarm:=FindByID(Item.ID);
+      if not Assigned(Alarm) then
+        Alarm:=Add(Item.ID);
+      if Assigned(Alarm) then begin
+        Alarm.Caption:=Item.Caption;
+        Alarm.SenderName:=Item.SenderName;
+        Alarm.DateBegin:=Item.DateBegin;
+        Alarm.TypeAlarm:=Item.TypeAlarm;
+        Alarm.Text:=Item.Text;
+      end;
+    end;
+  end;
+end;
+
+function TBisAlarms.FindByID(ID: String): TBisAlarm;
+var
+  i: Integer;
+  Item: TBisAlarm;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.ID,ID) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisAlarms.Add(ID: String): TBisAlarm;
+begin
+  Result:=FindByID(ID);
+  if not Assigned(Result) then begin
+    Result:=TBisAlarmClass(GetObjectClass).Create(Self);
+    Result.ID:=ID;
+    AddObject(Result);
+  end;
+end;
+
+function TBisAlarms.GetItem(Index: Integer): TBisAlarm;
+begin
+  Result:=TBisAlarm(inherited Items[Index]);
+end;
+
+function TBisAlarms.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisAlarm;
+end;
+
+procedure TBisAlarms.ReadData(Reader: TReader);
+var
+  Item,Alarm: TBisAlarm;
+begin
+  Reader.ReadListBegin;
+  while not Reader.EndOfList do begin
+    Item:=TBisAlarm.Create(nil);
+    try
+      Item.ReadData(Reader);
+      if not Assigned(FindByID(Item.ID)) then begin
+        Alarm:=Add(Item.ID);
+        if Assigned(Alarm) then begin
+          Alarm.Caption:=Item.Caption;
+          Alarm.SenderName:=Item.SenderName;
+          Alarm.DateBegin:=Item.DateBegin;
+          Alarm.TypeAlarm:=Item.TypeAlarm;
+          Alarm.Text:=Item.Text;
+        end;
+      end;
+    finally
+      Item.Free;
+    end;
+  end;
+  Reader.ReadListEnd;
+end;
+
+procedure TBisAlarms.LoadFromStream(Stream: TStream);
+var
+  Reader: TReader;
+begin
+  Reader:=TReader.Create(Stream,ReaderBufferSize);
+  try
+    ReadData(Reader);
+  finally
+    Reader.Free;
+  end;
+end;
+
+procedure TBisAlarms.WriteData(Writer: TWriter);
+var
+  i: Integer;
+  Item: TBisAlarm;
+begin
+  Writer.WriteListBegin;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    Item.WriteData(Writer);
+  end;
+  Writer.WriteListEnd;
+end;
+
+procedure TBisAlarms.SaveToStream(Stream: TStream);
+var
+  Writer: TWriter;
+begin
+  Writer:=TWriter.Create(Stream,WriterBufferSize);
+  try
+    WriteData(Writer);
+  finally
+    Writer.Free;
+  end;
+end;
+
+{ TBisAlarmsFormIface }
+
+constructor TBisAlarmsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisAlarmsForm;
+  OnlyOneForm:=true;
+
+  FAlaramEvent:=Core.Events.Add(SEventAlarm,EventHandler,false);
+end;
+
+destructor TBisAlarmsFormIface.Destroy;
+begin
+  Core.Events.Remove(FAlaramEvent);
+  FreeAndNilEx(FShowTimer);
+  inherited Destroy;
+end;
+
+procedure TBisAlarmsFormIface.ShowTimerOnTimer(Sender: TObject);
+begin
+  Show;
+  FreeAndNilEx(FShowTimer);
+end;
+
+function TBisAlarmsFormIface.EventHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+begin
+  Result:=false;
+  if Event=FAlaramEvent then begin
+    Result:=CanShow;
+    if Result then begin
+      FreeAndNilEx(FShowTimer);
+      FShowTimer:=TTimer.Create(nil);
+      FShowTimer.OnTimer:=ShowTimerOnTimer;
+      FShowTimer.Enabled:=true;
+    end;
+  end;
+end;
+
+{ TBisAlarmsForm }
+
+constructor TBisAlarmsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ActivateNeeded:=false;
+  CloseMode:=cmFree;
+  SizesStored:=true;
+
+  Memo.WordWrap:=true;
+  Memo.Color:=ColorControlFocused;
+
+  FAlarms:=TBisAlarms.Create(nil);
+  FOldCaption:=Caption;
+
+  FMemo:=TBisSynEdit.Create(Self);
+  FMemo.Parent:=Memo.Parent;
+  FMemo.Align:=Memo.Align;
+  FMemo.Color:=Memo.Color;
+  FMemo.AlignWithMargins:=Memo.AlignWithMargins;
+  FMemo.Font.Assign(Memo.Font);
+  FMemo.Margins.Assign(Memo.Margins);
+  FMemo.WordWrap:=true;
+  FMemo.WantReturns:=false;
+  FMemo.ReadOnly:=Memo.ReadOnly;
+  FMemo.ParentFont:=Memo.ParentFont;
+  FMemo.Gutter.Visible:=false;
+  FMemo.RightEdge:=1000;
+  FMemo.OnChange:=Memo.OnChange;
+  FMemo.OnClick:=Memo.OnClick;
+  FMemo.Options:=FMemo.Options+[eoHideShowScrollbars];
+
+  Memo.Free;
+  Memo:=nil;
+
+  FGradient:=TBisGradient.Create(nil);
+  FGradient.Parent:=nil;
+  FGradient.Align:=alClient;
+  FGradient.Style:=gsVertical;
+  FGradient.BeginColor:=clWhite;
+  FGradient.EndColor:=clWhite;
+
+  Image.BringToFront;
+  LabelCaption.BringToFront;
+
+  FSCounter:='%d из %d';
+  FSCaption:='%s %s';
+  FSStatus:='%s в %s';
+end;
+
+destructor TBisAlarmsForm.Destroy;
+begin
+  FGradient.Free;
+  FMemo.Free;
+  FAlarms.Free;
+  inherited Destroy;
+end;
+
+procedure TBisAlarmsForm.Init;
+begin
+  inherited Init;
+  FOldCaption:=Caption;
+end;
+
+function TBisAlarmsForm.EqualAlarms(NewAlarms: TBisAlarms): Boolean;
+var
+  Stream, NewStream: TMemoryStream;
+  Hash, NewHash: String;
+  Crypter: TBisCrypter;
+begin
+  Result:=FAlarms.Count=NewAlarms.Count;
+  if Result then begin
+    Stream:=TMemoryStream.Create;
+    NewStream:=TMemoryStream.Create;
+    Crypter:=TBisCrypter.Create;
+    try
+      FAlarms.SaveToStream(Stream);
+      Stream.Position:=0;
+      Hash:=Crypter.HashStream(Stream,haMD5,hfHEX);
+      NewAlarms.SaveToStream(NewStream);
+      NewStream.Position:=0;
+      NewHash:=Crypter.HashStream(NewStream,haMD5,hfHEX);
+      Result:=AnsiSameText(Hash,NewHash);
+    finally
+      Crypter.Free;
+      Stream.Free;
+      NewStream.Free;
+    end;
+  end;
+end;
+
+procedure TBisAlarmsForm.FormResize(Sender: TObject);
+begin
+  HideCaret(FMemo.Handle);
+  UpdateScrollBars;
+end;
+
+function TBisAlarmsForm.CanShow: Boolean;
+var
+  NewAlarms: TBisAlarms;
+begin
+  Result:=inherited CanShow;
+  if Result then begin
+    NewAlarms:=TBisAlarms.Create(nil);
+    try
+      if Assigned(Core) then begin
+        Core.ConnectionLoadAlarms(NewAlarms);
+        if NewAlarms.Count=0 then begin
+          Result:=false;
+          Close;
+        end;
+      end;
+    finally
+      if Result then begin
+        Result:=not EqualAlarms(NewAlarms);
+        if Result then
+          FAlarms.CopyFrom(NewAlarms,true);
+      end;
+      NewAlarms.Free;
+    end;
+  end;
+end;
+
+procedure TBisAlarmsForm.SetAlarmByIndex(Index: Integer);
+var
+  Alarm: TBisAlarm;
+  IconId: THandle;
+  AColor: TColor;
+begin
+  GridPanel.Visible:=FAlarms.Count>1;
+  BitBtnPrior.Enabled:=false;
+  BitBtnNext.Enabled:=false;
+  if (Index>=0) and (Index<FAlarms.Count) then begin
+    Alarm:=FAlarms.Items[Index];
+    LabeCounter.Caption:=FormatEx(FSCounter,[Index+1,FAlarms.Count]);
+    if GridPanel.Visible then
+      Caption:=FormatEx(FSCaption,[FOldCaption,LabeCounter.Caption])
+    else Caption:=FOldCaption;  
+    AColor:=clWindowText;
+    IconId:=Core.Application.Icon.Handle;
+    case Alarm.TypeAlarm of
+      atInfo: begin
+        AColor:=clBlue;
+        IconId:=LoadIcon(0,IDI_ASTERISK);
+      end;
+      atWarning: begin
+        AColor:=clYellow;
+        IconId:=LoadIcon(0,IDI_EXCLAMATION);
+      end;
+      atError: begin
+        AColor:=clRed;
+        IconId:=LoadIcon(0,IDI_HAND);
+      end;
+    end;
+    Image.Picture.Icon.Handle:=IconId;
+    LabelCaption.Caption:=Alarm.Caption;
+    FGradient.EndColor:=AColor;
+    FMemo.Lines.Text:=Alarm.Text;
+    StatusBar.Panels[0].Text:=FormatEx(FSStatus,[Alarm.SenderName,DateTimeToStr(Alarm.DateBegin)]);
+    BitBtnPrior.Enabled:=Index>0;
+    BitBtnNext.Enabled:=Index<FAlarms.Count-1;
+    FCurrentIndex:=Index;
+  end else
+    FCurrentIndex:=-1;
+
+end;
+
+procedure TBisAlarmsForm.BitBtnNextClick(Sender: TObject);
+begin
+  SetAlarmByIndex(FCurrentIndex+1);
+end;
+
+procedure TBisAlarmsForm.BitBtnPriorClick(Sender: TObject);
+begin
+  SetAlarmByIndex(FCurrentIndex-1);
+end;
+
+procedure TBisAlarmsForm.UpdateScrollBars;
+begin
+//  FMemo.ScrollBars:=ssNone;
+  
+end;
+
+procedure TBisAlarmsForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  SetAlarmByIndex(FAlarms.Count-1);
+  HideCaret(FMemo.Handle);
+  UpdateScrollBars;
+end;
+
+procedure TBisAlarmsForm.MemoChange(Sender: TObject);
+begin
+  HideCaret(FMemo.Handle);
+end;
+
+procedure TBisAlarmsForm.MemoClick(Sender: TObject);
+begin
+  HideCaret(FMemo.Handle);
+end;
+
+end.

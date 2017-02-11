@@ -1,0 +1,73 @@
+unit BisSmHttp;
+
+interface
+
+uses Classes,
+     BisServerModules, BisIfaceModules;
+
+procedure InitServerModule(AModule: TBisServerModule); stdcall;
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+
+exports
+  InitServerModule,
+  InitIfaceModule;
+
+implementation
+
+uses Variants, DB,
+     BisSmHttpServer, BisSmHttpServerMainFm, BisSmHttpConsts;
+
+procedure InitServerModule(AModule: TBisServerModule); stdcall;
+{var
+  DSServers: TBisDataSet;
+  DSParams: TBisDataSet;
+  Stream: TMemoryStream;
+  ParamName: String;
+  AServer: TBisHttpServer;}
+begin
+{  if Core.LocalBase.BaseLoaded then begin
+    DSServers:=TBisDataSet.Create(nil);
+    Stream:=TMemoryStream.Create;
+    try
+      ParamName:=Core.Config.Read(AModule.Name,SParamServers,SHttpServers);
+      if Core.LocalBase.ReadParam(ParamName,Stream) then begin
+        DSServers.LoadFromStream(Stream);
+        if DSServers.Active and not DSServers.IsEmpty then begin
+          DSServers.First;
+          while not DSServers.Eof do begin
+            Stream.Clear;
+            if DSServers.FieldByName(SFieldParams).IsBlob and
+               not VarIsNull(DSServers.FieldByName(SFieldParams).Value) and
+               Boolean(DSServers.FieldByName(SFieldEnable).AsInteger) then begin
+              DSParams:=TBisDataSet.Create(nil);
+              try
+                TBlobField(DSServers.FieldByName(SFieldParams)).SaveToStream(Stream);
+                DSParams.LoadFromStream(Stream);
+                if DSParams.Active and not DSParams.IsEmpty then begin
+                  AServer:=TBisHttpServer.Create;
+                  AServer.Name:=DSServers.FieldByName(SFieldName).AsString;
+                  AServer.Description:=DSServers.FieldByName(SFieldDescription).AsString;
+                  AServer.InitDefaultParams(DSParams);
+                  AModule.Servers.AddServer(AServer);
+                end;  
+              finally
+                DSParams.Free;
+              end;
+            end;
+            DSServers.Next;
+          end;
+        end;
+      end;  
+    finally
+      Stream.Free;
+      DSServers.Free;
+    end;
+  end; }
+end;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  AModule.Ifaces.AddClass(TBisSmHttpServerMainFormIface);
+end;
+
+end.

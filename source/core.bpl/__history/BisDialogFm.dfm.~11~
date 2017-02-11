@@ -1,0 +1,48 @@
+inherited BisDialogForm: TBisDialogForm
+  Left = 605
+  Top = 294
+  Caption = 'BisDialogForm'
+  ClientHeight = 183
+  ClientWidth = 295
+  ExplicitWidth = 303
+  ExplicitHeight = 217
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelButton: TPanel
+    Left = 0
+    Top = 148
+    Width = 295
+    Height = 35
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 0
+    ExplicitTop = 150
+    ExplicitWidth = 297
+    DesignSize = (
+      295
+      35)
+    object ButtonOk: TButton
+      Left = 130
+      Top = 2
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Caption = #1054#1050
+      Default = True
+      TabOrder = 0
+      ExplicitLeft = 132
+    end
+    object ButtonCancel: TButton
+      Left = 212
+      Top = 2
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Cancel = True
+      Caption = #1054#1090#1084#1077#1085#1072
+      ModalResult = 2
+      TabOrder = 1
+      ExplicitLeft = 214
+    end
+  end
+end

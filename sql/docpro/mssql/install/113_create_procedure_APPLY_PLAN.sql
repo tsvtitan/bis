@@ -1,0 +1,38 @@
+/* Создание процедуры применения плана */
+
+CREATE PROCEDURE /*PREFIX*/APPLY_PLAN
+  @PLAN_ID VARCHAR(32),
+  @DOC_ID VARCHAR(32)
+AS
+BEGIN
+  DECLARE 
+    @POSITION_ID VARCHAR(32),
+    @MOTION_ID VARCHAR(32);
+
+  DELETE FROM /*PREFIX*/MOTIONS
+   WHERE DOC_ID=@DOC_ID
+     AND POSITION_ID IN (SELECT POSITION_ID 
+                           FROM /*PREFIX*/POSITIONS 
+                          WHERE PLAN_ID=@PLAN_ID
+                            AND VIEW_ID IN (SELECT VIEW_ID 
+                                              FROM DOCS
+                                             WHERE DOC_ID=@DOC_ID));
+
+  SELECT TOP 1 
+         @POSITION_ID=POSITION_ID
+    FROM /*PREFIX*/POSITIONS
+   WHERE PLAN_ID=@PLAN_ID
+     AND VIEW_ID IN (SELECT VIEW_ID 
+                       FROM DOCS
+                      WHERE DOC_ID=@DOC_ID)
+   ORDER BY PRIORITY;  
+
+  SET @MOTION_ID=(SELECT ID FROM S_GET_UNIQUE_ID);
+
+  INSERT INTO /*PREFIX*/MOTIONS (MOTION_ID,POSITION_ID,DOC_ID,DATE_ISSUE)
+       VALUES (@MOTION_ID,@POSITION_ID,@DOC_ID,CURRENT_TIMESTAMP);
+
+END;
+
+
+--

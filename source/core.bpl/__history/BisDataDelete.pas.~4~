@@ -1,0 +1,27 @@
+unit BisDataDelete;
+
+interface
+
+uses Classes, Contnrs,
+     BisFm, BisDataEditFm;
+
+type
+
+  TBisDataDeleteFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDataDeleteFormIfaceClass=class of TBisDataDeleteFormIface;
+
+implementation
+
+{ TBisDataDeleteFormIface }
+
+constructor TBisDataDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Mode:=emDelete;
+end;
+
+end.

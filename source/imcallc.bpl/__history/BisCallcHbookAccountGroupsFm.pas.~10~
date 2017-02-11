@@ -1,0 +1,53 @@
+unit BisCallcHbookAccountGroupsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBisCallcHbookAccountGroupsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookAccountGroupsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHbookAccountGroupsForm: TBisCallcHbookAccountGroupsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisCallcHbookAccountGroupEditFm;
+
+{ TBisCallcHbookAccountGroupsFormIface }
+
+constructor TBisCallcHbookAccountGroupsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookAccountGroupsForm;
+  InsertClass:=TBisCallcHbookAccountGroupInsertFormIface;
+  UpdateClass:=TBisCallcHbookAccountGroupUpdateFormIface;
+  DeleteClass:=TBisCallcHbookAccountGroupDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_ACCOUNT_GROUPS';
+  with FieldNames do begin
+    AddKey('ACCOUNT_ID');
+    AddKey('GROUP_ID');
+    Add('USER_NAME','Учетная запись',150);
+    Add('GROUP_NAME','Организация',150);
+    Add('GROUP_NAME','Порядок',50);
+  end;
+  Orders.Add('USER_NAME');
+  Orders.Add('Group_SMALL_NAME');
+end;
+
+end.

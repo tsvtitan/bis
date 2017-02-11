@@ -1,0 +1,28 @@
+/* Создание процедуры номеров боченков */
+
+CREATE PROCEDURE /*PREFIX*/GET_BARREL_NUMS
+(
+  TIRAGE_ID VARCHAR(32),
+  ROUND_NUM INTEGER
+)
+RETURNS
+(
+  BARREL_NUM VARCHAR(2)
+)
+AS
+BEGIN
+  FOR SELECT BARREL_NUM
+        FROM /*PREFIX*/LOTTERY
+       WHERE TIRAGE_ID=:TIRAGE_ID
+         AND ROUND_NUM=:ROUND_NUM
+       ORDER BY INPUT_DATE
+        INTO :BARREL_NUM DO BEGIN
+    SUSPEND;
+  END
+END;
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

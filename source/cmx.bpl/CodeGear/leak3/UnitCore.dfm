@@ -1,0 +1,51 @@
+object CoreForm: TCoreForm
+  Left = 0
+  Top = 0
+  Caption = 'CoreForm'
+  ClientHeight = 167
+  ClientWidth = 332
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 0
+    Top = 0
+    Width = 332
+    Height = 167
+    Align = alClient
+    Alignment = taCenter
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    Layout = tlCenter
+    ExplicitWidth = 5
+    ExplicitHeight = 19
+  end
+  object Button1: TButton
+    Left = 240
+    Top = 88
+    Width = 75
+    Height = 25
+    Caption = 'Init'
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 240
+    Top = 119
+    Width = 75
+    Height = 25
+    Caption = 'Done'
+    TabOrder = 1
+    OnClick = Button2Click
+  end
+end

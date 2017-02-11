@@ -1,0 +1,1091 @@
+unit BisUdfIBase;
+
+interface
+
+uses Windows, SysUtils, ActiveX;
+
+type
+  PIBDateTime = ^TIBDateTime;
+  TIBDateTime = record
+    Days,                           // Date: Days since 17 November 1858
+    MSec10 : Integer;               // Time: Millisecond * 10 since midnigth
+  end;
+
+//  PInteger  = ^integer;
+//  PInt      = ^integer;
+  Short     = SmallInt;// 16 bit signed
+  UShort    = Word;    // 16 bit unsigned
+  Long      = LongInt; // 32 bit signed
+
+  TBlobGetSegment = function (BlobHandle: Pointer; Buffer: PChar; BufferSize: UShort; var ResultLength: UShort): Short; cdecl;
+  TBlobPutSegment = procedure (BlobHandle: Pointer; Buffer: PChar; BufferLength: Short); cdecl;
+
+  TBlob = record
+    GetSegment: TBlobGetSegment;
+    Handle: Pointer;
+    SegmentCount: Long;
+    MaxSegmentLength: Long;
+    TotalSize: Long;
+    PutSegment: TBlobPutSegment;
+  end;
+  PBlob = ^TBlob;
+
+const                               // Date translation constants
+  MSecsPerDay10 = MSecsPerDay * 10; // Milliseconds per day * 10
+  IBDateDelta = 15018;              // Days between Delphi and InterBase dates
+
+procedure Init;
+procedure Done;
+
+procedure GET_UNIQUE_ID(Ret: PChar); cdecl; export;
+function UPPER(Str: PChar): PChar; cdecl; export;
+function TRIM(Str: PChar): PChar; cdecl; export;
+function FORMAT_DATETIME(Format: PChar; var DateTime: TIBDateTime): PChar; cdecl; export;
+function SUBSTR(Str: PChar; var FromPos, ToPos: Integer): PChar; cdecl; export;
+function SUB_STRING(Str: PChar; var FromPos, ToPos: Integer): PChar; cdecl; export;
+function REPLACE_STRING(Str: PChar; Str1: PChar; Str2: PChar): PChar; cdecl; export;
+function SYSTEM_UPTIME: Integer; cdecl; export;
+function STRING_LENGTH(Str: PChar): Integer; cdecl; export;
+procedure COMPRESS_BLOB(var Input: TBlob; var CompressorLevel: Integer; var Output: TBlob); cdecl; export;
+procedure DECOMPRESS_BLOB(var Input: TBlob; var Output: TBlob); cdecl; export;
+procedure ENCODE_BLOB(var Input: TBlob; CrypterKey: PChar; var CrypterAlgorithm, CrypterMode: Integer; var Output: TBlob); cdecl; export;
+procedure DECODE_BLOB(var Input: TBlob; CrypterKey: PChar; var CrypterAlgorithm, CrypterMode: Integer; var Output: TBlob); cdecl; export;
+procedure HTTP_POST(Host,Port,Path,UserName,Password: PChar; var Request: TBlob; var Response: TBlob; var Timeout: Integer); cdecl; export;
+procedure HTTP_GET(Host,Port,Path,UserName,Password,Params: PChar; var Response: TBlob; var Timeout: Integer); cdecl; export;
+procedure UDP(Host: PChar; Port: PChar; var Request: TBlob; var Response: TBlob); cdecl; export;
+function SERVER_EXISTS(Host,Port: PChar; var TimeOut: Integer): Integer; cdecl; export;
+function PING(Host: PChar; var TimeOut: Integer): Integer; cdecl; export;
+function SLEEP(var TimeOut: Integer): Integer; cdecl; export;
+function EXECUTE_COMMAND(CommandLine: PChar; var ShowWindow: Integer; var TimeOut: Integer): Integer; cdecl; export;
+function MD5(Str: PChar): PChar; cdecl; export;
+procedure CHR(var Code: Integer; Ret: PChar); cdecl; export;
+function CONFIG_EXISTS(var Input: TBlob; Section: PChar): Integer; cdecl; export;
+function CONFIG_READ(var Input: TBlob; Section: PChar; Param: PChar; Default: PChar): PChar; cdecl; export;
+procedure CONFIG_WRITE(var Input: TBlob; Section: PChar; Param: PChar; Value: PChar; var Output: TBlob); cdecl; export;
+procedure BLOB_TO_STRING(var Input: TBlob; var Position, Size: Integer; Ret: PChar); cdecl; export;
+procedure STRING_TO_BLOB(Input: PChar; var Output: TBlob); cdecl; export;
+function DUPE(Text: PChar; var Count: Integer): PChar; cdecl; export;
+procedure RANDOM_STRING(var Count: Integer; Ret: PChar); cdecl; export;
+function RANDOM(var Count: Integer): Integer; cdecl; export;
+procedure JOIN_BLOB(var Input1, Input2: TBlob; var Output: TBlob); cdecl; export;
+function SAVE_BLOB(var Input: TBlob; Path: PChar): Integer; cdecl; export;
+procedure LOAD_BLOB(var Output: TBlob; Path: PChar); cdecl; export;
+function BLOB_LENGTH(var Input: TBlob): Integer; cdecl; export;
+function DELETE_FILE(Path: PChar): Integer; cdecl; export;
+procedure NUMBER_TO_WORDS(var Number: Double; var WordType: Integer; Ret: PChar); cdecl; export;
+procedure STRING_TO_NUMBER(Input: PChar; var Number: Double); cdecl; export;
+
+
+//function CONFIG_ERASE(Text: PChar; Section: PChar): PChar; cdecl; export;
+
+
+exports
+  GET_UNIQUE_ID,
+  UPPER,
+  TRIM,
+  FORMAT_DATETIME,
+  SUBSTR,
+  SUB_STRING,
+  REPLACE_STRING,
+  SYSTEM_UPTIME,
+  STRING_LENGTH,
+  COMPRESS_BLOB,
+  DECOMPRESS_BLOB,
+  ENCODE_BLOB,
+  DECODE_BLOB,
+  HTTP_POST,
+  HTTP_GET,
+  UDP,
+  SERVER_EXISTS,
+  PING,
+  SLEEP,
+  EXECUTE_COMMAND,
+  MD5,
+  CHR,
+  CONFIG_EXISTS,
+  CONFIG_READ,
+  CONFIG_WRITE,
+  BLOB_TO_STRING,
+  STRING_TO_BLOB,
+  DUPE,
+  RANDOM_STRING,
+  RANDOM,
+  JOIN_BLOB,
+  SAVE_BLOB,
+  LOAD_BLOB,
+  BLOB_LENGTH,
+  DELETE_FILE,
+  NUMBER_TO_WORDS,
+  STRING_TO_NUMBER;
+
+
+implementation
+
+uses Classes, Math, DateUtils, StrUtils, ZLib, IniFiles, SyncObjs,
+     IdObjs, IdURI, IdHttp, IdUDPClient, IdIcmpClient, IdAuthentication,
+     IdWinsock2, IdStack, IdStackWindows,
+     BisNetUtils,
+     BisCrypter;
+
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+begin
+  if IsTrue then Result:=ValueTrue
+  else Result:=ValueFalse;
+end;
+
+procedure SaveBlobToStream(var Blob: TBlob; Stream: TStream);
+var
+  Buffer: PChar;
+  EndOfBlob: Short;
+  MaxBufSize: UShort;
+  GotLength: UShort;
+begin
+  try
+    if (Assigned(Blob.Handle)) or (Blob.TotalSize>0) then begin // don't do anything is blob = 0
+      Stream.Position:=0;
+      MaxBufSize:=Blob.MaxSegmentLength;
+      GetMem(Buffer,MaxBufSize+1);
+      try
+        repeat
+          GotLength:=0; { !?! }
+
+          with Blob do
+            EndOfBlob:=GetSegment(Handle,Buffer,MaxBufSize,GotLength);
+
+          if (GotLength>0) then {?}
+            Stream.WriteBuffer(Buffer^,GotLength);
+
+        until EndOfBlob=0;
+
+      finally
+        FreeMem(Buffer,MaxBufSize+1);
+        Stream.Position:=0;
+      end;
+    end;
+  except
+  end;
+end;
+
+procedure LoadBlobFromStream(var Blob: TBlob; Stream: TStream);
+const
+  MaxBufSize=4096;
+var
+  BufSize, ReadLength, StreamSize: Integer;
+  Buffer: PChar;
+begin
+  try
+    Stream.Position:=0;
+    StreamSize:=Stream.Size;
+
+    if StreamSize>MaxBufSize then
+      BufSize:=MaxBufSize
+    else
+      BufSize:=StreamSize;
+
+    GetMem(Buffer,BufSize);
+    try
+      while StreamSize<>0 do begin
+
+        if StreamSize>BufSize then
+          ReadLength:=BufSize
+        else
+          ReadLength:=StreamSize;
+
+        Stream.ReadBuffer(Buffer^,ReadLength);
+
+        with Blob do
+          PutSegment(Handle,Buffer,ReadLength);
+
+        Dec(StreamSize,ReadLength);
+      end;
+    finally
+      FreeMem(Buffer,BufSize);
+      Stream.Position:=0;
+    end;
+  except
+    // do nothing or write error info into initialized log
+  end;
+end;
+
+function BlobToStr(var Blob: TBlob): String;
+var
+  Stream: TStringStream;
+begin
+  Stream:=TStringStream.Create('');
+  try
+    SaveBlobToStream(Blob,Stream);
+    Result:=Stream.DataString;
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure StrToBlob(S: String; var Blob: TBlob);
+var
+  Stream: TStringStream;
+begin
+  Stream:=TStringStream.Create(S);
+  try
+    LoadBlobFromStream(Blob,Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure CompressStream(Stream: TStream; Level: TCompressionLevel);
+var
+  Zip: TCompressionStream;
+  TempStream: TMemoryStream;
+begin
+  if Assigned(Stream) then begin
+    TempStream:=TMemoryStream.Create;
+    try
+      Zip:=TCompressionStream.Create(Level,TempStream);
+      try
+        Stream.Position:=0;
+        Zip.CopyFrom(Stream,Stream.Size);
+      finally
+        Zip.Free;
+      end;
+      Stream.Size:=0;
+      TempStream.Position:=0;
+      Stream.CopyFrom(TempStream,TempStream.Size);
+      Stream.Position:=0;
+    finally
+      TempStream.Free;
+    end;
+  end;
+end;
+
+procedure DecompressStream(Stream: TStream);
+var
+  Zip: TDecompressionStream;
+  Count: Integer;
+  Buffer: array[0..1023] of Char;
+  TempStream: TMemoryStream;
+begin
+  if Assigned(Stream) then begin
+    TempStream:=TMemoryStream.Create;
+    try
+      Stream.Position:=0;
+      try
+        Zip:=TDecompressionStream.Create(Stream);
+        try
+          repeat
+            Count:=Zip.Read(Buffer,SizeOf(Buffer));
+            TempStream.Write(Buffer,Count);
+          until Count=0;
+        finally
+          Zip.Free;
+        end;
+      except
+      end;
+      TempStream.Position:=0;
+      Stream.Size:=0;
+      Stream.CopyFrom(TempStream,TempStream.Size);
+      Stream.Position:=0;
+    finally
+      TempStream.Free;
+    end;
+  end;
+end;
+
+procedure DecodeStream(Key: String; Stream: TStream; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode);
+var
+  Crypter: TBisCrypter;
+  TempStream: TMemoryStream;
+begin
+  if Assigned(Stream) then begin
+    TempStream:=TMemoryStream.Create;
+    Crypter:=TBisCrypter.Create;
+    try
+      Stream.Position:=0;
+      Crypter.DecodeStream(Key,Stream,TempStream,Algorithm,Mode);
+      TempStream.Position:=0;
+      Stream.Size:=0;
+      Stream.Position:=0;
+      Stream.CopyFrom(TempStream,TempStream.Size);
+      Stream.Position:=0;
+    finally
+      Crypter.Free;
+      TempStream.Free;
+    end;
+  end;
+end;
+
+procedure EncodeStream(Key: String; Stream: TStream; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode);
+var
+  Crypter: TBisCrypter;
+  TempStream: TMemoryStream;
+begin
+  if Assigned(Stream) then begin
+    TempStream:=TMemoryStream.Create;
+    Crypter:=TBisCrypter.Create;
+    try
+      Stream.Position:=0;
+      Crypter.EncodeStream(Key,Stream,TempStream,Algorithm,Mode);
+      TempStream.Position:=0;
+      Stream.Size:=0;
+      Stream.CopyFrom(TempStream,TempStream.Size);
+      Stream.Position:=0;
+    finally
+      Crypter.Free;
+      TempStream.Free;
+    end;
+  end;
+end;
+
+function PrepareClassID(S: string): string;
+begin
+  Result:=Copy(s, 26, 12)+Copy(s, 21, 4)+Copy(s, 16, 4)+Copy(s, 11, 4)+Copy(s, 2, 8);
+end;
+
+function CreateClassID: string;
+var
+  ClassID: TCLSID;
+  P: PWideChar;
+begin
+  CoCreateGuid(ClassID);
+  StringFromCLSID(ClassID, P);
+  Result := P;
+  CoTaskMemFree(P);
+end;
+
+function GetUniqueId: String;
+begin
+  Result:=Copy(CreateClassID,1,37);
+  Result:=PrepareClassID(Result);
+end;
+
+// ?????
+
+{function GET_UNIQUE_ID: PChar; cdecl; export;
+var
+  S: String;
+begin
+  S:=GetUniqueId;
+  Result:=PChar(S);
+end;}
+
+procedure GET_UNIQUE_ID(Ret: PChar); cdecl; export;
+var
+  S: String;
+begin
+  S:=GetUniqueId;
+  StrCopy(Ret,PChar(S));
+end;
+
+function UPPER(Str: PChar): PChar; cdecl; export;
+var
+  S: String;
+begin
+  S:=AnsiUpperCase(Str);
+  Str:=StrCopy(Str,PChar(S));
+  Result:=Str;
+end;
+
+function TRIM(Str: PChar): PChar; cdecl; export;
+var
+  S: String;
+begin
+  S:=SysUtils.Trim(Str);
+  Str:=StrCopy(Str,PChar(S));
+  Result:=Str;
+end;
+
+function FORMAT_DATETIME(Format: PChar; var DateTime: TIBDateTime): PChar; cdecl; export;
+var
+  D: TDateTime;
+  S: String;
+begin
+  D:=DateTime.Days-IBDateDelta + DateTime.MSec10 / MSecsPerDay10;
+  S:=FormatDateTime(Format,D);
+  Format:=StrCopy(Format,PChar(S));
+  Result:=Format;
+end;
+
+function SUBSTR(Str: PChar; var FromPos, ToPos: Integer): PChar; cdecl; export;
+var
+  S: String;
+begin
+  S:=Copy(Str,FromPos,ToPos);
+  Str:=StrCopy(Str,PChar(S));
+  Result:=Str;
+end;
+
+function SUB_STRING(Str: PChar; var FromPos, ToPos: Integer): PChar; cdecl; export;
+var
+  S: String;
+begin
+  S:=Copy(Str,FromPos,ToPos);
+  Str:=StrCopy(Str,PChar(S));
+  Result:=Str;
+end;
+
+function REPLACE_STRING(Str: PChar; Str1: PChar; Str2: PChar): PChar; cdecl; export;
+var
+  S: String;
+begin
+  S:=ReplaceText(Str,Str1,Str2);
+  Str2:=StrCopy(Str2,PChar(S));
+  Result:=Str2;
+end;
+
+function SYSTEM_UPTIME: Integer; cdecl; export;
+var
+  nTime, freq: Int64;
+begin
+  if QueryPerformanceFrequency(freq) then begin
+    if QueryPerformanceCounter(nTime) then begin
+      Result:=Trunc((nTime / Freq) * 1000) and High(Cardinal)
+    end else begin
+      Result:=GetTickCount;
+    end;
+  end else begin
+    Result:=GetTickCount;
+  end;
+end;
+
+function STRING_LENGTH(Str: PChar): Integer; cdecl; export;
+begin
+  Result:=StrLen(Str);
+end;
+
+procedure COMPRESS_BLOB(var Input: TBlob; var CompressorLevel: Integer; var Output: TBlob); cdecl; export;
+var
+  Stream: TMemoryStream;
+begin
+  Stream:=TMemoryStream.Create;
+  try
+    SaveBlobToStream(Input,Stream);
+    if CompressorLevel>Integer(clMax) then CompressorLevel:=Integer(clMax);
+    if CompressorLevel<Integer(clNone) then CompressorLevel:=Integer(clNone);
+    CompressStream(Stream,TCompressionLevel(CompressorLevel));
+    LoadBlobFromStream(Output,Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure DECOMPRESS_BLOB(var Input: TBlob; var Output: TBlob); cdecl; export;
+var
+  Stream: TMemoryStream;
+begin
+  Stream:=TMemoryStream.Create;
+  try
+    SaveBlobToStream(Input,Stream);
+    DecompressStream(Stream);
+    LoadBlobFromStream(Output,Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure ENCODE_BLOB(var Input: TBlob; CrypterKey: PChar; var CrypterAlgorithm, CrypterMode: Integer; var Output: TBlob); cdecl; export;
+var
+  Stream: TMemoryStream;
+begin
+  Stream:=TMemoryStream.Create;
+  try
+    SaveBlobToStream(Input,Stream);
+    if CrypterAlgorithm>Integer(caMcryptRijndael) then CrypterAlgorithm:=Integer(caMcryptRijndael);
+    if CrypterAlgorithm<Integer(ca3Way) then CrypterAlgorithm:=Integer(ca3Way);
+    if CrypterMode>Integer(cmCFBMAC) then CrypterMode:=Integer(cmCFBMAC);
+    if CrypterMode<Integer(cmCTS) then CrypterMode:=Integer(cmCTS);
+    EncodeStream(CrypterKey,Stream,TBisCipherAlgorithm(CrypterAlgorithm),TBisCipherMode(CrypterMode));
+    LoadBlobFromStream(Output,Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure DECODE_BLOB(var Input: TBlob; CrypterKey: PChar; var CrypterAlgorithm, CrypterMode: Integer; var Output: TBlob); cdecl; export;
+var
+  Stream: TMemoryStream;
+begin
+  Stream:=TMemoryStream.Create;
+  try
+    SaveBlobToStream(Input,Stream);
+    if CrypterAlgorithm>Integer(caMcryptRijndael) then CrypterAlgorithm:=Integer(caMcryptRijndael);
+    if CrypterAlgorithm<Integer(ca3Way) then CrypterAlgorithm:=Integer(ca3Way);
+    if CrypterMode>Integer(cmCFBMAC) then CrypterMode:=Integer(cmCFBMAC);
+    if CrypterMode<Integer(cmCTS) then CrypterMode:=Integer(cmCTS);
+    DecodeStream(CrypterKey,Stream,TBisCipherAlgorithm(CrypterAlgorithm),TBisCipherMode(CrypterMode));
+    LoadBlobFromStream(Output,Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure HTTP_POST(Host,Port,Path,UserName,Password: PChar;
+                    var Request: TBlob; var Response: TBlob; var Timeout: Integer); cdecl; export;
+var
+  Http: TIdHttp;
+  APort: String;
+  Url: String;
+  InStream: TIdMemoryStream;
+  OutStream: TIdMemoryStream;
+begin
+  try
+    Http:=TIdHttp.Create(nil);
+    InStream:=TIdMemoryStream.Create;
+    OutStream:=TIdMemoryStream.Create;
+    try
+      Http.Request.UserAgent:='';
+
+      if Trim(UserName)<>'' then begin
+        Http.Request.BasicAuthentication:=true;
+        if not Assigned(Http.Request.Authentication) then
+          Http.Request.Authentication:=TIdBasicAuthentication.Create;
+        Http.Request.Authentication.Username:=UserName;
+        Http.Request.Authentication.Password:=Password;
+      end;
+
+      APort:=Port;
+      Url:='';
+      try
+        Http.URL.Host:=Host;
+        Http.URL.Port:=iff(SysUtils.Trim(APort)='','80',APort);
+        Http.URL.Protocol:='http';
+        Http.URL.Path:=Path;
+        Url:=Http.URL.GetFullURI([]);
+      except
+      end;
+
+      SaveBlobToStream(Request,InStream);
+
+      if Timeout>0 then
+        Http.ReadTimeout:=Timeout;
+
+      Http.Post(Url,InStream,OutStream);
+
+      if (OutStream.Size>0) then begin
+        LoadBlobFromStream(Response,OutStream);
+      end;
+
+    finally
+      OutStream.Free;
+      InStream.Free;
+      Http.Free;
+    end;
+  except
+    On E: Exception do begin
+      StrToBlob(E.Message,Response);
+    end;
+  end;
+end;
+
+procedure HTTP_GET(Host,Port,Path,UserName,Password,Params: PChar;
+                   var Response: TBlob; var Timeout: Integer); cdecl; export;
+var
+  Http: TIdHttp;
+  APort: String;
+  Url: String;
+  S: String;
+begin
+  try
+    Http:=TIdHttp.Create(nil);
+    try
+      Http.Request.UserAgent:='';
+
+      if Trim(UserName)<>'' then begin
+        Http.Request.BasicAuthentication:=true;
+        if not Assigned(Http.Request.Authentication) then
+          Http.Request.Authentication:=TIdBasicAuthentication.Create;
+        Http.Request.Authentication.Username:=UserName;
+        Http.Request.Authentication.Password:=Password;
+      end;
+
+      APort:=Port;
+      
+      Url:='';
+      try
+        Http.URL.Host:=Host;
+        Http.URL.Port:=iff(SysUtils.Trim(APort)='','80',APort);
+        Http.URL.Protocol:='http';
+        Http.URL.Path:=Path;
+        Http.URL.Params:=Params;
+        Url:=Http.URL.GetFullURI([ofBookmark]);
+      except
+      end;
+
+      if Timeout>0 then
+        Http.ReadTimeout:=Timeout;
+
+      S:=Http.Get(Url);
+      if Length(S)>0 then
+        StrToBlob(S,Response);
+
+    finally
+      Http.Free;
+    end;
+  except
+    On E: Exception do begin
+      StrToBlob(E.Message,Response);
+    end;
+  end;
+end;
+
+procedure UDP(Host: PChar; Port: PChar; var Request: TBlob; var Response: TBlob); cdecl; export;
+var
+  Udp: TIdUDPClient;
+  S: String;
+  APort: String;
+begin
+  try
+    Udp:=TIdUDPClient.Create(nil);
+    try
+      APort:=Port;
+      S:=BlobToStr(Request);
+      Udp.Host:=Host;
+      Udp.BufferSize:=Length(S);
+      Udp.Port:=StrToInt(iff(SysUtils.Trim(APort)='','0',APort));
+      Udp.Connect;
+      Udp.Send(S);
+    finally
+      Udp.Free;
+    end;
+  except
+    On E: Exception do begin
+      StrToBlob(E.Message,Response);
+    end;
+  end;
+end;
+
+type
+  TIdIcmpClient=class(IdIcmpClient.TIdIcmpClient)
+  end;
+
+function PING(Host: PChar; var TimeOut: Integer): Integer; cdecl; export;
+var
+  Icmp: TIdIcmpClient;
+  S: String;
+begin
+  Icmp:=TIdIcmpClient.Create.Create(nil);
+  try
+    if TimeOut>0 then
+      Icmp.ReceiveTimeout:=TimeOut;
+    Icmp.Host:=Host;
+    S:=GetUniqueId;
+    try
+      Icmp.Ping(S);
+      Result:=Integer(Icmp.ReplyStatus.ReplyStatusType);
+    except
+      on E: Exception do begin
+        Result:=Integer(rsError);
+      end;
+    end;
+  finally
+    Icmp.Free;
+  end;
+end;
+
+function SERVER_EXISTS(Host,Port: PChar; var TimeOut: Integer): Integer; cdecl; export;
+var
+  P: Integer;
+begin
+  Result:=Integer(false);
+  if TryStrToInt(Port,P) then
+    Result:=Integer(ServerExists(ResolveIP(Host),P,TimeOut));
+end;
+
+function SLEEP(var TimeOut: Integer): Integer; cdecl; export;
+begin
+  Result:=Windows.SleepEx(TimeOut,false);
+end;
+
+function EXECUTE_COMMAND(CommandLine: PChar; var ShowWindow: Integer; var TimeOut: Integer): Integer; cdecl; export;
+var
+  StartupInfo: TStartupInfo;
+  ProcessInfo: TProcessInformation;
+  Ret: Boolean;
+  Ret2: DWord;
+begin
+  Result:=0;
+  FillChar(StartupInfo,SizeOf(TStartupInfo),0);
+  with StartupInfo do begin
+    cb:=SizeOf(TStartupInfo);
+    wShowWindow:=ShowWindow;
+    dwFlags:=STARTF_USESHOWWINDOW;
+  end;
+  Ret:=CreateProcess(nil,PChar(CommandLine),nil,nil,False,
+                     NORMAL_PRIORITY_CLASS,nil,nil,StartupInfo,ProcessInfo);
+  if Ret then begin
+
+    Ret2:=WAIT_ABANDONED;
+    if TimeOut>0 then
+      Ret2:=WaitForSingleObject(ProcessInfo.hProcess,TimeOut);
+
+    case Ret2 of
+      WAIT_TIMEOUT: Result:=2;
+    else
+      Result:=1
+    end;
+
+  end;
+end;
+
+function MD5(Str: PChar): PChar; cdecl; export;
+var
+  Crypter: TBisCrypter;
+  S: String;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    S:=Crypter.HashString(Str,haMD5,hfHEX);;
+    Str:=StrCopy(Str,PChar(S));
+    Result:=Str;
+  finally
+    Crypter.Free;
+  end;
+end;
+
+procedure CHR(var Code: Integer; Ret: PChar); cdecl; export;
+var
+  S: String;
+begin
+  S:=Char(Code);
+  StrCopy(Ret,PChar(S));
+end;
+
+function CONFIG_EXISTS(var Input: TBlob; Section: PChar): Integer; cdecl; export;
+var
+  Config: TMemIniFile;
+  List: TStringList;
+  Ret: Integer;
+begin
+  Config:=TMemIniFile.Create('');
+  List:=TStringList.Create;
+  try
+    List.Text:=BlobToStr(Input);
+    Config.SetStrings(List);
+    Ret:=Integer(Config.SectionExists(Section));
+    Result:=Ret;
+  finally
+    List.Free;
+    Config.Free;
+  end;
+end;
+
+function CONFIG_READ(var Input: TBlob; Section: PChar; Param: PChar; Default: PChar): PChar; cdecl; export;
+var
+  Config: TMemIniFile;
+  List: TStringList;
+  Sections: TStringList;
+  S: String;
+begin
+  Config:=TMemIniFile.Create('');
+  List:=TStringList.Create;
+  Sections:=TStringList.Create;
+  try
+    List.Text:=BlobToStr(Input);
+    Config.SetStrings(List);
+    Config.ReadSections(Sections);
+    if Sections.Count=0 then begin
+      Section:=PChar(GetUniqueId);
+      List.Insert(0,'['+Section+']');
+      Config.SetStrings(List);
+    end;
+    S:=Config.ReadString(Section,Param,Default);
+    Default:=StrCopy(Default,PChar(S));
+    Result:=Default;
+  finally
+    Sections.Free;
+    List.Free;
+    Config.Free;
+  end;
+end;
+
+procedure CONFIG_WRITE(var Input: TBlob; Section: PChar; Param: PChar; Value: PChar; var Output: TBlob); cdecl; export;
+var
+  Config: TMemIniFile;
+  List: TStringList;
+begin
+  Config:=TMemIniFile.Create('');
+  List:=TStringList.Create;
+  try
+    List.Text:=BlobToStr(Input);
+    Config.SetStrings(List);
+    Config.WriteString(Section,Param,Value);
+    List.Clear;
+    Config.GetStrings(List);
+    StrToBlob(SysUtils.Trim(List.Text),Output);
+  finally
+    List.Free;
+    Config.Free;
+  end;
+end;
+
+procedure BLOB_TO_STRING(var Input: TBlob; var Position, Size: Integer; Ret: PChar); cdecl; export;
+var
+  S: String;
+begin
+  S:=BlobToStr(Input);
+  S:=Copy(S,Position,Size);
+  StrCopy(Ret,PChar(S));
+end;
+
+procedure STRING_TO_BLOB(Input: PChar; var Output: TBlob); cdecl; export;
+var
+  S: String;
+begin
+  S:=Input;
+  StrToBlob(S,Output);
+end;
+
+function DUPE(Text: PChar; var Count: Integer): PChar; cdecl; export;
+var
+  S: String;
+begin
+  S:=DupeString(Text,Count);
+  Text:=StrCopy(Text,PChar(S));
+  Result:=Text;
+end;
+
+procedure RANDOM_STRING(var Count: Integer; Ret: PChar); cdecl; export;
+var
+  L: Integer;
+  M: Integer;
+  D: Integer;
+  i: Integer;
+  S: String;
+begin
+  L:=Length(GetUniqueId);
+  M:=Count mod L;
+  D:=Count div L;
+  S:='';
+  for i:=0 to D do begin
+   if i=D then
+     S:=S+Copy(GetUniqueId,1,M)
+   else
+     S:=S+GetUniqueId;
+  end;
+  StrCopy(Ret,PChar(S));
+end;
+
+function RANDOM(var Count: Integer): Integer; cdecl; export;
+begin
+  Result:=System.Random(Count);
+end;
+
+procedure JOIN_BLOB(var Input1, Input2: TBlob; var Output: TBlob); cdecl; export;
+var
+  S1, S2: String;
+begin
+  S1:=BlobToStr(Input1);
+  S2:=BlobToStr(Input2);
+  StrToBlob(S1+S2,Output);
+end;
+
+function SAVE_BLOB(var Input: TBlob; Path: PChar): Integer; cdecl; export;
+var
+  Stream: TFileStream;
+begin
+  try
+    Stream:=TFileStream.Create(Path,fmCreate);
+    try
+      SaveBlobToStream(Input,Stream);
+      Result:=0;
+    finally
+      Stream.Free;
+    end;
+  except
+    Result:=2;
+  end;
+end;
+
+procedure LOAD_BLOB(var Output: TBlob; Path: PChar); cdecl; export;
+var
+  Stream: TFileStream;
+begin
+  try
+    if FileExists(Path) then begin
+      Stream:=TFileStream.Create(Path,fmOpenRead);
+      try
+        LoadBlobFromStream(Output,Stream);
+      finally
+        Stream.Free;
+      end;
+    end;
+  except
+  end;
+end;
+
+function BLOB_LENGTH(var Input: TBlob): Integer; cdecl; export;
+begin
+  Result:=Input.TotalSize;
+end;
+
+function DELETE_FILE(Path: PChar): Integer; cdecl; export;
+begin
+  if DeleteFile(Path) then
+    Result:=0
+  else Result:=1;
+end;
+
+procedure NUMBER_TO_WORDS(var Number: Double; var WordType: Integer; Ret: PChar) cdecl; export;
+const
+  Max000 = 6; {Кол-во триплетов - 000}
+  MaxPosition = Max000 * 3; {Кол-во знаков в числе }
+
+  function iif(i: Boolean; s1, s2: Char): Char; overload;
+  begin
+    if i then
+      result := s1
+    else
+      result := s2
+  end;
+
+  function iif(i: Boolean; s1, s2: string): string; overload;
+  begin
+    if i then
+      result := s1
+    else
+      result := s2
+  end;
+
+  function NumToStr(s: string; AsWoman: Boolean; AsMoney, AsCounter: Boolean): string;
+  const
+    c1000: array[0..Max000] of string = ('', 'тысяч', 'миллион', 'миллиард', 'триллион', 'квадраллион', 'квинтиллион');
+    c1000w: array[0..Max000] of Boolean = (False, True, False, False, False, False, False);
+    w: array[False..True, '0'..'9'] of string[3] = (('ов ', ' ', 'а ', 'а ', 'а ', 'ов ', 'ов ', 'ов ', 'ов ', 'ов '),
+                                                    (' ', 'а ', 'и ', 'и ', 'и ', ' ', ' ', ' ', ' ', ' '));
+    function Num000toStr(S: string; woman,counter,first: Boolean): string;
+      {Num000toStr возвращает число для триплета}
+    const
+      c100: array['0'..'9'] of string = ('', 'сто ', 'двести ', 'триста ', 'четыреста ', 'пятьсот ', 'шестьсот ', 'семьсот ', 'восемьсот ', 'девятьсот ');
+      c10: array['0'..'9'] of string = ('', 'десять ', 'двадцать ', 'тридцать ', 'сорок ', 'пятьдесят ', 'шестьдесят ', 'семьдесят ', 'восемьдесят ','девяносто ');
+      c11: array['0'..'9'] of string = ('', 'один', 'две', 'три', 'четыр', 'пят', 'шест', 'сем', 'восем', 'девят');
+      c1: array[False..True, '0'..'9'] of string = (('', 'один ', 'два ', 'три ', 'четыре ', 'пять ', 'шесть ', 'семь ', 'восемь ', 'девять '),
+                                                    ('', 'одна ', 'две ', 'три ', 'четыре ', 'пять ', 'шесть ', 'семь ', 'восемь ', 'девять '));
+      c2: array[False..True, '0'..'9'] of string = (('нулевой', 'первый ', 'второй ', 'третий ', 'четвертый ', 'пятый ', 'шестой ', 'седьмой ', 'восьмой ', 'девятый '),
+                                                    ('нулевая', 'первая ', 'вторая ', 'третья ', 'четвертая ', 'пятая ', 'шестая ', 'седьмая ', 'восемая ', 'девятая '));
+    begin {Num000toStr}
+      if not counter then
+        Result := c100[s[1]] + iif((s[2] = '1') and (s[3] > '0'),
+                                   c11[s[3]] + 'надцать ',
+                                   c10[s[2]] + c1[woman, s[3]])
+      else
+        Result := c100[s[1]] + iif((s[2] = '1') and (s[3] > '0'),
+                                   c11[s[3]] + iff(first,'надцат'+iff(woman,'ая ','ый '),'надцать '),
+                                   c10[s[2]] + iff(first,c2[woman, s[3]],c1[woman, s[3]]));
+    end; {Num000toStr}
+
+  var
+    s000: string[3];
+    isw, isMinus: Boolean;
+    i: integer;
+    Flag: Boolean;
+  begin
+    Result := '';
+    i := 0;
+    isMinus := (s <> '') and (s[1] = '-');
+    if isMinus then
+      s := Copy(s, 2, Length(s) - 1);
+    Flag:=true;  
+    while not ((i >= Ceil(Length(s) / 3)) or (i >= Max000)) do begin
+      s000 := Copy('00' + s, Length(s) - i * 3, 3);
+      isw := c1000w[i];
+      if (i > 0) and (s000 <> '000') then //тысячи и т.д.
+        Result := c1000[i] + w[Isw, iif(s000[2] = '1', '0', s000[3])] + Result;
+      Result := Num000toStr(s000, isw or AsWoman,AsCounter,Flag) + Result;
+      Flag:=false;
+      AsWoman:=false;
+      Inc(i)
+    end;
+
+    if Result = '' then
+      Result := 'ноль'
+    else begin
+      if not AsMoney and not AsCounter then begin
+        Flag:=true;
+        for i:=1 to Length(s) do begin
+          if (s[i]='0') then begin
+            if Flag then
+              Result:='ноль '+Result;
+          end else
+            Flag:=false;
+        end;
+      end;
+    end;
+
+    if isMinus then
+      Result := 'минус ' + Result;
+
+  end; {NumToStr}
+
+  function ending(const s: string): Char;
+  var
+    l: Integer; //С l на 8 байт коротче $50->$48->$3F
+  begin //Возвращает индекс окончания
+    l := Length(s);
+    Result := iif((l > 1) and (s[l - 1] = '1'), '0', s[l]);
+  end;
+
+
+var
+  S: String;
+  APos: Integer;
+  O1: String;
+  O2: String;
+  V1,V2: String;
+  AsWoman: Boolean;
+  AsMoney: Boolean;
+  AsCounter: Boolean;
+const
+  whole: array['0'..'9'] of string[2] = ('ых', 'ая', 'ых', 'ых', 'ых', 'ых', 'ых', 'ых', 'ых', 'ых');
+  ruble: array['0'..'9'] of string[2] = ('ей', 'ь', 'я', 'я', 'я', 'ей', 'ей', 'ей', 'ей', 'ей');
+  kopeek: array['0'..'9'] of string[3] = ('ек', 'йка', 'йки', 'йки', 'йки', 'ек', 'ек', 'ек', 'ек', 'ек');
+begin
+  AsCounter:=WordType in [7,8];
+  AsMoney:=WordType in [4,5,6];
+  if not AsMoney then
+    S:=FloatToStr(Number)
+  else
+    S:=FormatFloat('#0.00',Number);
+  APos:=PosEx(String(DecimalSeparator),S);
+  if APos>0 then begin
+    O1:=Copy(S,1,APos-1);
+    O2:=Copy(S,APos+1,Length(S));
+  end else begin
+    O1:=S;
+    O2:=iff(AsMoney,'00','0');
+  end;
+  AsWoman:=WordType in [0,2,3,8];
+  V1:=SysUtils.Trim(NumToStr(SysUtils.Trim(O1),AsWoman,AsMoney,AsCounter));
+  AsWoman:=(WordType in [0,2,3,4,5]) or (ending(O2) in ['1','2']);
+  V2:=SysUtils.Trim(NumToStr(SysUtils.Trim(O2),AsWoman,AsMoney,false));
+  case WordType of
+    0,1,7,8: S:=V1;
+    2: S:=V1+' цел'+whole[ending(O1)]+' '+SysUtils.Trim(O2)+' дробн'+whole[ending(O2)];
+    3: S:=V1+' цел'+whole[ending(O1)]+' '+V2+' дробн'+whole[ending(O2)];
+    4: S:=V1+' рубл'+ruble[ending(O1)];
+    5: S:=V1+' рубл'+ruble[ending(O1)]+' '+SysUtils.Trim(O2)+' копе'+Kopeek[ending(O2)];
+    6: S:=V1+' рубл'+ruble[ending(O1)]+' '+V2+' копе'+kopeek[ending(O2)];
+  else
+    S:=V1;
+  end;
+  S:=SysUtils.Trim(S);
+  StrCopy(Ret,PChar(S));
+end;
+
+procedure STRING_TO_NUMBER(Input: PChar; var Number: Double); cdecl; export;
+var
+  S: String;
+  D: Double;
+begin
+  S:=Input;
+  if TryStrToFloat(S,D) then
+    Number:=D;
+end;
+
+procedure Init;
+begin
+end;
+
+procedure Done;
+begin
+end;
+
+
+end.

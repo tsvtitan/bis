@@ -1,0 +1,159 @@
+unit BisKrieltDataAdvertismentPageEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls,
+  BisDataEditFm, BisControls, BisParam, ImgList;
+
+type
+  TBisKrieltDataAdvertismentPageEditForm = class(TBisDataEditForm)
+    LabelPage: TLabel;
+    EditPage: TEdit;
+    ButtonPage: TButton;
+    LabelAdvertisment: TLabel;
+    EditAdvertisment: TEdit;
+    ButtonAdvertisment: TButton;
+    LabelAccount: TLabel;
+    EditAccount: TEdit;
+    ButtonAccount: TButton;
+    LabelPlace: TLabel;
+    ComboBoxPlace: TComboBox;
+    LabelDateBegin: TLabel;
+    DateTimePickerBegin: TDateTimePicker;
+    LabelDateEnd: TLabel;
+    DateTimePickerEnd: TDateTimePicker;
+    LabelWhoplaced: TLabel;
+    EditWhoplaced: TEdit;
+    ButtonWhoplaced: TButton;
+    LabelDatePlaced: TLabel;
+    DateTimePickerDatePlacedDate: TDateTimePicker;
+    DateTimePickerDatePlacedTime: TDateTimePicker;
+    LabelPriority: TLabel;
+    EditPriority: TEdit;
+    LabelCounter: TLabel;
+    EditCounter: TEdit;
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure BeforeShow; override;
+  end;
+
+  TBisKrieltDataAdvertismentPageEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataAdvertismentPageFilterFormIface=class(TBisKrieltDataAdvertismentPageEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataAdvertismentPageInsertFormIface=class(TBisKrieltDataAdvertismentPageEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataAdvertismentPageUpdateFormIface=class(TBisKrieltDataAdvertismentPageEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataAdvertismentPageDeleteFormIface=class(TBisKrieltDataAdvertismentPageEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataAdvertismentPageEditForm: TBisKrieltDataAdvertismentPageEditForm;
+
+implementation
+
+uses Dateutils,
+     BisKrieltDataAdvertismentsFm, BisKrieltDataPagesFm,
+     BisCore, BisFilterGroups, BisKrieltConsts;
+
+{$R *.dfm}
+
+{ TBisKrieltDataAdvertismentPageEditFormIface }
+
+constructor TBisKrieltDataAdvertismentPageEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataAdvertismentPageEditForm;
+  with Params do begin
+    AddEditDataSelect('ADVERTISMENT_ID','EditAdvertisment','LabelAdvertisment','ButtonAdvertisment',
+                      TBisKrieltDataAdvertismentsFormIface,'ADVERTISMENT_NAME',true,true,'','NAME').Older('OLD_ADVERTISMENT_ID');
+    AddEditDataSelect('PAGE_ID','EditPage','LabelPage','ButtonPage',
+                      TBisKrieltDataPagesFormIface,'PAGE_NAME',true,true,'','NAME').Older('OLD_PAGE_ID');
+    AddEditDataSelect('ACCOUNT_ID','EditAccount','LabelAccount','ButtonAccount',
+                      SIfaceClassDataRolesAndAccountsFormIface,'USER_NAME',true,true).Older('OLD_ACCOUNT_ID');
+    AddInvisible('PLACE').Value:=0;                      
+    AddComboBoxTextIndex('PLACE2','ComboBoxPlace','LabelPlace',true);
+    AddEditDate('DATE_BEGIN','DateTimePickerBegin','LabelDateBegin',true).FilterCondition:=fcEqualGreater;
+    AddEditDate('DATE_END','DateTimePickerEnd','LabelDateEnd').FilterCondition:=fcEqualLess;
+    AddEditInteger('PRIORITY','EditPriority','LabelPriority',true);
+    AddEditInteger('COUNTER','EditCounter','LabelCounter');
+    AddEditDataSelect('WHO_PLACED','EditWhoplaced','LabelWhoplaced','ButtonWhoplaced',
+                      SIfaceClassDataAccountsFormIface,'WHO_PLACED_NAME',true,false,'ACCOUNT_ID','USER_NAME');
+    AddEditDateTime('DATE_PLACED','DateTimePickerDatePlacedDate','DateTimePickerDatePlacedTime','LabelDatePlaced',true).ExcludeModes([emFilter]);
+  end;
+end;
+
+{ TBisKrieltDataAdvertismentPageFilterFormIface }
+
+constructor TBisKrieltDataAdvertismentPageFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+{ TBisKrieltDataAdvertismentPageInsertFormIface }
+
+constructor TBisKrieltDataAdvertismentPageInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_ADVERTISMENT_PAGE';
+end;
+
+{ TBisKrieltDataAdvertismentPageUpdateFormIface }
+
+constructor TBisKrieltDataAdvertismentPageUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_ADVERTISMENT_PAGE';
+end;
+
+{ TBisKrieltDataAdvertismentPageDeleteFormIface }
+
+constructor TBisKrieltDataAdvertismentPageDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_ADVERTISMENT_PAGE';
+end;
+
+
+{ TBisKrieltDataAdvertismentPageEditForm }
+
+constructor TBisKrieltDataAdvertismentPageEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+procedure TBisKrieltDataAdvertismentPageEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  if Mode in [emInsert,emDuplicate] then begin
+    with Provider.Params do begin
+      Find('DATE_BEGIN').SetNewValue(DateOf(Date));
+      Find('WHO_PLACED').SetNewValue(Core.AccountId);
+      Find('WHO_PLACED_NAME').SetNewValue(Core.AccountUserName);
+      Find('DATE_PLACED').SetNewValue(Now);
+    end;
+  end;
+  UpdateButtonState;
+end;
+
+
+end.

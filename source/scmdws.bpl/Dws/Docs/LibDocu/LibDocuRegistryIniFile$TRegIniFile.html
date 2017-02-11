@@ -1,0 +1,238 @@
+<html>
+<body>
+<h1>Class TRegIniFile</h1>
+<b>Declaration</b><br>
+
+<pre>TRegIniFile = class(TObject)
+  <a href="#RegistryIniFile$TRegIniFile$Create">constructor Create(Filename: String; Rootkey: TRootKey)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$DeleteKey">procedure DeleteKey(Section: String; Ident: String)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$Destroy">destructor Destroy</a>;
+  <a href="#RegistryIniFile$TRegIniFile$EraseSection">procedure EraseSection(Section: String)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ReadBool">function ReadBool(Section: String; Ident: String; Default: Boolean): Boolean</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ReadDate">function ReadDate(Section: String; Ident: String; Default: DateTime): DateTime</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ReadDateTime">function ReadDateTime(Section: String; Ident: String; Default: DateTime): DateTime</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ReadFloat">function ReadFloat(Section: String; Ident: String; Default: Float): Float</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ReadInteger">function ReadInteger(Section: String; Ident: String; Default: Integer): Integer</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ReadSection">procedure ReadSection(Section: String; Strings: TStringList)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ReadSections">procedure ReadSections(Strings: TStringList)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ReadSectionValues">procedure ReadSectionValues(Section: String; Strings: TStringList)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ReadString">function ReadString(Section: String; Ident: String; Default: String): String</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ReadTime">function ReadTime(Section: String; Ident: String; Default: DateTime): DateTime</a>;
+  <a href="#RegistryIniFile$TRegIniFile$SectionExists">function SectionExists(Section: String): Boolean</a>;
+  <a href="#RegistryIniFile$TRegIniFile$UpdateFile">procedure UpdateFile</a>;
+  <a href="#RegistryIniFile$TRegIniFile$ValueExists">function ValueExists(Section: String; Ident: String): Boolean</a>;
+  <a href="#RegistryIniFile$TRegIniFile$WriteBool">procedure WriteBool(Section: String; Ident: String; Value: Boolean)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$WriteDate">procedure WriteDate(Section: String; Ident: String; Value: String)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$WriteDateTime">procedure WriteDateTime(Section: String; Ident: String; Value: DateTime)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$WriteFloat">procedure WriteFloat(Section: String; Ident: String; Value: Float)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$WriteInteger">procedure WriteInteger(Section: String; Ident: String; Value: Integer)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$WriteString">procedure WriteString(Section: String; Ident: String; Value: String)</a>;
+  <a href="#RegistryIniFile$TRegIniFile$WriteTime">procedure WriteTime(Section: String; Ident: String; Value: DateTime)</a>;
+end;</pre>
+<b>Description</b>
+<p></p>
+
+<hr>
+
+    <h2><a name=RegistryIniFile$TRegIniFile$Create>Method TRegIniFile.Create</a></h2>
+    <b>Declaration</b><br>
+    <pre>constructor Create(Filename: String; Rootkey: TRootKey);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$DeleteKey>Method TRegIniFile.DeleteKey</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure DeleteKey(Section: String; Ident: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$Destroy>Method TRegIniFile.Destroy</a></h2>
+    <b>Declaration</b><br>
+    <pre>destructor Destroy;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$EraseSection>Method TRegIniFile.EraseSection</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure EraseSection(Section: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ReadBool>Method TRegIniFile.ReadBool</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadBool(Section: String; Ident: String; Default: Boolean): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ReadDate>Method TRegIniFile.ReadDate</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadDate(Section: String; Ident: String; Default: DateTime): DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ReadDateTime>Method TRegIniFile.ReadDateTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadDateTime(Section: String; Ident: String; Default: DateTime): DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ReadFloat>Method TRegIniFile.ReadFloat</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadFloat(Section: String; Ident: String; Default: Float): Float;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ReadInteger>Method TRegIniFile.ReadInteger</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadInteger(Section: String; Ident: String; Default: Integer): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ReadSection>Method TRegIniFile.ReadSection</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure ReadSection(Section: String; Strings: TStringList);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ReadSections>Method TRegIniFile.ReadSections</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure ReadSections(Strings: TStringList);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ReadSectionValues>Method TRegIniFile.ReadSectionValues</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure ReadSectionValues(Section: String; Strings: TStringList);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ReadString>Method TRegIniFile.ReadString</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadString(Section: String; Ident: String; Default: String): String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ReadTime>Method TRegIniFile.ReadTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadTime(Section: String; Ident: String; Default: DateTime): DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$SectionExists>Method TRegIniFile.SectionExists</a></h2>
+    <b>Declaration</b><br>
+    <pre>function SectionExists(Section: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$Self>Method TRegIniFile.Self</a></h2>
+    <b>Declaration</b><br>
+    <pre>Self;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$UpdateFile>Method TRegIniFile.UpdateFile</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure UpdateFile;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$ValueExists>Method TRegIniFile.ValueExists</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ValueExists(Section: String; Ident: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$WriteBool>Method TRegIniFile.WriteBool</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteBool(Section: String; Ident: String; Value: Boolean);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$WriteDate>Method TRegIniFile.WriteDate</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteDate(Section: String; Ident: String; Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$WriteDateTime>Method TRegIniFile.WriteDateTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteDateTime(Section: String; Ident: String; Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$WriteFloat>Method TRegIniFile.WriteFloat</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteFloat(Section: String; Ident: String; Value: Float);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$WriteInteger>Method TRegIniFile.WriteInteger</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteInteger(Section: String; Ident: String; Value: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$WriteString>Method TRegIniFile.WriteString</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteString(Section: String; Ident: String; Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=RegistryIniFile$TRegIniFile$WriteTime>Method TRegIniFile.WriteTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteTime(Section: String; Ident: String; Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+</body>
+</html>

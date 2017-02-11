@@ -1,0 +1,185 @@
+unit BisTaxiDataCostsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList, DB, DBCtrls,
+  BisFm, BisDataFrm, BisDataGridFm, BisFieldNames, BisFilterGroups, BisDataEditFm,
+  BisProvider, BisDataGridFrm;
+
+type
+  TBisTaxiDataCostsFrame=class(TBisDataGridFrame)
+  private
+    FZoneId: Variant;
+    FZoneName: String;
+    procedure FillProvider;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure OpenRecords; override;
+
+    property ZoneId: Variant read FZoneId write FZoneId;
+    property ZoneName: String read FZoneName write FZoneName;
+  end;
+
+  TBisTaxiDataCostsForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataCostsFormIface=class(TBisDataGridFormIface)
+  private
+    FZoneId: Variant;
+    FZoneName: String;
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property ZoneId: Variant read FZoneId write FZoneId;
+    property ZoneName: String read FZoneName write FZoneName;
+  end;
+
+var
+  BisTaxiDataCostsForm: TBisTaxiDataCostsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses DateUtils,
+     BisUtils, BisOrders, BisCore, BisDialogs, BisTaxiDataCostEditFm;
+
+{ TBisTaxiDataCostsFrame }
+
+constructor TBisTaxiDataCostsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  UpdateClass:=TBisTaxiDataCostUpdateFormIface;
+  DeleteClass:=TBisTaxiDataCostDeleteFormIface;
+
+  with Provider.FieldDefs do begin
+    Add('ZONE_TO_ID',ftString,32);
+    Add('ZONE_FROM_ID',ftString,32);
+    Add('ZONE_TO_NAME',ftString,100);
+    Add('ZONE_FROM_NAME',ftString,100);
+    Add('DISTANCE',ftInteger);
+    Add('PERIOD',ftInteger);
+    Add('COST',ftFloat);
+  end;
+  with Provider.FieldNames do begin
+    AddKey('ZONE_TO_ID');
+    AddKey('ZONE_FROM_ID');
+    Add('ZONE_FROM_NAME','От зоны',140);
+    Add('DISTANCE','Расстояние',70);
+    Add('PERIOD','Время',60);
+    Add('COST','Стоимость',80).DisplayFormat:='#0.00';
+  end;
+  Provider.CreateTable();
+
+  ActionFilter.Visible:=false;
+  ActionView.Visible:=false;
+  ActionInsert.Visible:=false;
+  ActionDuplicate.Visible:=false;
+end;
+
+procedure TBisTaxiDataCostsFrame.FillProvider;
+var
+  P1: TBisProvider;
+  P2: TBisProvider;
+  Exists: Boolean;
+  ZoneFromId: Variant;
+begin
+  P1:=TBisProvider.Create(nil);
+  P2:=TBisProvider.Create(nil);
+  try
+
+    P1.ProviderName:='S_ZONES';
+    with P1.FieldNames do begin
+      AddInvisible('ZONE_ID');
+      AddInvisible('NAME');
+    end;
+    P1.Orders.Add('PRIORITY');
+    P1.Open;
+
+    P2.ProviderName:='S_COSTS';
+    with P2.FieldNames do begin
+      AddInvisible('ZONE_FROM_ID');
+      AddInvisible('ZONE_FROM_NAME');
+      AddInvisible('DISTANCE');
+      AddInvisible('PERIOD');
+      AddInvisible('COST');
+    end;
+    P2.FilterGroups.Add.Filters.Add('ZONE_TO_ID',fcEqual,FZoneId);
+    P2.Open;
+
+    if P1.Active and not P1.IsEmpty and P2.Active then begin
+      Provider.BeginUpdate;
+      try
+        Provider.EmptyTable;
+        P1.First;
+        while not P1.Eof do begin
+          ZoneFromId:=P1.FieldByName('ZONE_ID').Value;
+          Exists:=P2.Locate('ZONE_FROM_ID',ZoneFromId,[loCaseInsensitive]);
+
+          Provider.Append;
+          Provider.FieldByName('ZONE_FROM_ID').Value:=ZoneFromId;
+          Provider.FieldByName('ZONE_FROM_NAME').Value:=P1.FieldByName('NAME').Value;
+          Provider.FieldByName('ZONE_TO_ID').Value:=FZoneId;
+          Provider.FieldByName('ZONE_TO_NAME').Value:=FZoneName;
+          if Exists then begin
+            Provider.FieldByName('DISTANCE').Value:=P2.FieldByName('DISTANCE').Value;
+            Provider.FieldByName('PERIOD').Value:=P2.FieldByName('PERIOD').Value;
+            Provider.FieldByName('COST').Value:=P2.FieldByName('COST').Value;
+          end;
+          Provider.Post;
+
+          P1.Next;
+        end;
+        Provider.First;
+      finally
+        Provider.EndUpdate;
+      end;
+    end;
+  finally
+    P1.Free;
+  end;
+end;
+
+procedure TBisTaxiDataCostsFrame.OpenRecords;
+begin
+  inherited OpenRecords;
+  FillProvider;
+  DoUpdateCounters;
+end;
+
+{ TBisTaxiDataCostsFormIface }
+
+constructor TBisTaxiDataCostsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataCostsForm;
+  Permissions.Enabled:=true;
+  Available:=true;
+  ChangeFrameProperties:=false;
+end;
+
+function TBisTaxiDataCostsFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then begin
+    with TBisTaxiDataCostsForm(Result) do begin
+      TBisTaxiDataCostsFrame(DataFrame).ZoneId:=FZoneId;
+      TBisTaxiDataCostsFrame(DataFrame).ZoneName:=FZoneName;
+    end;
+  end;
+end;
+
+{ TBisTaxiDataCostsForm }
+
+class function TBisTaxiDataCostsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataCostsFrame;
+end;
+
+end.

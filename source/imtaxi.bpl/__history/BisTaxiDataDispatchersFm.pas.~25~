@@ -1,0 +1,110 @@
+unit BisTaxiDataDispatchersFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataGridFm, BisDataFrm, BisDataGridFrm;
+
+type
+  TBisTaxiDataDispatchersFrame=class(TBisDataGridFrame)
+  public
+    function CanUpdateRecord: Boolean; override;
+    function CanDeleteRecord: Boolean; override;
+  end;
+
+  TBisTaxiDataDispatchersForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataDispatchersFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataDispatchersForm: TBisTaxiDataDispatchersForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisCore, BisUtils, BisConsts, BisProvider,
+     BisTaxiDataDispatcherEditFm;
+
+{ TBisTaxiDataDispatchersFormIface }
+
+constructor TBisTaxiDataDispatchersFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataDispatchersForm;
+  FilterClass:=TBisTaxiDataDispatcherFilterFormIface;
+  InsertClass:=TBisTaxiDataDispatcherInsertFormIface;
+  UpdateClass:=TBisTaxiDataDispatcherUpdateFormIface;
+  DeleteClass:=TBisTaxiDataDispatcherDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_DISPATCHERS';
+  with FieldNames do begin
+    AddKey('DISPATCHER_ID');
+    AddInvisible('CALC_ID');
+    AddInvisible('PHONE_INTERNAL');
+    AddInvisible('PHONE_HOME');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('PASSPORT');
+    AddInvisible('PLACE_BIRTH');
+    AddInvisible('DATE_BIRTH');
+    AddInvisible('ADDRESS_RESIDENCE');
+    AddInvisible('ADDRESS_ACTUAL');
+    AddInvisible('LOCKED');
+    AddInvisible('CALC_NAME');
+    AddInvisible('PASSWORD');
+    AddInvisible('FIRM_ID');
+    Add('USER_NAME','Логин',130);
+    Add('SURNAME','Фамилия',120);
+    Add('NAME','Имя',100);
+    Add('PHONE','Телефон',100);
+    Add('FIRM_SMALL_NAME','Организация',100);
+  end;
+  Orders.Add('USER_NAME');
+end;
+
+{ TBisTaxiDataDispatchersForm }
+
+class function TBisTaxiDataDispatchersForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataDispatchersFrame;
+end;
+
+{ TBisTaxiDataDispatchersFrame }
+
+function TBisTaxiDataDispatchersFrame.CanDeleteRecord: Boolean;
+var
+  P: TBisProvider;
+begin
+  Result:=inherited CanUpdateRecord;
+  if Result then begin
+    P:=GetCurrentProvider;
+    if Assigned(P) and P.Active and not P.Empty then begin
+      if not VarIsNull(Core.FirmId) then
+        Result:=VarSameValue(Core.FirmId,P.FieldByName('FIRM_ID').Value);
+    end;
+  end;
+end;
+
+function TBisTaxiDataDispatchersFrame.CanUpdateRecord: Boolean;
+var
+  P: TBisProvider;
+begin
+  Result:=inherited CanDeleteRecord;
+  if Result then begin
+    P:=GetCurrentProvider;
+    if Assigned(P) and P.Active and not P.Empty then begin
+      if not VarIsNull(Core.FirmId) then
+        Result:=VarSameValue(Core.FirmId,P.FieldByName('FIRM_ID').Value);
+    end;
+  end;
+end;
+
+end.

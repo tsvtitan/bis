@@ -1,0 +1,44 @@
+unit BisArchiver;
+
+interface
+
+uses Classes, ZLib;
+
+type
+
+  TBisCompressionType=(ctZip);
+  TBisCompressionLevel
+
+  TBisArchiver=class(TObject)
+  private
+    FDefaultType: TBisCompressionType;
+  public
+    procedure CompressStream(AType: TBisCompressionType; Source, Dest: TStream); overload;
+    procedure CompressStream(Source, Dest: TStream); overload;
+
+    property DefaultType: TBisCompressionType read FDefaultType write FDefaultType;
+    property DefaultLevel: TBisCompression
+  end;
+
+implementation
+
+{ TBisArchiver }
+
+procedure TBisArchiver.CompressStream(AType: TBisCompressionType; Source, Dest: TStream);
+var
+  Zip: TCompressionStream;
+begin
+  case AType of
+    ctZip: begin
+      Zip:=TCompressionStream.Create();
+    end;
+  end;
+end;
+
+procedure TBisArchiver.CompressStream(Source, Dest: TStream);
+begin
+  CompressStream(FDefaultType,Source,Dest);
+end;
+
+
+end.

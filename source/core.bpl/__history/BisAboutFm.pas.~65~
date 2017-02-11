@@ -1,0 +1,143 @@
+unit BisAboutFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls,
+  BisFm, BisPicture;
+
+type
+  TBisAboutForm = class(TBisForm)
+    PanelControls: TPanel;
+    PanelButton: TPanel;
+    ButtonClose: TButton;
+    BevelTop: TBevel;
+    PanelTop: TPanel;
+    BevelBottom: TBevel;
+    MemoDescription: TMemo;
+    PanelLogo: TPanel;
+    ImageLogo: TImage;
+    PanelLabels: TPanel;
+    LabelName: TLabel;
+    LabelVersion: TLabel;
+    procedure MemoDescriptionEnter(Sender: TObject);
+    procedure MemoDescriptionKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  private
+    FLogoExists: Boolean;
+    procedure LoadLogo;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Show; override;
+
+  end;
+
+  TBisAboutFormIface=class(TBisFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+
+  end;
+
+var
+  BisAboutForm: TBisAboutForm;
+
+implementation
+
+uses BisCore, BisConsts;
+
+{$R *.dfm}
+
+{ TBisAboutFormIface }
+
+constructor TBisAboutFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisAboutForm;
+  OnlyOneForm:=true;
+  Available:=false;
+end;
+
+{ TBisAboutForm }
+
+constructor TBisAboutForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  CloseMode:=cmFree;
+  ShowType:=stNormal;
+
+  LoadLogo;
+
+  LabelName.Caption:=Core.Application.Title;
+  LabelVersion.Caption:=Core.Application.Version;
+  MemoDescription.Lines.Text:=Core.Application.Description;
+end;
+
+procedure TBisAboutForm.LoadLogo;
+var
+  Picture: TBisPicture;
+
+  function GetBackColor: TColor;
+  var
+    Bmp: TBitmap;
+  begin
+    Bmp:=TBitmap.Create;
+    try
+      Bmp.Width:=ImageLogo.Picture.Graphic.Width;
+      Bmp.Height:=ImageLogo.Picture.Graphic.Height;
+      Bmp.Canvas.Brush.Style:=bsSolid;
+      Bmp.Canvas.Draw(0,0,ImageLogo.Picture.Graphic);
+      Result:=Bmp.Canvas.Pixels[0,0];
+    finally
+      Bmp.Free;
+    end;
+  end;
+
+var
+  Stream: TMemoryStream;
+begin
+  Stream:=TMemoryStream.Create;
+  Picture:=TBisPicture.Create;
+  try
+    FLogoExists:=true;
+    if Core.LocalBase.ReadParam(SParamLogo,Stream) then begin
+      Stream.Position:=0;
+      try
+        Picture.LoadFromStream(Stream);
+        if not Picture.Empty then begin
+          ImageLogo.Picture.Graphic:=Picture.Graphic;
+          Stream.Position:=0;
+          ImageLogo.Picture.Graphic.LoadFromStream(Stream);
+          PanelTop.Color:=GetBackColor;
+          PanelLogo.Color:=PanelTop.Color;
+          PanelLabels.Color:=PanelTop.Color;
+        end else
+          FLogoExists:=false;
+      except
+        FLogoExists:=false;
+      end;
+    end else
+      FLogoExists:=false;
+  finally
+    Picture.Free;
+    Stream.Free;
+  end;
+end;
+
+procedure TBisAboutForm.MemoDescriptionEnter(Sender: TObject);
+begin
+  Windows.HideCaret(MemoDescription.Handle);
+end;
+
+procedure TBisAboutForm.MemoDescriptionKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Key=VK_ESCAPE then
+    ButtonClose.Click;
+end;
+
+procedure TBisAboutForm.Show;
+begin
+  ShowModal;
+
+end;
+
+end.

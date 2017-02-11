@@ -1,0 +1,26 @@
+unit BisExecuteOptionsFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Dialogs,
+  BisOptionsFrm, StdCtrls, ComCtrls;
+
+type
+  TBisExecuteOptionsFrame = class(TBisOptionsFrame)
+    CheckBoxAutoStart: TCheckBox;
+    EditAutoStartTime: TEdit;
+    LabelAutoStartTime: TLabel;
+    UpDownAutoStart: TUpDown;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,115 @@
+unit BisParamEditDateTime;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisParamEditDate, BisControls;
+
+type
+
+  TBisParamEditDateTime=class(TBisParamEditDate)
+  private
+    FDateTimePickerTimeName: String;
+    FDateTimePickerTime: TDateTimePicker;
+    FOldDateTimePickerTimeChange: TNotifyEvent;
+    procedure DateTimePickerTimeChange(Sender: TObject);
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    procedure SetEnabled(const Value: Boolean); override;
+    procedure SetVisible(const Value: Boolean); override;
+
+  public
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+
+    property DateTimePickerTimeName: String read FDateTimePickerTimeName write FDateTimePickerTimeName;
+  end;
+
+implementation
+
+uses Variants, DateUtils,
+     BisUtils, BisConsts;
+
+{ TBisParamEditDateTime }
+
+constructor TBisParamEditDateTime.Create;
+begin
+  inherited Create;
+  DataType:=ftDateTime;
+end;
+
+procedure TBisParamEditDateTime.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamEditDateTime) then begin
+    DateTimePickerTimeName:=TBisParamEditDateTime(Source).DateTimePickerTimeName;
+  end;
+end;
+
+procedure TBisParamEditDateTime.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FDateTimePickerTime:=TDateTimePicker(Parent.FindComponent(FDateTimePickerTimeName));
+    if Assigned(FDateTimePickerTime) then begin
+      FOldDateTimePickerTimeChange:=FDateTimePickerTime.OnChange;
+      FDateTimePickerTime.OnChange:=DateTimePickerTimeChange;
+    end;
+    Value:=TempValue;
+  end;
+  inherited LinkControls(Parent);
+  if Assigned(LabelEditDate) and Assigned(FDateTimePickerTime) then begin
+    LabelEditDate.FocusControls.Add(FDateTimePickerTime);
+  end;
+end;
+
+function TBisParamEditDateTime.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(EditDate) and Assigned(FDateTimePickerTime) then begin
+    Result:=iff(Empty,Null,Result+TimeOf(FDateTimePickerTime.Time));
+  end;
+end;
+
+procedure TBisParamEditDateTime.SetValue(const AValue: Variant);
+var
+  T1: TTimel
+begin
+  inherited SetValue(AValue);
+  if Assigned(FDateTimePickerTime) then begin
+    FDateTimePickerTime.OnChange:=nil;
+    try
+      FDateTimePickerTime.Time:=TimeOf(VarToDateDef(AValue,NullDate));
+    finally
+      FDateTimePickerTime.OnChange:=DateTimePickerTimeChange;
+    end;
+  end;
+end;
+
+procedure TBisParamEditDateTime.SetEnabled(const Value: Boolean);
+begin
+  inherited SetEnabled(Value);
+  if Assigned(FDateTimePickerTime) then
+    FDateTimePickerTime.Enabled:=Value;
+end;
+
+procedure TBisParamEditDateTime.SetVisible(const Value: Boolean);
+begin
+  inherited SetVisible(Value);
+  if Assigned(FDateTimePickerTime) then
+    FDateTimePickerTime.Visible:=Value;
+end;
+
+procedure TBisParamEditDateTime.DateTimePickerTimeChange(Sender: TObject);
+begin
+  DoChange(Self);
+  if Assigned(FOldDateTimePickerTimeChange) then
+    FOldDateTimePickerTimeChange(Sender);
+end;
+
+end.

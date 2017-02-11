@@ -1,0 +1,23 @@
+unit BisServerHttpHandlerDefaultWm;
+
+interface
+
+uses
+  SysUtils, Classes, HTTPApp;
+
+type
+  TBisServerHttpHandlerDefaultWebModule = class(TWebModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BisServerHttpHandlerDefaultWebModule: TBisServerHttpHandlerDefaultWebModule;
+
+implementation
+
+{$R *.dfm}
+
+end.

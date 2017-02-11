@@ -1,0 +1,38 @@
+unit BisCallcTasksFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls,
+  BisCallcTaskFrm, BisDataGridFrm;
+
+type
+  TBisCallcTasksFrameTasksFrame=class(TBisDataGridFrame)
+  end;
+
+  TBisCallcTasksFrame = class(TBisCallcTaskFrame)
+    PageControl: TPageControl;
+    TabSheetTasks: TTabSheet;
+  private
+    FTasksFrame: TBisCallcTasksFrameTasksFrame;  
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcTasksFrame: TBisCallcTasksFrame;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisCallcTasksFrame }
+
+constructor TBisCallcTasksFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+end;
+
+end.

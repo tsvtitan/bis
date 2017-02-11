@@ -1,0 +1,61 @@
+/* Создание процедуры выборки реестра по суммам */
+
+CREATE PROCEDURE /*PREFIX*/ROLL_ON_AMOUNT
+  @AGREEMENT_ID VARCHAR(32),
+  @DATE DATETIME,
+  @AMOUNT_BEGIN FLOAT,
+  @AMOUNT_END FLOAT
+AS
+BEGIN
+  DECLARE @MAX_DATE DATETIME,
+          @MIN_AMOUNT FLOAT,
+          @MAX_AMOUNT FLOAT;
+
+  SELECT @MAX_DATE=MAX(DATE_PAYMENT),
+         @MIN_AMOUNT=MIN(AMOUNT),
+         @MAX_AMOUNT=MAX(AMOUNT)  
+    FROM /*PREFIX*/PAYMENTS
+   WHERE STATE=1
+     AND DEAL_ID IN (SELECT DEAL_ID FROM /*PREFIX*/DEALS 
+                      WHERE AGREEMENT_ID=@AGREEMENT_ID
+                        AND DATE_CLOSE IS NULL);
+
+  IF (@DATE IS NOT NULL) SET @MAX_DATE=@DATE;
+
+  IF (@AMOUNT_BEGIN IS NOT NULL) SET @MIN_AMOUNT=@AMOUNT_BEGIN;
+
+  IF (@AMOUNT_END IS NOT NULL) SET @MAX_AMOUNT=@AMOUNT_END;
+
+  IF (@AGREEMENT_ID IS NOT NULL) BEGIN
+    SELECT T.* 
+      FROM (SELECT D.DEAL_ID,
+                   D.ACCOUNT_NUM,
+                   DB.SURNAME,
+                   DB.NAME,
+                   DB.PATRONYMIC,
+                   DB.DATE_BIRTH,
+                   DATEADD(DAY,-D1.DEBT_PERIOD,CURRENT_TIMESTAMP) AS DATE_DEBT, 
+                   DB.ADDRESS_RESIDENCE,
+                   D.DEBT_INFORMATION,
+                   (CASE 
+                      WHEN P1.AMOUNT IS NULL THEN D.INITIAL_DEBT
+                      ELSE D.INITIAL_DEBT-P1.AMOUNT
+                    END) AS DEBT
+              FROM DEALS D
+              JOIN DEBTORS DB ON DB.DEBTOR_ID=D.DEBTOR_ID
+              JOIN (SELECT DEAL_ID, 
+                           ARREAR_PERIOD+DATEDIFF(DAY,DATE_ISSUE,CURRENT_TIMESTAMP) AS DEBT_PERIOD 
+                      FROM /*PREFIX*/DEALS) AS D1 ON D1.DEAL_ID=D.DEAL_ID
+              LEFT JOIN (SELECT DEAL_ID, SUM(AMOUNT) AS AMOUNT 
+                           FROM /*PREFIX*/PAYMENTS 
+                          WHERE STATE=1
+                            AND DATE_PAYMENT<=@MAX_DATE
+                          GROUP BY DEAL_ID) AS P1 ON P1.DEAL_ID=D.DEAL_ID
+             WHERE D.AGREEMENT_ID=@AGREEMENT_ID) T
+     WHERE T.DEBT>=@MIN_AMOUNT
+       AND T.DEBT<=@MAX_AMOUNT
+     ORDER BY T.ADDRESS_RESIDENCE, T.SURNAME, T.NAME, T.PATRONYMIC, T.DEBT; 
+  END;
+END;
+
+--

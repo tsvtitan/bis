@@ -1,0 +1,55 @@
+unit BisTaxiDataDriversFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataFrm, BisDataGridFm, BisTaxiDataDriversFrm;
+
+type
+  TBisTaxiDataDriversForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataDriversFormIface=class(TBisDataGridFormIface)
+  protected
+    procedure SetDataFrameProperties(DataFrame: TBisDataFrame); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataDriversForm: TBisTaxiDataDriversForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisTaxiDataDriversFormIface }
+
+constructor TBisTaxiDataDriversFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataDriversForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+end;
+
+procedure TBisTaxiDataDriversFormIface.SetDataFrameProperties(DataFrame: TBisDataFrame);
+begin
+  inherited SetDataFrameProperties(DataFrame);
+  if Assigned(DataFrame) and (DataFrame is TBisTaxiDataDriversFrame) then
+
+
+end;
+
+{ TBisTaxiDataDriversForm }
+
+class function TBisTaxiDataDriversForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataDriversFrame;
+end;
+
+end.

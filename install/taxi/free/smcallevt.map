@@ -1,0 +1,886 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 00006574H .text                   CODE
+ 0002:00408000 000003B4H .itext                  ICODE
+ 0003:00409000 0000005CH .data                   DATA
+ 0004:0040A000 00000020H .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 0000012E C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000130 000001C3 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:000002F4 0000004C C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:00000340 000000A6 C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:000003E8 00000006 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:000003F0 00000016 C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:00000408 0000004E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000458 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000460 00000026 C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000488 0000000E C=CODE     S=.text    G=(none)   M=SyncObjs ACBP=A9
+ 0001:00000498 0000000E C=CODE     S=.text    G=(none)   M=IdGlobal ACBP=A9
+ 0001:000004A8 00000006 C=CODE     S=.text    G=(none)   M=IdSysVCL ACBP=A9
+ 0001:000004B0 0000000E C=CODE     S=.text    G=(none)   M=IdSocketHandle ACBP=A9
+ 0001:000004C0 0000000E C=CODE     S=.text    G=(none)   M=IdBaseComponent ACBP=A9
+ 0001:000004D0 00000006 C=CODE     S=.text    G=(none)   M=IdStack  ACBP=A9
+ 0001:000004D8 00000006 C=CODE     S=.text    G=(none)   M=IdWinSock2 ACBP=A9
+ 0001:000004E0 00000006 C=CODE     S=.text    G=(none)   M=IdWship6 ACBP=A9
+ 0001:000004E8 00000006 C=CODE     S=.text    G=(none)   M=IdStackWindows ACBP=A9
+ 0001:000004F0 0000001E C=CODE     S=.text    G=(none)   M=IdComponent ACBP=A9
+ 0001:00000510 00000036 C=CODE     S=.text    G=(none)   M=IdUDPServer ACBP=A9
+ 0001:00000548 0000006E C=CODE     S=.text    G=(none)   M=IdUDPBase ACBP=A9
+ 0001:000005B8 00000006 C=CODE     S=.text    G=(none)   M=IdThread ACBP=A9
+ 0001:000005C0 00000006 C=CODE     S=.text    G=(none)   M=WaveAcmDrivers ACBP=A9
+ 0001:000005C8 0000000E C=CODE     S=.text    G=(none)   M=BisEvents ACBP=A9
+ 0001:000005D8 00000006 C=CODE     S=.text    G=(none)   M=BisThreads ACBP=A9
+ 0001:000005E0 00000036 C=CODE     S=.text    G=(none)   M=BisLocks ACBP=A9
+ 0001:00000618 00000006 C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00000620 00000006 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000628 00000006 C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000630 00000016 C=CODE     S=.text    G=(none)   M=BisUtils ACBP=A9
+ 0001:00000648 0000001E C=CODE     S=.text    G=(none)   M=BisValues ACBP=A9
+ 0001:00000668 00000016 C=CODE     S=.text    G=(none)   M=BisObject ACBP=A9
+ 0001:00000680 00000006 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000688 00000006 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000690 00000006 C=CODE     S=.text    G=(none)   M=Themes   ACBP=A9
+ 0001:00000698 00000006 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:000006A0 00000006 C=CODE     S=.text    G=(none)   M=UxTheme  ACBP=A9
+ 0001:000006A8 00000006 C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:000006B0 00000006 C=CODE     S=.text    G=(none)   M=DwmApi   ACBP=A9
+ 0001:000006B8 00000006 C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:000006C0 00000006 C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:000006C8 00000006 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:000006D0 00000006 C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:000006D8 00000006 C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:000006E0 00000006 C=CODE     S=.text    G=(none)   M=GraphUtil ACBP=A9
+ 0001:000006E8 00000006 C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:000006F0 00000006 C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:000006F8 00000006 C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:00000700 00000006 C=CODE     S=.text    G=(none)   M=WideStrings ACBP=A9
+ 0001:00000708 00000006 C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:00000710 00000006 C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:00000718 00000006 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:00000720 00000006 C=CODE     S=.text    G=(none)   M=DECUtil  ACBP=A9
+ 0001:00000728 00000006 C=CODE     S=.text    G=(none)   M=Hash     ACBP=A9
+ 0001:00000730 00000006 C=CODE     S=.text    G=(none)   M=Cipher   ACBP=A9
+ 0001:00000738 00000006 C=CODE     S=.text    G=(none)   M=Cipher1  ACBP=A9
+ 0001:00000740 0000000E C=CODE     S=.text    G=(none)   M=BisDataParams ACBP=A9
+ 0001:00000750 0000000E C=CODE     S=.text    G=(none)   M=BisDataSet ACBP=A9
+ 0001:00000760 0000000E C=CODE     S=.text    G=(none)   M=BisParam ACBP=A9
+ 0001:00000770 00000006 C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00000778 00000006 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00000780 00000006 C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00000788 00000006 C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00000790 00000006 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00000798 00000006 C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:000007A0 00000006 C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:000007A8 00000006 C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:000007B0 00000006 C=CODE     S=.text    G=(none)   M=rxToolEdit ACBP=A9
+ 0001:000007B8 00000006 C=CODE     S=.text    G=(none)   M=rxDateUtil ACBP=A9
+ 0001:000007C0 00000006 C=CODE     S=.text    G=(none)   M=RXCtrls  ACBP=A9
+ 0001:000007C8 00000006 C=CODE     S=.text    G=(none)   M=RxHook   ACBP=A9
+ 0001:000007D0 00000006 C=CODE     S=.text    G=(none)   M=RXConst  ACBP=A9
+ 0001:000007D8 00000006 C=CODE     S=.text    G=(none)   M=rxVclutils ACBP=A9
+ 0001:000007E0 00000006 C=CODE     S=.text    G=(none)   M=RXProps  ACBP=A9
+ 0001:000007E8 00000006 C=CODE     S=.text    G=(none)   M=rxAppUtils ACBP=A9
+ 0001:000007F0 00000006 C=CODE     S=.text    G=(none)   M=RxPrgrss ACBP=A9
+ 0001:000007F8 00000006 C=CODE     S=.text    G=(none)   M=SynEdit  ACBP=A9
+ 0001:00000800 00000006 C=CODE     S=.text    G=(none)   M=SynEditHighlighter ACBP=A9
+ 0001:00000808 00000006 C=CODE     S=.text    G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0001:00000810 00000006 C=CODE     S=.text    G=(none)   M=SynRegExpr ACBP=A9
+ 0001:00000818 00000006 C=CODE     S=.text    G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0001:00000820 00000006 C=CODE     S=.text    G=(none)   M=SynTextDrawer ACBP=A9
+ 0001:00000828 00000006 C=CODE     S=.text    G=(none)   M=rxCurrEdit ACBP=A9
+ 0001:00000830 00000006 C=CODE     S=.text    G=(none)   M=ThemedDBGrid ACBP=A9
+ 0001:00000838 00000006 C=CODE     S=.text    G=(none)   M=RxRichEd ACBP=A9
+ 0001:00000840 00000006 C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:00000848 00000006 C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00000850 00000006 C=CODE     S=.text    G=(none)   M=BisParams ACBP=A9
+ 0001:00000858 00000006 C=CODE     S=.text    G=(none)   M=BisFm    ACBP=A9
+ 0001:00000860 0000002E C=CODE     S=.text    G=(none)   M=BisCoreObjects ACBP=A9
+ 0001:00000890 00000016 C=CODE     S=.text    G=(none)   M=BisConfig ACBP=A9
+ 0001:000008A8 00000016 C=CODE     S=.text    G=(none)   M=BisCryptUtils ACBP=A9
+ 0001:000008C0 00000006 C=CODE     S=.text    G=(none)   M=GIFImage ACBP=A9
+ 0001:000008C8 00000006 C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:000008D0 00000016 C=CODE     S=.text    G=(none)   M=BisCore  ACBP=A9
+ 0001:000008E8 00000006 C=CODE     S=.text    G=(none)   M=kbmMemTable ACBP=A9
+ 0001:000008F0 00000006 C=CODE     S=.text    G=(none)   M=BisConnectionUtils ACBP=A9
+ 0001:000008F8 00000006 C=CODE     S=.text    G=(none)   M=SynHighlighterXML ACBP=A9
+ 0001:00000900 00000006 C=CODE     S=.text    G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0001:00000908 00000006 C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:00000910 00000006 C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:00000918 00000006 C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00000920 00000006 C=CODE     S=.text    G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0001:00000928 00000006 C=CODE     S=.text    G=(none)   M=ActnMan  ACBP=A9
+ 0001:00000930 00000006 C=CODE     S=.text    G=(none)   M=ActnMenus ACBP=A9
+ 0001:00000938 00000006 C=CODE     S=.text    G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0001:00000940 00000006 C=CODE     S=.text    G=(none)   M=BisProvider ACBP=A9
+ 0001:00000948 00000006 C=CODE     S=.text    G=(none)   M=GIFImg   ACBP=A9
+ 0001:00000950 00000006 C=CODE     S=.text    G=(none)   M=BisSystemUtils ACBP=A9
+ 0001:00000958 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_Routines ACBP=A9
+ 0001:00000960 00000006 C=CODE     S=.text    G=(none)   M=MSI_Processes ACBP=A9
+ 0001:00000968 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0001:00000970 00000006 C=CODE     S=.text    G=(none)   M=MSI_Devices ACBP=A9
+ 0001:00000978 00000006 C=CODE     S=.text    G=(none)   M=MSI_CPU  ACBP=A9
+ 0001:00000980 00000006 C=CODE     S=.text    G=(none)   M=BisExceptNotifier ACBP=A9
+ 0001:00000988 00000006 C=CODE     S=.text    G=(none)   M=JclDebug ACBP=A9
+ 0001:00000990 00000006 C=CODE     S=.text    G=(none)   M=JclSysInfo ACBP=A9
+ 0001:00000998 00000006 C=CODE     S=.text    G=(none)   M=JclStrings ACBP=A9
+ 0001:000009A0 00000006 C=CODE     S=.text    G=(none)   M=JclSysUtils ACBP=A9
+ 0001:000009A8 00000006 C=CODE     S=.text    G=(none)   M=JclWideStrings ACBP=A9
+ 0001:000009B0 00000006 C=CODE     S=.text    G=(none)   M=JclShell ACBP=A9
+ 0001:000009B8 00000006 C=CODE     S=.text    G=(none)   M=JclRegistry ACBP=A9
+ 0001:000009C0 00000006 C=CODE     S=.text    G=(none)   M=JclHookExcept ACBP=A9
+ 0001:000009C8 00000006 C=CODE     S=.text    G=(none)   M=BisDeadlocks ACBP=A9
+ 0001:000009D0 00000006 C=CODE     S=.text    G=(none)   M=BisServiceApplication ACBP=A9
+ 0001:000009D8 00000006 C=CODE     S=.text    G=(none)   M=BisSvcMgr ACBP=A9
+ 0001:000009E0 00000006 C=CODE     S=.text    G=(none)   M=SvcMgr   ACBP=A9
+ 0001:000009E8 00000006 C=CODE     S=.text    G=(none)   M=BisNetUtils ACBP=A9
+ 0001:000009F0 00000006 C=CODE     S=.text    G=(none)   M=AsyncCalls ACBP=A9
+ 0001:000009F8 0000000E C=CODE     S=.text    G=(none)   M=WaveUtils ACBP=A9
+ 0001:00000A08 00000026 C=CODE     S=.text    G=(none)   M=BisRtp   ACBP=A9
+ 0001:00000A30 0000000E C=CODE     S=.text    G=(none)   M=BisRtpAcmDrivers ACBP=A9
+ 0001:00000A40 0000002E C=CODE     S=.text    G=(none)   M=BisCallServerHandlers ACBP=A9
+ 0001:00000A70 0000012E C=CODE     S=.text    G=(none)   M=BisCallServerChannels ACBP=A9
+ 0001:00000BA0 00001766 C=CODE     S=.text    G=(none)   M=BisCallServerEventMessages ACBP=A9
+ 0001:00002308 00000006 C=CODE     S=.text    G=(none)   M=IdUDPClient ACBP=A9
+ 0001:00002310 00000006 C=CODE     S=.text    G=(none)   M=IdIOHandler ACBP=A9
+ 0001:00002318 00000006 C=CODE     S=.text    G=(none)   M=IdIOHandlerStack ACBP=A9
+ 0001:00002320 00000006 C=CODE     S=.text    G=(none)   M=BisCompressUtils ACBP=A9
+ 0001:00002328 00000096 C=CODE     S=.text    G=(none)   M=BisCallServerHandlerEventConsts ACBP=A9
+ 0001:000023C0 00003482 C=CODE     S=.text    G=(none)   M=BisCallServerHandlerEvent ACBP=A9
+ 0001:00005844 00000D2F C=CODE     S=.text    G=(none)   M=.smcallevt ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:0000001C 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=IdGlobal ACBP=A9
+ 0002:0000004C 00000006 C=ICODE    S=.itext   G=(none)   M=IdSysVCL ACBP=A9
+ 0002:00000054 00000006 C=ICODE    S=.itext   G=(none)   M=IdStack  ACBP=A9
+ 0002:0000005C 00000006 C=ICODE    S=.itext   G=(none)   M=IdWinSock2 ACBP=A9
+ 0002:00000064 00000006 C=ICODE    S=.itext   G=(none)   M=IdWship6 ACBP=A9
+ 0002:0000006C 00000006 C=ICODE    S=.itext   G=(none)   M=IdStackWindows ACBP=A9
+ 0002:00000074 00000006 C=ICODE    S=.itext   G=(none)   M=IdComponent ACBP=A9
+ 0002:0000007C 00000006 C=ICODE    S=.itext   G=(none)   M=IdThread ACBP=A9
+ 0002:00000084 00000006 C=ICODE    S=.itext   G=(none)   M=BisThreads ACBP=A9
+ 0002:0000008C 00000006 C=ICODE    S=.itext   G=(none)   M=BisLocks ACBP=A9
+ 0002:00000094 00000006 C=ICODE    S=.itext   G=(none)   M=Graphics ACBP=A9
+ 0002:0000009C 00000006 C=ICODE    S=.itext   G=(none)   M=Registry ACBP=A9
+ 0002:000000A4 00000006 C=ICODE    S=.itext   G=(none)   M=IniFiles ACBP=A9
+ 0002:000000AC 00000006 C=ICODE    S=.itext   G=(none)   M=BisUtils ACBP=A9
+ 0002:000000B4 00000006 C=ICODE    S=.itext   G=(none)   M=Menus    ACBP=A9
+ 0002:000000BC 00000006 C=ICODE    S=.itext   G=(none)   M=ActnList ACBP=A9
+ 0002:000000C4 00000006 C=ICODE    S=.itext   G=(none)   M=Themes   ACBP=A9
+ 0002:000000CC 00000006 C=ICODE    S=.itext   G=(none)   M=Controls ACBP=A9
+ 0002:000000D4 00000006 C=ICODE    S=.itext   G=(none)   M=UxTheme  ACBP=A9
+ 0002:000000DC 00000006 C=ICODE    S=.itext   G=(none)   M=MultiMon ACBP=A9
+ 0002:000000E4 00000006 C=ICODE    S=.itext   G=(none)   M=DwmApi   ACBP=A9
+ 0002:000000EC 00000006 C=ICODE    S=.itext   G=(none)   M=Forms    ACBP=A9
+ 0002:000000F4 00000006 C=ICODE    S=.itext   G=(none)   M=HelpIntfs ACBP=A9
+ 0002:000000FC 00000006 C=ICODE    S=.itext   G=(none)   M=Dialogs  ACBP=A9
+ 0002:00000104 00000006 C=ICODE    S=.itext   G=(none)   M=Printers ACBP=A9
+ 0002:0000010C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtCtrls ACBP=A9
+ 0002:00000114 00000006 C=ICODE    S=.itext   G=(none)   M=GraphUtil ACBP=A9
+ 0002:0000011C 00000006 C=ICODE    S=.itext   G=(none)   M=Clipbrd  ACBP=A9
+ 0002:00000124 00000006 C=ICODE    S=.itext   G=(none)   M=FlatSB   ACBP=A9
+ 0002:0000012C 00000006 C=ICODE    S=.itext   G=(none)   M=DB       ACBP=A9
+ 0002:00000134 00000006 C=ICODE    S=.itext   G=(none)   M=WideStrings ACBP=A9
+ 0002:0000013C 00000006 C=ICODE    S=.itext   G=(none)   M=FMTBcd   ACBP=A9
+ 0002:00000144 00000006 C=ICODE    S=.itext   G=(none)   M=SqlTimSt ACBP=A9
+ 0002:0000014C 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:00000154 00000006 C=ICODE    S=.itext   G=(none)   M=DECUtil  ACBP=A9
+ 0002:0000015C 00000006 C=ICODE    S=.itext   G=(none)   M=Hash     ACBP=A9
+ 0002:00000164 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher   ACBP=A9
+ 0002:0000016C 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher1  ACBP=A9
+ 0002:00000174 00000006 C=ICODE    S=.itext   G=(none)   M=DBCtrls  ACBP=A9
+ 0002:0000017C 00000006 C=ICODE    S=.itext   G=(none)   M=ComCtrls ACBP=A9
+ 0002:00000184 00000006 C=ICODE    S=.itext   G=(none)   M=ExtActns ACBP=A9
+ 0002:0000018C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtDlgs  ACBP=A9
+ 0002:00000194 00000006 C=ICODE    S=.itext   G=(none)   M=Buttons  ACBP=A9
+ 0002:0000019C 00000006 C=ICODE    S=.itext   G=(none)   M=Mapi     ACBP=A9
+ 0002:000001A4 00000006 C=ICODE    S=.itext   G=(none)   M=DBPWDlg  ACBP=A9
+ 0002:000001AC 00000006 C=ICODE    S=.itext   G=(none)   M=DBLogDlg ACBP=A9
+ 0002:000001B4 00000006 C=ICODE    S=.itext   G=(none)   M=rxToolEdit ACBP=A9
+ 0002:000001BC 00000006 C=ICODE    S=.itext   G=(none)   M=rxDateUtil ACBP=A9
+ 0002:000001C4 00000006 C=ICODE    S=.itext   G=(none)   M=RXCtrls  ACBP=A9
+ 0002:000001CC 00000006 C=ICODE    S=.itext   G=(none)   M=RxHook   ACBP=A9
+ 0002:000001D4 00000006 C=ICODE    S=.itext   G=(none)   M=RXConst  ACBP=A9
+ 0002:000001DC 00000006 C=ICODE    S=.itext   G=(none)   M=rxVclutils ACBP=A9
+ 0002:000001E4 00000006 C=ICODE    S=.itext   G=(none)   M=RXProps  ACBP=A9
+ 0002:000001EC 00000006 C=ICODE    S=.itext   G=(none)   M=rxAppUtils ACBP=A9
+ 0002:000001F4 00000006 C=ICODE    S=.itext   G=(none)   M=RxPrgrss ACBP=A9
+ 0002:000001FC 00000006 C=ICODE    S=.itext   G=(none)   M=SynEdit  ACBP=A9
+ 0002:00000204 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditHighlighter ACBP=A9
+ 0002:0000020C 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0002:00000214 00000006 C=ICODE    S=.itext   G=(none)   M=SynRegExpr ACBP=A9
+ 0002:0000021C 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0002:00000224 00000006 C=ICODE    S=.itext   G=(none)   M=SynTextDrawer ACBP=A9
+ 0002:0000022C 00000006 C=ICODE    S=.itext   G=(none)   M=rxCurrEdit ACBP=A9
+ 0002:00000234 00000006 C=ICODE    S=.itext   G=(none)   M=ThemedDBGrid ACBP=A9
+ 0002:0000023C 00000006 C=ICODE    S=.itext   G=(none)   M=RxRichEd ACBP=A9
+ 0002:00000244 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtnrs ACBP=A9
+ 0002:0000024C 00000006 C=ICODE    S=.itext   G=(none)   M=CheckLst ACBP=A9
+ 0002:00000254 00000006 C=ICODE    S=.itext   G=(none)   M=BisFm    ACBP=A9
+ 0002:0000025C 00000006 C=ICODE    S=.itext   G=(none)   M=BisCryptUtils ACBP=A9
+ 0002:00000264 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImage ACBP=A9
+ 0002:0000026C 00000006 C=ICODE    S=.itext   G=(none)   M=jpeg     ACBP=A9
+ 0002:00000274 00000006 C=ICODE    S=.itext   G=(none)   M=BisCore  ACBP=A9
+ 0002:0000027C 00000006 C=ICODE    S=.itext   G=(none)   M=kbmMemTable ACBP=A9
+ 0002:00000284 00000006 C=ICODE    S=.itext   G=(none)   M=BisConnectionUtils ACBP=A9
+ 0002:0000028C 00000006 C=ICODE    S=.itext   G=(none)   M=SynHighlighterXML ACBP=A9
+ 0002:00000294 00000006 C=ICODE    S=.itext   G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0002:0000029C 00000006 C=ICODE    S=.itext   G=(none)   M=OleServer ACBP=A9
+ 0002:000002A4 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtrls ACBP=A9
+ 0002:000002AC 00000006 C=ICODE    S=.itext   G=(none)   M=AxCtrls  ACBP=A9
+ 0002:000002B4 00000006 C=ICODE    S=.itext   G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0002:000002BC 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMan  ACBP=A9
+ 0002:000002C4 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMenus ACBP=A9
+ 0002:000002CC 00000006 C=ICODE    S=.itext   G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0002:000002D4 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImg   ACBP=A9
+ 0002:000002DC 00000006 C=ICODE    S=.itext   G=(none)   M=BisSystemUtils ACBP=A9
+ 0002:000002E4 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_Routines ACBP=A9
+ 0002:000002EC 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Processes ACBP=A9
+ 0002:000002F4 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0002:000002FC 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Devices ACBP=A9
+ 0002:00000304 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_CPU  ACBP=A9
+ 0002:0000030C 00000006 C=ICODE    S=.itext   G=(none)   M=BisExceptNotifier ACBP=A9
+ 0002:00000314 00000006 C=ICODE    S=.itext   G=(none)   M=JclDebug ACBP=A9
+ 0002:0000031C 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysInfo ACBP=A9
+ 0002:00000324 00000006 C=ICODE    S=.itext   G=(none)   M=JclStrings ACBP=A9
+ 0002:0000032C 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysUtils ACBP=A9
+ 0002:00000334 00000006 C=ICODE    S=.itext   G=(none)   M=JclWideStrings ACBP=A9
+ 0002:0000033C 00000006 C=ICODE    S=.itext   G=(none)   M=JclShell ACBP=A9
+ 0002:00000344 00000006 C=ICODE    S=.itext   G=(none)   M=JclRegistry ACBP=A9
+ 0002:0000034C 00000006 C=ICODE    S=.itext   G=(none)   M=JclHookExcept ACBP=A9
+ 0002:00000354 00000006 C=ICODE    S=.itext   G=(none)   M=BisDeadlocks ACBP=A9
+ 0002:0000035C 00000006 C=ICODE    S=.itext   G=(none)   M=BisServiceApplication ACBP=A9
+ 0002:00000364 00000006 C=ICODE    S=.itext   G=(none)   M=BisSvcMgr ACBP=A9
+ 0002:0000036C 00000006 C=ICODE    S=.itext   G=(none)   M=SvcMgr   ACBP=A9
+ 0002:00000374 00000006 C=ICODE    S=.itext   G=(none)   M=AsyncCalls ACBP=A9
+ 0002:0000037C 00000006 C=ICODE    S=.itext   G=(none)   M=WaveUtils ACBP=A9
+ 0002:00000384 00000008 C=ICODE    S=.itext   G=(none)   M=BisCallServerEventMessages ACBP=A9
+ 0002:0000038C 00000006 C=ICODE    S=.itext   G=(none)   M=IdIOHandler ACBP=A9
+ 0002:00000394 00000006 C=ICODE    S=.itext   G=(none)   M=IdIOHandlerStack ACBP=A9
+ 0002:0000039C 00000008 C=ICODE    S=.itext   G=(none)   M=BisCallServerHandlerEventConsts ACBP=A9
+ 0002:000003A4 00000008 C=ICODE    S=.itext   G=(none)   M=BisCallServerHandlerEvent ACBP=A9
+ 0002:000003AC 00000005 C=ICODE    S=.itext   G=(none)   M=.smcallevt ACBP=A9
+ 0003:00000000 0000002C C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0004:00000000 0000000C C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:0000000C 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000014 00000004 C=BSS      S=.bss     G=DGROUP   M=BisCallServerEventMessages ACBP=A9
+ 0004:00000018 00000004 C=BSS      S=.bss     G=DGROUP   M=BisCallServerHandlerEventConsts ACBP=A9
+ 0004:0000001C 00000004 C=BSS      S=.bss     G=DGROUP   M=BisCallServerHandlerEvent ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:000003AC       .smcallevt..smcallevt
+ 0001:00006554       .smcallevt.@GetPackageInfoTable
+ 0001:0000655C       .smcallevt.@PackageLoad
+ 0001:00006568       .smcallevt.@PackageUnload
+ 0004:00000014       BisCallServerEventMessages..6
+ 0001:00000C08       BisCallServerEventMessages..TBisCallServerEventMessage
+ 0001:00000EE8       BisCallServerEventMessages..TBisCallServerEventRequest
+ 0001:00000FB4       BisCallServerEventMessages..TBisCallServerEventRequests
+ 0001:00000D54       BisCallServerEventMessages..TBisCallServerEventResponse
+ 0001:00000E20       BisCallServerEventMessages..TBisCallServerEventResponses
+ 0002:00000384       BisCallServerEventMessages.BisCallServerEventMessages
+ 0001:000022D8       BisCallServerEventMessages.Finalization
+ 0001:00001D28       BisCallServerEventMessages.TBisCallServerEventMessage.AddBitsPerSample
+ 0001:000018A0       BisCallServerEventMessages.TBisCallServerEventMessage.AddCallerId
+ 0001:00001914       BisCallServerEventMessages.TBisCallServerEventMessage.AddCallerPhone
+ 0001:00001830       BisCallServerEventMessages.TBisCallServerEventMessage.AddCallId
+ 0001:00001988       BisCallServerEventMessages.TBisCallServerEventMessage.AddChannelId
+ 0001:00001C44       BisCallServerEventMessages.TBisCallServerEventMessage.AddChannels
+ 0001:00001A08       BisCallServerEventMessages.TBisCallServerEventMessage.AddDataPort
+ 0001:00001D9C       BisCallServerEventMessages.TBisCallServerEventMessage.AddDataSize
+ 0001:00001BD4       BisCallServerEventMessages.TBisCallServerEventMessage.AddFormatTag
+ 0001:00001E0C       BisCallServerEventMessages.TBisCallServerEventMessage.AddPacketTime
+ 0001:00001A78       BisCallServerEventMessages.TBisCallServerEventMessage.AddRemoteSessionId
+ 0001:00001CB4       BisCallServerEventMessages.TBisCallServerEventMessage.AddSamplesPerSec
+ 0001:00001AF0       BisCallServerEventMessages.TBisCallServerEventMessage.AddSequence
+ 0001:00001B60       BisCallServerEventMessages.TBisCallServerEventMessage.AddSessionId
+ 0001:0000120C       BisCallServerEventMessages.TBisCallServerEventMessage.AsString
+ 0001:0000112C       BisCallServerEventMessages.TBisCallServerEventMessage.CopyFrom
+ 0001:00001074       BisCallServerEventMessages.TBisCallServerEventMessage.Create
+ 0001:00001104       BisCallServerEventMessages.TBisCallServerEventMessage.Destroy
+ 0001:00001790       BisCallServerEventMessages.TBisCallServerEventMessage.GetAcceptor
+ 0001:000017BC       BisCallServerEventMessages.TBisCallServerEventMessage.GetAcceptorType
+ 0001:000016AC       BisCallServerEventMessages.TBisCallServerEventMessage.GetBitsPerSample
+ 0001:00001354       BisCallServerEventMessages.TBisCallServerEventMessage.GetCallerId
+ 0001:00001380       BisCallServerEventMessages.TBisCallServerEventMessage.GetCallerPhone
+ 0001:000012FC       BisCallServerEventMessages.TBisCallServerEventMessage.GetCallId
+ 0001:00001324       BisCallServerEventMessages.TBisCallServerEventMessage.GetCallResultId
+ 0001:000013AC       BisCallServerEventMessages.TBisCallServerEventMessage.GetChannelId
+ 0001:000015C8       BisCallServerEventMessages.TBisCallServerEventMessage.GetChannels
+ 0001:0000141C       BisCallServerEventMessages.TBisCallServerEventMessage.GetDataPort
+ 0001:00001720       BisCallServerEventMessages.TBisCallServerEventMessage.GetDataSize
+ 0001:00001558       BisCallServerEventMessages.TBisCallServerEventMessage.GetFormatTag
+ 0001:0000148C       BisCallServerEventMessages.TBisCallServerEventMessage.GetRemoteSessionId
+ 0001:00001638       BisCallServerEventMessages.TBisCallServerEventMessage.GetSamplesPerSec
+ 0001:000014E8       BisCallServerEventMessages.TBisCallServerEventMessage.GetSequence
+ 0001:000014BC       BisCallServerEventMessages.TBisCallServerEventMessage.GetSessionId
+ 0001:00002158       BisCallServerEventMessages.TBisCallServerEventRequest.Create
+ 0001:000021E8       BisCallServerEventMessages.TBisCallServerEventRequest.Destroy
+ 0001:00002218       BisCallServerEventMessages.TBisCallServerEventRequests.Find
+ 0001:000022BC       BisCallServerEventMessages.TBisCallServerEventRequests.GetItem
+ 0001:000022D0       BisCallServerEventMessages.TBisCallServerEventRequests.NextSequence
+ 0001:00002048       BisCallServerEventMessages.TBisCallServerEventResponse.AddMessage
+ 0001:000020C4       BisCallServerEventMessages.TBisCallServerEventResponse.AddRequestName
+ 0001:00001FD4       BisCallServerEventMessages.TBisCallServerEventResponse.AddResponseType
+ 0001:00001E7C       BisCallServerEventMessages.TBisCallServerEventResponse.GetMessage
+ 0001:00001EE8       BisCallServerEventMessages.TBisCallServerEventResponse.GetRequestName
+ 0001:00001F58       BisCallServerEventMessages.TBisCallServerEventResponse.GetResponseType
+ 0001:00002144       BisCallServerEventMessages.TBisCallServerEventResponses.GetItem
+ 0004:0000001C       BisCallServerHandlerEvent..5
+ 0001:000024F4       BisCallServerHandlerEvent..TBisCallServerChannelEvent
+ 0001:000026D4       BisCallServerHandlerEvent..TBisCallServerChannelEvents
+ 0001:000023C0       BisCallServerHandlerEvent..TBisCallServerEventUdpServer
+ 0001:000027AC       BisCallServerHandlerEvent..TBisCallServerHandlerEvent
+ 0002:000003A4       BisCallServerHandlerEvent.BisCallServerHandlerEvent
+ 0001:000032F8       BisCallServerHandlerEvent.Disable
+ 0001:00005814       BisCallServerHandlerEvent.Finalization
+ 0001:00002908       BisCallServerHandlerEvent.InitCallServerHandlerModule
+ 0001:00003954       BisCallServerHandlerEvent.SendResponse
+ 0001:00004014       BisCallServerHandlerEvent.SendResponse
+ 0001:00003E00       BisCallServerHandlerEvent.SendResponse
+ 0001:00003BF0       BisCallServerHandlerEvent.SendResponse
+ 0001:00004200       BisCallServerHandlerEvent.SendResponse
+ 0001:00003350       BisCallServerHandlerEvent.SetPort
+ 0001:00004734       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Answer
+ 0001:00003CE8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.AnswerRequest
+ 0001:000046B8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.AnswerResponse
+ 0001:00002944       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Create
+ 0001:000032BC       BisCallServerHandlerEvent.TBisCallServerChannelEvent.DataPort
+ 0001:00002B30       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Destroy
+ 0001:000044A4       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Dial
+ 0001:00003A78       BisCallServerHandlerEvent.TBisCallServerChannelEvent.DialRequest
+ 0001:000043EC       BisCallServerHandlerEvent.TBisCallServerChannelEvent.DialResponse
+ 0001:00002C08       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetAcceptor
+ 0001:00002C28       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetAcceptorId
+ 0001:00002C20       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetAcceptorType
+ 0001:00002B7C       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetActive
+ 0001:00002BA8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetCallerId
+ 0001:00002BC0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetCallerPhone
+ 0001:00002BD8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetCallId
+ 0001:00002BF0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetCallResultId
+ 0001:00002C40       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetCreatorId
+ 0001:00002C58       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetDateCreate
+ 0001:00002C74       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetDirection
+ 0001:000034A0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetEventParams
+ 0001:00002CA4       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetInDataSize
+ 0001:00002C7C       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetInFormat
+ 0001:00002CC0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetInPacketTime
+ 0001:000038BC       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetLocalEventParams
+ 0001:00002CE8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetOutDataSize
+ 0001:00002CE0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetOutFormat
+ 0001:00002CF0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetOutPacketTime
+ 0001:00003820       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetRemoteEventParams
+ 0001:00004924       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Hangup
+ 0001:00003EF8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.HangupRequest
+ 0001:00004890       BisCallServerHandlerEvent.TBisCallServerChannelEvent.HangupResponse
+ 0001:0000410C       BisCallServerHandlerEvent.TBisCallServerChannelEvent.HoldRequest
+ 0001:00002E78       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Send
+ 0001:00002CF8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.SendEvent
+ 0001:00003098       BisCallServerHandlerEvent.TBisCallServerChannelEvent.SendMessage
+ 0001:000030FC       BisCallServerHandlerEvent.TBisCallServerChannelEvent.ServerUDPException
+ 0001:00003118       BisCallServerHandlerEvent.TBisCallServerChannelEvent.ServerUDPRead
+ 0001:00003450       BisCallServerHandlerEvent.TBisCallServerChannelEvent.TryServerActive
+ 0001:000042F8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.UnHoldRequest
+ 0001:00004CD8       BisCallServerHandlerEvent.TBisCallServerChannelEvents.Add
+ 0001:00004F2C       BisCallServerHandlerEvent.TBisCallServerChannelEvents.AddIncoming
+ 0001:00004D90       BisCallServerHandlerEvent.TBisCallServerChannelEvents.AddOutgoing
+ 0001:0000529C       BisCallServerHandlerEvent.TBisCallServerChannelEvents.AnswerHandler
+ 0001:000049E8       BisCallServerHandlerEvent.TBisCallServerChannelEvents.Create
+ 0001:00004B38       BisCallServerHandlerEvent.TBisCallServerChannelEvents.Destroy
+ 0001:00005230       BisCallServerHandlerEvent.TBisCallServerChannelEvents.DialHandler
+ 0001:00004BC4       BisCallServerHandlerEvent.TBisCallServerChannelEvents.Find
+ 0001:00005060       BisCallServerHandlerEvent.TBisCallServerChannelEvents.GetItem
+ 0001:00005340       BisCallServerHandlerEvent.TBisCallServerChannelEvents.HangupHandler
+ 0001:000053EC       BisCallServerHandlerEvent.TBisCallServerChannelEvents.HoldHandler
+ 0001:00005008       BisCallServerHandlerEvent.TBisCallServerChannelEvents.LockAddIncoming
+ 0001:00004E60       BisCallServerHandlerEvent.TBisCallServerChannelEvents.LockAddOutgoing
+ 0001:00004C4C       BisCallServerHandlerEvent.TBisCallServerChannelEvents.LockFind
+ 0001:00005074       BisCallServerHandlerEvent.TBisCallServerChannelEvents.ResultHandler
+ 0001:00004BA8       BisCallServerHandlerEvent.TBisCallServerChannelEvents.TryToRemove
+ 0001:00005490       BisCallServerHandlerEvent.TBisCallServerChannelEvents.UnHoldHandler
+ 0001:00002920       BisCallServerHandlerEvent.TBisCallServerEventUdpServer.GetBinding
+ 0001:0000576C       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.AddOutgoingChannel
+ 0001:00005534       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.Create
+ 0001:000055C4       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.Destroy
+ 0001:00005804       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.GetChannels
+ 0001:00005808       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.GetChannelsClass
+ 0001:00005810       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.GetConnected
+ 0001:000055F4       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.Init
+ 0004:00000018       BisCallServerHandlerEventConsts..1
+ 0002:0000039C       BisCallServerHandlerEventConsts.BisCallServerHandlerEventConsts
+ 0001:00002390       BisCallServerHandlerEventConsts.Finalization
+ 0001:00000278       SysInit.@InitPkg
+ 0001:000002DC       SysInit.@PackageLoad
+ 0001:000002E8       SysInit.@PackageUnload
+ 0001:00000168       SysInit.AllocTlsBuffer
+ 0001:00000224       SysInit.ExitProcessTLS
+ 0001:000001EC       SysInit.ExitThreadTLS
+ 0001:00000130       SysInit.FreeLibrary
+ 0001:00000174       SysInit.GetTlsSize
+ 0004:00000004       SysInit.HInstance
+ 0001:00000248       SysInit.InitializeModule
+ 0001:000001C0       SysInit.InitProcessTLS
+ 0001:0000017C       SysInit.InitThreadTLS
+ 0001:00000138       SysInit.LocalAlloc
+ 0001:00000140       SysInit.LocalFree
+ 0003:00000004       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0001:00000148       SysInit.TlsAlloc
+ 0004:00000008       SysInit.tlsBuffer
+ 0001:00000150       SysInit.TlsFree
+ 0001:00000158       SysInit.TlsGetValue
+ 0003:00000000       SysInit.TlsIndex
+ 0005:00000000       SysInit.TlsLast
+ 0003:0000001C       SysInit.TlsProc
+ 0001:00000160       SysInit.TlsSetValue
+ 0001:00000254       SysInit.UninitializeModule
+ 0004:0000000C       Windows..3
+ 0001:000002FC       Windows.Finalization
+ 0001:000002F4       Windows.FreeLibrary
+ 0004:00000010       Windows.HtmlHelpModule
+ 0002:00000008       Windows.Windows
+
+
+  Address             Publics by Value
+
+ 0001:00000130       SysInit.FreeLibrary
+ 0001:00000138       SysInit.LocalAlloc
+ 0001:00000140       SysInit.LocalFree
+ 0001:00000148       SysInit.TlsAlloc
+ 0001:00000150       SysInit.TlsFree
+ 0001:00000158       SysInit.TlsGetValue
+ 0001:00000160       SysInit.TlsSetValue
+ 0001:00000168       SysInit.AllocTlsBuffer
+ 0001:00000174       SysInit.GetTlsSize
+ 0001:0000017C       SysInit.InitThreadTLS
+ 0001:000001C0       SysInit.InitProcessTLS
+ 0001:000001EC       SysInit.ExitThreadTLS
+ 0001:00000224       SysInit.ExitProcessTLS
+ 0001:00000248       SysInit.InitializeModule
+ 0001:00000254       SysInit.UninitializeModule
+ 0001:00000278       SysInit.@InitPkg
+ 0001:000002DC       SysInit.@PackageLoad
+ 0001:000002E8       SysInit.@PackageUnload
+ 0001:000002F4       Windows.FreeLibrary
+ 0001:000002FC       Windows.Finalization
+ 0001:00000C08       BisCallServerEventMessages..TBisCallServerEventMessage
+ 0001:00000D54       BisCallServerEventMessages..TBisCallServerEventResponse
+ 0001:00000E20       BisCallServerEventMessages..TBisCallServerEventResponses
+ 0001:00000EE8       BisCallServerEventMessages..TBisCallServerEventRequest
+ 0001:00000FB4       BisCallServerEventMessages..TBisCallServerEventRequests
+ 0001:00001074       BisCallServerEventMessages.TBisCallServerEventMessage.Create
+ 0001:00001104       BisCallServerEventMessages.TBisCallServerEventMessage.Destroy
+ 0001:0000112C       BisCallServerEventMessages.TBisCallServerEventMessage.CopyFrom
+ 0001:0000120C       BisCallServerEventMessages.TBisCallServerEventMessage.AsString
+ 0001:000012FC       BisCallServerEventMessages.TBisCallServerEventMessage.GetCallId
+ 0001:00001324       BisCallServerEventMessages.TBisCallServerEventMessage.GetCallResultId
+ 0001:00001354       BisCallServerEventMessages.TBisCallServerEventMessage.GetCallerId
+ 0001:00001380       BisCallServerEventMessages.TBisCallServerEventMessage.GetCallerPhone
+ 0001:000013AC       BisCallServerEventMessages.TBisCallServerEventMessage.GetChannelId
+ 0001:0000141C       BisCallServerEventMessages.TBisCallServerEventMessage.GetDataPort
+ 0001:0000148C       BisCallServerEventMessages.TBisCallServerEventMessage.GetRemoteSessionId
+ 0001:000014BC       BisCallServerEventMessages.TBisCallServerEventMessage.GetSessionId
+ 0001:000014E8       BisCallServerEventMessages.TBisCallServerEventMessage.GetSequence
+ 0001:00001558       BisCallServerEventMessages.TBisCallServerEventMessage.GetFormatTag
+ 0001:000015C8       BisCallServerEventMessages.TBisCallServerEventMessage.GetChannels
+ 0001:00001638       BisCallServerEventMessages.TBisCallServerEventMessage.GetSamplesPerSec
+ 0001:000016AC       BisCallServerEventMessages.TBisCallServerEventMessage.GetBitsPerSample
+ 0001:00001720       BisCallServerEventMessages.TBisCallServerEventMessage.GetDataSize
+ 0001:00001790       BisCallServerEventMessages.TBisCallServerEventMessage.GetAcceptor
+ 0001:000017BC       BisCallServerEventMessages.TBisCallServerEventMessage.GetAcceptorType
+ 0001:00001830       BisCallServerEventMessages.TBisCallServerEventMessage.AddCallId
+ 0001:000018A0       BisCallServerEventMessages.TBisCallServerEventMessage.AddCallerId
+ 0001:00001914       BisCallServerEventMessages.TBisCallServerEventMessage.AddCallerPhone
+ 0001:00001988       BisCallServerEventMessages.TBisCallServerEventMessage.AddChannelId
+ 0001:00001A08       BisCallServerEventMessages.TBisCallServerEventMessage.AddDataPort
+ 0001:00001A78       BisCallServerEventMessages.TBisCallServerEventMessage.AddRemoteSessionId
+ 0001:00001AF0       BisCallServerEventMessages.TBisCallServerEventMessage.AddSequence
+ 0001:00001B60       BisCallServerEventMessages.TBisCallServerEventMessage.AddSessionId
+ 0001:00001BD4       BisCallServerEventMessages.TBisCallServerEventMessage.AddFormatTag
+ 0001:00001C44       BisCallServerEventMessages.TBisCallServerEventMessage.AddChannels
+ 0001:00001CB4       BisCallServerEventMessages.TBisCallServerEventMessage.AddSamplesPerSec
+ 0001:00001D28       BisCallServerEventMessages.TBisCallServerEventMessage.AddBitsPerSample
+ 0001:00001D9C       BisCallServerEventMessages.TBisCallServerEventMessage.AddDataSize
+ 0001:00001E0C       BisCallServerEventMessages.TBisCallServerEventMessage.AddPacketTime
+ 0001:00001E7C       BisCallServerEventMessages.TBisCallServerEventResponse.GetMessage
+ 0001:00001EE8       BisCallServerEventMessages.TBisCallServerEventResponse.GetRequestName
+ 0001:00001F58       BisCallServerEventMessages.TBisCallServerEventResponse.GetResponseType
+ 0001:00001FD4       BisCallServerEventMessages.TBisCallServerEventResponse.AddResponseType
+ 0001:00002048       BisCallServerEventMessages.TBisCallServerEventResponse.AddMessage
+ 0001:000020C4       BisCallServerEventMessages.TBisCallServerEventResponse.AddRequestName
+ 0001:00002144       BisCallServerEventMessages.TBisCallServerEventResponses.GetItem
+ 0001:00002158       BisCallServerEventMessages.TBisCallServerEventRequest.Create
+ 0001:000021E8       BisCallServerEventMessages.TBisCallServerEventRequest.Destroy
+ 0001:00002218       BisCallServerEventMessages.TBisCallServerEventRequests.Find
+ 0001:000022BC       BisCallServerEventMessages.TBisCallServerEventRequests.GetItem
+ 0001:000022D0       BisCallServerEventMessages.TBisCallServerEventRequests.NextSequence
+ 0001:000022D8       BisCallServerEventMessages.Finalization
+ 0001:00002390       BisCallServerHandlerEventConsts.Finalization
+ 0001:000023C0       BisCallServerHandlerEvent..TBisCallServerEventUdpServer
+ 0001:000024F4       BisCallServerHandlerEvent..TBisCallServerChannelEvent
+ 0001:000026D4       BisCallServerHandlerEvent..TBisCallServerChannelEvents
+ 0001:000027AC       BisCallServerHandlerEvent..TBisCallServerHandlerEvent
+ 0001:00002908       BisCallServerHandlerEvent.InitCallServerHandlerModule
+ 0001:00002920       BisCallServerHandlerEvent.TBisCallServerEventUdpServer.GetBinding
+ 0001:00002944       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Create
+ 0001:00002B30       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Destroy
+ 0001:00002B7C       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetActive
+ 0001:00002BA8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetCallerId
+ 0001:00002BC0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetCallerPhone
+ 0001:00002BD8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetCallId
+ 0001:00002BF0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetCallResultId
+ 0001:00002C08       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetAcceptor
+ 0001:00002C20       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetAcceptorType
+ 0001:00002C28       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetAcceptorId
+ 0001:00002C40       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetCreatorId
+ 0001:00002C58       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetDateCreate
+ 0001:00002C74       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetDirection
+ 0001:00002C7C       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetInFormat
+ 0001:00002CA4       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetInDataSize
+ 0001:00002CC0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetInPacketTime
+ 0001:00002CE0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetOutFormat
+ 0001:00002CE8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetOutDataSize
+ 0001:00002CF0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetOutPacketTime
+ 0001:00002CF8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.SendEvent
+ 0001:00002E78       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Send
+ 0001:00003098       BisCallServerHandlerEvent.TBisCallServerChannelEvent.SendMessage
+ 0001:000030FC       BisCallServerHandlerEvent.TBisCallServerChannelEvent.ServerUDPException
+ 0001:00003118       BisCallServerHandlerEvent.TBisCallServerChannelEvent.ServerUDPRead
+ 0001:000032BC       BisCallServerHandlerEvent.TBisCallServerChannelEvent.DataPort
+ 0001:000032F8       BisCallServerHandlerEvent.Disable
+ 0001:00003350       BisCallServerHandlerEvent.SetPort
+ 0001:00003450       BisCallServerHandlerEvent.TBisCallServerChannelEvent.TryServerActive
+ 0001:000034A0       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetEventParams
+ 0001:00003820       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetRemoteEventParams
+ 0001:000038BC       BisCallServerHandlerEvent.TBisCallServerChannelEvent.GetLocalEventParams
+ 0001:00003954       BisCallServerHandlerEvent.SendResponse
+ 0001:00003A78       BisCallServerHandlerEvent.TBisCallServerChannelEvent.DialRequest
+ 0001:00003BF0       BisCallServerHandlerEvent.SendResponse
+ 0001:00003CE8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.AnswerRequest
+ 0001:00003E00       BisCallServerHandlerEvent.SendResponse
+ 0001:00003EF8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.HangupRequest
+ 0001:00004014       BisCallServerHandlerEvent.SendResponse
+ 0001:0000410C       BisCallServerHandlerEvent.TBisCallServerChannelEvent.HoldRequest
+ 0001:00004200       BisCallServerHandlerEvent.SendResponse
+ 0001:000042F8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.UnHoldRequest
+ 0001:000043EC       BisCallServerHandlerEvent.TBisCallServerChannelEvent.DialResponse
+ 0001:000044A4       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Dial
+ 0001:000046B8       BisCallServerHandlerEvent.TBisCallServerChannelEvent.AnswerResponse
+ 0001:00004734       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Answer
+ 0001:00004890       BisCallServerHandlerEvent.TBisCallServerChannelEvent.HangupResponse
+ 0001:00004924       BisCallServerHandlerEvent.TBisCallServerChannelEvent.Hangup
+ 0001:000049E8       BisCallServerHandlerEvent.TBisCallServerChannelEvents.Create
+ 0001:00004B38       BisCallServerHandlerEvent.TBisCallServerChannelEvents.Destroy
+ 0001:00004BA8       BisCallServerHandlerEvent.TBisCallServerChannelEvents.TryToRemove
+ 0001:00004BC4       BisCallServerHandlerEvent.TBisCallServerChannelEvents.Find
+ 0001:00004C4C       BisCallServerHandlerEvent.TBisCallServerChannelEvents.LockFind
+ 0001:00004CD8       BisCallServerHandlerEvent.TBisCallServerChannelEvents.Add
+ 0001:00004D90       BisCallServerHandlerEvent.TBisCallServerChannelEvents.AddOutgoing
+ 0001:00004E60       BisCallServerHandlerEvent.TBisCallServerChannelEvents.LockAddOutgoing
+ 0001:00004F2C       BisCallServerHandlerEvent.TBisCallServerChannelEvents.AddIncoming
+ 0001:00005008       BisCallServerHandlerEvent.TBisCallServerChannelEvents.LockAddIncoming
+ 0001:00005060       BisCallServerHandlerEvent.TBisCallServerChannelEvents.GetItem
+ 0001:00005074       BisCallServerHandlerEvent.TBisCallServerChannelEvents.ResultHandler
+ 0001:00005230       BisCallServerHandlerEvent.TBisCallServerChannelEvents.DialHandler
+ 0001:0000529C       BisCallServerHandlerEvent.TBisCallServerChannelEvents.AnswerHandler
+ 0001:00005340       BisCallServerHandlerEvent.TBisCallServerChannelEvents.HangupHandler
+ 0001:000053EC       BisCallServerHandlerEvent.TBisCallServerChannelEvents.HoldHandler
+ 0001:00005490       BisCallServerHandlerEvent.TBisCallServerChannelEvents.UnHoldHandler
+ 0001:00005534       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.Create
+ 0001:000055C4       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.Destroy
+ 0001:000055F4       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.Init
+ 0001:0000576C       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.AddOutgoingChannel
+ 0001:00005804       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.GetChannels
+ 0001:00005808       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.GetChannelsClass
+ 0001:00005810       BisCallServerHandlerEvent.TBisCallServerHandlerEvent.GetConnected
+ 0001:00005814       BisCallServerHandlerEvent.Finalization
+ 0001:00006554       .smcallevt.@GetPackageInfoTable
+ 0001:0000655C       .smcallevt.@PackageLoad
+ 0001:00006568       .smcallevt.@PackageUnload
+ 0002:00000008       Windows.Windows
+ 0002:00000384       BisCallServerEventMessages.BisCallServerEventMessages
+ 0002:0000039C       BisCallServerHandlerEventConsts.BisCallServerHandlerEventConsts
+ 0002:000003A4       BisCallServerHandlerEvent.BisCallServerHandlerEvent
+ 0002:000003AC       .smcallevt..smcallevt
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.Module
+ 0003:0000001C       SysInit.TlsProc
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       SysInit.tlsBuffer
+ 0004:0000000C       Windows..3
+ 0004:00000010       Windows.HtmlHelpModule
+ 0004:00000014       BisCallServerEventMessages..6
+ 0004:00000018       BisCallServerHandlerEventConsts..1
+ 0004:0000001C       BisCallServerHandlerEvent..5
+ 0005:00000000       SysInit.TlsLast
+
+
+Line numbers for MiTeC_ToolHelp32(MiTeC_ToolHelp32.pas) segment .text
+
+   438 0001:00000000
+
+Line numbers for IpRtrMib(objects.bpl\IPHlpApi\Pas\IpRtrMib.pas) segment .text
+
+  1062 0001:00000000
+
+Line numbers for IpExport(objects.bpl\IPHlpApi\Pas\IpExport.pas) segment .text
+
+   343 0001:00000000
+
+Line numbers for IpTypes(objects.bpl\IPHlpApi\Pas\IpTypes.pas) segment .text
+
+   228 0001:00000000
+
+Line numbers for IpHlpApi(objects.bpl\IPHlpApi\Pas\IpHlpApi.pas) segment .text
+
+   752 0001:00000000
+
+Line numbers for BisCallServerEventMessages(smcallevt.bpl\BisCallServerEventMessages.pas) segment .text
+
+   127 0001:00001074   128 0001:000010A3   129 0001:000010AC   130 0001:000010B7
+   131 0001:000010BA   132 0001:000010C4   135 0001:00001104   136 0001:0000110F
+   137 0001:0000111B   145 0001:0000112C   146 0001:00001150   147 0001:0000115A
+   148 0001:00001162   149 0001:00001170   150 0001:0000117C   151 0001:00001188
+   152 0001:00001193   154 0001:000011A7   155 0001:000011B4   156 0001:000011BA
+   160 0001:000011C4   161 0001:000011CC   162 0001:000011DA   148 0001:000011DB
+   164 0001:000011DE   171 0001:0000120C   172 0001:0000122F   173 0001:00001237
+   174 0001:0000124C   175 0001:0000125D   176 0001:0000126B   177 0001:0000127B
+   178 0001:00001285   179 0001:00001299   176 0001:0000129C   180 0001:0000129F
+   182 0001:000012C2   185 0001:000012D2   188 0001:000012FC   189 0001:00001302
+   190 0001:00001310   193 0001:00001324   194 0001:0000132A   195 0001:00001338
+   198 0001:00001354   199 0001:0000135A   200 0001:00001368   203 0001:00001380
+   204 0001:00001386   205 0001:00001394   208 0001:000013AC   209 0001:000013C9
+   210 0001:000013E4   213 0001:0000141C   214 0001:00001436   215 0001:00001451
+   218 0001:0000148C   219 0001:00001492   220 0001:000014A0   223 0001:000014BC
+   224 0001:000014C2   225 0001:000014D0   228 0001:000014E8   229 0001:00001502
+   230 0001:0000151D   233 0001:00001558   234 0001:00001572   235 0001:0000158D
+   238 0001:000015C8   239 0001:000015E2   240 0001:000015FD   243 0001:00001638
+   244 0001:00001652   245 0001:0000166D   248 0001:000016AC   249 0001:000016C6
+   250 0001:000016E1   253 0001:00001720   254 0001:0000173A   255 0001:00001755
+   258 0001:00001790   259 0001:00001796   260 0001:000017A4   263 0001:000017BC
+   264 0001:000017D6   265 0001:000017F1   268 0001:00001830   269 0001:0000185A
+   270 0001:00001869   273 0001:000018A0   274 0001:000018CA   275 0001:000018D9
+   278 0001:00001914   279 0001:0000193E   280 0001:0000194D   283 0001:00001988
+   284 0001:000019AE   285 0001:000019C8   288 0001:00001A08   289 0001:00001A25
+   290 0001:00001A40   293 0001:00001A78   294 0001:00001AA2   295 0001:00001AB1
+   298 0001:00001AF0   299 0001:00001B0D   300 0001:00001B28   303 0001:00001B60
+   304 0001:00001B8A   305 0001:00001B99   308 0001:00001BD4   309 0001:00001BF1
+   310 0001:00001C0D   313 0001:00001C44   314 0001:00001C61   315 0001:00001C7D
+   318 0001:00001CB4   319 0001:00001CD1   320 0001:00001CEC   323 0001:00001D28
+   324 0001:00001D45   325 0001:00001D61   328 0001:00001D9C   329 0001:00001DB9
+   330 0001:00001DD5   333 0001:00001E0C   334 0001:00001E29   335 0001:00001E45
+   340 0001:00001E7C   341 0001:00001E99   342 0001:00001EB4   345 0001:00001EE8
+   346 0001:00001F05   347 0001:00001F20   350 0001:00001F58   351 0001:00001F72
+   352 0001:00001F8D   353 0001:00001F94   354 0001:00001F96   357 0001:00001FD4
+   358 0001:00001FF1   359 0001:0000200D   362 0001:00002048   363 0001:0000206E
+   364 0001:00002088   367 0001:000020C4   368 0001:000020EA   369 0001:00002104
+   374 0001:00002144   375 0001:0000214A   376 0001:00002153   381 0001:00002158
+   382 0001:00002187   383 0001:0000219A   384 0001:000021A9   387 0001:000021E8
+   388 0001:000021F3   389 0001:000021FB   390 0001:00002207   398 0001:00002218
+   399 0001:00002239   400 0001:0000223E   401 0001:00002242   402 0001:0000224E
+   403 0001:0000225A   405 0001:00002287   406 0001:0000228A   408 0001:0000228C
+   401 0001:0000228D   410 0001:00002292   413 0001:000022BC   414 0001:000022C2
+   415 0001:000022CB   419 0001:000022D0   420 0001:000022D3   421 0001:000022D6
+
+Line numbers for BisCallServerEventMessages(smcallevt.bpl\BisCallServerEventMessages.pas) segment .itext
+
+   423 0002:00000384
+
+Line numbers for BisCallServerHandlerEventConsts(smcallevt.bpl\BisCallServerHandlerEventConsts.pas) segment .itext
+
+    26 0002:0000039C
+
+Line numbers for BisCallServerHandlerEvent(smcallevt.bpl\BisCallServerHandlerEvent.pas) segment .text
+
+   193 0001:00002908   194 0001:0000290B   195 0001:00002919   200 0001:00002920
+   201 0001:00002924   202 0001:0000292D   203 0001:00002937   205 0001:0000293E
+   210 0001:00002944   211 0001:00002978   213 0001:00002981   215 0001:00002993
+   216 0001:000029A9   217 0001:000029B9   218 0001:000029C9   219 0001:000029D0
+   221 0001:000029E0   222 0001:000029FD   223 0001:00002A13   224 0001:00002A32
+   225 0001:00002A48   226 0001:00002A5E   227 0001:00002A74   228 0001:00002A8A
+   230 0001:00002AA0   231 0001:00002AA5   232 0001:00002AB6   233 0001:00002AC6
+   236 0001:00002B30   237 0001:00002B3B   238 0001:00002B4F   240 0001:00002B54
+   241 0001:00002B5F   242 0001:00002B6B   245 0001:00002B7C   246 0001:00002B80
+   247 0001:00002BA4   250 0001:00002BA8   251 0001:00002BAE   252 0001:00002BBB
+   255 0001:00002BC0   256 0001:00002BC6   257 0001:00002BD3   260 0001:00002BD8
+   261 0001:00002BDE   262 0001:00002BEB   265 0001:00002BF0   266 0001:00002BF6
+   267 0001:00002C03   270 0001:00002C08   271 0001:00002C0E   272 0001:00002C1B
+   276 0001:00002C20   277 0001:00002C27   280 0001:00002C28   281 0001:00002C2E
+   282 0001:00002C3B   285 0001:00002C40   286 0001:00002C46   287 0001:00002C53
+   290 0001:00002C58   291 0001:00002C5B   292 0001:00002C6E   296 0001:00002C74
+   297 0001:00002C7B   300 0001:00002C7C   301 0001:00002C7F   302 0001:00002C88
+   303 0001:00002C98   304 0001:00002C9E   307 0001:00002CA4   308 0001:00002CA7
+   309 0001:00002CAE   310 0001:00002CB8   311 0001:00002CBE   314 0001:00002CC0
+   315 0001:00002CC3   316 0001:00002CCA   317 0001:00002CD4   318 0001:00002CDB
+   322 0001:00002CE0   323 0001:00002CE5   327 0001:00002CE8   328 0001:00002CED
+   332 0001:00002CF0   333 0001:00002CF5   339 0001:00002CF8   340 0001:00002D26
+   341 0001:00002D2A   342 0001:00002D41   343 0001:00002D52   344 0001:00002D60
+   346 0001:00002D6B   348 0001:00002D7D   349 0001:00002D86   351 0001:00002DA3
+   352 0001:00002DAC   355 0001:00002DD8   356 0001:00002DE6   357 0001:00002DF4
+   358 0001:00002E05   359 0001:00002E10   361 0001:00002E1B   363 0001:00002E2C
+   366 0001:00002E3C   372 0001:00002E78   373 0001:00002E9D   374 0001:00002EAB
+   375 0001:00002EC3   376 0001:00002ED2   377 0001:00002EE0   378 0001:00002EE7
+   379 0001:00002EEE   380 0001:00002EF5   381 0001:00002EFC   382 0001:00002F12
+   383 0001:00002F23   384 0001:00002F32   385 0001:00002F41   387 0001:00002F61
+   388 0001:00002F6B   390 0001:00002F77   391 0001:00002F83   394 0001:00002FB8
+   396 0001:00002FC3   397 0001:00002FD2   398 0001:00002FF6   399 0001:00003000
+   402 0001:00003016   407 0001:00003041   409 0001:0000305B   412 0001:00003098
+   413 0001:000030B4   414 0001:000030C1   417 0001:000030D7   421 0001:000030FC
+   422 0001:00003100   423 0001:00003112   428 0001:00003118   429 0001:00003142
+   430 0001:00003150   431 0001:00003170   432 0001:0000317F   433 0001:0000318D
+   434 0001:00003198   437 0001:000031BD   438 0001:000031C9   441 0001:00003201
+   442 0001:0000321F   446 0001:0000323C   451 0001:00003267   454 0001:00003281
+   457 0001:000032BC   458 0001:000032C1   459 0001:000032C3   460 0001:000032DC
+   462 0001:000032F2   467 0001:000032F8   468 0001:000032FB   469 0001:00003310
+   470 0001:0000332A   471 0001:00003334   473 0001:0000334B   478 0001:00003350
+   479 0001:00003359   480 0001:0000335D   481 0001:00003378   482 0001:00003386
+   483 0001:0000339F   484 0001:000033B3   485 0001:000033B6   486 0001:000033C9
+   487 0001:000033DD   488 0001:000033E3   490 0001:00003414   491 0001:00003427
+   494 0001:00003446   499 0001:00003450   500 0001:0000345A   501 0001:0000345C
+   502 0001:00003463   503 0001:0000346F   504 0001:00003478   505 0001:00003479
+   506 0001:0000347E   507 0001:00003482   508 0001:0000348D   509 0001:00003491
+   506 0001:00003492   515 0001:00003496   526 0001:000034A0   527 0001:000034DE
+   528 0001:000034E2   529 0001:000034EC   530 0001:000034FD   531 0001:0000350B
+   532 0001:0000351D   533 0001:00003526   534 0001:0000353C   535 0001:0000354A
+   536 0001:00003558   537 0001:00003566   538 0001:00003574   539 0001:00003582
+   540 0001:00003590   541 0001:0000359E   542 0001:000035AC   544 0001:000035BA
+   545 0001:000035C2   546 0001:000035D2   547 0001:000035F3   548 0001:00003615
+   549 0001:0000362E   550 0001:00003647   551 0001:00003669   552 0001:00003682
+   553 0001:0000369B   554 0001:000036B4   555 0001:000036CD   558 0001:000036DE
+   561 0001:000036EE   564 0001:00003820   565 0001:0000384A   569 0001:00003894
+   572 0001:000038BC   573 0001:000038D6   577 0001:0000392F   584 0001:00003954
+   585 0001:0000397D   587 0001:000039A0   588 0001:000039B3   589 0001:000039CC
+   590 0001:000039DF   591 0001:000039EF   592 0001:00003A03   593 0001:00003A0C
+   595 0001:00003A16   596 0001:00003A26   597 0001:00003A3E   602 0001:00003A78
+   603 0001:00003A9E   604 0001:00003AA2   605 0001:00003AAC   606 0001:00003AB4
+   607 0001:00003AB8   608 0001:00003AC6   609 0001:00003AD4   610 0001:00003AEF
+   611 0001:00003B00   612 0001:00003B15   613 0001:00003B19   614 0001:00003B34
+   615 0001:00003B45   616 0001:00003B51   617 0001:00003B59   619 0001:00003B5D
+   622 0001:00003B7C   623 0001:00003B7E   624 0001:00003B89   628 0001:00003B9F
+   631 0001:00003BB5   638 0001:00003BF0   639 0001:00003C16   641 0001:00003C39
+   642 0001:00003C4C   643 0001:00003C5F   644 0001:00003C6F   645 0001:00003C83
+   646 0001:00003C8C   648 0001:00003C96   649 0001:00003CA6   650 0001:00003CBE
+   655 0001:00003CE8   656 0001:00003D0A   657 0001:00003D0E   658 0001:00003D35
+   659 0001:00003D3D   660 0001:00003D41   661 0001:00003D4F   662 0001:00003D5D
+   663 0001:00003D61   664 0001:00003D72   665 0001:00003D7A   666 0001:00003D7E
+   668 0001:00003D9D   669 0001:00003D9F   670 0001:00003DAA   674 0001:00003DC0
+   677 0001:00003DD6   684 0001:00003E00   685 0001:00003E26   687 0001:00003E49
+   688 0001:00003E5C   689 0001:00003E6F   690 0001:00003E7F   691 0001:00003E93
+   692 0001:00003E9C   694 0001:00003EA6   695 0001:00003EB6   696 0001:00003ECE
+   701 0001:00003EF8   702 0001:00003F1C   703 0001:00003F20   704 0001:00003F3A
+   705 0001:00003F42   706 0001:00003F46   707 0001:00003F54   708 0001:00003F62
+   709 0001:00003F7D   710 0001:00003F85   711 0001:00003F89   713 0001:00003FA8
+   714 0001:00003FAA   715 0001:00003FB5   719 0001:00003FCB   722 0001:00003FE1
+   729 0001:00004014   730 0001:0000403A   732 0001:0000405D   733 0001:00004070
+   734 0001:00004083   735 0001:00004093   736 0001:000040A7   737 0001:000040B0
+   739 0001:000040BA   740 0001:000040CA   741 0001:000040E2   746 0001:0000410C
+   747 0001:0000412E   748 0001:00004132   749 0001:0000414B   750 0001:00004153
+   751 0001:00004157   752 0001:00004165   753 0001:00004173   754 0001:0000417B
+   755 0001:0000417F   757 0001:0000419E   758 0001:000041A0   759 0001:000041AB
+   763 0001:000041C1   766 0001:000041D7   773 0001:00004200   774 0001:00004226
+   776 0001:00004249   777 0001:0000425C   778 0001:0000426F   779 0001:0000427F
+   780 0001:00004293   781 0001:0000429C   783 0001:000042A6   784 0001:000042B6
+   785 0001:000042CE   790 0001:000042F8   791 0001:0000431A   792 0001:0000431E
+   793 0001:00004337   794 0001:0000433F   795 0001:00004343   796 0001:00004351
+   797 0001:0000435F   798 0001:00004367   799 0001:0000436B   801 0001:0000438A
+   802 0001:0000438C   803 0001:00004397   807 0001:000043AD   810 0001:000043C3
+   813 0001:000043EC   814 0001:0000440F   815 0001:00004411   816 0001:00004415
+   819 0001:0000442A   820 0001:00004435   821 0001:0000443C   825 0001:00004440
+   826 0001:00004447   827 0001:0000444E   828 0001:00004450   831 0001:00004458
+   832 0001:0000445F   833 0001:00004476   834 0001:00004478   838 0001:0000447E
+   843 0001:000044A4   844 0001:000044E2   845 0001:000044F0   846 0001:00004515
+   847 0001:0000452F   848 0001:0000455F   849 0001:0000456D   851 0001:00004590
+   852 0001:0000459D   853 0001:000045B6   854 0001:000045C3   855 0001:000045D7
+   856 0001:000045E7   857 0001:000045F3   858 0001:000045FD   859 0001:00004608
+   860 0001:00004612   862 0001:0000461D   863 0001:00004631   864 0001:00004645
+   865 0001:00004652   866 0001:0000465F   868 0001:0000466C   869 0001:00004679
+   873 0001:00004684   876 0001:000046B8   877 0001:000046D2   878 0001:000046D4
+   879 0001:000046D8   882 0001:000046E9   883 0001:000046F0   887 0001:000046F4
+   888 0001:0000470B   892 0001:0000470D   897 0001:00004734   898 0001:0000474C
+   899 0001:00004753   901 0001:00004796   903 0001:000047B9   904 0001:000047C6
+   905 0001:000047D3   906 0001:000047E7   907 0001:000047F7   908 0001:00004803
+   909 0001:0000480D   910 0001:00004818   911 0001:00004822   913 0001:0000482D
+   914 0001:00004841   916 0001:00004855   917 0001:00004862   919 0001:0000486D
+   922 0001:00004890   923 0001:000048B3   924 0001:000048B5   925 0001:000048B9
+   928 0001:000048CA   929 0001:000048D1   930 0001:000048D8   931 0001:000048DE
+   935 0001:000048E2   936 0001:000048F9   940 0001:000048FB   945 0001:00004924
+   946 0001:0000493B   947 0001:00004942   948 0001:0000495D   950 0001:00004980
+   951 0001:0000498D   952 0001:0000499A   954 0001:000049AE   955 0001:000049BB
+   957 0001:000049C6   962 0001:000049E8   963 0001:00004A14   964 0001:00004A1D
+   965 0001:00004A2A   966 0001:00004A4C   967 0001:00004A6E   968 0001:00004A90
+   969 0001:00004AB2   970 0001:00004AD4   972 0001:00004AF6   975 0001:00004B38
+   976 0001:00004B44   977 0001:00004B51   978 0001:00004B5B   979 0001:00004B65
+   980 0001:00004B6F   981 0001:00004B79   982 0001:00004B83   984 0001:00004B8D
+   985 0001:00004B99   989 0001:00004BA8   991 0001:00004BBE   993 0001:00004BC3
+   999 0001:00004BC4  1000 0001:00004BE9  1001 0001:00004BEE  1002 0001:00004BFC
+  1003 0001:00004C08  1004 0001:00004C1A  1005 0001:00004C1D  1007 0001:00004C1F
+  1001 0001:00004C20  1008 0001:00004C23  1011 0001:00004C4C  1012 0001:00004C6E
+  1013 0001:00004C78  1014 0001:00004C86  1016 0001:00004CA1  1018 0001:00004CB1
+  1021 0001:00004CD8  1022 0001:00004D10  1023 0001:00004D1C  1024 0001:00004D20
+  1025 0001:00004D31  1026 0001:00004D35  1027 0001:00004D43  1028 0001:00004D51
+  1029 0001:00004D5A  1032 0001:00004D60  1035 0001:00004D90  1036 0001:00004DE2
+  1037 0001:00004DFC  1038 0001:00004E00  1039 0001:00004E0E  1040 0001:00004E1C
+  1042 0001:00004E25  1045 0001:00004E60  1046 0001:00004EAD  1047 0001:00004EB7
+  1048 0001:00004EC5  1050 0001:00004EE7  1052 0001:00004EF7  1055 0001:00004F2C
+  1056 0001:00004F51  1057 0001:00004F53  1058 0001:00004F57  1059 0001:00004F7D
+  1060 0001:00004F81  1061 0001:00004F99  1062 0001:00004FB1  1063 0001:00004FBE
+  1066 0001:00004FC7  1069 0001:00005008  1070 0001:00005014  1071 0001:0000501E
+  1072 0001:0000502C  1074 0001:00005046  1076 0001:00005056  1079 0001:00005060
+  1080 0001:00005066  1081 0001:0000506F  1089 0001:00005074  1090 0001:0000509A
+  1091 0001:0000509E  1092 0001:000050B3  1093 0001:000050BB  1094 0001:000050D3
+  1095 0001:000050DD  1096 0001:000050E1  1097 0001:000050EF  1098 0001:00005101
+  1100 0001:00005109  1102 0001:00005113  1103 0001:0000513B  1105 0001:0000514B
+  1106 0001:00005173  1108 0001:00005183  1109 0001:000051AB  1111 0001:000051BB
+  1112 0001:000051C1  1115 0001:000051CD  1117 0001:000051E1  1118 0001:000051E7
+  1121 0001:000051FA  1123 0001:00005201  1129 0001:00005230  1130 0001:0000523E
+  1131 0001:00005240  1132 0001:00005258  1133 0001:0000525C  1134 0001:00005268
+  1135 0001:0000526E  1136 0001:0000527A  1137 0001:0000527E  1139 0001:0000528A
+  1141 0001:00005291  1147 0001:0000529C  1148 0001:000052BD  1149 0001:000052BF
+  1150 0001:000052D7  1151 0001:000052DB  1152 0001:000052F1  1153 0001:000052F5
+  1154 0001:00005302  1156 0001:0000530F  1158 0001:00005316  1164 0001:00005340
+  1165 0001:0000535E  1166 0001:00005362  1167 0001:00005377  1168 0001:0000537B
+  1169 0001:00005392  1170 0001:00005396  1171 0001:000053A3  1172 0001:000053AF
+  1174 0001:000053BB  1176 0001:000053C2  1182 0001:000053EC  1183 0001:0000540D
+  1184 0001:0000540F  1185 0001:00005427  1186 0001:0000542B  1187 0001:00005441
+  1188 0001:00005445  1189 0001:00005452  1191 0001:0000545F  1193 0001:00005466
+  1199 0001:00005490  1200 0001:000054B1  1201 0001:000054B3  1202 0001:000054CB
+  1203 0001:000054CF  1204 0001:000054E5  1205 0001:000054E9  1206 0001:000054F6
+  1208 0001:00005503  1210 0001:0000550A  1215 0001:00005534  1216 0001:00005546
+  1217 0001:0000554F  1219 0001:00005559  1220 0001:00005568  1221 0001:0000556D
+  1222 0001:00005574  1227 0001:0000557D  1228 0001:0000558D  1231 0001:000055C4
+  1232 0001:000055CF  1233 0001:000055D7  1234 0001:000055E3  1240 0001:000055F4
+  1241 0001:00005617  1242 0001:0000561E  1244 0001:00005621  1245 0001:0000563E
+  1246 0001:0000565E  1247 0001:0000567C  1248 0001:0000569B  1249 0001:000056BA
+  1250 0001:000056D7  1251 0001:000056DB  1252 0001:000056EB  1253 0001:000056F5
+  1260 0001:00005709  1261 0001:0000570F  1263 0001:00005720  1266 0001:0000576C
+  1267 0001:000057B9  1268 0001:000057D1  1272 0001:00005804  1273 0001:00005807
+  1277 0001:00005808  1278 0001:0000580D  1282 0001:00005810  1283 0001:00005812
+
+Line numbers for BisCallServerHandlerEvent(smcallevt.bpl\BisCallServerHandlerEvent.pas) segment .itext
+
+  1285 0002:000003A4
+
+Line numbers for .smcallevt(smcallevt.dpk) segment .itext
+
+    38 0002:000003AC
+
+Bound resource files
+
+smcallevt.res
+smcallevt.drf
+
+
+Program entry point at 0002:000003AC

@@ -1,0 +1,53 @@
+unit BisTaxiDataDiscountTypesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataGridFm;
+
+type
+  TBisTaxiDataDiscountTypesForm = class(TBisDataGridForm)
+  end;
+
+  TBisTaxiDataDiscountsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataDiscountTypesForm: TBisTaxiDataDiscountTypesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisUtils, BisTaxiDataDiscountEditFm, BisConsts;
+
+{ TBisTaxiDataDiscountsFormIface }
+
+constructor TBisTaxiDataDiscountsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataDiscountsForm;
+  FilterClass:=TBisTaxiDataDiscountFilterFormIface;
+  InsertClass:=TBisTaxiDataDiscountInsertFormIface;
+  UpdateClass:=TBisTaxiDataDiscountUpdateFormIface;
+  DeleteClass:=TBisTaxiDataDiscountDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_DISCOUNT_TYPES';
+  with FieldNames do begin
+    AddKey('DISCOUNT_ID');
+    AddInvisible('PRIORITY');
+    AddInvisible('TYPE_DISCOUNT');
+    AddInvisible('PERCENT');
+    AddInvisible('DISCOUNT_SUM');
+    AddInvisible('PROC_NAME');
+    Add('NAME','Наименование',100);
+    Add('DESCRIPTION','Описание',250);
+  end;
+  Orders.Add('PRIORITY');
+end;
+
+end.

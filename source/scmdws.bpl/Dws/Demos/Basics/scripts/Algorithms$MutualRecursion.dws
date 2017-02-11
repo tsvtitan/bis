@@ -1,0 +1,27 @@
+type TMyArray = array[1..100] of string;
+var MyArray: TMyArray;
+
+function Skip(Pos: Integer): string; forward;
+
+function Take(Pos: Integer): string;
+begin
+  if Pos <= 100 then
+    Result := MyArray[Pos] + ';' + Skip(Pos + 1)
+  else 
+    Result := '';
+end;
+
+function Skip(Pos: Integer):string; 
+begin
+  if Pos >= 100 then 
+    Result := '' 
+  else
+    Result := Take(Pos + 1);
+end;
+
+var i: Integer;
+
+for i := 1 to 100 do 
+  MyArray[i] := IntToStr(i);
+
+PrintLn(Take(1));

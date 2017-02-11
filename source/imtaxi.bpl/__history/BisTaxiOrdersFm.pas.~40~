@@ -1,0 +1,267 @@
+unit BisTaxiOrdersFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList,
+  BisFm, BisDataFrm, BisSplitter,
+  BisTaxiOrdersFrm, BisTaxiDriverShiftsFrm, BisTaxiDriverParksFrm;                                  
+
+type
+  TSplitter=class(TBisSplitter)
+  end;
+
+  TBisTaxiOrdersForm = class(TBisForm)
+    StatusBar: TStatusBar;
+    PanelMain: TPanel;
+    PanelOrders: TPanel;
+    PanelRight: TPanel;
+    SplitterDriverShifts: TSplitter;
+    PanelDriverShifts: TPanel;
+    PanelDriverParks: TPanel;
+    SplitterOrders: TSplitter;
+    PanelBottom: TPanel;
+    procedure PanelRightResize(Sender: TObject);
+  private
+    FOldCaption: String;
+    FOldPanelRightWidth: Integer;
+    FOldPanelDriverParksHeight: Integer;
+    FOrdersFrame: TBisTaxiOrdersFrame;
+    FDriverShiftsFrame: TBisTaxiDriverShiftsFrame;
+    FDriverParksFrame: TBisTaxiDriverParksFrame;
+
+    procedure DriverShiftsFrameAfterInsertRecord(Sender: TBisDataFrame);
+    procedure DriverParksFrameAfterInsertRecord(Sender: TBisDataFrame);
+
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure BeforeShow; override;
+
+    property OrdersFrame: TBisTaxiOrdersFrame read FOrdersFrame;
+    property DriverShiftsFrame: TBisTaxiDriverShiftsFrame read FDriverShiftsFrame;
+    property DriverParksFrame: TBisTaxiDriverParksFrame read FDriverParksFrame;
+  end;
+
+  TBisTaxiOrdersFormIface=class(TBisFormIface)
+  private
+    FSPermissionDelete: String;
+    FSPermissionUpdate: String;
+    FSPermissionInsert: String;
+    FSPermissionInformation: String;
+    function GetLastForm: TBisTaxiOrdersForm;
+    function CanRefreshRecords(Sender: TBisDataFrame): Boolean;
+    function CanInsertRecord(Sender: TBisDataFrame): Boolean;
+    function CanUpdateRecord(Sender: TBisDataFrame): Boolean;
+    function CanDeleteRecord(Sender: TBisDataFrame): Boolean;
+    function CanInfoRecord(Sender: TBisDataFrame): Boolean;
+  protected
+    function CreateForm: TBisForm; override;  
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Init; override;
+
+    property LastForm: TBisTaxiOrdersForm read GetLastForm;
+  published
+    property SPermissionInsert: String read FSPermissionInsert write FSPermissionInsert;
+    property SPermissionUpdate: String read FSPermissionUpdate write FSPermissionUpdate;
+    property SPermissionDelete: String read FSPermissionDelete write FSPermissionDelete;
+    property SPermissionInformation: String read FSPermissionInformation write FSPermissionInformation;
+  end;
+
+var
+  BisTaxiOrdersForm: TBisTaxiOrdersForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisTaxiOrdersFormIface }
+
+constructor TBisTaxiOrdersFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiOrdersForm;
+  Permissions.Enabled:=true;
+  OnlyOneForm:=false;
+  ChangeFormCaption:=true;
+  MaxFormCount:=1;
+  ShowType:=stMdiChild;
+
+  FSPermissionInsert:='Создание';
+  FSPermissionUpdate:='Изменение';
+  FSPermissionDelete:='Удаление';
+  FSPermissionInformation:='Информация';
+end;
+
+procedure TBisTaxiOrdersFormIface.Init;
+begin
+  inherited Init;
+  Permissions.AddDefault(FSPermissionInsert);
+  Permissions.AddDefault(FSPermissionUpdate);
+  Permissions.AddDefault(FSPermissionDelete);
+  Permissions.AddDefault(FSPermissionInformation);
+end;
+
+function TBisTaxiOrdersFormIface.GetLastForm: TBisTaxiOrdersForm;
+begin
+  Result:=TBisTaxiOrdersForm(inherited LastForm);
+end;
+
+function TBisTaxiOrdersFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(LastForm) then begin
+    with LastForm do begin
+      if Assigned(OrdersFrame) then begin
+        OrdersFrame.OnCanRefreshRecords:=CanRefreshRecords;
+        OrdersFrame.OnCanInsertRecord:=CanInsertRecord;
+        OrdersFrame.OnCanDuplicateRecord:=CanInsertRecord;
+        OrdersFrame.OnCanUpdateRecord:=CanUpdateRecord;
+        OrdersFrame.OnCanDeleteRecord:=CanDeleteRecord;
+        OrdersFrame.OnCanInfoRecord:=CanInfoRecord;
+      end;
+      if Assigned(DriverShiftsFrame) then
+        DriverShiftsFrame.OnCanInfoRecord:=CanInfoRecord;
+      if Assigned(DriverParksFrame) then
+        DriverParksFrame.OnCanInfoRecord:=CanInfoRecord;
+    end;
+  end;
+end;
+
+function TBisTaxiOrdersFormIface.CanRefreshRecords(Sender: TBisDataFrame): Boolean;
+begin
+  Result:=Permissions.Exists(SPermissionShow);
+end;
+
+function TBisTaxiOrdersFormIface.CanInsertRecord(Sender: TBisDataFrame): Boolean;
+begin
+  Result:=Permissions.Exists(FSPermissionInsert);
+end;
+
+function TBisTaxiOrdersFormIface.CanUpdateRecord(Sender: TBisDataFrame): Boolean;
+begin
+  Result:=Permissions.Exists(FSPermissionUpdate);
+end;
+
+function TBisTaxiOrdersFormIface.CanDeleteRecord(Sender: TBisDataFrame): Boolean;
+begin
+  Result:=Permissions.Exists(FSPermissionDelete);
+end;
+
+function TBisTaxiOrdersFormIface.CanInfoRecord(Sender: TBisDataFrame): Boolean;
+begin
+  Result:=Permissions.Exists(FSPermissionInformation);
+end;
+
+
+
+{ TBisTaxiOrdersForm }
+
+constructor TBisTaxiOrdersForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  CloseMode:=cmFree;
+  SizesStored:=true;
+
+  FOldCaption:=Caption;
+
+  FOrdersFrame:=TBisTaxiOrdersFrame.Create(Self);
+  FOrdersFrame.Parent:=PanelOrders;
+  FOrdersFrame.Align:=alClient;
+//  FOrdersFrame.ParentForm:=Self;
+
+  FDriverShiftsFrame:=TBisTaxiDriverShiftsFrame.Create(Self);
+  FDriverShiftsFrame.Parent:=PanelDriverShifts;
+  FDriverShiftsFrame.Align:=alClient;
+  FDriverShiftsFrame.OnAfterInsertRecord:=DriverShiftsFrameAfterInsertRecord;
+  FDriverShiftsFrame.OnAfterDeleteRecord:=DriverShiftsFrameAfterInsertRecord;
+  FDriverShiftsFrame.OnAfterReceiptInsert:=DriverShiftsFrameAfterInsertRecord;
+  FDriverShiftsFrame.OnAfterChargeInsert:=DriverShiftsFrameAfterInsertRecord;
+
+  FDriverParksFrame:=TBisTaxiDriverParksFrame.Create(Self);
+  FDriverParksFrame.Parent:=PanelDriverParks;
+  FDriverParksFrame.Align:=alClient;
+  FDriverParksFrame.OnAfterInsertRecord:=DriverParksFrameAfterInsertRecord;
+  FDriverParksFrame.OnAfterUpdateRecord:=DriverParksFrameAfterInsertRecord;
+  FDriverParksFrame.OnAfterDeleteRecord:=DriverParksFrameAfterInsertRecord;
+
+  FOldPanelRightWidth:=PanelRight.Width;
+  FOldPanelDriverParksHeight:=PanelDriverParks.Height;
+
+end;
+
+destructor TBisTaxiOrdersForm.Destroy;
+begin
+  ProfileWrite('PanelRight.Width',PanelRight.Width);
+  ProfileWrite('PanelDriverParks.Height',PanelDriverParks.Height);
+
+  FDriverParksFrame.Free;
+  FDriverShiftsFrame.Free;
+  FOrdersFrame.Free;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiOrdersForm.Init;
+begin
+  inherited Init;
+  FOrdersFrame.Init;
+  FDriverShiftsFrame.Init;
+  FDriverParksFrame.Init;
+end;
+
+procedure TBisTaxiOrdersForm.BeforeShow;
+begin
+  inherited BeforeShow;
+
+  FOrdersFrame.ParentFormCaption:=FOldCaption;
+  FOrdersFrame.ChangeParentFormCaption;
+  FOrdersFrame.AsModal:=AsModal;
+  FOrdersFrame.ShowType:=ShowType;
+  FOrdersFrame.OpenRecords;
+
+  FDriverShiftsFrame.AsModal:=AsModal;
+  FDriverShiftsFrame.ShowType:=ShowType;
+  FDriverShiftsFrame.OpenRecords;
+
+  FDriverParksFrame.AsModal:=AsModal;
+  FDriverParksFrame.ShowType:=ShowType;
+  FDriverParksFrame.OpenRecords;
+
+  PanelRight.Width:=ProfileRead('PanelRight.Width',PanelRight.Width);
+  if PanelRight.Width<60 then
+    PanelRight.Width:=FOldPanelRightWidth;
+
+  PanelDriverParks.Height:=ProfileRead('PanelDriverParks.Height',PanelDriverParks.Height);
+  if PanelDriverParks.Height<60 then
+    PanelDriverParks.Height:=FOldPanelDriverParksHeight;
+
+end;
+
+procedure TBisTaxiOrdersForm.DriverShiftsFrameAfterInsertRecord(Sender: TBisDataFrame);
+begin
+  FDriverParksFrame.RefreshRecords;
+end;
+
+procedure TBisTaxiOrdersForm.DriverParksFrameAfterInsertRecord(Sender: TBisDataFrame);
+begin
+  FDriverShiftsFrame.RefreshRecords;
+end;
+
+procedure TBisTaxiOrdersForm.PanelRightResize(Sender: TObject);
+begin
+  if Assigned(FDriverShiftsFrame) then begin
+    FDriverShiftsFrame.RepositionControlBarControls;
+    FDriverShiftsFrame.ResizeToolbars;
+  end;
+
+  if Assigned(FDriverParksFrame) then begin
+    FDriverParksFrame.RepositionControlBarControls;
+    FDriverParksFrame.ResizeToolbars;
+  end;
+end;
+
+
+end.

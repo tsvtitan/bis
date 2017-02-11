@@ -1,0 +1,132 @@
+unit BisDBTableViewFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, DB, DBGrids, Grids,
+  BisDataSet, BisDialogFm;
+
+type
+  TDBGrid=class(DBGrids.TDBGrid)
+  public
+    procedure WMMouseWheel(var Message: TWMMouseWheel); message WM_MOUSEWHEEL;
+  end;
+
+  TBisDBTableViewForm = class(TBisDialogForm)
+    PanelGrid: TPanel;
+    DataSource: TDataSource;
+    DBGrid: TDBGrid;
+    OpenDialog: TOpenDialog;
+    SaveDialog: TSaveDialog;
+    ButtonLoad: TButton;
+    ButtonSave: TButton;
+    ButtonClear: TButton;
+    procedure ButtonLoadClick(Sender: TObject);
+    procedure ButtonSaveClick(Sender: TObject);
+    procedure ButtonClearClick(Sender: TObject);
+    procedure PanelButtonClick(Sender: TObject);
+  private
+    FDataSet: TBisDataSet;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property DataSet: TBisDataSet read FDataSet;
+  end;
+
+var
+  BisDBTableViewForm: TBisDBTableViewForm;
+
+implementation
+
+uses TypInfo, Consts, kbmMemTable,
+     BisCoreConsts, BisUtils;
+
+{$R *.dfm}
+
+{ TDBGrid }
+
+procedure TDBGrid.WMMouseWheel(var Message: TWMMouseWheel);
+const
+  CountWheel=1;
+begin
+  if Assigned(DataLink) and DataLink.Active  then begin
+   if DataLink.DataSet=nil then exit;
+   if Datalink.Active then
+    with Message, DataLink.DataSet do begin
+       if WheelDelta<0 then
+         if not DataLink.DataSet.Eof then
+           DataLink.DataSet.Next
+         else exit
+       else
+         if not DataLink.DataSet.Bof then
+           DataLink.DataSet.Prior
+         else exit;
+       Result:=1;
+    end;
+  end;
+end;
+
+{ TBisDBTableEditForm }
+
+constructor TBisDBTableViewForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FDataSet:=TBisDataSet.Create(nil);
+  DataSource.DataSet:=FDataSet;
+end;
+
+destructor TBisDBTableViewForm.Destroy;
+begin
+  FDataSet.Free;
+  inherited Destroy;
+end;
+
+procedure TBisDBTableViewForm.PanelButtonClick(Sender: TObject);
+var
+  NCount: Integer;
+  S: String;
+begin
+  if FDataSet.Active then begin
+    FDataSet.DisableControls;
+    try
+      S:='1000';
+      if InputQuery('','',S) then begin
+        if TryStrToInt(S,NCount) then begin
+        
+        end;
+          S:=
+      end;
+
+      for i:=0 to NCount-1 do begin
+
+      end;
+    finally
+      FDataSet.EnableControls;
+    end;
+  end;
+end;
+
+procedure TBisDBTableViewForm.ButtonLoadClick(Sender: TObject);
+begin
+  if OpenDialog.Execute then begin
+    FDataSet.LoadFromFile(OpenDialog.FileName);
+  end;
+end;
+
+procedure TBisDBTableViewForm.ButtonSaveClick(Sender: TObject);
+begin
+  if SaveDialog.Execute then begin
+    if FDataSet.State in [dsEdit, dsInsert] then
+      FDataSet.Post;
+    FDataSet.SaveToFile(SaveDialog.FileName);
+  end;
+end;
+
+procedure TBisDBTableViewForm.ButtonClearClick(Sender: TObject);
+begin
+  FDataSet.EmptyTable;
+end;
+
+end.

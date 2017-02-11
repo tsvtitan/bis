@@ -1,0 +1,25 @@
+unit BisScmDws;
+
+interface
+
+uses BisScriptModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitScriptModule(AModule: TBisScriptModule); stdcall;
+
+exports
+  InitScriptModule;
+
+implementation
+
+//uses BisExportFm, BisExportMainFm;
+
+procedure InitScriptModule(AModule: TBisScriptModule); stdcall;
+begin
+  with AModule do begin
+  {  AddClass(TBisExportMainFormIface);
+    AddClass(TBisExportFormIface);}
+  end;
+end;
+
+end.

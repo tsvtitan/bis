@@ -1,0 +1,32 @@
+unit BisScript;
+
+interface
+
+uses Classes,
+     dws2Comp;
+
+type
+
+  TBisScript=class(TComponent)
+  private
+    FScript: TDelphiWebScriptII;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+{ TBisScript }
+
+constructor Create(AOwner: TComponent);
+begin
+
+end;
+
+destructor Destroy;
+begin
+
+end;
+
+end.

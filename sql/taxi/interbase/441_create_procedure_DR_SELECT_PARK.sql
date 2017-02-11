@@ -1,0 +1,34 @@
+/* Создание процедуры определения результата выбора стоянки */
+
+CREATE PROCEDURE /*PREFIX*/DR_SELECT_PARK
+(
+  ORDER_ID VARCHAR(32),
+  ACTION_ID VARCHAR(32),
+  RESULT_ID VARCHAR(32)
+)
+RETURNS
+(
+  DETECTED INTEGER
+)
+AS
+  DECLARE CNT INTEGER;
+  DECLARE PARK_ID VARCHAR(32);
+BEGIN
+  DETECTED=0;
+
+   SELECT PARK_ID
+     FROM /*PREFIX*/ORDERS
+    WHERE ORDER_ID=:ORDER_ID
+     INTO :PARK_ID;
+
+  IF (PARK_ID IS NOT NULL) THEN
+    DETECTED=1;
+
+  SUSPEND;
+END
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

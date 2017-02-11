@@ -1,0 +1,92 @@
+inherited BisStatusForm: TBisStatusForm
+  BorderIcons = [biSystemMenu, biMaximize]
+  Caption = #1057#1090#1072#1090#1091#1089
+  ClientHeight = 223
+  ClientWidth = 492
+  Constraints.MinHeight = 250
+  Constraints.MinWidth = 500
+  KeyPreview = True
+  Position = poScreenCenter
+  OnKeyDown = FormKeyDown
+  OnResize = FormResize
+  ExplicitWidth = 500
+  ExplicitHeight = 250
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelProgress: TPanel
+    Left = 0
+    Top = 0
+    Width = 492
+    Height = 31
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 0
+    DesignSize = (
+      492
+      31)
+    object ProgressBar: TProgressBar
+      Left = 6
+      Top = 10
+      Width = 399
+      Height = 16
+      TabOrder = 0
+    end
+    object ButtonRunStop: TButton
+      Left = 412
+      Top = 5
+      Width = 75
+      Height = 25
+      Anchors = [akTop, akRight]
+      Cancel = True
+      Caption = #1054#1089#1090#1072#1085#1086#1074#1080#1090#1100
+      TabOrder = 1
+    end
+  end
+  object StatusBar: TStatusBar
+    Left = 0
+    Top = 204
+    Width = 492
+    Height = 19
+    Panels = <>
+    SimplePanel = True
+  end
+  object PanelList: TPanel
+    Left = 0
+    Top = 31
+    Width = 492
+    Height = 173
+    Align = alClient
+    BevelOuter = bvNone
+    BorderWidth = 5
+    TabOrder = 1
+    object ListView: TListView
+      Left = 5
+      Top = 5
+      Width = 482
+      Height = 163
+      Align = alClient
+      Columns = <
+        item
+          Caption = #1044#1072#1090#1072' '#1080' '#1074#1088#1077#1084#1103
+          MinWidth = 100
+          Width = 140
+        end
+        item
+          Caption = #1054#1087#1080#1089#1072#1085#1080#1077
+          MinWidth = 300
+          Width = 300
+        end>
+      HideSelection = False
+      ReadOnly = True
+      RowSelect = True
+      SmallImages = ImageList
+      TabOrder = 0
+      ViewStyle = vsReport
+      OnChange = ListViewChange
+    end
+  end
+  object ImageList: TImageList
+    Left = 216
+    Top = 104
+  end
+end

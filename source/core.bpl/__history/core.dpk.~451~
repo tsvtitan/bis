@@ -1,0 +1,100 @@
+package core;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vcl,
+  dbrtl,
+  vcljpg,
+  vcldb,
+  IndyCore,
+  IndySystem,
+  IndyProtocols,
+  vclie;
+
+contains
+  BisCore in 'BisCore.pas',
+  BisObject in 'BisObject.pas',
+  BisCoreIntf in 'BisCoreIntf.pas',
+  BisObjectIntf in 'BisObjectIntf.pas',
+  BisCmdLine in 'BisCmdLine.pas',
+  BisConfig in 'BisConfig.pas',
+  BisBase64 in 'BisBase64.pas',
+  BisUtils in 'BisUtils.pas',
+  BisCoreConsts in 'BisCoreConsts.pas',
+  BisCrypter in 'BisCrypter.pas',
+  BisCryptUtils in 'BisCryptUtils.pas',
+  BisLogger in 'BisLogger.pas',
+  BisLocalbase in 'BisLocalbase.pas',
+  BisDataSet in 'BisDataSet.pas',
+  BisObjects in 'BisObjects.pas',
+  BisModules in 'BisModules.pas',
+  BisConnectionModules in 'BisConnectionModules.pas',
+  BisCoreObjects in 'BisCoreObjects.pas',
+  BisCoreObjectsIntf in 'BisCoreObjectsIntf.pas',
+  BisLoggerIntf in 'BisLoggerIntf.pas',
+  BisConfigIntf in 'BisConfigIntf.pas',
+  BisObjectsIntf in 'BisObjectsIntf.pas',
+  BisIfaceModules in 'BisIfaceModules.pas',
+  BisModuleInfo in 'BisModuleInfo.pas',
+  BisVersionInfo in 'BisVersionInfo.pas',
+  BisIfaces in 'BisIfaces.pas',
+  BisFm in 'BisFm.pas' {BisForm},
+  BisSplashFm in 'BisSplashFm.pas' {BisSplashForm},
+  BisPicture in 'BisPicture.pas',
+  BisLocalbaseIntf in 'BisLocalbaseIntf.pas',
+  BisDBTableEditFm in 'BisDBTableEditFm.pas' {BisDBTableEditForm},
+  BisDBHexEdit in 'BisDBHexEdit.pas',
+  BisDBImage in 'BisDBImage.pas',
+  BisDBSynEdit in 'BisDBSynEdit.pas',
+  BisDBTable in 'BisDBTable.pas',
+  BisHexEdit in 'BisHexEdit.pas',
+  BisCmdLineIntf in 'BisCmdLineIntf.pas',
+  BisConnections in 'BisConnections.pas',
+  BisServerModules in 'BisServerModules.pas',
+  BisServers in 'BisServers.pas',
+  BisServiceApplication in 'BisServiceApplication.pas',
+  BisStandaloneApplication in 'BisStandaloneApplication.pas',
+  BisApplication in 'BisApplication.pas',
+  SvcMgr1 in 'SvcMgr1.pas',
+  BisComponents in 'BisComponents.pas',
+  BisExceptNotifier in 'BisExceptNotifier.pas',
+  BisExceptions in 'BisExceptions.pas',
+  BisSystemInfo in 'BisSystemInfo.pas',
+  BisDetailMsgFm in 'BisDetailMsgFm.pas' {BisDetailMsgForm},
+  BisTimedMsgFm in 'BisTimedMsgFm.pas' {BisTimedMsgForm},
+  BisDialogs in 'BisDialogs.pas',
+  BisLanguage in 'BisLanguage.pas',
+  BisVariants in 'BisVariants.pas',
+  BisStatusFm in 'BisStatusFm.pas' {BisStatusForm},
+  BisLoginFm in 'BisLoginFm.pas' {BisLoginForm},
+  BisLoginStatusFm in 'BisLoginStatusFm.pas' {BisLoginStatusForm},
+  BisDialogFm in 'BisDialogFm.pas' {BisDialogForm},
+  BisDBTableViewFm in 'BisDBTableViewFm.pas',
+  BisPermissions in 'BisPermissions.pas',
+  BisInterfaces in 'BisInterfaces.pas';
+
+end.

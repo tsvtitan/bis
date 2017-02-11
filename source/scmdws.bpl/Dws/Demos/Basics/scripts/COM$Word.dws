@@ -1,0 +1,58 @@
+{
+COM-Demonstration in DWSII
+
+To execute this demo you have to assign a
+Tdws2ComConnector to your TDelphiWebScriptII
+component and Word 9.0 (2000) should be installed
+on your system.
+
+To extend this example open "Visual Basic for
+Applications" (Word-Macro editor) and press [F2]
+(object catalog) You'll find all necessary
+information there.
+}
+var msWord: ComVariant;
+var doc, sel, tab: ComVariant;
+
+// Create a instance of Word 9.0
+msWord:=CreateOleObject('Word.Application');
+
+// Display Window
+msWord.Visible := True;
+
+// Add a new empty document
+doc := msWord.Documents.Add();
+// Get the current selection (cursor position)
+sel := msWord.Selection;
+
+// Add some text
+sel.TypeText('Some System Parameters:');
+sel.HomeKey(5 {wdLine}, 1 {wdExtend});
+// Some simple formatting
+sel.Font.Bold := True;
+sel.EndKey(5 {wdLine}, 0 {wdMove});
+sel.Font.Bold := False;
+sel.TypeParagraph();
+
+// Create a table
+tab := doc.Tables.Add(sel.Range, 3, 2);
+
+// Add text to the table cells
+sel.TypeText('Operating System');
+sel.MoveRight(12 {wdCell});
+sel.TypeText(msWord.System.OperatingSystem);
+sel.MoveLeft(12 {wdCell});
+sel.MoveDown(5 {wdLine});
+
+sel.TypeText('Processor');
+sel.MoveRight(12 {wdCell});
+sel.TypeText(msWord.System.ProcessorType);
+sel.MoveLeft(12 {wdCell});
+sel.MoveDown(5 {wdLine});
+
+sel.TypeText('Word Version');
+sel.MoveRight(12 {wdCell});
+sel.TypeText(MsWord.Version);
+sel.MoveLeft(12 {wdCell});
+sel.MoveDown(5 {wdLine});
+

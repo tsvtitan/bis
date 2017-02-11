@@ -1,0 +1,819 @@
+{******************************************************************************}
+{*        Copyright 1999-2001 by J.Friebel all rights reserved.               *}
+{*        Autor           :  Jörg Friebel                                     *}
+{*        Compiler        :  Delphi 7                                         *}
+{*        System          :  Windows XP / 2000                                *}
+{*        Projekt         :  TAPI Komponenten (TAPI Version 1.4 bis 3.0)      *}
+{*        Last Update     :  24.07.2003                                       *}
+{*        Version         :  0.2                                              *}
+{*        EMail           :  tapi@delphiclub.de                               *}
+{******************************************************************************}
+{*                                                                            *}
+{*    This File is free software; You can redistribute it and/or modify it    *}
+{*    under the term of GNU Library General Public License as published by    *}
+{*    the Free Software Foundation. This File is distribute in the hope       *}
+{*    it will be useful "as is", but WITHOUT ANY WARRANTY OF ANY KIND;        *}
+{*    See the GNU Library Public Licence for more details.                    *}
+{*                                                                            *}
+{******************************************************************************}
+{*                                                                            *}
+{*    Diese Datei ist Freie-Software. Sie können sie weitervertreiben         *}
+{*    und/oder verändern im Sinne der Bestimmungen der "GNU Library GPL"      *}
+{*    der Free Software Foundation. Diese Datei wird,"wie sie ist",           *}
+{*    zur Verfügung gestellt, ohne irgendeine GEWÄHRLEISTUNG                  *}
+{*                                                                            *}
+{******************************************************************************}
+{*                          www.delphiclub.de                                 *}
+{******************************************************************************}
+unit TAPIWave;
+
+interface
+
+{$I VERS.INC}
+{$I TAPI.INC}
+
+uses Windows, SysUtils, Classes, mmSystem, messages, TAPISystem,TAPICall;
+
+const USR_OUT_DONE = WM_USER+100;
+      USR_INBLOCK  = WM_USER+102;
+      USR_MMIOM_PROC_VERSION = WM_USER+1001;
+type
+  TWaveOutProc = procedure(hwo: HWAVEOUT; uMsg: UINT; dwInstance: DWORD;dwParam1, dwParam2: DWORD) ;stdcall;
+  TWaveInProc = procedure(hwo: HWAVEIN; uMsg: UINT; dwInstance: DWORD;dwParam1, dwParam2: DWORD) ;stdcall;
+
+  TWaveInStatus = (wsOK,wsError,wsDown);
+
+  TTAPIWaveDevice=class(TTAPIComponent)
+  private
+    FWindowHandle: HWND;
+    FIOProc: ^TFNMMIOProc;
+    FRecordBlockSize: DWord;
+    FMessageFormat: TWAVEFORMATEX;
+    FWaveOutData: PChar;
+    FWaveInBuffer1:Pointer;
+    FWaveInBuffer2:Pointer;
+    FRecBytes: DWord;
+    FActiveBuffer: Integer;
+    FCall: TTAPICall;
+    FMaxBuffers: Integer;
+    FWaveHdr: PWaveHdr;
+    FPlayWaveHdr: PWaveHdr;
+    FPlayBufferPos: Integer;
+    FWaveOutHandle: hWaveOut;
+    FWaveInHandle: hWaveIn;
+    FWaveOutID: DWord;
+    FWaveInID: DWord;
+    FAutoSave: Boolean;
+    FAfterPlay: TNotifyEvent;
+    FBeforeSave: TNotifyEvent;
+    FBeforeRecord: TNotifyEvent;
+    FAfterSave: TNotifyEvent;
+    FBeforePlay: TNotifyEvent;
+    FAfterRecord: TNotifyEvent;
+    FPlayFile: TFileName;
+    FRecordFile: TFileName;
+    FRecordStatus: TWaveInStatus;
+    FmmioInfo: TMMIOINFO;
+    FciRiffChunk: MMCKINFO;
+    FciSubChunk: MMCKINFO;
+    Fhmmio: HMMIO;
+    FNextPos:LongWord;
+    FNumBuffers:Integer;
+//    FRecordStopped: Boolean;
+    procedure AllocRecBuffers(RecBlockSize:Integer);
+    procedure AllocPlayBuffers(PlayBlockSize:Integer);
+    procedure CleanUpRecBuffer;
+    procedure CleanUpPlayBuffer;
+    function GetWaveInId: DWord;
+    function GetWaveOutId: DWord;
+    procedure MMWOMDONE;
+    procedure USRINBLOCK(aWaveHdr:PWaveHdr);
+    procedure WndProc(var Msg: TMessage);
+    function PrepareHeaderAndAddBuffer:Boolean;
+  protected
+    property RecordStatus:TWaveInStatus read FRecordStatus default wsDown;
+    procedure Notification(AComponent:TComponent; Operation :TOperation); override;
+  public
+    constructor Create(AOwner: TComponent);override;
+    destructor  Destroy; override;
+    function PlayMessage:Boolean;
+    function RecordMessage:Boolean;
+    property WaveOutId:DWord read GetWaveOutId;
+    property WaveInId:DWord read GetWaveInId;
+    property MaxBuffers:Integer read FMaxBuffers write FMaxBuffers default 2;
+    procedure PerformMsg(Msg: TCMTAPI);override;
+    procedure StopRec;
+    procedure StopPlay;
+    procedure CreateRiffFile;
+    procedure WriteToRiffFile;
+    procedure CloseRiffFile;
+
+//    property RecordStopped: Boolean read FRecordStopped write FRecordStopped;
+  published
+    property BeforeSave:TNotifyEvent read FBeforeSave write FBeforeSave;
+    property AfterSave: TNotifyEvent read FAfterSave write FAfterSave;
+    property BeforeRecord: TNotifyEvent read FBeforeRecord write FBeforeRecord;
+    property AfterRecord: TNotifyEvent read FAfterRecord write FAfterRecord;
+    property BeforePlay: TNotifyEvent read FBeforePlay write FBeforePlay;
+    property AfterPlay: TNotifyEvent read FAfterPlay write FAfterPlay;
+    property Call:TTAPICall read FCall write FCall;
+    property AutoSave:Boolean read FAutoSave write FAutoSave default True;
+    property RecordFile: TFileName read FRecordFile write FRecordFile;
+    property PlayFile: TFileName read FPlayFile write FPlayFile;
+    property NumBuffers: Integer read FNumBuffers write FNumBuffers default 10;
+  end;
+
+const Riff:Array[0..3]of Char=('W','A','V','E');
+      formatChunk:Array[0..3]of Char=('f','m','t',' ');
+      data:Array[0..3]of char=('d','a','t','a');
+
+function WaveIOProc(lpmmioinfo: PChar; uMessage: UINT; lParam1, lParam2: LPARAM): Longint; stdcall;
+
+procedure Register;
+
+implementation
+
+uses Forms,tapi;
+
+procedure Register;
+begin
+{$IFDEF TAPI30}
+  RegisterComponents('TAPI30', [TTAPIWaveDevice]);
+{$ELSE}
+{$IFDEF TAPI22}
+  RegisterComponents('TAPI22', [TTAPIWaveDevice]);
+{$ELSE}
+{$IFDEF TAPI21}
+  RegisterComponents('TAPI21', [TTAPIWaveDevice]);
+{$ELSE}
+{$IFDEF TAPI20}
+  RegisterComponents('TAPI20', [TTAPIWaveDevice]);
+{$ELSE}
+  RegisterComponents('TAPI', [TTAPIWaveDevice]);
+{$ENDIF}
+{$ENDIF}
+{$ENDIF}
+{$ENDIF}
+end;
+
+var aFile: HFILE;
+
+function WaveIOProc(lpmmioinfo: PChar; uMessage: UINT; lParam1, lParam2: LPARAM): Longint;
+var nFLag,nStatus:Cardinal;
+    lStatus: Longint;
+    {$IFDEF DEBUG}
+    MS:String;
+    {$ENDIF}
+begin
+  Result:=0;
+  {$IFDEF DEBUG}
+    case uMessage of
+      MMIOM_OPEN:MS:='MMIOM_OPEN';
+      MMIOM_CLOSE:MS:='MMIOM_CLOSE';
+      MMIO_READ:MS:='MMIO_READ';
+      MMIOM_WRITE:MS:='MMIOM_WRITE';
+      MMIOM_WRITEFLUSH:MS:='MMIOM_WRITEFLUSH';
+      MMIOM_SEEK:MS:='MMIOM_SEEK';
+    end;
+    OutputDebugString(PChar('WaveIoProc '+MS));
+  {$ENDIF}
+  case uMessage of
+    MMIOM_OPEN:
+      begin
+        if (PMMIOInfo(lpmmioinfo)^.dwFlags And MMIO_CREATE)=MMIO_CREATE then
+        begin
+          aFile:=_lcreat(PChar(lParam1),0);
+          if aFile = $FFFFFFFF then Result:=MMIOERR_CANNOTOPEN;
+          Exit;
+        end
+        else
+        begin
+          PMMIOInfo(lpmmioInfo).lDiskOffset:=0;
+          Result:=0;
+          Exit;
+        end;
+        nFlag:= OF_READWRITE;
+        if (PMMIOInfo(lpmmioinfo)^.dwFlags And MMIO_READ)=MMIO_READ then nFlag:= OF_READ
+        else
+          if (PMMIOInfo(lpmmioinfo)^.dwFlags And MMIO_WRITE)=MMIO_WRITE then nFlag:= OF_WRITE ;
+        afile:=_lopen(PChar(lParam1),nFlag);
+        if aFile= $FFFFFFFF then
+        begin
+          if (PMMIOInfo(lpmmioinfo)^.dwFlags And MMIO_WRITE)=MMIO_WRITE then
+            aFile:=_lcreat(PChar(lParam1),0);
+          if aFile= $FFFFFFFF then
+            Result:=MMIOERR_CANNOTOPEN
+          else
+          begin
+            PMMIOInfo(lpmmioInfo)^.lDiskOffset:=0;
+            Result:=0;
+          end;
+        end
+      end;
+    MMIOM_CLOSE:
+      Result:=_lclose(afile);
+    MMIO_READ:
+      begin
+        nStatus:=_lread(aFile,PChar(lParam1),lParam2);
+        PMMIOInfo(lpmmioinfo)^.lDiskOffset:=PMMIOInfo(lpmmioinfo)^.lDiskOffset+lParam2;
+        Result:=nStatus;
+      end;
+    MMIOM_WRITE,MMIOM_WRITEFLUSH:
+      begin
+        nStatus:=_lwrite(aFile,PChar(lParam1),UINT(lParam2));
+        PMMIOInfo(lpmmioinfo)^.lDiskOffset:=PMMIOInfo(lpmmioinfo)^.lDiskOffset+lParam2;
+        Result:=nStatus;
+        {$IFDEF DEBUG}
+          OutputDebugString(PChar('WRITE '+IntToStr(nStatus)));
+       {$ENDIF}
+      end;
+    MMIOM_SEEK:
+      begin
+        lStatus:=_llseek(aFile,Longint(lParam1),lParam2);
+        PMMIOInfo(lpmmioinfo)^.lDiskOffset:=lStatus;
+        Result:=lStatus;
+      end;
+  end;
+end;
+
+{ TTAPIWaveDevice }
+
+constructor TTAPIWaveDevice.Create(AOwner: TComponent);
+begin
+  inherited;
+  FNumBuffers:=10;
+  aFile:=0;
+  {$IFNDEF D6_OR_GR}
+  FWindowHandle := AllocateHWnd(WndProc);
+  {$ELSE}
+  FWindowHandle := Classes.AllocateHWnd(WndProc);
+  {$ENDIF}
+  FMaxBuffers:=2;
+  FPlayBufferPos:=0;
+  FWaveOutID:= Wave_Mapper ;
+  FWaveInID:= Wave_Mapper ;
+  FAutoSave:=True;
+  FIOProc:=nil;
+  FIOProc:=@mmioInstallIOProc( FOURCC(mmioStringToFOURCC('WAV ',0)),WaveIOProc,MMIO_INSTALLPROC);
+  if FIOProc=nil then MessageBox(FWindowHandle,'IO Proc Error',nil,MB_OK);
+  FRecordStatus:=wsDown;
+
+
+end;
+
+destructor TTAPIWaveDevice.Destroy;
+begin
+
+  aFile:=0;
+  CleanUpRecBuffer;
+  CleanUpPlayBuffer;
+  mmioInstallIOProc( FOURCC(mmioStringToFOURCC('WAV ',0)),nil,MMIO_REMOVEPROC);
+  {$IFNDEF D6_OR_GR}
+  DeallocateHWnd(FWindowHandle);
+  {$ELSE}
+  Classes.DeallocateHWnd(FWindowHandle);
+  {$ENDIF}
+
+  
+  inherited Destroy;
+end;
+
+procedure TTAPIWaveDevice.AllocRecBuffers(RecBlockSize:Integer);
+begin
+   {$IFDEF DEBUG}
+    OutputDebugString(PChar('AllocRecBuffers'));
+  {$ENDIF}
+  FWaveHdr:=HeapAlloc( GetProcessHeap, 8, SizeOf(TWaveHdr));
+  if FWaveHdr<>nil then
+  begin
+    FWaveInBuffer1:=PChar(HeapAlloc( GetProcessHeap, 8,RecBlockSize));
+    FWaveInBuffer2:=PChar(HeapAlloc( GetProcessHeap, 8,RecBlockSize));
+    FWaveHdr.dwBufferLength:= RecBlockSize;
+  end;
+  FRecordBlockSize:=RecBlockSize;
+end;
+
+procedure TTAPIWaveDevice.AllocPlayBuffers(PlayBlockSize:Integer);
+begin
+  {$IFDEF DEBUG}
+    OutputDebugString(PChar('AllocPlayBuffers'));
+  {$ENDIF}
+  FPlayWaveHdr:=HeapAlloc( GetProcessHeap, 8,PlayBlockSize);
+  if FPlayWaveHdr <> nil then
+  begin
+    FPlayWaveHdr.lpData:=FWaveOutData;
+    FPlayWaveHdr.dwBufferLength:=PlayBlockSize;
+    FPlayWaveHdr.dwFlags:=0;
+    FPlayWaveHdr.dwLoops:=0;
+    FPlayWaveHdr.lpNext:=nil;
+    FPlayWaveHdr.dwUser:=0;
+  end;
+end;
+
+procedure TTAPIWaveDevice.CleanUpRecBuffer;
+begin
+  {$IFDEF DEBUG}
+    OutputDebugString(PChar('CleanUpRecBuffer'));
+  {$ENDIF}
+  if FWaveHdr<>nil then
+  begin
+    FWaveHdr.lpData:=nil;
+    HeapFree(GetProcessHeap, 0,FWaveInBuffer1);
+    HeapFree(GetProcessHeap, 0,FWaveInBuffer2);
+    HeapFree(GetProcessHeap, 0,FWaveHdr.lpData);
+    HeapFree(GetProcessHeap, 0,FWaveHdr);
+    FWaveHdr:=nil;
+  end;
+end;
+
+procedure TTAPIWaveDevice.CleanUpPlayBuffer;
+begin
+  {$IFDEF DEBUG}
+    OutputDebugString(PChar('CleanUpPlayBuffer'));
+  {$ENDIF}
+  if FPlayWaveHdr <> nil then
+  begin
+    FPlayWaveHdr.lpData:=nil;
+    HeapFree(GetProcessHeap, 0, FPlayWaveHdr.lpData);
+    HeapFree(GetProcessHeap, 0, FPlayWaveHdr);
+    FPlayWaveHdr:=nil;
+  end;  
+end;
+
+function TTAPIWaveDevice.GetWaveInId: DWord;
+begin
+  try
+    if Assigned(FCall) then FWaveInId:=FCall.GetWaveID('wave/in');
+  except
+    // Fehler
+    FWaveInID:=Wave_Mapper;
+  end;
+  Result:=FWaveInID;
+end;
+
+function TTAPIWaveDevice.GetWaveOutId: DWord;
+begin
+  try
+    if Assigned(FCall) then FWaveOutID:=FCall.GetWaveID('wave/out');
+  except
+    // Fehler
+    FWaveOutID:=Wave_Mapper;
+  end;
+  Result:=FWaveOutID;
+end;
+
+function TTAPIWaveDevice.PlayMessage:Boolean;
+var hio:hmmio;
+    mmckinfoParent,mmckinfoSubchunk:MMCKINFO;
+    FmtSize,DataSize:DWord;
+    WaveFormat:PWaveFormatEx;
+    //WaveData:PChar;
+    mmr:MMRESULT;
+    szBuff:Array[0..255] of Char;
+    Flags:DWORD;
+begin
+  {$IFDEF DEBUG}
+    OutputDebugString(PChar('PlayMessage - Enter BeforPlay'));
+  {$ENDIF}
+  if Assigned(FCall) then
+  begin
+    if csConnected in FCall.Status.State then GetWaveOutID;
+  end;
+  Result:=False;
+  if Assigned(FBeforePlay) then FBeforePlay(self);
+  {$IFDEF DEBUG}
+    OutputDebugString(PChar('PlayMessage - leave BeforPlay'));
+  {$ENDIF}
+  FPlayBufferPos:=0;
+  hio:=mmioOpen(PChar(PlayFile),nil,MMIO_READ or MMIO_ALLOCBUF);
+  if hio=0 then
+  begin
+    Exit;
+  end;
+  mmckinfoParent.fccType:=FOURCC(RIFF);
+  mmr:=mmioDescend(hio,@mmckinfoParent,nil,MMIO_FINDRIFF);
+  if mmr <>0 then
+  begin
+    waveOutGetErrorText(mmr, szBuff, sizeof(szBuff));
+    MessageBox(FWindowHandle,szBuff,'Find Riff',MB_OK);
+    mmioClose(hio,0);
+    Result:=False;
+    Exit;
+  end;
+  mmckinfoSubchunk.ckid:=FOURCC(formatChunk);
+  if mmioDescend(hio,@mmckinfoSubchunk,@mmckinfoParent,MMIO_FINDCHUNK)<>0 then
+  begin
+    mmioClose(hio,0);
+    Result:=False;
+    Exit;
+  end;
+  FmtSize:=mmckinfoSubchunk.cksize;
+  WaveFormat:=GlobalAllocPtr(GMEM_MOVEABLE,FmtSize);
+
+  if (mmioRead(hio,PCHAR(WaveFormat),FmtSize))<> LongInt(FmtSize) then
+  begin
+    GlobalFreePtr(WaveFormat);
+    mmioClose(hio,0);
+    Result:=False;
+    Exit;
+  end;
+  mmioAscend(hio,@mmckinfoSubchunk,0);
+  mmckinfoSubchunk.ckid:=FOURCC(data);
+  if mmioDescend(hio,@mmckinfoSubchunk,@mmckinfoParent,MMIO_FINDCHUNK)<> 0 then
+  begin
+    GlobalFreePtr(WaveFormat);
+    mmioClose(hio,0);
+    Result:=False;
+    Exit;
+  end;
+  DataSize:=mmckinfoSubchunk.cksize;
+  if DataSize=0 then
+  begin
+    GlobalFreePtr(WaveFormat);
+    mmioClose(hio,0);
+    Result:=False;
+    Exit;
+  end;
+  FWaveOutData:=PChar(GlobalAllocPtr(GMEM_MOVEABLE or GMEM_SHARE,DataSize));
+  if mmioRead(hio,FWaveOutData,DataSize)<> LongInt(DataSize) then
+  begin
+    GlobalFreePtr(WaveFormat);
+    GlobalFreePtr(FWaveOutData);
+    FWaveOutData:=nil;
+    mmioClose(hio,0);
+    Result:=False;
+    Exit;
+  end;
+  mmioclose(hio,0);
+  AllocPlayBuffers(DataSize);
+  if FWaveOutID = Wave_Mapper then
+     Flags:=WAVE_FORMAT_QUERY
+  else
+     Flags:=WAVE_FORMAT_QUERY or WAVE_MAPPED;
+  mmr:=waveOutOpen(nil,FWaveOutID,PWaveFormatEx(PWaveFormat(WaveFormat)),0,0,Flags);
+  if mmr <>0 then
+  begin
+    //Fehler
+    GlobalFreePtr(WaveFormat);
+    waveOutGetErrorText(mmr, szBuff, sizeof(szBuff));
+    MessageBox(FWindowHandle,szBuff,'Unbekanntes Format',MB_OK);
+    Result:=False;
+    Exit;
+  end;
+  if FWaveOutID = Wave_Mapper then
+     Flags:=CALLBACK_WINDOW
+  else
+     Flags:=CALLBACK_WINDOW or WAVE_MAPPED;
+
+  mmr:=waveOutOpen(@FWaveOutHandle,FWaveOutID,PWaveFormatEX(WaveFormat),FWindowHandle,0,Flags);
+  if mmr <> 0 then
+  begin
+    GlobalFreePtr(WaveFormat);
+    waveOutGetErrorText(mmr, szBuff, sizeof(szBuff));
+    MessageBox(FWindowHandle,szBuff,'Wave Open',MB_OK);
+    CleanUpPlayBuffer;
+    Result:=False;
+    Exit;
+  end;
+  GlobalFreePtr(WaveFormat);
+  if waveOutPrepareHeader(FWaveOutHandle,FPlayWaveHdr,sizeof(TWAVEHDR))<>0 then
+  begin
+    MessageBox(FWindowHandle,'Header Fehler','',MB_OK);
+    CleanUpPlayBuffer;
+    Result:=False;
+    Exit;
+  end;
+  waveOutPause(FWaveOutHandle);
+  if waveOutWrite(FwaveOutHandle,FPlayWaveHdr,sizeOf(TWAVEHDR))<> 0 then
+  begin
+    MessageBox(FWindowHandle,'Fehler wav Messages','',MB_OK);
+    CleanUpPlayBuffer;
+    Result:=False;
+    Exit;
+  end;
+  waveOutRestart(FwaveOutHandle);
+  Result:=TRUE;
+end;
+
+procedure TTAPIWaveDevice.MMWOMDONE;
+begin
+  waveOutReset(FWaveOutHandle);
+  waveOutUnprepareHeader(FWaveOutHandle,FPlayWaveHdr,sizeOf(TWAVEHDR));
+  waveOutClose(FWaveOutHandle);
+  if Assigned(FAfterPlay) then FAfterPlay(self);
+  CleanUpPlayBuffer;
+end;
+
+procedure TTAPIWaveDevice.WndProc(var Msg: TMessage);
+begin
+  try
+    with Msg do
+    begin
+      case Msg of
+        USR_OUT_DONE: MMWOMDONE;
+        USR_INBLOCK: USRINBLOCK(PWaveHdr(lParam));
+        MM_WOM_DONE: PostMessage(FWindowHandle,USR_OUT_DONE,0,lParam);
+        MM_WIM_DATA: PostMessage(FWindowHandle,USR_INBLOCK,0,lParam);
+       else
+         Result := DefWindowProc(FWindowHandle, Msg, wParam, lParam);
+       end;
+     end;
+   except
+        Application.HandleException(Self);
+      end
+end;
+
+function TTAPIWaveDevice.RecordMessage: Boolean;
+var Flags:DWord;
+    mmr:MMRESULT;
+    szBuff:Array[0..255]of char;
+    WaveInCaps:PWaveInCaps;
+    //i: Integer;
+begin
+  Result:=False;
+  if Assigned(FBeforeRecord) then FBeforeRecord(self);
+
+//  FRecordStopped:=false;
+
+  GetMem(WaveInCaps,SizeOf(TWaveInCaps));
+  if waveInGetDevCaps(HWAVEIN(WaveInID),WaveInCaps,SizeOf(TWaveInCaps)+32)= MMSYSERR_NOERROR then
+  begin
+    {$IFDEF DEBUG}
+        OutputDebugString(PChar('Wave Formats :'+IntToStr(waveInCaps.dwFormats)));
+      {$ENDIF}
+    if waveInCaps.dwFormats= 0 then
+    begin
+      FMessageFormat.wFormatTag:=WAVE_FORMAT_PCM;
+      FMessageFormat.wBitsPerSample:=16;
+      FMessageFormat.nSamplesPerSec:=8000;
+{      FMessageFormat.wFormatTag:=7; // CCITT-u-Law
+      FMessageFormat.nSamplesPerSec:=8000;
+      FMessageFormat.wBitsPerSample:=8;}
+      FMessageFormat.nChannels:=1;
+      FMessageFormat.nBlockAlign:=FMessageFormat.nChannels * FMessageFormat.wBitsPerSample div 8;
+      FMessageFormat.nAvgBytesPerSec:=FMessageFormat.nSamplesPerSec * FMessageFormat.nBlockAlign;;
+      FMessageFormat.cbSize:=0;
+    end
+    else
+    begin
+      if  waveInCaps.dwFormats and Wave_Format_1M16 = Wave_Format_1M16 then
+      begin
+      {11.025 kHz, Mono,   16-bit - AVM }
+       FMessageFormat.wFormatTag:=WAVE_FORMAT_PCM;
+       FMessageFormat.nChannels:=1;
+       FMessageFormat.wBitsPerSample:=16;
+       FMessageFormat.nSamplesPerSec:=11025;
+       FMessageFormat.nBlockAlign:=FMessageFormat.nChannels * FMessageFormat.wBitsPerSample div 8;
+       FMessageFormat.nAvgBytesPerSec:=FMessageFormat.nSamplesPerSec * FMessageFormat.nBlockAlign;
+       FMessageFormat.cbSize:=0;
+     end;
+   end;
+  end;
+
+  AllocRecBuffers(FMessageFormat.nSamplesPerSec * (FMessageFormat.wBitsPerSample div 8) * 1) ;
+
+  FreeMem(WaveInCaps,SizeOf(TWaveInCaps));
+  if FWaveInID= Wave_Mapper then
+     Flags:=WAVE_FORMAT_QUERY
+  else
+     Flags:=WAVE_FORMAT_QUERY or WAVE_MAPPED;
+  mmr:=waveInOpen(@FWaveInHandle,FWaveInID,@FMessageFormat,0,0,Flags);
+  if mmr <> 0 then
+  begin
+    //Fehler
+    waveInGetErrorText(mmr, szBuff, sizeof(szBuff));
+    MessageBox(FWindowHandle,szBuff,'Open ',MB_OK);
+    FRecordStatus:=wsError;
+    Exit;
+  end;
+  if FWaveInID= Wave_Mapper then
+     Flags:=CALLBACK_WINDOW
+  else
+     Flags:=CALLBACK_WINDOW or WAVE_MAPPED;
+  CreateRiffFile;
+  if waveInOpen(@FWaveInHandle,FWaveInID,@FMessageFormat,FWindowHandle,0,Flags)<> 0 then
+  begin
+    //Fehler
+    waveInGetErrorText(mmr, szBuff, sizeof(szBuff));
+    MessageBox(FWindowHandle,szBuff,'Open 2',MB_OK);
+    FRecordStatus:=wsError;
+    Exit;
+  end;
+  FActiveBuffer:=0;
+  if PrepareHeaderAndAddBuffer then
+    if waveInStart(FWaveInHandle)= MMSYSERR_NOERROR  then
+    begin
+      Result:=True;
+      FRecordStatus:=wsOK;
+    end
+    else
+    begin
+      waveInGetErrorText(mmr, szBuff, sizeof(szBuff));
+      FRecordStatus:=wsError;
+    end;
+  FRecordStatus:=wsOK;
+end;
+
+function  TTAPIWaveDevice.PrepareHeaderAndAddBuffer:Boolean;
+var mmr:MMRESULT;
+    szBuff:Array[0..255]of char;
+begin
+  {$IFDEF DEBUG}
+    OutputDebugString(PChar('Prepare /Add  Buffer:'+IntToStr(FActiveBuffer)));
+  {$ENDIF}
+  Result:=False;
+  if FActiveBuffer =0 then
+    FWaveHdr.lpData:=PChar(FWaveInBuffer1)
+  else
+    FWaveHdr.lpData:=PChar(FWaveInBuffer2);
+  mmr:=waveInPrepareHeader(FWaveInHandle,FWaveHdr,sizeOf(TWAVEHDR));
+  if mmr<>0 then
+  begin
+    //Fehler
+    waveInGetErrorText(mmr, szBuff, sizeof(szBuff));
+    MessageBox(FWindowHandle,szBuff,'Prepare Header',MB_OK);
+    FRecordStatus:=wsError;
+    {$IFDEF DEBUG}
+      OutputDebugString(PChar('Prepare Buffer Error'));
+    {$ENDIF}
+    Exit;
+  end;
+
+  mmr:=waveInAddBuffer(FWaveInHandle,PWaveHdr(FWaveHdr),sizeOf(TWaveHdr));
+  if mmr <>0 then
+  begin
+    //Fehler
+    waveInGetErrorText(mmr, szBuff, sizeof(szBuff));
+    MessageBox(FWindowHandle,szBuff,'Add Buffer',MB_OK);
+    FRecordStatus:=wsError;
+    {$IFDEF DEBUG}
+      OutputDebugString(PChar('Add  Buffer Error'));
+    {$ENDIF}
+    Exit;
+  end;
+  Result:=True;
+end;
+
+procedure TTAPIWaveDevice.PerformMsg(Msg: TCMTAPI);
+begin
+  inherited;
+  with Msg.TAPIRec^ do
+  begin
+    if Assigned(FCall) then
+    begin
+      if (FCall.Handle=hDevice)and (dwMsg=LINE_CALLSTATE) then
+      begin
+        case  dwParam1 of
+          LINECALLSTATE_CONNECTED:
+          begin
+            try
+              FWaveInId:=FCall.GetWaveID('wave/in');
+              FWaveOutId:=FCall.GetWaveID('wave/out')
+            except
+            end;
+          end;
+          LINECALLSTATE_DISCONNECTED:
+          begin
+            try
+              StopRec;
+              StopPlay;
+              FWaveInId:=Wave_Mapper;
+              FWaveOutId:=Wave_Mapper;
+            except
+            end;
+          end
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TTAPIWaveDevice.StopPlay;
+begin
+  waveOutReset(FWaveOutHandle);
+  waveOutUnprepareHeader(FWaveOutHandle,FPlayWaveHdr,sizeOf(TWAVEHDR));
+  waveOutClose(FWaveOutHandle);
+end;
+
+procedure TTAPIWaveDevice.StopRec;
+begin
+  WaveInStop(FWaveInHandle);
+  WaveInReset(FWaveInHandle);
+  waveInUnprepareHeader(FWaveInHandle,FWaveHdr,sizeOf(TWAVEHDR));
+  waveInClose(FWaveInHandle);
+  FRecordStatus:= wsDown;
+end;
+
+procedure TTAPIWaveDevice.CreateRiffFile;
+begin
+  if FileExists(RecordFile) then
+    mmioRename(PChar(RecordFile),PChar(RecordFile+'.bak'),nil,0);
+  FmmioInfo.dwFlags:= 0;
+  FmmioInfo.fccIOProc:= mmioStringToFOURCC('WAV ',0);
+  FmmioInfo.pIOProc:= TFNMMIOProc(@WaveIOProc);
+  FmmioInfo.wErrorRet:=0;
+  FmmioInfo.hTask:=0;
+  FmmioInfo.cchBuffer:=0;
+  FmmioInfo.pchBuffer:=nil;
+  FmmioInfo.pchNext:=nil;
+  FmmioInfo.pchEndRead:=nil;
+  FmmioInfo.pchEndWrite:=nil;
+  FmmioInfo.lBufOffset:=0;
+  FmmioInfo.lDiskOffset:=0;
+  FmmioInfo.adwInfo[0]:=0;
+  FmmioInfo.adwInfo[1]:=0;
+  FmmioInfo.adwInfo[2]:=0;
+  FmmioInfo.dwReserved1:=0;
+  FmmioInfo.dwReserved2:=0;
+  FmmioInfo.hmmio:=0;
+  Fhmmio:=mmioOpen(PChar(RecordFile),@FmmioInfo,MMIO_CREATE or MMIO_WRITE or MMIO_ALLOCBUF);
+  if Fhmmio=0 then
+  begin
+    // File Error
+    //MMIOERR_INVALIDFILE
+  end;
+  mmioSetBuffer(Fhmmio,nil,FRecordBlockSize,0);
+  //nVersion:=mmioSendMessage(ahmmio,USR_MMIOM_PROC_VERSION,0,0);
+  mmioSeek(Fhmmio,0,SEEK_SET);
+  FciRiffChunk.fccType:=mmioStringToFOURCC('WAVE',0);
+  FciRiffChunk.cksize:=0;
+  mmioCreateChunk(Fhmmio,@FciRiffChunk,MMIO_CREATERIFF);
+  
+  FciSubChunk.ckid:=mmioStringToFOURCC('fmt ',0);
+  FciSubChunk.cksize:= SizeOf(TWAVEFORMATEX);
+
+  mmioCreateChunk(Fhmmio,@FciSubChunk,0);
+  mmioWrite(Fhmmio,PChar(@FMessageFormat),sizeOf(TWAVEFORMATEX));
+  mmioAscend(Fhmmio,@FciSubChunk,0);
+
+  FciSubChunk.ckid:= mmioStringToFOURCC('data',0);
+  FciSubChunk.cksize:=FRecordBlockSize;
+
+  mmioCreateChunk(Fhmmio,@FciSubChunk,0);
+
+  
+  FNextPos:=0;
+end;
+
+procedure TTAPIWaveDevice.WriteToRiffFile;
+begin
+ FNextPos:=mmioWrite(Fhmmio,FWaveHdr^.lpData,FRecBytes);
+end;
+
+procedure TTAPIWaveDevice.CloseRiffFile;
+begin
+    mmioGetInfo(Fhmmio,@FmmioInfo,0);
+    FmmioInfo.dwFlags:=FmmioInfo.dwFlags or MMIO_DIRTY;
+    FmmioInfo.pchNext:=FmmioInfo.pchNext+FNextPos;
+    mmioSetInfo(Fhmmio,@FmmioInfo,0);
+    mmioAscend(Fhmmio,@FciSubChunk,0);
+    mmioAscend(Fhmmio,@FciRiffChunk,0);
+    mmioFlush(Fhmmio,0);
+    mmioClose(Fhmmio,0);
+
+    if Assigned(FAfterRecord) then FAfterRecord(self);
+end;
+
+procedure TTAPIWaveDevice.USRINBLOCK(aWaveHdr:PWaveHdr);
+begin
+  {$IFDEF DEBUG}
+    OutputDebugString(PChar('IN Block  Buffer:'+IntToStr(FActiveBuffer)));
+  {$ENDIF}
+  if ((aWaveHdr.dwFlags and WHDR_DONE )=WHDR_DONE)  then
+  begin
+    if (FRecordStatus=wsDown) {or FRecordStopped }then begin
+
+        CleanUpRecBuffer;
+        CloseRiffFile;
+
+    end else
+
+      if (FActiveBuffer=FNumBuffers)  then
+      begin
+        FRecBytes:=aWaveHdr.dwBytesRecorded;
+        WriteToRiffFile;
+        StopRec;
+        CleanUpRecBuffer;
+        CloseRiffFile;
+      end
+      else
+      begin
+        FRecBytes:=aWaveHdr.dwBytesRecorded;
+        WriteToRiffFile;
+        inc(FActiveBuffer);
+        waveInUnprepareHeader(FWaveInHandle,FWaveHdr,sizeOf(TWAVEHDR));
+        PrepareHeaderAndAddBuffer;
+      end;
+  end;
+end;
+
+procedure TTAPIWaveDevice.Notification(AComponent: TComponent;
+  Operation: TOperation);
+begin
+  inherited Notification(AComponent,Operation);
+  if (Operation=opRemove) and (AComponent=FCall) then
+    FCall:=nil;
+
+end;
+
+end.

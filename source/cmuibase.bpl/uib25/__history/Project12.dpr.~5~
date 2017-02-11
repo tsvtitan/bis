@@ -1,0 +1,21 @@
+program Project12;
+
+uses
+  Forms,
+  Unit15 in 'Unit15.pas' {Form15},
+  IBStoredProc in 'IBStoredProc.pas',
+  DB in 'DB.pas',
+  IBCustomDataSet in 'IBCustomDataSet.pas',
+  IBDatabase in 'IBDatabase.pas',
+  IBSQL in 'IBSQL.pas',
+  IBBlob in 'IBBlob.pas',
+  BisThreads in 'BisThreads.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm15, Form15);
+  Application.Run;
+end.

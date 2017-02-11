@@ -1,0 +1,393 @@
+unit BisAcmDrivers;
+
+interface
+
+uses Windows, Classes, Contnrs, MMSystem,
+     WaveAcm;
+
+type
+  TBisAcmDriver=class;
+  
+  TBisAcmDriverFormat=class(TObject)
+  private
+    FDriver: TBisAcmDriver;
+    FWaveFormat: PWaveFormatEx;
+    FWaveFormatSize: DWord;
+    FStruct: Cardinal;
+    FIndex: Cardinal;
+    FTag: Cardinal;
+    FSupport: Cardinal;
+    FName: String;
+    FDescription: String;
+  public
+    constructor Create(ADriver: TBisAcmDriver; AWaveFormat: PWaveFormatEx);
+    destructor Destroy; override;
+
+    property Driver: TBisAcmDriver read FDriver;
+    property Name: String read FName;
+    property Index: Cardinal read FIndex;
+    property Tag: Cardinal read FTag;
+    property Description: String read FDescription; 
+    property WaveFormat: PWaveFormatEx read FWaveFormat;
+    property WaveFormatSize: DWord read FWaveFormatSize;
+  end;
+
+  TBisAcmDriverFormats=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisAcmDriverFormat;
+  public
+    function Add(ADriver: TBisAcmDriver; AFormat: PWaveFormatEx): TBisAcmDriverFormat;
+    function GetName(FormatTag: Cardinal): String;
+    function Find(Name: String; Channels: Word; SamplesPerSec: DWORD; BitsPerSample: Word): TBisAcmDriverFormat; overload;
+    function Find(Tag: Cardinal; Channels: Word; SamplesPerSec: DWORD; BitsPerSample: Word): TBisAcmDriverFormat; overload;
+
+    property Items[Index: Integer]: TBisAcmDriverFormat read GetItem; default;
+  end;
+  
+  TBisAcmDriver=class(TObject)
+  private
+    FID: HAcmDRIVERID;
+		FSupport: DWORD;              // misc. support flags
+    FStruct: DWORD;
+		FType: FOURCC;             // compressor type 'audc'
+		FComp: FOURCC;             // sub-type (not used; reserved)
+		FMid: WORD;               // manufacturer id
+		FPid: WORD;               // product id
+		FAcm: DWORD;              // version of the Acm *compiled* for
+		FDriver: DWORD;              // version of the driver
+		FFormatTags: DWORD;              // total unique format tags supported
+		FFilterTags: DWORD;              // total unique filter tags supported
+		Ficon: HICON;              // handle to custom icon
+		FShortName: String;
+		FLongName: String;
+		FCopyright: String;
+		FLicensing: String;
+		FFeatures: String;
+
+    FTemp: TAcmFORMATTAGDETAILS;
+    FFormats: TBisAcmDriverFormats;
+    procedure Refresh;
+  public
+    constructor Create(AID: HAcmDRIVERID);
+    destructor Destroy; override;
+
+    property ID: HAcmDRIVERID read FID;
+    property ShortName: String read FShortName;
+    property LongName: String read FLongName;
+    property Formats: TBisAcmDriverFormats read FFormats;
+  end;
+
+  TBisAcmDrivers=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisAcmDriver;
+  public
+    constructor Create;
+    function Add(AID: HAcmDRIVERID): TBisAcmDriver;
+    function GetFormatName(FormatTag: Cardinal): String;
+    function FindFormat(DriverName, FormatName: String; Channels: Word;
+                        SamplesPerSec: DWORD; BitsPerSample: Word): TBisAcmDriverFormat; overload;
+    function FindFormat(DriverName: String; FormatTag: Cardinal; Channels: Word;
+                        SamplesPerSec: DWORD; BitsPerSample: Word): TBisAcmDriverFormat; overload;
+    function FindFormat(Source: TBisAcmDriverFormat): TBisAcmDriverFormat; overload;
+
+    property Items[Index: Integer]: TBisAcmDriver read GetItem; default;
+  end;
+
+implementation
+
+uses SysUtils;
+
+{ TBisAcmDriverFormat }
+
+constructor TBisAcmDriverFormat.Create(ADriver: TBisAcmDriver; AWaveFormat: PWaveFormatEx);
+begin
+  inherited Create;
+  FDriver:=ADriver; 
+  FWaveFormatSize:=SizeOf(AWaveFormat^)+AWaveFormat.cbSize;
+  GetMem(FWaveFormat,FWaveFormatSize);
+  CopyMemory(FWaveFormat,AWaveFormat,FWaveFormatSize);
+end;
+
+destructor TBisAcmDriverFormat.Destroy;
+begin
+  if Assigned(FWaveFormat) then
+    FreeMem(FWaveFormat,FWaveFormatSize);
+  inherited Destroy;
+end;
+
+{ TBisAcmDriverFormats }
+
+function TBisAcmDriverFormats.Add(ADriver: TBisAcmDriver; AFormat: PWaveFormatEx): TBisAcmDriverFormat;
+begin
+  Result:=TBisAcmDriverFormat.Create(ADriver,AFormat);
+  inherited Add(Result);
+end;
+
+function TBisAcmDriverFormats.Find(Name: String; Channels: Word; SamplesPerSec: DWORD;  BitsPerSample: Word): TBisAcmDriverFormat;
+var
+  i: Integer;
+  Item: TBisAcmDriverFormat;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.FName,Name) then begin
+      if Assigned(Item.WaveFormat) then begin
+        if (Item.WaveFormat.nChannels=Channels) and
+           (Item.WaveFormat.nSamplesPerSec=SamplesPerSec) and
+           (Item.WaveFormat.wBitsPerSample=BitsPerSample) then begin
+          Result:=Item;
+          exit;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TBisAcmDriverFormats.Find(Tag: Cardinal; Channels: Word; SamplesPerSec: DWORD; BitsPerSample: Word): TBisAcmDriverFormat;
+var
+  i: Integer;
+  Item: TBisAcmDriverFormat;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.FTag=Tag then begin
+      if Assigned(Item.WaveFormat) then begin
+        if (Item.WaveFormat.nChannels=Channels) and
+           (Item.WaveFormat.nSamplesPerSec=SamplesPerSec) and
+           (Item.WaveFormat.wBitsPerSample=BitsPerSample) then begin
+          Result:=Item;
+          exit;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TBisAcmDriverFormats.GetItem(Index: Integer): TBisAcmDriverFormat;
+begin
+  Result:=TBisAcmDriverFormat(inherited Items[Index]);
+end;
+
+function TBisAcmDriverFormats.GetName(FormatTag: Cardinal): String;
+var
+  i: Integer;
+  Item: TBisAcmDriverFormat;
+begin
+  Result:='';
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.FTag=FormatTag then begin
+      Result:=Item.FName;
+      exit;
+    end;
+  end;
+end;
+
+{ TBisAcmDriver }
+
+constructor TBisAcmDriver.Create(AID: HAcmDRIVERID);
+begin
+  inherited Create;
+  FID:=AID;
+  FFormats:=TBisAcmDriverFormats.Create;
+end;
+
+destructor TBisAcmDriver.Destroy;
+begin
+  FFormats.Free;
+  inherited Destroy;
+end;
+
+function EnumFormat(hadid: HAcmDRIVERID; const pafd: TAcmFORMATDETAILS; dwInstance: DWORD; fdwSupport: DWORD) : BOOL; stdcall;
+var
+  Parent: TBisAcmDriver;
+  Format: TBisAcmDriverFormat;
+begin
+  Result:=false;
+  Parent:=TBisAcmDriver(dwInstance);
+  if Assigned(Parent) then begin
+
+    Format:=Parent.Formats.Add(Parent,pafd.pwfx);
+    Format.FStruct:=pafd.cbStruct;
+    Format.FIndex:=pafd.dwFormatIndex;
+    Format.FTag:=pafd.dwFormatTag;
+    Format.FSupport:=pafd.fdwSupport;
+    Format.FName:=Parent.FTemp.szFormatTag;
+    Format.FDescription:=pafd.szFormat;
+
+    Result:=true;
+  end;
+end;
+
+procedure TBisAcmDriver.Refresh;
+var
+  i: Integer;
+  Ret: MMResult;
+  phad: HAcmDRIVER;
+  paftd: TAcmFORMATTAGDETAILS;
+  pafd: TAcmFORMATDETAILS;
+  wfx: TWaveFormatEx;
+begin
+  Ret:=AcmDriverOpen(phad,FID,0);
+  if Ret=MMSYSERR_NOERROR then begin
+    try
+      for i:=0 to FFormatTags-1 do begin
+        FillChar(paftd,SizeOf(paftd),0);
+        paftd.cbStruct:=Sizeof(paftd);
+        paftd.dwFormatTagIndex:=i;
+
+        Ret:=AcmFormatTagDetails(phad,paftd,Acm_FORMATTAGDETAILSF_INDEX);
+        if Ret=MMSYSERR_NOERROR then begin
+
+          FillChar(pafd,SizeOf(pafd),0);
+          pafd.cbStruct:=SizeOf(pafd);
+          pafd.dwFormatTag:=paftd.dwFormatTag;
+
+          FillChar(wfx,SizeOf(wfx),0);
+          wfx.cbSize:=SizeOf(wfx);
+          wfx.wFormatTag:=pafd.dwFormatTag;
+
+          pafd.pwfx:=@wfx;
+
+          AcmMetrics(0,Acm_METRIC_MAX_SIZE_FORMAT,pafd.cbwfx);
+
+          FTemp:=paftd;
+
+          AcmFormatEnum(phad,pafd,EnumFormat,Dword(Self),Acm_FORMATENUMF_WFORMATTAG);
+        end;
+      end;
+    finally
+      AcmDriverClose(phad,0);
+    end;
+  end;
+end;
+
+{ TBisAcmDrivers }
+
+function EnumDriver(hadid: HAcmDRIVERID; dwInstance: DWORD; fdwSupport: DWORD) : BOOL; stdcall;
+var
+  Parent: TBisAcmDrivers;
+  Driver: TBisAcmDriver;
+  padd: TAcmDRIVERDETAILS;
+begin
+  Result:=false;
+  Parent:=TBisAcmDrivers(dwInstance);
+  if Assigned(Parent) then begin
+
+    Driver:=Parent.Add(hadid);
+    Driver.FSupport:=fdwSupport;
+
+    FillChar(padd,SizeOf(padd),0);
+    padd.cbStruct:=SizeOf(padd);
+
+    if AcmDriverDetails(hadid,padd,0)=MMSYSERR_NOERROR then begin
+      Driver.FStruct:=padd.cbStruct;
+		  Driver.FType:=padd.fccType;
+		  Driver.FComp:=padd.fccComp;
+		  Driver.FMid:=padd.wMid;
+		  Driver.FPid:=padd.wPid;
+		  Driver.FAcm:=padd.vdwAcm;
+		  Driver.FDriver:=padd.vdwDriver;
+		  Driver.FSupport:=padd.fdwSupport;
+		  Driver.FFormatTags:=padd.cFormatTags;
+		  Driver.FFilterTags:=padd.cFilterTags;
+		  Driver.Ficon:=padd.hicon;
+		  Driver.FShortName:=padd.szShortName;
+		  Driver.FLongName:=padd.szLongName;
+		  Driver.FCopyright:=padd.szCopyright;
+		  Driver.FLicensing:=padd.szLicensing;
+		  Driver.FFeatures:=padd.szFeatures;
+    end;
+
+    Driver.Refresh;
+
+    Result:=true;
+  end;
+end;
+
+constructor TBisAcmDrivers.Create;
+begin
+  inherited Create;
+  OwnsObjects:=true;
+  AcmDriverEnum(EnumDriver,DWord(Self),Acm_DRIVERENUMF_NOLOCAL or Acm_DRIVERENUMF_DISABLED);
+end;
+
+function TBisAcmDrivers.Add(AID: HAcmDRIVERID): TBisAcmDriver;
+begin
+  Result:=TBisAcmDriver.Create(AID);
+  inherited Add(Result);
+end;
+
+function TBisAcmDrivers.GetItem(Index: Integer): TBisAcmDriver;
+begin
+  Result:=TBisAcmDriver(inherited Items[Index]);
+end;
+
+function TBisAcmDrivers.GetFormatName(FormatTag: Cardinal): String;
+var
+  i: Integer;
+  Driver: TBisAcmDriver;
+begin
+  Result:='';
+  for i:=0 to Count-1 do begin
+    Driver:=Items[i];
+    Result:=Driver.Formats.GetName(FormatTag);
+    if Result<>'' then
+      break;
+  end;
+end;
+
+function TBisAcmDrivers.FindFormat(DriverName, FormatName: String; Channels: Word;
+                                    SamplesPerSec: DWORD; BitsPerSample: Word): TBisAcmDriverFormat;
+var
+  i: Integer;
+  Driver: TBisAcmDriver;
+  Format: TBisAcmDriverFormat;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Driver:=Items[i];
+    if AnsiSameText(Driver.ShortName,DriverName) or (Trim(DriverName)='') then begin
+      Format:=Driver.Formats.Find(FormatName,Channels,SamplesPerSec,BitsPerSample);
+      if Assigned(Format) then begin
+        Result:=Format;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+function TBisAcmDrivers.FindFormat(DriverName: String; FormatTag: Cardinal; Channels: Word;
+                                    SamplesPerSec: DWORD; BitsPerSample: Word): TBisAcmDriverFormat;
+var
+  i: Integer;
+  Driver: TBisAcmDriver;
+  Format: TBisAcmDriverFormat;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Driver:=Items[i];
+    if AnsiSameText(Driver.ShortName,DriverName) or (Trim(DriverName)='') then begin
+      Format:=Driver.Formats.Find(FormatTag,Channels,SamplesPerSec,BitsPerSample);
+      if Assigned(Format) then begin
+        Result:=Format;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+function TBisAcmDrivers.FindFormat(Source: TBisAcmDriverFormat): TBisAcmDriverFormat;
+begin
+  Result:=nil;
+  if Assigned(Source) and Assigned(Source.WaveFormat) then begin
+    with Source.WaveFormat^ do begin
+      Result:=FindFormat(Source.Driver.ShortName,Source.Name,nChannels,nSamplesPerSec,wBitsPerSample);
+    end;
+  end;
+end;
+
+
+end.

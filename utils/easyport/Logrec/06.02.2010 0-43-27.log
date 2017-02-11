@@ -1,0 +1,85 @@
+! Вторая попытка подключения (OpenPort к порту 2)
+! Третья попытка подключения (OpenPort к порту 2)
+! Четвёртая попытка подключения (OpenPort к порту 2)
+ate0
+OK
+
++CSCS: "IRA"
+
+OK
+ - команда -> at+CMGF=0
+
+OK
+ - команда -> at+CMGF?
+
++CMGF: 0
+
+OK
+Марка телефона - команда -> ati3
+
+Manufacturer: huawei
+Model: E156G
+Revision: 11.608.05.00.143
+IMEI: 358181028062525
++GCAP: +CGSM,+FCLASS,+DS
+
+OK
+Производитель - команда -> at+cgmi
+
+huawei
+
+OK
+Версия ПО ("прошивка") - команда -> at+cgmr
+
+11.608.05.00.143
+
+OK
+Номер СМС-центра - команда -> at+csca?
+
++CSCA: "+79037011111",145
+
+OK
+Набрать (голосовой) номер (ввод) и звонить (с задержкой) - команда -> atd"+79029232332";
+
+OK
+Набрать (голосовой) номер (ввод) и звонить (с задержкой) - команда -> at+ckpd="s"
+
++CME ERROR: operation not allowed
+>Набрать номер (ввод) и звонить - команда -> at+ckpd="+79029232332"
+
++CME ERROR: operation not allowed
+>Набрать номер (ввод) и звонить - команда -> at+ckpd="s"
+
++CME ERROR: operation not allowed
+Набрать номер (ввод) и звонить Голосом - команда -> atd+79029232332;
+
+OK
+Прервать  вызов - команда -> at+ckpd="e"
+
++CME ERROR: operation not allowed
+Прервать набор номера - команда -> ath0
+
+OK
+Прервать вызов - команда -> at+ckpd="e"
+
++CME ERROR: operation not allowed
+Прервать вызов - команда -> at+ckpd="e"
+
++CME ERROR: operation not allowed
+Прервать  вызов - команда -> at+ckpd="e"
+
++CME ERROR: operation not allowed
+>Прервать вызов - команда -> at+ckpd="e"
+
++CME ERROR: operation not allowed
+Получить характеристики телефона - команда -> at+cgsn
+
+358181028062525
+
+OK
+
++ Открытие файла с пакетом команд "CHECKPHONE.BAT"
+
++ Пакет команд из файла "CHECKPHONE.BAT" загружен (всего строк=1)
+
+++ Выполнение пакета команд из файла "CHECKPHONE.BAT"

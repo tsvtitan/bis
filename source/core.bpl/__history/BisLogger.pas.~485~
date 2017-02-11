@@ -1,0 +1,435 @@
+unit BisLogger;
+
+interface
+
+uses Windows, Classes, SyncObjs,
+     BisObject, BisConfig, BisCmdLine, BisCrypter, BisThreads;
+
+type
+  TBisLogger=class;
+  TBisLoggerMode=(lmDefault,lmClearOnInit);
+  TBisLoggerType=(ltInformation,ltWarning,ltError);
+  TBisLoggerCut=(lcDisable,lcSecond,lcMinute,lcHour,lcDay,lcWeek,lcMonth,lcYear);
+
+  TBisLoggerGetThreadNameEvent=function (Logger: TBisLogger; const ThreadID: Cardinal): String of object;
+
+  TBisLogger=class(TBisObject)
+  private
+    FLock: TCriticalSection;
+    FTempMessages: TStringList;
+    FThread: TBisWaitThread;
+    FFileStream: TFileStream;
+    FConfig: TBisConfig;
+    FCmdLine: TBisCmdLine;
+    FMode: TBisLoggerMode;
+    FCut: TBisLoggerCut;
+    FFileName: String;
+    FCrypter: TBisCrypter;
+    FEnabled: Boolean;
+    FEncoded: Boolean;
+    FOutputs: TStringList;
+    FCutting: Boolean;
+    FStartDate: TDateTime;
+    FCurrentDate: TDateTime;
+    FNewFileName: String;
+
+    FSInformation: String;
+    FSWarning: String;
+    FSError: String;
+    FSUnknown: String;
+    FSFormatMessage: String;
+    FSFormatDateTime: String;
+    FSFormatObjectName: String;
+    FSDelim: String;
+    FSFormatCut: String;
+    FSFormatCutDateTime: String;
+    FSFormatThreadName: String;
+    FSUnknownThread: String;
+
+    FOnGetThreadName: TBisLoggerGetThreadNameEvent;
+    FThreadInfo: Boolean;
+    FMaxSize: Integer;
+    FThreadNames: TStringList;
+    FObjectNames: TStringList;
+
+    procedure ThreadTimeout(Thread: TBisWaitThread);
+    procedure WriteToOutputs(Buffer: string; ObjectName: String);
+    procedure ReCreate;
+  protected
+    function DoGetThreadName(const ThreadID: Cardinal): String; virtual;
+  public
+    constructor Create(AOwner: Tcomponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure Done; override;
+    procedure Load;
+    procedure Save;
+    function Write(const Message: String; LogType: TBisLoggerType=ltInformation; ObjectName: String=''): Boolean;
+    procedure AddOutput(Output: TStrings; ObjectName: String='');
+    procedure RemoveOutput(Output: TStrings);
+
+    property FileName: String read FFileName;
+    property Config: TBisConfig read FConfig write FConfig;
+    property CmdLine: TBisCmdLine read FCmdLine write FCmdLine;
+    property Mode: TBisLoggerMode read FMode;
+    property Cut: TBisLoggerCut read FCut;
+    property Enabled: Boolean read FEnabled write FEnabled;
+    property ThreadInfo: Boolean read FThreadInfo write FThreadInfo;
+    property MaxSize: Integer read FMaxSize write FMaxSize;
+
+    property OnGetThreadName: TBisLoggerGetThreadNameEvent read FOnGetThreadName write FOnGetThreadName;
+  end;
+
+implementation
+
+uses SysUtils, StrUtils, DateUtils,
+     BisConsts, BisUtils, BisCryptUtils, BisBase64;
+
+type
+  TBisLoggerThread=class(TBisWaitThread)
+  end;
+
+{ TBisLogger }
+
+constructor TBisLogger.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FLock:=TCriticalSection.Create;
+  FTempMessages:=TStringList.Create;
+
+  FThread:=TBisLoggerThread.Create(1);
+  FThread.StopOnDestroy:=true;
+  FThread.OnTimeout:=ThreadTimeout;
+
+  FCrypter:=TBisCrypter.Create;
+  FCrypter.DefaultKey:=DefaultKey;
+  FCrypter.DefaultCipherAlgorithm:=DefaultCipherAlgorithm;
+  FCrypter.DefaultCipherMode:=DefaultCipherMode;
+  FCrypter.DefaultHashAlgorithm:=DefaultHashAlgorithm;
+  FCrypter.DefaultHashFormat:=DefaultHashFormat;
+
+  FOutputs:=TStringList.Create;
+
+  FThreadNames:=TStringList.Create;
+  FThreadNames.LineBreak:=';';
+
+  FObjectNames:=TStringList.Create;
+  FObjectNames.LineBreak:=';';
+
+  FEnabled:=false;
+  FEncoded:=true;
+  FThreadInfo:=false;
+  FMaxSize:=0;
+
+  FSInformation:='I';
+  FSWarning:='W';
+  FSError:='E';
+  FSUnknown:='U';
+  FSFormatThreadName:='%s|%d %s';
+  FSFormatMessage:='%s %s> %s';
+  FSFormatDateTime:='dd.mm.yy hh:nn:ss.zzz';
+  FSFormatObjectName:='[%s] %s';
+  FSFormatCut:='%s_%s';
+  FSFormatCutDateTime:='yyyy.mm.dd_hh.nn.ss.zzz';
+  FSUnknownThread:='Unknown';
+  FSDelim:='==>';
+
+
+end;
+
+destructor TBisLogger.Destroy;
+begin
+  FThread.Free;
+  FreeAndNilEx(FFileStream);
+  FObjectNames.Free;
+  FThreadNames.Free;
+  FOutputs.Free;
+  FCrypter.Free;
+  FTempMessages.Free;
+  FLock.Free;
+  inherited Destroy;
+end;
+
+procedure TBisLogger.Init;
+var
+  Path: string;
+begin
+  inherited Init;
+
+  if Assigned(FFileStream) then begin
+    FreeAndNilEx(FFileStream);
+  end;
+
+  FFileName:=PrepareFileName(FCmdLine,ChangeFileExt(FCmdLine.FileName,SLogExtension),SCmdParamLog,FEnabled);
+  if Assigned(FConfig) then begin
+    FFileName:=FConfig.Read(ObjectName,SFileName,FFileName);
+
+    Path:=ExtractFilePath(FFileName);
+    if (Trim(Path)='') then
+      FFileName:=ExtractFilePath(CmdLine.FileName)+ExtractFileName(FFileName)
+    else
+      FFileName:=ExpandFileNameEx(FFileName);
+
+    FMode:=FConfig.Read(ObjectName,SMode,FMode);
+    FCut:=FConfig.Read(ObjectName,SCut,FCut);
+    FEnabled:=FConfig.Read(ObjectName,SEnabled,FEnabled);
+    FEncoded:=FConfig.Read(ObjectName,SEncoded,FEncoded);
+    FThreadInfo:=FConfig.Read(ObjectName,SThreadInfo,FThreadInfo);
+    FMaxSize:=FConfig.Read(ObjectName,SMaxSize,FMaxSize);
+    FThreadNames.Text:=FConfig.Read(ObjectName,SThreadNames,FThreadNames.Text);
+    FObjectNames.Text:=FConfig.Read(ObjectName,SObjectNames,FObjectNames.Text);
+
+    FSInformation:=FConfig.Read(ObjectName,SLogInformation,FSInformation);
+    FSWarning:=FConfig.Read(ObjectName,SLogWarning,FSWarning);
+    FSError:=FConfig.Read(ObjectName,SLogError,FSError);
+    FSUnknown:=FConfig.Read(ObjectName,SLogUnknown,FSUnknown);
+    FSFormatMessage:=FConfig.Read(ObjectName,SLogFormatMessage,FSFormatMessage);
+    FSFormatDateTime:=FConfig.Read(ObjectName,SLogFormatDateTime,FSFormatDateTime);
+    FSFormatObjectName:=FConfig.Read(ObjectName,SLogFormatObjectName,FSFormatObjectName);
+    FSFormatCut:=FConfig.Read(ObjectName,SLogFormatCut,FSFormatCut);
+    FSFormatCutDateTime:=FConfig.Read(ObjectName,SLogFormatCutDateTime,FSFormatCutDateTime);
+    FSDelim:=FConfig.Read(ObjectName,SLogDelim,FSDelim);
+  end;
+
+end;
+
+procedure TBisLogger.Done;
+begin
+  inherited Done;
+end;
+
+procedure TBisLogger.ThreadTimeout(Thread: TBisWaitThread);
+var
+  NeedCut: Boolean;
+  P,F,E: String;
+  D: String;
+  Size: Int64;
+begin
+  if FEnabled then begin
+    try
+
+      FCurrentDate:=Now;
+
+      NeedCut:=false;
+      if FCut<>lcDisable then begin
+        case FCut of
+          lcSecond: NeedCut:=SecondsBetween(FCurrentDate,FStartDate)>0;
+          lcMinute: NeedCut:=MinutesBetween(FCurrentDate,FStartDate)>0;
+          lcHour: NeedCut:=HoursBetween(FCurrentDate,FStartDate)>0;
+          lcDay: NeedCut:=DaysBetween(FCurrentDate,FStartDate)>0;
+          lcWeek: NeedCut:=WeeksBetween(FCurrentDate,FStartDate)>0;
+          lcMonth: NeedCut:=MonthsBetween(FCurrentDate,FStartDate)>0;
+          lcYear: NeedCut:=YearsBetween(FCurrentDate,FStartDate)>0;
+        end;
+      end;
+
+      if (FMaxSize>0) then begin
+        Size:=FFileStream.Size;
+        if Size/(1024)>=FMaxSize then
+          NeedCut:=true;
+      end;
+
+      if NeedCut then begin
+        FCutting:=true;
+        try
+          P:=ExtractFilePath(FFileName);
+          F:=ChangeFileExt(ExtractFileName(FFileName),'');
+          E:=ExtractFileExt(FFileName);
+          D:=FormatDateTime(FSFormatCutDateTime,FCurrentDate);
+          F:=FormatEx(FSFormatCut,[F,D]);
+          FNewFileName:=P+F+E;
+
+          Thread.Synchronize(ReCreate);
+
+          FStartDate:=FCurrentDate;
+        finally
+          FCutting:=false;
+        end;
+      end;
+
+    finally
+      Thread.Reset;
+    end;
+  end;
+end;
+
+procedure TBisLogger.ReCreate;
+var
+  Flag: Boolean;
+begin
+  try
+    if Trim(FNewFileName)<>'' then begin
+
+      Flag:=false;
+
+      if Assigned(FFileStream) then begin
+        Flag:=FFileStream.Size>0;
+        FreeAndNilEx(FFileStream);
+      end;
+
+      if FileExists(FFileName) then begin
+        if Flag then
+          RenameFile(FFileName,FNewFileName);
+      end;
+
+      if not FileExists(FFileName) then begin
+        FFileStream:=TFileStream.Create(FFileName,fmCreate);
+        FreeAndNilEx(FFileStream);
+      end;
+
+      FFileStream:=TFileStream.Create(FFileName,fmOpenWrite or fmShareDenyNone);
+      FFileStream.Position:=FFileStream.Size;
+    end;
+
+  except
+  end;
+end;
+
+procedure TBisLogger.Load;
+begin
+  if FEnabled then begin
+
+    try
+      if not FileExists(FFileName) or (FMode=lmClearOnInit) then begin
+        FFileStream:=TFileStream.Create(FFileName,fmCreate);
+        FreeAndNilEx(FFileStream);
+      end;
+
+      FFileStream:=TFileStream.Create(FFileName,fmOpenWrite or fmShareDenyNone);
+      FFileStream.Position:=FFileStream.Size;
+
+      FThread.Stop;
+      FStartDate:=Now;
+      FThread.Start;
+
+    except
+    end;
+
+  end;
+end;
+
+procedure TBisLogger.Save;
+begin
+  FThread.Stop;
+  if Assigned(FFileStream) then
+    FreeAndNilEx(FFileStream);
+end;
+
+function TBisLogger.DoGetThreadName(const ThreadID: Cardinal): String;
+begin
+  Result:='';
+  if Assigned(FOnGetThreadName) then
+    Result:=FOnGetThreadName(Self,ThreadID);
+end;
+
+function TBisLogger.Write(const Message: String; LogType: TBisLoggerType=ltInformation; ObjectName: String=''): Boolean;
+var
+  Buffer: String;
+  Info: string;
+  S: String;
+  Strings: TStringList;
+  i: Integer;
+  ThreadID: Cardinal;
+  ThreadName: String;
+  FlagWrite: Boolean;
+begin
+  Result:=false;
+  if FEnabled then begin
+    FLock.Enter;
+    Strings:=TStringList.Create;
+    try
+      S:=Message;
+
+      FlagWrite:=true;
+      
+      if Trim(ObjectName)<>'' then
+        S:=FormatEx(FSFormatObjectName,[ObjectName,S]);
+
+      FlagWrite:=FlagWrite and ((FObjectNames.Count=0) or ((FObjectNames.Count>0) and (FObjectNames.IndexOf(ObjectName)<>-1)));         
+        
+      Info:=FSUnknown;
+      case LogType of
+        ltInformation: Info:=FSInformation;
+        ltWarning: Info:=FSWarning;
+        ltError: Info:=FSError;
+      end;
+
+      if FThreadInfo then begin
+        ThreadID:=GetCurrentThreadId;
+        ThreadName:=DoGetThreadName(ThreadID);
+        if Trim(ThreadName)<>'' then
+          S:=FormatEx(FSFormatThreadName,[ThreadName,ThreadID,S])
+        else
+          S:=FormatEx(FSFormatThreadName,[FSUnknownThread,ThreadID,S]);
+        FlagWrite:=FlagWrite and ((FThreadNames.Count=0) or ((FThreadNames.Count>0) and (FThreadNames.IndexOf(ThreadName)<>-1)));
+      end;
+
+      Buffer:=FormatEx(FSFormatMessage,[FormatDateTime(FSFormatDateTime,Now),Info,S]);
+      Strings.Add(Buffer);
+
+      if Assigned(FThread) then begin
+        if FCutting then begin
+          FTempMessages.Add(Buffer);
+          exit;
+        end else begin
+          if FTempMessages.Count>0 then begin
+            for i:=FTempMessages.Count-1 downto 0 do begin
+              Strings.Insert(0,FTempMessages[i]);
+            end;
+          end;
+          FTempMessages.Clear;
+        end;
+      end;
+
+      FlagWrite:=FlagWrite and Assigned(FFileStream);
+      if FlagWrite then begin
+
+        for i:=0 to Strings.Count-1 do begin
+          Buffer:=Strings[i];
+          if Trim(Buffer)<>'' then begin
+            WriteToOutputs(Buffer,ObjectName);
+            if FEncoded then begin
+              Buffer:=StrToBase64(FCrypter.EncodeString(Buffer));
+            end;
+            Buffer:=Buffer+SReturn;
+            FFileStream.Write(Pointer(Buffer)^,Length(Buffer));
+          end;
+        end;
+      end;
+
+    finally
+      Strings.Free;
+      FLock.Leave;
+    end;
+  end;
+end;
+
+procedure TBisLogger.WriteToOutputs(Buffer: string; ObjectName: String);
+var
+  i: Integer;
+  Output: TStrings;
+begin
+  for i:=0 to FOutputs.Count-1 do begin
+    if (FOutputs.Objects[i] is TStrings) and
+       AnsiSameText(FOutputs[i],ObjectName) then begin
+      Output:=TStrings(FOutputs.Objects[i]);
+      Output.Add(Buffer);
+    end;
+  end;
+end;
+
+procedure TBisLogger.AddOutput(Output: TStrings; ObjectName: String='');
+begin
+  FOutputs.AddObject(ObjectName,Output);
+end;
+
+procedure TBisLogger.RemoveOutput(Output: TStrings);
+var
+  Index: Integer;
+begin
+  Index:=FOutputs.IndexOfObject(Output);
+  if Index<>-1 then
+    FOutputs.Delete(Index);
+end;
+
+end.

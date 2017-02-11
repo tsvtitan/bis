@@ -1,0 +1,868 @@
+inherited BisCallcDealFrame: TBisCallcDealFrame
+  Width = 630
+  Height = 294
+  Align = alClient
+  Constraints.MinHeight = 294
+  Constraints.MinWidth = 630
+  ExplicitWidth = 630
+  ExplicitHeight = 294
+  object PanelDeal: TPanel
+    Left = 0
+    Top = 0
+    Width = 630
+    Height = 294
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+    object GroupBoxDeal: TGroupBox
+      AlignWithMargins = True
+      Left = 5
+      Top = 3
+      Width = 620
+      Height = 286
+      Margins.Left = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Align = alClient
+      Caption = ' '#1050#1088#1077#1076#1080#1090#1085#1086#1077' '#1076#1077#1083#1086' '
+      TabOrder = 0
+      object LabelNoDeal: TLabel
+        Left = 112
+        Top = 0
+        Width = 128
+        Height = 13
+        Alignment = taCenter
+        Caption = #1053#1077#1090' '#1082#1088#1077#1076#1080#1090#1085#1086#1075#1086' '#1076#1077#1083#1072
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Layout = tlCenter
+        Visible = False
+      end
+      object PanelControls: TPanel
+        Left = 2
+        Top = 15
+        Width = 616
+        Height = 269
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 0
+        ExplicitLeft = 0
+        ExplicitTop = 14
+        object LabelFirm: TLabel
+          Left = 11
+          Top = 8
+          Width = 54
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1050#1088#1077#1076#1080#1090#1086#1088':'
+          FocusControl = EditFirm
+        end
+        object LabelCurrency: TLabel
+          Left = 418
+          Top = 8
+          Width = 43
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1042#1072#1083#1102#1090#1072':'
+          FocusControl = EditCurrency
+        end
+        object LabelAccountNum: TLabel
+          Left = 221
+          Top = 8
+          Width = 29
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1057#1095#1077#1090':'
+          FocusControl = EditAccountNum
+        end
+        object LabelArrearPeriod: TLabel
+          Left = 517
+          Top = 7
+          Width = 42
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1055#1077#1088#1080#1086#1076':'
+          FocusControl = EditArrearPeriod
+        end
+        object LabelCurrentDebt: TLabel
+          Left = 479
+          Top = 34
+          Width = 47
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1054#1089#1090#1072#1090#1086#1082':'
+          FocusControl = EditCurrentDebt
+        end
+        object LabelDebtor: TLabel
+          Left = 15
+          Top = 35
+          Width = 50
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1044#1086#1083#1078#1085#1080#1082':'
+          FocusControl = EditDebtor
+        end
+        object LabelInitialDebt: TLabel
+          Left = 221
+          Top = 35
+          Width = 29
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1044#1086#1083#1075':'
+          FocusControl = EditInitialDebt
+        end
+        object LabelAmountPayment: TLabel
+          Left = 340
+          Top = 35
+          Width = 49
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1055#1083#1072#1090#1077#1078#1080':'
+          FocusControl = EditAmountPayment
+        end
+        object EditFirm: TEdit
+          Left = 71
+          Top = 5
+          Width = 140
+          Height = 21
+          Color = 15000804
+          ReadOnly = True
+          TabOrder = 0
+        end
+        object EditCurrency: TEdit
+          Left = 467
+          Top = 5
+          Width = 40
+          Height = 21
+          Color = 15000804
+          ReadOnly = True
+          TabOrder = 2
+        end
+        object EditAccountNum: TEdit
+          Left = 256
+          Top = 5
+          Width = 152
+          Height = 21
+          Color = 15000804
+          ReadOnly = True
+          TabOrder = 1
+        end
+        object EditArrearPeriod: TEdit
+          Left = 565
+          Top = 4
+          Width = 40
+          Height = 21
+          Color = 15000804
+          ReadOnly = True
+          TabOrder = 3
+        end
+        object EditCurrentDebt: TEdit
+          Left = 532
+          Top = 31
+          Width = 73
+          Height = 21
+          Hint = #1054#1089#1090#1072#1090#1086#1082' '#1076#1086#1083#1075#1072' '#1085#1072' '#1090#1077#1082#1091#1097#1080#1081' '#1084#1086#1084#1077#1085#1090
+          Color = 15000804
+          ReadOnly = True
+          TabOrder = 6
+        end
+        object EditDebtor: TEdit
+          Left = 71
+          Top = 32
+          Width = 140
+          Height = 21
+          Color = 15000804
+          ReadOnly = True
+          TabOrder = 4
+        end
+        object PageControl: TPageControl
+          Left = 11
+          Top = 59
+          Width = 594
+          Height = 203
+          ActivePage = TabSheetDeal
+          HotTrack = True
+          TabOrder = 8
+          OnChange = PageControlChange
+          object TabSheetDebtor: TTabSheet
+            Caption = #1040#1085#1082#1077#1090#1072
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object PageControlDebtor: TPageControl
+              AlignWithMargins = True
+              Left = 3
+              Top = 3
+              Width = 580
+              Height = 169
+              ActivePage = TabSheetDebtorGeneral
+              Align = alClient
+              HotTrack = True
+              Style = tsFlatButtons
+              TabOrder = 0
+              object TabSheetDebtorGeneral: TTabSheet
+                Caption = #1054#1089#1085#1086#1074#1085#1099#1077
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
+                DesignSize = (
+                  572
+                  138)
+                object LabelSurname: TLabel
+                  Left = 6
+                  Top = 10
+                  Width = 48
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1060#1072#1084#1080#1083#1080#1103':'
+                  FocusControl = EditSurname
+                end
+                object LabelName: TLabel
+                  Left = 215
+                  Top = 10
+                  Width = 23
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1048#1084#1103':'
+                  FocusControl = EditName
+                end
+                object LabelPatronymic: TLabel
+                  Left = 361
+                  Top = 10
+                  Width = 53
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1054#1090#1095#1077#1089#1090#1074#1086':'
+                  FocusControl = EditPatronymic
+                end
+                object LabelPassport: TLabel
+                  Left = 37
+                  Top = 88
+                  Width = 65
+                  Height = 26
+                  Alignment = taRightJustify
+                  Caption = #1055#1072#1089#1087#1086#1088#1090#1085#1099#1077' '#1076#1072#1085#1085#1099#1077':'
+                  FocusControl = MemoPassport
+                  WordWrap = True
+                end
+                object LabelDateBirth: TLabel
+                  Left = 18
+                  Top = 37
+                  Width = 84
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1044#1072#1090#1072' '#1088#1086#1078#1076#1077#1085#1080#1103':'
+                end
+                object LabelSex: TLabel
+                  Left = 240
+                  Top = 37
+                  Width = 23
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1055#1086#1083':'
+                end
+                object LabelPlaceBirth: TLabel
+                  Left = 13
+                  Top = 64
+                  Width = 89
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1052#1077#1089#1090#1086' '#1088#1086#1078#1076#1077#1085#1080#1103':'
+                  FocusControl = EditPlaceBirth
+                end
+                object EditSurname: TEdit
+                  Left = 60
+                  Top = 7
+                  Width = 140
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 0
+                end
+                object EditName: TEdit
+                  Left = 244
+                  Top = 7
+                  Width = 101
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 1
+                end
+                object EditPatronymic: TEdit
+                  Left = 420
+                  Top = 7
+                  Width = 149
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 2
+                end
+                object MemoPassport: TMemo
+                  Left = 108
+                  Top = 88
+                  Width = 461
+                  Height = 43
+                  Anchors = [akLeft, akTop, akRight, akBottom]
+                  Color = 15000804
+                  ReadOnly = True
+                  ScrollBars = ssVertical
+                  TabOrder = 6
+                end
+                object ComboBoxSex: TComboBox
+                  Left = 269
+                  Top = 34
+                  Width = 76
+                  Height = 21
+                  Style = csDropDownList
+                  Color = 15000804
+                  ItemHeight = 13
+                  TabOrder = 4
+                end
+                object DateTimePickerDateBirth: TDateTimePicker
+                  Left = 108
+                  Top = 34
+                  Width = 92
+                  Height = 21
+                  Date = 39541.640997719910000000
+                  Time = 39541.640997719910000000
+                  Color = 15000804
+                  TabOrder = 3
+                end
+                object EditPlaceBirth: TEdit
+                  Left = 108
+                  Top = 61
+                  Width = 461
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 5
+                end
+              end
+              object TabSheetDebtorAddresses: TTabSheet
+                Caption = #1040#1076#1088#1077#1089#1072
+                ImageIndex = 1
+                object LabelAddressResidence: TLabel
+                  Left = 22
+                  Top = 10
+                  Width = 85
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1040#1076#1088#1077#1089' '#1087#1088#1086#1087#1080#1089#1082#1080':'
+                  FocusControl = EditAddressResidence
+                end
+                object LabelAddressActual: TLabel
+                  Left = 3
+                  Top = 37
+                  Width = 104
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1060#1072#1082#1090#1080#1095#1077#1089#1082#1080#1081' '#1072#1076#1088#1077#1089':'
+                  FocusControl = EditAddressActual
+                end
+                object LabelAddressAdditional: TLabel
+                  Left = 26
+                  Top = 64
+                  Width = 81
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1044#1086#1087'-'#1085#1099#1081' '#1072#1076#1088#1077#1089':'
+                  FocusControl = EditAddressAdditional
+                end
+                object LabelIndexResidence: TLabel
+                  Left = 439
+                  Top = 10
+                  Width = 41
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1048#1085#1076#1077#1082#1089':'
+                  FocusControl = EditIndexResidence
+                end
+                object LabelIndexActual: TLabel
+                  Left = 439
+                  Top = 37
+                  Width = 41
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1048#1085#1076#1077#1082#1089':'
+                  FocusControl = EditIndexActual
+                end
+                object LabelIndexAdditional: TLabel
+                  Left = 439
+                  Top = 64
+                  Width = 41
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1048#1085#1076#1077#1082#1089':'
+                  FocusControl = EditIndexAdditional
+                end
+                object LabelIndexWork: TLabel
+                  Left = 439
+                  Top = 91
+                  Width = 41
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1048#1085#1076#1077#1082#1089':'
+                  FocusControl = EditIndexWork
+                end
+                object LabelAddressWork: TLabel
+                  Left = 31
+                  Top = 91
+                  Width = 76
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1040#1076#1088#1077#1089' '#1088#1072#1073#1086#1090#1099':'
+                  FocusControl = EditAddressWork
+                end
+                object EditAddressResidence: TEdit
+                  Left = 113
+                  Top = 7
+                  Width = 315
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 0
+                end
+                object EditAddressActual: TEdit
+                  Left = 113
+                  Top = 34
+                  Width = 315
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 2
+                end
+                object EditAddressAdditional: TEdit
+                  Left = 113
+                  Top = 61
+                  Width = 315
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 4
+                end
+                object EditIndexResidence: TEdit
+                  Left = 486
+                  Top = 7
+                  Width = 82
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 1
+                end
+                object EditIndexActual: TEdit
+                  Left = 486
+                  Top = 34
+                  Width = 82
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 3
+                end
+                object EditIndexAdditional: TEdit
+                  Left = 486
+                  Top = 61
+                  Width = 82
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 5
+                end
+                object EditIndexWork: TEdit
+                  Left = 486
+                  Top = 88
+                  Width = 82
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 7
+                end
+                object EditAddressWork: TEdit
+                  Left = 113
+                  Top = 88
+                  Width = 315
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 6
+                end
+              end
+              object TabSheetDebtorJob: TTabSheet
+                Caption = #1056#1072#1073#1086#1090#1072
+                ImageIndex = 2
+                object LabelPlaceWork: TLabel
+                  Left = 6
+                  Top = 10
+                  Width = 76
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1052#1077#1089#1090#1086' '#1088#1072#1073#1086#1090#1099':'
+                  FocusControl = EditPlaceWork
+                end
+                object LabelJobTitle: TLabel
+                  Left = 21
+                  Top = 37
+                  Width = 61
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1044#1086#1083#1078#1085#1086#1089#1090#1100':'
+                  FocusControl = EditJobTitle
+                end
+                object EditPlaceWork: TEdit
+                  Left = 88
+                  Top = 7
+                  Width = 473
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 0
+                end
+                object EditJobTitle: TEdit
+                  Left = 88
+                  Top = 34
+                  Width = 241
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 1
+                end
+              end
+              object TabSheetDebtorPhones: TTabSheet
+                Caption = #1058#1077#1083#1077#1092#1086#1085#1099
+                ImageIndex = 3
+                object LabelPhoneHome: TLabel
+                  Left = 10
+                  Top = 10
+                  Width = 103
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1044#1086#1084#1072#1096#1085#1080#1081' '#1090#1077#1083#1077#1092#1086#1085':'
+                  FocusControl = EditPhoneHome
+                end
+                object LabelPhoneWork: TLabel
+                  Left = 67
+                  Top = 37
+                  Width = 46
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1056#1072#1073#1086#1095#1080#1081':'
+                  FocusControl = EditPhoneWork
+                end
+                object LabelPhoneMobile: TLabel
+                  Left = 51
+                  Top = 64
+                  Width = 62
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1052#1086#1073#1080#1083#1100#1085#1099#1081':'
+                  FocusControl = EditPhoneMobile
+                end
+                object LabelPhoneOther1: TLabel
+                  Left = 63
+                  Top = 91
+                  Width = 50
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1044#1088#1091#1075#1086#1081' 1:'
+                  FocusControl = EditPhoneOther1
+                end
+                object LabelPhoneOther2: TLabel
+                  Left = 63
+                  Top = 118
+                  Width = 50
+                  Height = 13
+                  Alignment = taRightJustify
+                  Caption = #1044#1088#1091#1075#1086#1081' 2:'
+                  FocusControl = EditPhoneOther2
+                end
+                object LabelStatusPhoneHome: TLabel
+                  Left = 344
+                  Top = 10
+                  Width = 63
+                  Height = 13
+                  Caption = #1085#1077' '#1089#1086#1077#1076#1080#1085#1077#1085
+                end
+                object LabelStatusPhoneWork: TLabel
+                  Left = 344
+                  Top = 37
+                  Width = 63
+                  Height = 13
+                  Caption = #1085#1077' '#1089#1086#1077#1076#1080#1085#1077#1085
+                end
+                object LabelStatusPhoneMobile: TLabel
+                  Left = 344
+                  Top = 64
+                  Width = 63
+                  Height = 13
+                  Caption = #1085#1077' '#1089#1086#1077#1076#1080#1085#1077#1085
+                end
+                object LabelStatusPhoneOther1: TLabel
+                  Left = 344
+                  Top = 91
+                  Width = 63
+                  Height = 13
+                  Caption = #1085#1077' '#1089#1086#1077#1076#1080#1085#1077#1085
+                end
+                object LabelStatusPhoneOther2: TLabel
+                  Left = 344
+                  Top = 118
+                  Width = 63
+                  Height = 13
+                  Caption = #1085#1077' '#1089#1086#1077#1076#1080#1085#1077#1085
+                end
+                object EditPhoneHome: TEdit
+                  Left = 119
+                  Top = 7
+                  Width = 130
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 0
+                  OnChange = EditPhoneHomeChange
+                end
+                object EditPhoneWork: TEdit
+                  Left = 119
+                  Top = 34
+                  Width = 130
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 2
+                  OnChange = EditPhoneHomeChange
+                end
+                object EditPhoneMobile: TEdit
+                  Left = 119
+                  Top = 61
+                  Width = 130
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 4
+                  OnChange = EditPhoneHomeChange
+                end
+                object EditPhoneOther1: TEdit
+                  Left = 119
+                  Top = 88
+                  Width = 130
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 6
+                  OnChange = EditPhoneHomeChange
+                end
+                object EditPhoneOther2: TEdit
+                  Left = 119
+                  Top = 115
+                  Width = 130
+                  Height = 21
+                  Color = 15000804
+                  ReadOnly = True
+                  TabOrder = 8
+                  OnChange = EditPhoneHomeChange
+                end
+                object ButtonPhoneHome: TButton
+                  Left = 255
+                  Top = 7
+                  Width = 75
+                  Height = 21
+                  Caption = #1085#1072#1073#1088#1072#1090#1100
+                  Enabled = False
+                  TabOrder = 1
+                  OnClick = ButtonPhoneHomeClick
+                end
+                object ButtonPhoneWork: TButton
+                  Left = 255
+                  Top = 34
+                  Width = 75
+                  Height = 21
+                  Caption = #1085#1072#1073#1088#1072#1090#1100
+                  Enabled = False
+                  TabOrder = 3
+                  OnClick = ButtonPhoneHomeClick
+                end
+                object ButtonPhoneMobile: TButton
+                  Left = 255
+                  Top = 61
+                  Width = 75
+                  Height = 21
+                  Caption = #1085#1072#1073#1088#1072#1090#1100
+                  Enabled = False
+                  TabOrder = 5
+                  OnClick = ButtonPhoneHomeClick
+                end
+                object ButtonPhoneOther1: TButton
+                  Left = 255
+                  Top = 88
+                  Width = 75
+                  Height = 21
+                  Caption = #1085#1072#1073#1088#1072#1090#1100
+                  Enabled = False
+                  TabOrder = 7
+                  OnClick = ButtonPhoneHomeClick
+                end
+                object ButtonPhoneOther2: TButton
+                  Left = 255
+                  Top = 115
+                  Width = 75
+                  Height = 21
+                  Caption = #1085#1072#1073#1088#1072#1090#1100
+                  Enabled = False
+                  TabOrder = 9
+                  OnClick = ButtonPhoneHomeClick
+                end
+              end
+              object TabSheetDebtorFounders: TTabSheet
+                Caption = #1059#1095#1088#1077#1076#1080#1090#1077#1083#1080
+                ImageIndex = 4
+                object MemoFounders: TMemo
+                  Left = 0
+                  Top = 0
+                  Width = 572
+                  Height = 138
+                  Align = alClient
+                  Color = 15000804
+                  ReadOnly = True
+                  ScrollBars = ssVertical
+                  TabOrder = 0
+                end
+              end
+            end
+          end
+          object TabSheetGuarantors: TTabSheet
+            Caption = #1055#1086#1088#1091#1095#1080#1090#1077#1083#1080
+            ImageIndex = 4
+            object MemoGuarantors: TMemo
+              AlignWithMargins = True
+              Left = 3
+              Top = 3
+              Width = 580
+              Height = 169
+              Align = alClient
+              Color = 15000804
+              ReadOnly = True
+              ScrollBars = ssVertical
+              TabOrder = 0
+            end
+          end
+          object TabSheetDebtInformation: TTabSheet
+            Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103' '#1086' '#1076#1086#1083#1075#1077
+            ImageIndex = 1
+            DesignSize = (
+              586
+              175)
+            object LabelDebtorNum: TLabel
+              Left = 14
+              Top = 10
+              Width = 86
+              Height = 13
+              Alignment = taRightJustify
+              Caption = #1053#1086#1084#1077#1088' '#1076#1086#1075#1086#1074#1086#1088#1072':'
+              FocusControl = EditDebtorNum
+            end
+            object LabelDebtorDate: TLabel
+              Left = 267
+              Top = 10
+              Width = 81
+              Height = 13
+              Alignment = taRightJustify
+              Caption = #1044#1072#1090#1072' '#1076#1086#1075#1086#1074#1086#1088#1072':'
+              FocusControl = EditDebtorDate
+            end
+            object MemoDebtInformation: TMemo
+              AlignWithMargins = True
+              Left = 3
+              Top = 34
+              Width = 580
+              Height = 138
+              Anchors = [akLeft, akTop, akRight, akBottom]
+              Color = 15000804
+              ReadOnly = True
+              ScrollBars = ssVertical
+              TabOrder = 2
+            end
+            object EditDebtorNum: TEdit
+              Left = 106
+              Top = 7
+              Width = 146
+              Height = 21
+              Color = 15000804
+              ReadOnly = True
+              TabOrder = 0
+            end
+            object EditDebtorDate: TEdit
+              Left = 354
+              Top = 7
+              Width = 100
+              Height = 21
+              Color = 15000804
+              ReadOnly = True
+              TabOrder = 1
+            end
+          end
+          object TabSheetTasks: TTabSheet
+            Caption = #1052#1077#1088#1086#1087#1088#1080#1103#1090#1080#1103
+            ImageIndex = 2
+          end
+          object TabSheetPayments: TTabSheet
+            Caption = #1055#1083#1072#1090#1077#1078#1080
+            ImageIndex = 3
+          end
+          object TabSheetDocuments: TTabSheet
+            Caption = #1044#1086#1082#1091#1084#1077#1085#1090#1099
+            ImageIndex = 6
+          end
+          object TabSheetDeal: TTabSheet
+            Caption = #1044#1077#1090#1072#1083#1100#1085#1086
+            ImageIndex = 5
+            TabVisible = False
+          end
+          object TabSheetPattern: TTabSheet
+            Caption = #1064#1072#1073#1083#1086#1085' '#1088#1072#1079#1075#1086#1074#1086#1088#1072
+            ImageIndex = 7
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object RichEditPattern: TRichEdit
+              AlignWithMargins = True
+              Left = 3
+              Top = 3
+              Width = 580
+              Height = 169
+              Align = alClient
+              Color = 15000804
+              ReadOnly = True
+              ScrollBars = ssBoth
+              TabOrder = 0
+            end
+          end
+        end
+        object EditInitialDebt: TEdit
+          Left = 256
+          Top = 32
+          Width = 73
+          Height = 21
+          Hint = #1055#1077#1088#1074#1086#1085#1072#1095#1072#1083#1100#1085#1072#1103' '#1089#1091#1084#1084#1072' '#1076#1086#1083#1075#1072
+          Color = 15000804
+          ReadOnly = True
+          TabOrder = 5
+        end
+        object EditAmountPayment: TEdit
+          Left = 395
+          Top = 32
+          Width = 73
+          Height = 21
+          Hint = #1057#1091#1084#1084#1072' '#1087#1083#1072#1090#1077#1078#1077#1081' '#1085#1072' '#1090#1077#1082#1091#1097#1080#1081' '#1084#1086#1084#1077#1085#1090
+          Color = 15000804
+          ReadOnly = True
+          TabOrder = 7
+        end
+      end
+    end
+  end
+end

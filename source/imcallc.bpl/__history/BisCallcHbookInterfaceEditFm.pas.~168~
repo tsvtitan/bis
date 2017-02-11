@@ -1,0 +1,212 @@
+unit BisCallcHbookInterfaceEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls, BisInterfaces, BisParam;
+
+type
+
+  TBisCallcHbookInterfaceEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    ComboBoxType: TComboBox;
+    LabelType: TLabel;
+    GroupBoxModule: TGroupBox;
+    LabelModuleName: TLabel;
+    LabelModuleInterface: TLabel;
+    ComboBoxModuleName: TComboBox;
+    ComboBoxModuleInterface: TComboBox;
+    CheckBoxRefresh: TCheckBox;
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    function CheckParams: Boolean; override;
+    procedure ChangeParam(Param: TBisParam); override;
+    procedure Execute; override;
+  end;
+
+  TBisKrieltHbookInterfaceEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookInterfaceInsertFormIface=class(TBisKrieltHbookInterfaceEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookInterfaceUpdateFormIface=class(TBisKrieltHbookInterfaceEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookInterfaceDeleteFormIface=class(TBisKrieltHbookInterfaceEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookInterfaceEditForm: TBisCallcHbookInterfaceEditForm;
+
+function GetInterfaceTypeByIndex(Index: Integer): String;
+
+implementation
+
+{$R *.dfm}
+
+uses TypInfo,
+     BisCore, BisIfaceModules, BisIfaces, BisUtils, BisDialogs, BisConsts;
+
+function GetInterfaceTypeByIndex(Index: Integer): String;
+begin
+  Result:='';
+  case TBisInterfaceType(Index) of
+    itInternal: Result:='Внутренний';
+    itScript: Result:='Скрипт';
+    itReport: Result:='Отчет';
+    itDocument: Result:='Документ';
+  end;
+end;
+
+{ TBisKrieltHbookInterfaceEditFormIface }
+
+constructor TBisKrieltHbookInterfaceEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltHbookInterfaceEditForm;
+  with Params do begin
+    AddKey('INTERFACE_ID').Older('OLD_INTERFACE_ID');
+    AddComboBox('INTERFACE_TYPE','ComboBoxType','LabelType',true);
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription',false);
+    AddComboBoxTextIndex('MODULE_NAME','ComboBoxModuleName','LabelModuleName',false);
+    AddComboBoxTextIndex('MODULE_INTERFACE','ComboBoxModuleInterface','LabelModuleInterface',false);
+  end;
+end;
+
+{ TBisKrieltHbookInterfaceInsertFormIface }
+
+constructor TBisKrieltHbookInterfaceInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_INTERFACE';
+end;
+
+{ TBisKrieltHbookInterfaceUpdateFormIface }
+
+constructor TBisKrieltHbookInterfaceUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_INTERFACE';
+end;
+
+{ TBisKrieltHbookInterfaceDeleteFormIface }
+
+constructor TBisKrieltHbookInterfaceDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_INTERFACE';
+end;
+
+{ TBisKrieltHbookInterfaceEditForm }
+
+constructor TBisCallcHbookInterfaceEditForm.Create(AOwner: TComponent);
+var
+  i: Integer;
+  PInfo: PTypeInfo;
+  PData: PTypeData;
+  Module: TBisIfaceModule;
+begin
+  inherited Create(AOwner);
+
+  ComboBoxType.Clear;
+  PData:=nil;
+  PInfo:=TypeInfo(TBisInterfaceType);
+  if Assigned(PInfo) then
+    PData:=GetTypeData(PInfo);
+  if Assigned(PData) then
+    for i:=PData.MinValue to PData.MaxValue do begin
+      ComboBoxType.Items.Add(GetInterfaceTypeByIndex(i));
+    end;
+
+  ComboBoxModuleName.Clear;
+  for i:=0 to Core.IfaceModules.Count-1 do begin
+    Module:=Core.IfaceModules.Items[i];
+    if Module.Enabled then
+      ComboBoxModuleName.Items.AddObject(Module.ObjectName,Module);
+  end;
+
+end;
+
+procedure TBisCallcHbookInterfaceEditForm.ChangeParam(Param: TBisParam);
+var
+  i: Integer;
+  Module: TBisIfaceModule;
+  Iface: TBisIface;
+begin
+  inherited ChangeParam(Param);
+
+  if AnsiSameText(Param.ParamName,'MODULE_NAME') then begin
+    if ComboBoxModuleName.ItemIndex<>-1 then begin
+      ComboBoxModuleInterface.Clear;
+      Module:=TBisIfaceModule(ComboBoxModuleName.Items.Objects[ComboBoxModuleName.ItemIndex]);
+      if Assigned(Module) then begin
+        for i:=0 to Module.Ifaces.Count-1 do begin
+          Iface:=Module.Ifaces.Items[i];
+          if Iface.Available then
+            ComboBoxModuleInterface.Items.AddObject(Iface.ObjectName,Iface);
+        end;
+      end;
+    end else
+      ComboBoxModuleInterface.Clear;
+  end;
+
+  if AnsiSameText(Param.ParamName,'INTERFACE_TYPE') then begin
+    GroupBoxModule.Enabled:=TBisInterfaceType(ComboBoxType.ItemIndex)=itInternal;
+    ComboBoxModuleName.Color:=iff(GroupBoxModule.Enabled,clWindow,ColorReadOnly);
+    ComboBoxModuleInterface.Color:=ComboBoxModuleName.Color;
+    if not GroupBoxModule.Enabled then begin
+      ComboBoxModuleName.ItemIndex:=-1;
+      ComboBoxModuleInterface.ItemIndex:=-1;
+    end;
+  end;
+
+end;
+
+function TBisCallcHbookInterfaceEditForm.CheckParams: Boolean;
+begin
+  Result:=inherited CheckParams;
+  if Result then begin
+    if TBisInterfaceType(ComboBoxType.ItemIndex)=itInternal then begin
+      if ComboBoxModuleName.ItemIndex=-1 then begin
+        ShowError(FormatEx(SNeedControlValue,[LabelModuleName.Caption]));
+        ComboBoxModuleName.SetFocus;
+        Result:=false;
+        exit;
+      end;
+      if ComboBoxModuleInterface.ItemIndex=-1 then begin
+        ShowError(FormatEx(SNeedControlValue,[LabelModuleInterface.Caption]));
+        ComboBoxModuleInterface.SetFocus;
+        Result:=false;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallcHbookInterfaceEditForm.Execute;
+begin
+  inherited Execute;
+  if CheckBoxRefresh.Checked then begin
+    Core.RefreshPermissions;
+    Core.ReloadInterfaces;
+  end;
+end;
+
+end.

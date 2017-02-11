@@ -1,0 +1,84 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{671efbfb-2d2a-4c75-9fca-01f7607aeb7b}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="core.dproj" />
+    <Projects Include="csftpclt.dproj" />
+    <Projects Include="ftpclt.dproj" />
+    <Projects Include="imftpclt.dproj" />
+    <Projects Include="objects.dproj" />
+    <Projects Include="omnet.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+<BorlandProject xmlns=""><Default.Personality></Default.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="ftpclt">
+    <MSBuild Projects="ftpclt.dproj" Targets="" />
+  </Target>
+  <Target Name="ftpclt:Clean">
+    <MSBuild Projects="ftpclt.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="ftpclt:Make">
+    <MSBuild Projects="ftpclt.dproj" Targets="Make" />
+  </Target>
+  <Target Name="objects">
+    <MSBuild Projects="objects.dproj" Targets="" />
+  </Target>
+  <Target Name="objects:Clean">
+    <MSBuild Projects="objects.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="objects:Make">
+    <MSBuild Projects="objects.dproj" Targets="Make" />
+  </Target>
+  <Target Name="core">
+    <MSBuild Projects="core.dproj" Targets="" />
+  </Target>
+  <Target Name="core:Clean">
+    <MSBuild Projects="core.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="core:Make">
+    <MSBuild Projects="core.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omnet">
+    <MSBuild Projects="omnet.dproj" Targets="" />
+  </Target>
+  <Target Name="omnet:Clean">
+    <MSBuild Projects="omnet.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omnet:Make">
+    <MSBuild Projects="omnet.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imftpclt">
+    <MSBuild Projects="imftpclt.dproj" Targets="" />
+  </Target>
+  <Target Name="imftpclt:Clean">
+    <MSBuild Projects="imftpclt.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imftpclt:Make">
+    <MSBuild Projects="imftpclt.dproj" Targets="Make" />
+  </Target>
+  <Target Name="csftpclt">
+    <MSBuild Projects="csftpclt.dproj" Targets="" />
+  </Target>
+  <Target Name="csftpclt:Clean">
+    <MSBuild Projects="csftpclt.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="csftpclt:Make">
+    <MSBuild Projects="csftpclt.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="ftpclt;objects;core;omnet;imftpclt;csftpclt" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="ftpclt:Clean;objects:Clean;core:Clean;omnet:Clean;imftpclt:Clean;csftpclt:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="ftpclt:Make;objects:Make;core:Make;omnet:Make;imftpclt:Make;csftpclt:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

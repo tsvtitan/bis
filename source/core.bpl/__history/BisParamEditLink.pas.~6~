@@ -1,0 +1,19 @@
+unit BisParamEditLink;
+
+interface
+
+uses BisParamInvisible, BisParamEdit;
+
+type
+
+  TBisParamEditLink=class(TBisParamInvisible)
+  private
+    FButtonName: String;
+  published
+  public
+    property ButtonName: String read FButtonName write FButtonName;
+  end;
+
+implementation
+
+end.

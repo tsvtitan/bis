@@ -1,0 +1,277 @@
+unit BisIfaceModules;
+
+interface
+
+uses Classes, DB,
+     BisObject, BisModules, BisDataSet, BisIfaces;
+
+type
+  TBisIfaceModule=class;
+
+  TBisIfaceModuleInitProc=procedure (AModule: TBisIfaceModule); stdcall;
+
+  TBisIfaceModule=class(TBisModule)
+  private
+    FInitProc: TBisIfaceModuleInitProc;
+    FIfaces: TBisIfaces;
+    FClasses: TBisIfaceClasses;
+    FTable: TBisDataSet;
+    procedure RefreshIfaceDataParams;
+  protected
+    procedure DoInitProc(AModule: TBisModule); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure Unload; override;
+    procedure ReadIfaceDataParams(Iface: TBisIface);
+
+    property Ifaces: TBisIfaces read FIfaces;
+    property Classes: TBisIfaceClasses read FClasses;
+  end;
+
+  TBisIfaceModules=class(TBisModules)
+  private
+
+    function GetItem(Index: Integer): TBisIfaceModule;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Unload; override;
+    procedure IfacesShow;
+    procedure IfacesHide;
+    procedure IfacesLoadOptions;
+    procedure IfacesSaveOptions;
+    function Find(ObjectName: String): TBisIfaceModule; reintroduce;
+
+    property Items[Index: Integer]: TBisIfaceModule read GetItem;  default;
+  published
+
+  end;
+
+implementation
+
+uses Windows, SysUtils,
+     BisConsts, BisLogger, BisUtils;
+
+{ TBisIfaceModule }
+
+constructor TBisIfaceModule.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FIfaces:=TBisIfaces.Create(Self);
+  FClasses:=TBisIfaceClasses.Create;
+  FTable:=TBisDataSet.Create(Self);
+end;
+
+destructor TBisIfaceModule.Destroy;
+begin
+  FTable.Free;
+  FClasses.Free;
+  FIfaces.Free;
+  inherited Destroy;
+end;
+
+procedure TBisIfaceModule.DoInitProc(AModule: TBisModule);
+begin
+  @FInitProc:=GetProcAddress(Module,PChar(SInitIfaceModule));
+  if Assigned(@FInitProc) then begin
+    try
+      FInitProc(Self);
+      RefreshIfaceDataParams;
+      FIfaces.Init;
+      LoggerWrite(FormatEx(SInitSuccess,[FileName]));
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SInitFailed,[FileName,E.Message]),ltError);
+      end;
+    end;
+  end else begin
+    LoggerWrite(FormatEx(SInitProcNotFound,[FileName]),ltError);
+  end;
+end;
+
+procedure TBisIfaceModule.ReadIfaceDataParams(Iface: TBisIface);
+var
+  AName: String;
+  Field: TField;
+  AClass: TClass;
+  Found: Boolean;
+begin
+  if Assigned(Iface) and FTable.Active and not FTable.Empty then begin
+    FTable.First;
+    Field:=FTable.FindField(SFieldParams);
+    if Assigned(Field) and Field.IsBlob then begin
+      while not FTable.Eof do begin
+        AName:=FTable.FieldByName(SFieldName).AsString;
+        Found:=false;
+        if AnsiSameText(Iface.ObjectName,AName) then
+          Found:=true
+        else begin
+          AClass:=Iface.ClassType;
+          while Assigned(AClass) do begin
+            if IsClassParent(AClass,TBisIface) then begin
+              if AnsiSameText(TBisIfaceClass(AClass).GetObjectName,AName) then begin
+                Found:=true;
+                break;
+              end;
+            end else
+              break;
+            AClass:=AClass.ClassParent;
+          end;
+        end;
+        if Found then begin
+          Iface.DataParams.CopyFromDataSet(Field.AsString);
+          Iface.DataParams.Change;
+          break;
+        end;
+        FTable.Next;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisIfaceModule.RefreshIfaceDataParams;
+var
+  i: Integer;
+begin
+  for i:=0 to Ifaces.Count-1 do
+    ReadIfaceDataParams(Ifaces.Items[i]);
+end;
+
+procedure TBisIfaceModule.Init;
+var
+  Stream: TMemoryStream;
+  AModules: TBisIfaceModules;
+  Field: TField;
+begin
+  inherited Init;
+  if Assigned(Owner) and (Owner is TBisIfaceModules) then begin
+    AModules:=TBisIfaceModules(Owner);
+    FTable.Close;
+    if AModules.Table.Active and not AModules.Table.IsEmpty then begin
+      Stream:=TMemoryStream.Create;
+      try
+        Field:=AModules.Table.FindField(SFieldIfaces);
+        if Assigned(Field) and Field.IsBlob then begin
+          TBlobField(Field).SaveToStream(Stream);
+          Stream.Position:=0;
+          if Stream.Size>0 then begin
+            try
+              FTable.LoadFromStream(Stream);
+              FTable.Open;
+            except
+              On E: Exception do
+                LoggerWrite(E.Message);
+            end;
+          end;
+        end;
+      finally
+        Stream.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisIfaceModule.Unload;
+begin
+  FIfaces.Clear;
+  inherited Unload;
+end;
+
+{ TBisIfaceModules }
+
+constructor TBisIfaceModules.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+end;
+
+function TBisIfaceModules.Find(ObjectName: String): TBisIfaceModule;
+begin
+  Result:=TBisIfaceModule(inherited Find(ObjectName));
+end;
+
+function TBisIfaceModules.GetItem(Index: Integer): TBisIfaceModule;
+begin
+  Result:=TBisIfaceModule(inherited Items[Index]);
+end;
+
+function TBisIfaceModules.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisIfaceModule;
+end;
+
+procedure TBisIfaceModules.IfacesShow;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    try
+      Items[i].Ifaces.IfacesShow;
+    except
+      on E: Exception do begin
+        LoggerWrite(E.Message,ltError);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisIfaceModules.Unload;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    try
+      Items[i].Ifaces.IfacesHide;
+
+  inherited Unload;
+end;
+
+procedure TBisIfaceModules.IfacesHide;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    try
+      Items[i].Ifaces.IfacesHide;
+    except
+      on E: Exception do begin
+        LoggerWrite(E.Message,ltError);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisIfaceModules.IfacesSaveOptions;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    try
+      Items[i].Ifaces.IfacesSaveOptions;
+    except
+      on E: Exception do begin
+        LoggerWrite(E.Message,ltError);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisIfaceModules.IfacesLoadOptions;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    try
+      Items[i].Ifaces.IfacesLoadOptions;
+    except
+      on E: Exception do begin
+        LoggerWrite(E.Message,ltError);
+      end;
+    end;
+  end;
+end;
+
+end.

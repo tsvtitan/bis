@@ -1,0 +1,52 @@
+unit BisTaxiDataRatingsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataGridFm;
+
+type
+  TBisTaxiDataRatingsForm = class(TBisDataGridForm)
+  end;                                                                                          
+
+  TBisTaxiDataRatingsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataRatingsForm: TBisTaxiDataRatingsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisUtils, BisTaxiDataRatingEditFm, BisConsts;
+
+{ TBisTaxiDataRatingsFormIface }
+
+constructor TBisTaxiDataRatingsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataRatingsForm;
+  FilterClass:=TBisTaxiDataRatingFilterFormIface;
+  InsertClass:=TBisTaxiDataRatingInsertFormIface;
+  UpdateClass:=TBisTaxiDataRatingUpdateFormIface;
+  DeleteClass:=TBisTaxiDataRatingDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_RATINGS';
+  with FieldNames do begin
+    AddKey('DISCOUNT_TYPE_ID');
+    AddInvisible('PRIORITY');
+    AddInvisible('TYPE_CALC');
+    AddInvisible('PERCENT');
+    AddInvisible('DISCOUNT_SUM');
+    AddInvisible('PROC_NAME');
+    Add('NAME','Наименование',150);
+    Add('DESCRIPTION','Описание',250);
+  end;
+end;
+
+end.

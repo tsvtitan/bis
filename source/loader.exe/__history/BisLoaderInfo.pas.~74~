@@ -1,0 +1,297 @@
+unit BisLoaderInfo;
+
+interface
+
+function UpdateResource(Head,Resource,UpdateFile,ResourceFile: string): Boolean;
+
+implementation
+
+uses
+  Windows,
+  SysUtils,
+  Classes;
+
+const
+   IMAGE_RESOURCE_DATA_IS_DIRECTORY = $80000000;
+   IMAGE_OFFSET_STRIP_HIGH          = $7FFFFFFF;
+
+type
+
+  PIMAGE_RESOURCE_DIRECTORY_ENTRY=^IMAGE_RESOURCE_DIRECTORY_ENTRY;
+  IMAGE_RESOURCE_DIRECTORY_ENTRY=packed record
+    Name: DWord;
+    OffsetToData: DWord;
+  end;
+
+  PIMAGE_RESOURCE_DIRECTORY=^IMAGE_RESOURCE_DIRECTORY;
+  IMAGE_RESOURCE_DIRECTORY=packed record
+    Characteristics: DWord;
+    TimeDateStamp: DWord;
+    MajorVersion: Word;
+    MinorVersion: Word;
+    NumberOfNamedEntries: Word;
+    NumberOfIdEntries: Word;
+  end;
+
+  PIMAGE_RESOURCE_DATA_ENTRY = ^IMAGE_RESOURCE_DATA_ENTRY;
+  IMAGE_RESOURCE_DATA_ENTRY = packed record
+    OffsetToData    : DWORD;
+    Size            : DWORD;
+    CodePage        : DWORD;
+    Reserved        : DWORD;
+  end;
+
+  PIMAGE_RESOURCE_DIR_STRING_U = ^IMAGE_RESOURCE_DIR_STRING_U;
+  IMAGE_RESOURCE_DIR_STRING_U = packed record
+    Length          : WORD;
+    NameString      : array [0..0] of WCHAR;
+  end;
+
+var
+  HFile: THandle;
+  HFileMap: THandle;
+  FileMapView: Pointer=nil;
+
+procedure FreeFileMap;
+begin
+  if HFile<>0 then begin
+    if HFileMap<>0 then begin
+      if Assigned(FileMapView) then
+        UnmapViewOfFile(FileMapView);
+      CloseHandle(HFileMap);
+      HFileMap:=0;
+      FileMapView:=nil;
+    end;
+    CloseHandle(HFile);
+    HFile:=0;
+  end;
+end;
+
+function CreateFileMap(Value: String): Boolean;
+begin
+  Result:=false;
+  FreeFileMap;
+  HFile:=CreateFile(Pchar(Value), GENERIC_READ+GENERIC_WRITE, FILE_SHARE_READ+FILE_SHARE_WRITE, nil,
+                    OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+  if HFile=INVALID_HANDLE_VALUE then exit;
+
+  HFileMap:=CreateFileMapping(HFile,nil,PAGE_READWRITE,0,0,nil);
+  if (HFileMap=INVALID_HANDLE_VALUE) or (HFileMap=0) then begin
+    CloseHandle(HFile);
+  end;
+
+  FileMapView:=MapViewOfFile(HFileMap,FILE_MAP_ALL_ACCESS,0,0,0);
+  if not Assigned(FileMapView) then begin
+    CloseHandle(HFileMap);
+    CloseHandle(HFile);
+    HFileMap:=0;
+    HFile:=0;
+    exit;
+  end;
+  
+  Result:=true;
+end;
+
+procedure GetResourceMemory(Head,Resource: String; var Memory: Pointer; var MemorySize: Integer);
+
+    function GetPointer(mHandle: DWord; Addr: DWord; StartAddress: DWord;
+                        NumSection: Word; var Delta: Integer):Pointer;
+    var
+      i: Word;
+      SecHeader: TImageSectionHeader;
+    begin
+      Result:=Pointer(mHandle+Addr);
+      Delta:=0;
+      for i:=0 to NumSection-1 do begin
+        Move(Pointer(StartAddress)^,SecHeader,Sizeof(TImageSectionHeader));
+        StartAddress:=StartAddress+Sizeof(TImageSectionHeader);
+        if (SecHeader.VirtualAddress<=Addr)and
+           (SecHeader.VirtualAddress+SecHeader.SizeOfRawData>Addr) then begin
+          Result:=Pointer(mHandle+Addr-SecHeader.VirtualAddress+SecHeader.PointerToRawData);
+          Delta:=-SecHeader.VirtualAddress+SecHeader.PointerToRawData;
+          exit;
+        end;
+      end;
+    end;
+
+    function WideCharToStr(WStr: PWChar; Len: Integer): string;
+    begin
+      if Len = 0 then Len := -1;
+      Len := WideCharToMultiByte(CP_ACP, 0, WStr, Len, nil, 0, nil, nil);
+      SetLength(Result, Len);
+      WideCharToMultiByte(CP_ACP, 0, WStr, Len, PChar(Result), Len, nil, nil);
+    end;
+
+    function StripHighBit(L: DWord): Dword;
+    begin
+      Result := L and IMAGE_OFFSET_STRIP_HIGH;
+    end;
+
+    function HighBitSet(L: DWord): Boolean;
+    begin
+      Result := (L and IMAGE_RESOURCE_DATA_IS_DIRECTORY) <> 0;
+    end;
+
+    function GetResourceNameFromId(ResourceBase: DWord;
+                                   resDirEntry: PIMAGE_RESOURCE_DIRECTORY_ENTRY): string;
+    var
+      PDirStr: PIMAGE_RESOURCE_DIR_STRING_U;
+    begin
+      PDirStr := PIMAGE_RESOURCE_DIR_STRING_U(StripHighBit(resDirEntry.Name)+ResourceBase);
+      Result:=WideCharToStr(@PDirStr.NameString, PDirStr.Length);
+    end;
+
+    function GetNameResource(resType,ResourceBase: DWord;
+                             resDirEntry: PIMAGE_RESOURCE_DIRECTORY_ENTRY;
+                             level: Integer): string;
+    begin
+      Result:='';
+      if not Assigned(resDirEntry) then begin
+        exit;
+      end;
+
+      if not HighBitSet(resDirEntry.Name) and  (resDirEntry.Name <= 16)and (level<1) then begin
+        exit;
+      end;
+
+      if HighBitSet(resDirEntry.Name) then begin
+        Result :=GetResourceNameFromId(ResourceBase,resDirEntry);
+        exit;
+      end;
+      Result := Format('%d', [resDirEntry.Name]);
+   end;
+
+var
+  Delta: Integer;
+  isFind: Boolean;
+
+      procedure FindResource(resDir: PIMAGE_RESOURCE_DIRECTORY;
+                             resourceBase: DWord;
+                             Level: Integer;
+                             TypeParentRes: Word;
+                             IsTypeParentName: Boolean;
+                             ParentNameRes: string);
+
+         procedure FindResourcePlus(resDirEntry: PIMAGE_RESOURCE_DIRECTORY_ENTRY);
+         var
+           resType: DWord;
+           resDataEntry: PIMAGE_RESOURCE_DATA_ENTRY;
+           RDataE: PIMAGE_RESOURCE_DATA_ENTRY;
+           NameRes: string;
+           TypeParentName: Boolean;
+         begin
+           if Level=0 then
+             resType:=resDirEntry.Name
+           else resType:=TypeParentRes;
+
+           NameRes:=GetNameResource(resType,resourceBase,resDirEntry,level);
+
+           if NameRes=Resource then
+             isFind:=true;
+
+           if Level=0 then
+             ParentNameRes:=NameRes;
+
+           if not HighBitSet(resDirEntry.Name) and
+             (resDirEntry.Name <= 16) then begin
+             TypeParentName:=false;
+           end else begin
+             if (Level>0)and(not IsTypeParentName)then
+               TypeParentName:=false
+             else
+               TypeParentName:=true;
+           end;
+
+           if HighBitSet(resDirEntry.OffsetToData) then begin
+             FindResource(Pointer(resourceBase+StripHighBit(resDirEntry.OffsetToData)),
+                          resourceBase,Level+1,resType,TypeParentName,ParentNameRes);
+           end else begin
+             if (ParentNameRes=Head)and(isFind) then begin
+               resDataEntry:=Pointer(resourceBase+StripHighBit(resDirEntry.OffsetToData));
+               RDataE:=PIMAGE_RESOURCE_DATA_ENTRY(resDataEntry);
+               Memory:=Pointer(Integer(FileMapView)+Integer(RDataE.OffsetToData)+Delta);
+               MemorySize:=RDataE.Size;
+               isFind:=false;
+             end;
+           end;
+         end;
+
+      var
+        resDirEntry: PIMAGE_RESOURCE_DIRECTORY_ENTRY;
+        i: DWord;
+      begin
+        resDirEntry:=PIMAGE_RESOURCE_DIRECTORY_ENTRY(resDir);
+        inc(PIMAGE_RESOURCE_DIRECTORY(resDirEntry));
+
+        if resDir.NumberOfNamedEntries>0 then
+          for i:=0 to resDir.NumberOfNamedEntries-1 do begin
+            FindResourcePlus(resDirEntry);
+            inc(resDirEntry);
+          end;
+
+        if resDir.NumberOfIdEntries>0 then
+          for i:=0 to resDir.NumberOfIdEntries-1 do begin
+            FindResourcePlus(resDirEntry);
+            inc(resDirEntry);
+          end;
+      end;
+
+var
+  VirtualAddress: DWord;
+  DosHeader: TImageDosHeader;
+  NtHeader: TImageNtHeaders;
+  OptionalHeader: TImageOptionalHeader;
+  FileHeader: TImageFileHeader;
+  SectionAddress,NumberOfSections: DWord;
+  IRD: PIMAGE_RESOURCE_DIRECTORY;
+begin
+  Move(FileMapView^,DosHeader,sizeof(TImageDosHeader));
+  if DosHeader.e_magic<>IMAGE_DOS_SIGNATURE then exit;
+  Move(Pointer(DWord(FileMapView)+DWord(DosHeader._lfanew))^,NtHeader,sizeof(TImageNtHeaders));
+  Move(NtHeader.FileHeader,FileHeader,sizeof(TImageFileHeader));
+  Move(NtHeader.OptionalHeader,OptionalHeader,sizeof(TImageOptionalHeader));
+  VirtualAddress:=OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_RESOURCE].VirtualAddress;
+  SectionAddress:=DWord(FileMapView)+DWord(DosHeader._lfanew)+sizeof(TImageNtHeaders);
+  NumberOfSections:=FileHeader.NumberOfSections;
+  IRD:=GetPointer(DWord(FileMapView),VirtualAddress,SectionAddress,NumberOfSections,Delta);
+  if not IsBadCodePtr(IRD) then begin
+    isFind:=false;
+    FindResource(IRD,DWord(IRD),0,0,false,'');
+  end;
+end;
+
+function UpdateResource(Head,Resource,UpdateFile,ResourceFile: string): Boolean;
+var
+  Memory: Pointer;
+  MemorySize: Integer;
+  Stream: TFileStream;
+begin
+  Result:=false;
+  try
+    if CreateFileMap(UpdateFile) then begin
+      try
+        Memory:=nil;
+        MemorySize:=0;
+        GetResourceMemory(Head,Resource,Memory,MemorySize);
+        if Assigned(Memory) then begin
+          Stream:=TFileStream.Create(ResourceFile,fmOpenRead);
+          try
+            if Stream.Size=MemorySize then begin
+              Stream.Position:=0;
+              Stream.WriteBuffer(Memory^,MemorySize);
+              Result:=true;
+            end;
+          finally
+            Stream.Free;
+          end;
+        end;
+      finally
+        FreeFileMap;
+      end;
+    end;
+  except
+  end;
+end;
+
+
+end.

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{f8ea43b8-9465-43f3-8b82-c20069e5ee6b}</ProjectGuid>
+    <MainSource>scmdws.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\scmdws.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+    <DCC_UnitSearchPath>U:\source\_dcp;U:\source\scmdws.bpl\Dws\Source</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp;U:\source\scmdws.bpl\Dws\Source</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp;U:\source\scmdws.bpl\Dws\Source</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp;U:\source\scmdws.bpl\Dws\Source</DCC_IncludePath>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_IMPLICIT_IMPORT>False</DCC_IMPLICIT_IMPORT>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_OutputDRCFile>True</DCC_OutputDRCFile>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="HostApplication">U:\bin\loader.exe</Parameters><Parameters Name="RunParams">/config imdesign.ini /noupdate</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options><Package_Options Name="LibSuffix"></Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">315</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">Dws script module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.315</VersionInfoKeys><VersionInfoKeys Name="InternalName">scmdws.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">scmdws.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0</VersionInfoKeys><VersionInfoKeys Name="Comments">Dws script module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">scmdws.dpk</Source></Source><Excluded_Packages /><Language><Language Name="ProjectLang">$00000419</Language><Language Name="RootDir">U:\source\imdesign.bpl\</Language></Language>  
+    
+    
+    <Resource_DLL_Projects>
+      <Resource_DLL_Projects Name="Item0">Русский*$00000419*RUS*RUS</Resource_DLL_Projects>
+    </Resource_DLL_Projects>
+  </Delphi.Personality><ModelSupport>False</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="scmdws.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="core.dcp" />
+    <DCCReference Include="rtl.dcp" />
+    <DCCReference Include="scmdws.bpl\BisDws.pas" />
+    <DCCReference Include="scmdws.bpl\BisDwsConsts.pas" />
+    <DCCReference Include="scmdws.bpl\BisDwsScriptIface.pas" />
+    <DCCReference Include="scmdws.bpl\del\BrowserFrm.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2ComConnector.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2Comp.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2Compiler.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2Debugger.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2Errors.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2Exprs.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2Functions.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2Stack.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2StringResult.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2Strings.pas" />
+    <DCCReference Include="scmdws.bpl\Dws\Source\dws2Symbols.pas" />
+    <DCCReference Include="vcl.dcp" />
+  </ItemGroup>
+</Project>

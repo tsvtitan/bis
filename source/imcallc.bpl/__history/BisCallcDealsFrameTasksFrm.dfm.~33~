@@ -1,0 +1,117 @@
+inherited BisCallcDealsFrameTasksFrame: TBisCallcDealsFrameTasksFrame
+  Height = 222
+  ExplicitHeight = 222
+  inherited PanelData: TPanel
+    Height = 193
+    ExplicitHeight = 124
+    object Splitter: TSplitter [0]
+      Left = 0
+      Top = 68
+      Width = 450
+      Height = 5
+      Cursor = crVSplit
+      Align = alBottom
+      MinSize = 50
+      ExplicitTop = 23
+    end
+    inherited GridPattern: TDBGrid
+      Height = 68
+    end
+    object GroupBoxTasks: TGroupBox
+      AlignWithMargins = True
+      Left = 0
+      Top = 73
+      Width = 450
+      Height = 120
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      Align = alBottom
+      Caption = ' '#1052#1077#1088#1086#1087#1088#1080#1103#1090#1080#1103' '
+      Constraints.MinHeight = 50
+      TabOrder = 1
+      object PanelTasks: TPanel
+        Left = 2
+        Top = 15
+        Width = 286
+        Height = 103
+        Align = alLeft
+        BevelOuter = bvNone
+        TabOrder = 0
+        object SplitterTasks: TSplitter
+          Left = 281
+          Top = 0
+          Width = 5
+          Height = 103
+          Align = alRight
+          MinSize = 100
+          ExplicitLeft = 283
+        end
+      end
+      object DBMemoTaskDescription: TDBMemo
+        AlignWithMargins = True
+        Left = 288
+        Top = 15
+        Width = 155
+        Height = 98
+        Margins.Left = 0
+        Margins.Top = 0
+        Margins.Right = 5
+        Margins.Bottom = 5
+        Align = alClient
+        Color = clBtnFace
+        ReadOnly = True
+        ScrollBars = ssVertical
+        TabOrder = 1
+        ExplicitWidth = 160
+        ExplicitHeight = 103
+      end
+    end
+  end
+  inherited ActionList: TActionList
+    object ActionChecking: TAction [12]
+      Caption = #1042#1099#1073#1088#1072#1090#1100
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1099#1076#1077#1083#1077#1085#1085#1099#1077
+      OnExecute = ActionCheckingExecute
+      OnUpdate = ActionCheckingUpdate
+    end
+    object ActionUnChecking: TAction [13]
+      Caption = #1059#1073#1088#1072#1090#1100' '#1074#1099#1073#1086#1088
+      Hint = #1059#1073#1088#1072#1090#1100' '#1074#1099#1073#1086#1088
+      OnExecute = ActionUnCheckingExecute
+      OnUpdate = ActionUnCheckingUpdate
+    end
+    object ActionCheckingAll: TAction [14]
+      Caption = #1042#1099#1073#1088#1072#1090#1100' '#1074#1089#1077
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1089#1077
+      OnExecute = ActionCheckingAllExecute
+      OnUpdate = ActionCheckingAllUpdate
+    end
+    object ActionUnCheckingAll: TAction [15]
+      Caption = #1059#1073#1088#1072#1090#1100' '#1074#1099#1073#1086#1088' '#1074#1089#1077#1093
+      OnExecute = ActionUnCheckingAllExecute
+      OnUpdate = ActionUnCheckingAllUpdate
+    end
+  end
+  inherited Popup: TPopupActionBar
+    object N15: TMenuItem [0]
+      Action = ActionChecking
+    end
+    object N16: TMenuItem [1]
+      Action = ActionUnChecking
+    end
+    object N20: TMenuItem [2]
+      Caption = '-'
+    end
+    object N18: TMenuItem [3]
+      Action = ActionCheckingAll
+    end
+    object N19: TMenuItem [4]
+      Action = ActionUnCheckingAll
+    end
+    object N13: TMenuItem [5]
+      Caption = '-'
+    end
+  end
+end

@@ -1,0 +1,34 @@
+unit BisBallThirdRoundFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, ExtCtrls, DB, Buttons,
+  BisBallBarrelFrm, BisControls;
+
+type
+  TBisBallThirdRoundFrame = class(TBisBallBarrelFrame)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisLotoRound2Frame: TBisBallThirdRoundFrame;
+
+implementation
+
+uses BisProvider, BisConsts, BisFilterGroups;
+
+{$R *.dfm}
+
+{ TBisBallSecondRoundFrame }
+
+constructor TBisBallThirdRoundFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  RoundNum:=2;
+  ProviderName:='GET_SECOND_ROUND';
+end;
+
+end.

@@ -1,0 +1,34 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{43308324-4f0a-488a-811f-5e6053553aad}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="gwx.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="gwx">
+    <MSBuild Projects="gwx.dproj" Targets="" />
+  </Target>
+  <Target Name="gwx:Clean">
+    <MSBuild Projects="gwx.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="gwx:Make">
+    <MSBuild Projects="gwx.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="gwx" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="gwx:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="gwx:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

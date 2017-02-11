@@ -1,0 +1,266 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en-us">
+<title>DelphiWebScript II - Syntax</title>
+</head>
+<body>
+
+<h1>Syntax of DelphiWebScript II</h1>
+
+<h2>EBNF</h2>
+
+<p>The description of the syntax uses the EBNF (&quot;Enhanced
+Bachus Nauer Form&quot;).</p>
+
+<ul>
+    <li>[ ] = Optional</li>
+    <li>{ } = Zero, one or many times</li>
+    <li>Names in capital letters are symbols (non-terminals)</li>
+    <li>Names in quotes (&quot;name&quot;) are part of the input string (terminals)</li>
+</ul>
+
+<h2>Syntax</h2>
+<p>The start non-terminal is SCRIPT</p>
+
+<pre>
+SCRIPT =
+  [ ROOTSTATEMENT { &quot;;&quot; ROOTSTATEMENT } [ &quot;;&quot; ] ]
+
+ROOTSTATEMENT =
+  TYPEDECL |
+  PROCDECL |
+  STATEMENT
+
+STATEMENT =
+  VARDECL |
+  CONSTDECL |
+  BLOCK
+
+VARDECL =
+  &quot;var&quot; NAME &quot;:&quot; TYPEDEF [ &quot;=&quot; EXPR ]
+
+TYPEDECL =
+  &quot;type&quot; NAME &quot;=&quot; TYPEDEF
+
+TYPEDEF =
+  &quot;Boolean&quot; | &quot;Integer&quot; | &quot;Float&quot; | &quot;String&quot; | &quot;DateTime&quot; | &quot;Variant&quot;
+  NAME |
+  ENUMDEF |
+  ARRAYDEF |
+  RECORDDEF |
+  CLASSDEF
+
+ENUMDEF =
+  &quot;(&quot; NAME [ &quot;=&quot; EXPR ] { &quot;,&quot; NAME [ &quot;=&quot; EXPR ] } &quot;)&quot;
+
+ARRAYDEF =
+  &quot;array&quot; &quot;[&quot; EXPR &quot;..&quot; EXPR {&quot;,&quot; EXPR &quot;..&quot; EXPR} &quot;]&quot; &quot;of&quot; TYPEDEF |
+  &quot;array&quot; &quot;of&quot; TYPEDEF
+
+RECORDDEF =
+  &quot;record&quot; ARGLIST &quot;end&quot;
+
+ARGLIST =
+  ARGDECL { &quot;;&quot; ARGDECL }
+
+ARGDECL =
+  NAME &quot;:&quot; TYPEDEF
+
+CLASSDEF =
+  &quot;class&quot; [ &quot;(&quot; NAME &quot;)&quot; ]
+      [ &quot;private&quot; | &quot;public&quot; | &quot;protected&quot; ]
+      [ ARGLIST &quot;;&quot; ]
+      [ METHODDECL { &quot;;&quot; METHODDECL } &quot;;&quot; ]
+      [ &quot;property&quot; NAME [ "[" ARGLIST "]" ] &quot;:&quot; TYPEDEF [ &quot;read&quot; NAME ] [ &quot;write&quot; NAME ] &quot;;&quot; ] [ "default" ";" ]
+  &quot;end&quot;
+
+METHODDECL =
+  [ &quot;class&quot; ] &quot;procedure&quot; NAME [&quot;(&quot; [ARGLIST] &quot;)&quot;] [ &quot;;&quot; &quot;override&quot; | &quot;virtual&quot; | &quot;reintroduce&quot; ] |
+  [ &quot;class&quot; ] &quot;function&quot; NAME [&quot;(&quot; [ARGLIST] &quot;)&quot;] &quot;:&quot; TYPEDEF [ &quot;;&quot; &quot;override&quot; | &quot;virtual&quot; | &quot;reintroduce&quot; ] |
+  &quot;constructor&quot; NAME [&quot;(&quot; [ARGLIST] &quot;)&quot;] [ &quot;;&quot; &quot;override&quot; | &quot;virtual&quot; | &quot;reintroduce&quot; ] |
+  &quot;destructor&quot; NAME [&quot;(&quot; [ARGLIST] &quot;)&quot;] [ &quot;;&quot; &quot;override&quot; | &quot;virtual&quot; | &quot;reintroduce&quot; ]
+
+PROCDECL =
+  PROCHEAD &quot;;&quot; PROCBODY |
+  PROCHEAD &quot;;&quot; &quot;forward&quot; |
+  METHODDEF &quot;;&quot; PROCBODY
+
+PROCHEAD
+  &quot;procedure&quot; NAME [&quot;(&quot; [ARGLIST] &quot;)&quot;]
+  &quot;function&quot; NAME [&quot;(&quot; [ARGLIST] &quot;)&quot;] &quot;:&quot; TYPEDEF
+
+PROCBODY =
+  {VARDECL &quot;;&quot;} &quot;begin&quot; SCRIPT &quot;end&quot;
+
+METHODDEF =
+  [ &quot;class&quot; ] &quot;procedure&quot; NAME &quot;.&quot; NAME [&quot;(&quot; [ARGLIST] &quot;)&quot;] |
+  [ &quot;class&quot; ] &quot;function&quot; NAME &quot;.&quot; NAME [&quot;(&quot; [ARGLIST] &quot;)&quot;] &quot;:&quot; TYPEDEF |
+  &quot;constructor&quot; NAME &quot;.&quot; NAME [&quot;(&quot; [ARGLIST] &quot;)&quot;] |
+  &quot;destructor&quot; NAME &quot;.&quot; NAME [&quot;(&quot; [ARGLIST] &quot;)&quot;]
+
+CONSTDECL =
+  &quot;const&quot; NAME &quot;=&quot; EXPR
+
+BLOCK =
+  &quot;begin&quot; [STATEMENT {&quot;;&quot; STATEMENT} [&quot;;&quot;]] &quot;end&quot; |
+  INSTR
+
+INSTR =
+  &quot;if&quot; EXPR &quot;then&quot; BLOCK |
+  &quot;if&quot; EXPR &quot;then&quot; BLOCK &quot;else&quot; BLOCK |
+  CASEINSTR |
+  &quot;for&quot; VAR &quot;:=&quot; EXPR &quot;to&quot; EXPR &quot;do&quot; BLOCK |
+  &quot;for&quot; VAR &quot;:=&quot; EXPR &quot;downto&quot; EXPR &quot;do&quot; BLOCK |
+  &quot;while&quot; EXPR &quot;do&quot; BLOCK |
+  &quot;repeat&quot; [BLOCK {&quot;;&quot; BLOCK} [&quot;;&quot;]] &quot;until&quot; EXPR |
+  VAR &quot;:=&quot; EXPR |
+  FUNC |
+  EXCEPT |
+  FINALLY |
+  BLOCK
+
+CASECOND =
+  EXPR |
+  EXPR &quot;..&quot; EXPR |
+
+CASEINSTR =
+  &quot;case&quot; EXPR &quot;of&quot;
+    { CASECOND {&quot;,&quot; CASECOND } : BLOCK &quot;;&quot; }
+    [ &quot;default&quot; &quot;:&quot; BLOCK &quot;;&quot; ]
+  &quot;end&quot;
+
+FUNC =
+  NAME [ &quot;(&quot; [EXPR {, EXPR}] &quot;)&quot; ]
+
+EXCEPT =
+  &quot;try&quot;
+    STATEMENT { &quot;;&quot; STATEMENT } [ &quot;;&quot; ]
+  &quot;except&quot;
+    { &quot;on&quot; NAME &quot;:&quot; NAME &quot;do&quot; BLOCK; }
+  &quot;end&quot;
+
+FINALLY =
+  &quot;try&quot;
+    STATEMENT { &quot;;&quot; STATEMENT } [ &quot;;&quot; ]
+  &quot;finally&quot;
+    { &quot;on&quot; NAME &quot;:&quot; NAME &quot;do&quot; BLOCK; }
+  &quot;end&quot;
+
+EXPR =
+  EXPRADD [ &quot;=&quot; | &quot;+&quot; | &quot;-&quot; | &quot;OR&quot; EXPRADD]
+
+EXPRADD =
+  EXPRMUL [ &quot;+&quot; | &quot;-&quot; | &quot;OR&quot; EXPRADD]
+
+EXPRMUL =
+  TERM [ &quot;*&quot; | &quot;/&quot; | &quot;mod&quot; | &quot;div&quot; EXPRMUL]
+
+TERM =
+  &quot;+&quot; TERM |
+  &quot;-&quot; TERM |
+  &quot;not&quot; TERM |
+  CONST |
+  VAR |
+  FUNC |
+  &quot;(&quot; EXPR &quot;)&quot;
+  &quot;[&quot; [ EXPR { &quot;,&quot; EXPR } ] &quot;]&quot;
+
+CONST =
+  INT |
+  HEXINT |
+  FLOAT |
+  STR |
+  CHAR |
+  &quot;True&quot; |
+  &quot;False&quot;
+
+VAR =
+  NAME |
+  NAME &quot;[&quot; INT &quot;]&quot; |
+  NAME &quot;.&quot; VAR |
+  VAR &quot;.&quot; FUNC
+
+NAME =
+  LIT {LIT | &quot;0&quot;..&quot;9&quot; | &quot;_&quot;}
+
+LIT =
+  &quot;A&quot;..&quot;Z&quot;, &quot;a&quot;..&quot;z&quot;
+
+STR =
+  CHAR |
+  STRING { CHAR [ STRING ] }
+
+STRING =
+  &quot; ' &quot; { STRINGCHAR } &quot; ' &quot; { &quot; ' &quot; STRING }
+
+STRINGCHAR =
+  ASCII(0)..ASCII(255) - &quot; ' &quot; - ASCII(13) | &quot; ' ' &quot;
+
+CHAR =
+  &quot;#&quot; INT | &quot;#&quot; HEXINT
+
+HEXINT =
+  &quot;$&quot; HEXNUM { HEXNUM }
+
+HEXNUM =
+  &quot;0&quot;..&quot;9&quot;|&quot;A&quot;..&quot;F&quot;|&quot;a&quot;..&quot;f&quot;
+
+FLOAT =
+  INT [ &quot;.&quot; INT]  [ &quot;E&quot; | &quot;e&quot; [&quot;+&quot; | &quot;-&quot; ] INT ]
+
+INT =
+  NUM {NUM}
+
+NUM =
+  &quot;0&quot;..&quot;9&quot;
+</pre>
+
+<h2>Reserved Words</h2>
+
+<ul>
+    <li>and</li>
+    <li>array</li>
+    <li>as</li>
+    <li>begin</li>
+    <li>case</li>
+    <li>class</li>
+    <li>const</li>
+    <li>constructor</li>
+    <li>destructor</li>
+    <li>div</li>
+    <li>do</li>
+    <li>downto</li>
+    <li>else</li>
+    <li>end</li>
+    <li>except</li>
+    <li>finally</li>
+    <li>for</li>
+    <li>forward</li>
+    <li>function</li>
+    <li>if</li>
+    <li>inherited</li>
+    <li>is</li>
+    <li>label</li>
+    <li>mod</li>
+    <li>nil</li>
+    <li>not</li>
+    <li>of</li>
+    <li>or</li>
+    <li>procedure</li>
+    <li>property</li>
+    <li>raise</li>
+    <li>record</li>
+    <li>repeat</li>
+    <li>string</li>
+    <li>then</li>
+    <li>to</li>
+    <li>try</li>
+    <li>type</li>
+    <li>until</li>
+    <li>var</li>
+    <li>while</li>
+    <li>xor</li>
+</ul>
+</body>
+</html>

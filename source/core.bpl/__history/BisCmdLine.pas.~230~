@@ -1,0 +1,302 @@
+unit BisCmdLine;
+
+interface
+
+uses Classes,
+     BisObject, BisVariants, BisValues;
+
+type
+  TBisCmdParam=class(TBisValue)
+  private
+    FValues: TBisValues;
+    FSwitch: Char;
+    function GetValue: String;
+    function GetText: String;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+
+    procedure Add(const Value: String);
+    function Next(const Name: String): String;
+
+    property Values: TBisValues read FValues;
+    property Value: String read GetValue;
+    property Switch: Char read FSwitch;
+    property Text: String read GetText;
+  end;
+
+  TBisCmdParams=class(TBisValues)
+  private
+    function GetItem(Index: Integer): TBisCmdParam;
+  protected
+    function GetVariantClass: TBisVariantClass; override;
+  published
+  public
+    function Add(const Name: String; Value: Variant): TBisCmdParam; reintroduce;
+    function Find(const Name: String): TBisCmdParam;
+    function Delete(const Name: String): Boolean;
+
+    property Items[Index: Integer]: TBisCmdParam read GetItem; default;
+  end;
+
+  TBisCmdLine=class(TBisObject)
+  private
+    FParams: TBisCmdParams;
+    function GetFileName: String;
+    function GetText: String;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure Refresh;
+
+    function ParamExists(const Param: String): Boolean;
+    function ValueByParam(const Param: String; Index: Integer=0): String;
+
+    property FileName: String read GetFileName;
+    property Text: String read GetText;
+    property Params: TBisCmdParams read FParams;
+  end;
+
+implementation
+
+uses Windows, SysUtils, Variants,
+     BisUtils;
+
+{ TBisCmdParam }
+
+constructor TBisCmdParam.Create;
+begin
+  inherited Create;
+  FValues:=TBisValues.Create;
+end;
+
+destructor TBisCmdParam.Destroy;
+begin
+  FValues.Free;
+  inherited Destroy;
+end;
+
+function TBisCmdParam.GetText: String;
+var
+  i: Integer;
+  Item: TBisValue;
+  S: String;
+  V: String;
+begin
+  Result:=FSwitch+Name;
+  if FValues.Count>0 then begin
+    for i:=0 to FValues.Count-1 do begin
+      Item:=FValues.Items[i];
+      V:=Item.AsString;
+      if not AnsiSameText(Item.Name,V) then
+        S:=FormatEx('%s=%s',[QuotedFileName(Item.Name),QuotedFileName(V)])
+      else
+        S:=QuotedFileName(V);
+      Result:=Result+' '+S;  
+    end;
+    Result:=Trim(Result);
+  end;
+end;
+
+function TBisCmdParam.GetValue: String;
+var
+  i: Integer;
+  S: String;
+begin
+  Result:='';
+  if FValues.Count=1 then
+    Result:=FValues[0].AsString
+  else begin
+    for i:=0 to FValues.Count-1 do begin
+      S:=FValues[i].AsString;
+      Result:=iff(i=0,S,Result+' '+S);
+    end;
+  end;
+end;
+
+function TBisCmdParam.Next(const Name: String): String;
+var
+  Index: Integer;
+begin
+  Result:='';
+  Index:=FValues.IndexOfName(Name);
+  if (Index>-1) and ((Index+1)<FValues.Count) then
+    Result:=FValues[Index+1].AsString;
+  
+
+end;
+
+procedure TBisCmdParam.Add(const Value: String);
+var
+  Pos: Integer;
+  S1,S2: String;
+begin
+  Pos:=AnsiPos('=',Value);
+  if Pos>0 then begin
+    if ParseName(Value,'=',S1,S2) then
+      FValues.Add(S1,S2);
+  end else
+    FValues.Add(Value,Value);
+end;
+
+{ TBisCmdParams }
+
+function TBisCmdParams.Delete(const Name: String): Boolean;
+var
+  Item: TBisCmdParam;
+begin
+  Result:=false;
+  Item:=Find(Name);
+  if Assigned(Item) then begin
+    Remove(Item);
+    Result:=true;
+  end;
+end;
+
+function TBisCmdParams.Find(const Name: String): TBisCmdParam;
+begin
+  Result:=TBisCmdParam(inherited Find(Name));
+end;
+
+function TBisCmdParams.GetItem(Index: Integer): TBisCmdParam;
+begin
+  Result:=TBisCmdParam(inherited Items[Index]);
+end;
+
+function TBisCmdParams.GetVariantClass: TBisVariantClass;
+begin
+  Result:=TBisCmdParam;
+end;
+
+function TBisCmdParams.Add(const Name: String; Value: Variant): TBisCmdParam;
+begin
+  Result:=TBisCmdParam(inherited Add(Name,Value));
+end;
+
+{ TBisCmdLine }
+
+constructor TBisCmdLine.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FParams:=TBisCmdParams.Create;
+end;
+
+destructor TBisCmdLine.Destroy;
+begin
+  FParams.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCmdLine.Refresh;
+var
+  i: Integer;
+  ParamName: String;
+  Param: TBisCmdParam;
+  S: string;
+  Chars: TSysCharSet;
+begin
+  FParams.Clear;
+  Param:=nil;
+  Chars:=SwitchChars;
+  for i:=1 to ParamCount do begin
+    S:=Trim(ParamStr(i));
+    if (Chars = []) or (S[1] in Chars) then begin
+      ParamName:=Trim(Copy(S, 2, Maxint));
+      if ParamName<>'' then begin
+        Param:=FParams.Find(ParamName);
+        if not Assigned(Param) then begin
+          Param:=FParams.Add(ParamName,Null);
+          Param.FSwitch:=S[1];
+        end;
+      end;
+    end else begin
+      if Assigned(Param) and (S<>'') then
+        Param.Add(S);
+    end;  
+  end;
+end;
+
+{function TBisCmdLine.ParamExists(const Param: String): Boolean;
+begin
+  Result:=FindCmdLineSwitch(Param);
+end;}
+
+function TBisCmdLine.ParamExists(const Param: String): Boolean;
+var
+  Item: TBisCmdParam;
+begin
+  Item:=FParams.Find(Param);
+  Result:=Assigned(Item);
+end;
+
+{function TBisCmdLine.ValueByParam(const Param: String; Index: Integer=0): String;
+var
+  i: Integer;
+  ParamExists: Boolean;
+  S: string;
+  Chars: TSysCharSet;
+  Incr: Integer;
+begin
+  ParamExists:=false;
+  Chars:=SwitchChars;
+  Incr:=1;
+  for i:=1 to ParamCount do begin
+    S:=ParamStr(i);
+    if (Chars = []) or (S[1] in Chars) then begin
+      if (AnsiCompareText(Copy(S, 2, Maxint), Param) = 0) then begin
+        ParamExists:=True;
+      end;
+    end else begin
+      if ParamExists then begin
+        if Incr=(Index+1) then begin
+          Result:=S;
+          exit;
+        end;
+        Inc(Incr);
+      end;
+    end;
+  end;
+end;}
+
+function TBisCmdLine.ValueByParam(const Param: String; Index: Integer=0): String;
+var
+  Item: TBisCmdParam; 
+begin
+  Result:='';
+  Item:=FParams.Find(Param);
+  if Assigned(Item) then begin
+    if (Index>=0) and (Index<Item.Values.Count) then
+      Result:=Item.Values.Items[Index].AsString; 
+  end;
+end;
+
+
+function TBisCmdLine.GetFileName: String;
+begin
+  Result:=GetModuleName(HInstance);
+end;
+
+function TBisCmdLine.GetText: String;
+var
+  i: Integer;
+  Item: TBisCmdParam;
+begin
+  Result:=CmdLine;
+  if (FParams.Count>0) and (ParamCount>0) then begin
+    Result:=QuotedFileName(ParamStr(0));
+    for i:=0 to FParams.Count-1 do begin
+      Item:=FParams[i];
+      Result:=Result+' '+Item.Text;
+      Result:=Trim(Result);
+    end;
+  end;
+end;
+
+procedure TBisCmdLine.Init;
+begin
+  inherited Init;
+  Refresh;
+end;
+
+end.

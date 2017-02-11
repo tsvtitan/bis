@@ -1,0 +1,66 @@
+unit BisCallcHandbookRolesAndAccountsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm;
+
+type
+  TBiCallcHandbookRolesAndAccountsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBiCallcHandbookAccountsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHandbookRolesAndAccountsForm: TBiCallcHandbookRolesAndAccountsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisOrders;
+
+{ TBiCallcHandbookAccountsFormIface }
+
+constructor TBiCallcHandbookAccountsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBiCallcHandbookRolesAndAccountsForm;
+  ProviderName:='S_ACCOUNTS';
+  with FieldNames do begin
+    AddKey('ACCOUNT_ID');
+    Add('USER_NAME','Наименование',200);
+    AddCheckBox('IS_ROLE','Признак роли',80);
+    AddRadioButton('IS_ROLE','Признак роли2',80);
+  end;
+  with Orders do begin
+    Add('IS_ROLE',otDesc);
+    Add('USER_NAME');
+  end;
+end;
+
+{ TBiCallcHandbookRolesAndAccountsForm }
+
+constructor TBiCallcHandbookRolesAndAccountsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  if Assigned(DataFrame) then begin
+    with DataFrame do begin
+      ActionViewing.Visible:=false;
+      ActionInsert.Visible:=false;
+      ActionDuplicate.Visible:=false;
+      ActionUpdate.Visible:=false;
+      ActionDelete.Visible:=false;
+    end;
+  end;
+end;
+
+end.

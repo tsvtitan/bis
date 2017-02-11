@@ -1,0 +1,684 @@
+inherited BisSecureMainForm: TBisSecureMainForm
+  Left = 395
+  Top = 147
+  Caption = #1056#1077#1076#1072#1082#1090#1086#1088' '#1083#1086#1082#1072#1083#1100#1085#1086#1081' '#1073#1072#1079#1099
+  ClientHeight = 553
+  ClientWidth = 772
+  Constraints.MinHeight = 580
+  Constraints.MinWidth = 780
+  OldCreateOrder = True
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  ExplicitWidth = 780
+  ExplicitHeight = 587
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter: TSplitter
+    Left = 0
+    Top = 320
+    Width = 772
+    Height = 3
+    Cursor = crVSplit
+    Align = alTop
+  end
+  object PanelTop: TPanel
+    Left = 0
+    Top = 0
+    Width = 772
+    Height = 92
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 0
+    DesignSize = (
+      772
+      92)
+    object LabelFile: TLabel
+      Left = 73
+      Top = 13
+      Width = 30
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1060#1072#1081#1083':'
+    end
+    object LabelKey: TLabel
+      Left = 9
+      Top = 40
+      Width = 32
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1050#1083#1102#1095':'
+    end
+    object LabelHash: TLabel
+      Left = 56
+      Top = 67
+      Width = 23
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1061#1101#1096':'
+    end
+    object LabelAlgorithm: TLabel
+      Left = 321
+      Top = 39
+      Width = 52
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1040#1083#1075#1086#1088#1080#1090#1084':'
+    end
+    object LabelMode: TLabel
+      Left = 493
+      Top = 39
+      Width = 36
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1056#1077#1078#1080#1084':'
+    end
+    object EditFile: TEdit
+      Left = 109
+      Top = 10
+      Width = 402
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 1
+    end
+    object ButtonCreate: TButton
+      Left = 519
+      Top = 10
+      Width = 75
+      Height = 21
+      Anchors = [akTop, akRight]
+      Caption = #1057#1086#1079#1076#1072#1090#1100
+      TabOrder = 2
+      OnClick = ButtonCreateClick
+    end
+    object ButtonLoad: TButton
+      Left = 602
+      Top = 10
+      Width = 75
+      Height = 21
+      Anchors = [akTop, akRight]
+      Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
+      TabOrder = 3
+      OnClick = ButtonLoadClick
+    end
+    object ButtonSave: TButton
+      Left = 685
+      Top = 10
+      Width = 75
+      Height = 21
+      Anchors = [akTop, akRight]
+      Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+      TabOrder = 4
+      OnClick = ButtonSaveClick
+    end
+    object CheckBoxCrypt: TCheckBox
+      Left = 8
+      Top = 11
+      Width = 59
+      Height = 17
+      Caption = #1064#1080#1092#1088
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 0
+      OnClick = CheckBoxCryptClick
+    end
+    object EditKey: TEdit
+      Left = 47
+      Top = 37
+      Width = 261
+      Height = 21
+      TabOrder = 5
+      Text = 'Base Intellectual System'
+      OnChange = EditKeyChange
+    end
+    object EditHash: TEdit
+      Left = 85
+      Top = 64
+      Width = 223
+      Height = 21
+      TabOrder = 8
+      Text = '920C7934688DE6FCC4392CFF5C7B7A65'
+    end
+    object ComboBoxAlgorithm: TComboBox
+      Left = 379
+      Top = 36
+      Width = 100
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      ItemIndex = 34
+      TabOrder = 6
+      Text = 'RC5'
+      Items.Strings = (
+        'Way'
+        'Blowfish'
+        'Gost'
+        'IDEA'
+        'Q128'
+        'SAFER K40'
+        'SAFER SK40'
+        'SAFER K64'
+        'SAFER SK64'
+        'SAFER K128'
+        'SAFER SK128'
+        'SCOP'
+        'Shark'
+        'Square'
+        'TEA'
+        'TEAN'
+        'Twofish'
+        'Cast128'
+        'Cast256'
+        '1DES'
+        '2DES'
+        '2DDES'
+        '3DES'
+        '3DDES'
+        '3TDES'
+        'DESX'
+        'Diamond2'
+        'Diamond2Lite'
+        'FROG'
+        'Mars'
+        'Misty'
+        'NewDES'
+        'RC2'
+        'RC4'
+        'RC5'
+        'RC6'
+        'Rijndael'
+        'Sapphire'
+        'Skipjack')
+    end
+    object ButtonNew: TButton
+      Left = 317
+      Top = 64
+      Width = 75
+      Height = 21
+      Caption = #1053#1086#1074#1099#1081
+      TabOrder = 9
+      OnClick = ButtonNewClick
+    end
+    object ComboBoxMode: TComboBox
+      Left = 535
+      Top = 36
+      Width = 85
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      ItemIndex = 0
+      TabOrder = 7
+      Text = 'CTS'
+      Items.Strings = (
+        'CTS'
+        'CBC'
+        'CFB'
+        'OFB'
+        'ECB'
+        'CTSMAC'
+        'CBCMAC'
+        'CFBMAC')
+    end
+    object ButtonCreateHex: TButton
+      Left = 398
+      Top = 64
+      Width = 120
+      Height = 21
+      Caption = 'BisCryptConsts.hex'
+      TabOrder = 10
+      OnClick = ButtonCreateHexClick
+    end
+    object ButtonUtils: TButton
+      Left = 524
+      Top = 64
+      Width = 75
+      Height = 21
+      Caption = #1059#1090#1080#1083#1080#1090#1099
+      TabOrder = 11
+      OnClick = ButtonUtilsClick
+    end
+    object Button1: TButton
+      Left = 656
+      Top = 37
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 14
+      Visible = False
+      OnClick = Button1Click
+    end
+    object btDownColumns: TBitBtn
+      Left = 636
+      Top = 64
+      Width = 25
+      Height = 21
+      Hint = #1042#1085#1080#1079
+      TabOrder = 12
+      OnClick = btDownColumnsClick
+      Glyph.Data = {
+        F6000000424DF600000000000000760000002800000010000000100000000100
+        0400000000008000000000000000000000001000000010000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+        8888888888888888888888888888888888888888888888888888888888808888
+        8888888888060888888888888066608888888888066666088888888066666660
+        8888880000666000088888888066608888888888806660888888888880666088
+        8888888880000088888888888888888888888888888888888888}
+    end
+    object btUpColumns: TBitBtn
+      Left = 605
+      Top = 64
+      Width = 25
+      Height = 21
+      Hint = #1042#1074#1077#1088#1093
+      TabOrder = 13
+      OnClick = btUpColumnsClick
+      Glyph.Data = {
+        F6000000424DF600000000000000760000002800000010000000100000000100
+        0400000000008000000000000000000000001000000010000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+        8888888888888888888888888888888888888888888888888888888880000088
+        8888888880666088888888888066608888888888806660888888880000666000
+        0888888066666660888888880666660888888888806660888888888888060888
+        8888888888808888888888888888888888888888888888888888}
+    end
+  end
+  object StatusBar: TStatusBar
+    Left = 0
+    Top = 534
+    Width = 772
+    Height = 19
+    Panels = <>
+    ParentShowHint = False
+    ShowHint = True
+  end
+  object PanelGrid: TPanel
+    Left = 0
+    Top = 92
+    Width = 772
+    Height = 228
+    Align = alTop
+    BevelOuter = bvNone
+    BorderWidth = 3
+    TabOrder = 2
+    object Grid: TDBGrid
+      Left = 3
+      Top = 3
+      Width = 766
+      Height = 222
+      Align = alClient
+      Ctl3D = True
+      DataSource = DataSource
+      Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgConfirmDelete, dgCancelOnExit]
+      ParentCtl3D = False
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDrawColumnCell = GridDrawColumnCell
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = #1048#1084#1103
+          Width = 200
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DESCRIPTION'
+          Title.Caption = #1054#1087#1080#1089#1072#1085#1080#1077
+          Width = 450
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'TYPE'
+          PickList.Strings = (
+            #1058#1077#1082#1089#1090
+            #1050#1072#1088#1090#1080#1085#1082#1072
+            #1058#1072#1073#1083#1080#1094#1072
+            #1044#1086#1082#1091#1084#1077#1085#1090
+            #1041#1080#1085#1072#1088#1085#1099#1081)
+          Title.Caption = #1058#1080#1087
+          Visible = True
+        end>
+    end
+  end
+  object PanelInfo: TPanel
+    Left = 0
+    Top = 323
+    Width = 772
+    Height = 211
+    Align = alClient
+    BevelOuter = bvNone
+    BorderWidth = 3
+    TabOrder = 3
+    object GroupBoxValue: TGroupBox
+      Left = 3
+      Top = 3
+      Width = 766
+      Height = 205
+      Align = alClient
+      Caption = ' '#1047#1085#1072#1095#1077#1085#1080#1077' '
+      TabOrder = 0
+      object PanelValue: TPanel
+        Left = 2
+        Top = 15
+        Width = 762
+        Height = 188
+        Align = alClient
+        BevelOuter = bvNone
+        BorderWidth = 3
+        TabOrder = 0
+        object PageControl: TPageControl
+          Left = 3
+          Top = 3
+          Width = 668
+          Height = 182
+          ActivePage = TabSheetAsTable
+          Align = alClient
+          HotTrack = True
+          TabOrder = 0
+          OnChange = PageControlChange
+          object TabSheetAsText: TTabSheet
+            Caption = #1058#1077#1082#1089#1090
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object PanelAsText: TPanel
+              Left = 0
+              Top = 0
+              Width = 660
+              Height = 154
+              Align = alClient
+              BevelOuter = bvNone
+              BorderWidth = 3
+              TabOrder = 0
+            end
+          end
+          object TabSheetAsImage: TTabSheet
+            Caption = #1050#1072#1088#1090#1080#1085#1082#1072
+            ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object PanelAsImage: TPanel
+              Left = 0
+              Top = 0
+              Width = 660
+              Height = 154
+              Align = alClient
+              BevelOuter = bvNone
+              BorderWidth = 3
+              TabOrder = 0
+              object ScrollBoxAsImage: TScrollBox
+                Left = 3
+                Top = 3
+                Width = 654
+                Height = 148
+                Align = alClient
+                TabOrder = 0
+              end
+            end
+          end
+          object TabSheetAsTable: TTabSheet
+            Caption = #1058#1072#1073#1083#1080#1094#1072
+            ImageIndex = 3
+            object PanelAsTable: TPanel
+              Left = 0
+              Top = 0
+              Width = 660
+              Height = 154
+              Align = alClient
+              BevelOuter = bvNone
+              BorderWidth = 3
+              TabOrder = 0
+            end
+          end
+          object TabSheetAsDocument: TTabSheet
+            Caption = #1044#1086#1082#1091#1084#1077#1085#1090
+            ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object PanelAsDocument: TPanel
+              Left = 0
+              Top = 0
+              Width = 660
+              Height = 154
+              Align = alClient
+              BevelOuter = bvNone
+              BorderWidth = 3
+              TabOrder = 0
+            end
+          end
+          object TabSheetAsHex: TTabSheet
+            Caption = #1041#1080#1085#1072#1088#1085#1099#1081
+            ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object PanelAsHex: TPanel
+              Left = 0
+              Top = 0
+              Width = 660
+              Height = 154
+              Align = alClient
+              BevelOuter = bvNone
+              BorderWidth = 3
+              TabOrder = 0
+            end
+          end
+        end
+        object PanelButtonValue: TPanel
+          Left = 671
+          Top = 3
+          Width = 88
+          Height = 182
+          Align = alRight
+          BevelOuter = bvNone
+          TabOrder = 1
+          DesignSize = (
+            88
+            182)
+          object ButtonLoadValue: TButton
+            Left = 9
+            Top = 20
+            Width = 75
+            Height = 21
+            Anchors = [akTop, akRight]
+            Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
+            TabOrder = 0
+            OnClick = ButtonLoadValueClick
+          end
+          object ButtonSaveValue: TButton
+            Left = 9
+            Top = 47
+            Width = 75
+            Height = 21
+            Anchors = [akTop, akRight]
+            Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+            TabOrder = 1
+            OnClick = ButtonSaveValueClick
+          end
+          object ButtonClearValue: TButton
+            Left = 9
+            Top = 74
+            Width = 75
+            Height = 21
+            Anchors = [akTop, akRight]
+            Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+            TabOrder = 2
+            OnClick = ButtonClearValueClick
+          end
+          object ButtonAction: TButton
+            Left = 9
+            Top = 101
+            Width = 75
+            Height = 21
+            Anchors = [akTop, akRight]
+            Caption = #1044#1077#1081#1089#1090#1074#1080#1077
+            Enabled = False
+            TabOrder = 3
+            OnClick = ButtonActionClick
+          end
+        end
+      end
+    end
+  end
+  object DataSource: TDataSource
+    Left = 208
+    Top = 161
+  end
+  object PopupMenuNew: TPopupMenu
+    OnPopup = PopupMenuNewPopup
+    Left = 288
+    Top = 161
+    object MenuItemUniqueID: TMenuItem
+      Caption = #1059#1085#1080#1082#1072#1083#1100#1085#1099#1081' '#1048#1044
+      OnClick = MenuItemUniqueIDClick
+    end
+    object MenuItemNetworkcard: TMenuItem
+      Caption = #1055#1086' '#1089#1077#1090#1077#1074#1086#1081' '#1082#1072#1088#1090#1077
+    end
+  end
+  object OpenDialog: TOpenDialog
+    Filter = 
+      #1060#1072#1081#1083#1099' '#1103#1076#1088#1072' (*.bis)|*.bis|'#1060#1072#1081#1083#1099' '#1083#1086#1075#1072' (*.log)|*.log|'#1060#1072#1081#1083#1099' '#1080#1079#1086#1073#1088#1072#1078#1077 +
+      #1085#1080#1081' (*.gif;*.jpg;*.jpeg;*.bmp;*.ico;*.emf;*.wmf)|*.gif;*.jpg;*.j' +
+      'peg;*.bmp;*.ico;*.emf;*.wmf|'#1060#1072#1081#1083#1099' '#1090#1072#1073#1083#1080#1094' (*.tbl)|*.tbl|'#1060#1072#1081#1083#1099' '#1080#1084#1087 +
+      #1086#1088#1090#1072' (*.imp)|*.imp|'#1060#1072#1081#1083#1099' '#1101#1082#1089#1087#1086#1088#1090#1072' (*.exp)|*.exp|'#1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|' +
+      '*.*'
+    Options = [ofEnableSizing]
+    Left = 72
+    Top = 160
+  end
+  object SaveDialog: TSaveDialog
+    Filter = 
+      #1060#1072#1081#1083#1099' '#1103#1076#1088#1072' (*.bis)|*.bis|'#1060#1072#1081#1083#1099' '#1083#1086#1075#1072' (*.log)|*.log|'#1060#1072#1081#1083#1099' '#1080#1079#1086#1073#1088#1072#1078#1077 +
+      #1085#1080#1081' (*.gif;*.jpg;*.jpeg;*.bmp;*.ico;*.emf;*.wmf)|*.gif;*.jpg;*.j' +
+      'peg;*.bmp;*.ico;*.emf;*.wmf|'#1060#1072#1081#1083#1099' '#1090#1072#1073#1083#1080#1094' (*.tbl)|*.tbl|'#1060#1072#1081#1083#1099' '#1080#1084#1087 +
+      #1086#1088#1090#1072' (*.imp)|*.imp|'#1060#1072#1081#1083#1099' '#1101#1082#1089#1087#1086#1088#1090#1072' (*.exp)|*.exp|'#1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|' +
+      '*.*'
+    Options = [ofEnableSizing]
+    Left = 144
+    Top = 160
+  end
+  object SaveDialogHex: TSaveDialog
+    DefaultExt = '*.hex'
+    FileName = 'BisCryptConsts.hex'
+    Filter = #1041#1080#1085#1072#1088#1085#1099#1077' '#1092#1072#1081#1083#1099' (*.hex)|*.hex|'#1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|*.*'
+    Options = [ofEnableSizing]
+    Left = 376
+    Top = 160
+  end
+  object PopupMenuActionText: TPopupMenu
+    OnPopup = PopupMenuNewPopup
+    Left = 72
+    Top = 217
+  end
+  object PopupMenuActionImage: TPopupMenu
+    OnPopup = PopupMenuNewPopup
+    Left = 192
+    Top = 217
+  end
+  object PopupMenuActionTable: TPopupMenu
+    OnPopup = PopupMenuNewPopup
+    Left = 320
+    Top = 217
+    object MenuItemTableCreate: TMenuItem
+      Caption = #1057#1086#1079#1076#1072#1090#1100
+      OnClick = MenuItemTableCreateClick
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemTableValue: TMenuItem
+      Caption = #1047#1085#1072#1095#1077#1085#1080#1077
+      object MenuItemTableValueLoad: TMenuItem
+        Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
+        OnClick = MenuItemTableValueLoadClick
+      end
+      object MenuItemTableValueSave: TMenuItem
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+        OnClick = MenuItemTableValueSaveClick
+      end
+      object MenuItemTableValueClear: TMenuItem
+        Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+        OnClick = MenuItemTableValueClearClick
+      end
+      object N3: TMenuItem
+        Caption = '-'
+      end
+      object MenuItemTableValueTable: TMenuItem
+        Caption = #1058#1072#1073#1083#1080#1094#1072' 1'
+        Visible = False
+        OnClick = MenuItemTableValueTableClick
+      end
+      object N21: TMenuItem
+        Caption = #1058#1072#1073#1083#1080#1094#1072
+        OnClick = N21Click
+      end
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemTableRecord: TMenuItem
+      Caption = #1047#1072#1087#1080#1089#1100
+      object MenuItemTableRecordMoveUp: TMenuItem
+        Caption = #1055#1077#1088#1077#1076#1074#1080#1085#1091#1090#1100' '#1074#1074#1077#1088#1093
+        OnClick = MenuItemTableRecordMoveUpClick
+      end
+      object MenuItemTableRecordMoveDown: TMenuItem
+        Caption = #1055#1077#1088#1077#1076#1074#1080#1085#1091#1090#1100' '#1074#1085#1080#1079
+        OnClick = MenuItemTableRecordMoveDownClick
+      end
+    end
+  end
+  object PopupMenuActionDocument: TPopupMenu
+    OnPopup = PopupMenuNewPopup
+    Left = 456
+    Top = 217
+  end
+  object PopupMenuActionHex: TPopupMenu
+    OnPopup = PopupMenuNewPopup
+    Left = 584
+    Top = 217
+  end
+  object PopupMenuUtils: TPopupMenu
+    Left = 520
+    Top = 153
+    object MenuItemTableEdit: TMenuItem
+      Caption = #1056#1077#1076#1072#1082#1090#1086#1088' '#1090#1072#1073#1083#1080#1094
+      OnClick = MenuItemTableEditClick
+    end
+    object MenuItemDecodeLogFile: TMenuItem
+      Caption = #1056#1072#1089#1096#1080#1092#1088#1086#1074#1072#1090#1100' '#1083#1086#1075' '#1092#1072#1081#1083
+      OnClick = MenuItemDecodeLogFileClick
+    end
+    object MenuItemEncodeParam: TMenuItem
+      Caption = #1047#1072#1096#1080#1092#1088#1086#1074#1072#1090#1100' '#1079#1085#1072#1095#1077#1085#1080#1077' '#1087#1072#1088#1072#1084#1077#1090#1088#1072
+      OnClick = MenuItemEncodeParamClick
+    end
+    object MenuItemBase64Encode: TMenuItem
+      Caption = #1055#1088#1077#1086#1073#1088#1072#1079#1086#1074#1072#1090#1100' '#1074' Base64 '#1089#1090#1088#1086#1082#1091
+      OnClick = MenuItemBase64EncodeClick
+    end
+  end
+end

@@ -1,0 +1,539 @@
+unit BisFastReportClasses;
+
+interface
+
+uses Windows, Messages, Classes, Controls, Contnrs, ClipBrd, DBGrids, Forms,
+     Dialogs, Graphics, StdCtrls, ExtCtrls, ComCtrls, IniFiles, 
+     frxDesgn, frxClass, frxPreview, frxDBSet;
+
+type
+  TBisFastReportDesigner=class(TfrxDesigner)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisFastReportDesignerForm=class(TfrxDesignerForm)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisFastReportPreview=class(TfrxPreview)
+  public
+    property OnKeyDown;
+  end;
+
+  TBisFastReportDataSet=class(TfrxDBDataSet)
+  end;
+
+  TfrxCustomExportFilterClass=class of TfrxCustomExportFilter;
+
+  TBisFastReportExports=class(TObjectList)
+  public
+    procedure AddClass(AClass: TfrxCustomExportFilterClass);
+  end;
+
+  TBisFastReport=class(TfrxReport)
+  private
+    FDesignerComp: TBisFastReportDesigner;
+    FOnCloseDesigner: TCloseQueryEvent;
+    FAsModal: Boolean;
+    FIniFile: TCustomIniFile;
+    procedure DesignerCloseQuery(Sender: TObject; var CanClose: Boolean);
+    function GetGradientEndColor: TColor;
+    procedure SetGradientEndColor(const Value: TColor);
+    function GetIniFile(var Created: Boolean): TCustomIniFile;
+  protected
+    procedure DoAfterCreateDesigner; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function PrepareReport(ClearLastReport: Boolean = True): Boolean; override;
+
+    procedure DesignMdiChild;
+    procedure DesignModal;
+
+    procedure DeleteDataSets(ADataSet: TBisFastReportDataSet; IsDelete: Boolean=false);
+    procedure UpdateDatabands;
+    procedure ReplaceByComponent(AComponent: TComponent);
+
+    property GradientEndColor: TColor read GetGradientEndColor write SetGradientEndColor;
+    property IniFile: TCustomIniFile read FIniFile write FIniFile;
+
+    property OnCloseDesigner: TCloseQueryEvent read FOnCloseDesigner write FOnCloseDesigner;
+  end;
+
+implementation
+
+uses SysUtils, TypInfo, DB, GraphUtil,
+     Chart, DBChart, TeEngine,
+
+     frxDsgnIntf, frxChart, frxChBox, frxCross, frxRich, frxOLE,
+     frxBarcode, frxDCtrl, frxDesgnEditors, frxDMPClass, frxGradient,
+     fs_iinterpreter,
+
+     frxExportPDF, frxExportCSV, frxExportHTML, frxExportImage,
+     frxExportMail, frxExportMatrix, frxExportODF, frxExportRTF, frxExportText,
+     frxExportTXT, frxExportTxtPrn, frxExportXLS, frxExportXML,
+
+     BisUtils, BisDialogs, BisConsts,
+     BisFastReportComponents, BisFastReportControls;
+
+type
+  TFunctions=class(TfsRTTIModule)
+  public
+    constructor Create(AScript: TfsScript); override;
+    function TfrxReportDataSets_Add(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function TBisFastReport_GetDataSets(Instance: TObject; ClassType: TClass; const PropName: String): Variant;
+  end;
+
+{ TFunctions }
+
+constructor TFunctions.Create(AScript: TfsScript);
+begin
+  inherited Create(AScript);
+  with AScript do begin
+    with AddClass(TfrxReportDataSets,'TfrxReportDataSets') do begin
+      AddMethod('procedure Add(DataSet: TfrxDataSet)',TfrxReportDataSets_Add);
+    end;
+    with AddClass(TBisFastReport,'TfrxReport') do begin
+      AddProperty('DataSets','TfrxReportDataSets',TBisFastReport_GetDataSets,nil);
+    end;
+  end;
+end;
+
+function TFunctions.TfrxReportDataSets_Add(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  DataSet: TfrxDataSet;
+begin
+  if AnsiSameText(MethodName,'Add') then begin
+    DataSet:=TfrxDataSet(Integer(Caller.Params[0]));
+    TfrxReportDataSets(Instance).Add(DataSet);
+  end;
+end;
+
+function TFunctions.TBisFastReport_GetDataSets(Instance: TObject; ClassType: TClass; const PropName: String): Variant;
+begin
+  Result:=0;
+  if AnsiSameText(PropName,'DataSets') then begin
+    Result:=Integer(TBisFastReport(Instance).DataSets);
+  end;
+end;
+
+{ TBisFastReportDesigner }
+
+constructor TBisFastReportDesigner.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  CloseQuery:=false;
+  Restrictions:=Restrictions+[drDontShowRecentFiles];
+  frxDesignerComp:=Self;
+end;
+
+{ TBisFastReportDesignerForm }
+
+constructor TBisFastReportDesignerForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+{ TBisFastReportExports }
+
+procedure TBisFastReportExports.AddClass(AClass: TfrxCustomExportFilterClass);
+var
+  Obj: TfrxCustomExportFilter;
+begin
+  Obj:=AClass.Create(nil);
+  inherited Add(Obj);
+end;
+
+{ TBisFastReport }
+
+constructor TBisFastReport.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Name:=SReport;
+  EngineOptions.ConvertNulls:=true;
+  frxDesignerClass:=TBisFastReportDesignerForm;
+  FDesignerComp:=TBisFastReportDesigner.Create(Self);
+  FDesignerComp.Gradient:=true;
+  FDesignerComp.GradientEnd:=GetShadowColor(clBtnFace, -25);
+
+  PreviewOptions.Buttons:=PreviewOptions.Buttons-[pbEdit,pbExportQuick];
+  PreviewOptions.ZoomMode:=zmPageWidth;
+
+  OldStyleProgress:=true;
+
+  OnGetIniFile:=GetIniFile;
+end;
+
+destructor TBisFastReport.Destroy;
+begin
+  FDesignerComp.Free;
+  if Assigned(Designer) then begin
+    Designer.Free;
+    Designer:=nil;
+  end;
+  inherited Destroy;
+end;
+
+procedure TBisFastReport.DoAfterCreateDesigner;
+begin
+  inherited DoAfterCreateDesigner;
+  if Assigned(Designer) then begin
+    Designer.OnCloseQuery:=DesignerCloseQuery;
+  end;
+end;
+
+function TBisFastReport.GetGradientEndColor: TColor;
+begin
+  Result:=FDesignerComp.GradientEnd;
+end;
+
+function TBisFastReport.GetIniFile(var Created: Boolean): TCustomIniFile;
+begin
+  Result:=nil;
+  if Assigned(FIniFile) then begin
+    Created:=false;
+    Result:=FIniFile;
+  end;
+end;
+
+function TBisFastReport.PrepareReport(ClearLastReport: Boolean): Boolean;
+begin
+  Result:=inherited PrepareReport(ClearLastReport);
+end;
+
+procedure TBisFastReport.SetGradientEndColor(const Value: TColor);
+begin
+  FDesignerComp.GradientEnd:=Value;
+end;
+
+procedure TBisFastReport.DesignerCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if Assigned(FOnCloseDesigner) then
+     FOnCloseDesigner(Self,CanClose);
+end;
+
+procedure TBisFastReport.DesignMdiChild;
+begin
+  FAsModal:=false;
+  if Assigned(Designer) then begin
+    Designer.Update;
+    if Designer.WindowState=wsMinimized then begin
+      ShowWindow(Designer.Handle,SW_SHOW);
+      ShowWindow(Designer.Handle,SW_RESTORE);
+    end;
+    Designer.BringToFront;
+  end;
+  DesignReport(false,true);
+end;
+
+procedure TBisFastReport.DesignModal;
+begin
+  FAsModal:=true;
+  DesignReport(true,false);
+end;
+
+procedure TBisFastReport.DeleteDataSets(ADataSet: TBisFastReportDataSet; IsDelete: Boolean=false);
+var
+  i: Integer;
+  Item: TfrxDataSetItem;
+  Flag: Boolean;
+begin
+  Flag:=Trim(ADataSet.Name)<>'';
+  for i:=DataSets.Count-1 downto 0 do begin
+    Item:=DataSets.Items[i];
+    if AnsiSameText(Item.DataSetName,ADataSet.Name) then begin
+      Item.DataSet:=ADataSet;
+      Flag:=false;
+    end else begin
+      if not Assigned(Item.DataSet) then
+        DataSets.Delete(i);
+    end;
+  end;
+  if Flag then
+    DataSets.Add(ADataSet);
+end;
+
+
+procedure TBisFastReport.UpdateDatabands;
+
+  function GetDataSetByName(AName: String): TfrxDataSet;
+  var
+    i: Integer;
+    Item: TfrxDataSetItem;
+  begin
+    Result:=nil;
+    for i:=0 to DataSets.Count-1 do begin
+      Item:=DataSets.Items[i];
+      if AnsiSameText(Item.DataSetName,AName) then begin
+        Result:=Item.DataSet;
+        exit;
+      end;
+    end;
+  end;
+
+var
+  i: Integer;
+  Obj: TObject;
+  DS: TfrxDataSet;
+  S: String;
+const
+  SDataSet='DataSet';
+  SDataSetName='DataSetName';
+begin
+  for i:=0 to AllObjects.Count-1 do begin
+    Obj:=AllObjects[i];
+    if Assigned(Obj) then begin
+      if IsPublishedProp(Obj,SDataSet) and
+         IsPublishedProp(Obj,SDataSetName) then begin
+        S:=GetPropValue(Obj,SDataSetName);
+        DS:=GetDataSetByName(S);
+        SetObjectProp(Obj,SDataSet,DS);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisFastReport.ReplaceByComponent(AComponent: TComponent);
+
+{  procedure AssignChart(Chart: TDBChart; Picture: TfrxPictureView);
+  begin
+    Chart.CopyToClipboardMetafile(true);
+    Picture.Picture.Assign(Clipboard);
+  end; }
+
+{  procedure AssignGridHint(Grid: TSgtsDbGrid; Memo: TfrxMemoView);
+  begin
+    Memo.Text:=Grid.Hint;
+  end;}
+
+{  procedure AssignGridHead(Grid: TSgtsDbGrid; Header: TfrxBand);
+  var
+    i: Integer;
+    Column: TColumn;
+    ALeft, ATop: Integer;
+    AWidth, AHeight: Integer;
+    View: TfrxMemoView;
+    Memo: TfrxMemoView;
+    Obj: TObject;
+    Obj2: TfrxComponent;
+  begin
+    for i:=Header.ContainerObjects.Count-1 downto 0 do begin
+      Obj:=Header.ContainerObjects.Items[i];
+      if Assigned(Obj) and (Obj is TfrxMemoView) then begin
+        Header.ContainerObjects.Remove(Obj);
+        Obj.Free;
+      end;
+    end;
+    ALeft:=0;
+    ATop:=0;
+    Header.Height:=Grid.DefaultRowHeight;
+    AHeight:=Round(Header.Height);
+    for i:=0 to Grid.Columns.Count-1 do begin
+      Column:=Grid.Columns[i];
+      if Column.Visible then begin
+        AWidth:=Column.Width;
+        View:=TfrxMemoView.Create(Self);
+        View.Parent:=Header;
+        View.SetBounds(ALeft,ATop,AWidth,AHeight);
+        View.Frame.Style:=fsSolid;
+        View.Frame.Typ:=[ftLeft,ftRight,ftTop,ftBottom];
+        View.Text:=Column.Title.Caption;
+        View.Font.Assign(Column.Title.Font);
+        case Column.Title.Alignment of
+          taLeftJustify: View.HAlign:=haLeft;
+          taRightJustify: View.HAlign:=haRight;
+          taCenter: View.HAlign:=haCenter;
+        end;
+        View.GapX:=4;
+        View.VAlign:=vaCenter;
+        View.WordWrap:=false;
+        ALeft:=ALeft+Column.Width;
+      end;
+    end;
+    Obj2:=FindObject(SGridMemoReportTitle);
+    if Assigned(Obj2) and
+       (Obj2 is TfrxMemoView) then begin
+      Memo:=TfrxMemoView(Obj2);
+      Memo.Left:=0;
+      Memo.Width:=ALeft;
+    end;   
+  end;}
+
+  procedure GetHAlignAndDisplayFormat(Column: TColumn; var HAlign: TfrxHAlign; DisplayFormat: TfrxFormat);
+  var
+    S: String;
+  const
+    SPropertyDisplayFormat='PropertyDisplayFormat';  
+  begin
+    HAlign:=haLeft;
+    if Assigned(Column.Field) then begin
+      S:='';
+      if IsPublishedProp(Column.Field,SPropertyDisplayFormat) then
+        S:=GetStrProp(Column.Field,SPropertyDisplayFormat);
+      DisplayFormat.DecimalSeparator:=DecimalSeparator;
+      DisplayFormat.FormatStr:=S;
+      case Column.Field.DataType of
+        ftSmallint, ftInteger, ftWord: begin
+          if Trim(S)<>'' then
+            DisplayFormat.Kind:=fkNumeric;
+        end;
+        ftFloat, ftCurrency: begin
+          if Trim(S)<>'' then
+            DisplayFormat.Kind:=fkNumeric;
+        end;
+        ftString, ftBlob, ftMemo, ftFixedChar, ftWideString: begin
+          DisplayFormat.Kind:=fkText;
+        end;
+        ftDate, ftDateTime, ftTime, ftTimeStamp: begin
+          DisplayFormat.Kind:=fkDateTime;
+        end;
+      end;
+      case Column.Alignment of
+        taLeftJustify: HAlign:=haLeft;
+        taRightJustify: HAlign:=haRight;
+        taCenter: HAlign:=haCenter;
+      end;
+    end;
+  end;
+
+{  procedure AssignGridData(Grid: TSgtsDbGrid; MasterData: TfrxMasterData);
+  var
+    i: Integer;
+    Column: TColumn;
+    ALeft, ATop: Integer;
+    AWidth, AHeight: Integer;
+    View: TfrxMemoView;
+    Obj: TObject;
+    HAlign: TfrxHAlign;
+    DisplayFormat: TfrxFormat;
+  begin
+    for i:=MasterData.ContainerObjects.Count-1 downto 0 do begin
+      Obj:=MasterData.ContainerObjects.Items[i];
+      if Assigned(Obj) and (Obj is TfrxMemoView) then begin
+        MasterData.ContainerObjects.Remove(Obj);
+        Obj.Free;
+      end;
+    end;
+    ALeft:=0;
+    ATop:=0;
+    MasterData.Height:=Grid.DefaultRowHeight;
+    AHeight:=Round(MasterData.Height);
+    for i:=0 to Grid.Columns.Count-1 do begin
+      Column:=Grid.Columns[i];
+      if Column.Visible then begin
+        AWidth:=Column.Width;
+        View:=TfrxMemoView.Create(Self);
+        View.Parent:=MasterData;
+        View.SetBounds(ALeft,ATop,AWidth,AHeight);
+        View.Frame.Typ:=[];
+        View.GapX:=4;
+        View.Font.Assign(Column.Font);
+
+        if Assigned(Column.Field) and
+           not Column.Field.Calculated then begin
+          View.Text:=Format('[%s."%s"]',[MasterData.DataSetName,Column.FieldName]);
+          View.DataSet:=MasterData.DataSet;
+          View.DataField:=Column.FieldName;
+
+          HAlign:=haLeft;
+          DisplayFormat:=TfrxFormat.Create;
+          try
+            DisplayFormat.Assign(View.DisplayFormat);
+            GetHAlignAndDisplayFormat(Column,HAlign,DisplayFormat);
+            View.HAlign:=HAlign;
+            View.DisplayFormat:=DisplayFormat;
+          finally
+            DisplayFormat.Free;
+          end;
+        end;
+
+        View.VAlign:=vaCenter;
+        View.WordWrap:=false;
+        ALeft:=ALeft+Column.Width;
+      end;
+    end;
+  end;}
+
+var
+  i: Integer;
+  Obj: TObject;
+  List: TList;
+const
+  SChartPicture='ChartPicture';  
+begin
+  if Assigned(AComponent) then begin
+    List:=TList.Create;
+    try
+      List.Assign(AllObjects,laCopy);
+      for i:=0 to List.Count-1 do begin
+        Obj:=List[i];
+        if Assigned(Obj) then begin
+          if (Obj is TfrxView) then begin
+            if AnsiSameText(TfrxView(Obj).Name,SChartPicture) then begin
+           {   if (Obj is TfrxPictureView) and
+                 (AComponent is TDBChart) then begin
+                AssignChart(TDBChart(AComponent),TfrxPictureView(Obj));
+              end;     }
+            end;
+          end;
+          if (Obj is TfrxMemoView) then begin
+{            if AnsiSameText(TfrxMemoView(Obj).Name,SGridMemoReportTitle) then begin
+              if (AComponent is TSgtsDbGrid) then begin
+                AssignGridHint(TSgtsDbGrid(AComponent),TfrxMemoView(Obj));
+              end;
+            end;  }
+          end;
+          if (Obj is TfrxBand) then begin
+{            if AnsiSameText(TfrxBand(Obj).Name,SGridPageHeader) then begin
+              if (AComponent is TSgtsDbGrid) then begin
+                AssignGridHead(TSgtsDbGrid(AComponent),TfrxBand(Obj));
+              end;
+            end;
+            if AnsiSameText(TfrxBand(Obj).Name,SGridMasterData) then begin
+              if (Obj is TfrxMasterData) and
+                 (AComponent is TSgtsDbGrid) then begin
+                AssignGridData(TSgtsDbGrid(AComponent),TfrxMasterData(Obj));
+              end;
+            end;}
+          end;
+        end;
+      end;
+    finally
+      List.Free;
+    end;
+  end;
+end;
+
+var
+  FExports: TBisFastReportExports;
+
+initialization
+  RegisterClass(TBisFastReport);
+  RegisterClass(TBisFastReportDataSet);
+  FExports:=TBisFastReportExports.Create(true);
+  with FExports do begin
+    AddClass(TfrxPDFExport);
+    AddClass(TfrxCSVExport);
+    AddClass(TfrxHTMLExport);
+    AddClass(TfrxJPEGExport);
+    AddClass(TfrxBMPExport);
+    AddClass(TfrxTIFFExport);
+    AddClass(TfrxGIFExport);
+    AddClass(TfrxMailExport);
+    AddClass(TfrxODSExport);
+    AddClass(TfrxODTExport);
+    AddClass(TfrxRTFExport);
+    AddClass(TfrxSimpleTextExport);
+    AddClass(TfrxTXTExport);
+    AddClass(TfrxXLSExport);
+    AddClass(TfrxXMLExport);
+  end;
+  fsRTTIModules.Add(TFunctions);
+
+finalization
+  if fsRTTIModules <> nil then fsRTTIModules.Remove(TFunctions);
+  FExports.Free;
+
+end.

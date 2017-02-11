@@ -1,0 +1,104 @@
+package imcallc;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  omtapi,
+  omaudio,
+  vcl,
+  rtl;
+
+contains
+  BisCallc in 'imcallc.bpl\BisCallc.pas',
+  BisCallcConsts in 'imcallc.bpl\BisCallcConsts.pas',
+  BisCallcBiasFIO in 'imcallc.bpl\BisCallcBiasFIO.pas',
+  BisCallcMainFm in 'imcallc.bpl\BisCallcMainFm.pas' {BisCallcMainForm},
+  BisCallcHbookCurrencyFm in 'imcallc.bpl\BisCallcHbookCurrencyFm.pas' {BisCallcHbookCurrencyForm},
+  BisCallcHbookCurrencyEditFm in 'imcallc.bpl\BisCallcHbookCurrencyEditFm.pas' {BisCallcHbookCurrencyEditForm},
+  BisCallcHbookVariantsFm in 'imcallc.bpl\BisCallcHbookVariantsFm.pas' {BisCallcHbookVariantsForm},
+  BisCallcHbookVariantEditFm in 'imcallc.bpl\BisCallcHbookVariantEditFm.pas' {BisCallcHbookVariantEditForm},
+  BisCallcHbookAgreementsFm in 'imcallc.bpl\BisCallcHbookAgreementsFm.pas' {BisCallcHbookAgreementsForm},
+  BisCallcHbookAgreementEditFm in 'imcallc.bpl\BisCallcHbookAgreementEditFm.pas' {BisCallcHbookAgreementEditForm},
+  BisCallcHbookAccountFirmsFm in 'imcallc.bpl\BisCallcHbookAccountFirmsFm.pas' {BisCallcHbookAccountFirmsForm},
+  BisCallcHbookAccountFirmEditFm in 'imcallc.bpl\BisCallcHbookAccountFirmEditFm.pas' {BisCallcHbookAccountFirmEditForm},
+  BisCallcHbookGroupsFm in 'imcallc.bpl\BisCallcHbookGroupsFm.pas' {BisCallcHbookGroupsForm},
+  BisCallcHbookGroupEditFm in 'imcallc.bpl\BisCallcHbookGroupEditFm.pas' {BisCallcHbookGroupEditForm},
+  BisCallcHbookAccountGroupsFm in 'imcallc.bpl\BisCallcHbookAccountGroupsFm.pas' {BisCallcHbookAccountGroupsForm},
+  BisCallcHbookAccountGroupEditFm in 'imcallc.bpl\BisCallcHbookAccountGroupEditFm.pas' {BisCallcHbookAccountGroupEditForm},
+  BisCallcHbookActionsFm in 'imcallc.bpl\BisCallcHbookActionsFm.pas' {BisCallcHbookActionsForm},
+  BisCallcHbookActionEditFm in 'imcallc.bpl\BisCallcHbookActionEditFm.pas' {BisCallcHbookActionEditForm},
+  BisCallcHbookAccountActionsFm in 'imcallc.bpl\BisCallcHbookAccountActionsFm.pas' {BisCallcHbookAccountActionsForm},
+  BisCallcHbookAccountActionEditFm in 'imcallc.bpl\BisCallcHbookAccountActionEditFm.pas' {BisCallcHbookAccountActionEditForm},
+  BisCallcHbookResultsFm in 'imcallc.bpl\BisCallcHbookResultsFm.pas' {BisCallcHbookResultsForm},
+  BisCallcHbookActionResultsFm in 'imcallc.bpl\BisCallcHbookActionResultsFm.pas' {BisCallcHbookActionResultsForm},
+  BisCallcHbookActionResultEditFm in 'imcallc.bpl\BisCallcHbookActionResultEditFm.pas' {BisCallcHbookActionResultEditForm},
+  BisCallcHbookStatusesFm in 'imcallc.bpl\BisCallcHbookStatusesFm.pas' {BisCallcHbookStatusesForm},
+  BisCallcHbookStatusEditFm in 'imcallc.bpl\BisCallcHbookStatusEditFm.pas' {BisCallcHbookStatusEditForm},
+  BisCallcHbookCasesFm in 'imcallc.bpl\BisCallcHbookCasesFm.pas' {BisCallcHbookCasesForm},
+  BisCallcHbookCaseEditFm in 'imcallc.bpl\BisCallcHbookCaseEditFm.pas' {BisCallcHbookCaseEditForm},
+  BisCallcHbookDebtorsFm in 'imcallc.bpl\BisCallcHbookDebtorsFm.pas' {BisCallcHbookDebtorsForm},
+  BisCallcHbookDebtorEditFm in 'imcallc.bpl\BisCallcHbookDebtorEditFm.pas' {BisCallcHbookDebtorEditForm},
+  BisCallcHbookDealsFm in 'imcallc.bpl\BisCallcHbookDealsFm.pas' {BisCallcHbookDealsForm},
+  BisCallcHbookDealEditFm in 'imcallc.bpl\BisCallcHbookDealEditFm.pas' {BisCallcHbookDealEditForm},
+  BisCallcHbookPaymentsFm in 'imcallc.bpl\BisCallcHbookPaymentsFm.pas' {BisCallcHbookPaymentsForm},
+  BisCallcHbookPaymentEditFm in 'imcallc.bpl\BisCallcHbookPaymentEditFm.pas' {BisCallcHbookPaymentEditForm},
+  BisCallcHbookTasksFm in 'imcallc.bpl\BisCallcHbookTasksFm.pas' {BisCallcHbookTasksForm},
+  BisCallcHbookTaskEditFm in 'imcallc.bpl\BisCallcHbookTaskEditFm.pas' {BisCallcHbookTaskEditForm},
+  BisCallcHbookResultEditFm in 'imcallc.bpl\BisCallcHbookResultEditFm.pas' {BisCallcHbookResultEditForm},
+  BisCallcHbookTaskDocumentsFm in 'imcallc.bpl\BisCallcHbookTaskDocumentsFm.pas' {BiCallcHbookTaskDocumentsForm},
+  BisCallcHbookTaskDocumentEditFm in 'imcallc.bpl\BisCallcHbookTaskDocumentEditFm.pas' {BisCallcHbookTaskDocumentEditForm},
+  BisCallcHbookPatternsFm in 'imcallc.bpl\BisCallcHbookPatternsFm.pas' {BisCallcHbookPatternsForm},
+  BisCallcHbookPatternEditFm in 'imcallc.bpl\BisCallcHbookPatternEditFm.pas' {BisCallcHbookPatternEditForm},
+  BisCallcTaskFm in 'imcallc.bpl\BisCallcTaskFm.pas' {BisCallcTaskForm},
+  BisCallcDealFrm in 'imcallc.bpl\BisCallcDealFrm.pas' {BisCallcDealFrame: TFrame},
+  BisCallcTaskFrm in 'imcallc.bpl\BisCallcTaskFrm.pas' {BisCallcTaskFrame: TFrame},
+  BisCallcTaskOperatorFm in 'imcallc.bpl\BisCallcTaskOperatorFm.pas' {BisCallcTaskOperatorForm},
+  BisCallcHbookPlansFm in 'imcallc.bpl\BisCallcHbookPlansFm.pas' {BisCallcHbookPlansForm},
+  BisCallcHbookPlanEditFm in 'imcallc.bpl\BisCallcHbookPlanEditFm.pas' {BisCallcHbookPlanEditForm},
+  BisCallcHbookPlanActionsFm in 'imcallc.bpl\BisCallcHbookPlanActionsFm.pas' {BisCallcHbookPlanActionsForm},
+  BisCallcHbookPlanActionEditFm in 'imcallc.bpl\BisCallcHbookPlanActionEditFm.pas' {BisCallcHbookPlanActionEditForm},
+  BisCallcImportFm in 'imcallc.bpl\BisCallcImportFm.pas' {BisCallcImportForm},
+  BisCallcHbookDebtorHistoriesFm in 'imcallc.bpl\BisCallcHbookDebtorHistoriesFm.pas' {BisCallcHbookDebtorHistoriesForm},
+  BisCallcDealFramePaymentsFrm in 'imcallc.bpl\BisCallcDealFramePaymentsFrm.pas',
+  BisCallcDealFrameDocumentsFrm in 'imcallc.bpl\BisCallcDealFrameDocumentsFrm.pas',
+  BisCallcReadinessFm in 'imcallc.bpl\BisCallcReadinessFm.pas' {BisCallcReadinessForm},
+  BisCallcTaskLeaderFm in 'imcallc.bpl\BisCallcTaskLeaderFm.pas' {BisCallcTaskLeaderForm},
+  BisCallcTaskClerkFm in 'imcallc.bpl\BisCallcTaskClerkFm.pas' {BisCallcTaskClerkForm},
+  BisCallcHbookActionReportEditFm in 'imcallc.bpl\BisCallcHbookActionReportEditFm.pas' {BisCallcHbookActionReportEditForm},
+  BisCallcHbookActionReportsFm in 'imcallc.bpl\BisCallcHbookActionReportsFm.pas' {BisCallcHbookActionReportsForm},
+  BisCallcDealsFrm in 'imcallc.bpl\BisCallcDealsFrm.pas' {BisCallcDealsFrame: TFrame},
+  BisCallcDealsFrameTasksFrm in 'imcallc.bpl\BisCallcDealsFrameTasksFrm.pas' {BisCallcDealsFrameTasksFrame: T},
+  BisCallcDealEditFm in 'imcallc.bpl\BisCallcDealEditFm.pas' {BisCallcDealEditForm},
+  BisCallcTaskManagerFm in 'imcallc.bpl\BisCallcTaskManagerFm.pas' {BisCallcTaskManagerForm},
+  BisCallcTakeBellFm in 'imcallc.bpl\BisCallcTakeBellFm.pas' {BisCallcTakeBellForm},
+  BisCallcTakeBellFrm in 'imcallc.bpl\BisCallcTakeBellFrm.pas' {BisCallcTakeBellFrame: TFrame},
+  BisCallcTakeBellFilterFm in 'imcallc.bpl\BisCallcTakeBellFilterFm.pas' {BisCallcTakeBellFilterForm},
+  BisCallcDealsFrameTasksFilterFm in 'imcallc.bpl\BisCallcDealsFrameTasksFilterFm.pas' {BisCallcDealsFrameTasksFilterForm},
+  BisCallcDealFrameTasksFrm in 'imcallc.bpl\BisCallcDealFrameTasksFrm.pas' {BisCallcDealFrameTasksFrame: TFrame},
+  BisCallcTaskExecuteInfoFm in 'imcallc.bpl\BisCallcTaskExecuteInfoFm.pas' {BisTaskExecuteForm};
+
+end.

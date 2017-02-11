@@ -1,0 +1,110 @@
+package cmx;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  DbxReadOnlyMetaData,
+  vcl,
+  rtl,
+  vcldb,
+  dbrtl,
+  DbxCommonDriver,
+  DbxDynalinkDriver;
+
+contains
+  BisCmxConnection in 'cmx.bpl\BisCmxConnection.pas',
+  BisCmxConsts in 'cmx.bpl\BisCmxConsts.pas',
+  DBConnAdmin in 'cmx.bpl\CodeGear\dbx\DBConnAdmin.pas',
+  DbxDefaultDrivers in 'cmx.bpl\CodeGear\dbx\DbxDefaultDrivers.pas',
+  SqlConst in 'cmx.bpl\CodeGear\dbx\SqlConst.pas',
+  SqlExpr in 'cmx.bpl\CodeGear\dbx\SqlExpr.pas',
+  DBXRowBlobStreamReader in 'cmx.bpl\CodeGear\dbx\DBXRowBlobStreamReader.pas',
+  DBXRpcErrorCodes in 'cmx.bpl\CodeGear\dbx\DBXRpcErrorCodes.pas',
+  DbxSocketChannelNative in 'cmx.bpl\CodeGear\dbx\DbxSocketChannelNative.pas',
+  DBXStringCodes in 'cmx.bpl\CodeGear\dbx\DBXStringCodes.pas',
+  DBXStringDecoder in 'cmx.bpl\CodeGear\dbx\DBXStringDecoder.pas',
+  DBXStringEncoder in 'cmx.bpl\CodeGear\dbx\DBXStringEncoder.pas',
+  DBXTokens in 'cmx.bpl\CodeGear\dbx\DBXTokens.pas',
+  DBXTraceHandler in 'cmx.bpl\CodeGear\dbx\DBXTraceHandler.pas',
+  DBXBinaryStream in 'cmx.bpl\CodeGear\dbx\DBXBinaryStream.pas',
+  DbxChannel in 'cmx.bpl\CodeGear\dbx\DbxChannel.pas',
+  DBXClient in 'cmx.bpl\CodeGear\dbx\DBXClient.pas',
+  DBXErrorHandler in 'cmx.bpl\CodeGear\dbx\DBXErrorHandler.pas',
+  DBXFieldHeader in 'cmx.bpl\CodeGear\dbx\DBXFieldHeader.pas',
+  DBXFieldPacker in 'cmx.bpl\CodeGear\dbx\DBXFieldPacker.pas',
+  DBXJSonStreamReader in 'cmx.bpl\CodeGear\dbx\DBXJSonStreamReader.pas',
+  DBXCharDecoder in 'cmx.bpl\CodeGear\dbx\DBXCharDecoder.pas',
+  DBXJSonStreamWriter in 'cmx.bpl\CodeGear\dbx\DBXJSonStreamWriter.pas',
+  DBXRowBuffer in 'cmx.bpl\CodeGear\dbx\DBXRowBuffer.pas',
+  DBXDataStoreMetaDataReader in 'cmx.bpl\CodeGear\dbx\DBXDataStoreMetaDataReader.pas',
+  DBXDataStoreMetaDataWriter in 'cmx.bpl\CodeGear\dbx\DBXDataStoreMetaDataWriter.pas',
+  DBXDataStoreReadOnlyMetaData in 'cmx.bpl\CodeGear\dbx\DBXDataStoreReadOnlyMetaData.pas',
+  DBXDb2MetaDataReader in 'cmx.bpl\CodeGear\dbx\DBXDb2MetaDataReader.pas',
+  DBXDb2MetaDataWriter in 'cmx.bpl\CodeGear\dbx\DBXDb2MetaDataWriter.pas',
+  DBXInformixMetaDataReader in 'cmx.bpl\CodeGear\dbx\DBXInformixMetaDataReader.pas',
+  DBXInformixMetaDataWriter in 'cmx.bpl\CodeGear\dbx\DBXInformixMetaDataWriter.pas',
+  DBXInterbaseMetaDataReader in 'cmx.bpl\CodeGear\dbx\DBXInterbaseMetaDataReader.pas',
+  DBXInterbaseMetaDataWriter in 'cmx.bpl\CodeGear\dbx\DBXInterbaseMetaDataWriter.pas',
+  DBXMetaDataCommand in 'cmx.bpl\CodeGear\dbx\DBXMetaDataCommand.pas',
+  DBXMetaDataCommandFactory in 'cmx.bpl\CodeGear\dbx\DBXMetaDataCommandFactory.pas',
+  DBXMetaDataError in 'cmx.bpl\CodeGear\dbx\DBXMetaDataError.pas',
+  DBXMetaDataNames in 'cmx.bpl\CodeGear\dbx\DBXMetaDataNames.pas',
+  DBXMetaDataReader in 'cmx.bpl\CodeGear\dbx\DBXMetaDataReader.pas',
+  DBXMetaDataUtil in 'cmx.bpl\CodeGear\dbx\DBXMetaDataUtil.pas',
+  DBXMsSqlMetaDataReader in 'cmx.bpl\CodeGear\dbx\DBXMsSqlMetaDataReader.pas',
+  DBXMsSqlMetaDataWriter in 'cmx.bpl\CodeGear\dbx\DBXMsSqlMetaDataWriter.pas',
+  DBXMySqlMetaDataReader in 'cmx.bpl\CodeGear\dbx\DBXMySqlMetaDataReader.pas',
+  DBXMySqlMetaDataWriter in 'cmx.bpl\CodeGear\dbx\DBXMySqlMetaDataWriter.pas',
+  DBXOracleMetaDataReader in 'cmx.bpl\CodeGear\dbx\DBXOracleMetaDataReader.pas',
+  DBXOracleMetaDataWriter in 'cmx.bpl\CodeGear\dbx\DBXOracleMetaDataWriter.pas',
+  DBXPlatformUtil in 'cmx.bpl\CodeGear\dbx\DBXPlatformUtil.pas',
+  DBXReaderTableStorage in 'cmx.bpl\CodeGear\dbx\DBXReaderTableStorage.pas',
+  DBXSqlScanner in 'cmx.bpl\CodeGear\dbx\DBXSqlScanner.pas',
+  DBXSybaseASAMetaDataReader in 'cmx.bpl\CodeGear\dbx\DBXSybaseASAMetaDataReader.pas',
+  DBXSybaseASAMetaDataWriter in 'cmx.bpl\CodeGear\dbx\DBXSybaseASAMetaDataWriter.pas',
+  DBXSybaseASAReadOnlyMetaData in 'cmx.bpl\CodeGear\dbx\DBXSybaseASAReadOnlyMetaData.pas',
+  DBXSybaseASEMetaDataReader in 'cmx.bpl\CodeGear\dbx\DBXSybaseASEMetaDataReader.pas',
+  DBXSybaseASEMetaDataWriter in 'cmx.bpl\CodeGear\dbx\DBXSybaseASEMetaDataWriter.pas',
+  DBXSybaseASEReadOnlyMetaData in 'cmx.bpl\CodeGear\dbx\DBXSybaseASEReadOnlyMetaData.pas',
+  DBXTableStorage in 'cmx.bpl\CodeGear\dbx\DBXTableStorage.pas',
+  DBXdB2ReadOnlyMetaData in 'cmx.bpl\CodeGear\dbx\DBXdB2ReadOnlyMetaData.pas',
+  DBXInformixReadOnlyMetaData in 'cmx.bpl\CodeGear\dbx\DBXInformixReadOnlyMetaData.pas',
+  DBXInterbaseReadOnlyMetaData in 'cmx.bpl\CodeGear\dbx\DBXInterbaseReadOnlyMetaData.pas',
+  DBXMsSqlReadOnlyMetaData in 'cmx.bpl\CodeGear\dbx\DBXMsSqlReadOnlyMetaData.pas',
+  DBXMySqlReadOnlyMetaData in 'cmx.bpl\CodeGear\dbx\DBXMySqlReadOnlyMetaData.pas',
+  DBXOracleReadOnlyMetaData in 'cmx.bpl\CodeGear\dbx\DBXOracleReadOnlyMetaData.pas',
+  DBXTrace in 'cmx.bpl\CodeGear\dbx\DBXTrace.pas',
+  ClassRegistry in 'cmx.bpl\CodeGear\dbx\ClassRegistry.pas',
+  DBXCommon in 'cmx.bpl\CodeGear\dbx\DBXCommon.pas',
+  DBXDelegate in 'cmx.bpl\CodeGear\dbx\DBXDelegate.pas',
+  DBXPlatform in 'cmx.bpl\CodeGear\dbx\DBXPlatform.pas',
+  DBXPool in 'cmx.bpl\CodeGear\dbx\DBXPool.pas',
+  DBXDynalinkNative in 'cmx.bpl\CodeGear\dbx\DBXDynalinkNative.pas',
+  DBXDynalink in 'cmx.bpl\CodeGear\dbx\DBXDynalink.pas',
+  DbxInterbase in 'cmx.bpl\CodeGear\dbx\DbxInterbase.pas';
+
+end.

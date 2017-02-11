@@ -1,0 +1,229 @@
+<html>
+<body>
+<h1>Class TSMTPMail</h1>
+<b>Declaration</b><br>
+
+<pre>TSMTPMail = class(TObject)
+  <a href="#SMTPunit$TSMTPMail$AddAddress">procedure AddAddress(Value: String)</a>;
+  <a href="#SMTPunit$TSMTPMail$AddBCC">procedure AddBCC(Value: String)</a>;
+  <a href="#SMTPunit$TSMTPMail$AddCC">procedure AddCC(Value: String)</a>;
+  <a href="#SMTPunit$TSMTPMail$AddLine">procedure AddLine(Line: String)</a>;
+  <a href="#SMTPunit$TSMTPMail$Address">property Address: String read GetAddress write SetAddress</a>;
+  <a href="#SMTPunit$TSMTPMail$BCC">property BCC: String read GetBCC write SetBCC</a>;
+  <a href="#SMTPunit$TSMTPMail$Body">property Body: String read GetBody write SetBody</a>;
+  <a href="#SMTPunit$TSMTPMail$CC">property CC: String read GetCC write SetCC</a>;
+  <a href="#SMTPunit$TSMTPMail$Clear">procedure Clear</a>;
+  <a href="#SMTPunit$TSMTPMail$Create">constructor Create(Host: String; From: String; To: String)</a>;
+  <a href="#SMTPunit$TSMTPMail$GetAddress">function GetAddress: String</a>;
+  <a href="#SMTPunit$TSMTPMail$GetBCC">function GetBCC: String</a>;
+  <a href="#SMTPunit$TSMTPMail$GetBody">function GetBody: String</a>;
+  <a href="#SMTPunit$TSMTPMail$GetCC">function GetCC: String</a>;
+  <a href="#SMTPunit$TSMTPMail$GetSubject">function GetSubject: String</a>;
+  <a href="#SMTPunit$TSMTPMail$QuickMail">function QuickMail(From: String; To: String; Subject: String; Body: String): String</a>;
+  <a href="#SMTPunit$TSMTPMail$SendMail">function SendMail: String</a>;
+  <a href="#SMTPunit$TSMTPMail$SetAddress">procedure SetAddress(Value: String)</a>;
+  <a href="#SMTPunit$TSMTPMail$SetBCC">procedure SetBCC(Value: String)</a>;
+  <a href="#SMTPunit$TSMTPMail$SetBody">procedure SetBody(Value: String)</a>;
+  <a href="#SMTPunit$TSMTPMail$SetCC">procedure SetCC(Value: String)</a>;
+  <a href="#SMTPunit$TSMTPMail$SetSubject">procedure SetSubject(Value: String)</a>;
+  <a href="#SMTPunit$TSMTPMail$Subject">property Subject: String read GetSubject write SetSubject</a>;
+end;</pre>
+<b>Description</b>
+<p></p>
+
+<hr>
+
+    <h2><a name=SMTPunit$TSMTPMail$AddAddress>Method TSMTPMail.AddAddress</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure AddAddress(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$AddBCC>Method TSMTPMail.AddBCC</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure AddBCC(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$AddCC>Method TSMTPMail.AddCC</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure AddCC(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$AddLine>Method TSMTPMail.AddLine</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure AddLine(Line: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$Address>Property TSMTPMail.Address</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Address: String read GetAddress write SetAddress;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$BCC>Property TSMTPMail.BCC</a></h2>
+    <b>Declaration</b><br>
+    <pre>property BCC: String read GetBCC write SetBCC;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$Body>Property TSMTPMail.Body</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Body: String read GetBody write SetBody;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$CC>Property TSMTPMail.CC</a></h2>
+    <b>Declaration</b><br>
+    <pre>property CC: String read GetCC write SetCC;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$Clear>Method TSMTPMail.Clear</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Clear;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$Create>Method TSMTPMail.Create</a></h2>
+    <b>Declaration</b><br>
+    <pre>constructor Create(Host: String; From: String; To: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$GetAddress>Method TSMTPMail.GetAddress</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetAddress: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$GetBCC>Method TSMTPMail.GetBCC</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetBCC: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$GetBody>Method TSMTPMail.GetBody</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetBody: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$GetCC>Method TSMTPMail.GetCC</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetCC: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$GetSubject>Method TSMTPMail.GetSubject</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetSubject: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$QuickMail>Method TSMTPMail.QuickMail</a></h2>
+    <b>Declaration</b><br>
+    <pre>function QuickMail(From: String; To: String; Subject: String; Body: String): String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$Self>Method TSMTPMail.Self</a></h2>
+    <b>Declaration</b><br>
+    <pre>Self;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$SendMail>Method TSMTPMail.SendMail</a></h2>
+    <b>Declaration</b><br>
+    <pre>function SendMail: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$SetAddress>Method TSMTPMail.SetAddress</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetAddress(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$SetBCC>Method TSMTPMail.SetBCC</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetBCC(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$SetBody>Method TSMTPMail.SetBody</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetBody(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$SetCC>Method TSMTPMail.SetCC</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetCC(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$SetSubject>Method TSMTPMail.SetSubject</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetSubject(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SMTPunit$TSMTPMail$Subject>Property TSMTPMail.Subject</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Subject: String read GetSubject write SetSubject;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+</body>
+</html>

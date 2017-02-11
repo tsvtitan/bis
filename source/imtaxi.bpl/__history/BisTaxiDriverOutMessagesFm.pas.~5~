@@ -1,0 +1,156 @@
+unit BisTaxiDriverOutMessagesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList, DB,
+  VirtualTrees, VirtualDBTreeEx,
+  BisFm, BisDataFrm, BisDataGridFrm, BisDataGridFm, BisFieldNames, BisDBTree;
+
+type
+  TBisTaxiDriverOutMessagesFrame=class(TBisDataGridFrame)
+  private
+    function GetNewRecipientName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+    procedure GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas;
+                            Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+  public
+    constructor Create(AOwner: TComponent); override;                            
+  end;
+
+  TBisTaxiDriverOutMessagesForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDriverOutMessagesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDriverOutMessagesForm: TBisTaxiDriverOutMessagesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses DateUtils,
+     BisUtils, BisConsts, BisVariants, BisOrders, BisFilterGroups, BisValues, BisCore;
+
+{ TBisTaxiDriverOutMessagesFrame }
+
+constructor TBisTaxiDriverOutMessagesFrame.Create(AOwner: TComponent);
+var
+  D: TDateTime;
+begin
+  inherited Create(AOwner);
+
+  FilterClass:=nil;
+  InsertClass:=nil;
+  UpdateClass:=nil;
+  DeleteClass:=nil;
+  with Provider do begin
+    ProviderName:='S_DRIVER_OUT_MESSAGES';
+    with FieldNames do begin
+      AddKey('OUT_MESSAGE_ID');
+      AddInvisible('CREATOR_ID');
+      AddInvisible('CREATOR_NAME');
+      AddInvisible('RECIPIENT_ID');
+      AddInvisible('RECIPIENT_NAME');
+      AddInvisible('RECIPIENT_PHONE');
+      AddInvisible('TYPE_MESSAGE');
+      AddInvisible('DESCRIPTION');
+      AddInvisible('PRIORITY');
+      AddInvisible('DATE_CREATE');
+      AddInvisible('DATE_END');
+      AddInvisible('CAR_CALLSIGN');
+      Add('DATE_BEGIN','Дата начала',110);
+      Add('TEXT_OUT','Текст сообщения',210);
+      Add('DATE_OUT','Дата отправки',110);
+      Add('CONTACT','Контакт',100);
+      AddCalculate('NEW_RECIPIENT_NAME','Водитель',GetNewRecipientName,ftString,150,100);
+      Add('CAR_COLOR','Цвет автомобиля',80);
+      Add('CAR_BRAND','Марка автомобиля',80);
+      Add('CAR_STATE_NUM','Гос. номер автомобиля',80);
+      Add('LOCKED','Блокировка',50).Visible:=false;
+    end;
+    Orders.Add('DATE_CREATE',otDesc);
+  end;
+
+  D:=Core.ServerDate;
+
+  with CreateFilterMenuItem('Сегодня') do begin
+    with FilterGroups.AddVisible do begin
+      Filters.Add('DATE_CREATE',fcEqualGreater,DateOf(D));
+      Filters.Add('DATE_CREATE',fcLess,IncDay(DateOf(D)));
+    end;
+    Checked:=true;
+  end;
+
+  with CreateFilterMenuItem('Архив') do begin
+    FilterGroups.AddVisible.Filters.Add('DATE_CREATE',fcLess,DateOf(D));
+  end;
+
+  Grid.OnPaintText:=GridPaintText;
+
+end;
+
+function TBisTaxiDriverOutMessagesFrame.GetNewRecipientName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S1, S2: String;
+begin
+  Result:=Null;
+  if DataSet.Active and not DataSet.IsEmpty then begin
+    S1:=DataSet.FieldByName('RECIPIENT_NAME').AsString;
+    S2:=DataSet.FieldByName('CAR_CALLSIGN').AsString;
+    Result:=FormatEx('%s - %s',[S2,S1]);
+    if Trim(Result)='-' then
+      Result:=Null;
+  end;
+end;
+
+procedure TBisTaxiDriverOutMessagesFrame.GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas;
+                                                 Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+var
+  Data: PBisDBTreeNode;
+  DataKey: PDBVTData;
+  DateKeyFocused: PDBVTData;
+  Item: TBisValue;
+  Flag: Boolean;
+begin
+  Data:=Grid.GetDBNodeData(Node);
+  DataKey:=Grid.GetNodeData(Node);
+  DateKeyFocused:=Grid.GetNodeData(Grid.FocusedNode);
+  if Assigned(Data) and Assigned(DataKey) and Assigned(DateKeyFocused) then begin
+    Flag:=((DataKey.Hash=DateKeyFocused.Hash) and (Column<>Grid.FocusedColumn)) or (DataKey.Hash<>DateKeyFocused.Hash);
+    if Assigned(Data.Values) and Flag then begin
+      Item:=Data.Values.Find('LOCKED');
+      if Assigned(Item) and not VarIsNull(Item.Value) then begin
+        TargetCanvas.Font.Color:=clRed;
+      end;
+    end;
+  end;
+end;
+     
+{ TBisTaxiDriverOutMessagesFormIface }
+
+constructor TBisTaxiDriverOutMessagesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDriverOutMessagesForm;
+  Permissions.Enabled:=true;
+//  Available:=true;
+  ChangeFrameProperties:=false;
+end;
+
+{ TBisTaxiDriverOutMessagesForm }
+
+class function TBisTaxiDriverOutMessagesForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDriverOutMessagesFrame;
+end;
+
+
+
+end.

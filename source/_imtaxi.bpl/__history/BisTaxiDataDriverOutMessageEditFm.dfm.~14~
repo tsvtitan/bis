@@ -1,0 +1,17 @@
+inherited BisTaxiDataDriverOutMessageEditForm: TBisTaxiDataDriverOutMessageEditForm
+  Caption = 'BisTaxiDataDriverOutMessageEditForm'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    ExplicitTop = 395
+  end
+  inherited PanelControls: TPanel
+    ExplicitHeight = 395
+    inherited DateTimePickerCreate: TDateTimePicker
+      ExplicitTop = 365
+    end
+    inherited DateTimePickerCreateTime: TDateTimePicker
+      ExplicitTop = 365
+    end
+  end
+end

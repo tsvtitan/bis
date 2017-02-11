@@ -1,0 +1,210 @@
+unit BisCallcHbookInterfaceEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls, BisInterfaces, BisParam;
+
+type
+
+  TBisCallcHbookInterfaceEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    ComboBoxType: TComboBox;
+    LabelType: TLabel;
+    CheckBoxInternal: TCheckBox;
+    GroupBoxModule: TGroupBox;
+    LabelModuleName: TLabel;
+    LabelModuleInterface: TLabel;
+    ComboBoxModuleName: TComboBox;
+    ComboBoxModuleInterface: TComboBox;
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    function CheckParams: Boolean; override;
+    procedure ChangeParam(Param: TBisParam); override;
+    procedure Execute; override;
+  end;
+
+  TBisCallcHbookInterfaceEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookInterfaceInsertFormIface=class(TBisCallcHbookInterfaceEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookInterfaceUpdateFormIface=class(TBisCallcHbookInterfaceEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookInterfaceDeleteFormIface=class(TBisCallcHbookInterfaceEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookInterfaceEditForm: TBisCallcHbookInterfaceEditForm;
+
+function GetInterfaceTypeByIndex(Index: Integer): String;
+
+implementation
+
+{$R *.dfm}
+
+uses TypInfo,
+     BisCore, BisIfaceModules, BisIfaces, BisUtils, BisDialogs;
+
+function GetInterfaceTypeByIndex(Index: Integer): String;
+begin
+  Result:='';
+  case TBisInterfaceType(Index) of
+    itUnknown: Result:='Неизвестно';
+    itHandbook: Result:='Справочник';
+    itReport: Result:='Отчет';
+  end;
+end;
+
+{ TBisCallcHbookInterfaceEditFormIface }
+
+constructor TBisCallcHbookInterfaceEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookInterfaceEditForm;
+  with Params do begin
+    AddKey('INTERFACE_ID').Older('OLD_INTERFACE_ID');
+    AddComboBox('INTERFACE_TYPE','ComboBoxType','LabelType',true);
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription',false);
+    AddCheckBox('INTERNAL','CheckBoxInternal');
+    AddComboBoxTextIndex('MODULE_NAME','ComboBoxModuleName','LabelModuleName',false);
+    AddComboBoxTextIndex('MODULE_INTERFACE','ComboBoxModuleInterface','LabelModuleInterface',false);
+  end;
+end;
+
+{ TBisCallcHbookInterfaceInsertFormIface }
+
+constructor TBisCallcHbookInterfaceInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_INTERFACE';
+end;
+
+{ TBisCallcHbookInterfaceUpdateFormIface }
+
+constructor TBisCallcHbookInterfaceUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_INTERFACE';
+end;
+
+{ TBisCallcHbookInterfaceDeleteFormIface }
+
+constructor TBisCallcHbookInterfaceDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_INTERFACE';
+end;
+
+{ TBisCallcHbookInterfaceEditForm }
+
+constructor TBisCallcHbookInterfaceEditForm.Create(AOwner: TComponent);
+var
+  i: Integer;
+  PInfo: PTypeInfo;
+  PData: PTypeData;
+  Module: TBisIfaceModule;
+begin
+  inherited Create(AOwner);
+
+  ComboBoxType.Clear;
+  PData:=nil;
+  PInfo:=TypeInfo(TBisInterfaceType);
+  if Assigned(PInfo) then
+    PData:=GetTypeData(PInfo);
+  if Assigned(PData) then
+    for i:=PData.MinValue to PData.MaxValue do begin
+      ComboBoxType.Items.Add(GetInterfaceTypeByIndex(i));
+    end;
+
+  ComboBoxModuleName.Clear;
+  for i:=0 to Core.IfaceModules.Count-1 do begin
+    Module:=Core.IfaceModules.Items[i];
+    if Module.Enabled then
+      ComboBoxModuleName.Items.AddObject(Module.ObjectName,Module);
+  end;
+
+end;
+
+procedure TBisCallcHbookInterfaceEditForm.ChangeParam(Param: TBisParam);
+var
+  i: Integer;
+  Module: TBisIfaceModule;
+  Iface: TBisIface;
+begin
+  inherited ChangeParam(Param);
+
+  if AnsiSameText(Param.ParamName,'MODULE_NAME') then begin
+    if ComboBoxModuleName.ItemIndex<>-1 then begin
+      ComboBoxModuleInterface.Clear;
+      Module:=TBisIfaceModule(ComboBoxModuleName.Items.Objects[ComboBoxModuleName.ItemIndex]);
+      if Assigned(Module) then begin
+        for i:=0 to Module.Ifaces.Count-1 do begin
+          Iface:=Module.Ifaces.Items[i];
+          if Iface.Available then
+            ComboBoxModuleInterface.Items.AddObject(Iface.ObjectName,Iface);
+        end;
+      end;
+    end else
+      ComboBoxModuleInterface.Clear;
+  end;
+
+  if AnsiSameText(Param.ParamName,'INTERNAL') then begin
+    GroupBoxModule.Enabled:=CheckBoxInternal.Checked;
+    ComboBoxModuleName.Color:=iff(CheckBoxInternal.Checked,clWindow,clBtnFace);
+    ComboBoxModuleInterface.Color:=ComboBoxModuleName.Color;
+    if not CheckBoxInternal.Checked then begin
+      ComboBoxModuleName.ItemIndex:=-1;
+      ComboBoxModuleInterface.ItemIndex:=-1;
+    end;
+  end;
+
+end;
+
+function TBisCallcHbookInterfaceEditForm.CheckParams: Boolean;
+begin
+  Result:=inherited CheckParams;
+  if Result then begin
+    if CheckBoxInternal.Checked then begin
+      if ComboBoxModuleName.ItemIndex=-1 then begin
+        ShowError(FormatEx(SNeedControlValue,[LabelModuleName.Caption]));
+        ComboBoxModuleName.SetFocus;
+        Result:=false;
+        exit;
+      end;
+      if ComboBoxModuleInterface.ItemIndex=-1 then begin
+        ShowError(FormatEx(SNeedControlValue,[LabelModuleInterface.Caption]));
+        ComboBoxModuleInterface.SetFocus;
+        Result:=false;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallcHbookInterfaceEditForm.Execute;
+begin
+  inherited Execute;
+  Core.RefreshPermissions;
+  Core.ReloadInterfaces;
+end;
+
+end.

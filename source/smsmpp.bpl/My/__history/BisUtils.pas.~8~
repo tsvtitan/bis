@@ -1,0 +1,47 @@
+unit BisUtils;
+
+interface
+
+uses Classes;
+
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+procedure FreeAndNilEx(var Obj);
+function IsClassParent(AClassIn: TClass; AClassParent: TClass): Boolean;
+
+
+implementation
+
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+begin
+  if IsTrue then Result:=ValueTrue
+  else Result:=ValueFalse;
+end;
+
+procedure FreeAndNilEx(var Obj);
+var
+  Temp: TObject;
+begin
+  if Pointer(Obj)<>nil then begin
+    Temp:=TObject(Obj);
+    try
+      Temp.Free;
+    except
+    end;
+    Pointer(Obj):=nil;
+  end;
+end;
+
+function IsClassParent(AClassIn: TClass; AClassParent: TClass): Boolean;
+var
+  AncestorClass: TClass;
+begin
+  AncestorClass := AClassIn;
+  while (AncestorClass <> AClassParent) do
+  begin
+    if AncestorClass=nil then begin Result:=false; exit; end;
+    AncestorClass := AncestorClass.ClassParent;
+  end;
+  Result:=true;
+end;
+
+end.

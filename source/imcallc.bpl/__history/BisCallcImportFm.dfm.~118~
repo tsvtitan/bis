@@ -1,0 +1,461 @@
+inherited BisCallcImportForm: TBisCallcImportForm
+  Left = 425
+  Top = 194
+  Caption = #1048#1084#1087#1086#1088#1090
+  ClientHeight = 423
+  ClientWidth = 622
+  Constraints.MinHeight = 450
+  Constraints.MinWidth = 630
+  OnClose = FormClose
+  ExplicitLeft = 425
+  ExplicitTop = 194
+  ExplicitWidth = 630
+  ExplicitHeight = 450
+  PixelsPerInch = 96
+  TextHeight = 13
+  object StatusBar: TStatusBar
+    Left = 0
+    Top = 404
+    Width = 622
+    Height = 19
+    Panels = <
+      item
+        Width = 150
+      end>
+  end
+  object PanelControls: TPanel
+    Left = 0
+    Top = 0
+    Width = 622
+    Height = 88
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 1
+    object GroupBoxControls: TGroupBox
+      AlignWithMargins = True
+      Left = 5
+      Top = 5
+      Width = 612
+      Height = 83
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 0
+      Align = alClient
+      Caption = ' '#1054#1089#1085#1086#1074#1085#1099#1077' '#1076#1072#1085#1085#1099#1077' '
+      TabOrder = 0
+      object LabelAgreement: TLabel
+        Left = 18
+        Top = 24
+        Width = 47
+        Height = 13
+        Alignment = taRightJustify
+        Caption = #1044#1086#1075#1086#1074#1086#1088':'
+        FocusControl = EditAgreement
+      end
+      object LabelPlan: TLabel
+        Left = 371
+        Top = 51
+        Width = 29
+        Height = 13
+        Alignment = taRightJustify
+        Caption = #1055#1083#1072#1085':'
+        FocusControl = EditPlan
+      end
+      object LabelGroup: TLabel
+        Left = 362
+        Top = 24
+        Width = 38
+        Height = 13
+        Alignment = taRightJustify
+        Caption = #1043#1088#1091#1087#1087#1072':'
+        FocusControl = EditGroup
+      end
+      object LabelDateIssue: TLabel
+        Left = 82
+        Top = 51
+        Width = 167
+        Height = 13
+        Alignment = taRightJustify
+        Caption = #1044#1072#1090#1072' '#1087#1077#1088#1077#1076#1072#1095#1080' '#1082#1088#1077#1076#1080#1090#1085#1086#1075#1086' '#1076#1077#1083#1072':'
+        FocusControl = DateTimePickerIssue
+      end
+      object EditAgreement: TEdit
+        Left = 71
+        Top = 21
+        Width = 245
+        Height = 21
+        Color = 15000804
+        ReadOnly = True
+        TabOrder = 0
+      end
+      object ButtonAgreement: TButton
+        Left = 322
+        Top = 21
+        Width = 21
+        Height = 21
+        Hint = #1042#1099#1073#1088#1072#1090#1100' '#1076#1086#1075#1086#1074#1086#1088
+        Caption = '...'
+        TabOrder = 1
+        OnClick = ButtonAgreementClick
+      end
+      object EditPlan: TEdit
+        Left = 406
+        Top = 48
+        Width = 154
+        Height = 21
+        Color = 15000804
+        ReadOnly = True
+        TabOrder = 5
+      end
+      object ButtonPlan: TButton
+        Left = 566
+        Top = 48
+        Width = 21
+        Height = 21
+        Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1083#1072#1085
+        Caption = '...'
+        TabOrder = 6
+        OnClick = ButtonPlanClick
+      end
+      object EditGroup: TEdit
+        Left = 406
+        Top = 21
+        Width = 154
+        Height = 21
+        Color = 15000804
+        ReadOnly = True
+        TabOrder = 2
+      end
+      object ButtonGroup: TButton
+        Left = 566
+        Top = 21
+        Width = 21
+        Height = 21
+        Hint = #1042#1099#1073#1088#1072#1090#1100' '#1075#1088#1091#1087#1087#1091
+        Caption = '...'
+        TabOrder = 3
+        OnClick = ButtonGroupClick
+      end
+      object DateTimePickerIssue: TDateTimePicker
+        Left = 255
+        Top = 48
+        Width = 88
+        Height = 21
+        Date = 39507.457070671300000000
+        Time = 39507.457070671300000000
+        TabOrder = 4
+      end
+    end
+  end
+  object PanelPreview: TPanel
+    Left = 0
+    Top = 88
+    Width = 622
+    Height = 316
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 2
+    object GroupBoxPreview: TGroupBox
+      AlignWithMargins = True
+      Left = 5
+      Top = 5
+      Width = 612
+      Height = 306
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Align = alClient
+      Caption = ' '#1044#1072#1085#1085#1099#1077' '#1087#1086' '#1076#1086#1083#1078#1085#1080#1082#1072#1084' '
+      TabOrder = 0
+      object Splitter: TSplitter
+        Left = 2
+        Top = 171
+        Width = 608
+        Height = 5
+        Cursor = crVSplit
+        Align = alBottom
+        MinSize = 75
+        ExplicitTop = 221
+        ExplicitWidth = 605
+      end
+      object Grid: TDBGrid
+        AlignWithMargins = True
+        Left = 7
+        Top = 47
+        Width = 598
+        Height = 124
+        Margins.Left = 5
+        Margins.Top = 0
+        Margins.Right = 5
+        Margins.Bottom = 0
+        Align = alClient
+        DataSource = DataSource
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+        PopupMenu = PopupActionBar
+        ReadOnly = True
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'MS Sans Serif'
+        TitleFont.Style = []
+        OnColEnter = GridColEnter
+        OnColExit = GridColExit
+      end
+      object PanelFile: TPanel
+        Left = 2
+        Top = 15
+        Width = 608
+        Height = 32
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 0
+        DesignSize = (
+          608
+          32)
+        object LabelFile: TLabel
+          Left = 182
+          Top = 8
+          Width = 32
+          Height = 13
+          Caption = #1060#1072#1081#1083':'
+          FocusControl = EditFile
+        end
+        object LabelDealNum: TLabel
+          Left = 7
+          Top = 8
+          Width = 73
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1053#1086#1084#1077#1088' '#1076#1077#1083#1072' '#1089':'
+          FocusControl = EditDealNum
+        end
+        object EditFile: TEdit
+          Left = 220
+          Top = 5
+          Width = 218
+          Height = 21
+          Anchors = [akLeft, akTop, akRight]
+          Color = 15000804
+          ReadOnly = True
+          TabOrder = 1
+        end
+        object ButtonFile: TButton
+          Left = 444
+          Top = 5
+          Width = 75
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1092#1072#1081#1083
+          Anchors = [akTop, akRight]
+          Caption = #1042#1099#1073#1088#1072#1090#1100
+          TabOrder = 2
+          OnClick = ButtonFileClick
+        end
+        object ButtonImport: TButton
+          Left = 525
+          Top = 5
+          Width = 75
+          Height = 21
+          Hint = #1048#1084#1087#1086#1088#1090#1080#1088#1086#1074#1072#1090#1100
+          Anchors = [akTop, akRight]
+          Caption = #1048#1084#1087#1086#1088#1090
+          Enabled = False
+          TabOrder = 3
+          OnClick = ButtonImportClick
+        end
+        object EditDealNum: TEdit
+          Left = 86
+          Top = 5
+          Width = 88
+          Height = 21
+          TabOrder = 0
+        end
+      end
+      object PanelDetail: TPanel
+        Left = 2
+        Top = 176
+        Width = 608
+        Height = 128
+        Align = alBottom
+        BevelOuter = bvNone
+        Constraints.MinHeight = 75
+        TabOrder = 2
+        object SplitterValue: TSplitter
+          Left = 300
+          Top = 0
+          Width = 5
+          Height = 128
+          MinSize = 65
+          ExplicitLeft = 289
+        end
+        object PanelValue: TPanel
+          Left = 0
+          Top = 0
+          Width = 300
+          Height = 128
+          Align = alLeft
+          BevelOuter = bvNone
+          Constraints.MinWidth = 65
+          TabOrder = 0
+          object DBMemoValue: TDBMemo
+            AlignWithMargins = True
+            Left = 5
+            Top = 17
+            Width = 295
+            Height = 106
+            Margins.Left = 5
+            Margins.Top = 0
+            Margins.Right = 0
+            Margins.Bottom = 5
+            Align = alClient
+            DataSource = DataSource
+            ScrollBars = ssBoth
+            TabOrder = 0
+            WordWrap = False
+            OnExit = DBMemoValueExit
+          end
+          object PanelValueLabel: TPanel
+            AlignWithMargins = True
+            Left = 10
+            Top = 0
+            Width = 290
+            Height = 17
+            Margins.Left = 10
+            Margins.Top = 0
+            Margins.Right = 0
+            Margins.Bottom = 0
+            Align = alTop
+            Alignment = taLeftJustify
+            BevelOuter = bvNone
+            Caption = #1047#1085#1072#1095#1077#1085#1080#1077
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 1
+            VerticalAlignment = taAlignTop
+          end
+        end
+        object PanelPayments: TPanel
+          Left = 305
+          Top = 0
+          Width = 303
+          Height = 128
+          Align = alClient
+          BevelOuter = bvNone
+          TabOrder = 1
+          object PanelPaymetsLabel: TPanel
+            AlignWithMargins = True
+            Left = 5
+            Top = 0
+            Width = 298
+            Height = 17
+            Margins.Left = 5
+            Margins.Top = 0
+            Margins.Right = 0
+            Margins.Bottom = 0
+            Align = alTop
+            Alignment = taLeftJustify
+            BevelOuter = bvNone
+            Caption = #1055#1083#1072#1090#1077#1078#1080
+            TabOrder = 0
+            VerticalAlignment = taAlignTop
+          end
+          object GridPayments: TDBGrid
+            AlignWithMargins = True
+            Left = 0
+            Top = 17
+            Width = 298
+            Height = 106
+            Margins.Left = 0
+            Margins.Top = 0
+            Margins.Right = 5
+            Margins.Bottom = 5
+            Align = alClient
+            DataSource = DataSourcePayments
+            Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+            ReadOnly = True
+            TabOrder = 1
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'MS Sans Serif'
+            TitleFont.Style = []
+            OnColEnter = GridColEnter
+            OnColExit = GridColExit
+          end
+        end
+      end
+    end
+  end
+  object DataSource: TDataSource
+    Left = 197
+    Top = 197
+  end
+  object OpenDialog: TOpenDialog
+    Filter = 
+      'Xml '#1092#1072#1081#1083#1099' (*.xml)|*.xml|Excel '#1092#1072#1081#1083#1099' (*.xls)|*.xls|Temp '#1092#1072#1081#1083#1099' (*.' +
+      'tmp)|*.tmp|'#1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|*.*'
+    Options = [ofEnableSizing]
+    Left = 293
+    Top = 197
+  end
+  object DataSourcePayments: TDataSource
+    Left = 421
+    Top = 309
+  end
+  object PopupActionBar: TPopupActionBar
+    OnPopup = PopupActionBarPopup
+    Left = 389
+    Top = 197
+    object MenuItemImport: TMenuItem
+      Caption = #1048#1084#1087#1086#1088#1090
+      ShortCut = 16457
+      OnClick = ButtonImportClick
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemRefresh: TMenuItem
+      Caption = #1054#1073#1085#1086#1074#1080#1090#1100
+      Hint = #1054#1073#1085#1086#1074#1080#1090#1100' '#1076#1072#1085#1085#1099#1077
+      ShortCut = 116
+      OnClick = MenuItemRefreshClick
+    end
+    object N1: TMenuItem
+      Caption = '-'
+      Hint = '-'
+    end
+    object MenuItemSave: TMenuItem
+      Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1074' ...'
+      OnClick = MenuItemSaveClick
+    end
+    object MenuItemLoad: TMenuItem
+      Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100' '#1080#1079' ...'
+    end
+    object N3: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemDelete: TMenuItem
+      Caption = #1059#1076#1072#1083#1080#1090#1100
+      Hint = #1059#1076#1072#1083#1080#1090#1100' '#1090#1077#1082#1091#1097#1091#1102' '#1079#1072#1087#1080#1089#1100
+      ShortCut = 46
+      OnClick = MenuItemDeleteClick
+    end
+    object MenuItemClear: TMenuItem
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+      Hint = #1059#1076#1072#1083#1080#1090#1100' '#1074#1089#1077' '#1079#1072#1087#1080#1089#1080
+      OnClick = MenuItemClearClick
+    end
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = '*.tmp'
+    Filter = 'Temp '#1092#1072#1081#1083#1099' (*.tmp)|*.tmp|'#1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|*.*'
+    Left = 493
+    Top = 197
+  end
+end

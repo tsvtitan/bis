@@ -1,0 +1,139 @@
+unit BisParamMemoSynEdit;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisParamMemo, BisControls;
+
+type
+
+  TBisParamMemoSynEdit=class(TBisParamMemo)
+ private
+    FSynEdit: TSynEdit;
+    property Memo;
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+     function GetEmpty: Boolean; override;
+    procedure SetAlignment(const Value: TAlignment); override;
+    function GetAlignment: TAlignment; override;
+    function GetSize: Integer; override;
+    procedure SetSize(const Value: Integer); override;
+    function GetPrecision: Integer; override;
+    procedure SetPrecision(const Value: Integer); override;
+  public
+    constructor Create; override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+    property SynEdit: TSynEdit read FSynEdit;
+  end;
+
+
+implementation
+
+uses SysUtils, Variants,
+     BisUtils;
+
+{ TBisParamMemoSynEdit }
+
+constructor TBisParamMemoSynEdit.Create; 
+begin
+  inherited Create;
+  DataType:=ftFloat;
+end;
+
+procedure TBisParamMemoSynEdit.LinkControls(Parent: TWinControl);
+var
+  AMemo: TMemo;
+begin
+  inherited LinkControls(Parent);
+  if Assigned(Memo) then begin
+    AMemo:=Memo;
+    FSynEdit:=ReplaceEditToSynEdit(AMemo);
+    FSynEdit.Alignment:=taRightJustify;
+    Edit:=TEdit(FSynEdit);
+    if Assigned(LabelEdit) then
+      LabelEdit.FocusControls.Add(FSynEdit);
+  end;
+end;
+
+function TBisParamMemoSynEdit.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FSynEdit) then
+    Result:=iff(not Empty,FSynEdit.Value,Result);
+end;
+
+procedure TBisParamMemoSynEdit.SetValue(const AValue: Variant);
+begin
+  if not VarSameValue(Value,AValue) then begin
+    if Assigned(FSynEdit) then begin
+      FSynEdit.OnChange:=nil;
+      try
+        FSynEdit.Value:=AValue;
+      finally
+        FSynEdit.OnChange:=EditChange;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamMemoSynEdit.GetAlignment: TAlignment;
+begin
+  Result:=inherited GetAlignment;
+  if Assigned(FSynEdit) then
+    Result:=FSynEdit.Alignment;
+end;
+
+function TBisParamMemoSynEdit.GetEmpty: Boolean;
+begin
+  if Assigned(FSynEdit) then
+    Result:=VarIsNull(FSynEdit.Value)
+  else
+    Result:=inherited GetEmpty;
+end;
+
+procedure TBisParamMemoSynEdit.SetAlignment(const Value: TAlignment);
+begin
+  if Alignment<>Value then begin
+    if Assigned(FSynEdit) then begin
+      FSynEdit.Alignment:=Value;
+    end;
+    inherited SetAlignment(Value);
+  end;
+end;
+
+function TBisParamMemoSynEdit.GetPrecision: Integer;
+begin
+  Result:=inherited GetPrecision;
+  if Assigned(FSynEdit) then
+    Result:=FSynEdit.MaxLength;
+end;
+
+procedure TBisParamMemoSynEdit.SetPrecision(const Value: Integer);
+begin
+  if Precision<>Value then
+    if Assigned(FSynEdit) then
+      FSynEdit.MaxLength:=Value
+    else
+      inherited SetPrecision(Value);
+end;
+
+function TBisParamMemoSynEdit.GetSize: Integer;
+begin
+  Result:=inherited GetSize;
+  if Assigned(FSynEdit) then
+    Result:=FSynEdit.DecimalPlaces;
+end;
+
+procedure TBisParamMemoSynEdit.SetSize(const Value: Integer);
+begin
+  if Size<>Value then
+    if Assigned(FSynEdit) then
+      FSynEdit.DecimalPlaces:=Value
+    else
+      inherited SetSize(Value);
+end;
+
+end.

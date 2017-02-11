@@ -1,0 +1,127 @@
+unit BisCanonFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StdCtrls,
+  ComCtrls, ExtCtrls,
+  BisFm, BisIfaces;
+
+type
+
+  TBisCanonForm = class(TBisForm)
+    Label1: TLabel;
+    Button1: TButton;
+    Label2: TLabel;
+    Button2: TButton;
+    CheckBox1: TCheckBox;
+    Button3: TButton;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Panel1: TPanel;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+  private
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCanonFormIface=class(TBisFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCanonForm: TBisCanonForm;
+
+var
+  TestIface: TBisIface=nil;
+
+implementation
+
+uses BisCore, BisInterfaces, BisDataFm, BisProvider, BisIfaceModules, BisUtils,
+     BisPeriodFm;
+
+{$R *.dfm}
+
+{ TBisCanonFormIface }
+
+constructor TBisCanonFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCanontForm;
+  Available:=true;
+  OnlyOneForm:=false;
+  Permissions.Enabled:=true;
+  ShowType:=stNormal;
+  with Permissions.Add('Право') do begin
+    Values.Add('нет не знаю');
+    Values.Add('может быть');
+  end;
+end;
+
+{ TBisCanontForm }
+
+constructor TBisCanonForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FreeOnClose:=true;
+end;
+
+procedure TBisCanonForm.Button1Click(Sender: TObject);
+var
+  AProvider: TBisProvider;
+begin
+  AProvider:=TBisProvider.Create(nil);
+  try
+   if Core.DataSelectInto('Типы организаций',AProvider,
+                          'NAME',Label1.Caption,false,imInterface) then begin
+     Label1.Caption:=AProvider.FieldByName('NAME').AsString;
+   end;
+  finally
+    AProvider.Free;
+  end;
+end;
+
+
+procedure TBisCanonForm.Button2Click(Sender: TObject);
+var
+  AProvider: TBisProvider;
+begin
+
+  AProvider:=TBisProvider.Create(nil);
+  try
+   if Core.DataSelectInto('CallcHbookFirmTypesFormIface',AProvider,
+                          'NAME',Label2.Caption,false,imIface,CheckBox1.Checked) then begin
+     Label2.Caption:=AProvider.FieldByName('NAME').AsString;
+   end;
+  finally
+    AProvider.Free;
+  end;
+end;
+
+
+procedure TBisCanonForm.Button3Click(Sender: TObject);
+var
+  Iface: TBisPeriodFormIface;
+  D1, D2: TDate;
+  PeriodType: TBisPeriodType;
+begin
+  Iface:=TBisPeriodFormIface.Create(nil);
+  try
+    Iface.Init;
+    PeriodType:=ptYear;
+    D1:=DateTimePicker1.Date;
+    D2:=DateTimePicker2.Date;
+    if Iface.Select(PeriodType,D1,D2) then begin
+      DateTimePicker1.Date:=D1;
+      DateTimePicker2.Date:=D2;
+    end;
+  finally
+    Iface.Free;
+  end;
+
+end;
+
+end.

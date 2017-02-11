@@ -1,0 +1,106 @@
+unit BisOmStdControls;
+
+interface
+
+uses Classes, Controls,
+     BisScriptUnits, BisScriptTypes, BisScriptFuncs, BisScriptClass;
+
+type
+  TBisControlsScriptUnit=class(TBisScriptUnit)
+  private
+    function ClassTControlPropGetParent(Prop: TBisScriptClassProp; Obj: TObject): Variant;
+    procedure ClassTControlPropSetParent(Prop: TBisScriptClassProp; Obj: TObject; Value: Variant);
+    function ClassTControlPropGetCaption(Prop: TBisScriptClassProp; Obj: TObject): Variant;
+    procedure ClassTControlPropSetCaption(Prop: TBisScriptClassProp; Obj: TObject; Value: Variant);
+    function ClassTButtonMethodCreate(Method: TBisScriptClassMethod; var Obj: TObject): Variant;
+    procedure ClassTButtonEventOnClick(Sender: TObject);    
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+implementation
+
+uses StdCtrls, ExtCtrls,
+     BisUtils, BisScriptUtils;
+
+type
+  TButtonClass=class of TButton;
+
+{ TBisControlsScriptUnit }
+
+constructor TBisControlsScriptUnit.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  UnitName:='Controls';
+
+  Depends.Add('System');
+  Depends.Add('Classes');
+
+  Types.AddString('TCaption');
+
+  Vars.Add('mrNone',mrNone,'Integer',true);
+  Vars.Add('mrOk',mrOk,'Integer',true);
+  Vars.Add('mrCancel',mrCancel,'Integer',true);
+  Vars.Add('mrAbort',mrAbort,'Integer',true);
+  Vars.Add('mrRetry',mrRetry,'Integer',true);
+  Vars.Add('mrIgnore',mrIgnore,'Integer',true);
+  Vars.Add('mrYes',mrYes,'Integer',true);
+  Vars.Add('mrNo',mrNo,'Integer',true);
+  Vars.Add('mrAll',mrAll,'Integer',true);
+  Vars.Add('mrNoToAll',mrNoToAll,'Integer',true);
+  Vars.Add('mrYesToAll',mrYesToAll,'Integer',true);
+
+  with Types.AddClass('TControl',TControl,'TComponent') do begin
+    Props.AddByClass;
+    Props.Add('Parent','TWinControl',ClassTControlPropGetParent,ClassTControlPropSetParent);
+    Props.Add('Caption','TCaption',ClassTControlPropGetCaption,ClassTControlPropSetCaption);
+  end;
+
+  with Types.AddClass('TWinControl',TWinControl,'TControl') do begin
+    Props.AddByClass;
+  end;
+
+  with Types.AddClass('TButton',TButton,'TWinControl') do begin
+    with Methods.AddConstructor('Create',ClassTButtonMethodCreate) do begin
+      Params.Add('AOwner','TComponent');
+    end;
+    Props.AddByClass;
+    with Events.Add('OnClick','TNotifyEvent',@TBisControlsScriptUnit.ClassTButtonEventOnClick) do begin
+      Params.Add('Sender','TObject');
+    end;
+  end;
+end;
+
+function TBisControlsScriptUnit.ClassTControlPropGetParent(Prop: TBisScriptClassProp; Obj: TObject): Variant;
+begin
+  Result:=ObjectAsScriptType(TControl(Obj).Parent);
+end;
+
+procedure TBisControlsScriptUnit.ClassTControlPropSetParent(Prop: TBisScriptClassProp; Obj: TObject; Value: Variant);
+begin
+  TControl(Obj).Parent:=TWinControl(ScriptTypeAsObject(Value));
+end;
+
+function TBisControlsScriptUnit.ClassTButtonMethodCreate(Method: TBisScriptClassMethod; var Obj: TObject): Variant;
+var
+  AClass: TPersistentClass;
+begin
+  AClass:=GetClass(Method.Parent.Name);
+  if Assigned(AClass) and IsClassParent(AClass,TButton) then
+    Obj:=TButtonClass(AClass).Create(TComponent(Method.Params[0].AsObject));
+end;
+
+procedure TBisControlsScriptUnit.ClassTButtonEventOnClick(Sender: TObject);
+begin
+  with TBisScriptClassEventHandler(Self) do begin
+    Params[0].AsObject:=Sender;
+    Execute;
+  end;
+end;
+
+initialization
+  RegisterClass(TControl);
+  RegisterClass(TWinControl);
+  RegisterClass(TButton);
+
+end.

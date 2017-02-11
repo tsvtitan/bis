@@ -1,0 +1,62 @@
+package siplib2007;
+
+{$R *.res}
+{$R 'SipClient.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl;
+
+contains
+  SipClient in 'SipClient.pas',
+  WinSock2 in 'WinSock2.pas',
+  account in 'account.pas',
+  accounts in 'accounts.pas',
+  acm in 'acm.pas',
+  call in 'call.pas',
+  calls in 'calls.pas',
+  codecgsm in 'codecgsm.pas',
+  codecpcm in 'codecpcm.pas',
+  codecs in 'codecs.pas',
+  dtmf in 'dtmf.pas',
+  guids in 'guids.pas',
+  iputils in 'iputils.pas',
+  md5 in 'md5.pas',
+  rtp in 'rtp.pas',
+  udp in 'udp.pas',
+  sip in 'sip.pas',
+  sipints in 'sipints.pas',
+  sipmessage in 'sipmessage.pas',
+  siprequests in 'siprequests.pas',
+  soundinput in 'soundinput.pas',
+  soundplay in 'soundplay.pas',
+  text2speech in 'text2speech.pas',
+  wavfiles in 'wavfiles.pas',
+  conference in 'conference.pas',
+  recorder in 'recorder.pas',
+  logmessage in 'logmessage.pas',
+  codecspeex in 'codecspeex.pas';
+
+end.

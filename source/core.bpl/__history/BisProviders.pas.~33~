@@ -1,0 +1,32 @@
+unit BisProviders;
+
+interface
+
+uses Classes, Contnrs, DB, Graphics, Types, Variants,
+     BisProvider;
+
+type
+  TBisProviders=class(TObjectList)
+  private
+    function GetItems(Index: Integer): TBisProvider;
+  public
+
+    function Find(): TBisProvider;
+  {  function AddClass(AClass: TBisIfaceClass): TBisIface;
+    function AddIface(AIface: TBisIface): Boolean;}
+
+    property Items[Index: Integer]: TBisProvider read GetItems;
+  end;
+
+implementation
+
+uses SysUtils;
+
+{ TBisProviders }
+
+function TBisProviders.GetItems(Index: Integer): TBisProvider;
+begin
+  Result:=TBisProvider(inherited Items[Index]);
+end;
+
+end.

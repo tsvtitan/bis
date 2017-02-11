@@ -1,0 +1,94 @@
+unit BisHttpServerHandlerEvent;
+
+interface
+
+uses Classes,
+     HTTPApp,
+     BisHttpServerHandlerModules, BisHttpServerHandlers,
+     BisHttpServerHandlerEventWm;
+
+type
+
+  TBisHttpServerHandlerEvent=class(TBisHttpServerHandler)
+  private
+    FWebModule: TBisHttpServerHandlerEventWebModule;
+//    FClientKey: String;
+//    FServerKey: String;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    function HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean; override;
+    procedure CopyFrom(Source: TBisHttpServerHandler); override;
+
+  end;
+
+procedure InitServerHttpHandlerModule(AModule: TBisHttpServerHandlerModule); stdcall;
+
+exports
+  InitServerHttpHandlerModule;
+
+implementation
+
+uses SysUtils, Variants,
+     BisCore, BisUtils, BisConsts, BisHttpServerHandlerEventConsts;
+
+procedure InitServerHttpHandlerModule(AModule: TBisHttpServerHandlerModule); stdcall;
+begin
+  AModule.HandlerClass:=TBisHttpServerHandlerEvent;
+end;
+
+{ TBisHttpServerHandlerEvent }
+
+constructor TBisHttpServerHandlerEvent.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FWebModule:=TBisHttpServerHandlerEventWebModule.Create(Self);
+  FWebModule.Handler:=Self;
+end;
+
+destructor TBisHttpServerHandlerEvent.Destroy;
+begin
+  FWebModule.Free;
+  inherited Destroy;
+end;
+
+procedure TBisHttpServerHandlerEvent.Init;
+var
+  AName: String;
+  AValue: Variant;
+begin
+  inherited Init;
+  if Params.Active and not Params.Empty then begin
+    Params.First;
+    while not Params.Eof do begin
+      AName:=Params.FieldByName(SFieldName).AsString;
+      AValue:=Params.FieldByName(SFieldValue).Value;
+
+{      if AnsiSameText(AName,SParamClientKey) then FClientKey:=VarToStrDef(AValue,'');
+      if AnsiSameText(AName,SParamServerKey) then FServerKey:=VarToStrDef(AValue,'');}
+
+      Params.Next;
+    end;
+  end;
+end;
+
+function TBisHttpServerHandlerEvent.HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean;
+begin
+  if FWebModule is TBisHttpServerHandlerEventWebModule then begin
+{     TBisHttpServerHandlerEventWebModule(FWebModule).ClientKey:=FClientKey;
+     TBisHttpServerHandlerEventWebModule(FWebModule).ServerKey:=FServerKey;}
+  end;
+  Result:=IWebRequestHandler(FWebModule).HandleRequest(Request,Response);
+end;
+
+procedure TBisHttpServerHandlerEvent.CopyFrom(Source: TBisHttpServerHandler);
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) then begin
+//    FClientKey:=TBisHttpServerHandlerEvent(Source).FClientKey;
+//    FServerKey:=TBisHttpServerHandlerEvent(Source).FServerKey;
+  end;
+end;
+
+end.

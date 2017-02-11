@@ -1,0 +1,49 @@
+package imfotom;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  omcom,
+  omnet,
+  omarch,
+  vcl,
+  rtl;
+
+contains
+  BisFotom in 'imfotom.bpl\BisFotom.pas',
+  BisFotomMainFm in 'imfotom.bpl\BisFotomMainFm.pas' {BisFotomMainForm},
+  BisFotomConsts in 'imfotom.bpl\BisFotomConsts.pas',
+  BisFotomCatalogFm in 'imfotom.bpl\BisFotomCatalogFm.pas' {BisFotomCatalogForm},
+  BisFotomCanon in 'imfotom.bpl\BisFotomCanon.pas',
+  PRAPI in 'imfotom.bpl\PRAPI.PAS',
+  BisFotomImagePreviewFm in 'imfotom.bpl\BisFotomImagePreviewFm.pas' {BisFotomImagePreviewForm},
+  BisFotomSendFm in 'imfotom.bpl\BisFotomSendFm.pas' {BisFotomSendForm},
+  BisFotomResultFrm in 'imfotom.bpl\BisFotomResultFrm.pas' {BisFotomResultFrame: TFrame},
+  BisFotomMainFmIntf in 'imfotom.bpl\BisFotomMainFmIntf.pas',
+  frxBarcod in 'rptfast.bpl\FastReport\Source\frxBarcod.pas';
+
+end.

@@ -1,0 +1,313 @@
+unit BisServerModules;
+
+interface
+
+uses Classes,
+     BisObject, BisModules, BisDataSet, BisServers,
+     BisServerModuleIntf;
+
+type
+  TBisServerModule=class;
+
+  TBisServerModuleInitProc=procedure (AModule: TBisServerModule); stdcall;
+
+  TBisServerModule=class(TBisModule,IBisServerModule)
+  private
+    FInitProc: TBisServerModuleInitProc;
+    FServers: TBisServers;
+    FTable: TBisDataSet;
+
+    FSStartServersBegin: String;
+    FSStartServersSuccess: String;
+    FSStartServersFailed: String;
+    FSStopServersBegin: String;
+    FSStopServersSuccess: String;
+    FSStopServersFailed: String;
+    FServerClass: TBisServerClass;
+
+    procedure RefreshServers;
+    procedure SaveServerParams(Server: TBisObject);
+  protected
+    procedure DoInitProc(AModule: TBisModule); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Unload; override;
+    procedure Init; override;
+    procedure Save; override;
+
+    procedure StartServers;
+    procedure StopServers;
+
+    property Servers: TBisServers read FServers;
+    property ServerClass: TBisServerClass read FServerClass write FServerClass;
+  published
+    property SStartServersBegin: String read FSStartServersBegin write FSStartServersBegin;
+    property SStartServersSuccess: String read FSStartServersSuccess write FSStartServersSuccess;
+    property SStartServersFailed: String read FSStartServersFailed write FSStartServersFailed;
+    property SStopServersBegin: String read FSStopServersBegin write FSStopServersBegin;
+    property SStopServersSuccess: String read FSStopServersSuccess write FSStopServersSuccess;
+    property SStopServersFailed: String read FSStopServersFailed write FSStopServersFailed;
+  end;
+
+  TBisServerModules=class(TBisModules)
+  private
+    function GetItem(Index: Integer): TBisServerModule;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    procedure StartServers;
+    procedure StopServers;
+
+    property Items[Index: Integer]: TBisServerModule read GetItem; default;
+  end;
+
+implementation
+
+uses Windows, SysUtils, DB,
+     BisConsts, BisLogger, BisUtils;
+
+{ TBisServerModule }
+
+constructor TBisServerModule.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FServers:=TBisServers.Create(Self);
+  FTable:=TBisDataSet.Create(Self);
+
+  FSStartServersBegin:='Начало запуска серверов ...';
+  FSStartServersSuccess:='Запуск серверов прошел успешно.';
+  FSStartServersFailed:='Запуск серверов прошел с ошибкой: %s';
+  FSStopServersBegin:='Начало остановки серверов ...';
+  FSStopServersSuccess:='Остановка серверов прошла успешно.';
+  FSStopServersFailed:='Остановка серверов не прошла. %s';
+
+end;
+
+destructor TBisServerModule.Destroy;
+begin
+  FTable.Free;
+  FServers.Free;
+  inherited Destroy;
+end;
+
+procedure TBisServerModule.Init;
+var
+  Stream: TMemoryStream;
+  AModules: TBisServerModules;
+  Field: TField;
+begin
+  inherited Init;
+  if Assigned(Owner) and (Owner is TBisServerModules) then begin
+    AModules:=TBisServerModules(Owner);
+    FTable.Close;
+    if AModules.Table.Active and not AModules.Table.IsEmpty then begin
+      Stream:=TMemoryStream.Create;
+      try
+        Field:=AModules.Table.FindField(SFieldServers);
+        if Assigned(Field) and Field.IsBlob then begin
+          TBlobField(Field).SaveToStream(Stream);
+          Stream.Position:=0;
+          FTable.LoadFromStream(Stream);
+          FTable.Open;
+        end;
+      finally
+        Stream.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisServerModule.Save;
+var
+  Stream: TMemoryStream;
+  AModules: TBisServerModules;
+  Field: TField;
+begin
+  inherited Save;
+  if Assigned(Owner) and (Owner is TBisServerModules) then begin
+    AModules:=TBisServerModules(Owner);
+    if FTable.Active and AModules.Table.Active and not AModules.Table.IsEmpty then begin
+      Stream:=TMemoryStream.Create;
+      try
+        Field:=AModules.Table.FindField(SFieldServers);
+        if Assigned(Field) and Field.IsBlob then begin
+          FTable.SaveToStream(Stream);
+          Stream.Position:=0;
+          TBlobField(Field).LoadFromStream(Stream);
+        end;
+      finally
+        Stream.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisServerModule.RefreshServers;
+var
+  Field: TField;
+  AEnabled: Boolean;
+  AServer: TBisServer;
+  AObjectName: String;
+begin
+  if FTable.Active and not FTable.IsEmpty then begin
+    if Assigned(FServerClass) then begin
+      FServers.Clear;
+      FTable.First;
+      Field:=FTable.FindField(SFieldParams);
+      while not FTable.Eof do begin
+        AEnabled:=Boolean(FTable.FieldByName(SFieldEnabled).AsInteger);
+        if AEnabled then begin
+          AObjectName:=FTable.FieldByName(SFieldName).AsString+FServerClass.GetObjectName;
+          AServer:=FServers.AddClass(FServerClass,AObjectName);
+          if Assigned(AServer) then begin
+            AServer.Module:=Self;
+            AServer.Caption:=FTable.FieldByName(SFieldCaption).AsString;
+            AServer.Description:=FTable.FieldByName(SFieldDescription).AsString;
+            AServer.Enabled:=AEnabled;
+            if Assigned(Field) and Field.IsBlob then begin
+              AServer.Params.CopyFromDataSet(Field.AsString);
+              AServer.Params.Change;
+            end;
+          end;
+        end;
+        FTable.Next;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisServerModule.DoInitProc(AModule: TBisModule);
+begin
+  @FInitProc:=GetProcAddress(Module,PChar(SInitServerModule));
+  if Assigned(@FInitProc) then begin
+    try
+      FInitProc(Self);
+      RefreshServers;
+      FServers.Init;
+      LoggerWrite(FormatEx(SInitSuccess,[FileName]));
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SInitFailed,[FileName,E.Message]),ltError);
+      end;
+    end;
+  end else begin
+    LoggerWrite(FormatEx(SInitProcNotFound,[FileName]),ltError);
+  end;
+end;
+
+procedure TBisServerModule.Unload;
+begin
+  FServers.Clear;
+  inherited Unload;
+end;
+
+procedure TBisServerModule.SaveServerParams(Server: TBisObject);
+var
+  AServer: TBisServer;
+  AObjectName: String;
+  Field: TField;
+//  DS: TBisDataSet;
+//  Stream: TMemoryStream;
+  Saved: Boolean;
+begin
+  if Assigned(Server) and (Server is TBisServer) then begin
+    AServer:=TBisServer(Server);
+    if FTable.Active then begin
+
+      Saved:=false;
+      Field:=FTable.FindField(SFieldParams);
+      FTable.First;
+      while not FTable.Eof do begin
+        AObjectName:=FTable.FieldByName(SFieldName).AsString+FServerClass.GetObjectName;
+        if AnsiSameText(AObjectName,AServer.ObjectName) and Assigned(Field) and Field.IsBlob then begin
+     {     DS:=TBisDataSet.Create(nil);
+          Stream:=TMemoryStream.Create;
+          try
+            TBlobField(Field).SaveToStream(Stream);
+            Stream.Position:=0;
+            DS.LoadFromStream(Stream);
+            DS.EmptyTable;
+            AServer.Params.CopyTo(DS);
+            Stream.Position:=0;
+            DS.SaveToStream(Stream);
+            Stream.Position:=0;
+            FTable.Edit;
+            TBlobField(Field).LoadFromStream(Stream);
+            FTable.Post;
+            Saved:=true;
+            break;
+          finally
+            Stream.Free;
+            DS.Free;
+          end;   }
+        end;
+        FTable.Next;
+      end;
+
+      if Saved then begin
+        if Assigned(Owner) and (Owner is TBisServerModules) then begin
+          TBisServerModules(Owner).SaveToLocalbase;
+        end;
+      end;
+
+    end;
+  end;
+end;
+
+procedure TBisServerModule.StartServers;
+begin
+  LoggerWrite(FSStartServersBegin);
+  try
+    FServers.Start;
+    LoggerWrite(FSStartServersSuccess);
+  except
+    on E: Exception do begin
+      LoggerWrite(FormatEx(FSStartServersFailed,[E.Message]),ltError);
+    end;
+  end;
+end;
+
+procedure TBisServerModule.StopServers;
+begin
+  LoggerWrite(FSStopServersBegin);
+  try
+    FServers.Stop;
+    LoggerWrite(FSStopServersSuccess);
+  except
+    on E: Exception do begin
+      LoggerWrite(FormatEx(FSStopServersFailed,[E.Message]),ltError);
+    end;
+  end;
+end;
+
+{ TBisServerModules }
+
+function TBisServerModules.GetItem(Index: Integer): TBisServerModule;
+begin
+  Result:=TBisServerModule(inherited Items[Index]);
+end;
+
+function TBisServerModules.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisServerModule;
+end;
+
+procedure TBisServerModules.StartServers;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do
+    Items[i].StartServers;
+end;
+
+procedure TBisServerModules.StopServers;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do
+    Items[i].StopServers;
+end;
+
+
+end.

@@ -1,0 +1,39 @@
+inherited BisUtilTableEditForm: TBisUtilTableEditForm
+  Left = 547
+  Top = 315
+  Caption = #1056#1077#1076#1072#1082#1090#1086#1088' '#1090#1072#1073#1083#1080#1094
+  ClientHeight = 287
+  ClientWidth = 372
+  Font.Name = 'Tahoma'
+  ExplicitLeft = 547
+  ExplicitTop = 315
+  ExplicitWidth = 380
+  ExplicitHeight = 314
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 252
+    Width = 372
+    TabOrder = 1
+    inherited ButtonOk: TButton
+      Left = 210
+      ModalResult = 1
+      ExplicitLeft = 144
+    end
+    inherited ButtonCancel: TButton
+      Left = 291
+      ExplicitLeft = 225
+    end
+  end
+  object PanelFrame: TPanel
+    Left = 0
+    Top = 0
+    Width = 372
+    Height = 252
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+    ExplicitWidth = 306
+    ExplicitHeight = 185
+  end
+end

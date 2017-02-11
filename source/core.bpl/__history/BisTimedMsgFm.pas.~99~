@@ -1,0 +1,373 @@
+unit BisTimedMsgFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls,
+  BisFm;
+
+type
+  TBisTimedMsgForm = class(TBisForm)
+    PanelControls: TPanel;
+    ImageIcon: TImage;
+    LabelMessage: TLabel;
+    ButtonTimer: TSpeedButton;
+    Timer: TTimer;
+    Bevel: TBevel;
+    procedure FormShow(Sender: TObject);
+    procedure bHelpClick(Sender: TObject);
+    procedure ButtonTimerClick(Sender: TObject);
+    procedure TimerTimer(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+    FDlgType: TMsgDlgType;
+    FButtons: TMsgDlgButtons;
+    FSeconds: Integer;
+    FDefaultButton: TMsgDlgBtn;
+    DefButton: TBitBtn;
+
+    FSConfirmation: String;
+    FSWarning: String;
+    FSError: String;
+    FSInformation: String;
+    FSSuspendTimer: String;
+    FSResumeTimer: String;
+
+    FSButtonCaptionYes: String;
+    FSButtonCaptionNo: String;
+    FSButtonCaptionOK: String;
+    FSButtonCaptionCancel: String;
+    FSButtonCaptionAbort: String;
+    FSButtonCaptionRetry: String;
+    FSButtonCaptionIgnore: String;
+    FSButtonCaptionAll: String;
+    FSButtonCaptionNoToAll: String;
+    FSButtonCaptionYesToAll: String;
+    FSButtonCaptionHelp: String;
+
+  public
+    { Public declarations }
+    property DlgType: TMsgDlgType read FDlgType write FDlgType;
+    property Buttons: TMsgDlgButtons read FButtons write FButtons;
+    property DefaultButton: TMsgDlgBtn read FDefaultButton write FDefaultButton;
+    property Seconds: Integer read FSeconds write FSeconds;
+  published
+    property SConfirmation: String read FSConfirmation write FSConfirmation;
+    property SWarning: String read FSWarning write FSWarning;
+    property SError: String read FSError write FSError;
+    property SInformation: String read FSInformation write FSInformation;
+    property SSuspendTimer: String read FSSuspendTimer write FSSuspendTimer;
+    property SResumeTimer: String read FSResumeTimer write FSResumeTimer;
+    property SButtonCaptionYes: String read FSButtonCaptionYes write FSButtonCaptionYes;
+    property SButtonCaptionNo: String read FSButtonCaptionNo write FSButtonCaptionNo;
+    property SButtonCaptionOK: String read FSButtonCaptionOK write FSButtonCaptionOK;
+    property SButtonCaptionCancel: String read FSButtonCaptionCancel write FSButtonCaptionCancel;
+    property SButtonCaptionAbort: String read FSButtonCaptionAbort write FSButtonCaptionAbort;
+    property SButtonCaptionRetry: String read FSButtonCaptionRetry write FSButtonCaptionRetry;
+    property SButtonCaptionIgnore: String read FSButtonCaptionIgnore write FSButtonCaptionIgnore;
+    property SButtonCaptionAll: String read FSButtonCaptionAll write FSButtonCaptionAll;
+    property SButtonCaptionNoToAll: String read FSButtonCaptionNoToAll write FSButtonCaptionNoToAll;
+    property SButtonCaptionYesToAll: String read FSButtonCaptionYesToAll write FSButtonCaptionYesToAll;
+    property SButtonCaptionHelp: String read FSButtonCaptionHelp write FSButtonCaptionHelp;
+  end;
+
+var
+  BisTimedMsgForm: TBisTimedMsgForm;
+
+function BisTimedMessageBox(const Msg, Title: string; DlgType: TMsgDlgType;
+  Buttons: TMsgDlgButtons; DefaultButton: TMsgDlgBtn;
+  Seconds: Integer; HelpCtx: Longint = 0; UseTimer: Boolean=true): Integer;
+
+const
+  mbDefaultTimeOut: Integer = 30;
+
+implementation
+
+{$R *.DFM}
+{$R *.res}
+
+uses BisConsts, BisUtils, BisCoreUtils;
+
+const
+  IconIDs: array[TMsgDlgType] of PChar = (IDI_EXCLAMATION, IDI_HAND,
+    IDI_ASTERISK, IDI_QUESTION, nil);
+  ButtonGlyphs: array[TMsgDlgBtn] of String = (
+    'OK', 'NO', 'OK', 'CANCEL', 'ABORT', 'RETRY', 'IGNORE', 'YESTOALL', 'NOTOALL',
+    'YESTOALL', 'HELP');
+  ModalResults: array[TMsgDlgBtn] of Integer = (
+    mrYes, mrNo, mrOk, mrCancel, mrAbort, mrRetry, mrIgnore, mrAll, mrNoToAll,
+    mrYesToAll, 0);
+
+var
+  ButtonCaptions: array[TMsgDlgBtn] of String = (
+    '', '', '', '', '',
+    '', '', '', '',
+    '','');
+
+
+function BisTimedMessageBox(const Msg, Title: string; DlgType: TMsgDlgType;
+  Buttons: TMsgDlgButtons; DefaultButton: TMsgDlgBtn;
+  Seconds: Integer; HelpCtx: Longint = 0; UseTimer: Boolean=true): Integer;
+var
+  MsgForm: TBisTimedMsgForm;
+begin
+  MsgForm := TBisTimedMsgForm.Create(Application);
+  TranslateObject(MsgForm);
+
+  ButtonCaptions[mbYes]:=MsgForm.SButtonCaptionYes;
+  ButtonCaptions[mbNo]:=MsgForm.SButtonCaptionNo;
+  ButtonCaptions[mbOK]:=MsgForm.SButtonCaptionOK;
+  ButtonCaptions[mbCancel]:=MsgForm.SButtonCaptionCancel;
+  ButtonCaptions[mbAbort]:=MsgForm.SButtonCaptionAbort;
+  ButtonCaptions[mbRetry]:=MsgForm.SButtonCaptionRetry;
+  ButtonCaptions[mbIgnore]:=MsgForm.SButtonCaptionIgnore;
+  ButtonCaptions[mbAll]:=MsgForm.SButtonCaptionAll;
+  ButtonCaptions[mbNoToAll]:=MsgForm.SButtonCaptionNoToAll;
+  ButtonCaptions[mbYesToAll]:=MsgForm.SButtonCaptionYesToAll;
+  ButtonCaptions[mbHelp]:=MsgForm.SButtonCaptionHelp;
+
+//MsgForm.Font.Assign(Screen.HintFont);
+  MsgForm.LabelMessage.Caption := Msg;
+  MsgForm.Caption := Title;
+  MsgForm.DlgType := DlgType;
+  MsgForm.Buttons := Buttons;
+  MsgForm.DefaultButton := DefaultButton;
+  MsgForm.Seconds := Seconds;
+  MsgForm.HelpContext := HelpCtx;
+  MsgForm.HelpFile := Application.HelpFile;
+  if UseTimer then
+    MsgForm.ButtonTimer.Hint := MsgForm.SSuspendTimer
+  else
+    MsgForm.ButtonTimer.Hint := MsgForm.SResumeTimer;
+  MsgForm.ButtonTimer.Down:=UseTimer;
+  MsgForm.ButtonTimer.Visible:=UseTimer;
+  Result := MsgForm.ShowModal;
+  MsgForm.Free
+end;
+
+function Max(I, J: Integer): Integer;
+begin
+  if I > J then Result := I else Result := J;
+end;
+
+function GetAveCharSize(Canvas: TCanvas): TPoint;
+var
+  I: Integer;
+  Buffer: array[0..51] of Char;
+begin
+  for I := 0 to 25 do Buffer[I] := Chr(I + Ord('A'));
+  for I := 0 to 25 do Buffer[I + 26] := Chr(I + Ord('a'));
+  GetTextExtentPoint(Canvas.Handle, Buffer, 52, TSize(Result));
+  Result.X := Result.X div 52;
+end;
+
+procedure TBisTimedMsgForm.FormCreate(Sender: TObject);
+begin
+  FSConfirmation:='Подтверждение';
+  FSWarning:='Предупреждение';
+  FSError:='Ошибка';
+  FSInformation:='Информация';
+  FSSuspendTimer:='Остановить таймер';
+  FSResumeTimer:='Запустить таймер';
+
+  FSButtonCaptionYes:='Да';
+  FSButtonCaptionNo:='Нет';
+  FSButtonCaptionOK:='ОК';
+  FSButtonCaptionCancel:='Отмена';
+  FSButtonCaptionAbort:='Прервать';
+  FSButtonCaptionRetry:='Повторить';
+  FSButtonCaptionIgnore:='Игнорировать';
+  FSButtonCaptionAll:='Все';
+  FSButtonCaptionNoToAll:='Нет для всех';
+  FSButtonCaptionYesToAll:='Да для всех';
+  FSButtonCaptionHelp:='Помощь';
+
+end;
+
+procedure TBisTimedMsgForm.FormShow(Sender: TObject);
+const
+  mcHorzMargin = 8;
+  mcVertMargin = 8;
+  mcHorzSpacing = 10;
+  mcVertSpacing = 15;
+  mcButtonWidth = 50;
+  mcButtonHeight = 14;
+  mcButtonSpacing = 4;
+var
+  DialogUnits: TPoint;
+  HorzMargin, VertMargin, HorzSpacing, VertSpacing, ButtonWidth,
+  ButtonHeight, ButtonSpacing, ButtonGroupWidth,
+  IconTextWidth, IconTextHeight, X, ALeft: Integer;
+  B, CancelButton: TMsgDlgBtn;
+  IconID: PChar;
+  TextRect: TRect;
+  ButtonWidths: array[TMsgDlgBtn] of Integer;
+  S: String;
+  Button: TBitBtn;
+begin
+
+  if Buttons = [] then
+    Buttons := [mbOk];
+  ButtonTimer.Visible := ButtonTimer.Visible and (Seconds > 0);
+
+  DialogUnits := GetAveCharSize(Canvas);
+  HorzMargin := MulDiv(mcHorzMargin, DialogUnits.X, 4);
+  VertMargin := MulDiv(mcVertMargin, DialogUnits.Y, 8);
+  HorzSpacing := MulDiv(mcHorzSpacing, DialogUnits.X, 4);
+  VertSpacing := MulDiv(mcVertSpacing, DialogUnits.Y, 8);
+  ButtonWidth := MulDiv(mcButtonWidth, DialogUnits.X, 4);
+
+  ButtonHeight := MulDiv(mcButtonHeight, DialogUnits.Y, 8);
+  ButtonSpacing := MulDiv(mcButtonSpacing, DialogUnits.X, 4);
+  SetRect(TextRect, 0, 0, Screen.Width div 2, 0);
+  DrawText(Canvas.Handle, PChar(LabelMessage.Caption), Length(LabelMessage.Caption)+1, TextRect,
+           DT_EXPANDTABS or DT_CALCRECT or DT_WORDBREAK or
+           DrawTextBiDiModeFlagsReadingOnly);
+  IconID := IconIDs[DlgType];
+  IconTextWidth := TextRect.Right;
+  IconTextHeight := TextRect.Bottom;
+
+  if IconID <> nil then
+    ImageIcon.Picture.Icon.Handle := LoadIcon(0, IconID)
+  else
+    ImageIcon.Picture.Icon := Application.Icon;
+
+  Inc(IconTextWidth, 32 + HorzSpacing);
+  if IconTextHeight < 32 then IconTextHeight := 32;
+  ImageIcon.SetBounds(HorzMargin, VertMargin, 32, 32);
+
+  if Caption = '' then
+    if DlgType <> mtCustom then begin
+      case DlgType of
+        mtWarning: Caption:=FSWarning;
+        mtError: Caption:=FSError;
+        mtInformation: Caption:=FSInformation;
+        mtConfirmation: Caption:=FSConfirmation;
+      end;
+    end else
+      Caption := Application.Title;
+
+  if not (DefaultButton in Buttons) then
+    if mbOk in Buttons then DefaultButton := mbOk else
+      if mbYes in Buttons then DefaultButton := mbYes else
+        DefaultButton := mbRetry;
+  if not (DefaultButton in Buttons) then
+    for B := Low(TMsgDlgBtn) to High(TMsgDlgBtn) do
+      if B in Buttons then
+      begin
+        DefaultButton := B;
+        Break
+      end;
+  if mbCancel in Buttons then CancelButton := mbCancel else
+    if mbNo in Buttons then CancelButton := mbNo else
+      CancelButton := mbOk;
+
+  ButtonGroupWidth := 0;
+  for B := Low(TMsgDlgBtn) to High(TMsgDlgBtn) do
+  begin
+    if B in Buttons then
+    begin
+      S := ButtonCaptions[B];
+      if (Seconds > 0) and (B = DefaultButton) then
+        S := S + ' (' + IntToStr(Seconds) + ')';
+      X := Canvas.TextWidth(S) + 32;
+      if X > ButtonWidth then
+        ButtonWidths[B] := X
+      else
+        ButtonWidths[B] := ButtonWidth;
+      Inc(ButtonGroupWidth, ButtonSpacing)
+    end
+    else
+      ButtonWidths[B] := 0;
+    Inc(ButtonGroupWidth, ButtonWidths[B]);
+  end;
+  Dec(ButtonGroupWidth, ButtonSpacing);
+
+  ClientWidth := Max(IconTextWidth, ButtonGroupWidth) + HorzMargin * 2;
+  if ButtonTimer.Visible then
+    ClientWidth := ClientWidth + HorzSpacing + ButtonTimer.Width;
+
+  ClientHeight := IconTextHeight + ButtonHeight + VertSpacing +
+    VertMargin * 2;
+
+  Left := (Screen.Width div 2) - (Width div 2);
+  Top := (Screen.Height div 2) - (Height div 2);
+
+  PanelControls.Height:=ClientHeight-ButtonHeight-VertMargin * 2;
+
+//  LabelMessage.BoundsRect := TextRect;
+  ALeft := IconTextWidth - TextRect.Right + HorzMargin;
+{  LabelMessage.SetBounds(ALeft, VertMargin+mcVertSpacing-mcVertMargin,
+                         TextRect.Right, TextRect.Bottom);}
+  LabelMessage.SetBounds(ALeft, VertMargin, TextRect.Right, PanelControls.Height);
+
+
+  ButtonTimer.Left := ClientWidth - HorzMargin - ButtonTimer.Width;
+  ButtonTimer.Top := VertMargin;
+
+  X := (ClientWidth - ButtonGroupWidth) div 2;
+  for B := Low(TMsgDlgBtn) to High(TMsgDlgBtn) do
+    if B in Buttons then
+    begin
+      Button := TBitBtn.Create(Self);
+      With Button do
+      begin
+        Parent := Self;
+        if (Seconds > 0) and (B = DefaultButton) and (ButtonTimer.Visible) then
+          Caption := ButtonCaptions[B] + ' (' + IntToStr(Seconds) + ')'
+        else
+          Caption := ButtonCaptions[B];
+        ModalResult := ModalResults[B];
+        //Glyph.LoadFromResourceName(HInstance, ButtonGlyphs[B]);
+        NumGlyphs := 2;
+        if B = DefaultButton then
+        begin
+          Default := True;
+          DefButton := Button
+        end;
+        if B = CancelButton then Cancel := True;
+        SetBounds(X, IconTextHeight + VertMargin + VertSpacing,
+          ButtonWidths[B], ButtonHeight);
+        Inc(X, ButtonWidths[B] + ButtonSpacing);
+        if B = mbHelp then
+          OnClick := bHelpClick;
+      end
+    end;
+
+  Timer.Enabled := ButtonTimer.Visible;
+
+  if DefButton.CanFocus then
+    DefButton.SetFocus
+end;
+
+procedure TBisTimedMsgForm.bHelpClick(Sender: TObject);
+begin
+  Application.HelpContext(HelpContext);
+end;
+
+procedure TBisTimedMsgForm.ButtonTimerClick(Sender: TObject);
+begin
+  Timer.Enabled := ButtonTimer.Down;
+  if ButtonTimer.Down then
+    ButtonTimer.Hint := FSSuspendTimer
+  else
+    ButtonTimer.Hint := FSResumeTimer;
+end;
+
+procedure TBisTimedMsgForm.TimerTimer(Sender: TObject);
+begin
+  Dec(FSeconds);
+  if ButtonTimer.Visible then
+    DefButton.Caption := ButtonCaptions[DefaultButton] + ' (' + IntToStr(FSeconds) + ')'
+  else DefButton.Caption :=ButtonCaptions[DefaultButton];
+  if FSeconds <= 0 then
+  begin
+    ModalResult := ModalResults[DefaultButton];
+    ButtonTimer.Down := False;
+    Timer.Enabled := False
+  end
+end;
+
+end.

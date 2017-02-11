@@ -1,0 +1,182 @@
+inherited BisTaxiDataClientDriverEditForm: TBisTaxiDataClientDriverEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisTaxiDataClientDriverEditForm'
+  ClientHeight = 267
+  ClientWidth = 318
+  ExplicitWidth = 326
+  ExplicitHeight = 301
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 229
+    Width = 318
+    ExplicitTop = 187
+    ExplicitWidth = 300
+    inherited ButtonOk: TButton
+      Left = 139
+      ExplicitLeft = 121
+    end
+    inherited ButtonCancel: TButton
+      Left = 235
+      ExplicitLeft = 217
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 318
+    Height = 229
+    ExplicitTop = -1
+    ExplicitWidth = 318
+    ExplicitHeight = 229
+    object LabelClient: TLabel
+      Left = 50
+      Top = 15
+      Width = 41
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1050#1083#1080#1077#1085#1090':'
+      FocusControl = EditClient
+    end
+    object LabelDescription: TLabel
+      Left = 38
+      Top = 150
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1087#1080#1089#1072#1085#1080#1077':'
+    end
+    object LabelDriver: TLabel
+      Left = 38
+      Top = 42
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1042#1086#1076#1080#1090#1077#1083#1100':'
+      FocusControl = EditDriver
+    end
+    object LabelDateCreate: TLabel
+      Left = 11
+      Top = 69
+      Width = 80
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akLeft, akBottom]
+      Caption = #1044#1072#1090#1072' '#1089#1086#1079#1076#1072#1085#1080#1103':'
+      FocusControl = DateTimePickerCreate
+    end
+    object LabelKind: TLabel
+      Left = 68
+      Top = 96
+      Width = 23
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1042#1080#1076':'
+      FocusControl = ComboBoxKind
+    end
+    object LabelPriority: TLabel
+      Left = 43
+      Top = 123
+      Width = 48
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akLeft, akBottom]
+      Caption = #1055#1086#1088#1103#1076#1086#1082':'
+      FocusControl = EditPriority
+    end
+    object EditClient: TEdit
+      Left = 97
+      Top = 12
+      Width = 168
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonClient: TButton
+      Left = 271
+      Top = 12
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
+      Anchors = [akTop, akRight]
+      Caption = '...'
+      TabOrder = 1
+    end
+    object MemoDescription: TMemo
+      Left = 97
+      Top = 147
+      Width = 195
+      Height = 66
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      TabOrder = 2
+    end
+    object EditDriver: TEdit
+      Left = 97
+      Top = 39
+      Width = 168
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 3
+    end
+    object ButtonDriver: TButton
+      Left = 271
+      Top = 39
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1086#1076#1080#1090#1077#1083#1103
+      Anchors = [akTop, akRight]
+      Caption = '...'
+      TabOrder = 4
+    end
+    object DateTimePickerCreate: TDateTimePicker
+      Left = 97
+      Top = 66
+      Width = 88
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Checked = False
+      TabOrder = 5
+    end
+    object DateTimePickerCreateTime: TDateTimePicker
+      Left = 191
+      Top = 66
+      Width = 74
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 6
+    end
+    object ComboBoxKind: TComboBox
+      Left = 97
+      Top = 93
+      Width = 88
+      Height = 21
+      Style = csDropDownList
+      Anchors = [akLeft, akBottom]
+      ItemHeight = 13
+      TabOrder = 7
+    end
+    object EditPriority: TEdit
+      Left = 97
+      Top = 120
+      Width = 54
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      Constraints.MaxWidth = 300
+      TabOrder = 8
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 32
+    Top = 176
+  end
+end

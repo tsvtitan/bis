@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{f8ea43b8-9465-43f3-8b82-c20069e5ee6b}</ProjectGuid>
+    <MainSource>imcallc.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\imcallc.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+    <DCC_UnitSearchPath>U:\source\_dcp</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp</DCC_IncludePath>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_IMPLICIT_IMPORT>False</DCC_IMPLICIT_IMPORT>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_OutputDRCFile>True</DCC_OutputDRCFile>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="HostApplication">U:\bin\loader.exe</Parameters><Parameters Name="RunParams">/config imcallc.ini</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options><Package_Options Name="LibSuffix"></Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">1126</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">DMD</VersionInfoKeys><VersionInfoKeys Name="FileDescription">BIS Call-center interface module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.1126</VersionInfoKeys><VersionInfoKeys Name="InternalName">imcallc.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">DMD</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">DMD</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">imcallc.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments">Call-center interface module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">imcallc.dpk</Source></Source><Excluded_Packages></Excluded_Packages><Language><Language Name="ProjectLang">$00000419</Language><Language Name="RootDir">U:\source\imdesign.bpl\</Language></Language>  
+    
+    
+    <Resource_DLL_Projects>
+      <Resource_DLL_Projects Name="Item0">Русский*$00000419*RUS*RUS</Resource_DLL_Projects>
+    </Resource_DLL_Projects>
+  </Delphi.Personality><ModelSupport>False</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="imcallc.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="core.dcp" />
+    <DCCReference Include="imcallc.bpl\BisCallc.pas" />
+    <DCCReference Include="imcallc.bpl\BisCallcBiasFIO.pas" />
+    <DCCReference Include="imcallc.bpl\BisCallcConsts.pas" />
+    <DCCReference Include="imcallc.bpl\BisCallcDealEditFm.pas">
+      <Form>BisCallcDealEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcDealFrameDocumentsFrm.pas" />
+    <DCCReference Include="imcallc.bpl\BisCallcDealFramePaymentsFrm.pas" />
+    <DCCReference Include="imcallc.bpl\BisCallcDealFrameTasksFrm.pas">
+      <Form>BisCallcDealFrameTasksFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcDealFrm.pas">
+      <Form>BisCallcDealFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcDealsFrameTasksFilterFm.pas">
+      <Form>BisCallcDealsFrameTasksFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcDealsFrameTasksFrm.pas">
+      <Form>BisCallcDealsFrameTasksFrame</Form>
+      <DesignClass>T</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcDealsFrm.pas">
+      <Form>BisCallcDealsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookAccountActionEditFm.pas">
+      <Form>BisCallcHbookAccountActionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookAccountActionsFm.pas">
+      <Form>BisCallcHbookAccountActionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookAccountFirmEditFm.pas">
+      <Form>BisCallcHbookAccountFirmEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookAccountFirmsFm.pas">
+      <Form>BisCallcHbookAccountFirmsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookAccountGroupEditFm.pas">
+      <Form>BisCallcHbookAccountGroupEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookAccountGroupsFm.pas">
+      <Form>BisCallcHbookAccountGroupsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookActionEditFm.pas">
+      <Form>BisCallcHbookActionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookActionReportEditFm.pas">
+      <Form>BisCallcHbookActionReportEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookActionReportsFm.pas">
+      <Form>BisCallcHbookActionReportsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookActionResultEditFm.pas">
+      <Form>BisCallcHbookActionResultEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookActionResultsFm.pas">
+      <Form>BisCallcHbookActionResultsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookActionsFm.pas">
+      <Form>BisCallcHbookActionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookAgreementEditFm.pas">
+      <Form>BisCallcHbookAgreementEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookAgreementsFm.pas">
+      <Form>BisCallcHbookAgreementsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookCaseEditFm.pas">
+      <Form>BisCallcHbookCaseEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookCasesFm.pas">
+      <Form>BisCallcHbookCasesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookCurrencyEditFm.pas">
+      <Form>BisCallcHbookCurrencyEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookCurrencyFm.pas">
+      <Form>BisCallcHbookCurrencyForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookDealEditFm.pas">
+      <Form>BisCallcHbookDealEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookDealsFm.pas">
+      <Form>BisCallcHbookDealsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookDebtorEditFm.pas">
+      <Form>BisCallcHbookDebtorEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookDebtorHistoriesFm.pas">
+      <Form>BisCallcHbookDebtorHistoriesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookDebtorsFm.pas">
+      <Form>BisCallcHbookDebtorsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookGroupEditFm.pas">
+      <Form>BisCallcHbookGroupEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookGroupsFm.pas">
+      <Form>BisCallcHbookGroupsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookPatternEditFm.pas">
+      <Form>BisCallcHbookPatternEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookPatternsFm.pas">
+      <Form>BisCallcHbookPatternsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookPaymentEditFm.pas">
+      <Form>BisCallcHbookPaymentEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookPaymentsFm.pas">
+      <Form>BisCallcHbookPaymentsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookPlanActionEditFm.pas">
+      <Form>BisCallcHbookPlanActionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookPlanActionsFm.pas">
+      <Form>BisCallcHbookPlanActionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookPlanEditFm.pas">
+      <Form>BisCallcHbookPlanEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookPlansFm.pas">
+      <Form>BisCallcHbookPlansForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookResultEditFm.pas">
+      <Form>BisCallcHbookResultEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookResultsFm.pas">
+      <Form>BisCallcHbookResultsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookStatusEditFm.pas">
+      <Form>BisCallcHbookStatusEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookStatusesFm.pas">
+      <Form>BisCallcHbookStatusesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookTaskDocumentEditFm.pas">
+      <Form>BisCallcHbookTaskDocumentEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookTaskDocumentsFm.pas">
+      <Form>BiCallcHbookTaskDocumentsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookTaskEditFm.pas">
+      <Form>BisCallcHbookTaskEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookTasksFm.pas">
+      <Form>BisCallcHbookTasksForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookVariantEditFm.pas">
+      <Form>BisCallcHbookVariantEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcHbookVariantsFm.pas">
+      <Form>BisCallcHbookVariantsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcImportFm.pas">
+      <Form>BisCallcImportForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcMainFm.pas">
+      <Form>BisCallcMainForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcReadinessFm.pas">
+      <Form>BisCallcReadinessForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcTakeBellFilterFm.pas">
+      <Form>BisCallcTakeBellFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcTakeBellFm.pas">
+      <Form>BisCallcTakeBellForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcTakeBellFrm.pas">
+      <Form>BisCallcTakeBellFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcTaskClerkFm.pas">
+      <Form>BisCallcTaskClerkForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcTaskExecuteInfoFm.pas">
+      <Form>BisTaskExecuteForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcTaskFm.pas">
+      <Form>BisCallcTaskForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcTaskFrm.pas">
+      <Form>BisCallcTaskFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcTaskLeaderFm.pas">
+      <Form>BisCallcTaskLeaderForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcTaskManagerFm.pas">
+      <Form>BisCallcTaskManagerForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcallc.bpl\BisCallcTaskOperatorFm.pas">
+      <Form>BisCallcTaskOperatorForm</Form>
+    </DCCReference>
+    <DCCReference Include="omaudio.dcp" />
+    <DCCReference Include="omtapi.dcp" />
+    <DCCReference Include="rtl.dcp" />
+    <DCCReference Include="vcl.dcp" />
+  </ItemGroup>
+</Project>

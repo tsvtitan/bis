@@ -1,0 +1,81 @@
+object SendFrm: TSendFrm
+  Left = 676
+  Top = 183
+  BorderStyle = bsDialog
+  Caption = 'Sending...'
+  ClientHeight = 98
+  ClientWidth = 366
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnClose = FormClose
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 8
+    Top = 32
+    Width = 70
+    Height = 13
+    Alignment = taRightJustify
+    AutoSize = False
+    Caption = 'Bytes sent:'
+  end
+  object BytesLbl: TLabel
+    Left = 96
+    Top = 32
+    Width = 6
+    Height = 13
+    Caption = '0'
+  end
+  object Label3: TLabel
+    Left = 8
+    Top = 8
+    Width = 70
+    Height = 13
+    Alignment = taRightJustify
+    AutoSize = False
+    Caption = 'To:'
+  end
+  object HostLbl: TLabel
+    Left = 96
+    Top = 8
+    Width = 36
+    Height = 13
+    Caption = 'HostLbl'
+  end
+  object Button1: TButton
+    Left = 8
+    Top = 64
+    Width = 75
+    Height = 25
+    Caption = 'Close'
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+  object ACMIn1: TACMIn
+    Active = False
+    OnData = ACMIn1Data
+    WaveFormatChooser = ACMDlg1
+    DeviceID = 0
+    BufferSize = 16384
+    HeadersNum = 3
+    AutoBufferSize = True
+    Left = 104
+    Top = 40
+  end
+  object ACMDlg1: TACMDlg
+    wFormatTag = 49
+    nChannels = 1
+    nSamplesPerSec = 8000
+    nAvgBytesPerSec = 8000
+    nBlockAlign = 1
+    nBitsPerSample = 8
+    Left = 152
+    Top = 48
+  end
+end

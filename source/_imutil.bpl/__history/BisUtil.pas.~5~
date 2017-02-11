@@ -1,0 +1,25 @@
+unit BisUtil;
+
+interface
+
+uses BisModules, BisIfaceModules;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisUtilFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+var
+  IsMainModule: Boolean;
+begin
+  AModule.Ifaces.AddClass(TBisUtilMainFormIface);
+
+  AModule.Ifaces.AddClass(TBisUtilFormIface);
+end;
+
+end.

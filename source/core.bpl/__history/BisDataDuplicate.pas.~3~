@@ -1,0 +1,18 @@
+unit BisDataDuplicate;
+
+interface
+
+uses BisDataInsert;
+
+type
+
+  TBisDataUpdateFormIface=class(TBisDataInsertFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDataUpdateFormIfaceClass=class of TBisDataUpdateFormIface;
+
+implementation
+
+end.

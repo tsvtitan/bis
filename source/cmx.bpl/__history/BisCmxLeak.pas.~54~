@@ -1,0 +1,72 @@
+unit BisCmxLeak;
+
+interface
+
+function LeakGetWorkingSetSize: Integer;
+procedure LeakLoggerWrite(S: String);
+
+procedure LeakInitCounter;
+procedure LeakStartCounter;
+procedure LeakStopCounter;
+procedure LeakDoneCounter;
+
+implementation
+
+uses Windows, PsAPI, SysUtils,
+
+     BisCore;
+
+var
+  AllCount: Integer;
+  AllTime: TDateTime;
+  CurCount: Integer;
+  CurTime: TDateTime;
+
+function LeakGetWorkingSetSize: Integer;
+var
+  pmc: TProcessMemoryCounters;
+begin
+  Result:=0;
+  pmc.cb:=SizeOf(pmc);
+  FillChar(pmc,SizeOf(pmc),0);
+  if GetProcessMemoryInfo(GetCurrentProcess, @pmc, SizeOf(pmc)) then
+    Result:=pmc.WorkingSetSize;
+end;
+
+procedure LeakLoggerWrite(S: String);
+begin
+  if Assigned(Core) then
+    Core.Logger.Write('LEAK: '+S);
+end;
+
+procedure LeakInitCounter;
+begin
+  AllCount:=0;
+  AllTime:=0.0;
+  LeakLoggerWrite('Init at '+DateTimeToStr(Time)+' =================');
+end;
+
+procedure LeakStartCounter;
+begin
+  CurTime:=Time;
+  CurCount:=LeakGetWorkingSetSize;
+end;
+
+procedure LeakStopCounter;
+var
+  Size: Integer;
+begin
+  AllTime:=AllTime+(CurTime-Time);
+  Size:=LeakGetWorkingSetSize-CurCount;
+  AllCount:=AllCount+Size;
+  LeakLoggerWrite(IntToStr(Size));
+end;
+
+procedure LeakDoneCounter;
+begin
+  LeakLoggerWrite('Time = '+TimeToStr(AllTime));
+  LeakLoggerWrite('Bytes = '+IntToStr(AllCount));
+  LeakLoggerWrite('Done at '+DateTimeToStr(Time)+' =================');
+end;
+
+end.

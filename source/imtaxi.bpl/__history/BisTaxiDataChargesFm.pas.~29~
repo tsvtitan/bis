@@ -1,0 +1,131 @@
+unit BisTaxiDataChargesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataFrm, BisDataGridFm, BisDataGridFrm, BisDataEditFm;
+
+type
+  TBisTaxiDataChargesFrame=class(TBisDataGridFrame)
+  private
+    FFilterMenuItemToday: TBisDataFrameFilterMenuItem;
+    FAccountId: Variant;
+    FFilterMenuItemArchive: TBisDataFrameFilterMenuItem;
+    FUserName: String;
+  protected
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property FilterMenuItemToday: TBisDataFrameFilterMenuItem read FFilterMenuItemToday;
+    property FilterMenuItemArchive: TBisDataFrameFilterMenuItem read FFilterMenuItemArchive;
+
+    property AccountId: Variant read FAccountId write FAccountId;
+    property UserName: String read FUserName write FUserName;
+  end;
+
+  TBisTaxiDataChargesForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataChargesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataChargesForm: TBisTaxiDataChargesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses DateUtils,
+     BisUtils, BisConsts, BisOrders, BisCore, BisFilterGroups, BisParam,
+     BisTaxiDataChargeEditFm, BisTaxiDataChargeFilterFm;
+
+{ TBisTaxiDataChargesFrame }
+
+constructor TBisTaxiDataChargesFrame.Create(AOwner: TComponent);
+var
+  D: TDateTime;
+begin
+  inherited Create(AOwner);
+  FilterClass:=TBisTaxiDataChargeFilterFormIface;
+  InsertClass:=TBisTaxiDataChargeInsertFormIface;
+  UpdateClass:=TBisTaxiDataChargeUpdateFormIface;
+  DeleteClass:=TBisTaxiDataChargeDeleteFormIface;
+  with Provider do begin
+    ProviderName:='S_CHARGES';
+    with FieldNames do begin
+      AddKey('CHARGE_ID');
+      AddInvisible('CHARGE_TYPE_ID');
+      AddInvisible('ACCOUNT_ID');
+      AddInvisible('WHO_CREATE_ID');
+      AddInvisible('WHO_USER_NAME');
+      AddInvisible('DATE_CREATE');
+      AddInvisible('DESCRIPTION');
+      Add('DATE_CHARGE','Дата',110);
+      Add('USER_NAME','Счет',110);
+      Add('SUM_CHARGE','Сумма',70).DisplayFormat:='#0.00';
+      Add('CHARGE_TYPE_NAME','Вид списания',110);
+    end;
+    Orders.Add('DATE_CHARGE',otDesc);
+  end;
+
+  D:=Core.ServerDate;
+
+  FFilterMenuItemToday:=CreateFilterMenuItem('За сутки');
+  with FFilterMenuItemToday do begin
+    with FilterGroups.AddVisible do begin
+      Filters.Add('DATE_CHARGE',fcEqualGreater,DateOf(D));
+      Filters.Add('DATE_CHARGE',fcLess,IncDay(DateOf(D)));
+    end;
+    Checked:=true;
+  end;
+
+  FFilterMenuItemArchive:=CreateFilterMenuItem('Архив');
+  with FFilterMenuItemArchive do begin
+    FilterGroups.AddVisible.Filters.Add('DATE_CHARGE',fcLess,DateOf(D));
+  end;
+
+  FAccountId:=Null;
+end;
+
+procedure TBisTaxiDataChargesFrame.BeforeIfaceExecute(AIface: TBisDataEditFormIface);
+var
+  Param: TBisParam;
+begin
+  inherited BeforeIfaceExecute(AIface);
+  if Assigned(AIface) then begin
+    with AIface.Params do begin
+      ParamByName('USER_NAME').Value:=FUserName;
+      Param:=ParamByName('ACCOUNT_ID');
+      Param.Value:=FAccountId;
+      if not Param.Empty then
+        Param.ExcludeModes(AllParamEditModes);
+    end;
+  end;
+end;
+
+{ TBisTaxiDataChargesFormIface }
+
+constructor TBisTaxiDataChargesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataChargesForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+end;
+
+{ TBisTaxiDataChargesForm }
+
+class function TBisTaxiDataChargesForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataChargesFrame;
+end;
+
+end.

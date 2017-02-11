@@ -1,0 +1,25 @@
+{
+
+Demo: Variables in Tdws2Unit
+  The variable "caption" is defined in the
+  Tdws2Unit component. If you read the variable
+  the OnReadVar event is called, if your write it
+  OnWriteVar is called.
+
+  The variable "global" is a global string variable
+  also defined in Tdws2Unit. The value remains stored
+  even if the program is terminated an restarted
+
+}
+
+// backups and restores the original title
+if global = '' then
+  global := Caption
+else
+  Caption := global;
+
+// Print the title of this window
+PrintLn(Caption);
+
+// Change the title of this window
+Caption := Caption + ' "To be or not to be!"';

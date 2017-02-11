@@ -1,0 +1,255 @@
+unit BisKrieltDataArticleEditFm;
+
+interface
+                                                                                                       
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ImgList, ComCtrls, Menus, ActnPopup, ExtDlgs,
+  BisDataEditFm, BisParam,
+  BisControls;
+
+type
+  TBisKrieltDataArticleEditForm = class(TBisDataEditForm)
+    LabelSubject: TLabel;
+    EditSubject: TEdit;
+    ButtonSubject: TButton;
+    LabelDateCreate: TLabel;
+    DateTimePickerCreate: TDateTimePicker;
+    DateTimePickerCreateTime: TDateTimePicker;
+    LabelTitle: TLabel;
+    EditTitle: TEdit;
+    LabelAccount: TLabel;
+    EditAccount: TEdit;
+    LabelText: TLabel;
+    MemoText: TMemo;
+    LabelLink: TLabel;
+    EditLink: TEdit;
+    LabelSection: TLabel;
+    ComboBoxSection: TComboBox;
+    LabelDateArticle: TLabel;
+    DateTimePickerArticle: TDateTimePicker;
+    DateTimePickerArticleTime: TDateTimePicker;
+    LabelExcerpt: TLabel;
+    MemoExcerpt: TMemo;
+    PanelPicture: TPanel;
+    ShapePicture: TShape;
+    ImagePicture: TImage;
+    ButtonPicture: TButton;
+    SavePictureDialog: TSavePictureDialog;
+    OpenPictureDialog: TOpenPictureDialog;
+    PopupActionBarPicture: TPopupActionBar;
+    MenuItemLoadPicture: TMenuItem;
+    MenuItemSavePicture: TMenuItem;
+    MenuItemClearPicture: TMenuItem;
+    LabelViewsCounter: TLabel;
+    EditViewsCounter: TEdit;
+    MemoTags: TMemo;
+    LabelTags: TLabel;
+    procedure ButtonPictureClick(Sender: TObject);
+    procedure PopupActionBarPicturePopup(Sender: TObject);
+    procedure MenuItemLoadPictureClick(Sender: TObject);
+    procedure MenuItemSavePictureClick(Sender: TObject);
+    procedure MenuItemClearPictureClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure BeforeShow; override;
+    procedure ChangeParam(Param: TBisParam); override;
+  end;
+
+  TBisKrieltDataArticleEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataArticleFilterFormIface=class(TBisKrieltDataArticleEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataArticleInsertFormIface=class(TBisKrieltDataArticleEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataArticleUpdateFormIface=class(TBisKrieltDataArticleEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataArticleDeleteFormIface=class(TBisKrieltDataArticleEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataArticleEditForm: TBisKrieltDataArticleEditForm;
+
+function GetSectionNameByIndex(Index: Integer): String;
+
+implementation
+
+uses BisCore, BisProvider, BisFilterGroups,
+     BisKrieltDataSubjectsFm, BisKrieltConsts;
+
+{$R *.dfm}
+
+function GetSectionNameByIndex(Index: Integer): String;
+begin
+  Result:='';
+  case Index of
+    0: Result:='статья';
+    1: Result:='новость';    
+  end;
+end;
+
+{ TBisKrieltDataArticleEditFormIface }
+
+constructor TBisKrieltDataArticleEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataArticleEditForm;
+  with Params do begin
+    AddKey('ARTICLE_ID').Older('OLD_ARTICLE_ID');
+    AddEditDateTime('DATE_ARTICLE','DateTimePickerArticle','DateTimePickerArticleTime','LabelDateArticle',true).ExcludeModes([emFilter]);
+    AddComboBoxIndex('SECTION','ComboBoxSection','LabelSection',true);
+    AddEditDataSelect('SUBJECT_ID','EditSubject','LabelSubject','ButtonSubject',
+                      TBisKrieltDataSubjectsFormIface,'SUBJECT_NAME',false,false,'','NAME').ExcludeModes(AllParamEditModes);
+    AddEdit('LINK','EditLink','LabelLink');
+    AddEdit('TITLE','EditTitle','LabelTitle',true);
+    AddMemo('EXCERPT','MemoExcerpt','LabelExcerpt',true);
+    AddMemo('TAGS','MemoTags','LabelTags');
+    AddImage('PICTURE','ImagePicture').ExcludeModes([emFilter]);
+    AddMemo('ARTICLE_TEXT','MemoText','LabelText');
+    AddEditInteger('VIEWS_COUNTER','EditViewsCounter','LabelViewsCounter');
+    AddEditDataSelect('ACCOUNT_ID','EditAccount','LabelAccount','',
+                      SIfaceClassDataAccountsFormIface,'USER_NAME',true,false).ExcludeModes(AllParamEditModes);
+    AddEditDateTime('DATE_CREATE','DateTimePickerCreate','DateTimePickerCreateTime','LabelDateCreate',true).ExcludeModes(AllParamEditModes);
+  end;
+end;
+
+{ TBisKrieltDataArticleFilterFormIface }
+
+constructor TBisKrieltDataArticleFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Фильтр статей';
+end;
+
+{ TBisKrieltDataArticleInsertFormIface }
+
+constructor TBisKrieltDataArticleInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_ARTICLE';
+  Caption:='Создать статью';
+end;
+
+{ TBisKrieltDataArticleUpdateFormIface }
+
+constructor TBisKrieltDataArticleUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_ARTICLE';
+  Caption:='Изменить статью';
+end;
+
+{ TBisKrieltDataArticleDeleteFormIface }
+
+constructor TBisKrieltDataArticleDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_ARTICLE';
+  Caption:='Удалить статью';
+end;
+
+
+{ TBisKrieltDataArticleEditForm }
+
+constructor TBisKrieltDataArticleEditForm.Create(AOwner: TComponent);
+var
+  i: Integer;
+begin
+  inherited Create(AOwner);
+  ImagePicture.ControlStyle:=ImagePicture.ControlStyle+[csReflector];
+  for i:=0 to 1 do
+    ComboBoxSection.Items.Add(GetSectionNameByIndex(i));
+    
+end;
+
+procedure TBisKrieltDataArticleEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  if Mode in [emInsert,emDuplicate] then begin
+    with Provider do begin
+      ParamByName('DATE_ARTICLE').SetNewValue(Core.ServerDate);
+      ParamByName('ACCOUNT_ID').SetNewValue(Core.AccountId);
+      ParamByName('USER_NAME').SetNewValue(Core.AccountUserName);
+      ParamByName('DATE_CREATE').SetNewValue(Core.ServerDate);
+    end;
+  end;
+  ButtonPicture.Enabled:=Mode in [emInsert,emDuplicate,emUpdate];
+  UpdateButtonState;
+end;
+
+procedure TBisKrieltDataArticleEditForm.ButtonPictureClick(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  Pt:=PanelPicture.ClientToScreen(Point(ButtonPicture.Left,ButtonPicture.Top+ButtonPicture.Height));
+  PopupActionBarPicture.Popup(Pt.X,Pt.Y);
+end;
+
+procedure TBisKrieltDataArticleEditForm.ChangeParam(Param: TBisParam);
+var
+  P: TBisProvider;
+begin
+  inherited ChangeParam(Param);
+  if AnsiSameText(Param.ParamName,'ARTICLE_ID') and not Param.Empty then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_ARTICLES';
+      P.FieldNames.AddInvisible('PICTURE');
+      P.FilterGroups.Add.Filters.Add('ARTICLE_ID',fcEqual,Param.Value);
+      P.Open;
+      if P.Active and not P.IsEmpty then begin
+        with Provider.Params.ParamByName('PICTURE') do begin
+          SetNewValue(P.FieldByName('PICTURE').AsString);
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+
+end;
+
+procedure TBisKrieltDataArticleEditForm.MenuItemClearPictureClick(Sender: TObject);
+begin
+  Provider.Params.ParamByName('PICTURE').Clear;
+end;
+
+procedure TBisKrieltDataArticleEditForm.MenuItemLoadPictureClick(Sender: TObject);
+begin
+  if OpenPictureDialog.Execute then
+    Provider.Params.ParamByName('PICTURE').LoadFromFile(OpenPictureDialog.FileName);
+end;
+
+procedure TBisKrieltDataArticleEditForm.MenuItemSavePictureClick(Sender: TObject);
+begin
+  if SavePictureDialog.Execute then
+    Provider.Params.ParamByName('PICTURE').SaveToFile(SavePictureDialog.FileName);
+end;
+
+procedure TBisKrieltDataArticleEditForm.PopupActionBarPicturePopup(Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.ParamByName('PICTURE');
+  MenuItemSavePicture.Enabled:=not Param.Empty;
+  MenuItemClearPicture.Enabled:=not Param.Empty;
+end;
+
+
+end.

@@ -1,0 +1,2644 @@
+unit BisCmIBaseConnection;
+
+interface
+
+uses Windows, Classes, Contnrs, DB, Variants,
+     Forms, Controls,
+     IBDatabase, IBStoredProc, IBQuery, IBSQLMonitor,
+     BisObject, BisConnectionModules, BisCore,
+     BisDataSet, BisConfig, BisProfile, BisInterfaces,
+     BisParams, BisParam, BisIfaces, BisMenus, BisConnections,
+     BisPermissions, BisLogger;
+
+type
+  TBisCmIBaseConnection=class;
+  TBisCmIBaseSessions=class;
+
+  TBisCmIBaseProc=class(TIBStoredProc)
+  private
+    FSParamPrefix: String;
+    procedure SetNullToParamValues;
+  protected
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure CopyParamsFrom(Source: TBisParams);
+    procedure CopyParamsTo(Source: TBisParams);
+
+    property SParamPrefix: String read FSParamPrefix write FSParamPrefix;
+  end;
+
+  TBisCmxQuery=class(TIBQuery)
+  private
+    FFetchCount: Integer;
+  public
+    procedure FetchAll;
+    procedure CopyParamsFrom(Source: TBisParams);
+
+    property FetchCount: Integer read FFetchCount;
+  end;
+
+  TBisCmIBaseDatabase=class(TIBDatabase)
+  private
+    function GetUserName: String;
+    procedure SetUserName(Value: String);
+    function GetPassword: String;
+    procedure SetPassword(Value: String);
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Assign(Source: TPersistent); override;
+
+    property UserName: String read GetUserName write SetUserName;
+    property Password: String read GetPassword write SetPassword;
+  end;
+
+  TBisCmIBaseConnectionClass=class of TBisCmIBaseConnection;
+
+  TBisCmIBaseSqlMonitor=class(TIBSQLMonitor)
+  end;
+
+  TBisCmIBaseSession=class(TBisObject)
+  private
+    FSessions: TBisCmIBaseSessions;
+    FSessionId: String;
+    FConnection: TBisCmIBaseConnection;
+    FDatabase: TBisCmIBaseDatabase;
+    FSqlMonitor: TBisCmIBaseSqlMonitor;
+    FApplicationId: String;
+    FAccountId: String;
+    FUserName: String;
+    FPassword: String;
+    FDateCreate: TDateTime;
+    FDateUpdate: TDateTime;
+    FPermissions: TBisDataSet;
+    FRoles: TStringList;
+    FLocks: TBisDataSet;
+    FIPList: TStringList;
+
+    FSSqlInsert: String;
+    FSFormatDateTime: String;
+    FSSqlUpdate: String;
+    FSSqlDelete: String;
+    FSSqlLoadPermissions: String;
+    FSSqlLoadRoles: String;
+    FSSqlLoadLocks: String;
+    FSCheckPermissions: String;
+    FSSqlLoadProfile: String;
+    FSSqlSaveProfile: String;
+    FSSqlLoadInterfaces: String;
+    FSSqlGetRecords: String;
+    FSSqlGetRecordsCount: String;
+    FSSqlLoadMenus: String;
+    FSSqlLoadScript: String;
+    FSSqlLoadReport: String;
+    FSSqlLoadDocument: String;
+    FSParamPrefix: String;
+    FSSessionFormat: String;
+    FSInsertStart: String;
+    FSInsertSuccess: String;
+    FSInsertFail: String;
+    FSUpdateStart: String;
+    FSUpdateSuccess: String;
+    FSUpdateFail: String;
+    FSDeleteStart: String;
+    FSDeleteFail: String;
+    FSDeleteSuccess: String;
+    FSLoadProfileFail: String;
+    FSLoadProfileSuccess: String;
+    FSLoadProfileStart: String;
+    FSSaveProfileStart: String;
+    FSSaveProfileFail: String;
+    FSSaveProfileSuccess: String;
+    FSLoadInterfacesSuccess: String;
+    FSLoadInterfacesStart: String;
+    FSLoadInterfacesFail: String;
+    FSGetRecordsSuccess: String;
+    FSGetRecordsStart: String;
+    FSGetRecordsFail: String;
+    FSGetRecordsSql: String;
+    FSGetRecordsSqlCount: String;
+    FSLoadMenusFail: String;
+    FSLoadMenusSuccess: String;
+    FSLoadMenusStart: String;
+    FSLoadScriptStart: String;
+    FSLoadScriptFail: String;
+    FSLoadScriptSuccess: String;
+    FSLoadScriptSql: String;
+    FSLoadReportStart: String;
+    FSLoadReportFail: String;
+    FSLoadReportSuccess: String;
+    FSLoadReportSql: String;
+    FSLoadDocumentStart: String;
+    FSLoadDocumentFail: String;
+    FSLoadDocumentSuccess: String;
+    FSLoadDocumentSql: String;
+    FSLoadMenusSql: String;
+    FSLoadInterfacesSql: String;
+    FSSaveProfileSql: String;
+    FSLoadProfileSql: String;
+    FSDeleteSql: String;
+    FSUpdateSql: String;
+    FSInsertSql: String;
+    FSExecuteStart: String;
+    FSExecuteFail: String;
+    FSExecuteSuccess: String;
+    FSExecuteProvider: String;
+    FSExecuteParam: String;
+    FSExecutePackageStart: String;
+    FSExecutePackageEnd: String;
+
+    procedure LoggerWrite(const Message: String; LogType: TBisLoggerType=ltInformation; const LoggerName: String='');
+    procedure CheckPermissions(AObjectName: String; APermissions: TBisPermissions);
+    procedure CheckLocks(AMethod: String=''; AObject: String='');
+//    procedure SqlMonitorLogTrace(Sender: TObject; TraceInfo: TDBXTraceInfo);
+    procedure DumpParams(Params: TBisParams); overload;
+    procedure DumpParams(Params: TParams); overload;
+    function GetRoleIds: String;
+    procedure CopyData(FromDataSet: TDataSet; ToDataSet: TBisDataSet; AllCount: Integer);
+    procedure Progress(const Min,Max,Position: Integer; var Breaked: Boolean);
+    function GetPrefix: String;
+    function PreparePrefix(AName: String): String;
+  public
+    constructor Create(ASessions: TBisCmIBaseSessions); reintroduce; virtual;
+    destructor Destroy; override;
+
+    procedure Insert(SystemInfo: TStringList);
+    procedure Update;
+    procedure Delete;
+    procedure LoadPermissions;
+    procedure LoadRoles;
+    procedure LoadLocks;
+
+    procedure LoadProfile(Profile: TBisProfile); virtual;
+    procedure SaveProfile(Profile: TBisProfile); virtual;
+    procedure LoadInterfaces(Interfaces: TBisInterfaces); virtual;
+    procedure GetRecords(DataSet: TBisDataSet); virtual;
+    procedure Execute(DataSet: TBisDataSet); virtual;
+    procedure LoadMenus(Menus: TBisMenus); virtual;
+    procedure LoadScript(ScriptId: String; Stream: TStream); virtual;
+    procedure LoadReport(ReportId: String; Stream: TStream); virtual;
+    procedure LoadDocument(DocumentId: String; Stream: TStream); virtual; 
+
+    property SessionId: String read FSessionId write FSessionId;
+    property Database: TBisCmIBaseDatabase read FDatabase;
+    property SqlMonitor: TBisCmIBaseSqlMonitor read FSqlMonitor;
+    property Connection: TBisCmIBaseConnection read FConnection write FConnection;
+    property ApplicationId: String read FApplicationId write FApplicationId;
+    property AccountId: String read FAccountId write FAccountId;
+    property UserName: String read FUserName write FUserName;
+    property Password: String read FPassword write FPassword;
+    property DateCreate: TDateTime read FDateCreate write FDateCreate;
+    property Permissions: TBisDataSet read FPermissions;
+    property Roles: TStringList read FRoles;
+    property Locks: TBisDataSet read FLocks;
+    property IPList: TStringList read FIPList;
+
+    property SCheckPermissions: String read FSCheckPermissions write FSCheckPermissions;
+    property SFormatDateTime: String read FSFormatDateTime write FSFormatDateTime;
+    property SSqlInsert: String read FSSqlInsert write FSSqlInsert;
+    property SSqlUpdate: String read FSSqlUpdate write FSSqlUpdate;
+    property SSqlDelete: String read FSSqlDelete write FSSqlDelete;
+    property SSqlLoadPermissions: String read FSSqlLoadPermissions write FSSqlLoadPermissions;
+    property SSqlLoadRoles: String read FSSqlLoadRoles write FSSqlLoadRoles;
+    property SSqlLoadLocks: String read FSSqlLoadLocks write FSSqlLoadLocks; 
+    property SSqlLoadProfile: String read FSSqlLoadProfile write FSSqlLoadProfile;
+    property SSqlSaveProfile: String read FSSqlSaveProfile write FSSqlSaveProfile;
+    property SSqlLoadInterfaces: String read FSSqlLoadInterfaces write FSSqlLoadInterfaces;
+    property SSqlGetRecords: String read FSSqlGetRecords write FSSqlGetRecords;
+    property SSqlGetRecordsCount: String read FSSqlGetRecordsCount write FSSqlGetRecordsCount;
+    property SSqlLoadMenus: String read FSSqlLoadMenus write FSSqlLoadMenus;
+    property SSqlLoadScript: String read FSSqlLoadScript write FSSqlLoadScript;
+    property SSqlLoadReport: String read FSSqlLoadReport write FSSqlLoadReport;
+    property SSqlLoadDocument: String read FSSqlLoadDocument write FSSqlLoadDocument;
+    property SParamPrefix: String read FSParamPrefix write FSParamPrefix;
+  published
+    property SSessionFormat: String read FSSessionFormat write FSSessionFormat;
+
+    property SInsertStart: String read FSInsertStart write FSInsertStart;
+    property SInsertSql: String read FSInsertSql write FSInsertSql;
+    property SInsertSuccess: String read FSInsertSuccess write FSInsertSuccess;
+    property SInsertFail: String read FSInsertFail write FSInsertFail;
+
+    property SUpdateStart: String read FSUpdateStart write FSUpdateStart;
+    property SUpdateSql: String read FSUpdateSql write FSUpdateSql;
+    property SUpdateSuccess: String read FSUpdateSuccess write FSUpdateSuccess;
+    property SUpdateFail: String read FSUpdateFail write FSUpdateFail;
+
+    property SDeleteStart: String read FSDeleteStart write FSDeleteStart;
+    property SDeleteSql: String read FSDeleteSql write FSDeleteSql;
+    property SDeleteSuccess: String read FSDeleteSuccess write FSDeleteSuccess;
+    property SDeleteFail: String read FSDeleteFail write FSDeleteFail;
+
+    property SLoadProfileStart: String read FSLoadProfileStart write FSLoadProfileStart;
+    property SLoadProfileSql: String read FSLoadProfileSql write FSLoadProfileSql;
+    property SLoadProfileSuccess: String read FSLoadProfileSuccess write FSLoadProfileSuccess;
+    property SLoadProfileFail: String read FSLoadProfileFail write FSLoadProfileFail;
+
+    property SSaveProfileStart: String read FSSaveProfileStart write FSSaveProfileStart;
+    property SSaveProfileSql: String read FSSaveProfileSql write FSSaveProfileSql;
+    property SSaveProfileSuccess: String read FSSaveProfileSuccess write FSSaveProfileSuccess;
+    property SSaveProfileFail: String read FSSaveProfileFail write FSSaveProfileFail;
+
+    property SLoadInterfacesStart: String read FSLoadInterfacesStart write FSLoadInterfacesStart;
+    property SLoadInterfacesSql: String read FSLoadInterfacesSql write FSLoadInterfacesSql;
+    property SLoadInterfacesSuccess: String read FSLoadInterfacesSuccess write FSLoadInterfacesSuccess;
+    property SLoadInterfacesFail: String read FSLoadInterfacesFail write FSLoadInterfacesFail;
+
+    property SGetRecordsStart: String read FSGetRecordsStart write FSGetRecordsStart;
+    property SGetRecordsSql: String read FSGetRecordsSql write FSGetRecordsSql;
+    property SGetRecordsSqlCount: String read FSGetRecordsSqlCount write FSGetRecordsSqlCount;
+    property SGetRecordsSuccess: String read FSGetRecordsSuccess write FSGetRecordsSuccess;
+    property SGetRecordsFail: String read FSGetRecordsFail write FSGetRecordsFail;
+
+    property SExecuteStart: String read FSExecuteStart write FSExecuteStart;
+    property SExecuteProvider: String read FSExecuteProvider write FSExecuteProvider;
+    property SExecuteParam: String read FSExecuteParam write FSExecuteParam;
+    property SExecutePackageStart: String read FSExecutePackageStart write FSExecutePackageStart;
+    property SExecutePackageEnd: String read FSExecutePackageEnd write FSExecutePackageEnd;
+    property SExecuteSuccess: String read FSExecuteSuccess write FSExecuteSuccess;
+    property SExecuteFail: String read FSExecuteFail write FSExecuteFail;
+
+    property SLoadMenusStart: String read FSLoadMenusStart write FSLoadMenusStart;
+    property SLoadMenusSql: String read FSLoadMenusSql write FSLoadMenusSql;
+    property SLoadMenusSuccess: String read FSLoadMenusSuccess write FSLoadMenusSuccess;
+    property SLoadMenusFail: String read FSLoadMenusFail write FSLoadMenusFail;
+
+    property SLoadScriptStart: String read FSLoadScriptStart write FSLoadScriptStart;
+    property SLoadScriptSql: String read FSLoadScriptSql write FSLoadScriptSql;
+    property SLoadScriptSuccess: String read FSLoadScriptSuccess write FSLoadScriptSuccess;
+    property SLoadScriptFail: String read FSLoadScriptFail write FSLoadScriptFail;
+
+    property SLoadReportStart: String read FSLoadReportStart write FSLoadReportStart;
+    property SLoadReportSql: String read FSLoadReportSql write FSLoadReportSql;
+    property SLoadReportSuccess: String read FSLoadReportSuccess write FSLoadReportSuccess;
+    property SLoadReportFail: String read FSLoadReportFail write FSLoadReportFail;
+
+    property SLoadDocumentStart: String read FSLoadDocumentStart write FSLoadDocumentStart;
+    property SLoadDocumentSql: String read FSLoadDocumentSql write FSLoadDocumentSql;
+    property SLoadDocumentSuccess: String read FSLoadDocumentSuccess write FSLoadDocumentSuccess;
+    property SLoadDocumentFail: String read FSLoadDocumentFail write FSLoadDocumentFail;
+
+  end;
+
+  TBisCmIBaseSessionClass=class of TBisCmIBaseSession;
+
+  TBisCmIBaseSessions=class(TObjectList)
+  private
+    FConnection: TBisCmIBaseConnection;
+    FSSchemaOverride: String;
+    FSFormatSchemaName: String;
+    function GetItems(Index: Integer): TBisCmIBaseSession;
+
+  protected
+    function GetSessionClass: TBisCmIBaseSessionClass; virtual;
+  public
+    constructor Create(AConnection: TBisCmIBaseConnection); virtual;
+    destructor Destroy; override;
+
+    function Add(SessionId: String; ApplicationId: String;
+                 AccountId, UserName, Password: String;
+                 DbUserName, DbPassword: String;
+                 LoginParams: TBisConnectionLoginParams=nil): TBisCmIBaseSession;
+    function Find(SessionId: String): TBisCmIBaseSession;
+    procedure Remove(Session: TBisCmIBaseSession);
+
+    property Items[Index: Integer]: TBisCmIBaseSession read GetItems;
+
+    property SSchemaOverride: String read FSSchemaOverride write FSSchemaOverride;
+    property SFormatSchemaName: String read FSFormatSchemaName write FSFormatSchemaName;
+  end;
+
+  TBisCmIBaseSessionsClass=class of TBisCmIBaseSessions;
+
+  TBisCmIBaseConnection=class(TBisConnection)
+  private
+    FLock: TRTLCriticalSection;
+    FDefaultConnection: TBisCmIBaseDatabase;
+    FSessions: TBisCmIBaseSessions;
+    FOldCursor: TCursor;
+
+    FSSqlGetDbUserName: String;
+    FSSqlApplicationExists: String;
+    FSSqlSessionExists: String;
+    FSSqlGetServerDate: String;
+    FSFieldNameQuote: String;
+    FSFormatDateTimeValue: String;
+    FSSqlInsert: String;
+    FSFormatFilterDateValue: String;
+    FSExecSqlStart: String;
+    FSExecSqlSuccess: String;
+    FSExecSqlFail: String;
+    FSExecSqlSql: String;
+
+    procedure Lock;
+    procedure UnLock;
+    function GetDbUserName(UserName, Password: String; var AccountId: String; var DbUserName, DbPassword: String): Boolean;
+    function ApplicationExists(ApplicationId,AccountId: String): Boolean;
+    function SessionExists(SessionId: String): Boolean;
+    function SessionFind(SessionId: String): TBisCmIBaseSession;
+    function GetTableName(SQL: String; var Where: String): String;
+    function ExecSql(SQL: String; AConnection: TBisCmIBaseDatabase): Boolean;
+    procedure ImportScript(Stream: TStream);
+    procedure ImportTable(Stream: TStream);
+    procedure ExportScript(const Value: String; Stream: TStream);
+    procedure ExportTable(const Value: String; Stream: TStream);
+    procedure ChangeParams(Sender: TObject);
+    function GetPrefix: String;
+    function PreparePrefix(AName: String): String;
+  protected
+    function GetFieldNameQuote: String; override;
+    function GetRecordsFilterDateValue(Value: TDateTime): String; override;
+    function GetConnected: Boolean; override;
+
+    function GetSessionsClass: TBisCmIBaseSessionsClass; virtual;
+
+    property DefaultConnection: TBisCmIBaseDatabase read FDefaultConnection;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure Init; override;
+
+    procedure Connect; override;
+    procedure Disconnect; override;
+    procedure Import(ImportType: TBisConnectionImportType; Stream: TStream); override;
+    procedure Export(ExportType: TBisConnectionExportType; const Value: String; Stream: TStream); override;
+    function GetServerDate: TDateTime; override;
+
+    function Login(const ApplicationId,UserName,Password: String; Params: TBisConnectionLoginParams=nil): String; override;
+    procedure Logout(const SessionId: String); override;
+    function Check(const SessionId: String): Boolean; override;
+    procedure LoadProfile(const SessionId: String; Profile: TBisProfile); override;
+    procedure SaveProfile(const SessionId: String; Profile: TBisProfile); override;
+    procedure RefreshPermissions(const SessionId: String); override;
+    procedure LoadInterfaces(const SessionId: String; Interfaces: TBisInterfaces); override;
+    procedure GetRecords(const SessionId: String; DataSet: TBisDataSet); override;
+    procedure Execute(const SessionId: String; DataSet: TBisDataSet); override;
+    procedure LoadMenus(const SessionId: String; Menus: TBisMenus); override;
+    procedure LoadScript(const SessionId: String; ScriptId: String; Stream: TStream); override;
+    procedure LoadReport(const SessionId: String; ReportId: String; Stream: TStream); override;
+    procedure LoadDocument(const SessionId: String; DocumentId: String; Stream: TStream); override;
+
+    property SSqlGetDbUserName: String read FSSqlGetDbUserName write FSSqlGetDbUserName;
+    property SSqlApplicationExists: String read FSSqlApplicationExists write FSSqlApplicationExists;
+    property SSqlSessionExists: String read FSSqlSessionExists write FSSqlSessionExists;
+    property SSqlGetServerDate: String read FSSqlGetServerDate write FSSqlGetServerDate;
+    property SFieldNameQuote: String read FSFieldNameQuote write FSFieldNameQuote;
+    property SFormatDateTimeValue: String read FSFormatDateTimeValue write FSFormatDateTimeValue;
+    property SSqlInsert: String read FSSqlInsert write FSSqlInsert;
+    property SFormatFilterDateValue: String read FSFormatFilterDateValue write FSFormatFilterDateValue;
+  published
+
+    property SExecSqlStart: String read FSExecSqlStart write FSExecSqlStart;
+    property SExecSqlSql: String read FSExecSqlSql write FSExecSqlSql;
+    property SExecSqlSuccess: String read FSExecSqlSuccess write FSExecSqlSuccess;
+    property SExecSqlFail: String read FSExecSqlFail write FSExecSqlFail;
+  end;
+
+implementation
+
+uses SysUtils, ActiveX, FMtBcd, TypInfo, StrUtils,
+     BisCmIBaseConsts, BisUtils, BisExceptions,
+     BisConsts, BisCoreUtils, BisLeak;
+
+
+{ TBisCmIBaseProc }
+
+
+constructor TBisCmIBaseProc.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+procedure TBisCmIBaseProc.CopyParamsFrom(Source: TBisParams);
+var
+  Item: TBisParam;
+
+  procedure SetToParam(ParamName: String; Value: Variant);
+  var
+    Param: TParam;
+    S: String;
+  begin
+    S:=SParamPrefix+ParamName;
+    Param:=Params.FindParam(S);
+    if Assigned(Param) then begin
+      if Item.ParamType in [ptInput,ptInputOutput] then begin
+        Param.Value:=Value;
+      end;
+    end;
+  end;
+
+var
+  i,j: Integer;
+begin
+  if Assigned(Source) then begin
+    for i:=0 to Source.Count-1 do begin
+      Item:=Source.Items[i];
+      SetToParam(Item.ParamName,Item.Value);
+      for j:=0 to Item.Olders.Count-1 do begin
+        SetToParam(Item.Olders.Strings[j],Item.OldValue);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseProc.CopyParamsTo(Source: TBisParams);
+var
+  Item: TBisParam;
+
+  procedure GetFromParam;
+  var
+    Param: TParam;
+    S: String;
+  begin
+    S:=SParamPrefix+Item.ParamName;
+    Param:=Params.FindParam(S);
+    if Assigned(Param) then begin
+      if Item.ParamType in [ptOutput,ptInputOutput] then begin
+        Item.Value:=Param.Value;
+      end;
+    end;
+  end;
+
+var
+  i: Integer;
+begin
+  if Assigned(Source) then begin
+    for i:=0 to Source.Count-1 do begin
+      Item:=Source.Items[i];
+      GetFromParam;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseProc.SetNullToParamValues;
+var
+  i: Integer;
+  Param: TParam;
+begin
+  for i:=Params.Count-1 downto 0 do begin
+    Param:=Params.Items[i];
+    if Trim(Param.Name)<>'' then begin
+      Param.Value:=Null;
+{      if Param.ParamType in [ptInputOutput,ptOutput] then
+        Param.Value:='';}
+      
+    end else
+      Params.Delete(i);
+  end;
+end;
+
+{ TBisCmxQuery }
+
+procedure TBisCmxQuery.FetchAll;
+begin
+  FFetchCount:=0;
+  First;
+  while not Eof do begin
+    Inc(FFetchCount);
+    Next;
+  end;
+  First;
+end;
+
+procedure TBisCmxQuery.CopyParamsFrom(Source: TBisParams);
+{var
+//  Item: TBisParam;
+//  Param: TParam;
+  i: Integer;
+//  S: String;}
+begin
+(*  if Assigned(Source) and ParamCheck then begin
+    for i:=0 to Source.Count-1 do begin
+{      Item:=Source.Items[i];
+{      S:=GetParamName(Item);
+      Param:=Params.FindParam(S);
+      if Assigned(Param) then begin
+        Item.DataType:=Param.DataType;
+        Item.ParamType:=Param.ParamType;
+        Item.Size:=Param.Size;
+        Item.Precision:=Param.Precision;
+        if not Param.IsNull then
+          Item.Value:=Param.Value
+        else Item.Value:=Null;
+      end;}
+    end;
+  end;*)
+end;
+
+{ TBisCmIBaseDatabase }
+
+constructor TBisCmIBaseDatabase.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  LoginPrompt:=false;
+//  LoadParamsOnConnect:=false;
+//  ParamsLoaded:=false;
+//  SQLHourGlass:=false;
+end;
+
+function TBisCmIBaseDatabase.GetUserName: String;
+begin
+//  Result:=Params.Values[TDBXPropertyNames.UserName];
+end;
+
+procedure TBisCmIBaseDatabase.SetUserName(Value: String);
+begin
+//  Params.Values[TDBXPropertyNames.UserName]:=Value;
+end;
+
+function TBisCmIBaseDatabase.GetPassword: String;
+begin
+//  Result:=Params.Values[TDBXPropertyNames.Password];
+end;
+
+procedure TBisCmIBaseDatabase.SetPassword(Value: String);
+begin
+//  Params.Values[TDBXPropertyNames.Password]:=Value;
+end;
+
+procedure TBisCmIBaseDatabase.Assign(Source: TPersistent);
+var
+  ASource: TBisCmIBaseDatabase;
+begin
+  if Source is TBisCmIBaseDatabase then begin
+    ASource:=TBisCmIBaseDatabase(Source);
+{    Self.DriverName:=ASource.DriverName;
+    Self.LibraryName:=ASource.LibraryName;
+    Self.VendorLib:=ASource.VendorLib;
+    Self.GetDriverFunc:=ASource.GetDriverFunc;
+    Self.Params.Text:=ASource.Params.Text;}
+  end else
+    inherited Assign(Source);
+end;
+
+{ TBisCmIBaseSession }
+
+constructor TBisCmIBaseSession.Create(ASessions: TBisCmIBaseSessions);
+begin
+  inherited Create(nil);
+  FSessions:=ASessions;
+  FDatabase:=TBisCmIBaseDatabase.Create(nil);
+{  FSqlMonitor:=TBisCmIBaseSqlMonitor.Create(nil);
+  FSqlMonitor.:=FDatabase;
+  FSqlMonitor.OnLogTrace:=SqlMonitorLogTrace;
+  FSqlMonitor.Active:=false;}
+  FPermissions:=TBisDataSet.Create(nil);
+  FRoles:=TStringList.Create;
+  FLocks:=TBisDataSet.Create(nil);
+  FIPList:=TStringList.Create;
+
+  FSSessionFormat:='%s: %s';
+
+  FSInsertStart:='Начало создания сессии ...';
+  FSInsertSql:='Запрос создания сессии => %s';
+  FSInsertSuccess:='Сессия создана успешно.';
+  FSInsertFail:='Сессия не создана. Ошибка: %s';
+
+  FSUpdateStart:='Начало обновления сессии ...';
+  FSUpdateSql:='Запрос обновления сессии => %s';
+  FSUpdateSuccess:='Сессия обновлена успешно.';
+  FSUpdateFail:='Сессия не обновлена. Ошибка: %s';
+
+  FSDeleteStart:='Начало удаления сессии ...';
+  FSDeleteSql:='Запрос удаления сессии => %s';
+  FSDeleteSuccess:='Сессия удалено успешно.';
+  FSDeleteFail:='Сессия не удалена. Ошибка: %s';
+
+  FSLoadProfileStart:='Начало загрузки профиля ...';
+  FSLoadProfileSql:='Запрос загрузки профиля => %s';
+  FSLoadProfileSuccess:='Профиль загружен успешно.';
+  FSLoadProfileFail:='Профиль не загружен. Ошибка: %s';
+
+  FSSaveProfileStart:='Начало сохранения профиля ...';
+  FSSaveProfileSql:='Запрос сохранения профиля => %s';
+  FSSaveProfileSuccess:='Профиль сохранен успешно.';
+  FSSaveProfileFail:='Профиль не сохранен. Ошибка: %s';
+
+  FSLoadInterfacesStart:='Начало загрузки интерфейсов ...';
+  FSLoadInterfacesSql:='Запрос загрузки интерфейсов => %s';
+  FSLoadInterfacesSuccess:='Интерфейсы загружены успешно.';
+  FSLoadInterfacesFail:='Интерфейсы не загружены. Ошибка: %s';
+
+  FSGetRecordsStart:='Начало получения записей ...';
+  FSGetRecordsSql:='Запрос получения записей => %s';
+  FSGetRecordsSqlCount:='Запрос количества записей => %s';
+  FSGetRecordsSuccess:='Записи получены успешно.';
+  FSGetRecordsFail:='Записи не получены. Ошибка: %s';
+
+  FSExecuteStart:='Начало выполнения процедуры ...';
+  FSExecuteProvider:='Имя процедуры => %s';
+  FSExecuteParam:='Параметр => %s Тип параметра => %s Тип данных => %s Значение => %s';
+  FSExecutePackageStart:='Начало выполнения пакета ...';
+  FSExecutePackageEnd:='Окончание выполнения пакета ...';
+  FSExecuteSuccess:='Процедура выполнена успешно.';
+  FSExecuteFail:='Процедура не выполнена. Ошибка: %s';
+
+  FSLoadMenusStart:='Начало загрузки меню ...';
+  FSLoadMenusSql:='Запрос загрузки меню => %s';
+  FSLoadMenusSuccess:='Меню загружено успешно.';
+  FSLoadMenusFail:='Меню не загружено. Ошибка: %s';
+
+  FSLoadScriptStart:='Начало загрузки скрипта ...';
+  FSLoadScriptSql:='Запрос загрузки скрипта => %s';
+  FSLoadScriptSuccess:='Скрипт загружен успешно.';
+  FSLoadScriptFail:='Скрипт не загружен. Ошибка: %s';
+
+  FSLoadReportStart:='Начало загрузки отчета ...';
+  FSLoadReportSql:='Запрос загрузки отчета => %s';
+  FSLoadReportSuccess:='Отчет загружен успешно.';
+  FSLoadReportFail:='Отчет не загружен. Ошибка: %s';
+
+  FSLoadDocumentStart:='Начало загрузки документа ...';
+  FSLoadDocumentSql:='Запрос загрузки документа => %s';
+  FSLoadDocumentSuccess:='Документ загружен успешно.';
+  FSLoadDocumentFail:='Документ не загружен. Ошибка: %s';
+
+  TranslateObject(Self,TBisCmIBaseSession);
+end;
+
+destructor TBisCmIBaseSession.Destroy;
+begin
+  FIPList.Free;
+  FLocks.Free;
+  FRoles.Free;
+  FPermissions.Free;
+  FSqlMonitor.Free;
+  FDatabase.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCmIBaseSession.LoggerWrite(const Message: String; LogType: TBisLoggerType=ltInformation; const LoggerName: String='');
+var
+  S: String;
+begin
+  if Assigned(FConnection) and (Trim(Message)<>'') then begin
+    S:=FormatEx(FSSessionFormat,[FSessionId,Message]);
+    FConnection.LoggerWrite(S,LogType,LoggerName);
+  end;
+end;
+
+{procedure TBisCmIBaseSession.SqlMonitorLogTrace(Sender: TObject; TraceInfo: TDBXTraceInfo);
+var
+  S: String;
+begin
+  if FSqlMonitor.Active then begin
+    S:=Trim(TraceInfo.Message);
+    LoggerWrite(S,ltInformation);
+  end;
+end;}
+
+function TBisCmIBaseSession.GetPrefix: String;
+begin
+  Result:='';
+  if Assigned(FConnection) then
+    Result:=FConnection.GetPrefix;
+end;
+
+function TBisCmIBaseSession.PreparePrefix(AName: String): String;
+begin
+  Result:=AName;
+  if Assigned(FConnection) then
+    Result:=FConnection.PreparePrefix(AName);
+end;
+
+procedure TBisCmIBaseSession.Progress(const Min,Max,Position: Integer; var Breaked: Boolean);
+begin
+  if Assigned(FConnection) and Assigned(FConnection) then begin
+    FConnection.Progress(Min,Max,Position,Breaked);
+  end;
+end;
+
+function TBisCmIBaseSession.GetRoleIds: String;
+var
+  i: Integer;
+begin
+  Result:=QuotedStr(FAccountId);
+  for i:=0 to FRoles.Count-1 do begin
+    if Trim(FRoles[i])<>'' then begin
+      Result:=Result+','+QuotedStr(FRoles[i]);
+    end;
+  end;
+end;  
+
+procedure TBisCmIBaseSession.Insert(SystemInfo: TStringList);
+var
+  Query: TBisCmxQuery;
+  Stream: TMemoryStream;
+  Sql: String;
+begin
+  if Assigned(SystemInfo) and FDatabase.Connected then begin
+    LoggerWrite(FSInsertStart);
+    try
+      Query:=TBisCmxQuery.Create(nil);
+      Stream:=TMemoryStream.Create;
+      try
+        Query.Database:=FDatabase;
+        Query.ParamCheck:=true;
+        Sql:=FormatEx(FSSqlInsert,[QuotedStr(FSessionId),QuotedStr(FApplicationId),QuotedStr(FAccountId),
+                                   QuotedStr(FormatDateTime(FSFormatDateTime,FDateCreate)),
+                                   QuotedStr(FormatDateTime(FSFormatDateTime,FDateCreate))]);
+        Sql:=ReplaceText(Sql,SPrefix,GetPrefix);
+        LoggerWrite(FormatEx(FSInsertSql,[Sql]));
+        Query.SQL.Text:=Sql;
+        SystemInfo.SaveToStream(Stream);
+        Stream.Position:=0;
+        Query.ParamByName(SFieldParams).LoadFromStream(Stream,ftBlob);
+        Query.ExecSQL;
+        LoggerWrite(FSInsertSuccess);
+      finally
+        Stream.Free;
+        Query.Free;
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSInsertFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.Update;
+var
+  Query: TBisCmxQuery;
+  Sql: String;
+begin
+  if Assigned(FConnection) and FDatabase.Connected then begin
+    LoggerWrite(FSUpdateStart);
+    try
+      StartLeak('TBisCmIBaseSession.Update');
+      Query:=TBisCmxQuery.Create(nil);
+      try
+        FDateUpdate:=FConnection.GetServerDate;;
+        Query.Database:=FDatabase;
+        Sql:=FormatEx(FSSqlUpdate,[QuotedStr(FormatDateTime(FSFormatDateTime,FDateUpdate)),QuotedStr(FSessionId)]);
+        Sql:=ReplaceText(Sql,SPrefix,GetPrefix);
+        LoggerWrite(FormatEx(FSUpdateSql,[Sql]));
+        Query.SQL.Text:=Sql;
+        Query.ExecSQL;
+        LoggerWrite(FSUpdateSuccess);
+      finally
+        Query.Free;
+        StopLeak('TBisCmIBaseSession.Update');
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSUpdateFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.Delete;
+var
+  Query: TBisCmxQuery;
+  Sql: String;
+begin
+  if FDatabase.Connected then begin
+    LoggerWrite(FSDeleteStart);
+    try
+      Query:=TBisCmxQuery.Create(nil);
+      try
+        Query.Database:=FDatabase;
+        Sql:=FormatEx(FSSqlDelete,[QuotedStr(FSessionId)]);
+        Sql:=ReplaceText(Sql,SPrefix,GetPrefix);
+        LoggerWrite(FormatEx(FSDeleteSql,[Sql]));
+        Query.SQL.Text:=Sql;
+        Query.ExecSQL;
+        LoggerWrite(FSDeleteSuccess);
+      finally
+        Query.Free;
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSDeleteFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.LoadPermissions;
+var
+  Query: TBisCmxQuery;
+  S: String;
+  Sql: String;
+begin
+  S:=GetRoleIds;
+  if FDatabase.Connected and (Trim(S)<>'') then begin
+    Query:=TBisCmxQuery.Create(nil);
+    try
+      Query.Database:=FDatabase;
+      Sql:=FormatEx(FSSqlLoadPermissions,[S]);
+      Query.SQL.Text:=ReplaceText(Sql,SPrefix,GetPrefix);
+      Query.Open;
+      if Query.Active then begin
+        FPermissions.CreateTable(Query);
+        FPermissions.CopyRecords(Query);
+      end;
+    finally
+      Query.Free;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.LoadRoles;
+var
+  Query: TBisCmxQuery;
+  Sql: String;
+begin
+  if FDatabase.Connected then begin
+    FRoles.Clear;
+    Query:=TBisCmxQuery.Create(nil);
+    try
+      Query.Database:=FDatabase;
+      Sql:=FormatEx(FSSqlLoadRoles,[QuotedStr(FAccountId)]);
+      Query.SQL.Text:=ReplaceText(Sql,SPrefix,GetPrefix);
+      Query.Open;
+      if Query.Active then begin
+        Query.First;
+        while not Query.Eof do begin
+          FRoles.Add(Query.FieldByName(SFieldRoleId).AsString);
+          Query.Next;
+        end;
+      end;
+    finally
+      Query.Free;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.LoadLocks;
+var
+  Query: TBisCmxQuery;
+  S: String;
+  Sql: String;
+  ADate: String;
+begin
+  S:=GetRoleIds;
+  if FDatabase.Connected and (Trim(S)<>'') then begin
+    Query:=TBisCmxQuery.Create(nil);
+    try
+      Query.Database:=FDatabase;
+      ADate:=QuotedStr(FormatDateTime(FSFormatDateTime,FDateCreate));
+      Sql:=FormatEx(FSSqlLoadLocks,[ADate,ADate,ADate,QuotedStr(FApplicationId),S]);
+      Query.SQL.Text:=ReplaceText(Sql,SPrefix,GetPrefix);
+      Query.Open;
+      if Query.Active then begin
+        FLocks.CreateTable(Query);
+        FLocks.CopyRecords(Query);
+      end;
+    finally
+      Query.Free;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.CheckPermissions(AObjectName: String; APermissions: TBisPermissions);
+var
+  Access: String;
+  Perm: TBisPermission;
+  Value: String;
+  Index: Integer;
+begin
+  if Assigned(APermissions) then
+    if FPermissions.Active and not FPermissions.IsEmpty then begin
+      APermissions.Clear;
+      FPermissions.Filter:=FormatEx(FSCheckPermissions,[QuotedStr(AObjectName)]);
+      FPermissions.Filtered:=true;
+      try
+        FPermissions.First;
+        while not FPermissions.Eof do begin
+          Access:=FPermissions.FieldByName(SFieldRightAccess).AsString;
+          Perm:=APermissions.Find(Access);
+          if not Assigned(Perm) then
+            Perm:=APermissions.Add(Access);
+          if Assigned(Perm) then begin
+            Value:=FPermissions.FieldByName(SFieldValue).AsString;
+            Index:=Perm.Values.IndexOf(Value);
+            if Index=-1 then
+              Index:=Perm.Values.Add(Value);
+            Perm.Exists[Index]:=true;
+          end;
+          FPermissions.Next;
+        end;
+      finally
+        FPermissions.Filtered:=false;
+        FPermissions.Filter:='';
+      end;
+    end;
+end;
+
+procedure TBisCmIBaseSession.CheckLocks(AMethod: String=''; AObject: String='');
+var
+  Met: String;
+  Obj: String;
+  Desc: String;
+  List: TStringList;
+
+  function ListFound: Boolean;
+  var
+    i: Integer;
+  begin
+    Result:=false;
+    for i:=0 to List.Count-1 do begin
+      if IPList.IndexOf(List.Strings[i])<>-1 then begin
+        Result:=true;
+        exit;
+      end;
+    end;
+  end;
+
+begin
+  if Assigned(FLocks) then begin
+    if FLocks.Active and not FLocks.IsEmpty then begin
+      FLocks.First;
+      List:=TStringList.Create;
+      try
+        while not FLocks.Eof do begin
+          Met:=FLocks.FieldByName(SFieldMethod).AsString;
+          if (Trim(Met)='') or AnsiSameText(Met,AMethod) then begin
+            Obj:=FLocks.FieldByName(SFieldObject).AsString;
+            if (Trim(Obj)='') or AnsiSameText(Obj,AObject) then begin
+              List.Text:=FLocks.FieldByName(SFieldIPList).AsString;
+              if (Trim(List.Text)='') or ListFound then begin
+                Desc:=FLocks.FieldByName(SFieldDescription).AsString;
+                raise Exception.Create(Desc);
+              end;
+            end;
+          end;
+          FLocks.Next;
+        end;
+      finally
+        List.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.LoadProfile(Profile: TBisProfile);
+var
+  Query: TBisCmxQuery;
+  Sql: String;
+begin
+  if FDatabase.Connected then begin
+    LoggerWrite(FSLoadProfileStart);
+    try
+      Query:=TBisCmxQuery.Create(nil);
+      try
+        Query.Database:=FDatabase;
+        Sql:=FormatEx(FSSqlLoadProfile,[QuotedStr(FApplicationId),QuotedStr(FAccountId)]);
+        Sql:=ReplaceText(Sql,SPrefix,GetPrefix);
+        LoggerWrite(FormatEx(FSLoadProfileSql,[Sql]));
+        Query.SQL.Text:=Sql;
+        Query.Open;
+        if Query.Active and not Query.IsEmpty then begin
+          Profile.Text:=Query.FieldByName(SFieldProfile).AsString;
+        end;
+        LoggerWrite(FSLoadProfileSuccess);
+      finally
+        Query.Free;
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSLoadProfileFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.SaveProfile(Profile: TBisProfile);
+var
+  Query: TBisCmxQuery;
+  Stream: TMemoryStream;
+  Sql: String;
+begin
+  if FDatabase.Connected then begin
+    LoggerWrite(FSSaveProfileStart);
+    try
+      Query:=TBisCmxQuery.Create(nil);
+      Stream:=TMemoryStream.Create;
+      try
+        Profile.SaveToStream(Stream);
+        Stream.Position:=0;
+        Query.Database:=FDatabase;
+        Query.ParamCheck:=true;
+        Sql:=FormatEx(FSSqlSaveProfile,[QuotedStr(FApplicationId),QuotedStr(FAccountId)]);
+        Sql:=ReplaceText(Sql,SPrefix,GetPrefix);
+        LoggerWrite(FormatEx(FSSaveProfileSql,[Sql]));
+        Query.SQL.Text:=Sql;
+        Query.ParamByName(SFieldProfile).LoadFromStream(Stream,ftBlob);
+        Query.ExecSQL;
+        LoggerWrite(FSSaveProfileSuccess);
+      finally
+        Stream.Free;
+        Query.Free;
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSSaveProfileFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.LoadInterfaces(Interfaces: TBisInterfaces);
+var
+  Query: TBisCmxQuery;
+  AInterface: TBisInterface;
+  Position: Integer;
+  Breaked: Boolean;
+  S: String;
+  AID: String;
+  AType: TBisInterfaceType;
+  AObjectName: String;
+  AScriptId: Variant;
+  AReportId: Variant;
+  ADocumentId: Variant;
+  Sql: String;
+begin
+  S:=GetRoleIds;
+  if FDatabase.Connected and (Trim(S)<>'') then begin
+    LoggerWrite(FSLoadInterfacesStart);
+    try
+      Query:=TBisCmxQuery.Create(nil);
+      try
+        Query.Database:=FDatabase;
+        Sql:=FormatEx(FSSqlLoadInterfaces,[QuotedStr(FApplicationId),S]);
+        Sql:=ReplaceText(Sql,SPrefix,GetPrefix);
+        LoggerWrite(FormatEx(FSLoadInterfacesSql,[Sql]));
+        Query.SQL.Text:=Sql;
+        Query.Open;
+        if Query.Active then begin
+          Query.FetchAll;
+          Progress(0,Query.FetchCount,0,Breaked);
+          try
+            Position:=1;
+            while not Query.Eof do begin
+              if Breaked then
+                break;
+              AID:=Query.FieldByName(SFieldInterfaceId).AsString;
+              AType:=TBisInterfaceType(Query.FieldByName(SFieldInterfaceType).AsInteger);
+              AObjectName:=Query.FieldByName(SFieldName).AsString;
+              AInterface:=Interfaces.FindById(AID);
+              if not Assigned(AInterface) then begin
+                case AType of
+                  BisInterfaces.itInternal: begin
+                    AInterface:=Interfaces.AddInternal(AID,AObjectName,
+                                                       Query.FieldByName(SFieldModuleName).AsString,
+                                                       Query.FieldByName(SFieldModuleInterface).AsString);
+                  end;
+                  BisInterfaces.itScript: begin
+                    AScriptId:=Query.FieldByName(SFieldScriptId).Value;
+                    if not VarIsNull(AReportId) then
+                      AInterface:=Interfaces.AddScript(AScriptId,AObjectName,
+                                                       Query.FieldByName(SFieldScriptEngine).AsString,
+                                                       TBisScriptPlace(Query.FieldByName(SFieldScriptPlace).AsInteger));
+                  end;
+                  BisInterfaces.itReport: begin
+                    AReportId:=Query.FieldByName(SFieldReportId).Value;
+                    if not VarIsNull(AReportId) then
+                      AInterface:=Interfaces.AddReport(AReportId,AObjectName,
+                                                       Query.FieldByName(SFieldReportEngine).AsString,
+                                                       TBisReportPlace(Query.FieldByName(SFieldReportPlace).AsInteger));
+                  end;
+                  BisInterfaces.itDocument: begin
+                    ADocumentId:=Query.FieldByName(SFieldDocumentId).Value;
+                    if not VarIsNull(ADocumentId) then
+                      AInterface:=Interfaces.AddDocument(ADocumentId,AObjectName,
+                                                         Query.FieldByName(SFieldDocumentOleClass).AsString,
+                                                         TBisDocumentPlace(Query.FieldByName(SFieldDocumentPlace).AsInteger));
+                  end;
+                end;
+              end;
+              if Assigned(AInterface) then begin
+                with AInterface do begin
+                  Description:=Query.FieldByName(SFieldDescription).AsString;
+                  InterfaceType:=AType;
+                  AutoShow:=Boolean(Query.FieldByName(SFieldAutoRun).AsInteger);
+                  CheckPermissions(AInterface.ObjectName,AInterface.Permissions);
+                end;
+              end;
+              Query.Next;
+              Progress(0,Query.FetchCount,Position,Breaked);
+              Inc(Position);
+            end;
+            LoggerWrite(FSLoadInterfacesSuccess);
+          finally
+            Progress(0,0,0,Breaked);
+          end;
+        end;
+      finally
+        Query.Free;
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSLoadInterfacesFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.CopyData(FromDataSet: TDataSet; ToDataSet: TBisDataSet; AllCount: Integer);
+
+  function FetchAll: Integer;
+  begin
+    Result:=0;
+    FromDataSet.First;
+    while not FromDataSet.Eof do begin
+      Inc(Result);
+      FromDataSet.Next;
+    end;
+    FromDataSet.First;
+  end;
+
+var
+  FetchCount: Integer;
+  Breaked: Boolean;
+  StartPos: Integer;
+  RealCount: Integer;
+  RecCount: Integer;
+  Position: Integer;
+  AActive: Boolean;
+begin
+  if Assigned(FromDataSet) and Assigned(ToDataSet) then begin
+
+    AActive:=FromDataSet.Active;
+
+
+    if AActive then begin
+
+      FetchCount:=0;
+      if ToDataSet.FetchCount<0 then begin
+        FetchCount:=FetchAll;
+        AllCount:=FetchCount;
+      end;
+
+      Breaked:=false;
+      Progress(0,FetchCount,0,Breaked);
+      ToDataSet.BeginUpdate;
+      try
+        if ToDataSet.Active then
+          StartPos:=ToDataSet.RecordCount
+        else StartPos:=0;
+
+        RealCount:=ToDataSet.FetchCount;
+        if RealCount<0 then begin
+          RealCount:=AllCount-StartPos
+        end else begin
+          if (StartPos+RealCount)>AllCount then
+            RealCount:=AllCount-StartPos;
+        end;
+
+        RecCount:=0;
+        if not ToDataSet.Active then begin
+          ToDataSet.CreateTable(FromDataSet);
+        end;
+
+        Position:=1;
+        while not FromDataSet.Eof do begin
+          if Breaked then
+            break;
+          if (RecCount>=StartPos) then begin
+            if (RecCount<(StartPos+RealCount)) then begin
+              ToDataSet.CopyRecord(FromDataSet);
+            end else
+              break;
+          end;
+          Inc(RecCount);
+          FromDataSet.Next;
+          Progress(0,FetchCount,Position,Breaked);
+          Inc(Position);
+        end;
+
+        ToDataSet.First;
+        ToDataSet.ServerRecordCount:=AllCount;
+
+      finally
+        ToDataSet.EndUpdate;
+        Progress(0,0,0,Breaked);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.GetRecords(DataSet: TBisDataSet);
+var
+  Query: TBisCmxQuery;
+  SQL: String;
+  SQLCount: String;
+  AllCount: Integer;
+  FieldNames: String;
+  Params: String;
+  Filters: String;
+  Groups: String;
+  Orders: String;
+  AProvider: String;
+begin
+  if FDatabase.Connected then begin
+    LoggerWrite(FSGetRecordsStart);
+    try
+      StartLeak('TBisCmIBaseSession.GetRecords');
+      AProvider:=PreparePrefix(DataSet.ProviderName);
+      Query:=TBisCmxQuery.Create(nil);
+      try
+        Query.Database:=FDatabase;
+        Query.ParamCheck:=DataSet.Params.Count>0;
+
+        FieldNames:=FConnection.GetRecordsFieldNames(DataSet,DataSet.FieldNames);
+        Params:=FConnection.GetRecordsParams(DataSet,DataSet.Params);
+        Filters:=FConnection.GetRecordsFilterGroups(DataSet.FilterGroups);
+        Groups:=FConnection.GetRecordsGroups(DataSet,DataSet.FieldNames);
+        Orders:=FConnection.GetRecordsOrders(DataSet.Orders);
+
+        SQL:=Trim(FormatEx(FSSqlGetRecords,[FieldNames,AProvider,Params,Filters,Groups,Orders]));
+        LoggerWrite(FormatEx(FSGetRecordsSql,[SQL]));
+        AllCount:=0;
+
+        if DataSet.FetchCount>0 then begin
+        //  SQLCount:=Trim(Format(FSSqlGetRecordsCount,[SQL]));  Oracle, MsSql
+          SQLCount:=Trim(FormatEx(FSSqlGetRecords,['COUNT(*)',AProvider,Params,Filters,Groups,''])); // Interbase
+          LoggerWrite(FormatEx(FSGetRecordsSqlCount,[SQLCount]));
+          Query.SQL.Text:=SQLCount;
+          Query.CopyParamsFrom(DataSet.Params);
+          Query.Open;
+          if not Query.IsEmpty then
+            AllCount:=Query.Fields[0].AsInteger;
+        end else begin
+          AllCount:=MaxInt;
+        end;
+
+        Query.Close;
+        Query.SQL.Text:=SQL;
+        Query.CopyParamsFrom(DataSet.Params);
+        Query.Open;
+        LoggerWrite(FSGetRecordsSuccess);
+
+        CopyData(Query,DataSet,AllCount);
+
+      finally
+        Query.Free;
+        StopLeak('TBisCmIBaseSession.GetRecords');
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSGetRecordsFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.DumpParams(Params: TBisParams);
+var
+  S1: String;
+  S2: String;
+  S3: String;
+  i: Integer;
+  Param: TBisParam;
+begin
+  if Assigned(Params) then begin
+    for i:=0 to Params.Count-1 do begin
+      Param:=Params.Items[i];
+      if Param.Empty then
+        S1:=SNull
+      else S1:=VarToStrDef(Param.Value,'');
+      if Length(S1)>MaxValueSize then
+        S1:=Copy(S1,1,MaxValueSize)+'...';
+
+      S2:=GetEnumName(TypeInfo(TParamType),Integer(Param.ParamType));
+      S3:=GetEnumName(TypeInfo(TFieldType),Integer(Param.DataType));
+
+      LoggerWrite(FormatEx(FSExecuteParam,[Param.ParamName,S2,S3,S1]));
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.DumpParams(Params: TParams);
+var
+  S: String;
+  S1: String;
+  S2: String;
+  S3: String;
+  i: Integer;
+  Param: TParam;
+begin
+  if Assigned(Params) then begin
+    for i:=0 to Params.Count-1 do begin
+      Param:=Params.Items[i];
+      if Param.IsNull then
+        S1:=SNull
+      else S1:=VarToStrDef(Param.Value,'');
+      if Length(S1)>MaxValueSize then
+        S1:=Copy(S1,1,MaxValueSize)+'...';
+
+      S:=Param.Name;
+      S2:=GetEnumName(TypeInfo(TParamType),Integer(Param.ParamType));
+      S3:=GetEnumName(TypeInfo(TFieldType),Integer(Param.DataType));
+
+      LoggerWrite(FormatEx(FSExecuteParam,[S,S2,S3,S1]));
+    end;
+  end;
+end;
+
+{function TBisCmIBaseSession.ExecuteOpen(Proc: TBisCmIBaseProc; OpenDataSet: TBisDataSet): TDataSet;
+begin
+  Result:=Proc;
+  if Assigned(Proc) then
+    Proc.Open;
+end;}
+
+procedure TBisCmIBaseSession.Execute(DataSet: TBisDataSet);
+
+  procedure ExecutePackage;
+  var
+    i: Integer;
+    Proc: TBisCmIBaseProc;
+    Params: TBisParams;
+    AProvider: String;
+  begin
+    if DataSet.PackageParams.Count>0 then begin
+      LoggerWrite(FSExecutePackageStart);
+      try
+        for i:=0 to DataSet.PackageParams.Count-1 do begin
+          Params:=DataSet.PackageParams.Items[i];
+          AProvider:=iff(Trim(Params.ProviderName)<>'',Params.ProviderName,DataSet.ProviderName);
+          AProvider:=PreparePrefix(AProvider);
+          Proc:=TBisCmIBaseProc.Create(nil);
+          try
+            Proc.SParamPrefix:=FSParamPrefix;
+            Proc.Database:=FDatabase;
+            Proc.StoredProcName:=AProvider;
+
+            LoggerWrite(FormatEx(FSExecuteProvider,[AProvider]));
+
+            Proc.SetNullToParamValues;
+            Proc.CopyParamsFrom(Params);
+            DumpParams(Proc.Params);
+
+            Proc.ExecProc;
+
+            LoggerWrite(FSExecuteSuccess);
+            Proc.CopyParamsTo(Params);
+            DumpParams(Params);
+
+          finally
+            Proc.Free;
+          end;
+        end;
+      finally
+        LoggerWrite(FSExecutePackageEnd);
+      end;
+    end;
+  end;
+
+var
+  AllCount: Integer;
+  Proc: TBisCmIBaseProc;
+  AProvider: String;
+//  Transaction: TDBXTransaction;
+  FromDataSet: TDataSet;
+  OpenDataSet: TBisDataSet;
+begin
+  if FDatabase.Connected then begin
+{    LoggerWrite(FSExecuteStart);
+    try
+      StartLeak('TBisCmIBaseSession.Execute');
+      AProvider:=PreparePrefix(DataSet.ProviderName);
+      Proc:=TBisCmIBaseProc.Create(nil);
+      OpenDataSet:=TBisDataSet.Create(nil);
+      try
+        Proc.SParamPrefix:=FSParamPrefix;
+        Proc.Database:=FDatabase;
+        Proc.StoredProcName:=AProvider;
+
+        LoggerWrite(FormatEx(FSExecuteProvider,[AProvider]));
+
+        Proc.SetNullToParamValues;
+        Proc.CopyParamsFrom(DataSet.Params);
+        DumpParams(Proc.Params);
+
+        FromDataSet:=Proc;
+
+        AllCount:=MaxInt;
+        if DataSet.InGetRecords then begin
+
+          FromDataSet:=ExecuteOpen(Proc,OpenDataSet);
+
+          LoggerWrite(FSExecuteSuccess);
+          Proc.CopyParamsTo(DataSet.Params);
+          DumpParams(DataSet.Params);
+        end else begin
+          Transaction:=FDatabase.BeginTransaction;
+          try
+
+            Proc.ExecProc;
+
+            LoggerWrite(FSExecuteSuccess);
+            Proc.CopyParamsTo(DataSet.Params);
+            DumpParams(DataSet.Params);
+
+            ExecutePackage;
+
+            FDatabase.CommitFreeAndNil(Transaction);
+          except
+            on E: Exception do begin
+              FDatabase.RollbackFreeAndNil(Transaction);
+              raise;
+            end;
+          end;
+        end;
+
+        CopyData(FromDataSet,DataSet,AllCount);
+      finally
+        OpenDataSet.Free;
+        Proc.Free;
+        StopLeak('TBisCmIBaseSession.Execute');
+      end;
+    except
+      On E: Exception do begin
+        raise;
+      end;
+    end;}
+  end;
+end;
+
+procedure TBisCmIBaseSession.LoadMenus(Menus: TBisMenus);
+var
+  Query: TBisCmxQuery;
+  Position: Integer;
+  Breaked: Boolean;
+  Menu: TBisMenu;
+  S: String;
+  ID: String;
+  ParentID: String;
+  Stream: TMemoryStream;
+  Sql: String;
+begin
+  S:=GetRoleIds;
+  if FDatabase.Connected and (Trim(S)<>'') then begin
+    LoggerWrite(FSLoadMenusStart);
+    try
+      Query:=TBisCmxQuery.Create(nil);
+      try
+        Query.Database:=FDatabase;
+        Sql:=FormatEx(FSSqlLoadMenus,[QuotedStr(FApplicationId),S]);
+        Sql:=ReplaceText(Sql,SPrefix,GetPrefix);
+        LoggerWrite(FormatEx(FSLoadMenusSql,[Sql]));
+        Query.SQL.Text:=Sql;
+        Query.Open;
+        if Query.Active then begin
+          Query.FetchAll;
+          Progress(0,Query.FetchCount,0,Breaked);
+          try
+            Position:=1;
+            while not Query.Eof do begin
+              if Breaked then
+                break;
+
+              ID:=Query.FieldByName(SFieldMenuId).AsString;
+              ParentID:=Query.FieldByName(SFieldParentId).AsString;
+              Menu:=Menus.AddByID(ID,ParentID);
+              if Assigned(Menu) then begin
+                //Menu.ParentID:=ParentID;
+                Menu.InterfaceID:=Query.FieldByName(SFieldInterfaceId).AsString;
+                Menu.Caption:=Query.FieldByName(SFieldName).AsString;
+                Menu.Description:=Query.FieldByName(SFieldDescription).AsString;
+                Menu.ShortCut:=Query.FieldByName(SFieldShortCut).AsInteger;
+                Menu.Priority:=Query.FieldByName(SFieldPriority).AsInteger;
+                Stream:=TMemoryStream.Create;
+                try
+                  TBlobField(Query.FieldByName(SFieldPicture)).SaveToStream(Stream);
+                  Stream.Position:=0;
+                  Menu.Picture.LoadFromStream(Stream);
+                finally
+                  Stream.Free;
+                end;
+              end;
+
+              Query.Next;
+              Progress(0,Query.FetchCount,Position,Breaked);
+              Inc(Position);
+            end;
+            LoggerWrite(FSLoadMenusSuccess);
+          finally
+            Progress(0,0,0,Breaked);
+          end;
+        end;
+      finally
+        Query.Free;
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSLoadMenusFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.LoadScript(ScriptId: String; Stream: TStream);
+var
+  Query: TBisCmxQuery;
+  FileStream: TFileStream;
+  S: String;
+  Sql: String;
+begin
+  if FDatabase.Connected then begin
+    LoggerWrite(FSLoadScriptStart);
+    try
+      Query:=TBisCmxQuery.Create(nil);
+      try
+        Query.Database:=FDatabase;
+        Sql:=FormatEx(FSSqlLoadScript,[QuotedStr(ScriptId)]);
+        Sql:=ReplaceText(Sql,SPrefix,GetPrefix);
+        LoggerWrite(FormatEx(FSLoadScriptSql,[Sql]));
+        Query.SQL.Text:=Sql;
+        Query.Open;
+        if Query.Active and not Query.IsEmpty then begin
+          if Query.FieldByName(SFieldScript).IsBlob then begin
+            case TBisScriptPlace(Query.FieldByName(SFieldPlace).AsInteger) of
+              spDatabase: TBlobField(Query.FieldByName(SFieldScript)).SaveToStream(Stream);
+              spFileSystem: begin
+                S:=Query.FieldByName(SFieldScript).AsString;
+                if FileExists(S) then begin
+                  FileStream:=nil;
+                  try
+                    FileStream:=TFileStream.Create(S,fmOpenRead);
+                    Stream.CopyFrom(FileStream,FileStream.Size);
+                  finally
+                    FreeAndNilEx(FileStream);
+                  end;
+                end;
+              end;
+            end;
+            Stream.Position:=0;
+          end;
+        end;
+        LoggerWrite(FSLoadScriptSuccess);
+      finally
+        Query.Free;
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSLoadScriptFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.LoadReport(ReportId: String; Stream: TStream);
+var
+  Query: TBisCmxQuery;
+  FileStream: TFileStream;
+  S: String;
+  Sql: String;
+begin
+  if FDatabase.Connected then begin
+    LoggerWrite(FSLoadReportStart);
+    try
+      Query:=TBisCmxQuery.Create(nil);
+      try
+        Query.Database:=FDatabase;
+        Sql:=FormatEx(FSSqlLoadReport,[QuotedStr(ReportId)]);
+        Sql:=ReplaceText(Sql,SPrefix,GetPrefix);
+        LoggerWrite(FormatEx(FSLoadReportSql,[Sql]));
+        Query.SQL.Text:=Sql;
+        Query.Open;
+        if Query.Active and not Query.IsEmpty then begin
+          if Query.FieldByName(SFieldReport).IsBlob then begin
+            case TBisReportPlace(Query.FieldByName(SFieldPlace).AsInteger) of
+              rpDatabase: TBlobField(Query.FieldByName(SFieldReport)).SaveToStream(Stream);
+              rpFileSystem: begin
+                S:=Query.FieldByName(SFieldReport).AsString;
+                if FileExists(S) then begin
+                  FileStream:=nil;
+                  try
+                    FileStream:=TFileStream.Create(S,fmOpenRead);
+                    Stream.CopyFrom(FileStream,FileStream.Size);
+                  finally
+                    FreeAndNilEx(FileStream);
+                  end;
+                end;
+              end;
+            end;
+            Stream.Position:=0;
+          end;
+        end;
+        LoggerWrite(FSLoadReportSuccess);
+      finally
+        Query.Free;
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSLoadReportFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSession.LoadDocument(DocumentId: String; Stream: TStream);
+var
+  Query: TBisCmxQuery;
+  FileStream: TFileStream;
+  S: String;
+  Sql: String;
+begin
+  if FDatabase.Connected then begin
+    LoggerWrite(FSLoadDocumentStart);
+    try
+      Query:=TBisCmxQuery.Create(nil);
+      try
+        Query.Database:=FDatabase;
+        Sql:=FormatEx(FSSqlLoadDocument,[QuotedStr(DocumentId)]);
+        Sql:=ReplaceText(Sql,SPrefix,GetPrefix);
+        LoggerWrite(FormatEx(FSLoadDocumentSql,[Sql]));
+        Query.SQL.Text:=Sql;
+        Query.Open;
+        if Query.Active and not Query.IsEmpty then begin
+          if Query.FieldByName(SFieldDocument).IsBlob then begin
+            case TBisDocumentPlace(Query.FieldByName(SFieldPlace).AsInteger) of
+              dpDatabase: TBlobField(Query.FieldByName(SFieldDocument)).SaveToStream(Stream);
+              dpFileSystem: begin
+                S:=Query.FieldByName(SFieldDocument).AsString;
+                if FileExists(S) then begin
+                  FileStream:=nil;
+                  try
+                    FileStream:=TFileStream.Create(S,fmOpenRead);
+                    Stream.CopyFrom(FileStream,FileStream.Size);
+                  finally
+                    FreeAndNilEx(FileStream);
+                  end;
+                end;
+              end;
+            end;
+            Stream.Position:=0;
+          end;
+        end;
+        LoggerWrite(FSLoadDocumentSuccess);
+      finally
+        Query.Free;
+      end;
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(FSLoadDocumentFail,[E.Message]),ltError);
+        raise;
+      end;
+    end;
+  end;
+end;
+
+{ TBisCmIBaseSessions }
+
+constructor TBisCmIBaseSessions.Create(AConnection: TBisCmIBaseConnection);
+begin
+  inherited Create;
+  FConnection:=AConnection;
+end;
+
+destructor TBisCmIBaseSessions.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TBisCmIBaseSessions.GetSessionClass: TBisCmIBaseSessionClass;
+begin
+  Result:=TBisCmIBaseSession;
+end;
+
+function TBisCmIBaseSessions.GetItems(Index: Integer): TBisCmIBaseSession;
+begin
+  Result:=TBisCmIBaseSession(inherited Items[Index]);
+end;
+
+function TBisCmIBaseSessions.Add(SessionId: String; ApplicationId: String;
+                             AccountId: String; UserName, Password: String;
+                             DbUserName, DbPassword: String;
+                             LoginParams: TBisConnectionLoginParams=nil): TBisCmIBaseSession;
+var
+  Session: TBisCmIBaseSession;
+  Index: Integer;
+  OldCursor: TCursor;
+  OverrideUserName: String;
+  SystemInfo: TStringList;
+begin
+  Result:=nil;
+  if Assigned(FConnection) then begin
+{    try
+      SystemInfo:=TStringList.Create;
+      OldCursor:=Screen.Cursor;
+      try
+        Session:=GetSessionClass.Create(Self);
+        if Assigned(Session) then begin
+          Session.SessionId:=SessionId;
+          Session.DateCreate:=FConnection.GetServerDate;
+          Session.ApplicationId:=ApplicationId;
+          Session.AccountId:=AccountId;
+          Session.UserName:=UserName;
+          Session.Password:=Password;
+
+          with Session.Database do begin
+            Assign(FConnection.DefaultConnection);
+            UserName:=DbUserName;
+            Password:=DbPassword;
+            ConnectionName:=SessionId;
+
+            Index:=Params.IndexOfName(FSSchemaOverride);
+            if Index<>-1 then begin
+              OverrideUserName:=FConnection.DefaultConnection.UserName;
+        //      Params.Values[FSSchemaOverride]:=FormatEx(FSFormatSchemaName,[OverrideUserName]);
+            end;
+
+            ParamsLoaded:=true;
+            Connected:=true;
+          end;
+          Session.Database.AutoClone:=false;
+
+          if Assigned(LoginParams) then begin
+            SystemInfo.Text:=LoginParams.SystemInfo.Text;
+            Session.IPList.Text:=LoginParams.IPList.Text;
+
+            LoginParams.AccountId:=AccountId;
+          end;
+
+          Session.Connection:=FConnection;
+          Session.Insert(SystemInfo);
+          Session.LoadRoles;
+          Session.LoadPermissions;
+          Session.LoadLocks;
+
+          inherited Add(Session);
+          Result:=Session;
+        end;
+      finally
+        SystemInfo.Free;
+        Screen.Cursor:=OldCursor;
+      end;
+    except
+      on E: Exception do begin
+        FreeAndNilEx(Session);
+        raise;
+      end;
+    end;}
+  end;
+end;
+
+function TBisCmIBaseSessions.Find(SessionId: String): TBisCmIBaseSession;
+var
+  i: Integer;
+  Item: TBisCmIBaseSession;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.SessionId,SessionId) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseSessions.Remove(Session: TBisCmIBaseSession);
+begin
+  if Assigned(Session) then begin
+    Session.Delete;
+    inherited Remove(Session);
+  end;
+end;
+
+{ TBisCmIBaseConnection }
+
+constructor TBisCmIBaseConnection.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  InitializeCriticalSection(FLock);
+  Params.OnChange:=ChangeParams;
+
+  FDefaultConnection:=TBisCmIBaseDatabase.Create(Self);
+
+  FSessions:=GetSessionsClass.Create(Self);
+
+//  Core.ExceptNotifier.IngnoreExceptions.Add(TDBXError);
+
+  FSExecSqlStart:='Начало выполнения запроса ...';
+  FSExecSqlSql:='Текст запроса => %s';
+  FSExecSqlSuccess:='Запрос выполнен успешно.';
+  FSExecSqlFail:='Запрос не выполнен. Ошибка: %s';
+  
+end;
+
+destructor TBisCmIBaseConnection.Destroy;
+begin
+  FSessions.Free;
+  FDefaultConnection.Free;
+  DeleteCriticalSection(FLock);
+  inherited Destroy;
+end;
+
+function TBisCmIBaseConnection.GetSessionsClass: TBisCmIBaseSessionsClass;
+begin
+  Result:=TBisCmIBaseSessions;
+end;
+
+procedure TBisCmIBaseConnection.Lock;
+begin
+  EnterCriticalSection(FLock);
+  FOldCursor:=Screen.Cursor;
+end;
+
+procedure TBisCmIBaseConnection.UnLock;
+begin
+  Screen.Cursor:=FOldCursor;
+  LeaveCriticalSection(FLock);
+end;
+
+procedure TBisCmIBaseConnection.ChangeParams(Sender: TObject);
+var
+  Str: TStringList;
+  i: Integer;
+  Param: TBisConnectionParam;
+begin
+  Str:=TStringList.Create;
+  try
+    for i:=0 to Params.Count-1 do begin
+      Param:=Params.Items[i];
+
+      Str.Add(FormatEx('%s=%s',[Param.ParamName,Param.Value]));
+      if AnsiSameText(Param.ParamName,SParamDriverName) then FDefaultConnection.DriverName:=Param.Value;
+      if AnsiSameText(Param.ParamName,SParamLibraryName) then FDefaultConnection.LibraryName:=Param.Value;
+      if AnsiSameText(Param.ParamName,SParamVendorLib) then FDefaultConnection.VendorLib:=Param.Value;
+      if AnsiSameText(Param.ParamName,SParamGetDriverFunc) then FDefaultConnection.GetDriverFunc:=Param.Value;
+    end;
+    FDefaultConnection.Params.Text:=Str.Text;
+    FDefaultConnection.ParamsLoaded:=true;
+  finally
+    Str.Free;
+  end;
+end;
+
+function TBisCmIBaseConnection.GetPrefix: String;
+var
+  Param: TBisConnectionParam;
+begin
+  Result:='';
+  Param:=Params.Find(SParamPrefix);
+  if Assigned(Param) then
+    Result:=Param.Value;
+end;
+
+function TBisCmIBaseConnection.PreparePrefix(AName: String): String;
+begin
+  Result:=Format('%s%s',[GetPrefix,AName]);
+end;
+
+procedure TBisCmIBaseConnection.Init;
+begin
+  inherited Init;
+  ChangeParams(Params);
+end;
+
+function TBisCmIBaseConnection.GetDbUserName(UserName, Password: String;
+                                         var AccountId: String; var DbUserName, DbPassword: String): Boolean;
+var
+  Query: TBisCmxQuery;
+  Sql: String;
+  NewPass: String;
+begin
+  Result:=false;
+  if FDefaultConnection.Connected then begin
+    Query:=TBisCmxQuery.Create(nil);
+    try
+      Query.Database:=FDefaultConnection;
+      Sql:=FormatEx(FSSqlGetDbUserName,[QuotedStr(AnsiUpperCase(UserName))]);
+      Query.SQL.Text:=ReplaceText(Sql,SPrefix,GetPrefix);
+      Query.Open;
+      if Query.Active and not Query.IsEmpty then begin
+        NewPass:=Query.FieldByName(SFieldPassword).AsString;
+        if NewPass=Password then begin
+          AccountId:=Query.FieldByName(SFieldAccountId).AsString;
+          DbUserName:=Query.FieldByName(SFieldDbUserName).AsString;
+          DbPassword:=Query.FieldByName(SFieldDbPassword).AsString;
+          Result:=true;
+        end;
+      end;
+    finally
+      Query.Free;
+    end;
+  end;
+end;
+
+function TBisCmIBaseConnection.ApplicationExists(ApplicationId,AccountId: String): Boolean;
+var
+  Query: TBisCmxQuery;
+  Sql: String;
+begin
+  Result:=false;
+  if FDefaultConnection.Connected then begin
+    Query:=TBisCmxQuery.Create(nil);
+    try
+      Query.Database:=FDefaultConnection;
+      Sql:=FormatEx(FSSqlApplicationExists,[QuotedStr(ApplicationId),QuotedStr(AccountId)]);
+      Query.SQL.Text:=ReplaceText(Sql,SPrefix,GetPrefix);
+      Query.Open;
+      if Query.Active and not Query.IsEmpty then begin
+        Result:=not Boolean(Query.FieldByName(SFieldLocked).AsInteger);
+      end;
+    finally
+      Query.Free;
+    end;
+  end;
+end;
+
+function TBisCmIBaseConnection.SessionExists(SessionId: String): Boolean;
+var
+  Query: TBisCmxQuery;
+  Sql: String;
+begin
+  Result:=false;
+  if FDefaultConnection.Connected then begin
+    Query:=TBisCmxQuery.Create(nil);
+    try
+      Query.Database:=FDefaultConnection;
+      Sql:=FormatEx(FSSqlSessionExists,[QuotedStr(SessionId)]); 
+      Query.SQL.Text:=ReplaceText(Sql,SPrefix,GetPrefix);
+      Query.Open;
+      Result:=Query.Active and not Query.IsEmpty;
+    finally
+      Query.Free;
+    end;
+  end;
+end;
+
+function TBisCmIBaseConnection.SessionFind(SessionId: String): TBisCmIBaseSession;
+var
+  Exists: Boolean;
+begin
+  Exists:=SessionExists(SessionId);
+  Result:=FSessions.Find(SessionId);
+  if not Exists and Assigned(Result) then begin
+    FSessions.Remove(Result);
+    Result:=nil;
+  end;
+end;
+
+function TBisCmIBaseConnection.GetFieldNameQuote: String;
+begin
+  Result:=FSFieldNameQuote;
+end;
+
+function TBisCmIBaseConnection.GetRecordsFilterDateValue(Value: TDateTime): String;
+begin
+  Result:=FormatEx(FSFormatFilterDateValue,[QuotedStr(FormatDateTime(FSFormatDateTimeValue,Value))]);
+end;
+
+function TBisCmIBaseConnection.GetConnected: Boolean;
+begin
+  Result:=FDefaultConnection.Connected;
+end;
+
+procedure TBisCmIBaseConnection.Connect;
+begin
+  Lock;
+  try
+    inherited Connect;
+    try
+      FDefaultConnection.Connected:=false;
+      FDefaultConnection.Connected:=true;
+    except
+      On E: Exception do
+        raise EBisConnection.CreateFmt(ECConnectFailed,SConnectFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.Disconnect;
+begin
+  Lock;
+  try
+    inherited Disconnect;
+    try
+      if FSessions.Count=0 then
+        FDefaultConnection.Connected:=false;
+    except
+      On E: Exception do
+        raise EBisConnection.CreateFmt(EСDisconnectFailed,SDisconnectFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+function TBisCmIBaseConnection.GetTableName(SQL: String; var Where: String): String;
+var
+  APos: Integer;
+  i: Integer;
+  Ch: Char;
+const
+  Chars=[' ',#13,#10,#0];
+begin
+  Result:='';
+  APos:=Pos(UpperCase(SFrom),UpperCase(SQL));
+  if APos>0 then begin
+    Result:=Copy(SQL,APos+Length(SFrom)+1,Length(SQL));
+    for i:=1 to Length(Result) do begin
+      Ch:=Result[i];
+      if Ch in Chars then begin
+        Result:=Copy(Result,1,i-1);
+        Result:=Trim(Result);
+        Result:=StringReplace(Result,'*','',[rfReplaceAll]);
+        Result:=StringReplace(Result,'/','',[rfReplaceAll]);
+        break;
+      end;
+    end;
+  end;
+  APos:=Pos(UpperCase(SWhere),UpperCase(SQL));
+  if APos>0 then begin
+    Where:=Copy(SQL,APos+Length(SWhere)+1,Length(SQL));
+  end;
+end;
+
+function TBisCmIBaseConnection.ExecSql(SQL: String; AConnection: TBisCmIBaseDatabase): Boolean;
+var
+  Query: TBisCmxQuery;
+begin
+  Result:=false;
+  if Assigned(AConnection) then
+    if AConnection.Connected then begin
+      LoggerWrite(FSExecSqlStart);
+      try
+        Query:=TBisCmxQuery.Create(nil);
+        try
+          Query.Database:=AConnection;
+          SQL:=Trim(SQL);
+          LoggerWrite(FormatEx(FSExecSqlSql,[SQL]));
+          if Length(SQL)>0 then begin
+            Query.ParamCheck:=false;
+            Query.SQL.Text:=SQL;
+            Query.ExecSQL;
+            Result:=true;
+            LoggerWrite(FSExecSqlSuccess);
+          end;
+        finally
+          Query.Free;
+        end;
+      except
+        On E: Exception do begin
+          LoggerWrite(FormatEx(FSExecSqlFail,[E.Message]),ltError);
+          raise;
+        end;
+      end;
+    end;
+end;
+
+procedure TBisCmIBaseConnection.ImportScript(Stream: TStream);
+var
+  S: String;
+begin
+  if Stream.Size>0 then begin
+    Stream.Position:=0; 
+    SetLength(S,Stream.Size);
+    Stream.ReadBuffer(Pointer(S)^,Stream.Size);
+    if Trim(S)<>'' then begin
+      S:=ReplaceText(S,SPrefix,GetPrefix);
+      ExecSql(S,FDefaultConnection);
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.ImportTable(Stream: TStream);
+var
+  DataSet: TBisDataSet;
+  Query: TBisCmxQuery;
+  i: Integer;
+  Field: TField;
+  Position: Integer;
+  Breaked: Boolean;
+  Fields: String;
+  Values: String;
+  Param: TParam;
+begin
+  if (Stream.Size>0) and FDefaultConnection.Connected then begin
+    DataSet:=TBisDataSet.Create(nil);
+    Query:=TBisCmxQuery.Create(nil);
+    Progress(0,0,0,Breaked);
+    try
+      Query.Database:=FDefaultConnection;
+      Query.ParamCheck:=true;
+      DataSet.LoadFromStream(Stream);
+      DataSet.Open;
+      if DataSet.Active then begin
+        Position:=1;
+        DataSet.First;
+        while not DataSet.Eof do begin
+
+          for i:=0 to DataSet.FieldCount-1 do begin
+            Field:=DataSet.Fields[i];
+            if i=0 then begin
+              Fields:=FSFieldNameQuote+Field.FieldName+FSFieldNameQuote;
+              Values:=':'+Field.FieldName;
+            end else begin
+              Fields:=Fields+','+FSFieldNameQuote+Field.FieldName+FSFieldNameQuote;
+              Values:=Values+',:'+Field.FieldName;
+            end;
+          end;
+
+          Query.SQL.Text:=FormatEx(FSSqlInsert,[PreparePrefix(DataSet.TableName),Fields,Values]);
+
+          for i:=0 to Query.Params.Count-1 do begin
+            Param:=Query.Params[i];
+            Field:=DataSet.FindField(Param.Name);
+            if Assigned(Field) then begin
+              Param.DataType:=Field.DataType;
+              Param.Value:=Field.Value;
+            end;
+          end;
+          
+          Query.ExecSQL;
+
+          Progress(0,DataSet.RecordCount,Position,Breaked);
+          if Breaked then
+            break;
+          DataSet.Next;
+        end;
+      end;
+    finally
+      Progress(0,0,0,Breaked);
+      Query.Free;
+      DataSet.Free;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.Import(ImportType: TBisConnectionImportType; Stream: TStream);
+begin
+  Lock;
+  try
+    inherited Import(ImportType,Stream);
+    try
+      if Assigned(Stream) then begin
+        case ImportType of
+          itScript: ImportScript(Stream);
+          itTable: ImportTable(Stream);
+        end;
+      end;
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECImportFailed,SImportFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.ExportScript(const Value: String; Stream: TStream);
+begin
+end;
+
+procedure TBisCmIBaseConnection.ExportTable(const Value: String; Stream: TStream);
+var
+  Query: TBisCmxQuery;
+  DataSet: TBisDataSet;
+  TableName: String;
+  Breaked: Boolean;
+  Position: Integer;
+  Where: String;
+begin
+  try
+    if FDefaultConnection.Connected then begin
+      Query:=TBisCmxQuery.Create(nil);
+      DataSet:=TBisDataSet.Create(nil);
+      Progress(0,0,0,Breaked);
+      try
+        Query.Database:=FDefaultConnection;
+        Query.Sql.Text:=Value;
+        Query.Open;
+        if Query.Active then begin
+          Breaked:=false;
+          Position:=1;
+          TableName:=GetTableName(Value,Where);
+          Query.First;
+          DataSet.CreateTable(Query);
+          while not Query.Eof do begin
+            DataSet.CopyRecord(Query,true,true);
+            Progress(0,Query.FetchCount,Position,Breaked);
+            if Breaked then
+              break;
+            Inc(Position);
+            Query.Next;
+          end;
+          DataSet.TableName:=TableName;
+          DataSet.SaveToStream(Stream);
+        end;
+      finally
+        Progress(0,0,0,Breaked);
+        DataSet.Free;
+        Query.Free;
+      end;
+    end;
+  except
+    On E: Exception do begin
+      raise;
+    end;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.Export(ExportType: TBisConnectionExportType; const Value: String; Stream: TStream);
+begin
+  Lock;
+  try
+    inherited Export(ExportType,Value,Stream);
+    try
+      if Assigned(Stream) then begin
+        case ExportType of
+          etScript: ExportScript(Value,Stream);
+          etTable: ExportTable(Value,Stream);
+        end;
+      end;
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECExportFailed,SExportFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+function TBisCmIBaseConnection.GetServerDate: TDateTime;
+var
+  Query: TBisCmxQuery;
+  Sql: String;
+  Value: Variant;
+begin
+  Result:=inherited GetServerDate;
+  if FDefaultConnection.Connected then begin
+    Query:=TBisCmxQuery.Create(nil);
+    try
+      try
+        Query.Database:=FDefaultConnection;
+        Sql:=FSSqlGetServerDate;
+        Query.SQL.Text:=ReplaceText(Sql,SPrefix,GetPrefix);
+        Query.Open;
+        if Query.Active and not Query.IsEmpty then begin
+          Value:=Query.Fields[0].Value;
+          if not VarIsNull(Value) then
+            Result:=VarToDateDef(Value,Result);
+        end;
+      except
+        on E: Exception do
+          raise EBisConnection.CreateFmt(ECGetServerDateFailed,SGetServerDateFailed,[E.Message]);
+      end;
+    finally
+      Query.Free;
+    end;
+  end;
+end;
+
+function TBisCmIBaseConnection.Login(const ApplicationId,UserName,Password: String; Params: TBisConnectionLoginParams=nil): String;
+var
+  UserDefault: Boolean;
+  AccountId: String;
+  DbUserName: String;
+  DbPassword: String;
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    Result:=inherited Login(ApplicationId,UserName,Password,Params);
+    try
+      if GetDbUserName(UserName,Password,AccountId,DbUserName,DbPassword) then begin
+        if ApplicationExists(ApplicationId,AccountId) then begin
+
+          UserDefault:=(Trim(DbUserName)='') or
+                       AnsiSameText(FDefaultConnection.UserName,DbUserName);
+          if UserDefault then begin
+            DbUserName:=FDefaultConnection.UserName;
+            DbPassword:=FDefaultConnection.Password;
+          end;
+
+          ASession:=FSessions.Add(GetUniqueID,ApplicationId,AccountId,UserName,Password,
+                                  DbUserName,DbPassword,Params);
+          if Assigned(ASession) then begin
+            try
+              ASession.CheckLocks(SLogin);
+              Result:=ASession.SessionId;
+            except
+              on E: Exception do begin
+                FSessions.Remove(ASession);
+                raise;
+              end;
+            end;
+          end else
+            raise Exception.Create(SSessionCreateFailed);
+            
+
+        end else
+          raise Exception.Create(SApplicationNotFoundOrLocked);
+
+      end else
+        raise Exception.CreateFmt(SAccountNotFoundOrLocked,[UserName]);
+
+    except
+      On E: Exception do
+        raise EBisConnection.CreateFmt(ECLoginFailed,SLoginFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.Logout(const SessionId: String);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited Logout(SessionId);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) then begin
+        ASession.Update;
+        ASession.CheckLocks(SLogout);
+        FSessions.Remove(ASession);
+      end;
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECLogoutFailed,SLogoutFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+function TBisCmIBaseConnection.Check(const SessionId: String): Boolean;
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    Result:=inherited Check(SessionId);
+    try
+      ASession:=SessionFind(SessionId);
+      Result:=Assigned(ASession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECCheckFailed,SCheckFailed,[E.Message]);
+    end; 
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.LoadProfile(const SessionId: String; Profile: TBisProfile);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited LoadProfile(SessionId,Profile);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) and Assigned(Profile) then begin
+        ASession.Update;
+        ASession.CheckLocks(SLoadProfile);
+        ASession.LoadProfile(Profile);
+      end else
+        raise EBisConnection.Create(ECInvalidSession,SInvalidSession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECLoadProfileFailed,SLoadProfileFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.SaveProfile(const SessionId: String; Profile: TBisProfile);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited SaveProfile(SessionId,Profile);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) and Assigned(Profile) then begin
+        ASession.Update;
+        ASession.CheckLocks(SSaveProfile);
+        ASession.SaveProfile(Profile);
+      end else
+        raise EBisConnection.Create(ECInvalidSession,SInvalidSession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECSaveProfileFailed,SSaveProfileFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.RefreshPermissions(const SessionId: String);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited RefreshPermissions(SessionId);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) then begin
+        ASession.Update;
+        ASession.CheckLocks(SRefreshPermissions);
+        ASession.LoadRoles;
+        ASession.LoadPermissions;
+      end else
+        raise EBisConnection.Create(ECInvalidSession,SInvalidSession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECRefreshPermissionsFailed,SRefreshPermissionsFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.LoadInterfaces(const SessionId: String; Interfaces: TBisInterfaces);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited LoadInterfaces(SessionId,Interfaces);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) and Assigned(Interfaces) then begin
+        ASession.Update;
+        ASession.CheckLocks(SLoadInterfaces);
+        ASession.LoadInterfaces(Interfaces);
+      end else
+        raise EBisConnection.Create(ECInvalidSession,SInvalidSession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECLoadInterfacesFailed,SLoadInterfacesFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.GetRecords(const SessionId: String; DataSet: TBisDataSet);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited GetRecords(SessionId,DataSet);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) and Assigned(DataSet) then begin
+        ASession.Update;
+        ASession.CheckLocks(SGetRecords,DataSet.ProviderName);
+        ASession.GetRecords(DataSet);
+      end else
+        raise EBisConnection.Create(ECInvalidSession,SInvalidSession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECGetRecordsFailed,SGetRecordsFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.Execute(const SessionId: String; DataSet: TBisDataSet);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited Execute(SessionId,DataSet);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) and Assigned(DataSet) then begin
+        ASession.Update;
+        ASession.CheckLocks(SExecute,DataSet.ProviderName);
+        ASession.Execute(DataSet);
+      end else
+        raise EBisConnection.Create(ECInvalidSession,SInvalidSession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECExecuteFailed,SExecuteFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.LoadMenus(const SessionId: String; Menus: TBisMenus);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited LoadMenus(SessionId,Menus);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) and Assigned(Menus) then begin
+        ASession.Update;
+        ASession.CheckLocks(SLoadMenus);
+        ASession.LoadMenus(Menus);
+      end else
+        raise EBisConnection.Create(ECInvalidSession,SInvalidSession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECLoadMenusFailed,SLoadMenusFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.LoadScript(const SessionId: String; ScriptId: String; Stream: TStream);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited LoadScript(SessionId,ScriptId,Stream);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) and Assigned(Stream) then begin
+        ASession.Update;
+        ASession.CheckLocks(SLoadScript);
+        ASession.LoadScript(ScriptId,Stream);
+      end else
+        raise EBisConnection.Create(ECInvalidSession,SInvalidSession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECLoadScriptFailed,SLoadScriptFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.LoadReport(const SessionId: String; ReportId: String; Stream: TStream);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited LoadReport(SessionId,ReportId,Stream);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) and Assigned(Stream) then begin
+        ASession.Update;
+        ASession.CheckLocks(SLoadReport);
+        ASession.LoadReport(ReportId,Stream);
+      end else
+        raise EBisConnection.Create(ECInvalidSession,SInvalidSession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECLoadReportFailed,SLoadReportFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+procedure TBisCmIBaseConnection.LoadDocument(const SessionId: String; DocumentId: String; Stream: TStream);
+var
+  ASession: TBisCmIBaseSession;
+begin
+  Lock;
+  try
+    inherited LoadDocument(SessionId,DocumentId,Stream);
+    try
+      ASession:=SessionFind(SessionId);
+      if Assigned(ASession) and Assigned(Stream) then begin
+        ASession.Update;
+        ASession.CheckLocks(SLoadDocument);
+        ASession.LoadDocument(DocumentId,Stream);
+      end else
+        raise EBisConnection.Create(ECInvalidSession,SInvalidSession);
+    except
+      on E: Exception do
+        raise EBisConnection.CreateFmt(ECLoadDocumentFailed,SLoadDocumentFailed,[E.Message]);
+    end;
+  finally
+    UnLock;
+  end;
+end;
+
+
+end.
+
+
+

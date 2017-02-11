@@ -1,0 +1,63 @@
+unit BisOptionsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+
+  BisDialogFm, BisOptionsFrm;
+
+type
+  TBisOptionsForm = class(TBisDialogForm)
+    PanelFrame: TPanel;
+    PanelButtons: TPanel;
+  private
+    FFrame: TBisOptionsFrame;  
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure SetFrame(Frame: TBisOptionsFrame); virtual;
+
+  end;
+
+  TBisOptionsFormClass=class of TBisOptionsForm;
+
+var
+  BisOptionsForm: TBisOptionsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisCoreUtils, BisConsts, BisUtils;
+
+{ TBisOptionsForm }
+
+constructor TBisOptionsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  SizeGrip.Visible:=true;
+  FFrame:=nil;
+end;
+
+destructor TBisOptionsForm.Destroy;
+begin
+  FFrame:=nil;
+  inherited Destroy;
+end;
+
+procedure TBisOptionsForm.SetFrame(Frame: TBisOptionsFrame);
+begin
+  if Assigned(Frame) then begin
+    ClientWidth:=Frame.Width;
+    ClientHeight:=Frame.Height+PanelButtons.Height;
+    Constraints.MinWidth:=iff(Constraints.MinWidth<>Width,Width,Constraints.MinWidth);
+    Constraints.MinHeight:=iff(Constraints.MinHeight<>Height,Height,Constraints.MinHeight);
+    Frame.Align:=alClient;
+    Frame.Parent:=PanelFrame;
+    Caption:=iff(Trim(Frame.Caption)<>'',Frame.Caption,Caption);
+  end;
+end;
+
+end.

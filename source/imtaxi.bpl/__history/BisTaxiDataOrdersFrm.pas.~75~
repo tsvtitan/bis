@@ -1,0 +1,202 @@
+unit BisTaxiDataOrdersFrm;
+
+interface
+                                                                
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin,
+  StdCtrls, ExtCtrls, Grids, DBGrids,
+  VirtualTrees, {VirtualDBTreeEx, }                                                                            
+  BisFieldNames, BisDBTree, BisDataFrm, BisDataGridFrm, BisDataEditFm,
+  BisTaxiOrderFilterFm;
+
+type
+  TBisTaxiDataOrdersFrame = class(TBisDataGridFrame)
+  private
+    FGroupToday: String;
+    FGroupArchive: String;
+    FFilterMenuItemToday: TBisDataFrameFilterMenuItem;
+    FFilterMenuItemArchive: TBisDataFrameFilterMenuItem;
+
+    function GetNewDriverName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+
+    procedure GridBeforeCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+                                  Column: TColumnIndex; CellRect: TRect);
+    procedure GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode;
+                            Column: TColumnIndex; TextType: TVSTTextType);
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure OpenRecords; override;
+
+    property FilterMenuItemToday: TBisDataFrameFilterMenuItem read FFilterMenuItemToday;
+    property FilterMenuItemArchive: TBisDataFrameFilterMenuItem read FFilterMenuItemArchive;
+  end;
+
+  TBisTaxiDataOrderFilterFormIface=class(TBisTaxiOrderFilterFormIface)
+  end;
+
+implementation
+
+uses DateUtils,
+     BisUtils, BisCore, BisOrders, BisFilterGroups;
+
+{$R *.dfm}
+
+{ TBisTaxiDataOrdersFrame }
+
+constructor TBisTaxiDataOrdersFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FilterClass:=TBisTaxiDataOrderFilterFormIface;
+  with Provider do begin
+    ProviderName:='S_ORDERS';
+    with FieldNames do begin
+      AddKey('ORDER_ID');
+      AddInvisible('DRIVER_NAME');
+      AddInvisible('CAR_CALLSIGN');
+      
+      Add('DATE_ACCEPT','Дата поступления',110);
+      Add('PHONE','Телефон',90);
+      Add('STREET_NAME','Улица откуда',100);
+      Add('HOUSE','Дом/Корпус откуда',45);
+      Add('FLAT','Квартира/Офис откуда',35);
+      Add('PORCH','Подъезд отдкуда',35);
+      Add('COST_RATE','Стоимость',50).DisplayFormat:='#0.00';
+      Add('ACTION_NAME','Действие',100);
+      Add('ROUTE_STREET_NAME','Улица куда',100);
+      Add('ROUTE_HOUSE','Дом/Корпус куда',45);
+      Add('ROUTE_FLAT','Квартира/Офис куда',35);
+      Add('ROUTE_PORCH','Подъезд куда',35);
+      Add('ROUTE_ZONE_NAME','Зона куда',100);
+      Add('RESULT_NAME','Результат',100);
+      Add('CUSTOMER','ФИО',100);
+      AddCalculate('NEW_DRIVER_NAME','Водитель',GetNewDriverName,ftString,150,100);
+      Add('CAR_COLOR','Цвет автомобиля',80);
+      Add('CAR_BRAND','Марка автомобиля',80);
+      Add('CAR_STATE_NUM','Гос. номер автомобиля',80);
+      Add('CLIENT_USER_NAME','Клиент',100);
+      Add('DISCOUNT_TYPE_NAME','Тип дисконта',100);
+      Add('DISCOUNT_NUM','Номер дисконта',100);
+      Add('WHO_ACCEPT','Кто принял',100);
+      Add('DATE_ARRIVAL','Дата подачи',110);
+      Add('ORDER_NUM','№ заказа',50);
+
+      Add('ACTION_BRUSH_COLOR','Цвет фона действия',50).Visible:=false;
+      Add('ACTION_FONT_COLOR','Цвет шрифта действия',50).Visible:=false;
+      Add('RESULT_BRUSH_COLOR','Цвет фона результата',50).Visible:=false;
+      Add('RESULT_FONT_COLOR','Цвет шрифта результата',50).Visible:=false;
+
+    end;
+    Orders.Add('DATE_ARRIVAL',otDesc);
+  end;
+
+  FGroupToday:=GetUniqueID;
+  FGroupArchive:=GetUniqueID;
+
+  FFilterMenuItemToday:=CreateFilterMenuItem('За сутки');
+  FFilterMenuItemToday.Checked:=true;
+
+  FFilterMenuItemArchive:=CreateFilterMenuItem('Архив');
+
+  Grid.OnPaintText:=GridPaintText;
+  Grid.OnBeforeCellPaint:=GridBeforeCellPaint;
+
+end;
+
+function TBisTaxiDataOrdersFrame.GetNewDriverName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S1, S2: String;
+begin
+  Result:=Null;
+  if DataSet.Active then begin
+    S1:=DataSet.FieldByName('DRIVER_NAME').AsString;
+    S2:=DataSet.FieldByName('CAR_CALLSIGN').AsString;
+    Result:=FormatEx('%s - %s',[S2,S1]);
+    if Trim(Result)='-' then
+      Result:=Null;
+  end;
+end;
+
+procedure TBisTaxiDataOrdersFrame.GridBeforeCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+                                                      Column: TColumnIndex; CellRect: TRect);
+{var
+  Data: PBisDBTreeNode;
+  DataKey: PDBVTData;
+  DateKeyFocused: PDBVTData;
+  ActionColor: Variant;
+  ResultColor: Variant;
+  AColor: TColor;}
+begin
+(*  Data:=Grid.GetDBNodeData(Node);
+  DataKey:=Grid.GetNodeData(Node);
+  DateKeyFocused:=Grid.GetNodeData(Grid.FocusedNode);
+  if Assigned(Data) and Assigned(DataKey) and Assigned(DateKeyFocused) then begin
+    if Assigned(Data.Values) {and (DataKey.Hash<>DateKeyFocused.Hash) } then begin
+      ActionColor:=Data.Values.GetValue('ACTION_BRUSH_COLOR');
+      ResultColor:=Data.Values.GetValue('RESULT_BRUSH_COLOR');
+      AColor:=TColor(VarToIntDef(ActionColor,clWindow));
+      if not VarIsNull(ResultColor) then
+        AColor:=TColor(VarToIntDef(ResultColor,clWindow));
+      TargetCanvas.Brush.Style:=bsSolid;
+      TargetCanvas.Brush.Color:=AColor;
+      TargetCanvas.FillRect(CellRect);
+    end;
+  end;*)
+end;
+
+procedure TBisTaxiDataOrdersFrame.GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode;
+                                                Column: TColumnIndex; TextType: TVSTTextType);
+{var
+  Data: PBisDBTreeNode;
+  DataKey: PDBVTData;
+  DateKeyFocused: PDBVTData;
+  ActionColor: Variant;
+  ResultColor: Variant;
+  AColor: TColor;
+  Flag: Boolean;}
+begin
+{  Data:=Grid.GetDBNodeData(Node);
+  DataKey:=Grid.GetNodeData(Node);
+  DateKeyFocused:=Grid.GetNodeData(Grid.FocusedNode);
+  if Assigned(Data) and Assigned(DataKey) and Assigned(DateKeyFocused) then begin
+    Flag:=((DataKey.Hash=DateKeyFocused.Hash) and (Column<>Grid.FocusedColumn)) or (DataKey.Hash<>DateKeyFocused.Hash);
+    if Assigned(Data.Values) and Flag then begin
+      ActionColor:=Data.Values.GetValue('ACTION_FONT_COLOR');
+      ResultColor:=Data.Values.GetValue('RESULT_FONT_COLOR');
+      AColor:=TColor(VarToIntDef(ActionColor,clWindowText));
+      if not VarIsNull(ResultColor) then
+        AColor:=TColor(VarToIntDef(ResultColor,clWindowText));
+      TargetCanvas.Font.Color:=AColor;
+    end;
+  end;}
+end;
+
+procedure TBisTaxiDataOrdersFrame.OpenRecords;
+var
+  Group1, Group2: TBisFilterGroup;
+  D: TDateTime;
+begin
+
+  D:=Core.ServerDate;
+
+  with FFilterMenuItemToday do begin
+    Group1:=FilterGroups.Find(FGroupToday);
+    if Assigned(Group1) then
+      FilterGroups.Remove(Group1);
+    Group1:=FilterGroups.AddByName(FGroupToday,foAnd,True);
+    Group1.Filters.Add('DATE_BEGIN',fcGreater,IncDay(D,-1));
+    Group1.Filters.Add('DATE_BEGIN',fcEqualLess,D);
+  end;
+
+  with FFilterMenuItemArchive do begin
+    Group2:=FilterGroups.Find(FGroupArchive);
+    if Assigned(Group2) then
+      FilterGroups.Remove(Group2);
+    Group2:=FilterGroups.AddByName(FGroupArchive,foAnd,True);
+    Group2.Filters.Add('DATE_BEGIN',fcEqualLess,IncDay(D,-1));
+  end;
+
+  inherited OpenRecords;
+end;
+
+end.

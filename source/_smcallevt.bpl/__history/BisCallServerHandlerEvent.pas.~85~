@@ -1,0 +1,91 @@
+unit BisCallServerHandlerEvent;
+
+interface
+
+uses Classes,
+     BisEvents,
+     BisCallServerHandlerModules, BisCallServerHandlers, BisCallServerInChannels;
+
+type
+  TBisCallServerInChannelEvent=class(TBisCallServerInChannel)
+  end;
+
+  TBisCallServerInChannelsEvent=class(TBisCallServerInChannels)
+  protected
+    ñ
+  end;
+
+  TBisCallServerHandlerEvent=class(TBisCallServerHandler)
+  private
+    FEventInvite: TBisEvent;
+
+    function EventHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+  protected
+    function GetInChannelsClass: TBisCallServerInChannelsClass; virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function CanInvite(Contact: String): Boolean; override;
+//    procedure Invite(SessionId, LineId, Contact: String); override;
+  end;
+
+procedure InitCallServerHandlerModule(AModule: TBisCallServerHandlerModule); stdcall;
+
+exports
+  InitCallServerHandlerModule;
+
+implementation
+
+uses SysUtils,
+     BisCore, BisProvider, BisFilterGroups, BisUtils,
+     BisCallServerHandlerEventConsts;
+
+procedure InitCallServerHandlerModule(AModule: TBisCallServerHandlerModule); stdcall;
+begin
+  AModule.HandlerClass:=TBisCallServerHandlerEvent;
+end;
+
+{ TBisCallServerHandlerEvent }
+
+constructor TBisCallServerHandlerEvent.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FEventInvite:=Core.Events.Add(SEventInvite,EventHandler,true);
+end;
+
+destructor TBisCallServerHandlerEvent.Destroy;
+begin
+  Core.Events.Remove(FEventInvite);
+
+  inherited Destroy;
+end;
+
+function TBisCallServerHandlerEvent.CanInvite(Contact: String): Boolean;
+begin
+  Result:=inherited CanInvite(Contact);
+  if not Result then
+    Result:=Length(Trim(Contact))=Length(GetUniqueID);
+end;
+
+function TBisCallServerHandlerEvent.EventHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+var
+  InChannel: TBisCallServerInChannelEvent;
+begin
+  Result:=false;
+  if Event=FEventInvite then begin
+{    Channel:=TBisCallServerHandlerChannelEvent(Channels.AddClass(TBisCallServerHandlerChannelEvent));
+    if Assigned(Channel) then
+
+{    if Result then
+      DoInvite(PSessionId.AsString,PLineId.AsString,PContact.AsString);}
+  end;
+end;
+
+{procedure TBisCallServerHandlerEvent.Invite(Contact: String);
+begin
+  inherited Invite(Contact);
+
+end;}
+
+end.

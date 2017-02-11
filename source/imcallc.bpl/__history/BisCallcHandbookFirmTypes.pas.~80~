@@ -1,0 +1,38 @@
+unit BisCallcHandbookFirmTypes;
+
+interface
+
+uses Classes,
+     BisDataGridFm, BisCallcHandbookFirmTypesEditFm;
+
+type
+  TBisCallcHandbookFirmTypesIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+implementation
+
+uses BisFilterGroups;
+
+{ TBisCallcHandbookFirmTypesIface }
+
+constructor TBisCallcHandbookFirmTypesIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  InsertClass:=TBisCallcHandbookFirmTypesInsertIface;
+ // InsertClasses.Add(TBisCallcHandbookFirmTypesInsertIface2);
+  Caption:='Типы организаций';
+  ProviderName:='S_FIRM_TYPES';
+  with FieldNames do begin
+    AddKey('FIRM_TYPE_ID');
+    Add('NAME','Наименование',100);
+    Add('DESCRIPTION','Описание',150);
+    AddInvisible('PRIORITY');
+  end;
+  FilterGroups.Add.Filters.Add('PRIORITY',fcEqual,1);
+  Orders.Add('NAME');
+end;
+
+
+end.

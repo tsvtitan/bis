@@ -1,0 +1,15 @@
+object DataModule2: TDataModule2
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 357
+  Top = 322
+  Height = 150
+  Width = 215
+  object client: TIdTCPClient
+    Host = '127.0.0.1'
+    Port = 9000
+    Left = 64
+    Top = 56
+  end
+end

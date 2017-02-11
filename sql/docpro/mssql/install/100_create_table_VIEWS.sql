@@ -1,0 +1,63 @@
+/* Создание таблицы видов документов */
+
+CREATE TABLE /*PREFIX*/VIEWS
+(
+  VIEW_ID VARCHAR(32) NOT NULL,
+  NAME VARCHAR(100) NOT NULL,
+  DESCRIPTION VARCHAR(250),
+  PRIMARY KEY (VIEW_ID)
+)
+
+--
+
+/* Создание просмотра таблицы видов документов */
+
+CREATE VIEW /*PREFIX*/S_VIEWS
+AS
+SELECT * FROM /*PREFIX*/VIEWS
+
+--
+
+/* Создание процедуры добавления вида документа */
+
+CREATE PROCEDURE /*PREFIX*/I_VIEW
+  @VIEW_ID VARCHAR(32),
+  @NAME VARCHAR(100),
+  @DESCRIPTION VARCHAR(250)
+AS
+BEGIN
+  INSERT INTO /*PREFIX*/VIEWS (VIEW_ID,NAME,DESCRIPTION)
+       VALUES (@VIEW_ID,@NAME,@DESCRIPTION);
+END;
+
+--
+
+/* Создание процедуры изменения вида документа */
+
+CREATE PROCEDURE /*PREFIX*/U_VIEW
+  @VIEW_ID VARCHAR(32),
+  @NAME VARCHAR(100),
+  @DESCRIPTION VARCHAR(250),
+  @OLD_VIEW_ID VARCHAR(32)
+AS
+BEGIN
+  UPDATE /*PREFIX*/VIEWS
+     SET VIEW_ID=@VIEW_ID,
+         NAME=@NAME,
+	 DESCRIPTION=@DESCRIPTION
+   WHERE VIEW_ID=@OLD_VIEW_ID;
+END;
+
+--
+
+/* Создание процедуры удаления вида документа */
+
+CREATE PROCEDURE /*PREFIX*/D_VIEW
+  @OLD_VIEW_ID VARCHAR(32)
+AS
+BEGIN
+  DELETE FROM /*PREFIX*/VIEWS 
+        WHERE VIEW_ID=@OLD_VIEW_ID;
+END;
+
+--

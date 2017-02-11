@@ -1,0 +1,16 @@
+function FileLoop(S: String; I: Integer; F: Integer): Boolean;
+begin
+  PrintLn('File: ' + S + '   (CRC = ' + IntToHex(GetCRC32FromFile(S), 8) + ')');
+  Result := True;
+end;
+
+procedure ShowFiles;
+var
+  SL: TStringList;
+begin
+  SL := FileList('C:\*', False, False, False);
+  ForEach(SL, 'FileLoop', 0);
+  SL.Free;
+end;
+
+ShowFiles;

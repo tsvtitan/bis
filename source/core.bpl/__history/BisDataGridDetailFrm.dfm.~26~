@@ -1,0 +1,94 @@
+inherited BisDataGridDetailFrame: TBisDataGridDetailFrame
+  Width = 779
+  Height = 358
+  Constraints.MinWidth = 460
+  ExplicitWidth = 779
+  ExplicitHeight = 358
+  inherited PanelData: TPanel
+    Width = 779
+    Height = 328
+    ExplicitWidth = 779
+    ExplicitHeight = 328
+    object Splitter: TSplitter [0]
+      Left = 363
+      Top = 3
+      Height = 322
+      ExplicitLeft = 235
+      ExplicitTop = 6
+      ExplicitHeight = 117
+    end
+    inherited GridPattern: TDBGrid
+      Width = 360
+      Height = 322
+      Align = alLeft
+    end
+    object Panel1: TPanel
+      Left = 366
+      Top = 3
+      Width = 410
+      Height = 322
+      Align = alClient
+      BevelOuter = bvNone
+      Caption = 'Panel1'
+      TabOrder = 1
+      object Panel2: TPanel
+        AlignWithMargins = True
+        Left = 3
+        Top = 0
+        Width = 407
+        Height = 25
+        Margins.Top = 0
+        Margins.Right = 0
+        Align = alTop
+        BevelOuter = bvNone
+        Caption = #1055#1072#1088#1072#1084#1077#1090#1088#1099' '#1086#1073#1098#1077#1082#1090#1072
+        Color = clBtnShadow
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+        ExplicitTop = 96
+        ExplicitWidth = 447
+      end
+      inline BisFastReportFrame1: TBisFastReportFrame
+        Left = 0
+        Top = 28
+        Width = 410
+        Height = 294
+        Align = alClient
+        Constraints.MinHeight = 150
+        Constraints.MinWidth = 410
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        ExplicitLeft = -5
+        ExplicitTop = 72
+        inherited PanelReport: TPanel
+          Height = 264
+        end
+      end
+    end
+  end
+  inherited ControlBar: TControlBar
+    Width = 779
+  end
+  inherited DataSource: TDataSource
+    Left = 176
+    Top = 96
+  end
+  inherited ImageList: TImageList
+    Left = 96
+  end
+  inherited Popup: TPopupActionBar
+    Left = 168
+    Top = 42
+  end
+end

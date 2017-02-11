@@ -1,0 +1,1 @@
+loader.exe /config imtaxi.ini /noupdate /show show.txt

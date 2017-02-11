@@ -1,0 +1,412 @@
+unit BisCallServerBackHandler;
+
+interface
+
+uses Windows, SysUtils, Classes, Contnrs, ZLib, mmSystem, SyncObjs,
+     BisEvents, BisNotifyEvents, BisCrypter, BisValues, BisConnections, BisThreads,
+     BisCallServerHandlerModules, BisCallServerHandlers,
+     BisCallServerChannels;
+
+type
+  TBisCallServerBackHandler=class;
+
+  TBisCallServerBackChannel=class(TBisCallServerChannel)
+  private
+    FHandler: TBisCallServerBackHandler;
+    FCallerId, FCallerPhone: Variant;
+    FCallId: Variant;
+    FCallResultId: Variant;
+    FAcceptorId: Variant;
+    FAcceptor: Variant;
+    FAcceptorType: TBisCallServerChannelAcceptorType;
+    FCreatorId: Variant;
+    FDateCreate: TDateTime;
+    FDirection: TBisCallServerChannelDirection;
+  protected
+    function GetActive: Boolean; override;
+    function GetCallId: Variant; override;
+    function GetCallResultId: Variant; override;
+    function GetDirection: TBisCallServerChannelDirection; override;
+    function GetCallerId: Variant; override;
+    function GetCallerPhone: Variant; override;
+    function GetAcceptor: Variant; override;
+    function GetAcceptorType: TBisCallServerChannelAcceptorType; override;
+    function GetAcceptorId: Variant; override;
+    function GetCreatorId: Variant; override;
+    function GetDateCreate: TDateTime; override;
+    function GetLocation: TBisCallServerChannelLocation; override;
+    function GetInFormat: PWaveFormatEx; override;
+    function GetOutFormat: PWaveFormatEx; override;
+    procedure SetOutFormat(const Value: PWaveFormatEx); override;
+    function GetOutDataSize: Integer; override;
+    procedure SetOutDataSize(const Value: Integer); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
+  TBisCallServerBackChannels=class(TBisCallServerChannels)
+  private
+    FHandler: TBisCallServerBackHandler;
+    function GetItem(Index: Integer): TBisCallServerBackChannel;
+  protected
+    procedure DoChannelDestroy(Channel: TBisCallServerChannel); override;    
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property Items[Index: Integer]: TBisCallServerBackChannel read GetItem; default;
+  end;
+
+  TBisCallServerBackHandler=class(TBisCallServerHandler)
+  private
+    FOperatorIds: TStringList;
+    FThread: TBisWaitThread;
+    FInterval: Integer;
+    FMaxCount: Integer;
+    FPeriod: Integer;
+
+    function GetChannels: TBisCallServerBackChannels;
+
+    procedure ThreadTimeout(Thread: TBisWaitThread);
+    procedure ThreadBegin(Thread: TBisThread);
+    procedure ThreadEnd(Thread: TBisThread; const AException: Exception=nil);
+
+  protected
+    function GetChannelsClass: TBisCallServerChannelsClass; override;
+    function GetConnected: Boolean; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure Connect; override;
+    procedure Disconnect; override;
+
+    property Channels: TBisCallServerBackChannels read GetChannels;
+  end;
+
+procedure InitCallServerHandlerModule(AModule: TBisCallServerHandlerModule); stdcall;
+
+exports
+  InitCallServerHandlerModule;
+
+implementation
+
+uses Variants, DB,
+     BisCore, BisProvider, BisFilterGroups, BisUtils, BisDataParams,
+     BisConfig, BisConsts, BisLogger, BisNetUtils, BisDataSet,
+     BisCallServerBackHandlerConsts;
+
+procedure InitCallServerHandlerModule(AModule: TBisCallServerHandlerModule); stdcall;
+begin
+  AModule.HandlerClass:=TBisCallServerBackHandler;
+end;
+
+{ TBisCallServerBackChannel }
+
+constructor TBisCallServerBackChannel.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FCallerId:=Null;
+  FCallerPhone:=Null;
+  FCallId:=Null;
+  FCallResultId:=Null;
+  FAcceptorId:=Null;
+  FAcceptor:=Null;
+  FCreatorId:=Core.AccountId;
+  FDateCreate:=Core.ServerDate;
+
+end;
+
+destructor TBisCallServerBackChannel.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TBisCallServerBackChannel.GetActive: Boolean;
+begin
+  Result:=true; //Assigned(FServer) and FServer.Active and (State in [csProcessing]);
+end;
+
+function TBisCallServerBackChannel.GetCallerId: Variant;
+begin
+  Result:=FCallerId;
+end;
+
+function TBisCallServerBackChannel.GetCallerPhone: Variant;
+begin
+  Result:=FCallerPhone;
+end;
+
+function TBisCallServerBackChannel.GetCallId: Variant;
+begin
+  Result:=FCallId;
+end;
+
+function TBisCallServerBackChannel.GetCallResultId: Variant;
+begin
+  Result:=FCallResultId;
+end;
+
+function TBisCallServerBackChannel.GetAcceptor: Variant;
+begin
+  Result:=FAcceptor;
+end;
+
+function TBisCallServerBackChannel.GetAcceptorType: TBisCallServerChannelAcceptorType;
+begin
+  Result:=FAcceptorType;
+end;
+
+function TBisCallServerBackChannel.GetAcceptorId: Variant;
+begin
+  Result:=FAcceptorId;
+end;
+
+function TBisCallServerBackChannel.GetCreatorId: Variant;
+begin
+  Result:=FCreatorId;
+end;
+
+function TBisCallServerBackChannel.GetDateCreate: TDateTime;
+begin
+  Result:=FDateCreate;
+end;
+
+function TBisCallServerBackChannel.GetDirection: TBisCallServerChannelDirection;
+begin
+  Result:=FDirection;
+end;
+
+function TBisCallServerBackChannel.GetInFormat: PWaveFormatEx;
+begin
+  Result:=nil;
+{  if Assigned(FRemoteDriverFormat) then
+    Result:=FRemoteDriverFormat.WaveFormat;}
+end;
+
+function TBisCallServerBackChannel.GetLocation: TBisCallServerChannelLocation;
+begin
+  Result:=inherited GetLocation;
+  if Assigned(FHandler) then begin
+    case FHandler.Location of
+      hlInternal: Result:=clInternal;
+      hlExternal: Result:=clExternal;
+    end;
+  end;
+end;
+
+function TBisCallServerBackChannel.GetOutDataSize: Integer;
+begin
+  Result:=0; //FOutDataSize;
+end;
+
+function TBisCallServerBackChannel.GetOutFormat: PWaveFormatEx;
+begin
+  Result:=nil; //FOutFormat;
+end;
+
+procedure TBisCallServerBackChannel.SetOutDataSize(const Value: Integer);
+begin
+//  FOutDataSize:=Value;
+end;
+
+procedure TBisCallServerBackChannel.SetOutFormat(const Value: PWaveFormatEx);
+begin
+{  FOutFormat:=Value;
+  FLocalDriverFormat:=FHandler.FDrivers.FindFormat(Value);
+  FLocalPayloadType:=FHandler.FDrivers.FormatToPayloadType(FLocalDriverFormat);}
+end;
+
+{ TBisCallServerBackChannels }
+
+constructor TBisCallServerBackChannels.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+destructor TBisCallServerBackChannels.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TBisCallServerBackChannels.DoChannelDestroy(Channel: TBisCallServerChannel);
+begin
+  if Assigned(Channel) then
+    Channel.Hangup;
+  inherited DoChannelDestroy(Channel);
+end;
+
+{function TBisCallServerBackChannels.Add(Id: String; Direction: TBisCallServerChannelDirection; CallId: Variant): TBisCallServerBackChannel;
+begin
+  Result:=Find(Id);
+  if not Assigned(Result) then begin
+    Result:=TBisCallServerBackChannel(inherited AddClass(TBisCallServerBackChannel,false));
+    if Assigned(Result) then begin
+      Result.FId:=Id;
+      Result.FCallId:=CallId;
+      Result.FChannels:=Self;
+      Result.FHandler:=FHandler;
+      Result.FDirection:=Direction;
+    end;
+  end;
+end;
+
+function TBisCallServerBackChannels.AddOutgoing(CallId, CallerId, CallerPhone: Variant): TBisCallServerBackChannel;
+begin
+  Result:=Add(GetUniqueID,cdOutgoing,CallId);
+  if Assigned(Result) then begin
+    Result.FCallerId:=CallerId;
+    Result.FCallerPhone:=CallerPhone;
+    DoChannelCreate(Result);
+  end;
+end;}
+
+function TBisCallServerBackChannels.GetItem(Index: Integer): TBisCallServerBackChannel;
+begin
+  Result:=TBisCallServerBackChannel(inherited Items[Index]);
+end;
+
+type
+  TBisCallServerBackThread=class(TBisWaitThread)
+  private
+    FCodeMessages: TBisDataSet;
+  end;
+
+{ TBisCallServerBackHandler }
+
+constructor TBisCallServerBackHandler.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Channels.FHandler:=Self;
+  FOperatorIds:=TStringList.Create;
+
+  FThread:=TBisCallServerBackThread.Create;
+  FThread.OnTimeout:=ThreadTimeout;
+  FThread.OnBegin:=ThreadBegin;
+  FThread.OnEnd:=ThreadEnd;
+end;
+
+destructor TBisCallServerBackHandler.Destroy;
+begin
+  Disconnect;
+  FThread.Free;
+  FOperatorIds.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCallServerBackHandler.Init;
+begin
+  inherited Init;
+  with Params do begin
+    FOperatorIds.Text:=Trim(AsString(SParamOperatorIds));
+    FInterval:=AsInteger(SParamInterval,FInterval);
+    FMaxCount:=AsInteger(SParamMaxCount,FMaxCount);
+    FPeriod:=AsInteger(SParamPeriod,FPeriod);
+  end;
+end;
+
+procedure TBisCallServerBackHandler.ThreadBegin(Thread: TBisThread);
+var
+  AThread: TBisCallServerBackThread;
+begin
+  AThread:=TBisCallServerBackThread(Thread);
+  AThread.FCodeMessages:=TBisDataSet.Create(Self);
+end;
+
+procedure TBisCallServerBackHandler.ThreadEnd(Thread: TBisThread; const AException: Exception);
+begin
+  with TBisCallServerBackThread(Thread) do begin
+    FreeAndNilEx(FCodeMessages);
+  end;
+end;
+
+procedure TBisCallServerBackHandler.ThreadTimeout(Thread: TBisWaitThread);
+begin
+
+end;
+
+function TBisCallServerBackHandler.GetChannels: TBisCallServerBackChannels;
+begin
+  Result:=TBisCallServerBackChannels(inherited Channels);
+end;
+
+function TBisCallServerBackHandler.GetChannelsClass: TBisCallServerChannelsClass;
+begin
+  Result:=TBisCallServerBackChannels;
+end;
+
+function TBisCallServerBackHandler.GetConnected: Boolean;
+begin
+  Result:=FThread.Working;
+end;
+
+{
+procedure TBisCallServerBackHandler.Start;
+begin
+  Stop;
+  if not Connected and Enabled then begin
+    LoggerWrite(SStart);
+    try
+      FLocalIP:=GetLocalIP;
+      FThread.Timeout:=FInterval;
+      FThread.Start;
+      LoggerWrite(SStartSuccess);
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SStartFail,[E.Message]),ltError);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallServerBackHandler.Stop;
+begin
+  if FThread.Working then begin
+    LoggerWrite(SStop);
+    try
+      FThread.Stop;
+      LoggerWrite(SStopSuccess);
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SStopFail,[E.Message]),ltError);
+      end;
+    end;
+  end;
+end;
+}
+
+procedure TBisCallServerBackHandler.Connect;
+begin
+  Disconnect;
+  if not Connected and Enabled then begin
+    LoggerWrite(SConnect);
+    try
+      FThread.Timeout:=FInterval;
+      FThread.Start;
+      LoggerWrite(SConnectSuccess);
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SConnectFail,[E.Message]),ltError);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallServerBackHandler.Disconnect;
+begin
+  if Connected then begin
+    LoggerWrite(SDisconnect);
+    try
+      FThread.Stop;
+      LoggerWrite(SDisconnectSuccess);
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SDisconnectFail,[E.Message]),ltError);
+      end;
+    end;
+  end;
+end;
+
+end.

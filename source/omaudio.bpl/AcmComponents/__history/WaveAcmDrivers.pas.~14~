@@ -1,0 +1,404 @@
+unit WaveAcmDrivers;
+
+interface
+
+uses Windows, Classes, Contnrs, MMSystem,
+     MSACM;
+     {WaveAcm}
+
+type
+  TWaveAcmDriver=class;
+  
+  TWaveAcmDriverFormat=class(TObject)
+  private
+    FDriver: TWaveAcmDriver;
+    FWaveFormat: PWaveFormatEx;
+    FWaveFormatSize: LongWord;
+    FStruct: LongWord;
+    FIndex: LongWord;
+    FTag: LongWord;
+    FSupport: LongWord;
+    FName: String;
+    FDescription: String;
+  public
+    constructor Create(ADriver: TWaveAcmDriver; AWaveFormat: PWaveFormatEx);
+    destructor Destroy; override;
+
+    property Driver: TWaveAcmDriver read FDriver;
+    property Name: String read FName;
+    property Index: LongWord read FIndex;
+    property Tag: LongWord read FTag;
+    property Description: String read FDescription; 
+    property WaveFormat: PWaveFormatEx read FWaveFormat;
+    property WaveFormatSize: LongWord read FWaveFormatSize;
+  end;
+
+  TWaveAcmDriverFormats=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TWaveAcmDriverFormat;
+  public
+    function Add(ADriver: TWaveAcmDriver; AFormat: PWaveFormatEx): TWaveAcmDriverFormat;
+    function GetName(FormatTag: LongWord): String;
+    function Find(Name: String; Channels: Word; SamplesPerSec: LongWord; BitsPerSample: Word): TWaveAcmDriverFormat; overload;
+    function Find(Tag: LongWord; Channels: Word; SamplesPerSec: LongWord; BitsPerSample: Word): TWaveAcmDriverFormat; overload;
+
+    property Items[Index: Integer]: TWaveAcmDriverFormat read GetItem; default;
+  end;
+  
+  TWaveAcmDriver=class(TObject)
+  private
+    FID: HAcmDRIVERID;
+		FSupport: LongWord;              // misc. support flags
+    FStruct: LongWord;
+		FType: FOURCC;             // compressor type 'audc'
+		FComp: FOURCC;             // sub-type (not used; reserved)
+		FMid: WORD;               // manufacturer id
+		FPid: WORD;               // product id
+		FAcm: LongWord;              // version of the Acm *compiled* for
+		FDriver: LongWord;              // version of the driver
+		FFormatTags: LongWord;              // total unique format tags supported
+		FFilterTags: LongWord;              // total unique filter tags supported
+		Ficon: HICON;              // handle to custom icon
+		FShortName: String;
+		FLongName: String;
+		FCopyright: String;
+		FLicensing: String;
+		FFeatures: String;
+
+    FTemp: TAcmFORMATTAGDETAILS;
+    FFormats: TWaveAcmDriverFormats;
+    procedure Refresh;
+  public
+    constructor Create(AID: HAcmDRIVERID);
+    destructor Destroy; override;
+
+    property ID: HAcmDRIVERID read FID;
+    property ShortName: String read FShortName;
+    property LongName: String read FLongName;
+    property Formats: TWaveAcmDriverFormats read FFormats;
+  end;
+
+  TWaveAcmDrivers=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TWaveAcmDriver;
+  public
+    constructor Create;
+    function Add(AID: HAcmDRIVERID): TWaveAcmDriver;
+    function GetFormatName(FormatTag: LongWord): String;
+    function FindFormat(DriverName, FormatName: String; Channels: Word;
+                        SamplesPerSec: LongWord; BitsPerSample: Word): TWaveAcmDriverFormat; overload;
+    function FindFormat(DriverName: String; FormatTag: LongWord; Channels: Word;
+                        SamplesPerSec: LongWord; BitsPerSample: Word): TWaveAcmDriverFormat; overload;
+    function FindFormat(Source: TWaveAcmDriverFormat): TWaveAcmDriverFormat; overload;
+
+    property Items[Index: Integer]: TWaveAcmDriver read GetItem; default;
+  end;
+
+implementation
+
+uses SysUtils;
+
+{ TWaveAcmDriverFormat }
+
+constructor TWaveAcmDriverFormat.Create(ADriver: TWaveAcmDriver; AWaveFormat: PWaveFormatEx);
+begin
+  inherited Create;
+  FDriver:=ADriver; 
+  FWaveFormatSize:=SizeOf(AWaveFormat^)+AWaveFormat.cbSize;
+  GetMem(FWaveFormat,FWaveFormatSize);
+  Move(AWaveFormat^,FWaveFormat^,FWaveFormatSize);
+//  CopyMemory(FWaveFormat,AWaveFormat,FWaveFormatSize);
+end;
+
+destructor TWaveAcmDriverFormat.Destroy;
+begin
+  if Assigned(FWaveFormat) then
+    FreeMem(FWaveFormat,FWaveFormatSize);
+  inherited Destroy;
+end;
+
+{ TWaveAcmDriverFormats }
+
+function TWaveAcmDriverFormats.Add(ADriver: TWaveAcmDriver; AFormat: PWaveFormatEx): TWaveAcmDriverFormat;
+begin
+  Result:=TWaveAcmDriverFormat.Create(ADriver,AFormat);
+  inherited Add(Result);
+end;
+
+function TWaveAcmDriverFormats.Find(Name: String; Channels: Word; SamplesPerSec: LongWord;  BitsPerSample: Word): TWaveAcmDriverFormat;
+var
+  i: Integer;
+  Item: TWaveAcmDriverFormat;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.FName,Name) then begin
+      if Assigned(Item.WaveFormat) then begin
+        if (Item.WaveFormat.nChannels=Channels) and
+           (Item.WaveFormat.nSamplesPerSec=SamplesPerSec) and
+           (Item.WaveFormat.wBitsPerSample=BitsPerSample) then begin
+          Result:=Item;
+          exit;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TWaveAcmDriverFormats.Find(Tag: LongWord; Channels: Word; SamplesPerSec: LongWord; BitsPerSample: Word): TWaveAcmDriverFormat;
+var
+  i: Integer;
+  Item: TWaveAcmDriverFormat;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.FTag=Tag then begin
+      if Assigned(Item.WaveFormat) then begin
+        if (Item.WaveFormat.nChannels=Channels) and
+           (Item.WaveFormat.nSamplesPerSec=SamplesPerSec) and
+           (Item.WaveFormat.wBitsPerSample=BitsPerSample) then begin
+          Result:=Item;
+          exit;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TWaveAcmDriverFormats.GetItem(Index: Integer): TWaveAcmDriverFormat;
+begin
+  Result:=TWaveAcmDriverFormat(inherited Items[Index]);
+end;
+
+function TWaveAcmDriverFormats.GetName(FormatTag: LongWord): String;
+var
+  i: Integer;
+  Item: TWaveAcmDriverFormat;
+begin
+  Result:='';
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.FTag=FormatTag then begin
+      Result:=Item.FName;
+      exit;
+    end;
+  end;
+end;
+
+{ TWaveAcmDriver }
+
+constructor TWaveAcmDriver.Create(AID: HAcmDRIVERID);
+begin
+  inherited Create;
+  FID:=AID;
+  FFormats:=TWaveAcmDriverFormats.Create;
+end;
+
+destructor TWaveAcmDriver.Destroy;
+begin
+  FFormats.Free;
+  inherited Destroy;
+end;
+
+function EnumFormat(hadid: HAcmDRIVERID; const pafd: TAcmFORMATDETAILS; dwInstance: LongWord; fdwSupport: LongWord) : BOOL; stdcall;
+var
+  Parent: TWaveAcmDriver;
+  Format: TWaveAcmDriverFormat;
+begin
+  Result:=false;
+  Parent:=TWaveAcmDriver(dwInstance);
+  if Assigned(Parent) then begin
+
+    Format:=Parent.Formats.Add(Parent,pafd.pwfx);
+    Format.FStruct:=pafd.cbStruct;
+    Format.FIndex:=pafd.dwFormatIndex;
+    Format.FTag:=pafd.dwFormatTag;
+    Format.FSupport:=pafd.fdwSupport;
+    Format.FName:=Parent.FTemp.szFormatTag;
+    Format.FDescription:=pafd.szFormat;
+
+    Result:=true;
+  end;
+end;
+
+procedure TWaveAcmDriver.Refresh;
+var
+  i: Integer;
+  Ret: MMResult;
+  phad: HAcmDRIVER;
+  paftd: TAcmFORMATTAGDETAILS;
+  pafd: TAcmFORMATDETAILS;
+  wfx: PWaveFormatEx;
+begin
+  Ret:=AcmDriverOpen(phad,FID,0);
+  if Ret=MMSYSERR_NOERROR then begin
+    try
+      for i:=0 to FFormatTags-1 do begin
+        FillChar(paftd,SizeOf(paftd),0);
+        paftd.cbStruct:=Sizeof(paftd);
+        paftd.dwFormatTagIndex:=i;
+
+        Ret:=AcmFormatTagDetails(phad,paftd,ACM_FORMATTAGDETAILSF_INDEX);
+        if Ret=MMSYSERR_NOERROR then begin
+
+          FillChar(pafd,SizeOf(pafd),0);
+          pafd.cbStruct:=SizeOf(pafd);
+          pafd.dwFormatTag:=paftd.dwFormatTag;
+
+          AcmMetrics(0,ACM_METRIC_MAX_SIZE_FORMAT,pafd.cbwfx);
+
+          GetMem(wfx,pafd.cbwfx);
+          try
+  {          FillChar(wfx,SizeOf(wfx),0);
+            wfx.cbSize:=SizeOf(wfx);
+            wfx.nChannels:=1;
+            wfx.wFormatTag:=pafd.dwFormatTag;
+
+            pafd.pwfx:=@wfx;
+
+            AcmMetrics(0,ACM_METRIC_MAX_SIZE_FORMAT,pafd.cbwfx);}
+
+            FTemp:=paftd;
+
+  //          AcmFormatEnum(phad,pafd,EnumFormat,LongWord(Self),ACM_FORMATENUMF_WFORMATTAG);
+            AcmFormatEnum(phad,pafd,EnumFormat,LongWord(Self),ACM_FORMATENUMF_INPUT or ACM_FORMATENUMF_NCHANNELS or ACM_FORMATENUMF_WFORMATTAG);
+          finally
+            FreeMem();
+          end;
+        end;
+      end;
+    finally
+      AcmDriverClose(phad,0);
+    end;
+  end;
+end;
+
+{ TWaveAcmDrivers }
+
+function EnumDriver(hadid: HAcmDRIVERID; dwInstance: LongWord; fdwSupport: LongWord) : BOOL; stdcall;
+var
+  Parent: TWaveAcmDrivers;
+  Driver: TWaveAcmDriver;
+  padd: TAcmDRIVERDETAILS;
+begin
+  Result:=false;
+  Parent:=TWaveAcmDrivers(dwInstance);
+  if Assigned(Parent) then begin
+
+    Driver:=Parent.Add(hadid);
+    Driver.FSupport:=fdwSupport;
+
+    FillChar(padd,SizeOf(padd),0);
+    padd.cbStruct:=SizeOf(padd);
+
+    if AcmDriverDetails(hadid,padd,0)=MMSYSERR_NOERROR then begin
+      Driver.FStruct:=padd.cbStruct;
+		  Driver.FType:=padd.fccType;
+		  Driver.FComp:=padd.fccComp;
+		  Driver.FMid:=padd.wMid;
+		  Driver.FPid:=padd.wPid;
+		  Driver.FAcm:=padd.vdwAcm;
+		  Driver.FDriver:=padd.vdwDriver;
+		  Driver.FSupport:=padd.fdwSupport;
+		  Driver.FFormatTags:=padd.cFormatTags;
+		  Driver.FFilterTags:=padd.cFilterTags;
+		  Driver.Ficon:=padd.hicon;
+		  Driver.FShortName:=padd.szShortName;
+		  Driver.FLongName:=padd.szLongName;
+		  Driver.FCopyright:=padd.szCopyright;
+		  Driver.FLicensing:=padd.szLicensing;
+		  Driver.FFeatures:=padd.szFeatures;
+    end;
+
+    Driver.Refresh;
+
+    Result:=true;
+  end;
+end;
+
+constructor TWaveAcmDrivers.Create;
+begin
+  inherited Create;
+  OwnsObjects:=true;
+  AcmDriverEnum(EnumDriver,LongWord(Self),ACM_DRIVERENUMF_NOLOCAL or ACM_DRIVERENUMF_DISABLED);
+end;
+
+function TWaveAcmDrivers.Add(AID: HAcmDRIVERID): TWaveAcmDriver;
+begin
+  Result:=TWaveAcmDriver.Create(AID);
+  inherited Add(Result);
+end;
+
+function TWaveAcmDrivers.GetItem(Index: Integer): TWaveAcmDriver;
+begin
+  Result:=TWaveAcmDriver(inherited Items[Index]);
+end;
+
+function TWaveAcmDrivers.GetFormatName(FormatTag: LongWord): String;
+var
+  i: Integer;
+  Driver: TWaveAcmDriver;
+begin
+  Result:='';
+  for i:=0 to Count-1 do begin
+    Driver:=Items[i];
+    Result:=Driver.Formats.GetName(FormatTag);
+    if Result<>'' then
+      break;
+  end;
+end;
+
+function TWaveAcmDrivers.FindFormat(DriverName, FormatName: String; Channels: Word;
+                                    SamplesPerSec: LongWord; BitsPerSample: Word): TWaveAcmDriverFormat;
+var
+  i: Integer;
+  Driver: TWaveAcmDriver;
+  Format: TWaveAcmDriverFormat;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Driver:=Items[i];
+    if AnsiSameText(Driver.ShortName,DriverName) or (Trim(DriverName)='') then begin
+      Format:=Driver.Formats.Find(FormatName,Channels,SamplesPerSec,BitsPerSample);
+      if Assigned(Format) then begin
+        Result:=Format;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+function TWaveAcmDrivers.FindFormat(DriverName: String; FormatTag: LongWord; Channels: Word;
+                                    SamplesPerSec: LongWord; BitsPerSample: Word): TWaveAcmDriverFormat;
+var
+  i: Integer;
+  Driver: TWaveAcmDriver;
+  Format: TWaveAcmDriverFormat;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Driver:=Items[i];
+    if AnsiSameText(Driver.ShortName,DriverName) or (Trim(DriverName)='') then begin
+      Format:=Driver.Formats.Find(FormatTag,Channels,SamplesPerSec,BitsPerSample);
+      if Assigned(Format) then begin
+        Result:=Format;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+function TWaveAcmDrivers.FindFormat(Source: TWaveAcmDriverFormat): TWaveAcmDriverFormat;
+begin
+  Result:=nil;
+  if Assigned(Source) and Assigned(Source.WaveFormat) then begin
+    with Source.WaveFormat^ do begin
+      Result:=FindFormat(Source.Driver.ShortName,Source.Name,nChannels,nSamplesPerSec,wBitsPerSample);
+    end;
+  end;
+end;
+
+
+end.

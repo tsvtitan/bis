@@ -1,0 +1,175 @@
+unit BisMessDataOutMessagesFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList, DB,
+  Menus, ActnPopup, ImgList, ToolWin, Grids, DBGrids,
+  VirtualTrees, VirtualDBTreeEx,
+  BisDataFrm, BisDataGridFrm, BisFieldNames, BisDBTree;
+
+type
+  TBisMessDataOutMessagesFrame = class(TBisDataGridFrame)
+    ToolBarAdditional: TToolBar;
+    ToolButtonImport: TToolButton;
+    ActionImport: TAction;
+    procedure ActionImportExecute(Sender: TObject);
+    procedure ActionImportUpdate(Sender: TObject);
+  private
+    FSToday: String;
+    FSArchive: String;
+    FTodayMenuItem: TBisDataFrameFilterMenuItem;
+    FArchiveMenuItem: TBisDataFrameFilterMenuItem;
+    procedure GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas;
+                            Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Init; override;
+    procedure OpenRecords; override;
+
+    function CanImport: Boolean;
+    procedure Import;
+  published
+    property SToday: String read FSToday write FSToday;
+    property SArchive: String read FSArchive write FSArchive;
+  end;
+
+implementation
+
+uses DateUtils,
+     BisUtils, BisConsts, BisVariants, BisOrders, BisFilterGroups, BisValues, BisCore, BisDialogs,
+     BisMessDataOutMessageEditFm, BisMessDataOutMessageFilterFm, BisMessDataOutMessageInsertExFm,
+     BisMessDataOutMessagesImportFm;
+
+{$R *.dfm}
+
+{ TBisMessDataOutMessagesFrame }
+
+constructor TBisMessDataOutMessagesFrame.Create(AOwner: TComponent);
+var
+  D: TDateTime;
+begin
+  inherited Create(AOwner);
+
+  FilterClass:=TBisMessDataOutMessageFilterFormIface;
+  InsertClasses.Add(TBisMessDataOutMessageInsertFormIface);
+  InsertClasses.Add(TBisMessDataOutMessageInsertExFormIface);
+  UpdateClass:=TBisMessDataOutMessageUpdateFormIface;
+  DeleteClass:=TBisMessDataOutMessageDeleteFormIface;
+  with Provider do begin
+    ProviderName:='S_OUT_MESSAGES';
+    with FieldNames do begin
+      AddKey('OUT_MESSAGE_ID');
+      AddInvisible('CREATOR_ID');
+      AddInvisible('CREATOR_NAME');
+      AddInvisible('RECIPIENT_ID');
+      AddInvisible('RECIPIENT_NAME');
+      AddInvisible('RECIPIENT_PHONE');
+      AddInvisible('TYPE_MESSAGE');
+      AddInvisible('DESCRIPTION');
+      AddInvisible('PRIORITY');
+      AddInvisible('DATE_CREATE');
+      AddInvisible('DATE_END');
+      Add('DATE_BEGIN','Дата начала',110);
+      Add('TEXT_OUT','Текст сообщения',210);
+      Add('DATE_OUT','Дата отправки',110);
+      Add('CONTACT','Контакт',100);
+      Add('LOCKED','Блокировка',50).Visible:=false;
+    end;
+    Orders.Add('DATE_BEGIN',otDesc);
+  end;
+
+  D:=Core.ServerDate;
+
+  FSToday:='Сегодня';
+  FSArchive:='Архив';
+
+  FTodayMenuItem:=CreateFilterMenuItem(FSToday);
+  with FTodayMenuItem do begin
+    with FilterGroups.AddVisible do begin
+      Filters.Add('DATE_BEGIN',fcEqualGreater,DateOf(D));
+      Filters.Add('DATE_BEGIN',fcLess,IncDay(DateOf(D)));
+    end;
+    Checked:=true;
+  end;
+
+  FArchiveMenuItem:=CreateFilterMenuItem(FSArchive);
+  with FArchiveMenuItem do begin
+    FilterGroups.AddVisible.Filters.Add('DATE_BEGIN',fcLess,DateOf(D));
+  end;
+
+  Grid.OnPaintText:=GridPaintText;
+
+end;
+
+procedure TBisMessDataOutMessagesFrame.Init;
+begin
+  inherited Init;
+  FTodayMenuItem.Caption:=FSToday;
+  FArchiveMenuItem.Caption:=FSArchive;
+end;
+
+procedure TBisMessDataOutMessagesFrame.OpenRecords;
+begin
+  inherited OpenRecords;
+
+end;
+
+procedure TBisMessDataOutMessagesFrame.GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas;
+                                                 Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+var
+  Data: PBisDBTreeNode;
+  DataKey: PDBVTData;
+  DateKeyFocused: PDBVTData;
+  Item: TBisValue;
+  Flag: Boolean;
+begin
+  Data:=Grid.GetDBNodeData(Node);
+  DataKey:=Grid.GetNodeData(Node);
+  DateKeyFocused:=Grid.GetNodeData(Grid.FocusedNode);
+  if Assigned(Data) and Assigned(DataKey) and Assigned(DateKeyFocused) then begin
+    Flag:=((DataKey.Hash=DateKeyFocused.Hash) and (Column<>Grid.FocusedColumn)) or (DataKey.Hash<>DateKeyFocused.Hash);
+    if Assigned(Data.Values) and Flag then begin
+      Item:=Data.Values.Find('LOCKED');
+      if Assigned(Item) and not VarIsNull(Item.Value) then begin
+        TargetCanvas.Font.Color:=clRed;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisMessDataOutMessagesFrame.ActionImportExecute(Sender: TObject);
+begin
+  Import;
+end;
+
+procedure TBisMessDataOutMessagesFrame.ActionImportUpdate(Sender: TObject);
+begin
+  ActionImport.Enabled:=CanImport;
+end;
+
+function TBisMessDataOutMessagesFrame.CanImport: Boolean;
+begin
+  Result:=CanInsertRecord;
+end;
+
+procedure TBisMessDataOutMessagesFrame.Import;
+var
+  AIface: TBisMessDataOutMessagesImportFormIface;
+begin
+  if CanImport then begin
+    AIface:=TBisMessDataOutMessagesImportFormIface.Create(nil);
+    try
+      AIface.Init;
+      AIface.ShowType:=ShowType;
+      AIface.ShowModal;
+      RefreshRecords;
+    finally
+      AIface.Free;
+    end;
+  end;
+end;
+
+
+end.

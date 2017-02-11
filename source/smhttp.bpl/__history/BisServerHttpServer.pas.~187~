@@ -1,0 +1,387 @@
+unit BisServerHttpServer;
+
+interface
+
+uses Classes, Contnrs,
+     HTTPApp,
+     IdHTTPServer, IdContext, IdCustomHTTPServer,
+     BisObject, BisServers, BisServerModules, BisDataSet, BisCore, BisLogger,
+     BisConnections, BisServerHttpHandlerModules, BisServerHttpHandlers;
+
+type
+  TBisServerHttpServer=class;
+
+  TBisServerIdHttpServerClient=class(TObject)
+  private
+    FID: String;
+  public
+    property ID: String read FID write FID;
+  end;
+
+  TBisServerIdHttpServerClients=class(TThreadList)
+  end;
+
+  TBisServerIdHttpServer=class(TIdHTTPServer)
+  private
+    FServer: TBisServerHttpServer;
+    FClients: TBisServerIdHttpServerClients;
+    FServerName: String;
+    procedure CommandGet(AContext:TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+    function GetRealyHost(Host: string): String;
+    function GetHandlerByDocument(const Host, Document: String; var OutPath,OutScript: string): TBisServerHttpHandler;
+  protected
+    procedure DoConnect(AContext: TIdContext); override;
+    procedure DoDisconnect(AContext: TIdContext); override;
+    procedure DoCommandOther(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo); override;
+    procedure DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo); override;
+
+    property Server: TBisServerHttpServer read FServer write FServer;
+  public
+    constructor Create(AOnwer: TComponent); reintroduce;
+    destructor Destroy; override;
+
+    property ServerName: String read FServerName write FServerName;
+  end;
+
+  TBisServerHttpServer=class(TBisServer)
+  private
+    FIP: String;
+    FPort: String;
+    FWorking: Boolean;
+    FServer: TBisServerIdHttpServer;
+    FModules: TBisServerHttpHandlerModules;
+    FSConnect: String;
+    FSDisconnect: String;
+    FSDoCommandGetFail: String;
+    FSHandlerNotFound: String;
+    FSInvalidHandler: String;
+    FSRequestPage: String;
+    procedure ChangeParams(Sender: TObject);
+  protected
+    function GetStarted: Boolean; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+
+    procedure Start; override;
+    procedure Stop; override;
+
+    property Working: Boolean read FWorking write FWorking;
+    property Modules: TBisServerHttpHandlerModules read FModules;
+
+  published
+    property SConnect: String read FSConnect write FSConnect;
+    property SDisconnect: String read FSDisconnect write FSDisconnect;
+    property SDoCommandGetFail: String read FSDoCommandGetFail write FSDoCommandGetFail;
+    property SHandlerNotFound: String read FSHandlerNotFound write FSHandlerNotFound;
+    property SInvalidHandler: String read FSInvalidHandler write FSInvalidHandler;
+    property SRequestPage: String read FSRequestPage write FSRequestPage;
+  end;
+
+  TBisServerHttpServers=class(TBisServers)
+  private
+    function GetItem(Index: Integer): TBisServerHttpServer;
+  public
+    constructor Create(AOwner: TComponent); override;
+    function Working: Boolean;
+    property Items[Index: Integer]: TBisServerHttpServer read GetItem;
+  end;
+
+
+var
+  Servers: TBisServerHttpServers=nil;
+
+implementation
+
+uses SysUtils, Dialogs,
+     ActiveX,
+     IdSocketHandle, IdAssignedNumbers,
+     BisServerHttpConsts, BisConsts, BisUtils, BisProvider,
+     BisServerHttpResponse, BisServerHttpRequest;
+
+{ TBisServerIdHttpServer }
+
+constructor TBisServerIdHttpServer.Create(AOnwer: TComponent);
+begin
+  inherited Create;
+  FClients:=TBisServerIdHttpServerClients.Create;
+  OnCommandGet:=CommandGet;
+end;
+
+destructor TBisServerIdHttpServer.Destroy;
+begin
+  Active:=false;
+  FClients.Free;
+  inherited Destroy;
+end;
+
+procedure TBisServerIdHttpServer.CommandGet(AContext:TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+begin
+  // Why???
+end;
+
+procedure TBisServerIdHttpServer.DoConnect(AContext: TIdContext);
+var
+  Client: TBisServerIdHttpServerClient;
+  ID: String;
+begin
+  ID:=GetUniqueID;
+  if Assigned(FServer) then begin
+    FServer.Working:=true;
+    FServer.LoggerWrite(FormatEx(FServer.SConnect,[ID,AContext.Binding.PeerIP,AContext.Binding.Port]));
+  end;
+  Client:=TBisServerIdHttpServerClient.Create;
+  Client.ID:=ID;
+  FClients.Add(Client);
+  AContext.Data:=Client;
+
+end;
+
+procedure TBisServerIdHttpServer.DoDisconnect(AContext: TIdContext);
+var
+  Client: TBisServerIdHttpServerClient;
+  List: TList;
+begin
+  Client:=TBisServerIdHttpServerClient(AContext.Data);
+  if Assigned(Client) then begin
+    List:=FClients.LockList;
+    try
+      List.Remove(Client);
+      if Assigned(FServer) then begin
+        FServer.Working:=List.Count>0;
+        FServer.LoggerWrite(FormatEx(FServer.SDisconnect,[Client.ID]));
+      end;
+      Client.Free;
+      AContext.Data:=nil;
+    finally
+      FClients.UnlockList;
+    end;
+  end;
+end;
+
+function TBisServerIdHttpServer.GetHandlerByDocument(const Host, Document: String; var OutPath, OutScript: string): TBisServerHttpHandler;
+begin
+  Result:=nil;
+  if Assigned(FServer) then
+    Result:=FServer.Modules.FindHandler(Host,Document,OutPath,OutScript);
+end;
+
+function TBisServerIdHttpServer.GetRealyHost(Host: string): String;
+var
+  APos: Integer;
+const
+  SDelim=':';
+begin
+  Apos:=Pos(SDelim,Host);
+  if Apos>0 then
+    Result:=Copy(Host,1,Apos-Length(SDelim))
+  else Result:=Host;
+end;
+
+procedure TBisServerIdHttpServer.DoCommandOther(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+begin
+end;
+
+procedure TBisServerIdHttpServer.DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+var
+  NewHost: string;
+  Client: TBisServerIdHttpServerClient;
+
+  procedure CommandGetNotFound(Error: string);
+  begin
+    AResponseInfo.ResponseNo:=PageNotFound;
+    AResponseInfo.ContentText:=FormatEx(FServer.SDoCommandGetFail,[Client.ID,Error]);
+    FServer.LoggerWrite(AResponseInfo.ContentText,ltError);
+  end;
+
+var
+  Request: TBisServerHttpRequest;
+  Response: TBisServerHttpResponse;
+  Handler: TBisServerHttpHandler;
+  OutPath,OutScript: string;
+begin
+  Client:=TBisServerIdHttpServerClient(AContext.Data);
+  if Assigned(Client) and Assigned(FServer) then begin
+
+    FServer.LoggerWrite(FormatEx(FServer.SRequestPage,[Client.ID,ARequestInfo.Document,ARequestInfo.Host]));
+    
+    NewHost:=GetRealyHost(ARequestInfo.Host);
+    Handler:=GetHandlerByDocument(NewHost,ARequestInfo.Document,OutPath,OutScript);
+    try
+      if Assigned(Handler) then begin
+
+        CoInitialize(nil);
+        try
+
+          Request:=TBisServerHttpRequest.Create(AContext,ARequestInfo,AResponseInfo);
+          try
+
+            Request.NewPathInfo:=OutPath;
+            Request.NewScriptName:=OutScript;
+            Response:=TBisServerHttpResponse.Create(Request,AContext,ARequestInfo,AResponseInfo);
+            try
+              AResponseInfo.FreeContentStream:=false;
+              if Handler.HandleRequest(Request,Response) then begin
+                if not Response.Sent then begin
+                  Response.SendResponse;
+                end;
+              end else
+                CommandGetNotFound(FServer.SInvalidHandler);
+
+            finally
+              Response.Free;
+            end;
+
+          finally
+            Request.Free;
+          end;
+
+        finally
+          CoUninitialize;
+        end;
+
+      end else
+        CommandGetNotFound(FServer.SHandlerNotFound);
+    except
+      On E: Exception do
+        CommandGetNotFound(E.Message);
+    end;
+  end;
+end;
+
+{ TBisServerHttpServers }
+
+constructor TBisServerHttpServers.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Objects.OwnsObjects:=false;
+end;
+
+function TBisServerHttpServers.GetItem(Index: Integer): TBisServerHttpServer;
+begin
+  Result:=TBisServerHttpServer(inherited Items[Index]);
+end;
+
+function TBisServerHttpServers.Working: Boolean;
+var
+  i: Integer;
+begin
+  Result:=false;
+  for i:=0 to Count-1 do begin
+    if Items[i].Working then begin
+      Result:=true;
+      break;
+    end;
+  end;
+end;
+
+{ TBisServerHttpServer }
+
+constructor TBisServerHttpServer.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Params.OnChange:=ChangeParams;
+  FServer:=TBisServerIdHttpServer.Create(Self);
+  FServer.Server:=Self;
+
+  FModules:=TBisServerHttpHandlerModules.Create(Self);
+
+  FSConnect:='%s: установлено соединение с ip-адресом %s на порт %d.';
+  FSDisconnect:='%s: разорвано соединение.';
+  FSDoCommandGetFail:='%s: неудачное получение страницы. Ошибка: %s';
+  FSHandlerNotFound:='%s: не найден обработчик страницы.';
+  FSInvalidHandler:='%s: неверный обработчик страницы.';
+  FSRequestPage:='%s: запрошена страница %s на сайте %s.';
+
+  Servers.AddServer(Self);
+end;
+
+destructor TBisServerHttpServer.Destroy;
+begin
+  Servers.Remove(Self);
+
+  FModules.Free;
+  FServer.Free;
+  inherited Destroy;
+end;
+
+function TBisServerHttpServer.GetStarted: Boolean;
+begin
+  Result:=FServer.Active;
+end;
+
+procedure TBisServerHttpServer.Init;
+begin
+  inherited Init;
+  FModules.Init;
+end;
+
+procedure TBisServerHttpServer.ChangeParams(Sender: TObject);
+var
+  i: Integer;
+  IPs, Ports: TStringList;
+  Param: TBisServerParam;
+  AIP, APort: String;
+  SocketHandle: TIdSocketHandle;
+  Stream: TMemoryStream;
+begin
+
+  for i:=0 to Params.Count-1 do begin
+    Param:=Params.Items[i];
+    if AnsiSameText(Param.ParamName,SParamIP) then FIP:=Param.Value;
+    if AnsiSameText(Param.ParamName,SParamPort) then FPort:=Param.Value;
+    if AnsiSameText(Param.ParamName,SParamModules) then begin
+      Stream:=TMemoryStream.Create;
+      try
+        Stream.WriteBuffer(Pointer(Param.Value)^,Length(Param.Value));
+        if Stream.Size>0 then begin
+          Stream.Position:=0;
+          FModules.Table.Close;
+          FModules.Table.LoadFromStream(Stream);
+          FModules.Table.Open;
+        end;
+      finally
+        Stream.Free;
+      end;
+    end;
+  end;
+
+  IPs:=TStringList.Create;
+  Ports:=TStringList.Create;
+  try
+    FServer.Bindings.Clear;
+    GetStringsByString(FIP,';',IPs);
+    GetStringsByString(FPort,';',Ports);
+    for AIP in IPs do begin
+      for APort in Ports do begin
+        SocketHandle:=FServer.Bindings.Add;
+        SocketHandle.IP:=AIP;
+        SocketHandle.Port:=StrToIntDef(APort,IdPORT_HTTP);
+      end;
+    end;
+  finally
+    Ports.Free;
+    IPs.Free;
+  end;
+end;
+
+procedure TBisServerHttpServer.Start;
+begin
+  FServer.Active:=true;
+  FModules.Load;
+end;
+
+procedure TBisServerHttpServer.Stop;
+begin
+  FModules.Unload;
+  FServer.Active:=false;
+end;
+
+initialization
+  Servers:=TBisServerHttpServers.Create(nil);
+
+finalization
+  FreeAndNilEx(Servers);
+
+end.

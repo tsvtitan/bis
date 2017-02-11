@@ -1,0 +1,44 @@
+inherited BisMessDataOutMessagesFrame: TBisMessDataOutMessagesFrame
+  Width = 484
+  Height = 240
+  Constraints.MinWidth = 320
+  ExplicitWidth = 484
+  ExplicitHeight = 240
+  inherited PanelData: TPanel
+    Width = 484
+    Height = 211
+    ExplicitWidth = 320
+    ExplicitHeight = 211
+    inherited GridPattern: TDBGrid
+      Width = 484
+      Height = 211
+    end
+  end
+  inherited ControlBar: TControlBar
+    Width = 484
+    ExplicitWidth = 320
+    inherited LabelCounter: TLabel
+      Left = 375
+      Width = 57
+      ExplicitLeft = 375
+      ExplicitWidth = 57
+    end
+    inherited ToolBarRefresh: TToolBar
+      inherited ToolButtonExport: TToolButton
+        ExplicitWidth = 36
+      end
+      inherited ToolButtonFilter: TToolButton
+        ExplicitWidth = 36
+      end
+    end
+    inherited ToolBarEdit: TToolBar
+      inherited ToolButtonInsert: TToolButton
+        ExplicitWidth = 36
+      end
+    end
+    inherited ToolBarNavigate: TToolBar
+      Width = 97
+      ExplicitWidth = 97
+    end
+  end
+end

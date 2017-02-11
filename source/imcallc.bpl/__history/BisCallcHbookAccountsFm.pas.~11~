@@ -1,0 +1,63 @@
+unit BisCallcHbookAccountsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBisCallcHbookAccountsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookAccountsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHbookAccountsForm: TBisCallcHbookAccountsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHbookAccountEditFm;
+
+{ TBisCallcHbookAccountsFormIface }
+
+constructor TBisCallcHbookAccountsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookAccountsForm;
+  InsertClass:=TBisCallcHbookAccountInsertFormIface;
+  UpdateClass:=TBisCallcHbookAccountUpdateFormIface;
+  DeleteClass:=TBisCallcHbookAccountDeleteFormIface;
+  ProviderName:='S_ACCOUNTS';
+  with FieldNames do begin
+    AddKey('ACCOUNT_ID');
+    AddInvisible('FIRM_ID');
+    AddInvisible('FIRM_SMALL_NAME');
+    AddInvisible('PASSWORD');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('DB_USER_NAME');
+    AddInvisible('DB_PASSWORD');
+    AddInvisible('IS_ROLE');
+    AddInvisible('LOCKED');
+    AddInvisible('AUTO_CREATED');
+    AddInvisible('EMAIL');
+    Add('USER_NAME','Логин',100);
+    Add('SURNAME','Фамилия',120);
+    Add('NAME','Имя',100);
+    Add('PATRONYMIC','Отчество',120);
+    Add('PHONE','Телефон',80);
+  end;
+  FilterGroups.Add.Filters.Add('IS_ROLE',fcEqual,0);
+  Orders.Add('USER_NAME');
+end;
+
+end.

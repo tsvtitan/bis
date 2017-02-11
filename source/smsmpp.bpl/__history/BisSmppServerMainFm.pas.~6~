@@ -1,0 +1,91 @@
+unit BisSmppServerMainFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ToolWin, ExtCtrls, Menus, ActnPopup, ImgList,
+  StdCtrls, ActnList,
+
+  BisFm, BisObject, BisServerMainFm, BisServers, BisIfaceModules;
+
+type
+  TBisSmppServerMainForm = class(TBisServerMainForm)
+  protected
+    function GetServerClass: TBisServerClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisSmppServerMainFormIface=class(TBisServerMainFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+
+var
+  BisSmppServerMainForm: TBisSmppServerMainForm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+
+exports
+  InitIfaceModule;
+
+implementation
+
+{$R *.dfm}
+
+uses BisCore, BisConsts, BisSmppServerConsts, BisUtils, BisSmppServer;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+var
+  IsMainModule: Boolean;
+begin
+  IsMainModule:=Core.IfaceModules.IsFirstModule(AModule);
+  with AModule.Ifaces do begin
+    if IsMainModule then
+      AddClass(TBisSmppServerMainFormIface);
+  end;
+end;
+
+{ TTBisSmppServerMainFormIface }
+
+constructor TBisSmppServerMainFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisSmppServerMainForm;
+end;
+
+{ TTBisSmppServerMainForm }
+
+constructor TBisSmppServerMainForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+function TBisSmppServerMainForm.GetServerClass: TBisServerClass;
+begin
+  Result:=TBisSmppServer;
+end;
+
+function TBisSmppServerMainForm.CanOptions: Boolean;
+begin
+  Result:=inherited CanOptions;
+end;
+
+procedure TBisSmppServerMainForm.Options;
+var
+  Iface: TBisSmppServerModemsFormIface;
+begin
+  if CanOptions then begin
+    Iface:=TBisSmppServerModemsFormIface.Create(nil);
+    try
+      Iface.ShowModal;
+    finally
+      Iface.Free;
+    end;
+  end;
+end;
+
+
+end.

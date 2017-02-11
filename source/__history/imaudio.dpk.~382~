@@ -1,0 +1,42 @@
+package imaudio;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  omaudio;
+
+contains
+  BisAudioInit in 'imaudio.bpl\BisAudioInit.pas',
+  BisAudioWaveFrm in 'imaudio.bpl\BisAudioWaveFrm.pas' {BisAudioWaveFrame: TFrame},
+  BisAudioFormatFm in 'imaudio.bpl\BisAudioFormatFm.pas' {BisAudioFormatForm},
+  BisAudioTextFm in 'imaudio.bpl\BisAudioTextFm.pas' {BisAudioTextForm},
+  BisAudioDataSampleVoiceEditFm in 'imaudio.bpl\BisAudioDataSampleVoiceEditFm.pas' {BisAudioDataSampleVoiceEditForm},
+  BisAudioDataSampleVoicesFrm in 'imaudio.bpl\BisAudioDataSampleVoicesFrm.pas' {BisAudioDataSampleVoicesFrame: TFrame},
+  BisAudioDataSampleVoicesFm in 'imaudio.bpl\BisAudioDataSampleVoicesFm.pas' {BisAudioDataSampleVoicesForm},
+  BisAudioConsts in 'imaudio.bpl\BisAudioConsts.pas';
+
+end.

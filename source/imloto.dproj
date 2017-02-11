@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{2d7f424b-25f7-4edb-935d-f5abcf455486}</ProjectGuid>
+    <MainSource>imloto.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\imloto.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_UnitSearchPath>U:\source\_dcp;U:\source\core.bpl</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp;U:\source\core.bpl</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp;U:\source\core.bpl</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp;U:\source\core.bpl</DCC_IncludePath>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="RunParams">/config imloto.ini /noupdate</Parameters><Parameters Name="HostApplication">U:\bin\loto.exe</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">123</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">Loto interface module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.123</VersionInfoKeys><VersionInfoKeys Name="InternalName">imloto.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">imloto.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0</VersionInfoKeys><VersionInfoKeys Name="Comments">Loto interface module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">imloto.dpk</Source></Source></Delphi.Personality><ModelSupport>False</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="imloto.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="core.dcp" />
+    <DCCReference Include="dbrtl.dcp" />
+    <DCCReference Include="imloto.bpl\BisLoto.pas" />
+    <DCCReference Include="imloto.bpl\BisLotoBarrelFrm.pas">
+      <Form>BisLotoBarrelFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoConsts.pas" />
+    <DCCReference Include="imloto.bpl\BisLotoDataMemberEditFm.pas">
+      <Form>BisLotoDataMemberEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoDataMembersFm.pas">
+      <Form>BisLotoDataMembersForm</Form>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoDataTirageEditFm.pas">
+      <Form>BisLotoDataTirageEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoDataTiragesFm.pas">
+      <Form>BisLotoDataTiragesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoLotteryFm.pas">
+      <Form>BisLotoLotteryForm</Form>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoMainFm.pas">
+      <Form>BisLotoMainForm</Form>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoRound1Frm.pas">
+      <Form>BisLotoRound1Frame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoRound2Frm.pas">
+      <Form>BisLotoRound2Frame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoRound3Frm.pas">
+      <Form>BisLotoRound3Frame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoRound4Frm.pas">
+      <Form>BisLotoRound4Frame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoSiteExportIface.pas" />
+    <DCCReference Include="imloto.bpl\BisLotoTicketImportFm.pas">
+      <Form>BisLotoTicketImportForm</Form>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoTicketManageFm.pas">
+      <Form>BisLotoTicketManageForm</Form>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoTiragePrizeEditFm.pas">
+      <Form>BisLotoTiragePrizeEditForm</Form>
+      <DesignClass>T</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imloto.bpl\BisLotoTiragePrizesFrm.pas">
+      <Form>BisLotoTiragePrizesFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="omcom.dcp" />
+    <DCCReference Include="rtl.dcp" />
+    <DCCReference Include="vcl.dcp" />
+  </ItemGroup>
+</Project>

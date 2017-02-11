@@ -1,0 +1,89 @@
+unit BisCallcHbookRoleEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisCallcHbookRoleEditForm = class(TBisDataEditForm)
+    LabelUserName: TLabel;
+    EditUserName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookRolesEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookRolesInsertFormIface=class(TBisCallcHbookRolesEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookRolesUpdateFormIface=class(TBisCallcHbookRolesEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookRolesDeleteFormIface=class(TBisCallcHbookRolesEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookRoleEditForm: TBisCallcHbookRoleEditForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisCallcHbookRolesEditFormIface }
+
+constructor TBisCallcHbookRolesEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookRolesEditForm;
+  with Params do begin
+    AddKey('ACCOUNT_ID').Duplicate('OLD_ACCOUNT_ID');
+    AddInvisible('IS_ROLE').Value:=1;
+    AddInvisible('AUTO_CREATED').Value:=0;
+    AddInvisible('LOCKED').Value:=0;
+    AddEdit('USER_NAME','EditUserName','LabelUserName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+  end;
+end;
+
+{ TBisCallcHbookRolesInsertFormIface }
+
+constructor TBisCallcHbookRolesInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_ACCOUNT';
+end;
+
+{ TBisCallcHbookRolesUpdateFormIface }
+
+constructor TBisCallcHbookRolesUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_ACCOUNT';
+end;
+
+{ TBisCallcHbookRolesDeleteFormIface }
+
+constructor TBisCallcHbookRolesDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_ACCOUNT';
+end;
+
+end.

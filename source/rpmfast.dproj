@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{a1397316-0fdf-42b2-8d3d-1c225f4ef88c}</ProjectGuid>
+    <MainSource>rpmfast.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\rpmfast.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_UnitSearchPath>U:\source\_dcp;U:\source\rpmfast.bpl\FastReport\Source;U:\source\rpmfast.bpl\FastReport\FastScript;U:\source\rpmfast.bpl\FastReport\Source\ExportPack</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp;U:\source\rpmfast.bpl\FastReport\Source;U:\source\rpmfast.bpl\FastReport\FastScript;U:\source\rpmfast.bpl\FastReport\Source\ExportPack</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp;U:\source\rpmfast.bpl\FastReport\Source;U:\source\rpmfast.bpl\FastReport\FastScript;U:\source\rpmfast.bpl\FastReport\Source\ExportPack</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp;U:\source\rpmfast.bpl\FastReport\Source;U:\source\rpmfast.bpl\FastReport\FastScript;U:\source\rpmfast.bpl\FastReport\Source\ExportPack</DCC_IncludePath>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+    <DCC_IMPLICIT_IMPORT>False</DCC_IMPLICIT_IMPORT>
+    <DCC_MapFile>3</DCC_MapFile>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">2</VersionInfo><VersionInfo Name="MinorVer">1</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">FastReport engine module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">2.1.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName">rpmfast.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">rpmfast.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">2.1</VersionInfoKeys><VersionInfoKeys Name="Comments">FastReport engine module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">rpmfast.dpk</Source></Source><Excluded_Packages>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <Excluded_Packages Name="$(BDS)\bin\bcboffice2k100.bpl">CodeGear C++Builder Office 2000 Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\bcbofficexp100.bpl">CodeGear C++Builder Office XP Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dcloffice2k100.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dclofficexp100.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+    </Excluded_Packages></Delphi.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="rpmfast.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="core.dcp" />
+    <DCCReference Include="rpmfast.bpl\BisFastReportClasses.pas" />
+    <DCCReference Include="rpmfast.bpl\BisFastReportComponents.pas" />
+    <DCCReference Include="rpmfast.bpl\BisFastReportControls.pas" />
+    <DCCReference Include="rpmfast.bpl\BisFastReportEditorFm.pas" />
+    <DCCReference Include="rpmfast.bpl\BisFastReportFm.pas" />
+    <DCCReference Include="rpmfast.bpl\BisFastReportFrm.pas" />
+    <DCCReference Include="rpmfast.bpl\BisFastReportFunctions.pas" />
+    <DCCReference Include="rpmfast.bpl\BisFastReportInit.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\FastScript\fs_iinterpreter.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\FastScript\fs_xml.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportCSV.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportHTML.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportImage.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportMail.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportMatrix.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportODF.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportPDF.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportRTF.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportText.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportTXT.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportTxtPrn.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportXLS.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxExportXML.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\ExportPack\frxPDFFile.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\frxChart.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\frxClass.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\frxCustomDB.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\frxDBSet.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\frxDesgn.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\frxEngine.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\frxPreview.pas" />
+    <DCCReference Include="rpmfast.bpl\FastReport\Source\frxVariables.pas" />
+    <DCCReference Include="rtl.dcp" />
+    <DCCReference Include="tee.dcp" />
+    <DCCReference Include="teedb.dcp" />
+    <DCCReference Include="teeUI.dcp" />
+    <DCCReference Include="vcl.dcp" />
+  </ItemGroup>
+</Project>

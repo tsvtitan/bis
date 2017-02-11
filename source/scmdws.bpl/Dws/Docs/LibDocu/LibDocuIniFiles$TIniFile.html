@@ -1,0 +1,256 @@
+<html>
+<body>
+<h1>Class TIniFile</h1>
+<b>Declaration</b><br>
+
+<pre>TIniFile = class(TObject)
+  <a href="#IniFiles$TIniFile$Create">constructor Create(FileName: String)</a>;
+  <a href="#IniFiles$TIniFile$DeleteKey">procedure DeleteKey(Section: String; Ident: String)</a>;
+  <a href="#IniFiles$TIniFile$Destroy">destructor Destroy</a>;
+  <a href="#IniFiles$TIniFile$EraseSection">procedure EraseSection(Section: String)</a>;
+  <a href="#IniFiles$TIniFile$Filename">property Filename: String read GetFilename</a>;
+  <a href="#IniFiles$TIniFile$GetFilename">function GetFilename: String</a>;
+  <a href="#IniFiles$TIniFile$ReadBool">function ReadBool(Section: String; Ident: String; Default: Boolean): Boolean</a>;
+  <a href="#IniFiles$TIniFile$ReadDate">function ReadDate(Section: String; Name: String; Default: DateTime): DateTime</a>;
+  <a href="#IniFiles$TIniFile$ReadDateTime">function ReadDateTime(Section: String; Name: String; Default: DateTime): DateTime</a>;
+  <a href="#IniFiles$TIniFile$ReadFloat">function ReadFloat(Section: String; Name: String; Default: Float): Float</a>;
+  <a href="#IniFiles$TIniFile$ReadInteger">function ReadInteger(Section: String; Ident: String; Default: Integer): Integer</a>;
+  <a href="#IniFiles$TIniFile$ReadSection">procedure ReadSection(Section: String; Strings: TStringList)</a>;
+  <a href="#IniFiles$TIniFile$ReadSections">procedure ReadSections(Strings: TStringList)</a>;
+  <a href="#IniFiles$TIniFile$ReadSectionValues">procedure ReadSectionValues(Section: String; Strings: TStringList)</a>;
+  <a href="#IniFiles$TIniFile$ReadString">function ReadString(Section: String; Ident: String; Default: String): String</a>;
+  <a href="#IniFiles$TIniFile$ReadTime">function ReadTime(Section: String; Name: String; Default: DateTime): DateTime</a>;
+  <a href="#IniFiles$TIniFile$SectionExists">function SectionExists(Section: String): Boolean</a>;
+  <a href="#IniFiles$TIniFile$UpdateFile">procedure UpdateFile</a>;
+  <a href="#IniFiles$TIniFile$ValueExists">function ValueExists(Section: String; Ident: String): Boolean</a>;
+  <a href="#IniFiles$TIniFile$WriteBool">procedure WriteBool(Section: String; Ident: String; Value: Boolean)</a>;
+  <a href="#IniFiles$TIniFile$WriteDate">procedure WriteDate(Section: String; Name: String; Value: DateTime)</a>;
+  <a href="#IniFiles$TIniFile$WriteDateTime">procedure WriteDateTime(Section: String; Name: String; Value: DateTime)</a>;
+  <a href="#IniFiles$TIniFile$WriteFloat">procedure WriteFloat(Section: String; Name: String; Value: Float)</a>;
+  <a href="#IniFiles$TIniFile$WriteInteger">procedure WriteInteger(Section: String; Ident: String; Value: Integer)</a>;
+  <a href="#IniFiles$TIniFile$WriteString">procedure WriteString(Section: String; Ident: String; Value: String)</a>;
+  <a href="#IniFiles$TIniFile$WriteTime">procedure WriteTime(Section: String; Name: String; Value: DateTime)</a>;
+end;</pre>
+<b>Description</b>
+<p></p>
+
+<hr>
+
+    <h2><a name=IniFiles$TIniFile$Create>Method TIniFile.Create</a></h2>
+    <b>Declaration</b><br>
+    <pre>constructor Create(FileName: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$DeleteKey>Method TIniFile.DeleteKey</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure DeleteKey(Section: String; Ident: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$Destroy>Method TIniFile.Destroy</a></h2>
+    <b>Declaration</b><br>
+    <pre>destructor Destroy;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$EraseSection>Method TIniFile.EraseSection</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure EraseSection(Section: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$Filename>Property TIniFile.Filename</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Filename: String read GetFilename;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$GetFilename>Method TIniFile.GetFilename</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetFilename: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ReadBool>Method TIniFile.ReadBool</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadBool(Section: String; Ident: String; Default: Boolean): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ReadDate>Method TIniFile.ReadDate</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadDate(Section: String; Name: String; Default: DateTime): DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ReadDateTime>Method TIniFile.ReadDateTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadDateTime(Section: String; Name: String; Default: DateTime): DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ReadFloat>Method TIniFile.ReadFloat</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadFloat(Section: String; Name: String; Default: Float): Float;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ReadInteger>Method TIniFile.ReadInteger</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadInteger(Section: String; Ident: String; Default: Integer): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ReadSection>Method TIniFile.ReadSection</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure ReadSection(Section: String; Strings: TStringList);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ReadSections>Method TIniFile.ReadSections</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure ReadSections(Strings: TStringList);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ReadSectionValues>Method TIniFile.ReadSectionValues</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure ReadSectionValues(Section: String; Strings: TStringList);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ReadString>Method TIniFile.ReadString</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadString(Section: String; Ident: String; Default: String): String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ReadTime>Method TIniFile.ReadTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ReadTime(Section: String; Name: String; Default: DateTime): DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$SectionExists>Method TIniFile.SectionExists</a></h2>
+    <b>Declaration</b><br>
+    <pre>function SectionExists(Section: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$Self>Method TIniFile.Self</a></h2>
+    <b>Declaration</b><br>
+    <pre>Self;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$UpdateFile>Method TIniFile.UpdateFile</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure UpdateFile;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$ValueExists>Method TIniFile.ValueExists</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ValueExists(Section: String; Ident: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$WriteBool>Method TIniFile.WriteBool</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteBool(Section: String; Ident: String; Value: Boolean);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$WriteDate>Method TIniFile.WriteDate</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteDate(Section: String; Name: String; Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$WriteDateTime>Method TIniFile.WriteDateTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteDateTime(Section: String; Name: String; Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$WriteFloat>Method TIniFile.WriteFloat</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteFloat(Section: String; Name: String; Value: Float);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$WriteInteger>Method TIniFile.WriteInteger</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteInteger(Section: String; Ident: String; Value: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$WriteString>Method TIniFile.WriteString</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteString(Section: String; Ident: String; Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=IniFiles$TIniFile$WriteTime>Method TIniFile.WriteTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure WriteTime(Section: String; Name: String; Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+</body>
+</html>

@@ -1,0 +1,15 @@
+program sppech;
+
+uses
+  Forms,
+  Unit15 in 'Unit15.pas' {SpeechForm},
+  BisSpeech in 'BisSpeech.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TSpeechForm, SpeechForm);
+  Application.Run;
+end.

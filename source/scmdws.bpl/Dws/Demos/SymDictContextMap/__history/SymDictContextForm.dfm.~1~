@@ -1,0 +1,267 @@
+object fmDictContxt: TfmDictContxt
+  Left = 192
+  Top = 107
+  Caption = 'Symbol Dictionary and Context Map Demo'
+  ClientHeight = 608
+  ClientWidth = 761
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 573
+    Top = 0
+    Height = 520
+    Align = alRight
+    Beveled = True
+  end
+  object Editor: TSynEdit
+    Left = 0
+    Top = 0
+    Width = 573
+    Height = 520
+    Align = alClient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Style = []
+    ParentShowHint = False
+    ShowHint = False
+    TabOrder = 0
+    Gutter.Font.Charset = DEFAULT_CHARSET
+    Gutter.Font.Color = clWindowText
+    Gutter.Font.Height = -11
+    Gutter.Font.Name = 'Terminal'
+    Gutter.Font.Style = []
+    Highlighter = SynPasSyn1
+    Lines.Strings = (
+      'type'
+      '  TPoint = record'
+      '    x : Integer;'
+      '    y : Integer;'
+      '  end;'
+      ''
+      'type'
+      '  TMyClass = class(TObject)'
+      '    FSnuffy : Boolean;'
+      '    FVal : Integer;'
+      '    function GetMyValue : Integer;'
+      '    procedure SetSomeThing(AValue : Integer);'
+      '    property Value: Integer read GetMyValue;'
+      '  end;'
+      ''
+      '{$INCLUDE '#39'SampleInclude.dws'#39'}'
+      ''
+      'function TMyClass.GetMyValue : Integer;'
+      'begin'
+      '  Result := FVal;'
+      'end;'
+      ''
+      'procedure TMyClass.SetSomeThing(AValue : Integer);'
+      'begin'
+      '  var i : Integer;'
+      '  if AValue = 0 then'
+      '  begin'
+      '    for i := 0 to 100 do'
+      '    begin'
+      '      FVal := FVal + AValue;'
+      '    end;'
+      '  end'
+      '  else'
+      '  begin'
+      '    FVal := Value;'
+      '  end;'
+      'end;'
+      ''
+      'procedure This;'
+      'var i : Integer;'
+      'begin'
+      '  // doesn'#39't do anything.'
+      'end;'
+      ''
+      'var Mine : TMyClass;'
+      ''
+      'Mine := TMyClass.Create;'
+      'try'
+      '  mine.SetSomeThing(100);'
+      'finally'
+      '  //Mine.Free;'
+      'end;')
+    OnChange = EditorChange
+    OnStatusChange = EditorStatusChange
+    RemovedKeystrokes = <
+      item
+        Command = ecContextHelp
+        ShortCut = 112
+      end>
+    AddedKeystrokes = <
+      item
+        Command = ecContextHelp
+        ShortCut = 16496
+      end>
+  end
+  object sbStatus: TStatusBar
+    Left = 0
+    Top = 589
+    Width = 761
+    Height = 19
+    Panels = <>
+    SimplePanel = True
+  end
+  object pFooter: TPanel
+    Left = 0
+    Top = 520
+    Width = 761
+    Height = 69
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 2
+    object mMessages: TMemo
+      Left = 0
+      Top = 0
+      Width = 761
+      Height = 69
+      Align = alClient
+      ReadOnly = True
+      ScrollBars = ssBoth
+      TabOrder = 0
+    end
+  end
+  object pDictionary: TPanel
+    Left = 576
+    Top = 0
+    Width = 185
+    Height = 520
+    Align = alRight
+    BevelOuter = bvNone
+    TabOrder = 3
+    object Splitter2: TSplitter
+      Left = 0
+      Top = 265
+      Width = 185
+      Height = 3
+      Cursor = crVSplit
+      Align = alTop
+      Beveled = True
+    end
+    object Splitter3: TSplitter
+      Left = 0
+      Top = 365
+      Width = 185
+      Height = 3
+      Cursor = crVSplit
+      Align = alBottom
+    end
+    object lbSymNames: TListBox
+      Left = 0
+      Top = 82
+      Width = 185
+      Height = 183
+      Align = alTop
+      ItemHeight = 13
+      TabOrder = 1
+      OnClick = lbSymNamesClick
+    end
+    object Panel1: TPanel
+      Left = 0
+      Top = 65
+      Width = 185
+      Height = 17
+      Align = alTop
+      BevelOuter = bvLowered
+      Caption = 'Symbol Dictionary'
+      TabOrder = 2
+    end
+    object lbSymPositions: TListBox
+      Left = 0
+      Top = 268
+      Width = 185
+      Height = 97
+      Align = alClient
+      ItemHeight = 13
+      TabOrder = 0
+      OnClick = lbSymPositionsClick
+    end
+    object pContext: TPanel
+      Left = 0
+      Top = 368
+      Width = 185
+      Height = 152
+      Align = alBottom
+      BevelOuter = bvNone
+      TabOrder = 3
+      object pContextHdr: TPanel
+        Left = 0
+        Top = 0
+        Width = 185
+        Height = 17
+        Align = alTop
+        BevelOuter = bvLowered
+        Caption = 'Context Map'
+        TabOrder = 0
+      end
+      object tvContextMap: TTreeView
+        Left = 0
+        Top = 17
+        Width = 185
+        Height = 135
+        Align = alClient
+        HideSelection = False
+        Indent = 19
+        ReadOnly = True
+        TabOrder = 1
+        OnClick = tvContextMapClick
+      end
+    end
+    object grpListControl: TGroupBox
+      Left = 0
+      Top = 0
+      Width = 185
+      Height = 65
+      Align = alTop
+      Caption = 'List Control'
+      TabOrder = 4
+      object chkAutoUpdate: TCheckBox
+        Left = 7
+        Top = 17
+        Width = 90
+        Height = 17
+        Caption = 'Auto Update'
+        TabOrder = 0
+      end
+      object btnForceUpdate: TButton
+        Left = 8
+        Top = 34
+        Width = 89
+        Height = 22
+        Caption = '&Force Update'
+        TabOrder = 1
+        OnClick = btnForceUpdateClick
+      end
+    end
+  end
+  object DelphiWebScriptII1: TDelphiWebScriptII
+    Config.CompilerOptions = [coSymbolDictionary, coContextMap]
+    Config.MaxDataSize = 0
+    Config.Timeout = 0
+    Left = 96
+    Top = 192
+  end
+  object SynPasSyn1: TSynPasSyn
+    CommentAttri.Background = clSilver
+    CommentAttri.Foreground = clGray
+    DirectiveAttri.Foreground = clGreen
+    KeyAttri.Foreground = clPurple
+    StringAttri.Foreground = clRed
+    Left = 72
+    Top = 64
+  end
+end

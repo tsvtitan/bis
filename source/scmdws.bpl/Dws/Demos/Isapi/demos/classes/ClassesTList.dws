@@ -1,0 +1,53 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>TList Demonstration</title>
+</head>
+
+<body>
+<pre>
+<%
+var lst: TList = TList.Create;
+
+type
+ TString = class
+   Value: String;
+   constructor Create(V: String);
+ end;
+
+constructor TString.Create(V: String);
+begin
+  Value := V;
+end;
+
+lst.Add(TString.Create('Hello'));
+lst.Add(TString.Create('World'));
+lst.Add(TString.Create('Hallo'));
+lst.Add(TString.Create('Welt'));
+
+procedure ShowList;
+begin
+  var x: Integer;
+  for x := 0 to lst.Count - 1 do
+  begin
+    SendLn(TString(lst.GetItems(x)).Value);
+  end;
+  SendLn('');
+end;
+
+ShowList;
+lst.Remove(lst.getitems(2));
+ShowList;
+lst.Delete(0);
+ShowList;
+lst.Insert(0, TString.Create('Hallöchen'));
+ShowList;
+SendLn(lst.IndexOf(lst.getItems(1)));
+
+%>
+</pre>
+</body>
+
+</html>

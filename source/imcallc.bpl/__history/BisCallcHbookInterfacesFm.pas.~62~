@@ -1,0 +1,84 @@
+unit BisCallcHbookInterfacesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, DB,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList, DBCtrls,
+  BisFieldNames, BisControls;
+
+type
+  TBisCallcHbookInterfacesForm = class(TBisDataGridForm)
+    PanelControls: TPanel;
+    GroupBoxControls: TGroupBox;
+    PanelDescription: TPanel;
+    DBMemoDescription: TDBMemo;
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookInterfacesFormIface=class(TBisDataGridFormIface)
+  private
+    function GetInterfaceTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookInterfacesForm: TBisCallcHbookInterfacesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisKrieltHbookInterfaceEditFm;
+
+{ TBisKrieltHbookInterfacesFormIface }
+
+constructor TBisKrieltHbookInterfacesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltHbookInterfacesForm;
+  InsertClass:=TBisKrieltHbookInterfaceInsertFormIface;
+  UpdateClass:=TBisKrieltHbookInterfaceUpdateFormIface;
+  DeleteClass:=TBisKrieltHbookInterfaceDeleteFormIface;
+  Permissions.Enabled:=true;
+  Available:=true;
+  ProviderName:='S_INTERFACES';
+  with FieldNames do begin
+    AddKey('INTERFACE_ID');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('INTERFACE_TYPE');
+    AddInvisible('MODULE_NAME');
+    AddInvisible('MODULE_INTERFACE');
+    Add('NAME','Наименование',250);
+    AddCalculate('INTERFACE_TYPE_NAME','Тип интерфейса',GetInterfaceTypeName,ftString,100,100);
+  end;
+  Orders.Add('INTERFACE_TYPE');
+  Orders.Add('NAME');
+end;
+
+function TBisKrieltHbookInterfacesFormIface.GetInterfaceTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S: String;
+begin
+  Result:=Null;
+  S:=GetInterfaceTypeByIndex(DataSet.FieldByName('INTERFACE_TYPE').AsInteger);
+  if Trim(S)<>'' then
+    Result:=S;
+end;
+
+{ BisKrieltHbookInterfacesForm }
+
+constructor TBisCallcHbookInterfacesForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  
+  if Assigned(DataFrame) then begin
+    DBMemoDescription.DataSource:=DataFrame.DataSource;
+  end;
+end;
+
+end.

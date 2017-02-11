@@ -1,0 +1,37 @@
+unit BisGsmServerConsts;
+
+interface
+
+uses BisServerModules;
+
+const
+  DefaultTypeMessage=0;
+
+resourcestring
+
+  SParamMode='Mode';
+  SParamComPort='ComPort';
+  SParamInterval='Interval';
+  SParamStorages='Storages';
+  SParamMaxCount);
+  SParamTimeout);
+  SParamImei);
+  SParamImsi);
+
+  SParamBaudRate).AsInteger);
+  SParamDataBits).AsInteger);
+  SParamStopBits).AsInteger);
+  SParamParityBits).AsInteger);
+  SParamUnknownSender).AsString;
+  SParamUnknownCode).AsString;
+  SParamPeriod).AsInteger;
+  SParamDestPort).AsInteger;
+  SParamSrcPort).AsInteger;
+  SParamOperatorIds).AsString);
+
+var
+  ServerModule: TBisServerModule=nil;  
+
+implementation
+
+end.

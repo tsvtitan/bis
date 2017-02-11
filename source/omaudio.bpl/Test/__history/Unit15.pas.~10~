@@ -1,0 +1,39 @@
+unit Unit15;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ACS_Classes, ACS_Converters, NewACDSAudio, ACS_Wave, StdCtrls;
+
+type
+  TForm15 = class(TForm)
+    WaveIn1: TWaveIn;
+    DSAudioOut1: TDSAudioOut;
+    Button1: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form15: TForm15;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm15.Button1Click(Sender: TObject);
+begin
+  DSAudioOut1.Resume;
+end;
+
+procedure TForm15.FormCreate(Sender: TObject);
+begin
+  WaveIn1.FileName:='c:\123.wav';
+end;
+
+end.

@@ -1,0 +1,34 @@
+inherited BisTaxiDataDriverWeekScheduleFrame: TBisTaxiDataDriverWeekScheduleFrame
+  ParentFont = False
+  inherited ControlBar: TControlBar
+    inherited LabelCounter: TLabel
+      Visible = True
+    end
+    inherited ToolBarEdit: TToolBar
+      Visible = False
+    end
+  end
+  inherited ActionList: TActionList
+    inherited ActionExport: TAction
+      Visible = False
+    end
+    inherited ActionFilter: TAction
+      Visible = False
+    end
+    inherited ActionView: TAction
+      Visible = False
+    end
+    inherited ActionInsert: TAction
+      Visible = False
+    end
+    inherited ActionDuplicate: TAction
+      Visible = False
+    end
+    inherited ActionUpdate: TAction
+      Visible = False
+    end
+    inherited ActionDelete: TAction
+      Visible = False
+    end
+  end
+end

@@ -1,0 +1,18 @@
+object BisServerHttpHandlerDefaultWebModule: TBisServerHttpHandlerDefaultWebModule
+  OldCreateOrder = False
+  Actions = <
+    item
+      Name = 'WebActionItem1'
+      PathInfo = '/bis'
+      OnAction = BisServerHttpHandlerDefaultWebModuleWebActionItem1Action
+    end
+    item
+      Name = 'WebActionItem2'
+      PathInfo = '/'
+      OnAction = BisServerHttpHandlerDefaultWebModuleWebActionItem2Action
+    end>
+  Left = 591
+  Top = 345
+  Height = 150
+  Width = 215
+end

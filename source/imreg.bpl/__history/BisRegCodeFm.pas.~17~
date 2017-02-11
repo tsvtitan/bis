@@ -1,0 +1,35 @@
+unit BisRegCodeFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDialogFm;
+
+type
+  TBisRegCodeForm = class(TBisDialogForm)
+    LabelCode: TLabel;
+    GroupBoxDesc: TGroupBox;
+    MemoDesc: TMemo;
+    MemoCode: TMemo;
+    procedure EditCodeChange(Sender: TObject);
+  private
+  public
+  end;
+
+var
+  BisRegCodeForm: TBisRegCodeForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisRegCodeForm }
+
+procedure TBisRegCodeForm.EditCodeChange(Sender: TObject);
+begin
+  ButtonOk.Enabled:=Trim(EditCode.Text)<>'';
+end;
+
+end.

@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{f8ea43b8-9465-43f3-8b82-c20069e5ee6b}</ProjectGuid>
+    <MainSource>imdesign.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\imdesign.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+    <DCC_UnitSearchPath>U:\source\_dcp</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp</DCC_IncludePath>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_IMPLICIT_IMPORT>False</DCC_IMPLICIT_IMPORT>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_OutputDRCFile>True</DCC_OutputDRCFile>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="HostApplication">U:\bin\taxi.exe</Parameters><Parameters Name="RunParams">/config imtaxi2.ini /noupdate</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options><Package_Options Name="LibSuffix"></Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">2</VersionInfo><VersionInfo Name="MinorVer">1</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">6</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">Design interface module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">2.1.0.6</VersionInfoKeys><VersionInfoKeys Name="InternalName">imdesign.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">imdesign.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">2.1</VersionInfoKeys><VersionInfoKeys Name="Comments">Design interface module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">imdesign.dpk</Source></Source><Excluded_Packages /><Language><Language Name="ProjectLang">$00000419</Language><Language Name="RootDir">U:\source\imdesign.bpl\</Language></Language>  
+    
+    
+    <Resource_DLL_Projects>
+      <Resource_DLL_Projects Name="Item0">Русский*$00000419*RUS*RUS</Resource_DLL_Projects>
+    </Resource_DLL_Projects>
+  </Delphi.Personality><ModelSupport>False</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="imdesign.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="E:\Work\bis\source\core.dcp" />
+    <DCCReference Include="imdesign.bpl\BisDesignConsts.pas" />
+    <DCCReference Include="imdesign.bpl\BisDesignDataAccountEditFm.pas">
+      <Form>BisDesignDataAccountEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataAccountRoleEditFm.pas">
+      <Form>BisDesignDataAccountRoleEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataAccountRolesFm.pas">
+      <Form>BisDesignDataAccountRolesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataAccountsFm.pas">
+      <Form>BisDesignDataAccountsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataAlarmEditFm.pas">
+      <Form>BisDesignDataAlarmEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataAlarmFilterFm.pas">
+      <Form>BisDesignDataAlarmFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataAlarmsFm.pas">
+      <Form>BisDesignDataAlarmsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataApplicationEditFm.pas">
+      <Form>BisDesignDataApplicationEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataApplicationInterfaceEditFm.pas">
+      <Form>BisDesignDataApplicationInterfaceEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataApplicationInterfacesFm.pas">
+      <Form>BisDesignDataApplicationInterfacesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataApplicationsFm.pas">
+      <Form>BisDesignDataApplicationsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataApplicationsFrm.pas">
+      <Form>BisDesignDataApplicationsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataConstEditFm.pas">
+      <Form>BisDesignDataConstEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataConstsFm.pas">
+      <Form>BisDesignDataConstsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataDocumentEditFm.pas">
+      <Form>BisDesignDataDocumentEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataDocumentsFm.pas">
+      <Form>BisDesignDataDocumentsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataExchangeEditFm.pas">
+      <Form>BisDesignDataExchangeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataExchangesFm.pas">
+      <Form>BisDesignDataExchangesFrom</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataFirmEditFm.pas">
+      <Form>BisDesignDataFirmEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataFirmsFm.pas">
+      <Form>BisDesignDataFirmsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataFirmTypeEditFm.pas">
+      <Form>BisDesignDataFirmTypeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataFirmTypesFm.pas">
+      <Form>BisDesignDataFirmTypesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataInterfaceEditFm.pas">
+      <Form>BisDesignDataInterfaceEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataInterfaceFilterFm.pas">
+      <Form>BisDesignDataInterfaceFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataInterfacesFm.pas">
+      <Form>BisDesignDataInterfacesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataInterfacesFrm.pas">
+      <Form>BisDesignDataInterfacesFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataLocalitiesFm.pas">
+      <Form>BisDesignDataLocalitiesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataLocalitiesFrm.pas">
+      <Form>BisDesignDataLocalitiesFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataLocalityEditFm.pas">
+      <Form>BisDesignDataLocalityEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataLockEditFm.pas">
+      <Form>BisDesignDataLockEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataLocksFm.pas">
+      <Form>BisDesignDataLocksForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataMenuEditFm.pas">
+      <Form>BisDesignDataMenuEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataMenusFm.pas">
+      <Form>BisDesignDataMenusForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataPermissionEditFm.pas">
+      <Form>BisDesignDataPermissionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataPermissionsFm.pas">
+      <Form>BisDesignDataPermissionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataProfileEditFm.pas">
+      <Form>BisDesignDataProfileEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataProfilesFm.pas">
+      <Form>BisDesignDataProfilesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataReportEditFm.pas">
+      <Form>BisDesignDataReportEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataReportsFm.pas">
+      <Form>BisDesignDataReportsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataReportsFrm.pas">
+      <Form>BisDesignDataReportsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataRoleEditFm.pas">
+      <Form>BisDesignDataRoleEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataRolesAndAccountsFm.pas">
+      <Form>BisDesignDataRolesAndAccountsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataRolesFm.pas">
+      <Form>BisDesignDataRolesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataScriptEditFm.pas">
+      <Form>BisDesignDataScriptEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataScriptsFm.pas">
+      <Form>BisDesignDataScirptsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataScriptsFrm.pas">
+      <Form>BisDesignDataScriptsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataSessionsFm.pas">
+      <Form>BisDesignDataSessionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataSessionsFrm.pas">
+      <Form>BisDesignDataSessionsFrame</Form>
+      <DesignClass>T</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataStreetEditFm.pas">
+      <Form>BisDesignDataStreetEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataStreetsFm.pas">
+      <Form>BisDesignDataStreetsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataTaskEditFm.pas">
+      <Form>BisDesignDataTaskEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataTasksFm.pas">
+      <Form>BisDesignDataTasksForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignDataTasksFrm.pas">
+      <Form>BisDesignDataTasksFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignExchangeFm.pas">
+      <Form>BisDesignExchangeForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignInit.pas" />
+    <DCCReference Include="imdesign.bpl\BisDesignJournalActionEditFm.pas">
+      <Form>BisDesignJournalActionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignJournalActionsFm.pas">
+      <Form>BisDesignJournalActionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imdesign.bpl\BisDesignMainFm.pas">
+      <Form>BisDesignMainForm</Form>
+    </DCCReference>
+  </ItemGroup>
+</Project>

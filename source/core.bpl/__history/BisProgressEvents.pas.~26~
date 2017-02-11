@@ -1,0 +1,74 @@
+unit BisProgressEvents;
+
+interface
+
+uses Classes, Contnrs;
+
+type
+
+  TProgressEvent=procedure (const Min,Max,Position: Integer; var Breaked: Boolean) of object;
+
+  TBisProgressEvent=class(TObject)
+  private
+    FEvent: TProgressEvent;
+    FEnabled: Boolean;
+  public
+    constructor Create; 
+    procedure Progress(const Min, Max, Position: Integer; var Breaked: Boolean);
+
+    property Event: TProgressEvent read FEvent write FEvent;
+    property Enabled: Boolean read FEnabled write FEnabled; 
+  end;
+
+  TBisProgressEvents=class(TObjectList)
+  private
+    function GetItems(Index: Integer): TBisProgressEvent;
+  public
+    function Add(Event: TProgressEvent): TBisProgressEvent;
+    procedure Progress(const Min, Max, Position: Integer; var Breaked: Boolean);
+
+    property Items[Index: Integer]: TBisProgressEvent read GetItems;
+  end;
+
+implementation
+
+{ TBisProgressEvent }
+
+constructor TBisProgressEvent.Create;
+begin
+  inherited Create;
+  FEnabled:=true;
+end;
+
+procedure TBisProgressEvent.Progress(const Min, Max, Position: Integer; var Breaked: Boolean);
+begin
+  if Assigned(FEvent) and FEnabled then
+    FEvent(Min,Max,Position,Breaked);
+end;
+
+{ TBisProgressEvents }
+
+function TBisProgressEvents.Add(Event: TProgressEvent): TBisProgressEvent;
+begin
+  Result:=TBisProgressEvent.Create;
+  Result.Event:=Event;
+  inherited Add(Result);
+end;
+
+function TBisProgressEvents.GetItems(Index: Integer): TBisProgressEvent;
+begin
+  Result:=TBisProgressEvent(inherited Items[Index]);
+end;
+
+procedure TBisProgressEvents.Progress(const Min, Max, Position: Integer; var Breaked: Boolean);
+var
+  i: Integer;
+  Item: TBisProgressEvent;
+begin
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    Item.Progress(Min,Max,Position,Breaked);
+  end;
+end;
+
+end.

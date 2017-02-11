@@ -1,0 +1,14 @@
+program Project11;
+
+uses
+  Forms,
+  Unit14 in 'Unit14.pas' {SipClientForm};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TSipClientForm, SipClientForm);
+  Application.Run;
+end.

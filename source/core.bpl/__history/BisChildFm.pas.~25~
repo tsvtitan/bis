@@ -1,0 +1,43 @@
+unit BisChildFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisFm;
+
+type
+  TBisChildForm = class(TBisForm)
+  private
+  public
+    procedure BeforeShow; override;
+  end;
+
+  TBisChildIface=class(TBisFormIface)
+  protected
+    function GetFormClass: TBisFormClass; override;
+  end;
+
+var
+  BisChildForm: TBisChildForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisChildIface }
+
+function TBisChildIface.GetFormClass: TBisFormClass; 
+begin
+  Result:=TBisChildForm;
+end;
+
+{ TBisChildForm }
+
+procedure TBisChildForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  FormStyle:=fsMDIChild;
+end;
+
+end.

@@ -1,0 +1,427 @@
+<html>
+<body>
+<h1>Class TADODataset</h1>
+<b>Declaration</b><br>
+
+<pre>TADODataset = class(TObject)
+  <a href="#ADO$TADODataset$Cancel">procedure Cancel</a>;
+  <a href="#ADO$TADODataset$Close">procedure Close</a>;
+  <a href="#ADO$TADODataset$CommandTimeout">property CommandTimeout: Integer read GetCommandTimeout write SetCommandTimeout</a>;
+  <a href="#ADO$TADODataset$Connection">property Connection: TObject write SetConnection</a>;
+  <a href="#ADO$TADODataset$Create">constructor Create</a>;
+  <a href="#ADO$TADODataset$Delete">procedure Delete</a>;
+  <a href="#ADO$TADODataset$Edit">procedure Edit</a>;
+  <a href="#ADO$TADODataset$Eof">function Eof: Boolean</a>;
+  <a href="#ADO$TADODataset$FieldAsDateTime">property FieldAsDateTime: DateTime read GetFieldAsDateTime write SetFieldAsDateTime</a>;
+  <a href="#ADO$TADODataset$FieldAsFloat">property FieldAsFloat[Index: Variant]: Float read GetFieldAsFloat write SetFieldAsFloat</a>;
+  <a href="#ADO$TADODataset$FieldAsInteger">property FieldAsInteger[Index: Variant]: Integer read GetFieldAsInteger write SetFieldAsInteger</a>;
+  <a href="#ADO$TADODataset$FieldAsString">property FieldAsString[index: Variant]: String read GetFieldAsString write SetFieldAsString</a>;
+  <a href="#ADO$TADODataset$FieldAsVariant">property FieldAsVariant[Index: Variant]: Variant read GetFieldAsVariant write SetFieldAsVariant</a>;
+  <a href="#ADO$TADODataset$FieldByName">function FieldByName(FieldName: String): TDBField</a>;
+  <a href="#ADO$TADODataset$FieldCount">function FieldCount: Integer</a>;
+  <a href="#ADO$TADODataset$FieldIsNull">property FieldIsNull[index: Variant]: Boolean read GetFieldIsNull</a>;
+  <a href="#ADO$TADODataset$Fields">property Fields[Index: TDBField]: TDBField read GetField write SetField</a>;
+  <a href="#ADO$TADODataset$First">function First: Boolean</a>;
+  <a href="#ADO$TADODataset$Free">destructor Free</a>;
+  <a href="#ADO$TADODataset$GetCommandTimeout">function GetCommandTimeout: Integer</a>;
+  <a href="#ADO$TADODataset$GetField">function GetField(Index: Integer): TDBField</a>;
+  <a href="#ADO$TADODataset$GetFieldAsDateTime">function GetFieldAsDateTime(Index: Variant): DateTime</a>;
+  <a href="#ADO$TADODataset$GetFieldAsFloat">function GetFieldAsFloat(Index: Variant): Float</a>;
+  <a href="#ADO$TADODataset$GetFieldAsInteger">function GetFieldAsInteger(Index: Variant): Integer</a>;
+  <a href="#ADO$TADODataset$GetFieldAsString">function GetFieldAsString(index: Variant): String</a>;
+  <a href="#ADO$TADODataset$GetFieldAsVariant">function GetFieldAsVariant(Index: Variant): Variant</a>;
+  <a href="#ADO$TADODataset$GetFieldIsNull">function GetFieldIsNull(Index: Variant): Boolean</a>;
+  <a href="#ADO$TADODataset$GetHTMLCombo">procedure GetHTMLCombo(Selected: String)</a>;
+  <a href="#ADO$TADODataset$GetSQL">function GetSQL: String</a>;
+  <a href="#ADO$TADODataset$Insert">procedure Insert</a>;
+  <a href="#ADO$TADODataset$Last">function Last: Boolean</a>;
+  <a href="#ADO$TADODataset$Next">function Next: Boolean</a>;
+  <a href="#ADO$TADODataset$Open">procedure Open</a>;
+  <a href="#ADO$TADODataset$Post">procedure Post</a>;
+  <a href="#ADO$TADODataset$RecordCount">function RecordCount: Integer</a>;
+  <a href="#ADO$TADODataset$SetCommandTimeout">procedure SetCommandTimeout(Value: Integer)</a>;
+  <a href="#ADO$TADODataset$SetConnection">procedure SetConnection(Value: TObject)</a>;
+  <a href="#ADO$TADODataset$SetField">procedure SetField(Index: Integer; Value: TDBField)</a>;
+  <a href="#ADO$TADODataset$SetFieldAsDateTime">procedure SetFieldAsDateTime(Index: Variant; Value: DateTime)</a>;
+  <a href="#ADO$TADODataset$SetFieldAsFloat">procedure SetFieldAsFloat(Index: Variant; Value: Float)</a>;
+  <a href="#ADO$TADODataset$SetFieldAsInteger">procedure SetFieldAsInteger(Index: Variant; Value: Integer)</a>;
+  <a href="#ADO$TADODataset$SetFieldAsString">procedure SetFieldAsString(Index: Variant; Value: String)</a>;
+  <a href="#ADO$TADODataset$SetFieldAsVariant">procedure SetFieldAsVariant(Index: Variant; Value: Variant)</a>;
+  <a href="#ADO$TADODataset$SetSQL">procedure SetSQL(sSQL: String)</a>;
+  <a href="#ADO$TADODataset$sql">property sql: String read GetSQL write SetSQL</a>;
+end;</pre>
+<b>Description</b>
+<p></p>
+
+<hr>
+
+    <h2><a name=ADO$TADODataset$Cancel>Method TADODataset.Cancel</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Cancel;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Close>Method TADODataset.Close</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Close;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$CommandTimeout>Property TADODataset.CommandTimeout</a></h2>
+    <b>Declaration</b><br>
+    <pre>property CommandTimeout: Integer read GetCommandTimeout write SetCommandTimeout;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Connection>Property TADODataset.Connection</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Connection: TObject write SetConnection;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Create>Method TADODataset.Create</a></h2>
+    <b>Declaration</b><br>
+    <pre>constructor Create;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Delete>Method TADODataset.Delete</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Delete;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Edit>Method TADODataset.Edit</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Edit;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Eof>Method TADODataset.Eof</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Eof: Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$FieldAsDateTime>Property TADODataset.FieldAsDateTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>property FieldAsDateTime: DateTime read GetFieldAsDateTime write SetFieldAsDateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$FieldAsFloat>Property TADODataset.FieldAsFloat</a></h2>
+    <b>Declaration</b><br>
+    <pre>property FieldAsFloat[Index: Variant]: Float read GetFieldAsFloat write SetFieldAsFloat;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$FieldAsInteger>Property TADODataset.FieldAsInteger</a></h2>
+    <b>Declaration</b><br>
+    <pre>property FieldAsInteger[Index: Variant]: Integer read GetFieldAsInteger write SetFieldAsInteger;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$FieldAsString>Property TADODataset.FieldAsString</a></h2>
+    <b>Declaration</b><br>
+    <pre>property FieldAsString[index: Variant]: String read GetFieldAsString write SetFieldAsString;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$FieldAsVariant>Property TADODataset.FieldAsVariant</a></h2>
+    <b>Declaration</b><br>
+    <pre>property FieldAsVariant[Index: Variant]: Variant read GetFieldAsVariant write SetFieldAsVariant;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$FieldByName>Method TADODataset.FieldByName</a></h2>
+    <b>Declaration</b><br>
+    <pre>function FieldByName(FieldName: String): TDBField;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$FieldCount>Method TADODataset.FieldCount</a></h2>
+    <b>Declaration</b><br>
+    <pre>function FieldCount: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$FieldIsNull>Property TADODataset.FieldIsNull</a></h2>
+    <b>Declaration</b><br>
+    <pre>property FieldIsNull[index: Variant]: Boolean read GetFieldIsNull;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Fields>Property TADODataset.Fields</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Fields[Index: TDBField]: TDBField read GetField write SetField;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$First>Method TADODataset.First</a></h2>
+    <b>Declaration</b><br>
+    <pre>function First: Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Free>Method TADODataset.Free</a></h2>
+    <b>Declaration</b><br>
+    <pre>destructor Free;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$GetCommandTimeout>Method TADODataset.GetCommandTimeout</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetCommandTimeout: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$GetField>Method TADODataset.GetField</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetField(Index: Integer): TDBField;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$GetFieldAsDateTime>Method TADODataset.GetFieldAsDateTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetFieldAsDateTime(Index: Variant): DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$GetFieldAsFloat>Method TADODataset.GetFieldAsFloat</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetFieldAsFloat(Index: Variant): Float;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$GetFieldAsInteger>Method TADODataset.GetFieldAsInteger</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetFieldAsInteger(Index: Variant): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$GetFieldAsString>Method TADODataset.GetFieldAsString</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetFieldAsString(index: Variant): String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$GetFieldAsVariant>Method TADODataset.GetFieldAsVariant</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetFieldAsVariant(Index: Variant): Variant;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$GetFieldIsNull>Method TADODataset.GetFieldIsNull</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetFieldIsNull(Index: Variant): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$GetHTMLCombo>Method TADODataset.GetHTMLCombo</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure GetHTMLCombo(Selected: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$GetSQL>Method TADODataset.GetSQL</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetSQL: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Insert>Method TADODataset.Insert</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Insert;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Last>Method TADODataset.Last</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Last: Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Next>Method TADODataset.Next</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Next: Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Open>Method TADODataset.Open</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Open;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Post>Method TADODataset.Post</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Post;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$RecordCount>Method TADODataset.RecordCount</a></h2>
+    <b>Declaration</b><br>
+    <pre>function RecordCount: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$Self>Method TADODataset.Self</a></h2>
+    <b>Declaration</b><br>
+    <pre>Self;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$SetCommandTimeout>Method TADODataset.SetCommandTimeout</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetCommandTimeout(Value: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$SetConnection>Method TADODataset.SetConnection</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetConnection(Value: TObject);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$SetField>Method TADODataset.SetField</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetField(Index: Integer; Value: TDBField);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$SetFieldAsDateTime>Method TADODataset.SetFieldAsDateTime</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetFieldAsDateTime(Index: Variant; Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$SetFieldAsFloat>Method TADODataset.SetFieldAsFloat</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetFieldAsFloat(Index: Variant; Value: Float);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$SetFieldAsInteger>Method TADODataset.SetFieldAsInteger</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetFieldAsInteger(Index: Variant; Value: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$SetFieldAsString>Method TADODataset.SetFieldAsString</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetFieldAsString(Index: Variant; Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$SetFieldAsVariant>Method TADODataset.SetFieldAsVariant</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetFieldAsVariant(Index: Variant; Value: Variant);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$SetSQL>Method TADODataset.SetSQL</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetSQL(sSQL: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=ADO$TADODataset$sql>Property TADODataset.sql</a></h2>
+    <b>Declaration</b><br>
+    <pre>property sql: String read GetSQL write SetSQL;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+</body>
+</html>

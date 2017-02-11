@@ -1,0 +1,159 @@
+unit BisCallcHbookFirmEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisCallcHbookFirmEditForm = class(TBisDataEditForm)
+    LabelSmallName: TLabel;
+    LabelFullName: TLabel;
+    LabelInn: TLabel;
+    LabelPaymentAccount: TLabel;
+    LabelBank: TLabel;
+    LabelCorrAccount: TLabel;
+    LabelLegalAddress: TLabel;
+    LabelPostAddress: TLabel;
+    LabelPhone: TLabel;
+    LabelFirmType: TLabel;
+    LabelFax: TLabel;
+    LabelEmail: TLabel;
+    LabelSite: TLabel;
+    LabelOkonh: TLabel;
+    LabelOkpo: TLabel;
+    LabelKpp: TLabel;
+    LabeDirector: TLabel;
+    LabelAccountant: TLabel;
+    LabelBik: TLabel;
+    EditSmallName: TEdit;
+    EditFullName: TEdit;
+    EditInn: TEdit;
+    EditPaymentAccount: TEdit;
+    EditBank: TEdit;
+    EditCorrAccount: TEdit;
+    EditLegalAddress: TEdit;
+    EditPostAddress: TEdit;
+    EditPhone: TEdit;
+    EditFirmType: TEdit;
+    ButtonFirmType: TButton;
+    EditFax: TEdit;
+    EditEmail: TEdit;
+    EditSite: TEdit;
+    EditOkonh: TEdit;
+    EditOkpo: TEdit;
+    EditKpp: TEdit;
+    EditDirector: TEdit;
+    EditAccountant: TEdit;
+    EditBik: TEdit;
+    LabelParent: TLabel;
+    EditParent: TEdit;
+    ButtonParent: TButton;
+    LabelContactFace: TLabel;
+    EditContactFace: TEdit;
+    procedure EditSmallNameExit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookFirmEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookFirmInsertFormIface=class(TBisCallcHbookFirmEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookFirmUpdateFormIface=class(TBisCallcHbookFirmEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookFirmDeleteFormIface=class(TBisCallcHbookFirmEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookFirmEditForm: TBisCallcHbookFirmEditForm;
+
+implementation
+
+uses BisCallcHbookFirmTypesFm, BisCallcHbookFirmsFm;
+
+{$R *.dfm}
+
+{ TBisCallcHbookFirmEditFormIface }
+
+constructor TBisCallcHbookFirmEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookFirmEditForm;
+  with Params do begin
+    AddKey('FIRM_ID').Older('OLD_FIRM_ID');
+    AddEditDataSelect('PARENT_ID','EditParent','LabelParent','ButtonParent',
+                      TBisCallcHbookFirmsFormIface,'PARENT_SMALL_NAME',false,false,'FIRM_ID','SMALL_NAME');
+    AddEdit('SMALL_NAME','EditSmallName','LabelSmallName',true);
+    AddEditData('FIRM_TYPE_ID','EditFirmType','LabelFirmType','ButtonFirmType',
+                TBisCallcHbookFirmTypesFormIface,'FIRM_TYPE_NAME',true,false,'','NAME');
+    AddEdit('FULL_NAME','EditFullName','LabelFullName',true);
+    AddEdit('INN','EditInn','LabelInn');
+    AddEdit('BANK','EditBank','LabelBank');
+    AddEdit('BIK','EditBik','LabelBik');
+    AddEdit('PAYMENT_ACCOUNT','EditPaymentAccount','LabelPaymentAccount');
+    AddEdit('CORR_ACCOUNT','EditCorrAccount','LabelCorrAccount');
+    AddEdit('LEGAL_ADDRESS','EditLegalAddress','LabelLegalAddress');
+    AddEdit('POST_ADDRESS','EditPostAddress','LabelPostAddress');
+    AddEdit('PHONE','EditPhone','LabelPhone');
+    AddEdit('FAX','EditFax','LabelFax');
+    AddEdit('EMAIL','EditEmail','LabelEmail');
+    AddEdit('SITE','EditSite','LabelSite');
+    AddEdit('OKONH','EditOkonh','LabelOkonh');
+    AddEdit('OKPO','EditOkpo','LabelOkpo');
+    AddEdit('KPP','EditKpp','LabelKpp');
+    AddEdit('DIRECTOR','EditDirector','LabelDirector');
+    AddEdit('ACCOUNTANT','EditAccountant','LabelAccountant');
+    AddEdit('CONTACT_FACE','EditContactFace','LabelContactFace');
+  end;
+end;
+
+{ TBisCallcHbookFirmInsertFormIface }
+
+constructor TBisCallcHbookFirmInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_FIRM';
+end;
+
+{ TBisCallcHbookFirmUpdateFormIface }
+
+constructor TBisCallcHbookFirmUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_FIRM';
+end;
+
+{ TBisCallcHbookFirmDeleteFormIface }
+
+constructor TBisCallcHbookFirmDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_FIRM';
+end;
+
+{ TBisCallcHbookFirmEditForm }
+
+procedure TBisCallcHbookFirmEditForm.EditSmallNameExit(Sender: TObject);
+begin
+  if (Mode in [emInsert,emDuplicate,emUpdate]) and
+     (Trim(EditSmallName.Text)<>'') and (Trim(EditFullName.Text)='') then
+    EditFullName.Text:=EditSmallName.Text;
+end;
+
+end.

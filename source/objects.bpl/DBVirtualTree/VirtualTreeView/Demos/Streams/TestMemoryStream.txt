@@ -1,0 +1,32 @@
+CASE 1
+======
+Root Nodes : 3000
+User Data  : rtf text in RichEdit (TMemoryStream)
+Save/Load Method  : VST.SaveToStream/LoadFromStream,
+                    Stream.SaveToFile/LoadFromFile,
+                    without OnSaveNode/OnLoadNode.
+Time to Load file : 6 seconds
+Time to Save file : 6 seconds
+
+
+
+CASE 2
+======
+Root Nodes : 3000
+User Data  : none
+Save/Load Method  : VST.SaveToStream/LoadFromStream,
+                    Stream.SaveToFile/LoadFromFile,
+                    without OnSaveNode/OnLoadNode.
+Time to Load file : 4 seconds
+Time to Save file : 4 seconds
+
+
+
+CASE 3
+======
+Root Nodes : 3000
+User Data  : none
+Save/Load Method  : VST.SaveToFile/LoadFromFile,
+                    with OnSaveNode/OnLoadNode.
+Time to Load file : 11 seconds (modified code)
+Time to Save file : 10 seconds

@@ -1,0 +1,287 @@
+unit BisCoreUtils;
+
+interface
+
+uses Classes,
+     BisFieldNames, BisFilterGroups, BisParams, BisLogger;
+
+procedure TranslateObject(AObject: TObject; BaseClass: TClass=nil);
+procedure TranslateFieldNames(AFieldNames: TBisFieldNames; OwnerClass: TClass);
+procedure TranslateFilterGroups(AFilterGroups: TBisFilterGroups; OwnerClass: TClass);
+procedure TranslateParams(AParams: TBisParams; OwnerClass: TClass);
+
+procedure ObjectLoggerWrite(const ObjectName,Message: String; LogType: TBisLoggerType=ltInformation);
+procedure ClassLoggerWrite(const ClassName,Message: String; LogType: TBisLoggerType=ltInformation);
+
+implementation
+
+uses SysUtils, TypInfo, Contnrs, Variants,
+     BisCore, BisUtils, BisParam, BisDialogs;
+
+procedure TranslateClass(AClass: TClass; AObject: TObject; ABaseClass: TClass; AParentName: String);
+
+type
+  TType=(ttString,ttInteger,ttFloat);
+
+  procedure TranslateLocal(AClass: TClass; PropName: String; SFind: String; Typ: TType);
+  var
+    S: String;
+    V: Variant;
+    PPI: PPropInfo;
+  begin
+    try
+      if Assigned(AClass) and IsPublishedProp(AObject,PropName) then begin
+        PPI:=GetPropInfo(AObject,PropName);
+        if Assigned(PPI) then begin
+          V:=GetPropValue(AObject,PropName);
+          S:=Core.Translate(SFind);
+          if S<>SFind then begin
+            case Typ of
+              ttString: SetPropValue(AObject,PropName,S);
+              ttInteger: SetPropValue(AObject,PropName,StrToIntDef(S,V));
+              ttFloat: SetPropValue(AObject,PropName,StrToFloatDef(S,V));
+            end;
+          end else begin
+            if Core.TranslateToLog then
+              Core.Logger.Write(SFind+'='+VarToStrDef(V,''));
+            if AClass.ClassParent<>nil then begin
+              if (AClass<>ABaseClass) and IsPublishedProp(AClass.ClassParent,PropName) then begin
+                S:=AClass.ClassParent.ClassName+'.'+PropName;
+                TranslateLocal(AClass.ClassParent,PropName,S,Typ);
+              end;
+            end;
+          end;
+        end;
+      end;
+    except
+      on E: Exception do begin
+        ShowError(SFind);
+      end;
+    end;
+  end;
+
+var
+  i: Integer;
+  Count: Integer;
+  P: PTypeInfo;
+  PropList: PPropList;
+  SFind: String;
+  Typ: TType;
+  Obj: TObject;
+begin
+  PropList:=nil;
+  if Assigned(AClass) and Assigned(AObject) and Assigned(Core) then begin
+    P:=PTypeInfo(AClass.ClassInfo);
+    if not Assigned(P) then
+      P:=PTypeInfo(AObject.ClassInfo);
+    if Assigned(P) then
+      Count:=GetPropList(P,PropList)
+    else
+      Count:=GetPropList(AObject,PropList);
+    if Assigned(PropList) then begin
+      try
+        for i:=0 to Count-1 do begin
+          if Assigned(PropList[i])  then begin
+            SFind:=AParentName+'.'+PropList[i].Name;
+            case PropList[i].PropType^.Kind of
+              tkChar, tkString, tkWChar, tkLString, tkWString,
+              tkInteger, tkFloat: begin
+                 Typ:=ttString;
+                 case PropList[i].PropType^.Kind of
+                   tkInteger: Typ:=ttInteger;
+                   tkFloat: Typ:=ttFloat;
+                 end;
+                 TranslateLocal(AClass,PropList[i].Name,SFind,Typ);
+              end;
+              tkClass: begin
+                Obj:=GetObjectProp(AObject,PropList[i]);
+                if Assigned(Obj) and (Obj is TComponent) then begin
+                  TranslateClass(Obj.ClassType,Obj,Obj.ClassType,SFind);
+                end;
+              end;
+            end;
+          end;
+        end;
+      finally
+        Dispose(PropList);
+//        FreeAndNilEx(PropList);
+      end;
+    end;
+  end;
+end;
+
+procedure TranslateComponent(AComponent: TComponent; BaseClass: TClass; AParentName: String);
+var
+  i: Integer;
+  Item: TComponent;
+begin
+  if Assigned(AComponent) then begin
+    for i:=0 to AComponent.ComponentCount-1 do begin
+      Item:=AComponent.Components[i];
+      if Assigned(Item) and (Trim(Item.Name)<>'') then
+        TranslateClass(Item.ClassType,Item,Item.ClassType,AParentName+'.'+Item.Name);
+    end;
+  end;
+end;
+
+procedure TranslateObject(AObject: TObject; BaseClass: TClass=nil);
+var
+  AClass: TClass;
+  List: TList;
+  i: Integer;
+begin
+  if Assigned(AObject) then begin
+
+    if not Assigned(BaseClass) then
+      BaseClass:=AObject.ClassType;
+
+    TranslateClass(AObject.ClassType,AObject,BaseClass,AObject.ClassName);
+
+    List:=TList.Create;
+    try
+
+      AClass:=AObject.ClassType;
+      while Assigned(AClass) do begin
+        List.Add(AClass);
+        if Assigned(BaseClass) and (BaseClass=AClass) then
+          break;
+        AClass:=AClass.ClassParent;
+      end;
+
+      for i:=List.Count-1 downto 0 do begin
+        AClass:=TClass(List.Items[i]);
+        if AObject is TComponent then
+          TranslateComponent(TComponent(AObject),BaseClass,AClass.ClassName);
+      end;
+
+    finally
+      List.Free;
+    end;
+
+  end;
+end;
+
+procedure TranslateFieldNames(AFieldNames: TBisFieldNames; OwnerClass: TClass);
+var
+  i: Integer;
+  Item: TBisFieldName;
+  SClass: String;
+  SFind: String;
+  S: String;
+begin
+  if Assigned(AFieldNames) and Assigned(OwnerClass) then begin
+    SClass:=OwnerClass.ClassName;
+    for i:=0 to AFieldNames.Count-1 do begin
+      Item:=AFieldNames.Items[i];
+      SFind:=SClass+'.FieldNames.'+Item.FieldName+'.Caption';
+      if Core.TranslateToLog then
+        Core.Logger.Write(SFind+'='+Item.Caption);
+      S:=Core.Translate(SFind);
+      if S<>SFind then begin
+        Item.Caption:=S;
+      end;
+    end;
+  end;
+end;
+
+procedure TranslateFilterGroups(AFilterGroups: TBisFilterGroups; OwnerClass: TClass);
+
+  function Translate(PropName: String; Default: String): String;
+  var
+    SFind: String;
+    S: String;
+  begin
+    SFind:='TBisFilterGroups.'+PropName;
+    if Core.TranslateToLog then
+      Core.Logger.Write(SFind+'='+Default);
+    S:=Core.Translate(SFind);
+    if S<>SFind then
+      Result:=S
+    else
+      Result:=Default;
+  end;
+
+begin
+  if Assigned(AFilterGroups) and Assigned(OwnerClass) then begin
+
+    AFilterGroups.SOr:=Translate('SOr',AFilterGroups.SOr);
+    AFilterGroups.SAnd:=Translate('SAnd',AFilterGroups.SAnd);
+    AFilterGroups.SEqual:=Translate('SEqual',AFilterGroups.SEqual);
+    AFilterGroups.SGreater:=Translate('SGreater',AFilterGroups.SGreater);
+    AFilterGroups.SLess:=Translate('SLess',AFilterGroups.SLess);
+    AFilterGroups.SNotEqual:=Translate('SNotEqual',AFilterGroups.SNotEqual);
+    AFilterGroups.SEqualGreater:=Translate('SEqualGreater',AFilterGroups.SEqualGreater);
+    AFilterGroups.SEqualLess:=Translate('SEqualLess',AFilterGroups.SEqualLess);
+    AFilterGroups.SLike:=Translate('SLike',AFilterGroups.SLike);
+    AFilterGroups.SNotLike:=Translate('SNotLike',AFilterGroups.SNotLike);
+    AFilterGroups.SIsNull:=Translate('SIsNull',AFilterGroups.SIsNull);
+    AFilterGroups.SIsNotNull:=Translate('SIsNotNull',AFilterGroups.SIsNotNull);
+
+  end;
+end;
+
+procedure TranslateParams(AParams: TBisParams; OwnerClass: TClass);
+var
+  SClass: String;
+
+  function GetItemIndex(Item: TBisParam): Integer;
+  var
+    i: Integer;
+  begin
+    Result:=0;
+    for i:=0 to AParams.Count-1 do begin
+      if AnsiSameText(Item.ParamName,AParams.Items[i].ParamName) then begin
+        if Item=AParams.Items[i] then
+          break;
+        Inc(Result);
+      end;
+    end;
+  end;
+
+  procedure TranslateFilterCaption(Item: TBisParam; Index: Integer);
+  var
+    SIndex: String;
+    SFind: String;
+    S: String;
+  begin
+    SIndex:=IntToStr(Index+1);
+    if Index=0 then
+      SFind:=SClass+'.Params.'+Item.ParamName+'.FilterCaption'
+    else
+      SFind:=SClass+'.Params.'+Item.ParamName+SIndex+'.FilterCaption';
+    if Core.TranslateToLog then
+      Core.Logger.Write(SFind+'='+Item.FilterCaption);
+    S:=Core.Translate(SFind);
+    if S<>SFind then begin
+      Item.FilterCaption:=S;
+    end;
+  end;
+
+var
+  i: Integer;
+  Item: TBisParam;
+  Index: Integer;
+begin
+  if Assigned(AParams) and Assigned(OwnerClass) then begin
+    SClass:=OwnerClass.ClassName;
+    for i:=0 to AParams.Count-1 do begin
+      Item:=AParams.Items[i];
+      Index:=GetItemIndex(Item);
+      TranslateFilterCaption(Item,Index);
+    end;
+  end;
+end;
+
+procedure ObjectLoggerWrite(const ObjectName,Message: String; LogType: TBisLoggerType=ltInformation);
+begin
+
+end;
+
+procedure ClassLoggerWrite(const ClassName,Message: String; LogType: TBisLoggerType=ltInformation);
+begin
+  ObjectLoggerWrite(GetNameByClass(ClassName),Message,LogType);
+  if Assigned(Core) and Assigned(Core.Logger) then
+    Core.Logger.Write(Message,LogType,GetNameByClass(ClassName));
+end;
+
+end.

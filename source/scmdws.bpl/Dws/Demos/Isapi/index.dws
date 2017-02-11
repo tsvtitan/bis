@@ -1,0 +1,170 @@
+<html>
+<head>
+<title>DWSII ISAPI Module</title>
+</head>
+<body>
+<h1>DelphiWebScript II ISAPI Module</h1>
+<p><b>Version:</b> <%= Module.Version %></p>
+<p>Welcome to the DWSII ISAPI module. Below you can see the 
+information that this ISAPI module offers to the script programmer. 
+<a href="demos/demos.dws"> Further demo scripts are available here</a></p>
+<h3>Parameters of the HTTP-Request (GET or POST method)</h3>
+<pre>
+<% 
+var x: Integer;
+
+if Request.ParamCount = 0 then
+begin
+%>
+No Parameters.
+Add some parameters to the request: 
+http://..../index.dws?param1=value1&param2=test
+<%
+end
+else
+begin
+  for x := 0 to Request.ParamCount - 1 do
+  begin
+    Send('Request Param: ' + Request.ParamName(x) + '=');
+    SendLn(Request.ParamValue(x));
+  end;
+end;
+
+if Request.CookieCount = 0 then
+begin
+%>
+No Cookies.
+<%
+end
+else
+begin
+  for x := 0 to Request.CookieCount - 1 do
+  begin
+    Send('Request Cookie: ' + Request.CookieName(x) + '=');
+    SendLn(Request.CookieValue(x));
+  end;
+end;
+%>
+</pre>
+<h3>HTTP-Request Properties</h3>
+<p>The DWSII Request class is a wrapper for TWebRequest in Delphi. Read the Delphi help for more information.</p>
+<pre>
+<%
+SendLn('Request.Authorization: ' + Request.Authorization);
+SendLn('Request.Content: ' + Request.Content);
+SendLn('Request.ContentLength: ' + IntToStr(Request.ContentLength));
+SendLn('Request.ContentType: ' + Request.ContentType);
+SendLn('Request.Date: ' + FormatDateTime('dddddd tt', Request.Date));
+SendLn('Request.From: ' + Request.From);
+SendLn('Request.Host: ' + Request.Host);
+SendLn('Request.PathInfo: ' + Request.PathInfo);
+SendLn('Request.Referer: ' + Request.Referer);
+SendLn('Request.RemoteAddr: ' + Request.RemoteAddr);
+SendLn('Request.RemoteHost: ' + Request.RemoteHost);
+SendLn('Request.ScriptName: ' + Request.ScriptName);
+SendLn('Request.Title: ' + Request.Title);
+SendLn('Request.Url: ' + Request.Url);
+SendLn('Request.UserAgent: ' + Request.UserAgent);
+%>
+</pre>
+<h3>HTTP-Response Properties</h3>
+<p>The DWSII Response class is a wrapper for TWebResponse in Delphi. Read the Delphi help for more information.</p>
+<pre>
+<%
+SendLn('Response.Allow: ' + Response.Allow);
+SendLn('Response.Content: ' + Response.Content);
+SendLn('Response.ContentEncoding: ' + Response.ContentEncoding);
+SendLn('Response.ContentLength: ' + IntToStr(Response.ContentLength));
+SendLn('Response.ContentType: ' + Response.ContentType);
+SendLn('Response.ContentVersion: ' + Response.ContentVersion);
+SendLn('Response.Date: ' + FormatDateTime('dddddd tt', Response.Date));
+SendLn('Response.DerivedFrom: ' + Response.DerivedFrom);
+SendLn('Response.Expires: ' + FormatDateTime('dddddd tt', Response.Expires));
+SendLn('Response.LastModified: ' + FormatDateTime('dddddd tt', Response.LastModified));
+SendLn('Response.Location: ' + Response.Location);
+SendLn('Response.LogMessage: ' + Response.LogMessage);
+SendLn('Response.Realm: ' + Response.Realm);
+SendLn('Response.ReasonString: ' + Response.ReasonString);
+SendLn('Response.Server: ' + Response.Server);
+SendLn('Response.StatusCode: ' + IntToStr(Response.StatusCode));
+SendLn('Response.Title: ' + Response.Title);
+SendLn('Response.Version: ' + Response.Version);
+%>
+
+Cookies: 
+<%
+if Response.CookieCount = 0 then
+begin
+%>
+No Cookies.
+<%
+end
+else
+begin
+  for x := 0 to Response.CookieCount - 1 do
+  begin
+    Send('Response Cookie: ' + Response.Cookie(x).Name + '=');
+    SendLn(Response.Cookie(x).HeaderValue);
+  end;
+end;
+%>
+</pre>
+<h3>Script Document</h3>
+<p>Informations about this script document</p>
+<pre>
+<%
+SendLn('ScriptDoc.Date: ' + FormatDateTime('dddddd tt', ScriptDoc.Date));
+SendLn('ScriptDoc.Size: ' + IntToStr(ScriptDoc.Size));
+SendLn('ScriptDoc.FileName: ' + ScriptDoc.FileName);
+SendLn('ScriptDoc.Path: ' + ScriptDoc.Path);
+%>
+</pre>
+<h3>Session</h3>
+<p>The values of the session record. This is only meaningfull if you use the session manager (see demos)</p>
+<pre>
+<%
+Send('SessionManager.Version: '); SendLn(SessionManager.Version);
+
+Sendln('Sessionstate: ' + inttostr(Session.ClientState));
+
+case Session.clientState of
+  dwStateLOFF :  sendln(' end session and log off');
+  dwStateTOUT : sendln(' session timed out');
+  dwStateNLI : sendln(' user is not logged in ');
+  dwStatePRF : sendln(' still to proof session ');
+  dwStateGLI : sendln(' logged in as guest ');
+  dwStateULI : sendln(' user is logged in, session exists ');
+  dwStateNAT : sendln(' logged in on higher level ');
+  dwStateVIP : sendln(' logged in on VIP level ');
+  dwStateSU  : sendln(' logged in on SU level ');
+end;
+
+SendLn('User.AnsiNick: ' + Session.Param('AnsiNick'));
+SendLn('User.ActiveUsers: ' + IntToStr(Session.ActiveUsers));
+SendLn('User.IpAddr: ' + Session.IpAddr);
+SendLn('User.SBrand: ' + Session.SBrand);
+SendLn('User.TLogin: ' + FormatDateTime('dddddd tt', Session.TLogin));
+SendLn('User.TLastAction: ' + FormatDateTime('dddddd tt', Session.TLastAction));
+%>
+</pre>
+<h3>Debugger Settings</h3>
+<p>The settings of the remote debugger server. To enable the remote debugger you have to 
+execute a script with the line &quot;Debugger.Enabled := True&quot; and to start 
+the remote debugger application (DebuggerIDE.exe). The next time a script is processed the 
+ISAPI module connects to the remote debugger application and executes the script in 
+debugging mode.</p>
+<pre>
+<%
+{
+// Not possible because there is currently no remote debugging support in the example ISAPI.
+// To include remote debugger support go to http://www.dwscript.com, download the RemoteDebugger
+// and drop the component onto the webmodule. Afterwards wire it and recompile the example isapi.
+
+Debugger.Enabled := False;
+SendLn('Debugger.Address: "' + Debugger.Address + '"');
+SendLn('Debugger.Port: ' + IntToStr(Debugger.Port));
+}
+%>
+</pre>
+</body>
+</html>

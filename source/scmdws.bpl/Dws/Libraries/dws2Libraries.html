@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><html><head><title>DWSII 2 - Libraries</title><style type="text/css">
+					div, span, table { font-family: helvetica, verdana; font-size: 10pt; }
+					table { margin: 0; width: 640px; }
+					ul { margin-top: 0; margin-bottom: 0; margin-left: 18px;}
+
+					div.title { font-size: 14pt; margin-top: 15px; margin-bottom: 10px; }
+					div.desc { font-style: italic; }
+					div.subtitle { font-size: 9pt; font-weight: bold; font-style: italic; }
+					div.p { margin-bottom: 15px; }
+					th.props { width: 100px; text-align: left; vertical-align: top; font-size: 9pt; font-weight: bold; padding-left: 0; }
+					td.props { width: 440px; text-align: left; vertical-align: top; }
+					tr.dark { background-color: #DDDDDF; }
+					tr.bright { background-color: #EEEEEF; }
+				</style></head><body><script type="text/javascript">
+						function toggleHelp(helpLink) {
+							var txt = helpLink.parentElement.children(2);
+							
+							if (txt.style.display=='block') {
+								txt.style.display = 'none';
+								helpLink.innerText = 'show...';
+							} else {
+								txt.style.display = 'block';
+								helpLink.innerText = 'hide...';
+							}
+						}
+				</script><div class="title">DWSII 2.x Libraries</div><div>This is a list of all libraries currently part of the DWSII project. Please direct questions, bug reports, suggestions about the libraries to the 
+				<a href="http://sourceforge.net/forum/?group_id=20329">DWSII forum</a> or to the author of the library.</div><div><ul><li><a href="#Library???Lib">???Lib</a></li><li><a href="#LibraryADODBLib">ADODBLib</a></li><li><a href="#LibraryClassesLib">ClassesLib</a></li><li><a href="#LibraryDbIsamLib">DbIsamLib</a></li><li><a href="#LibraryDbLib">DbLib</a></li><li><a href="#LibraryFtpLib">FtpLib</a></li><li><a href="#LibraryIboLib">IboLib</a></li><li><a href="#LibraryIbxLib">IbxLib</a></li><li><a href="#LibraryIniLib">IniLib</a></li><li><a href="#LibraryMFLib">MFLib</a></li><li><a href="#LibrarySmtpLib">SmtpLib</a></li><li><a href="#LibrarySymbolsLib">SymbolsLib</a></li><li><a href="#LibraryWebLib">WebLib</a></li></ul></div><table with="600"><tr><td><div class="title"><a name="#Library???Lib">???Lib</a></div><div class="desc">Empty template for a new library</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">-</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>James Bond, [<a href="mailto:007@mi6.co.uk">e-mail</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>vcl</b></li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>???</b> - Name this unit and add types, classes, functions, ...</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 5, Delphi 6, Delphi 7, Kylix 1, Kylix 3</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibraryADODBLib">ADODBLib</a></div><div class="desc">The DWS2-ADO-Library brings you 1 component for database access in DWS2, 
+Tdws2ADOlib, that introduces the classes TADOConnectionto and TADODataset;
+they are similar to the original classes of Delphi VCL. There are some extra properties (more will follow).</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">1.0</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>Fabrizio Vita, [<a href="mailto:itaca@users.sourceforge.net">e-mail</a>], [<a href="http://www.itacasoft.com/">homepage</a>], [<a href="http://sf.net/users/itaca">Source Forge</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>vcl</b></li><li><b>dbrtl</b></li><li><b>adortl</b> - ADOExpress component (Delphi 6, Delphi 7)</li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>ADO</b> - Contains the classes TADOConnection, TADOQuery and TADODataset</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"><div><div class="subtitle">TADOConnetion</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">
+TADOConnetion = class
+  .Create(ConnectionString: String): String;
+  .Open;
+  .Close;
+  .Execute(sSQL: string): TADODataset;
+  .BeginTrans;
+  .CommitTrans;
+  .RollbackTrans;
+  .ExecuteSQL;
+  .GetDataset(sSQL: string): TADODataset;
+  .Version: string;
+  .State: integer;
+  .DatasetCount: integer;
+  .Free;
+properties
+  .ConnectionString: String;
+  .CommandTimeout: integer;
+    </pre></div><div><div class="subtitle">TDBField</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">
+TDBField = class
+  .IsNull: Boolean;
+  .DataType: Integer;
+  .DataSize: integer;
+  .FieldName: string;
+properties
+  .Value: Variant;
+  .AsString: String;
+  .AsInteger: Integer;
+  .AsFloat: Float;
+  .AsDateTime: DateTime;
+    </pre></div><div><div class="subtitle">TADODataset</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">
+TADODataset = class
+  .Create;
+  .Open;
+  .Close;
+  .First: boolean;
+  .Next: boolean;
+  .Last: boolean;
+  .Eof: boolean;
+  .FieldByName(Name: string): TDBField;
+  .edit;
+  .insert;
+  .post;
+  .cancel;
+  .delete;
+  .RecordCount: integer;
+  .FieldCount: integer;
+  .GetHTMLCombo: string;
+  .Free;
+properties
+  .SQL: String;
+  .Connection: TADOConnection;
+  .Fields[index]: TDBField;
+  .Fieldisnull[index]: boolean;
+  .FieldAsDateTime[index]: dateTime;
+  .FieldAsFloat[index]: Float;
+  .FieldAsString[index]: String;
+  .FieldAsInteger[index]: Integer;
+  .FieldAsVariant[index]: Variant;
+  .CommandTimeout: integer;
+    </pre></div></td></tr><tr class="bright"><th class="props">Examples</th><td class="props"><div class="subtitle">Example "Query"</div><pre>var conn: TADOConnection;
+var rs: TADODataset;
+var t: integer;
+
+conn := TADOConnection.Create('DEMO_NEWS');
+rs := conn.Execute('select * from accessi');
+
+while not rs.Eof do
+begin
+   for t := 0 to rs.fieldcount - 1 do
+   begin
+      Send(rs.FieldAsString[t] + '---');
+   end;  
+   SendLn('&lt;br&gt;');
+   rs.Next;
+end;
+
+rs.free;
+conn.free; </pre></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibraryClassesLib">ClassesLib</a></div><div class="desc">Wraps the most important container classes from Delphi unit "Classes"</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">2.0</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>Matthias Ackermann, [<a href="mailto:matthias@dwscript.com">e-mail</a>], [<a href="http://sf.net/users/mackermann">Source Forge</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>vcl</b></li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>Classes</b> - Contains classes like TStrings, TList, ...</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 5, Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"><div class="subtitle">DWSII Documentation</div><div><a href="http://sf.net/projects/dws">http://sf.net/projects/dws</a></div><div class="p">Further information is available in the DWSII documentation</div></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibraryDbIsamLib">DbIsamLib</a></div><div class="desc">Wrapper class for using DbIsam with Delphi WebScript.</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">1.0</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>Wilbert van Leijen, [<a href="mailto:w.vanleijen@ksu.nl">e-mail</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>vcl</b></li><li><b>vcldb</b></li><li><b>dbrtl</b></li><li><b>bdertl</b></li><li><b>db319d7r</b> - DBISAM component from elevate software [<a href="http://www.elevatesoft.com">download</a>]</li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>DbIsam</b> - Classes to access databases using DbIsam from elevate software</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 5, Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"><div class="subtitle">DbIsam / elevate software  Website</div><div><a href="http://www.elevatesoft.com">http://www.elevatesoft.com</a></div><div class="p"></div><div><div class="subtitle">TDBIsamQuery</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">  TDBIsamQuery = class
+    constructor Create(Databasename, SQL : String);
+    procedure First;
+    procedure Next;
+    procedure Prior;
+    procedure Last;
+    procedure Append;
+    procedure Insert;
+    procedure Edit;
+    procedure Delete;
+    procedure Cancel;
+    procedure Post;
+    function BOF : Boolean;
+    function EOF : Boolean;
+    function FieldByName(Name : String) : Variant;
+    procedure Store(FieldName : String; Value : Variant);
+    function AsString(FieldName : String) : String;
+    function AsFloat(FieldName : String) : Float;
+    function AsInteger(FieldName : String) : Integer;
+    function AsBoolean(FieldName : String) : Boolean;
+    function AsDateTime(FieldName : String) : DateTime;
+    class procedure Execute(Alias : String; SQL : String);
+    function Locate(KeyFields : String; KeyValues : Variant) : Boolean;
+    function IsEmpty : Boolean;
+    function RecNo : Integer;
+    function RecordCount : Integer;
+  end;
+</pre></div><div><div class="subtitle">TDBIsamTable</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">  TDBIsamTable = class
+    constructor Create(Databasename, TableName : String);
+    procedure First;
+    procedure Next;
+    procedure Last;
+    procedure Prior;
+    procedure Append;
+    procedure Insert;
+    procedure Edit;
+    procedure Delete;
+    procedure Cancel;
+    procedure Post;
+    function BOF : Boolean;
+    function EOF : Boolean;
+    function Locate(KeyFields : String; KeyValues : Variant) : Boolean;
+    function FieldByName(Name : String) : Variant;
+    procedure Store(FieldName : String; Value : Variant);
+    function AsString(FieldName : String) : String;
+    function AsFloat(FieldName : String) : Float;
+    function AsInteger(FieldName : String) : Integer;
+    function AsBoolean(FieldName : String) : Boolean;
+    function AsDateTime(FieldName : String) : DateTime;
+    function IsEmpty : Boolean;
+    property IndexName : String;
+    property Filter : String;
+    function RecNo : Integer;
+    function RecordCount : Integer;
+  end;</pre></div></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibraryDbLib">DbLib</a></div><div class="desc">Very basic wrapper for Delphi TQuery class</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">1.0</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>Matthias Ackermann, [<a href="http://sf.net/users/mackermann">Source Forge</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>vcl</b></li><li><b>dbrtl</b></li><li><b>bdertl</b></li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>Db</b> - Contains classes like TStrings, TList, ...</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 5, Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"><div class="subtitle">DWSII Documentation</div><div><a href="http://sf.net/projects/dws">http://sf.net/projects/dws</a></div><div class="p">Further information is available in the DWSII documentation</div></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibraryFtpLib">FtpLib</a></div><div class="desc">The DWS2-ADO-Library brings you 1 component for database access in DWS2, 
+Tdws2ADOlib, that introduces the classes TADOConnectionto and TADODataset;
+they are similar to the original classes of Delphi VCL. There are some extra properties (more will follow).</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">1.0</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>Fabrizio Vita, [<a href="mailto:itaca@users.sourceforge.net">e-mail</a>], [<a href="http://www.itacasoft.com/">homepage</a>], [<a href="http://sf.net/users/itaca">Source Forge</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">DWS Units</div><ul><li><b>Internal</b></li></ul><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>vcl</b></li><li><b>indy</b> - Indy Internet Components. Those shipped with Delphi 6 or Delphi 7 will do. [<a href="http://www.nevrona.com/Indy/">download</a>]</li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>FTP</b> - Contains the class TFTPConnection</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibraryIboLib">IboLib</a></div><div class="desc">IBO (IBObjects) is the most sophisticated Interbase access tool for Delphi made by Jason Wharton. You will find more on http://www.ibobjects.com. The DWS2-IBO-Library brings you 3 components for databas access in DWS2.</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">1.0</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>hannes hernler, [<a href="mailto:hannes@dwscript.com">e-mail</a>], [<a href="http://sf.net/users/hhernler">Source Forge</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>IBO40ADT</b> - IBObjects by Jason Wharton [<a href="http://www.ibobjects.com">download</a>]</li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>Ibo</b> - Contains the classes TDataSetGrp, TQuery, TDataset, TStatement, TMLUField, TLUField, TDBField, TCustomDBField, TDatabase</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 5, Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"><div><div class="subtitle">Components</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">dws2IBOlib     -  introduces some classes to create and work with database
+                  objects in the script. dws2IBOlib is linked to 1
+                  TIB_Connection and 1 TIB_Transaction.
+                  There are some extra IBO properties to use Jasons extras.
+
+dws2IBODataSrc -  component to add a predefined TIB_Query, TIB_Cursor,
+                  or TIB_Statement as script object that can be used
+                  in the script without creation or prepare.
+
+dws2IBODataBase-  component to add more TIB_Connections if you use more
+                  than one database. DWS Queries and Statments can be
+                  created with database as parameter.</pre></div><div><div class="subtitle">Further Information</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Please see the help files of Delphi, interbase and IBO about the meaning
+of these classes and methods.</pre></div><div><div class="subtitle">Not Supported IBObjects Features</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">LookUpField : special for web apps - define a master-detail table relation,
+                 you can lookup details belonging to one master dataline (like
+                 with name=value in stringlists) when "name" filed is string.
+
+DataSetGrp :  DataSetGroup, special for reports - if you iterate through
+                 a dataset you can use DataSetGrp to watch changing of single
+                 field values, calculate group sums and total sums (like
+                 all incomes listed per person and totals per person....).</pre></div><div><div class="subtitle">Overview</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">TDatabase
+    .create(Database,user, pwd: String): String;
+    .connect;
+    .disconnect;
+   properties
+    .dialect: integer;
+    .charset: String;
+
+TDBField
+   properties
+    .Value: Variant;
+    .AsString: String;
+
+TLUField = class(TDBField)
+   properties
+    .Value: Variant;
+    .AsString: String;
+
+TStatement
+    .Create;
+    .CreateFromDB(Database: TDatabase);
+    .free;
+    .execute;
+    .FieldName(FieldName: String): TDBField;
+    .Field(FieldName: String): Variant; //simple version
+    .FieldIsNull(FieldName: String): boolean;
+    .ParamByName(ParamName: String): TDBField;
+    .SetParam(ParamName: String; Value: variant);
+   properties
+    .SQL: String; // after create assign SQL with the SQL statement
+
+TDataset   = class(TStatement)
+    .Open;
+    .First: boolean;
+    .Next: boolean;
+    .Eof: boolean;
+    .xxx: String;
+    .edit;
+    .insert;
+    .post;
+    .cancel;
+    .delete;
+    .close;
+
+TQuery = class(TDataset)
+    .Prior: String;
+    .SetLookUpFields(KeyFieldName,LUfieldName: String): String;
+    .LookUp(KeyFieldValue: String): String;
+   properties
+    .Filter: String;
+    .Filtered: boolean;
+    .SortOrder: integer;
+
+TDataSetGrp
+    .create(DataSet: TDataset; GroupFieldName: String);
+          DataSet is allready prepared;
+    .Free;
+    .Changed: boolean;
+          will be false while the content of the GroupField stays the same
+          while iterating through this dataset
+    .AddSumField(FieldName: String);
+          after create, before start iterating, add all fieldnames of fields
+          which should be added in the group or total
+    .SumOfField(FieldName: String): float;
+          returns actual value of added field values. is set to 0 with "reset"
+    .Count: integer;
+          returns the number of datarecords in this group.
+    .AddRow;
+          adds values of all fields 
+    .Restart;
+          reset values for a new group, DOES NOT RESET FIELD SUMS
+    .Reset;
+          reset values AND FIELD SUMS for a new group</pre></div></td></tr><tr class="bright"><th class="props">Examples</th><td class="props"><div class="subtitle">Example "dws2IBO : TDataSetGrp Demo"</div><pre>var qAmounts: TDataset;
+var grpEmployee : TDataSetGrp;
+
+qAmounts := TDataset.Create;
+qAmounts.SQL := 'select * from empl_amounts'; // wages of employees
+qAmounts.open;
+grpEmployee := TDataSetGrp.create(qAmounts,'name');
+grpEmployee.AddSumField('amount');
+
+while not qAmounts.Eof do
+begin
+  Print('name: ');
+  PrintLn(qAmounts.Field('name'));
+  while not grpEmployee.changed do
+  begin
+    Print(qAmounts.Fieldbyname('bill_date').value);
+    Print(', ');
+    PrintLn(qAmounts.Field('amount'));
+    grpEmployee.addrow;
+    qAmounts.Next;
+    i := i+1;
+  end;
+  Print(grpEmployee.count);
+  Print('-----------, sum: ');
+  PrintLn(grpEmployee.SumOfField('amount'));
+  Println('');
+  grpEmployee.reset;
+end;</pre></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibraryIbxLib">IbxLib</a></div><div class="desc">A wrapper for the IBExpress components of Delphi 6 and 7.</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">1.0</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>hannes hernler, [<a href="mailto:hannes@dwscript.com">e-mail</a>], [<a href="http://sf.net/users/hhernler">Source Forge</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">Delphi Packages</div><ul><li><b>rtl</b></li><li><b>dbrtl</b></li><li><b>ibxpress</b></li><li><b>dws2Runtime</b></li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>IBX</b> - Contains the IBX classes TDataSetGrp, TQuery, TDataset, TStatement, TMLUField, TLUField, TDBField, TDatabase</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibraryIniLib">IniLib</a></div><div class="desc">Class wrapper for the TIniFile component. Works exaclty like the normal TIniFile component except for a few minor functions.</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">1.3</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>Matthias Ackermann, [<a href="mailto:matthias@dwscript.com">e-mail</a>], [<a href="http://sf.net/users/mackermann">Source Forge</a>]</div><div>Jeremy Darling, [<a href="mailto:jeremy.darling@premconf.com">e-mail</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">DWS Units</div><ul><li><b>Classes</b></li></ul><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>vcl</b></li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>Ini</b> - Contains the class TIniFile</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 5, Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"><div><div class="subtitle">Excluded Functions</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">The functions excluded are:
+	1) procedure ReadSection
+	2) procedure ReadSections
+	3) procedure ReadSectionValues
+All other procedures, functions, and properties exist.
+
+Port to Kylix should be easily made.</pre></div></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibraryMFLib">MFLib</a></div><div class="desc">Tons of funtions for WIN32 API, ZIP-Support, TCP/IP, ...</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">1.0 Beta</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>Manfred Fuchs, [<a href="mailto:manfred@dwscript.com">e-mail</a>], [<a href="http://sf.net/users/manfredfuchs">Source Forge</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">DWS Units</div><ul><li><b>Internal</b></li></ul><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>vcl</b></li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>MFBasic</b> - Basic functions like Beep, Sleep, GetTickCount, ...</li><li><b>MFConnection</b> - Functions to determine the connections state of a dial up network and the current IP address.</li><li><b>MFFile</b> - File utility functions</li><li><b>MFInfo</b> - Information about Windows version, current user and Windows directories.</li><li><b>MFIniFiles</b> - Writing and reading Windows INI-files</li><li><b>MFRegistry</b> - Querying and modifying registry values</li><li><b>MFShell</b> - Contains a function to refresh the desktop items</li><li><b>MFString</b> - String utility functions</li><li><b>MFSystem</b> - Windows events, Mail Slots, ShellExecute and so on...</li><li><b>MFWindow</b> - Functions to find, manipulate and close windows</li><li><b>MFDialog</b> - Contains the function SelectStringDialog() that displays a box to select one from a list of strings.</li><li><b>MFZip</b> - Functions to create and manipulate ZIP-files</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 5, Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"><div><div class="subtitle">Basic</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+-
+
+Functions
+----------
+
+procedure Beep;
+function  Dec(var I: Integer): Integer;
+function  Dec2(var I: Integer; N: Integer): Integer;
+function  Inc(var I: Integer): Integer;
+function  Inc2(var I: Integer; N: Integer): Integer;
+function  GetTickCount: Integer;
+procedure Sleep(mSecs: Integer);
+procedure WriteLn(Text: String);</pre></div><div><div class="subtitle">Connection</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+-
+
+Functions
+----------
+
+function Connected: Boolean;
+function IPAddress: String;</pre></div><div><div class="subtitle">Dialog</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+-
+
+Functions
+----------
+
+function SelectStringDialog(Title: String; Strings: TStringList; Selected: Integer): Integer;</pre></div><div><div class="subtitle">File</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+DRIVE_UNKNOWN
+DRIVE_NO_ROOT_DIR
+DRIVE_REMOVABLE
+DRIVE_FIXED
+DRIVE_REMOTE
+DRIVE_CDROM
+DRIVE_RAMDISK
+FILEDATE_CREATION
+FILEDATE_LASTACCESS
+FILEDATE_LASTWRITE
+MOVEFILE_REPLACE_EXISTING
+MOVEFILE_COPY_ALLOWED
+MOVEFILE_DELAY_UNTIL_REBOOT
+MOVEFILE_WRITE_THROUGH
+MOVEFILE_CREATE_HARDLINK
+MOVEFILE_FAIL_IF_NOT_TRACKABLE
+
+Functions
+----------
+
+function  DescCopy(Source, Target: String): Boolean;
+function  DescListCreate(Dir: String): TStringList;
+function  DescListRead(List: TStringList; FileName: String): String;
+function  DescMove(Source, Target: String): Boolean;
+function  DescRead(Filename: String): String;
+function  DescWrite(FileName, Desc: String): Boolean;
+function  OpenDialog(FileName, InitialDir, Title, DefaultExt, Filter: String; FilterIndex: Integer): String;
+function  OpenDialogMulti(FileName, InitialDir, Title, DefaultExt, Filter: String; FilterIndex: Integer): TStringList;
+function  SaveDialog(FileName, InitialDir, Title, DefaultExt, Filter: String; FilterIndex: Integer): String;
+function  CDClose(Drive: Integer): Boolean;
+function  CDOpen(Drive: Integer): Boolean;
+function  GetCRC32FromFile(FileName: String): Integer;
+function  GetDriveName(Drive: Integer): String;
+function  GetDriveNum(Drive: String): Integer;
+function  GetDriveReady(Drive: Integer): Boolean;
+function  GetDriveSerial(Drive: Integer): String;
+function  GetDriveType(Drive: Integer): Integer;
+function  DirectoryExists(DirName: String): Boolean;
+function  DirectoryList(DirName: String; Recurse, Hidden): TStringList;
+function  CopyFile(Source, Target: String; Fail: Boolean): Boolean;
+function  FileDate(FileName: String; Flag: Integer): DateTime;
+function  FileList(FileName: String; Recurse, Hidden, Dirs: Boolean): TStringList;
+function  FileSize(FileName: String): Integer;
+function  MakePath(Drive, Dir, Name, Ext: String): String;
+function  MoveFile(Source, Target: String): Boolean;
+function  MoveFileEx(Source, Target: String; Flags: Integer): Boolean;
+function  ReadOnlyPath(Path: String): Boolean;
+procedure SplitPath(Path: String; var Drive, Dir, Name, Ext: String);
+function  SubdirectoryExists(Dir: String): Boolean;</pre></div><div><div class="subtitle">Info</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+VER_UNKNOWN
+VER_WIN32S
+VER_WIN95
+VER_WIN98
+VER_WIN98SE
+VER_WINME
+VER_WINNT
+VER_WINNT4
+VER_WIN2000
+
+Functions
+----------
+
+function  GetAllUsersDesktopDirectory: String;
+function  GetAllUsersProgramsDirectory: String;
+function  GetAllUsersStartmenuDirectory: String;
+function  GetAllUsersStartupDirectory: String;
+function  GetAppdataDirectory: String;
+function  GetCacheDirectory: String;
+function  GetChannelFolderName: String;
+function  GetCommonFilesDirectory: String;
+function  GetComputerName: String;
+function  GetConsoleTitle: String;
+function  GetCookiesDirectory: String;
+function  GetCPUSpeed: String;
+function  GetDesktopDirectory: String;
+function  GetDevicePath: String;
+function  GetEnvironmentVariable: String;
+function  GetFavoritesDirectory: String;
+function  GetFontsDirectory: String;
+function  GetHistoryDirectory: String;
+function  GetLinkfolderName: String;
+function  GetMediaPath: String;
+function  GetNethoodDirectory: String;
+function  GetPersonalDirectory: String;
+function  GetPFAccessoriesName: String;
+function  GetPrinthoodDirectory: String;
+function  GetProgramfilesDirectory: String;
+function  GetProgramsDirectory: String;
+function  GetRecentDirectory: String;
+function  GetSendtoDirectory: String;
+function  GetSMAccessoriesName: String;
+function  GetStartmenuDirectory: String;
+function  GetStartupDirectory: String;
+function  GetSystemDirectory: String;
+function  GetTempDirectory: String;
+function  GetTemplatesDirectory: String;
+function  GetUserName: String;
+function  GetVersion: String;
+function  GetWallpaperDirectory: String;
+function  GetWindowsDirectory: String;
+function  GetWindowsVersion: String;
+function  IsWin2000: Boolean;
+function  IsWin9x: Boolean;
+function  IsWinNT: Boolean;
+function  IsWinNT4: Boolean;
+function  SetComputerName: String;
+function  SetConsoleTitle: String;</pre></div><div><div class="subtitle">IniFiles</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Klasse TIniFile
+---------------
+
+procedure TIniFile.Create(FileName: String);
+procedure TIniFile.Destroy;
+procedure TIniFile.DeleteKey(Section: String; Ident: String);
+procedure TIniFile.EraseSection(Section: String);
+function  TIniFile.ReadBool(Section: String; Ident: String; Default: Boolean): Boolean;
+function  TIniFile.ReadDate(Section: String; Ident: String; Default: DateTime): DateTime;
+function  TIniFile.ReadDateTime(Section: String; Ident: String; Default: DateTime): DateTime;
+function  TIniFile.ReadFloat(Section: String; Ident: String; Default: Float): Float;
+function  TIniFile.ReadInteger(Section: String; Ident: String; Default: Integer): Integer;
+procedure TIniFile.ReadSection(Section: String; Strings: TStringList);
+procedure TIniFile.ReadSections(Strings: TStringList);
+procedure TIniFile.ReadSectionValues(Section: String; Strings: TStringList);
+function  TIniFile.ReadString(Section: String; Ident: String; Default: String): String;
+function  TIniFile.ReadTime(Section: String; Ident: String; Default: DateTime): DateTime;
+function  TIniFile.SectionExists(Section: String): Boolean;
+procedure TIniFile.UpdateFile;
+function  TIniFile.ValueExists(Section: String; Ident: String): Boolean;
+procedure TIniFile.WriteBool(Section: String; Ident: String; Value: Boolean);
+procedure TIniFile.WriteDate(Section: String; Ident: String; Value: DateTime);
+procedure TIniFile.WriteDateTime(Section: String; Ident: String; Value: DateTime);
+procedure TIniFile.WriteFloat(Section: String; Ident: String; Value: Float);
+procedure TIniFile.WriteInteger(Section: String; Ident: String; Value: Integer);
+procedure TIniFile.WriteString(Section: String; Ident: String; Value: String);
+procedure TIniFile.WriteTime(Section: String; Ident: String; Value: DateTime);
+
+property  TIniFile.FileName: String;</pre></div><div><div class="subtitle">Registry</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+HKEY_CLASSES_ROOT
+HKEY_CURRENT_USER
+HKEY_LOCAL_MACHINE
+HKEY_USERS
+HKEY_PERFORMANCE_DATA
+HKEY_CURRENT_CONFIG
+HKEY_DYN_DATA
+
+Functions
+----------
+
+procedure RegCreateKey(MainKey: Integer; SubKey: String);
+procedure RegDeleteKey(MainKey: Integer; SubKey: String);
+procedure RegDeleteValue(MainKey: Integer; SubKey: String; ValName: String);
+function  RegReadInteger(MainKey: Integer; SubKey: String; ValName: String; ValDef: Integer): Integer;
+function  RegReadString(MainKey: Integer; SubKey: String; ValName: String; ValDef: String): String;
+function  RegGetType(MainKey: Integer; SubKey: String; ValName: String; var Size: Integer): Integer;
+function  RegKeyExists(MainKey: Integer; SubKey: String): Boolean;
+function  RegValueExists(MainKey: Integer; SubKey: String; ValName: String): Boolean;
+procedure RegWriteInteger(MainKey: Integer; SubKey: String; ValName: String; Value: Integer);
+procedure RegWriteString(MainKey: Integer; SubKey: String; ValName: String; Value: String);</pre></div><div><div class="subtitle">Shell</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+-
+
+Functions
+----------
+
+DesktopRefresh;</pre></div><div><div class="subtitle">String</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+cdrLeft
+cdrRight
+
+Functions
+----------
+
+function  ANSI2OEM(S: String): String;
+function  ChangeTokenValue(S: String; Name: String; Value: String; Delimiter: String): String;
+function  Chr(Byte: Integer): String;
+function  CmpRE(S: String; RE: String): Boolean;
+function  CmpWC(S: String; WC: String; Case: Boolean): Boolean;
+function  Crop(S: String; Len: Integer; Dir: Integer; Delimiter: String)
+function  ForEach(List: TStringList; Func: String; Flag: Integer): Boolean;
+procedure FormatColumns(List: TStringList; Delimiter: String; Space: String; Adjustment: Integer);
+function  GetCRC32FromString(S: String): Integer;
+function  GetStringFromList(List: TStringList; Delimiter: String): String;
+function  GetTokenList(S: String; Delimiter: String; Repeater: Boolean; IgnoreFirst: Boolean; IgnoreLast: Boolean): TStringList;
+function  IncWC(S: String; WC: String; Case: Boolean): String;
+function  Num2Text(Num: Integer): String;
+function  OEM2ANSI(S: String): String;
+function  Ord(Char: String): Integer;
+function  PosX(SubStr: String; S: String): Integer;
+function  StringOfChar(Ch: String; Count: Integer): String;
+function  TestWC(S: String): Integer;
+function  Translate(S: String; Out: String; In: String; Place: String; Case: Boolean): String;</pre></div><div><div class="subtitle">System</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+SW_HIDE
+SW_SHOWNORMAL
+SW_NORMAL
+SW_SHOWMINIMIZED
+SW_SHOWMAXIMIZED
+SW_MAXIMIZE
+SW_SHOWNOACTIVE
+SW_SHOW
+SW_MINIMIZE
+SW_SHOWMINNOACTIVE
+SW_SHOWNA
+SW_RESTORE
+SW_SHOWDEFAULT
+EWX_LOGOFF
+EWX_SHUTDOWN
+EWX_REBOOT
+EWX_FORCE
+EWX_POWEROFF
+EWX_FORCEIFHUNG
+
+Nachrichten-Constants für PostMessage() und SendMessage() siehe Datei dws2MFLibMessages.txt
+
+Functions
+----------
+
+function  ShellExecute(Operation: String; Filename: String; Parameters: String; Directory: String; ShowCmd: Integer): Integer;
+function  ShellExecuteWait(Filename: String; Parameters: String; Directory: String; ShowCmd: Integer): Boolean;
+function  ExitWindowsEx(Flags: Integer): Integer;
+function  WriteMailslot(Machine: String; Mailslot: String; Text: String): Boolean;
+function  GetProcessList: TStringList;
+function  HiWord(Value: Integer): Integer;
+function  IsFileActive(FileName: String): Boolean;
+function  KillProcess(Window: Integer; FileName: String; KillAll: Boolean): Boolean;
+function  LoWord(Value: Integer): Integer;
+function  MakeLong(Low, High: Integer): Integer;
+function  PostMessage(Window, Msg, WParam, LParam: Integer): Boolean;
+procedure SendKeys(Keys: String);
+procedure SendKeysEx(Keys: String; Wait: Integer);
+function  SendKeysNamedWin(Window: String; Keys: String): Integer;
+function  SendKeysNamedWinEx(Window: String; Keys: String; Wait: Integer; Back: Boolean): Integer;
+function  SendKeysWin(Window: Integer; Keys: String): Integer;
+function  SendKeysWinEx(Window: Integer; Keys: String; Wait: Integer; Back: Boolean): Integer;
+function  SendMessage(Window, Msg, WParam, LParam: Integer): Integer;</pre></div><div><div class="subtitle">System</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+-
+
+Functions
+----------
+
+function  FindWindow(Class: String; Window: String): Integer;
+function  FindWindowEx(Parent: Integer; ChildAfter: Integer; Class: String; Window: String): Integer;
+function  GetClassName(Window: Integer): String;
+function  GetWindowText(Window: Integer): String;
+procedure HideTaskbar;
+function  IsIconic(Window: Integer): Boolean;
+function  IsWindow(Window: Integer): Boolean;
+function  IsWindowEnabled(Window: Integer): Boolean;
+function  IsWindowVisible(Window: Integer): Boolean;
+function  IsZoomed(Window: Integer): Boolean;
+function  SearchWindow(var Class; var Window: String; ProcID: Integer): Integer;
+function  SearchWindowEx(Parent: Integer; ChildAfter: Integer; var Class; var Window: String; Num: Integer): Integer;
+procedure ShowTaskbar;
+function  WaitForWindow(var Class; var Window: String; Timeout: Integer; ProcID: Integer): Integer;
+function  WaitForWindowClose(Window: Integer; Timeout: Integer): Boolean;
+function  WaitForWindowClose(Class: String; Window: String; Timeout: Integer; ProcID: Integer): Boolean;
+function  WaitForWindowEnabled(Window: Integer; Timeout: Integer): Boolean;
+function  WaitForWindowEnabled(Class: String; Window: String; Timeout: Integer; ProcID: Integer): Boolean;
+function  WaitForWindowEx(Parent: Integer; var Class; var Window: String; Timeout: Integer; Num: Integer): Integer;
+procedure WindowMove(Window: Integer; X: Integer; Y: Integer; Abs: Boolean);
+procedure WindowResize(Window: Integer; X: Integer; Y: Integer; Abs: Boolean);</pre></div><div><div class="subtitle">Zip</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">Constants
+----------
+
+Zip_Add
+Zip_Move
+Zip_Update
+Zip_Freshen
+Zip_Extract
+Zip_Test
+Zip_OverwriteConfirm
+Zip_OverwriteAlways
+Zip_OverwriteNever
+Zip_EraseFinal
+Zip_EraseAllowUndo
+
+Classes
+-------
+
+TZip
+
+constructor TZip.Create;
+destructor  TZip.Destroy;
+
+function  TZip.Add(Action: Integer; ZipFile: String; FileName: String): Integer;
+function  TZip.AddList(Action: Integer; ZipFile: String; FileNames: TStringList): Integer;
+function  TZip.Delete(ZipFile: String; FileName: String): Integer;
+function  TZip.DeleteList(ZipFile: String; FileNames: TStringList): Integer;
+function  TZip.Extract(Action: Integer; ZipFile: String; FileName: String): Integer;
+function  TZip.ExtractList(Action: Integer; ZipFile: String; FileNames: TStringList): Integer;
+function  TZip.List(ZipFile: String): TStringList;
+function  TZip.Message(ZipFile: String): String;
+function  TZip.ReadSpan(SpanFile: String; var ZipFile: String): Integer;
+function  TZip.SFX2ZIP(ZipFile: String): Integer;
+function  TZip.WriteSpan(ZipFile: String; SpanFile: String): Integer;
+function  TZip.ZIP2SFX(ZipFile: String): Integer;
+
+property TZip.AddCompLevel: Integer;
+property TZip.AddDirNames: Boolean;
+property TZip.AddDiskSpan: Boolean;
+property TZip.AddDiskSpanErase: Boolean;
+property TZip.AddEncrypt: Boolean;
+property TZip.AddHiddenFiles: Boolean;
+property TZip.AddRecurseDirs: Boolean;
+property TZip.AddSeparateDirs: Boolean;
+property TZip.AddZipTime: Boolean;
+property TZip.ConfirmErase: Boolean;
+property TZip.ExtrDirNames: Boolean;
+property TZip.ExtrOverwrite: Boolean;
+property TZip.HowToDelete: Boolean;
+property TZip.KeepFreeOnDisk1: Integer;
+property TZip.MaxVolumeSize: Integer;
+property TZip.MinFreeVolumeSize: Integer;
+property TZip.Password: String;
+property TZip.SFXAskCmdLine: Boolean;
+property TZip.SFXAskFiles: Boolean;
+property TZip.SFXCaption: String;
+property TZip.SFXCommandLine: String;
+property TZip.SFXDefaultDir: String;
+property TZip.SFXHideOverwriteBox: Boolean;
+property TZip.SFXOverwriteMode: Integer;
+property TZip.Temp: String;</pre></div></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibrarySmtpLib">SmtpLib</a></div><div class="desc">Wrapper for the Fastnet SMTP component</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">1.0</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>hannes hernler, [<a href="mailto:hannes@dwscript.com">e-mail</a>], [<a href="http://sf.net/users/hhernler">Source Forge</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>NMFAST</b></li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>SMTPunit</b> - Contains the class TSMTPMail to send mails using SMTP</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 5, Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibrarySymbolsLib">SymbolsLib</a></div><div class="desc">Library to browse through the symboltable of the current DWSII program.</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">1.0</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>Matthias Ackermann, [<a href="mailto:matthias@dwscript.com">e-mail</a>], [<a href="http://sf.net/users/mackermann">Source Forge</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">Delphi Packages</div><ul><li><b>dws2Runtime</b></li><li><b>vcl</b></li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>Symbols</b> - Contains the class TSymbols</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 5, Delphi 6, Delphi 7, Kylix 1, Kylix 3</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"></td></tr></table></td></tr></table><table with="600"><tr><td><div class="title"><a name="#LibraryWebLib">WebLib</a></div><div class="desc">The DWS2-Web-Library brings you 3 components for building Webapps with DWS2 and 1 for desktop script handling (eg. in reports...). Ready to use ISAPI Library with included Session management. Tested with IIS, PWS, OmniHttpd</div></td></tr><tr><td><table class="props" width="100%"><tr class="dark"><th class="props">Version</th><td class="props">-</td></tr><tr class="bright"><th class="props">Author(s)</th><td class="props"><div>hannes hernler, [<a href="mailto:hannes@dwscript.com">e-mail</a>], [<a href="http://sf.net/users/hhernler">Source Forge</a>]</div></td></tr><tr class="dark"><th class="props">License(s)</th><td class="props">Mozilla Public License (MPL)</td></tr><tr class="bright"><th class="props">Dependencies</th><td class="props"><div class="subtitle">Delphi Packages</div><ul><li><b>inet</b></li><li><b>dws2Runtime</b></li><li><b>indy</b></li></ul></td></tr><tr class="dark"><th class="props">Units</th><td class="props"><ul><li><b>WebUnit</b> - Contains the classes Request, Response, ...</li><li><b>SessionManager</b> - Session manager interface</li></ul></td></tr><tr class="bright"><th class="props">Compatibility</th><td class="props">Delphi 5, Delphi 6, Delphi 7</td></tr><tr class="dark"><th class="props">Documentation</th><td class="props"><div><div class="subtitle">Overview</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">dws2WebLib     -  introduces some classes to handle the isapi calls of
+                  Borlands webbroker (request, response, cookie), the
+                  scriptdoc class to store information about the scriptfile,
+                  and TFormVarGroup to handle multiple input fields of
+                  database tables in html forms.
+                  there are also some "functions" usefull for webapps.
+
+dws2PageProducer - based on CustomContentProducer, with standard interface
+                  to be called by webactions and return content from scriptfiles.
+
+dws2SessionLib-   component to add http-usertracking (not an easy thing)
+                  and store sessiondata
+
+dws2PageLoader -  similar to dws2PageProducer but without interface to
+                  webbroker.
+</pre></div><div><div class="subtitle">dws2WebLib Classes</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">See the help files of Delphi about the meaning of these classes
+and methods.
+
+
+Request
+    .Param(Name: String): String
+    .Params(Name: String): String (TStrings.text !!)
+       function params results a string from TStrings.text
+       to be used in a Stringlist. but doesn´t use the datatype
+       TStrings to be compatible with different DWS Libraries (CLasses, VCLwrapper..)
+       script example: MyStringList.text := Request.Params('ffcheck');
+    .ParamCount: Integer
+    .ParamName(Index: Integer): String;
+    .ParamValue(Index: Integer): string;
+    .Authorization: string;
+    .Content: String;
+    .ContentLength: Integer;
+    .ContentType: String;
+    .CookieCount: Integer;
+    .Date: DateTime;
+    .From: String;
+    .Host: String;
+    .PathInfo: String;
+    .Referer: String;
+    .RemoteAddr: String;
+    .RemoteHost: String;
+    .ScriptName: String;
+    .Title: String;
+    .Url: String;
+    .UserAgent: String;
+    .Accept: String;
+    .Method: String;
+    .LogContent: String;
+    .Cookie(Name: String): String;
+    .CookieName(Index: Integer): String;
+    .CookieValue(Index: Integer): String;
+
+Response
+    .Allow: String;
+    .Content: String;
+    .ContentEncoding: String;
+    .ContentLength: Integer;
+    .ContentType: String;
+    .ContentVersion: String;
+    .CookieCount: Integer;
+    .NewCookie: TCookie;
+    .SendRedirect(Uri: String);
+    .Cookie(Index: Integer): TCookie;
+    .CookieByName(Name: String): TCookie;
+    .Date: DateTime;
+    .DerivedFrom: String;
+    .Expires: DateTime;
+    .LastModified: DateTime;
+    .Location: String;
+    .LogMessage: String;
+    .Realm: String;
+    .ReasonString: String;
+    .Server: String;
+    .StatusCode: Integer;
+    .Title: String;
+    .Version: String;
+
+ScriptDoc
+    .Date: DateTime;
+    .Size: Integer;
+    .FileName: String;
+    .Path: String;
+
+TCookie
+    .Domain: String;
+    .Expires: DateTime;
+    .HeaderValue: String;
+    .Name: String;
+    .Path: String;
+    .Value: String;
+    .Secure: Boolean;
+
+TFormVarGroup
+    .create;
+    .AddNullFields: boolean;
+         also add fields where value strings are empty (null) -
+         e.g. for delete dataset records
+    .Prefix: String;
+         when there are mutliple fields (e.g. from a database table) with
+         values that have to be inserted/updated you can name the fields
+         like
+         &lt;input type="text" name="ffprfx&lt;%=qQuery.field('id')%&gt;"
+            value="&lt;%=qQuery.field('amount')%&gt;"&gt;
+         then Prefix is "ffprfx" and in content params is a list of
+            Prefix+extension=value
+         like
+            ffprfx23=4500
+            ffprfx677=12345
+            ffprfx788=3000
+         where the part between prefix and "=" is extension
+    .ext: string;
+         see above
+    .value: string;
+         see above
+    .count: integer;
+         number of fields with the actual prefix
+    .RecNr: integer;
+         actual line index of the paramlist (see first, next, eof)
+    .First;
+         set actual line index of the paramlist to 0 (see RecNr, next, eof)
+    .Next;
+         inc actual line index of the paramlist (see first, RecNr, eof)
+    .Eof: boolean;
+         test actual line index of the paramlist (see first, next, RecNr)</pre></div><div><div class="subtitle">dws2WebLib Functions</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">.FormVar(ParamName: String): String;
+         returns field value of html-form-field by the name of  ParamName
+         in a post request or (ParamName=)value in a get request.
+    .RtfToHtml(RtfStr: String): String;
+         replaces all CR/LF with &lt;br&gt;
+    .TrimURL(sURL: String): String;
+         deletes 'http://' from the string if any
+    .AcceptWML: boolean;
+         reurns if the requesting client accepts WML code
+    .URLencode(sURL: String): String;
+    .URLdecode(sURL: String): String;
+         spaces and special character in string are replaced by %ord(chr) and vs.
+    .forward(NewFile: String);
+         stops execution of actual script and continues with script at
+         path NewFile;
+</pre></div><div><div class="subtitle">customSessionUnit</div><div onclick="toggleHelp(this)" style="color: blue; cursor: pointer;"> show...</div><pre class="p" style="display: none;">const
+  // session state constants for UserSession.FClientState
+  dwstateLOFF = -1; // end session and log off
+  dwsStateTOUT = -2; // session timed out
+  dwsStateNLI  = 0; // user is not logged in
+  dwsStateGLI  = 1; // logged in as guest
+  dwsStatePRF  = 9; // still to proof session
+  dwsStateULI  = 10; // user is logged in, session exists
+  dwsStateNAT  = 12; // logged in on higher level
+  dwsStateVIP  = 20; // logged in on VIP level
+  dwsStateSU   = 100; // logged in on SU level
+
+Classes
+  Session
+    .Param(Name: String): variant;
+    .Store(Name: String; value: variant);
+    .ActiveUsers: Integer;
+          number of  ActiveUsers
+    .IpAddr: String;
+    .ClientState: Integer;
+    .SBrand: String;
+         Sessionbrand: please read about session branding on www.dwscript.com
+    .TLogin: DateTime;
+    .TLastAction: DateTime;
+
+Functions
+      TIDfunc: String;
+          returns the sessionbrand; function name is set like the value of
+          property SessionBrandLable; e.g. &lt;%= TID %&gt; returns the sessionbrand
+          if SessionBrandLable has the value 'TID'
+      ActiveSession: boolean;
+          tests if this request is within a context of a tracked session
+</pre></div></td></tr></table></td></tr></table></body></html>

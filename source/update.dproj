@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{5a8d3900-7855-498a-b9b9-bde61c5200d4}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\update.exe</DCC_DependencyCheckOutputName>
+    <MainSource>update.dpr</MainSource>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_Define>DEBUG</DCC_Define>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_ExeOutput>U:\bin</DCC_ExeOutput>
+    <DCC_UnitSearchPath>U:\source\objects.bpl\Cipher\Source;U:\source\omnet.bpl\Indy\Core;U:\source\omnet.bpl\Indy\Protocols;U:\source\omnet.bpl\Indy\System;U:\source\omnet.bpl\Ras;U:\source\objects.bpl\DIMime\Source;U:\source\objects.bpl\Alcinoe\source;U:\source\objects.bpl\IPHlpApi\Pas;U:\source\objects.bpl\WinSock2</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\objects.bpl\Cipher\Source;U:\source\omnet.bpl\Indy\Core;U:\source\omnet.bpl\Indy\Protocols;U:\source\omnet.bpl\Indy\System;U:\source\omnet.bpl\Ras;U:\source\objects.bpl\DIMime\Source;U:\source\objects.bpl\Alcinoe\source;U:\source\objects.bpl\IPHlpApi\Pas;U:\source\objects.bpl\WinSock2</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\objects.bpl\Cipher\Source;U:\source\omnet.bpl\Indy\Core;U:\source\omnet.bpl\Indy\Protocols;U:\source\omnet.bpl\Indy\System;U:\source\omnet.bpl\Ras;U:\source\objects.bpl\DIMime\Source;U:\source\objects.bpl\Alcinoe\source;U:\source\objects.bpl\IPHlpApi\Pas;U:\source\objects.bpl\WinSock2</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\objects.bpl\Cipher\Source;U:\source\omnet.bpl\Indy\Core;U:\source\omnet.bpl\Indy\Protocols;U:\source\omnet.bpl\Indy\System;U:\source\omnet.bpl\Ras;U:\source\objects.bpl\DIMime\Source;U:\source\objects.bpl\Alcinoe\source;U:\source\objects.bpl\IPHlpApi\Pas;U:\source\objects.bpl\WinSock2</DCC_IncludePath>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+    <DCC_TYPEINFO_IMPLICITLY_ADDED>False</DCC_TYPEINFO_IMPLICITLY_ADDED>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">2</VersionInfo><VersionInfo Name="MinorVer">1</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">7</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">Update</VersionInfoKeys><VersionInfoKeys Name="FileVersion">2.1.0.7</VersionInfoKeys><VersionInfoKeys Name="InternalName">update.exe</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">update.exe</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">2.1</VersionInfoKeys><VersionInfoKeys Name="Comments">Update</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">update.dpr</Source></Source></Delphi.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="update.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="core.bpl\BisBase64.pas" />
+    <DCCReference Include="core.bpl\BisCrypter.pas" />
+    <DCCReference Include="core.bpl\BisFileDirs.pas" />
+    <DCCReference Include="core.bpl\BisModuleInfo.pas" />
+    <DCCReference Include="core.bpl\BisNetUtils.pas" />
+    <DCCReference Include="core.bpl\BisSizeGrip.pas" />
+    <DCCReference Include="core.bpl\BisVersionInfo.pas" />
+    <DCCReference Include="objects.bpl\Alcinoe\source\ALXmlDoc.pas" />
+    <DCCReference Include="objects.bpl\DcpCrypt2\DCPbase64.pas" />
+    <DCCReference Include="objects.bpl\DcpCrypt2\DCPblockciphers.pas" />
+    <DCCReference Include="objects.bpl\DcpCrypt2\DCPconst.pas" />
+    <DCCReference Include="objects.bpl\DcpCrypt2\DCPcrypt2.pas" />
+    <DCCReference Include="objects.bpl\DcpCrypt2\DCPrijndael.pas" />
+    <DCCReference Include="update.exe\BisUpdateConfig.pas" />
+    <DCCReference Include="update.exe\BisUpdateConnection.pas" />
+    <DCCReference Include="update.exe\BisUpdateConsts.pas" />
+    <DCCReference Include="update.exe\BisUpdateMainFm.pas">
+      <Form>BisUpdateMainForm</Form>
+    </DCCReference>
+    <DCCReference Include="update.exe\BisUpdateMapFile.pas" />
+    <DCCReference Include="update.exe\BisUpdateTypes.pas" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,53 @@
+package MemTableEh9Vcl;
+
+{$R *.res}
+{$R 'MemTableEh.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD ON}
+
+requires
+  EhLib90,
+  rtl,
+  dcldb,
+  vcl,
+  dbrtl,
+  dbexpress,
+  ibxpress,
+  dclado,
+  dclbde;
+
+contains
+  MemTableEh in 'MemTableEh.pas',
+  MemTableDataEh in 'MemTableDataEh.pas',
+  MemTableDesignEh in 'MemTableDesignEh.pas',
+  MemTableEditEh in 'MemTableEditEh.pas' {MemTableDataForm},
+  DataDriverEh in 'DataDriverEh.pas',
+  DBXDataDriverEh in 'DBXDataDriverEh.pas',
+  EhLibMTE in 'EhLibMTE.pas',
+  IBXDataDriverEh in 'IBXDataDriverEh.pas',
+  BDEDataDriverEh in 'BDEDataDriverEh.pas',
+  MemTreeEh in 'MemTreeEh.pas',
+  MTCreateDataDriver in 'MTCreateDataDriver.pas' {fMTCreateDataDriver},
+  ADODataDriverEh in 'ADODataDriverEh.pas';
+
+end.

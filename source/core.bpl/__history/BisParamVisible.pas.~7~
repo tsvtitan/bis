@@ -1,0 +1,29 @@
+unit BisParamVisible;
+
+interface
+
+uses Classes,
+     BisParam, BisParamInvisible;
+
+type
+
+  TBisParamVisible=class(TBisParamInvisible)
+  public
+    constructor Create; override;
+  end;
+
+implementation
+
+uses Variants, Sysutils,
+     BisUtils;
+
+{ TBisParamVisible }
+
+constructor TBisParamVisible.Create;
+begin
+  inherited Create;
+
+end;
+
+
+end.

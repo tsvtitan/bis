@@ -1,0 +1,41 @@
+inherited BisCallDataCallsForm: TBisCallDataCallsForm
+  Left = 450
+  Top = 245
+  Caption = #1042#1099#1079#1086#1074#1099
+  ClientHeight = 316
+  ClientWidth = 732
+  Position = poDesigned
+  ExplicitWidth = 748
+  ExplicitHeight = 354
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited StatusBar: TStatusBar
+    Top = 297
+    Width = 732
+    ExplicitTop = 297
+    ExplicitWidth = 732
+  end
+  inherited PanelFrame: TPanel
+    Width = 732
+    Height = 259
+    ExplicitWidth = 732
+    ExplicitHeight = 259
+  end
+  inherited PanelButton: TPanel
+    Top = 259
+    Width = 732
+    ExplicitTop = 259
+    ExplicitWidth = 732
+    DesignSize = (
+      732
+      38)
+    inherited ButtonOk: TButton
+      Left = 554
+      ExplicitLeft = 554
+    end
+    inherited ButtonCancel: TButton
+      Left = 649
+      ExplicitLeft = 649
+    end
+  end
+end

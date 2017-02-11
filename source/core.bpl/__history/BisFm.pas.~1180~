@@ -1,0 +1,1103 @@
+unit BisFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Contnrs, ExtCtrls, ComCtrls, CommCtrl,
+
+  BisIfaces, BisObject, BisLogger, BisConfig, BisDataParams, BisCmdLine,
+  BisOptionsFrm, BisControls;
+
+type
+  TBisFormIface=class;
+
+  TBisFormShowType=(stDefault,stMdiChild);
+
+  TBisFormCloseMode=(cmNone,cmFree,cmMinimize);
+
+  TBisFormCanOptionsEvent=function: Boolean of object;
+
+  TBisForm = class(TForm)
+  private
+    FDefaultWidth: Integer;
+    FDefaultHeight: Integer;
+    FLeft: Integer;
+    FTop: Integer;
+    FWidth: Integer;
+    FHeight: Integer;
+    FWindowState: TWindowState;
+    FAsModal: Boolean;
+    FOnCloseFree: TNotifyEvent;
+    FShowType: TBisFormShowType;
+    FInstanceCounter: Integer;
+    FDefaultCaption: String;
+    FObjectName: String;
+    FSizesStored: Boolean;
+    FTimerDelayed: TTimer;
+    FShowingChanged: Boolean;
+    FSizesExists: Boolean;
+    FCloseMode: TBisFormCloseMode;
+    FTranslateClass: TClass;
+    FOnCanOptions: TBisFormCanOptionsEvent;
+    FOnOptions: TNotifyEvent;
+    FActivateNeeded: Boolean;
+//    FNeedRemoveWSPOPUP: Boolean;
+    procedure WMSizing(var Message: TMessage); message WM_SIZING;
+    procedure WMWindowPosChanged(var Message: TWMWindowPosChanged); message WM_WINDOWPOSCHANGED;
+    procedure WMWindowPosChanging(var Message: TWMWindowPosChanging); message WM_WINDOWPOSCHANGING;
+    procedure CMShowingChanged(var Message: TMessage); message CM_SHOWINGCHANGED;
+    procedure TimerDelayedExecute(Sender: TObject);
+    function GetFormStyleByShowType: TFormStyle;
+    function GetDelayed: Boolean;
+  protected
+    procedure SetName(const NewName: TComponentName); override;
+    procedure DoClose(var Action: TCloseAction); override;
+    procedure DoShow; override;
+    procedure Resizing(State: TWindowState); override;
+    procedure SetZOrder(TopMost: Boolean); override;
+    function DoCanOptions: Boolean; virtual;
+    procedure DoOptions; virtual;
+    function GetWorking: Boolean; virtual;
+    procedure ReadProfileParams; virtual;
+    procedure WriteProfileParams; virtual;
+    procedure SaveProfileParams; virtual;
+    procedure ReadDataParams(DataParams: TBisDataValueParams); virtual;
+    procedure AfterOptions(AFrame: TBisOptionsFrame); virtual;
+
+    class function GetObjectName: String; virtual;
+
+    property InstanceCounter: Integer read FInstanceCounter write FInstanceCounter;
+    property DefaultCaption: String read FDefaultCaption write FDefaultCaption;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer); override;
+    procedure Init; virtual;
+    procedure EnableControls(AEnabled: Boolean); virtual;
+    function CanShow: Boolean; virtual;
+    procedure BeforeShow; virtual;
+    procedure AfterShow; virtual;
+    procedure Show; virtual;
+    function ShowModal: TModalResult; reintroduce; virtual;
+    procedure BringToFront; virtual;
+    procedure LoggerWrite(const Message: String; LogType: TBisLoggerType=ltInformation; const LoggerName: String=''); virtual;
+    function ConfigRead(const Param: String; Default: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''): Variant; virtual;
+    function ProfileRead(const Param: String; Default: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''): Variant; virtual;
+    function ProfileExists(const Param: String; const Section: String=''): Boolean; virtual;
+    procedure ProfileWrite(const Param: String; Value: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''); virtual;
+    procedure Progress(const Min, Max, Position: Integer; var Interrupted: Boolean); virtual;
+    function IsMainForm: Boolean; virtual;
+    function CanOptions: Boolean; virtual;
+    procedure Options; virtual;
+
+    property Delayed: Boolean read GetDelayed;
+    property AsModal: Boolean read FAsModal;
+    property Working: Boolean read GetWorking;
+    property ShowType: TBisFormShowType read FShowType write FShowType;
+    property CloseMode: TBisFormCloseMode read FCloseMode write FCloseMode;
+    property SizesStored: Boolean read FSizesStored write FSizesStored;
+    property TranslateClass: TClass read FTranslateClass write FTranslateClass;
+    property ActivateNeeded: Boolean read FActivateNeeded write FActivateNeeded;
+
+  published
+    property ObjectName: String read FObjectName write FObjectName;
+
+  end;
+
+  TBisFormClass=class of TBisForm;
+
+  TBisForms=class(TObjectList)
+  private
+    function GetItems(Index: Integer): TBisForm;
+    function GetVisibleCount: Integer;
+  protected
+    procedure RemoveWithOutFree(AForm: TBisForm);
+  public
+    function InstanceCounter(AClass: TBisFormClass; ACaption: String): Integer;
+    function Working: Boolean;
+
+    property Items[Index: Integer]: TBisForm read GetItems;
+    property VisibleCount: Integer read GetVisibleCount;
+  end;
+
+  TBisFormIface=class(TBisIface)
+  private
+    FFormClass: TBisFormClass;
+    FForms: TBisForms;
+    FOnlyOneForm: Boolean;
+    FApplicationCreateForm: Boolean;
+    FSFormatCaption: String;
+    FActiveForm: TBisForm;
+    FChangeFormCaption: Boolean;
+    FShowType: TBisFormShowType;
+    FShowAfterMainForm: Boolean;
+    FMaxFormCount: Integer;
+    FOnBeforeShowForm: TNotifyEvent;
+    function GetLastForm: TBisForm;
+    procedure FormActivate(Sender: TObject);
+    procedure FormCloseFree(Sender: TObject);
+    function FormCanOptions: Boolean;
+    procedure FormOptions(Sender: TObject);
+    procedure SetShowType(const Value: TBisFormShowType);
+  protected
+    function GetOptionsFormOwner: TComponent; override;
+    function GetWorking: Boolean; override;
+    procedure AfterOptions(AFrame: TBisOptionsFrame); override;
+//    class function GetFormClass: TBisFormClass; virtual;
+    function CreateForm: TBisForm; virtual;
+    procedure FreeForm(AForm: TBisForm); virtual;
+    function Delayed(AForm: TBisForm): Boolean; virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function CanHide: Boolean; virtual;
+    function CanShow: Boolean; override;
+    procedure Show; override;
+    procedure Hide; override;
+    procedure Init; override;
+    procedure ShowByCommand(Param: TBisCmdParam; const Command: String); override;
+
+    procedure ChangeActiveForm; virtual;
+    procedure BeforeFormShow; virtual;
+    function ShowModal: TModalResult; virtual;
+    procedure ShowInParent(Parent: TWinControl); virtual;
+    procedure RemoveFormWithOutFree(AForm: TBisForm);
+
+    property FormClass: TBisFormClass read FFormClass write FFormClass;
+    property Forms: TBisForms read FForms;
+    property LastForm: TBisForm read GetLastForm;
+    property ActiveForm: TBisForm read FActiveForm;
+    property OnlyOneForm: Boolean read FOnlyOneForm write FOnlyOneForm;
+    property ApplicationCreateForm: Boolean read FApplicationCreateForm write FApplicationCreateForm;
+    property ChangeFormCaption: Boolean read FChangeFormCaption write FChangeFormCaption;
+    property ShowType: TBisFormShowType read FShowType write SetShowType;
+    property ShowAfterMainForm: Boolean read FShowAfterMainForm write FShowAfterMainForm;
+    property MaxFormCount: Integer read FMaxFormCount write FMaxFormCount;
+    property OnBeforeShowForm: TNotifyEvent read FOnBeforeShowForm write FOnBeforeShowForm;  
+  published
+    property SFormatCaption: String read FSFormatCaption write FSFormatCaption;
+  end;
+
+  TBisFormIfaceClass=class of TBisFormIface;
+
+var
+  BisForm: TBisForm;
+
+implementation
+
+uses BisConsts, BisUtils, BisCore, BisCoreUtils,
+     BisConnectionUtils;
+
+{$R *.dfm}
+
+type
+  TListDelayed=class(TList)
+  public
+    procedure RemoveByForms(Forms: TBisForms);
+    procedure Show;
+  end;
+
+{ TListDelayed }
+
+procedure TListDelayed.RemoveByForms(Forms: TBisForms);
+var
+  i: Integer;
+begin
+  if Assigned(Forms) then begin
+    for i:=0 to Forms.Count-1 do
+      Remove(Forms.Items[i]);
+  end;
+end;
+
+procedure TListDelayed.Show;
+var
+  i: Integer;
+  AForm: TBisForm;
+  List: TList;
+begin
+  List:=TList.Create;
+  try
+    List.Assign(Self);
+    Clear;
+    for i:=0 to List.Count-1 do begin
+      AForm:=TBisForm(List.Items[i]);
+      if Assigned(AForm) then begin
+        AForm.Show;
+        if AForm.Visible then begin
+          AForm.Update;
+          AForm.BringToFront;
+        end;
+      end;
+    end;
+  finally
+    List.Free;
+  end;
+end;
+
+var
+  ListFormDelayed: TListDelayed;
+
+
+{ TBisForms }
+
+function TBisForms.GetItems(Index: Integer): TBisForm;
+begin
+  Result:=TBisForm(inherited Items[Index]);
+end;
+
+function TBisForms.GetVisibleCount: Integer;
+var
+  i: Integer;
+begin
+  Result:=0;
+  for i:=0 to Count-1 do begin
+    if Items[i].Visible then
+      Inc(Result);
+  end;
+end;
+
+function TBisForms.InstanceCounter(AClass: TBisFormClass; ACaption: String): Integer;
+var
+  i: Integer;
+begin
+  Result:=0;
+  for i:=Count-1 downto 0 do begin
+    if (Items[i].ClassType=AClass) and Items[i].Visible then begin
+      if AnsiSameText(Items[i].DefaultCaption,ACaption) then begin
+        Result:=Items[i].InstanceCounter;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisForms.RemoveWithOutFree(AForm: TBisForm);
+var
+  AOld: Boolean;
+begin
+  AOld:=OwnsObjects;
+  OwnsObjects:=false;
+  try
+    Remove(AForm);
+  finally
+    OwnsObjects:=AOld;
+  end;
+end;
+
+function TBisForms.Working: Boolean;
+var
+  i: Integer;
+begin
+  Result:=false;
+  for i:=0 to Count-1 do begin
+    if Items[i].Working then begin
+      Result:=true;
+      exit;
+    end;
+  end;
+end;
+
+{ TBisFormIface }
+
+constructor TBisFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FFormClass:=TBisForm;
+  FSFormatCaption:='[%d] %s';
+  FOnlyOneForm:=true;
+  FShowAfterMainForm:=false;
+  FMaxFormCount:=10;
+  FForms:=TBisForms.Create(true);
+end;
+
+destructor TBisFormIface.Destroy;
+begin
+  ListFormDelayed.RemoveByForms(FForms);
+  FForms.Free;
+  inherited Destroy;
+end;
+
+procedure TBisFormIface.Init;
+begin
+  inherited Init;
+end;
+
+{class function TBisFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisForm;
+end;}
+
+function TBisFormIface.GetLastForm: TBisForm;
+begin
+  Result:=nil;
+  if FForms.Count>0 then
+    Result:=FForms.Items[FForms.Count-1];
+end;
+
+function TBisFormIface.GetOptionsFormOwner: TComponent;
+begin
+  Result:=ActiveForm;
+end;
+
+function TBisFormIface.GetWorking: Boolean;
+begin
+  Result:=FForms.Working;
+end;
+
+function TBisFormIface.CreateForm: TBisForm;
+
+  procedure CreateFormByClass(AClass: TBisFormClass; out Form: TBisForm);
+  begin
+    Form:=nil;
+    if Assigned(AClass) then begin
+      if FApplicationCreateForm then begin
+        Application.CreateForm(AClass,Form);
+      end else
+        Form:=AClass.Create(Self);
+      if Assigned(Form) then begin
+        Form.OnActivate:=FormActivate;
+        Form.FOnCloseFree:=FormCloseFree;
+        Form.FOnCanOptions:=FormCanOptions;
+        Form.FOnOptions:=FormOptions;
+        Form.ShowType:=FShowType;
+        FForms.Add(Form);
+      end;
+    end;
+  end;
+
+begin
+  Result:=nil;
+  CreateFormByClass(FormClass,Result);
+end;
+
+function TBisFormIface.CanShow: Boolean;
+begin
+  Result:=inherited CanShow;
+end;
+
+procedure TBisFormIface.ChangeActiveForm;
+begin
+end;
+
+procedure TBisFormIface.AfterOptions(AFrame: TBisOptionsFrame);
+var
+  i: Integer;
+begin
+  inherited AfterOptions(AFrame);
+  for i:=0 to FForms.Count-1 do
+    FForms.Items[i].AfterOptions(AFrame);
+end;
+
+procedure TBisFormIface.BeforeFormShow;
+var
+  Form: TBisForm;
+begin
+  if Assigned(LastForm) then begin
+    Form:=LastForm;
+    if (FForms.VisibleCount<FMaxFormCount) and FChangeFormCaption and (Trim(Caption)<>'') then begin
+      Form.DefaultCaption:=Caption;
+      Form.Caption:=Caption;
+    end;
+    Form.InstanceCounter:=FForms.InstanceCounter(TBisFormClass(Form.ClassType),Form.Caption)+1;
+    if (Form.InstanceCounter>1) and
+       (not FOnlyOneForm and not Core.IfaceOnlyOneForm) and
+       (FForms.VisibleCount<FMaxFormCount)  then
+      Form.Caption:=FormatEx(FSFormatCaption,[Form.InstanceCounter,Form.Caption]);
+    Form.ReadDataParams(DataParams);
+    Form.ReadProfileParams;
+    if Assigned(FOnBeforeShowForm) then
+      FOnBeforeShowForm(Self);
+  end;
+end;
+
+function TBisFormIface.Delayed(AForm: TBisForm): Boolean;
+begin
+  Result:=false;
+  if Assigned(Application) and
+     (Application.MainForm<>AForm) and
+     (not Assigned(Application.MainForm) or (Assigned(Application.MainForm) and not Application.MainForm.Visible)) and
+     FShowAfterMainForm then begin
+
+    ListFormDelayed.Add(AForm);
+    Result:=true;
+  end;
+end;
+
+procedure TBisFormIface.SetShowType(const Value: TBisFormShowType);
+begin
+  if FShowType<>Value then begin
+    FShowType:=Value;
+  end;
+end;
+
+procedure TBisFormIface.Show;
+var
+  FlagCreate: Boolean;
+  AForm: TBisForm;
+begin
+  inherited Show;
+  if CanShow then begin
+    FlagCreate:=(FForms.VisibleCount<FMaxFormCount) and
+                ((FForms.VisibleCount=0) or (not FOnlyOneForm and not Core.IfaceOnlyOneForm));
+    if FlagCreate then begin
+      AForm:=CreateForm;
+      if Assigned(AForm) then begin
+        AForm.Init;
+      end;
+    end else begin
+      AForm:=GetLastForm;
+    end;
+    if Assigned(AForm) then begin
+      BeforeFormShow;
+      if not Delayed(AForm) then begin
+        AForm.Show;
+        if AForm.Visible then begin
+          AForm.Update;
+          AForm.BringToFront;
+        end else begin
+          if not FApplicationCreateForm and
+             Assigned(Application) and (Application.MainForm<>AForm) then
+            FreeForm(AForm);
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisFormIface.ShowByCommand(Param: TBisCmdParam; const Command: String);
+begin
+  ShowModal;
+end;
+
+procedure TBisFormIface.ShowInParent(Parent: TWinControl);
+begin
+  ///
+end;
+
+function TBisFormIface.ShowModal: TModalResult;
+var
+  AForm: TBisForm;
+begin
+  Result:=mrCancel;
+  if CanShow then begin
+    AForm:=CreateForm;
+    if Assigned(AForm) then
+      AForm.Init;
+    if Assigned(AForm) then begin
+       BeforeFormShow;
+       Result:=AForm.ShowModal;
+       FreeForm(AForm);
+    end;
+  end;
+end;
+
+function TBisFormIface.CanHide: Boolean;
+begin
+  Result:=true;
+end;
+
+procedure TBisFormIface.Hide;
+begin
+  if CanHide then begin
+    FActiveForm:=nil;
+    ListFormDelayed.RemoveByForms(FForms);
+    FForms.Clear;
+  end;
+  inherited Hide;
+end;
+
+procedure TBisFormIface.FormActivate(Sender: TObject);
+begin
+  if Assigned(Sender) and (Sender is TBisForm) then begin
+    FActiveForm:=TBisForm(Sender);
+    ChangeActiveForm;
+  end;
+end;
+
+function TBisFormIface.FormCanOptions: Boolean;
+begin
+  Result:=inherited CanOptions;
+end;
+
+procedure TBisFormIface.FormCloseFree(Sender: TObject);
+begin
+  RemoveFormWithOutFree(TBisForm(Sender));
+end;
+
+procedure TBisFormIface.FormOptions(Sender: TObject);
+begin
+  inherited Options;
+end;
+
+procedure TBisFormIface.FreeForm(AForm: TBisForm);
+begin
+  ListFormDelayed.Remove(AForm);
+  FForms.Remove(AForm);
+end;
+
+procedure TBisFormIface.RemoveFormWithOutFree(AForm: TBisForm);
+begin
+  if AForm=FActiveForm then
+    FActiveForm:=nil;
+  ListFormDelayed.Remove(AForm);
+  FForms.RemoveWithOutFree(AForm);
+end;
+
+{ TBisForm }
+
+constructor TBisForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  Font.Name:=STahoma;
+
+  FActivateNeeded:=true;
+  FObjectName:=GetObjectName;
+  FTranslateClass:=TBisForm;
+  FDefaultCaption:=Caption;
+  FDefaultWidth:=Width;
+  FDefaultHeight:=Height;
+
+  if WindowState<>wsMaximized then begin
+    Constraints.MaxWidth:=iff(Constraints.MaxWidth=0,Screen.Width+10,Constraints.MaxWidth);
+    Constraints.MaxHeight:=iff(Constraints.MaxHeight=0,Screen.Height+10,Constraints.MaxHeight);
+    Constraints.MinWidth:=iff(Constraints.MinWidth=0,Width,Constraints.MinWidth);
+    Constraints.MinHeight:=iff(Constraints.MinHeight=0,Height,Constraints.MinHeight);
+  end;
+end;
+
+destructor TBisForm.Destroy;
+{var
+  WL: LongWord;}
+begin
+  WriteProfileParams;
+
+{  if FNeedRemoveWSPOPUP then begin
+    WL:=GetWindowLong(Handle,GWL_STYLE);
+    WL:=WL and WS_POPUP;
+    SetWindowLong(Handle,GWL_STYLE,WL);
+  end;}
+
+  inherited Destroy;
+end;
+
+procedure TBisForm.SetName(const NewName: TComponentName);
+var
+  S: String;
+begin
+  S:=GetComponentName(NewName,GetObjectName,Owner);
+  inherited SetName(S);
+end;
+
+procedure TBisForm.Init;
+begin
+  TranslateObject(Self,FTranslateClass);
+end;
+
+function TBisForm.IsMainForm: Boolean;
+begin
+  Result:=false;
+  if Assigned(Application) then
+    Result:=Application.MainForm=Self;
+end;
+
+class function TBisForm.GetObjectName: String;
+begin
+  Result:=GetNameByClass(ClassName);
+end;
+
+function TBisForm.GetWorking: Boolean;
+begin
+  Result:=false;
+end;
+
+procedure TBisForm.ReadDataParams(DataParams: TBisDataValueParams);
+begin
+  //
+end;
+
+procedure TBisForm.ReadProfileParams;                                         
+var
+  ACaptionHeight: Integer;
+begin
+  FSizesExists:=ProfileExists(SParamLeft) and
+                ProfileExists(SParamTop) and
+                ProfileExists(SParamWidth) and
+                ProfileExists(SParamHeight) and
+                ProfileExists(SParamWindowState);
+  if FSizesExists and not Visible then begin
+    ACaptionHeight:=GetSystemMetrics(SM_CYCAPTION)+GetSystemMetrics(SM_CYBORDER)*2;
+    FLeft:=ProfileRead(SParamLeft,0)+iff(FInstanceCounter=1,0,ACaptionHeight);
+    FTop:=ProfileRead(SParamTop,0)+iff(FInstanceCounter=1,0,ACaptionHeight);
+{    FLeft:=ProfileRead(SParamLeft,0)+FInstanceCounter*ACaptionHeight;
+    FTop:=ProfileRead(SParamTop,0)+FInstanceCounter*ACaptionHeight;}
+    FWidth:=ProfileRead(SParamWidth,Width);
+    FHeight:=ProfileRead(SParamHeight,Height);
+    FWindowState:=ProfileRead(SParamWindowState,WindowState);
+  end;
+end;
+
+procedure TBisForm.WriteProfileParams;
+begin
+  if FSizesStored then begin
+    if not (WindowState in [wsMaximized,wsMinimized]) then begin
+      FLeft:=Left;
+      ProfileWrite(SParamLeft,FLeft);
+      FTop:=Top;
+      ProfileWrite(SParamTop,FTop);
+      FWidth:=Width;
+      ProfileWrite(SParamWidth,FWidth);
+      FHeight:=Height;
+      ProfileWrite(SParamHeight,FHeight);
+    end;
+    FWindowState:=WindowState;
+    ProfileWrite(SParamWindowState,FWindowState);
+  end;
+end;
+
+procedure TBisForm.SaveProfileParams;
+begin
+  DefaultSaveProfile(Core.Profile);
+end;
+
+procedure TBisForm.LoggerWrite(const Message: String; LogType: TBisLoggerType;  const LoggerName: String);
+var
+  S: String;
+begin
+  if Assigned(Core) and
+     Assigned(Core.Logger) then begin
+    S:=LoggerName;
+    if Trim(S)='' then
+      S:=Self.ObjectName;
+    Core.Logger.Write(Message,LogType,S);
+  end;
+end;
+
+function TBisForm.ConfigRead(const Param: String; Default: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''): Variant;
+var
+  S: String;
+begin
+  if Assigned(Core) and
+     Assigned(Core.Config) then begin
+    S:=Section;
+    if Trim(S)='' then
+      S:=Self.ObjectName;
+    Result:=Core.Config.Read(S,Param,Default,Mode);
+  end;
+end;
+
+function TBisForm.ProfileExists(const Param: String; const Section: String=''): Boolean;
+var
+  S: String;
+begin
+  Result:=false;
+  if Assigned(Core) and
+     Assigned(Core.Profile) then begin
+    S:=Section;
+    if Trim(S)='' then
+      S:=Self.ObjectName;
+    Result:=Core.Profile.Exists(S,Param);
+  end;
+end;
+
+function TBisForm.ProfileRead(const Param: String; Default: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''): Variant;
+var
+  S: String;
+begin
+  if Assigned(Core) and
+     Assigned(Core.Profile) then begin
+    S:=Section;
+    if Trim(S)='' then
+      S:=Self.ObjectName;
+    Result:=Core.Profile.Read(S,Param,Default,Mode);
+  end;
+end;
+
+procedure TBisForm.ProfileWrite(const Param: String; Value: Variant; Mode: TBisConfigMode=cmDefault; const Section: String='');
+var
+  S: String;
+begin
+  if Assigned(Core) and
+     Assigned(Core.Profile) then begin
+    S:=Section;
+    if Trim(S)='' then
+      S:=Self.ObjectName;
+    Core.Profile.Write(S,Param,Value,Mode);
+  end;
+end;
+
+procedure TBisForm.Progress(const Min, Max, Position: Integer; var Interrupted: Boolean);
+begin
+  if Assigned(Core) then
+    Core.Progress(Min,Max,Position,Interrupted);
+end;
+
+procedure TBisForm.DoClose(var Action: TCloseAction);
+var
+  Flag: Boolean;
+begin
+  case FCloseMode of
+    cmNone: ;
+    cmFree: begin
+      Flag:=true;
+      if IsMainForm then
+        Flag:=false;
+      if Flag then
+        Action:=caFree;
+    end;
+    cmMinimize: Action:=caMinimize;
+  end;
+  inherited DoClose(Action);
+  if (Action=caFree) and Assigned(FOnCloseFree) then
+    FOnCloseFree(Self);
+end;
+
+procedure TBisForm.TimerDelayedExecute(Sender: TObject);
+begin
+  if Assigned(FTimerDelayed) then begin
+    FTimerDelayed.Enabled:=false;
+    ListFormDelayed.Show;
+    FreeAndNilEx(FTimerDelayed);
+  end;
+end;
+
+procedure TBisForm.DoShow;
+begin
+  inherited DoShow;
+  if IsMainForm and
+     not Assigned(FTimerDelayed) then begin
+    FTimerDelayed:=TTimer.Create(Self);
+    FTimerDelayed.Enabled:=false;
+    FTimerDelayed.Interval:=1;
+    FTimerDelayed.OnTimer:=TimerDelayedExecute;
+    FTimerDelayed.Enabled:=true;
+  end;
+end;
+
+procedure TBisForm.EnableControls(AEnabled: Boolean);
+begin
+  EnableControl(Self,AEnabled);
+end;
+
+procedure TBisForm.WMSizing(var Message: TMessage);
+var
+  NewHeight, NewWidth: Integer;
+  R: PRect;
+begin
+  R := PRect(Message.LParam);
+  NewHeight:=R.Bottom-R.Top;
+  NewWidth:=R.Right-R.Left;
+
+  if Constraints.MinHeight>0 then
+   if NewHeight<=Constraints.MinHeight then
+      NewHeight:=Constraints.MinHeight;
+
+  if Constraints.MinWidth>0 then
+   if NewWidth<=Constraints.MinWidth then
+      NewWidth:=Constraints.MinWidth;
+
+  if Constraints.MaxHeight>0 then
+    if NewHeight>=Constraints.MaxHeight then
+      NewHeight:=Constraints.MaxHeight;
+
+  if Constraints.MaxWidth>0 then
+    if NewWidth>=Constraints.MaxWidth then
+      NewWidth:=Constraints.MaxWidth;
+
+  if Message.WParam in [WMSZ_BOTTOM,WMSZ_BOTTOMRIGHT,WMSZ_BOTTOMLEFT] then begin
+    R.Bottom := R.Top + NewHeight;
+  end else begin
+    R.Top := R.Bottom - NewHeight;
+  end;
+
+  if Message.WParam in [WMSZ_RIGHT,WMSZ_TOPRIGHT,WMSZ_BOTTOMRIGHT] then begin
+    R.Right := R.Left + NewWidth;
+  end else begin
+    R.Left := R.Right - NewWidth;
+  end;
+
+end;
+
+procedure TBisForm.Resizing(State: TWindowState);
+begin
+  inherited Resizing(State);
+end;
+
+procedure TBisForm.WMWindowPosChanged(var Message: TWMWindowPosChanged);
+begin
+  inherited;
+end;
+
+procedure TBisForm.WMWindowPosChanging(var Message: TWMWindowPosChanging);
+var
+  OldWindowState: TWindowState;
+begin
+  OldWindowState:=WindowState;
+  inherited;
+  if (OldWindowState<>wsMaximized) and Visible and not FShowingChanged then begin
+    WriteProfileParams;
+  end;
+end;
+
+function TBisForm.CanShow: Boolean;
+begin
+  Result:=true;
+end;
+
+procedure TBisForm.CMShowingChanged(var Message: TMessage);
+var
+  MaxWidth, MaxHeight: Integer;
+  Rect: TRect;
+  SInfoX, SInfoY: TScrollInfo;
+  dX,dY: Integer;
+begin
+  FShowingChanged:=false;
+  if FSizesStored and Visible then begin
+    if not (FWindowState in [{wsMaximized,}wsMinimized]) then begin
+
+      FShowingChanged:=true;
+
+      MaxWidth:=Screen.Width;
+      MaxHeight:=Screen.Height;
+
+      ReadProfileParams;
+
+      if Assigned(Application) and Assigned(Application.MainForm) then begin
+
+        if (Application.MainForm<>Self) then begin
+
+          if (Application.MainForm.FormStyle=fsMDIForm) and (Self.FormStyle=fsMDIChild) then begin
+
+            FillChar(Rect,SizeOf(Rect),0);
+            GetWindowRect(Application.MainForm.ClientHandle,Rect);
+
+            SInfoX.cbSize := sizeof(SInfoX);
+            SInfoX.fMask := SIF_ALL;
+            GetScrollInfo(Application.MainForm.ClientHandle,SB_HORZ,SInfoX);
+            dX:=SInfoX.nPage;
+
+            SInfoY.cbSize := sizeof(SInfoY);
+            SInfoY.fMask := SIF_ALL;
+            GetScrollInfo(Application.MainForm.ClientHandle,SB_VERT,SInfoY);
+            dY:=SInfoX.nPage;
+
+            MaxWidth:=Rect.Right-Rect.Left-dX;
+            MaxHeight:=Rect.Bottom-Rect.Top-dY;
+          end;
+        end else begin
+
+          if not FSizesExists then begin
+            FLeft:=MaxWidth div 2 - FDefaultWidth div 2;
+            FTop:=MaxHeight div 2 - FDefaultHeight div 2;
+          end;
+
+        end;
+      end;
+
+      if (FLeft+FWidth)<0 then
+        Left:=0
+      else if ((FLeft+FWidth)>MaxWidth) or ((FTop+FHeight)>MaxHeight) then begin
+        Top:=0;
+        Left:=0;
+      end else Left:=FLeft;  
+
+      if (FTop+FHeight)<0 then
+        Top:=0
+      else if ((FLeft+FWidth)>MaxWidth) or ((FTop+FHeight)>MaxHeight) then begin
+        Top:=0;
+        Left:=0;
+      end else Top:=FTop;
+
+      if (Left+FWidth)>MaxWidth then
+        Width:=FDefaultWidth
+      else Width:=FWidth;
+
+      if (Top+FHeight)>MaxHeight then
+        Height:=FDefaultHeight
+      else Height:=FHeight;
+
+      if not FActivateNeeded and HandleAllocated and
+         Assigned(Application) and Assigned(Application.MainForm) then begin
+///        if Application.Active then
+          ShowWindow(Handle,SW_SHOWNOACTIVATE)
+{        else
+          ShowWindow(Handle,SW_SHOWNORMAL);}
+      end;
+
+      WindowState:=FWindowState;
+
+      WriteProfileParams;
+    end;
+  end;
+  inherited;
+  FShowingChanged:=false;
+end;
+
+procedure TBisForm.BeforeShow;
+begin
+  if FAsModal then begin
+    case Position of
+      poDefaultPosOnly,poOwnerFormCenter: begin
+        if Assigned(Owner) and (Owner is TForm) and TForm(Owner).Visible then
+          Position:=poOwnerFormCenter
+        else if Assigned(Application.MainForm) and Application.MainForm.Visible then
+          Position:=poMainFormCenter
+        else
+          Position:=poScreenCenter;
+      end;
+      poMainFormCenter: begin
+        if not Assigned(Application.MainForm) or
+          (Assigned(Application.MainForm) and not Application.MainForm.Visible) then
+         Position:=poScreenCenter;
+      end;
+    end;
+    if FShowType=stMdiChild then
+      BorderIcons:=BorderIcons-[biMinimize];
+  end else begin
+    case Position of
+      poOwnerFormCenter: begin
+        if Assigned(Owner) and (Owner is TForm) and TForm(Owner).Visible then
+          Position:=poOwnerFormCenter
+        else if Assigned(Application.MainForm) and Application.MainForm.Visible then
+          Position:=poMainFormCenter
+        else
+          Position:=poScreenCenter;
+      end;
+    end;
+    if FShowType=stMdiChild then
+      BorderIcons:=BorderIcons+[biMinimize];
+  end;
+end;
+
+procedure TBisForm.BringToFront;
+begin
+  if FActivateNeeded then begin
+    if Visible and HandleAllocated then begin
+      if (WindowState=wsMinimized) then begin
+        ShowWindow(Handle,SW_SHOW);
+        ShowWindow(Handle,SW_RESTORE);
+      end;
+      inherited BringToFront;
+    end;
+  end;
+end;
+
+procedure TBisForm.AfterOptions(AFrame: TBisOptionsFrame);
+begin
+  //
+end;
+
+procedure TBisForm.AfterShow;
+begin
+  //
+end;
+
+function TBisForm.GetDelayed: Boolean;
+begin
+  Result:=ListFormDelayed.IndexOf(Self)<>-1;
+end;
+
+function TBisForm.GetFormStyleByShowType: TFormStyle;
+begin
+  Result:=FormStyle;
+  case FShowType of
+    stMdiChild: begin
+      if Assigned(Application) and Assigned(Application.MainForm) then
+        if Application.MainForm.FormStyle=fsMDIForm then
+          Result:=fsMDIChild;
+    end;
+  end;
+end;
+
+procedure TBisForm.SetBounds(ALeft, ATop, AWidth, AHeight: Integer);
+var
+  pt: TPoint;
+  OwnerForm: TForm;
+  ACaptionHeight: Integer;
+  ATopBottom: Integer;
+  ALeftRigth: Integer;
+begin
+  if (Position=poOwnerFormCenter) and (FShowType<>stMdiChild) then begin
+
+    if Assigned(Owner) and (Owner is TForm) and TCustomForm(Owner).Visible and
+       (TForm(Owner).FormStyle=fsMDIChild) and
+       Assigned(Application.MainForm) and Application.MainForm.Visible then begin
+
+      OwnerForm:=TForm(Owner);
+
+      pt:=Point(OwnerForm.Left,OwnerForm.Top);
+      pt:=OwnerForm.ClientToScreen(pt);
+
+      ACaptionHeight:=GetSystemMetrics(SM_CYCAPTION);
+      ATopBottom:=GetSystemMetrics(SM_CYBORDER)*2;
+      ALeftRigth:=GetSystemMetrics(SM_CXBORDER)*2;
+
+      ALeft:=pt.X-OwnerForm.Left + OwnerForm.Width div 2 - Width div 2 - ALeftRigth*2;
+      ATop:=pt.Y-OwnerForm.Top + OwnerForm.Height div 2 - Height div 2 - ACaptionHeight - ATopBottom*2;
+    end;
+  end;
+  inherited SetBounds(ALeft,ATop,AWidth,AHeight);
+end;
+
+procedure TBisForm.SetZOrder(TopMost: Boolean);
+begin
+  if FActivateNeeded then
+    inherited SetZOrder(TopMost);
+end;
+
+procedure TBisForm.Show;
+begin
+  FAsModal:=false;
+  if CanShow then begin
+    BeforeShow;
+    FormStyle:=GetFormStyleByShowType;
+    inherited Show;
+    AfterShow;
+  end;
+end;
+
+function TBisForm.ShowModal: TModalResult;
+begin
+  FAsModal:=true;
+  Result:=mrCancel;
+  if CanShow then begin
+    BeforeShow;
+    FormStyle:=fsNormal;
+    Result:=inherited ShowModal;
+    if Result=mrOk then
+      AfterShow;
+  end;
+end;
+
+function TBisForm.DoCanOptions: Boolean;
+begin
+  Result:=false;
+  if Assigned(FOnCanOptions) then
+    Result:=FOnCanOptions;
+end;
+
+function TBisForm.CanOptions: Boolean;
+begin
+  Result:=DoCanOptions;
+end;
+
+procedure TBisForm.DoOptions;
+begin
+  if Assigned(FOnOptions) then
+    FOnOptions(Self);
+end;
+
+procedure TBisForm.Options;
+begin
+  DoOptions;
+end;
+
+
+initialization
+  ListFormDelayed:=TListDelayed.Create;
+
+finalization
+  ListFormDelayed.Free;
+
+end.

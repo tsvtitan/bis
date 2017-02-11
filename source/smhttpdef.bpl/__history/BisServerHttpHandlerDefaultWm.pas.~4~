@@ -1,0 +1,34 @@
+unit BisServerHttpHandlerDefaultWm;
+
+interface
+
+uses
+  SysUtils, Classes, HTTPApp;
+
+type
+  TBisServerHttpHandlerDefaultWebModule = class(TWebModule)
+    procedure BisServerHttpHandlerDefaultWebModuleWebActionItem1Action(
+      Sender: TObject; Request: TWebRequest; Response: TWebResponse;
+      var Handled: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BisServerHttpHandlerDefaultWebModule: TBisServerHttpHandlerDefaultWebModule;
+
+implementation
+
+{$R *.dfm}
+
+procedure TBisServerHttpHandlerDefaultWebModule.BisServerHttpHandlerDefaultWebModuleWebActionItem1Action(
+  Sender: TObject; Request: TWebRequest; Response: TWebResponse;
+  var Handled: Boolean);
+begin
+  Response.Content:='Œ ';
+  Handled:=true;
+end;
+
+end.

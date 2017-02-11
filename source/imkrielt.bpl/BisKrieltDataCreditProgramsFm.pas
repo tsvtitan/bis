@@ -1,0 +1,78 @@
+unit BisKrieltDataCreditProgramsFm;
+
+interface                                                                                             
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, DB, BisFm, ActnList,
+  BisFieldNames;
+
+type
+  TBisKrieltDataCreditProgramsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisKrieltDataCreditProgramsFormIface=class(TBisDataGridFormIface)
+  private
+    function GetProgramTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataCreditProgramsForm: TBisKrieltDataCreditProgramsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisKrieltDataCreditProgramEditFm;
+
+{ TBisKrieltDataCreditProgramsFormIface }
+
+constructor TBisKrieltDataCreditProgramsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataCreditProgramsForm;
+  FilterClass:=TBisKrieltDataCreditProgramFilterFormIface;
+  InsertClass:=TBisKrieltDataCreditProgramInsertFormIface;
+  UpdateClass:=TBisKrieltDataCreditProgramUpdateFormIface;
+  DeleteClass:=TBisKrieltDataCreditProgramDeleteFormIface;
+  Permissions.Enabled:=true;
+//  Available:=true;
+  ProviderName:='S_CREDIT_PROGRAMS';
+  with FieldNames do begin
+    AddKey('CREDIT_PROGRAM_ID');
+    AddInvisible('FIRM_ID');
+    AddInvisible('PROGRAM_TYPE');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('PERIOD_MIN');
+    AddInvisible('PERIOD_MAX');
+    AddInvisible('RATE_FROM');
+    AddInvisible('RATE_BEFORE');
+    AddInvisible('AMOUNT_MIN');
+    AddInvisible('AMOUNT_MAX');
+    AddInvisible('CURRENCY');
+    AddInvisible('AGE_FROM');
+    AddInvisible('AGE_BEFORE');
+    Add('FIRM_SMALL_NAME','Организация',150);
+    Add('NAME','Наименование',250);
+    AddCalculate('PROGRAM_TYPE_NAME','Тип программы',GetProgramTypeName,ftString,100,100);
+  end;
+  Orders.Add('NAME');
+end;
+
+function TBisKrieltDataCreditProgramsFormIface.GetProgramTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S: String;
+begin
+  Result:=Null;
+  S:=GetProgramTypeByIndex(DataSet.FieldByName('PROGRAM_TYPE').AsInteger);
+  if Trim(S)<>'' then
+    Result:=S;
+end;
+
+end.

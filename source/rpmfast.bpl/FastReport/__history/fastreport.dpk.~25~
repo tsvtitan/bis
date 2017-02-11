@@ -1,0 +1,199 @@
+package fastreport;
+
+{$R *.res}
+{$R 'Source\frxReg.dcr'}
+{$R 'FastScript\fs_ireg.dcr'}
+{$R 'Source\ADO\frxADOReg.dcr'}
+{$R 'Source\BDE\frxBDEReg.dcr'}
+{$R 'Source\DBX\frxDBXReg.dcr'}
+{$R 'Source\FIB\frxFIBReg.dcr'}
+{$R 'Source\IBX\frxIBXReg.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESIGNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vclx,
+  vcl,
+  vcljpg,
+  dbrtl,
+  vcldb,
+  bdertl,
+  dsnap,
+  dbexpress,
+  DbxClientDriver,
+  DbxReadOnlyMetaData,
+  DbxCommonDriver,
+  DbxDynalinkDriver,
+  designide,
+  tee,
+  teedb;
+
+contains
+  rc_Crypt in 'Source\rc_Crypt.pas',
+  frx2xto30 in 'Source\frx2xto30.pas',
+  frxAbout in 'Source\frxAbout.pas',
+  frxAggregate in 'Source\frxAggregate.pas',
+  frxChart in 'Source\frxChart.pas',
+  frxChartEditor in 'Source\frxChartEditor.pas',
+  frxChartHelpers in 'Source\frxChartHelpers.pas',
+  frxChartRTTI in 'Source\frxChartRTTI.pas',
+  frxChBox in 'Source\frxChBox.pas',
+  frxChBoxRTTI in 'Source\frxChBoxRTTI.pas',
+  frxChm in 'Source\frxChm.pas',
+  frxClass in 'Source\frxClass.pas',
+  frxClassRTTI in 'Source\frxClassRTTI.pas',
+  frxCodeUtils in 'Source\frxCodeUtils.pas',
+  frxConnEditor in 'Source\frxConnEditor.pas',
+  frxConnWizard in 'Source\frxConnWizard.pas',
+  frxCross in 'Source\frxCross.pas',
+  frxCrossEditor in 'Source\frxCrossEditor.pas',
+  frxCrossRTTI in 'Source\frxCrossRTTI.pas',
+  frxCrypt in 'Source\frxCrypt.pas',
+  frxCtrls in 'Source\frxCtrls.pas',
+  frxCustomDB in 'Source\frxCustomDB.pas',
+  frxCustomDBEditor in 'Source\frxCustomDBEditor.pas',
+  frxCustomDBRTTI in 'Source\frxCustomDBRTTI.pas',
+  frxCustomEditors in 'Source\frxCustomEditors.pas',
+  frxDataTree in 'Source\frxDataTree.pas',
+  frxDBSet in 'Source\frxDBSet.pas',
+  frxDCtrl in 'Source\frxDCtrl.pas',
+  frxDCtrlRTTI in 'Source\frxDCtrlRTTI.pas',
+  frxDesgn in 'Source\frxDesgn.pas',
+  frxDesgnCtrls in 'Source\frxDesgnCtrls.pas',
+  frxDesgnEditors in 'Source\frxDesgnEditors.pas',
+  frxDesgnWorkspace1 in 'Source\frxDesgnWorkspace1.pas',
+  frxDesgnWorkspace in 'Source\frxDesgnWorkspace.pas',
+  frxDialogForm in 'Source\frxDialogForm.pas',
+  frxDMPClass in 'Source\frxDMPClass.pas',
+  frxDMPExport in 'Source\frxDMPExport.pas',
+  frxDock in 'Source\frxDock.pas',
+  frxDsgnIntf in 'Source\frxDsgnIntf.pas',
+  frxEditAliases in 'Source\frxEditAliases.pas',
+  frxEditDataBand in 'Source\frxEditDataBand.pas',
+  frxEditExpr in 'Source\frxEditExpr.pas',
+  frxEditFormat in 'Source\frxEditFormat.pas',
+  frxEditFrame in 'Source\frxEditFrame.pas',
+  frxEditGroup in 'Source\frxEditGroup.pas',
+  frxEditHighlight in 'Source\frxEditHighlight.pas',
+  frxEditMD in 'Source\frxEditMD.pas',
+  frxEditMemo in 'Source\frxEditMemo.pas',
+  frxEditOptions in 'Source\frxEditOptions.pas',
+  frxEditPage in 'Source\frxEditPage.pas',
+  frxEditPicture in 'Source\frxEditPicture.pas',
+  frxEditQueryParams in 'Source\frxEditQueryParams.pas',
+  frxEditReport in 'Source\frxEditReport.pas',
+  frxEditReportData in 'Source\frxEditReportData.pas',
+  frxEditSQL in 'Source\frxEditSQL.pas',
+  frxEditStrings in 'Source\frxEditStrings.pas',
+  frxEditStyle in 'Source\frxEditStyle.pas',
+  frxEditSysMemo in 'Source\frxEditSysMemo.pas',
+  frxEditTabOrder in 'Source\frxEditTabOrder.pas',
+  frxEditVar in 'Source\frxEditVar.pas',
+  frxEngine in 'Source\frxEngine.pas',
+  frxEvaluateForm in 'Source\frxEvaluateForm.pas',
+  frxGradient in 'Source\frxGradient.pas',
+  frxGradientRTTI in 'Source\frxGradientRTTI.pas',
+  frxGraphicUtils in 'Source\frxGraphicUtils.pas',
+  frxGZip in 'Source\frxGZip.pas',
+  frxInheritError in 'Source\frxInheritError.pas',
+  frxInsp in 'Source\frxInsp.pas',
+  frxNewItem in 'Source\frxNewItem.pas',
+  frxOLE in 'Source\frxOLE.pas',
+  frxOLEEditor in 'Source\frxOLEEditor.pas',
+  frxOLERTTI in 'Source\frxOLERTTI.pas',
+  frxPassw in 'Source\frxPassw.pas',
+  frxPictureCache in 'Source\frxPictureCache.pas',
+  frxPopupForm in 'Source\frxPopupForm.pas',
+  frxPreview in 'Source\frxPreview.pas',
+  frxPreviewPages in 'Source\frxPreviewPages.pas',
+  frxPreviewPageSettings in 'Source\frxPreviewPageSettings.pas',
+  frxPrintDialog in 'Source\frxPrintDialog.pas',
+  frxPrinter in 'Source\frxPrinter.pas',
+  frxProgress in 'Source\frxProgress.pas',
+  frxrcClass in 'Source\frxrcClass.pas',
+  frxrcDesgn in 'Source\frxrcDesgn.pas',
+  frxrcExports in 'Source\frxrcExports.pas',
+  frxrcInsp in 'Source\frxrcInsp.pas',
+  frxReportTree in 'Source\frxReportTree.pas',
+  frxRes in 'Source\frxRes.pas',
+  frxRich in 'Source\frxRich.pas',
+  frxRichEdit in 'Source\frxRichEdit.pas',
+  frxRichEditor in 'Source\frxRichEditor.pas',
+  frxRichRTTI in 'Source\frxRichRTTI.pas',
+  frxSearchDialog in 'Source\frxSearchDialog.pas',
+  frxStdWizard in 'Source\frxStdWizard.pas',
+  frxSynMemo in 'Source\frxSynMemo.pas',
+  frxUnicodeCtrls in 'Source\frxUnicodeCtrls.pas',
+  frxUnicodeUtils in 'Source\frxUnicodeUtils.pas',
+  frxUtils in 'Source\frxUtils.pas',
+  frxVariables in 'Source\frxVariables.pas',
+  frxWatchForm in 'Source\frxWatchForm.pas',
+  frxXML in 'Source\frxXML.pas',
+  frxXMLSerializer in 'Source\frxXMLSerializer.pas',
+  frxZLib in 'Source\frxZLib.pas',
+  pngimage in 'Source\pngimage.pas',
+  pnglang in 'Source\pnglang.pas',
+  rc_AlgRef in 'Source\rc_AlgRef.pas',
+  rc_ApiRef in 'Source\rc_ApiRef.pas',
+  fs_xml in 'FastScript\fs_xml.pas',
+  fs_iadortti in 'FastScript\fs_iadortti.pas',
+  fs_ibasic in 'FastScript\fs_ibasic.pas',
+  fs_ibdertti in 'FastScript\fs_ibdertti.pas',
+  fs_ichartrtti in 'FastScript\fs_ichartrtti.pas',
+  fs_iclassesrtti in 'FastScript\fs_iclassesrtti.pas',
+  fs_iconst in 'FastScript\fs_iconst.pas',
+  fs_icpp in 'FastScript\fs_icpp.pas',
+  fs_idbctrlsrtti in 'FastScript\fs_idbctrlsrtti.pas',
+  fs_idbrtti in 'FastScript\fs_idbrtti.pas',
+  fs_idialogsrtti in 'FastScript\fs_idialogsrtti.pas',
+  fs_idisp in 'FastScript\fs_idisp.pas',
+  fs_ievents in 'FastScript\fs_ievents.pas',
+  fs_iexpression in 'FastScript\fs_iexpression.pas',
+  fs_iextctrlsrtti in 'FastScript\fs_iextctrlsrtti.pas',
+  fs_iformsrtti in 'FastScript\fs_iformsrtti.pas',
+  fs_igraphicsrtti in 'FastScript\fs_igraphicsrtti.pas',
+  fs_iibxrtti in 'FastScript\fs_iibxrtti.pas',
+  fs_iilparser in 'FastScript\fs_iilparser.pas',
+  fs_iinirtti in 'FastScript\fs_iinirtti.pas',
+  fs_iinterpreter in 'FastScript\fs_iinterpreter.pas',
+  fs_ijs in 'FastScript\fs_ijs.pas',
+  fs_iparser in 'FastScript\fs_iparser.pas',
+  fs_ipascal in 'FastScript\fs_ipascal.pas',
+  fs_isysrtti in 'FastScript\fs_isysrtti.pas',
+  fs_iteereg in 'FastScript\fs_iteereg.pas',
+  fs_itools in 'FastScript\fs_itools.pas',
+  fs_synmemo in 'FastScript\fs_synmemo.pas',
+  fs_tree in 'FastScript\fs_tree.pas',
+  frxBDEComponents in 'Source\BDE\frxBDEComponents.pas',
+  frxBDEEditor in 'Source\BDE\frxBDEEditor.pas',
+  frxBDERTTI in 'Source\BDE\frxBDERTTI.pas',
+  frxDBXComponents in 'Source\DBX\frxDBXComponents.pas',
+  frxDBXEditor in 'Source\DBX\frxDBXEditor.pas',
+  frxDBXRTTI in 'Source\DBX\frxDBXRTTI.pas',
+  frxIBXComponents in 'Source\IBX\frxIBXComponents.pas',
+  frxIBXEditor in 'Source\IBX\frxIBXEditor.pas',
+  frxIBXRTTI in 'Source\IBX\frxIBXRTTI.pas';
+
+end.

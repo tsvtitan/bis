@@ -1,0 +1,1163 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 000113D4H .text                   CODE
+ 0002:00413000 0000035CH .itext                  ICODE
+ 0003:00414000 00000098H .data                   DATA
+ 0004:00415000 0000001CH .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 0000017E C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000180 000001C3 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:00000344 0000006C C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:000003B0 000000DE C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:00000490 0000000E C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:000004A0 0000006E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:00000510 0000005E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000570 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000578 0000002E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:000005A8 00000356 C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:00000900 00000006 C=CODE     S=.text    G=(none)   M=WideStrings ACBP=A9
+ 0001:00000908 00000006 C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:00000910 00000006 C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:00000918 0000000E C=CODE     S=.text    G=(none)   M=DateUtils ACBP=A9
+ 0001:00000928 00000006 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:00000930 00000006 C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000938 00000006 C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000940 00000006 C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000948 00000006 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000950 00000006 C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00000958 00000006 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000960 00000006 C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000968 00000006 C=CODE     S=.text    G=(none)   M=Themes   ACBP=A9
+ 0001:00000970 00000006 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000978 00000006 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000980 00000006 C=CODE     S=.text    G=(none)   M=UxTheme  ACBP=A9
+ 0001:00000988 00000006 C=CODE     S=.text    G=(none)   M=DwmApi   ACBP=A9
+ 0001:00000990 00000006 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000998 00000006 C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:000009A0 00000006 C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:000009A8 00000006 C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:000009B0 00000006 C=CODE     S=.text    G=(none)   M=GraphUtil ACBP=A9
+ 0001:000009B8 00000006 C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:000009C0 00000006 C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:000009C8 00000006 C=CODE     S=.text    G=(none)   M=IB       ACBP=A9
+ 0001:000009D0 00000006 C=CODE     S=.text    G=(none)   M=IBUtils  ACBP=A9
+ 0001:000009D8 0000000E C=CODE     S=.text    G=(none)   M=IBSQLMonitor ACBP=A9
+ 0001:000009E8 00000006 C=CODE     S=.text    G=(none)   M=IBServices ACBP=A9
+ 0001:000009F0 0000009E C=CODE     S=.text    G=(none)   M=IBDatabase ACBP=A9
+ 0001:00000A90 00000006 C=CODE     S=.text    G=(none)   M=IBIntf   ACBP=A9
+ 0001:00000A98 00000256 C=CODE     S=.text    G=(none)   M=IBCustomDataSet ACBP=A9
+ 0001:00000CF0 00000086 C=CODE     S=.text    G=(none)   M=IBStoredProc ACBP=A9
+ 0001:00000D78 0000008E C=CODE     S=.text    G=(none)   M=IBQuery  ACBP=A9
+ 0001:00000E08 0000001E C=CODE     S=.text    G=(none)   M=BisObject ACBP=A9
+ 0001:00000E28 0000000E C=CODE     S=.text    G=(none)   M=BisObjects ACBP=A9
+ 0001:00000E38 0000003E C=CODE     S=.text    G=(none)   M=BisCoreObjects ACBP=A9
+ 0001:00000E78 00000026 C=CODE     S=.text    G=(none)   M=BisConfig ACBP=A9
+ 0001:00000EA0 00000006 C=CODE     S=.text    G=(none)   M=BisFm    ACBP=A9
+ 0001:00000EA8 00000006 C=CODE     S=.text    G=(none)   M=DECUtil  ACBP=A9
+ 0001:00000EB0 00000006 C=CODE     S=.text    G=(none)   M=Hash     ACBP=A9
+ 0001:00000EB8 00000006 C=CODE     S=.text    G=(none)   M=Cipher   ACBP=A9
+ 0001:00000EC0 00000006 C=CODE     S=.text    G=(none)   M=Cipher1  ACBP=A9
+ 0001:00000EC8 00000006 C=CODE     S=.text    G=(none)   M=BisCoreUtils ACBP=A9
+ 0001:00000ED0 0000000E C=CODE     S=.text    G=(none)   M=BisParams ACBP=A9
+ 0001:00000EE0 00000006 C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00000EE8 00000006 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00000EF0 00000006 C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00000EF8 00000006 C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00000F00 00000006 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00000F08 00000006 C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00000F10 00000006 C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00000F18 00000006 C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00000F20 00000006 C=CODE     S=.text    G=(none)   M=rxToolEdit ACBP=A9
+ 0001:00000F28 00000006 C=CODE     S=.text    G=(none)   M=rxDateUtil ACBP=A9
+ 0001:00000F30 00000006 C=CODE     S=.text    G=(none)   M=RXCtrls  ACBP=A9
+ 0001:00000F38 00000006 C=CODE     S=.text    G=(none)   M=RxHook   ACBP=A9
+ 0001:00000F40 00000006 C=CODE     S=.text    G=(none)   M=RXConst  ACBP=A9
+ 0001:00000F48 00000006 C=CODE     S=.text    G=(none)   M=rxVclutils ACBP=A9
+ 0001:00000F50 00000006 C=CODE     S=.text    G=(none)   M=RXProps  ACBP=A9
+ 0001:00000F58 00000006 C=CODE     S=.text    G=(none)   M=rxAppUtils ACBP=A9
+ 0001:00000F60 00000006 C=CODE     S=.text    G=(none)   M=RxPrgrss ACBP=A9
+ 0001:00000F68 00000006 C=CODE     S=.text    G=(none)   M=rxCurrEdit ACBP=A9
+ 0001:00000F70 00000006 C=CODE     S=.text    G=(none)   M=ThemedDBGrid ACBP=A9
+ 0001:00000F78 00000006 C=CODE     S=.text    G=(none)   M=RxRichEd ACBP=A9
+ 0001:00000F80 00000006 C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:00000F88 00000006 C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00000F90 00000036 C=CODE     S=.text    G=(none)   M=BisUtils ACBP=A9
+ 0001:00000FC8 00000006 C=CODE     S=.text    G=(none)   M=BisPicture ACBP=A9
+ 0001:00000FD0 00000006 C=CODE     S=.text    G=(none)   M=GIFImage ACBP=A9
+ 0001:00000FD8 00000006 C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:00000FE0 00000006 C=CODE     S=.text    G=(none)   M=BisCore  ACBP=A9
+ 0001:00000FE8 0000000E C=CODE     S=.text    G=(none)   M=BisAlarmsFm ACBP=A9
+ 0001:00000FF8 00000016 C=CODE     S=.text    G=(none)   M=BisPermissions ACBP=A9
+ 0001:00001010 0000003E C=CODE     S=.text    G=(none)   M=BisDataSet ACBP=A9
+ 0001:00001050 00000006 C=CODE     S=.text    G=(none)   M=AsyncCalls ACBP=A9
+ 0001:00001058 00000006 C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:00001060 00000006 C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:00001068 00000006 C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00001070 0000000E C=CODE     S=.text    G=(none)   M=kbmMemTable ACBP=A9
+ 0001:00001080 00000006 C=CODE     S=.text    G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0001:00001088 0000000E C=CODE     S=.text    G=(none)   M=BisTasks ACBP=A9
+ 0001:00001098 00000026 C=CODE     S=.text    G=(none)   M=BisInterfaces ACBP=A9
+ 0001:000010C0 00000006 C=CODE     S=.text    G=(none)   M=ActnMan  ACBP=A9
+ 0001:000010C8 00000006 C=CODE     S=.text    G=(none)   M=ActnMenus ACBP=A9
+ 0001:000010D0 00000006 C=CODE     S=.text    G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0001:000010D8 000000C6 C=CODE     S=.text    G=(none)   M=BisConnections ACBP=A9
+ 0001:000011A0 0000000E C=CODE     S=.text    G=(none)   M=BisMenus ACBP=A9
+ 0001:000011B0 00000006 C=CODE     S=.text    G=(none)   M=SynEditHighlighter ACBP=A9
+ 0001:000011B8 00000006 C=CODE     S=.text    G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0001:000011C0 00000006 C=CODE     S=.text    G=(none)   M=SynRegExpr ACBP=A9
+ 0001:000011C8 00000006 C=CODE     S=.text    G=(none)   M=SynHighlighterXML ACBP=A9
+ 0001:000011D0 00000006 C=CODE     S=.text    G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0001:000011D8 00000006 C=CODE     S=.text    G=(none)   M=SynEdit  ACBP=A9
+ 0001:000011E0 00000006 C=CODE     S=.text    G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0001:000011E8 00000006 C=CODE     S=.text    G=(none)   M=SynTextDrawer ACBP=A9
+ 0001:000011F0 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_Routines ACBP=A9
+ 0001:000011F8 00000006 C=CODE     S=.text    G=(none)   M=MSI_Processes ACBP=A9
+ 0001:00001200 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0001:00001208 00000006 C=CODE     S=.text    G=(none)   M=MSI_Devices ACBP=A9
+ 0001:00001210 00000006 C=CODE     S=.text    G=(none)   M=MSI_CPU  ACBP=A9
+ 0001:00001218 00000006 C=CODE     S=.text    G=(none)   M=JclDebug ACBP=A9
+ 0001:00001220 00000006 C=CODE     S=.text    G=(none)   M=JclSysInfo ACBP=A9
+ 0001:00001228 00000006 C=CODE     S=.text    G=(none)   M=JclStrings ACBP=A9
+ 0001:00001230 00000006 C=CODE     S=.text    G=(none)   M=JclSysUtils ACBP=A9
+ 0001:00001238 00000006 C=CODE     S=.text    G=(none)   M=JclWideStrings ACBP=A9
+ 0001:00001240 00000006 C=CODE     S=.text    G=(none)   M=JclShell ACBP=A9
+ 0001:00001248 00000006 C=CODE     S=.text    G=(none)   M=JclRegistry ACBP=A9
+ 0001:00001250 00000006 C=CODE     S=.text    G=(none)   M=JclHookExcept ACBP=A9
+ 0001:00001258 00000006 C=CODE     S=.text    G=(none)   M=BisCoreThreads ACBP=A9
+ 0001:00001260 0000000E C=CODE     S=.text    G=(none)   M=BisExceptions ACBP=A9
+ 0001:00001270 00000006 C=CODE     S=.text    G=(none)   M=BisServiceApplication ACBP=A9
+ 0001:00001278 00000006 C=CODE     S=.text    G=(none)   M=BisSvcMgr ACBP=A9
+ 0001:00001280 00000006 C=CODE     S=.text    G=(none)   M=BisCryptUtils ACBP=A9
+ 0001:00001288 00000006 C=CODE     S=.text    G=(none)   M=SvcMgr   ACBP=A9
+ 0001:00001290 00000006 C=CODE     S=.text    G=(none)   M=BisIPUtils ACBP=A9
+ 0001:00001298 0000007E C=CODE     S=.text    G=(none)   M=BisIBaseConsts ACBP=A9
+ 0001:00001318 0000F552 C=CODE     S=.text    G=(none)   M=BisIBaseConnection ACBP=A9
+ 0001:0001086C 00000B67 C=CODE     S=.text    G=(none)   M=.cmibase ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:0000001C 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=DB       ACBP=A9
+ 0002:0000004C 00000006 C=ICODE    S=.itext   G=(none)   M=WideStrings ACBP=A9
+ 0002:00000054 00000006 C=ICODE    S=.itext   G=(none)   M=FMTBcd   ACBP=A9
+ 0002:0000005C 00000006 C=ICODE    S=.itext   G=(none)   M=SqlTimSt ACBP=A9
+ 0002:00000064 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:0000006C 00000006 C=ICODE    S=.itext   G=(none)   M=Forms    ACBP=A9
+ 0002:00000074 00000006 C=ICODE    S=.itext   G=(none)   M=HelpIntfs ACBP=A9
+ 0002:0000007C 00000006 C=ICODE    S=.itext   G=(none)   M=MultiMon ACBP=A9
+ 0002:00000084 00000006 C=ICODE    S=.itext   G=(none)   M=ActnList ACBP=A9
+ 0002:0000008C 00000006 C=ICODE    S=.itext   G=(none)   M=Graphics ACBP=A9
+ 0002:00000094 00000006 C=ICODE    S=.itext   G=(none)   M=Registry ACBP=A9
+ 0002:0000009C 00000006 C=ICODE    S=.itext   G=(none)   M=IniFiles ACBP=A9
+ 0002:000000A4 00000006 C=ICODE    S=.itext   G=(none)   M=Themes   ACBP=A9
+ 0002:000000AC 00000006 C=ICODE    S=.itext   G=(none)   M=Controls ACBP=A9
+ 0002:000000B4 00000006 C=ICODE    S=.itext   G=(none)   M=Menus    ACBP=A9
+ 0002:000000BC 00000006 C=ICODE    S=.itext   G=(none)   M=UxTheme  ACBP=A9
+ 0002:000000C4 00000006 C=ICODE    S=.itext   G=(none)   M=DwmApi   ACBP=A9
+ 0002:000000CC 00000006 C=ICODE    S=.itext   G=(none)   M=Dialogs  ACBP=A9
+ 0002:000000D4 00000006 C=ICODE    S=.itext   G=(none)   M=Printers ACBP=A9
+ 0002:000000DC 00000006 C=ICODE    S=.itext   G=(none)   M=ExtCtrls ACBP=A9
+ 0002:000000E4 00000006 C=ICODE    S=.itext   G=(none)   M=GraphUtil ACBP=A9
+ 0002:000000EC 00000006 C=ICODE    S=.itext   G=(none)   M=Clipbrd  ACBP=A9
+ 0002:000000F4 00000006 C=ICODE    S=.itext   G=(none)   M=FlatSB   ACBP=A9
+ 0002:000000FC 00000006 C=ICODE    S=.itext   G=(none)   M=IB       ACBP=A9
+ 0002:00000104 00000006 C=ICODE    S=.itext   G=(none)   M=IBUtils  ACBP=A9
+ 0002:0000010C 00000006 C=ICODE    S=.itext   G=(none)   M=IBSQLMonitor ACBP=A9
+ 0002:00000114 00000006 C=ICODE    S=.itext   G=(none)   M=IBServices ACBP=A9
+ 0002:0000011C 00000006 C=ICODE    S=.itext   G=(none)   M=IBDatabase ACBP=A9
+ 0002:00000124 00000006 C=ICODE    S=.itext   G=(none)   M=IBIntf   ACBP=A9
+ 0002:0000012C 00000006 C=ICODE    S=.itext   G=(none)   M=IBCustomDataSet ACBP=A9
+ 0002:00000134 00000006 C=ICODE    S=.itext   G=(none)   M=BisFm    ACBP=A9
+ 0002:0000013C 00000006 C=ICODE    S=.itext   G=(none)   M=DECUtil  ACBP=A9
+ 0002:00000144 00000006 C=ICODE    S=.itext   G=(none)   M=Hash     ACBP=A9
+ 0002:0000014C 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher   ACBP=A9
+ 0002:00000154 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher1  ACBP=A9
+ 0002:0000015C 00000006 C=ICODE    S=.itext   G=(none)   M=DBCtrls  ACBP=A9
+ 0002:00000164 00000006 C=ICODE    S=.itext   G=(none)   M=ComCtrls ACBP=A9
+ 0002:0000016C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtActns ACBP=A9
+ 0002:00000174 00000006 C=ICODE    S=.itext   G=(none)   M=ExtDlgs  ACBP=A9
+ 0002:0000017C 00000006 C=ICODE    S=.itext   G=(none)   M=Buttons  ACBP=A9
+ 0002:00000184 00000006 C=ICODE    S=.itext   G=(none)   M=Mapi     ACBP=A9
+ 0002:0000018C 00000006 C=ICODE    S=.itext   G=(none)   M=DBPWDlg  ACBP=A9
+ 0002:00000194 00000006 C=ICODE    S=.itext   G=(none)   M=DBLogDlg ACBP=A9
+ 0002:0000019C 00000006 C=ICODE    S=.itext   G=(none)   M=rxToolEdit ACBP=A9
+ 0002:000001A4 00000006 C=ICODE    S=.itext   G=(none)   M=rxDateUtil ACBP=A9
+ 0002:000001AC 00000006 C=ICODE    S=.itext   G=(none)   M=RXCtrls  ACBP=A9
+ 0002:000001B4 00000006 C=ICODE    S=.itext   G=(none)   M=RxHook   ACBP=A9
+ 0002:000001BC 00000006 C=ICODE    S=.itext   G=(none)   M=RXConst  ACBP=A9
+ 0002:000001C4 00000006 C=ICODE    S=.itext   G=(none)   M=rxVclutils ACBP=A9
+ 0002:000001CC 00000006 C=ICODE    S=.itext   G=(none)   M=RXProps  ACBP=A9
+ 0002:000001D4 00000006 C=ICODE    S=.itext   G=(none)   M=rxAppUtils ACBP=A9
+ 0002:000001DC 00000006 C=ICODE    S=.itext   G=(none)   M=RxPrgrss ACBP=A9
+ 0002:000001E4 00000006 C=ICODE    S=.itext   G=(none)   M=rxCurrEdit ACBP=A9
+ 0002:000001EC 00000006 C=ICODE    S=.itext   G=(none)   M=ThemedDBGrid ACBP=A9
+ 0002:000001F4 00000006 C=ICODE    S=.itext   G=(none)   M=RxRichEd ACBP=A9
+ 0002:000001FC 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtnrs ACBP=A9
+ 0002:00000204 00000006 C=ICODE    S=.itext   G=(none)   M=CheckLst ACBP=A9
+ 0002:0000020C 00000006 C=ICODE    S=.itext   G=(none)   M=BisUtils ACBP=A9
+ 0002:00000214 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImage ACBP=A9
+ 0002:0000021C 00000006 C=ICODE    S=.itext   G=(none)   M=jpeg     ACBP=A9
+ 0002:00000224 00000006 C=ICODE    S=.itext   G=(none)   M=BisCore  ACBP=A9
+ 0002:0000022C 00000006 C=ICODE    S=.itext   G=(none)   M=AsyncCalls ACBP=A9
+ 0002:00000234 00000006 C=ICODE    S=.itext   G=(none)   M=OleServer ACBP=A9
+ 0002:0000023C 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtrls ACBP=A9
+ 0002:00000244 00000006 C=ICODE    S=.itext   G=(none)   M=AxCtrls  ACBP=A9
+ 0002:0000024C 00000006 C=ICODE    S=.itext   G=(none)   M=kbmMemTable ACBP=A9
+ 0002:00000254 00000006 C=ICODE    S=.itext   G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0002:0000025C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMan  ACBP=A9
+ 0002:00000264 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMenus ACBP=A9
+ 0002:0000026C 00000006 C=ICODE    S=.itext   G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0002:00000274 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditHighlighter ACBP=A9
+ 0002:0000027C 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0002:00000284 00000006 C=ICODE    S=.itext   G=(none)   M=SynRegExpr ACBP=A9
+ 0002:0000028C 00000006 C=ICODE    S=.itext   G=(none)   M=SynHighlighterXML ACBP=A9
+ 0002:00000294 00000006 C=ICODE    S=.itext   G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0002:0000029C 00000006 C=ICODE    S=.itext   G=(none)   M=SynEdit  ACBP=A9
+ 0002:000002A4 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0002:000002AC 00000006 C=ICODE    S=.itext   G=(none)   M=SynTextDrawer ACBP=A9
+ 0002:000002B4 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_Routines ACBP=A9
+ 0002:000002BC 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Processes ACBP=A9
+ 0002:000002C4 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0002:000002CC 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Devices ACBP=A9
+ 0002:000002D4 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_CPU  ACBP=A9
+ 0002:000002DC 00000006 C=ICODE    S=.itext   G=(none)   M=JclDebug ACBP=A9
+ 0002:000002E4 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysInfo ACBP=A9
+ 0002:000002EC 00000006 C=ICODE    S=.itext   G=(none)   M=JclStrings ACBP=A9
+ 0002:000002F4 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysUtils ACBP=A9
+ 0002:000002FC 00000006 C=ICODE    S=.itext   G=(none)   M=JclWideStrings ACBP=A9
+ 0002:00000304 00000006 C=ICODE    S=.itext   G=(none)   M=JclShell ACBP=A9
+ 0002:0000030C 00000006 C=ICODE    S=.itext   G=(none)   M=JclRegistry ACBP=A9
+ 0002:00000314 00000006 C=ICODE    S=.itext   G=(none)   M=JclHookExcept ACBP=A9
+ 0002:0000031C 00000006 C=ICODE    S=.itext   G=(none)   M=BisCoreThreads ACBP=A9
+ 0002:00000324 00000006 C=ICODE    S=.itext   G=(none)   M=BisServiceApplication ACBP=A9
+ 0002:0000032C 00000006 C=ICODE    S=.itext   G=(none)   M=BisSvcMgr ACBP=A9
+ 0002:00000334 00000006 C=ICODE    S=.itext   G=(none)   M=BisCryptUtils ACBP=A9
+ 0002:0000033C 00000006 C=ICODE    S=.itext   G=(none)   M=SvcMgr   ACBP=A9
+ 0002:00000344 00000008 C=ICODE    S=.itext   G=(none)   M=BisIBaseConsts ACBP=A9
+ 0002:0000034C 00000008 C=ICODE    S=.itext   G=(none)   M=BisIBaseConnection ACBP=A9
+ 0002:00000354 00000005 C=ICODE    S=.itext   G=(none)   M=.cmibase ACBP=A9
+ 0003:00000000 00000030 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0004:00000000 0000000C C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:0000000C 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000014 00000004 C=BSS      S=.bss     G=DGROUP   M=BisIBaseConsts ACBP=A9
+ 0004:00000018 00000004 C=BSS      S=.bss     G=DGROUP   M=BisIBaseConnection ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:00000354       .cmibase..cmibase
+ 0001:000113B4       .cmibase.@GetPackageInfoTable
+ 0001:000113BC       .cmibase.@PackageLoad
+ 0001:000113C8       .cmibase.@PackageUnload
+ 0004:00000018       BisIBaseConnection..8
+ 0001:00002AB0       BisIBaseConnection..TBisIBaseConnection
+ 0001:00001A60       BisIBaseConnection..TBisIBaseDatabase
+ 0001:00001318       BisIBaseConnection..TBisIBaseProc
+ 0001:0000165C       BisIBaseConnection..TBisIBaseQuery
+ 0001:00001B48       BisIBaseConnection..TBisIBaseSession
+ 0001:000029F0       BisIBaseConnection..TBisIBaseSessions
+ 0001:00001990       BisIBaseConnection..TBisIBaseTransaction
+ 0002:0000034C       BisIBaseConnection.BisIBaseConnection
+ 0001:0000DD9C       BisIBaseConnection.DumpParams
+ 0001:000087F0       BisIBaseConnection.ExecuteOpen
+ 0001:00008BA8       BisIBaseConnection.ExecutePackage
+ 0001:00007EB0       BisIBaseConnection.FetchAll
+ 0001:0001083C       BisIBaseConnection.Finalization
+ 0001:0000325C       BisIBaseConnection.GetFromParam
+ 0001:0000DBA4       BisIBaseConnection.GetKeys
+ 0001:00002EDC       BisIBaseConnection.InitConnectionModule
+ 0001:00006DB4       BisIBaseConnection.ListFound
+ 0001:000087AC       BisIBaseConnection.SetSessionId
+ 0001:000030B0       BisIBaseConnection.SetToParam
+ 0001:0000CB44       BisIBaseConnection.TBisIBaseConnection.ApplicationExists
+ 0001:0000C438       BisIBaseConnection.TBisIBaseConnection.ChangeParams
+ 0001:0000F58C       BisIBaseConnection.TBisIBaseConnection.Check
+ 0001:0000D1BC       BisIBaseConnection.TBisIBaseConnection.CheckSessions
+ 0001:0000C1E8       BisIBaseConnection.TBisIBaseConnection.CloneConnection
+ 0001:0000D53C       BisIBaseConnection.TBisIBaseConnection.Connect
+ 0001:0000B960       BisIBaseConnection.TBisIBaseConnection.Create
+ 0001:0000C148       BisIBaseConnection.TBisIBaseConnection.Destroy
+ 0001:0000D600       BisIBaseConnection.TBisIBaseConnection.Disconnect
+ 0001:0000FD64       BisIBaseConnection.TBisIBaseConnection.Execute
+ 0001:0000EE7C       BisIBaseConnection.TBisIBaseConnection.Export
+ 0001:0000EBE4       BisIBaseConnection.TBisIBaseConnection.ExportScript
+ 0001:0000EC24       BisIBaseConnection.TBisIBaseConnection.ExportTable
+ 0001:0000D514       BisIBaseConnection.TBisIBaseConnection.GetConnected
+ 0001:0000C7A8       BisIBaseConnection.TBisIBaseConnection.GetDbUserName
+ 0001:0000D418       BisIBaseConnection.TBisIBaseConnection.GetFieldNameQuote
+ 0001:0000EF24       BisIBaseConnection.TBisIBaseConnection.GetInternalServerDate
+ 0001:0000C60C       BisIBaseConnection.TBisIBaseConnection.GetPrefix
+ 0001:0000C1A0       BisIBaseConnection.TBisIBaseConnection.GetRealRealDefaultDatabase
+ 0001:0000FC04       BisIBaseConnection.TBisIBaseConnection.GetRecords
+ 0001:0000D430       BisIBaseConnection.TBisIBaseConnection.GetRecordsFilterDateValue
+ 0001:0000F11C       BisIBaseConnection.TBisIBaseConnection.GetServerDate
+ 0001:0000D530       BisIBaseConnection.TBisIBaseConnection.GetSessionCount
+ 0001:0000D05C       BisIBaseConnection.TBisIBaseConnection.GetSessionIDs
+ 0001:0000C198       BisIBaseConnection.TBisIBaseConnection.GetSessionsClass
+ 0001:0000D6C4       BisIBaseConnection.TBisIBaseConnection.GetTableName
+ 0001:0000C678       BisIBaseConnection.TBisIBaseConnection.GetTimeOut
+ 0001:0000D528       BisIBaseConnection.TBisIBaseConnection.GetWorking
+ 0001:0000EB50       BisIBaseConnection.TBisIBaseConnection.Import
+ 0001:0000D854       BisIBaseConnection.TBisIBaseConnection.ImportScript
+ 0001:0000E8FC       BisIBaseConnection.TBisIBaseConnection.ImportTable
+ 0001:0000C790       BisIBaseConnection.TBisIBaseConnection.Init
+ 0001:000102A8       BisIBaseConnection.TBisIBaseConnection.LoadAlarms
+ 0001:000106CC       BisIBaseConnection.TBisIBaseConnection.LoadDocument
+ 0001:0000FAB8       BisIBaseConnection.TBisIBaseConnection.LoadInterfaces
+ 0001:0000FEC4       BisIBaseConnection.TBisIBaseConnection.LoadMenus
+ 0001:0000F6E0       BisIBaseConnection.TBisIBaseConnection.LoadProfile
+ 0001:00010560       BisIBaseConnection.TBisIBaseConnection.LoadReport
+ 0001:000103F4       BisIBaseConnection.TBisIBaseConnection.LoadScript
+ 0001:00010010       BisIBaseConnection.TBisIBaseConnection.LoadTasks
+ 0001:0000C1B8       BisIBaseConnection.TBisIBaseConnection.Lock
+ 0001:0000F1A0       BisIBaseConnection.TBisIBaseConnection.Login
+ 0001:0000F4A4       BisIBaseConnection.TBisIBaseConnection.Logout
+ 0001:0000C6F8       BisIBaseConnection.TBisIBaseConnection.PreparePrefix
+ 0001:0000F970       BisIBaseConnection.TBisIBaseConnection.RefreshPermissions
+ 0001:0000C3BC       BisIBaseConnection.TBisIBaseConnection.RemoveConnection
+ 0001:0000F828       BisIBaseConnection.TBisIBaseConnection.SaveProfile
+ 0001:0001015C       BisIBaseConnection.TBisIBaseConnection.SaveTask
+ 0001:0000CDC0       BisIBaseConnection.TBisIBaseConnection.SessionExists
+ 0001:0000CFD4       BisIBaseConnection.TBisIBaseConnection.SessionFind
+ 0001:0000C1D0       BisIBaseConnection.TBisIBaseConnection.UnLock
+ 0001:0000F620       BisIBaseConnection.TBisIBaseConnection.Update
+ 0001:00003864       BisIBaseConnection.TBisIBaseDatabase.CopyFrom
+ 0001:000036A0       BisIBaseConnection.TBisIBaseDatabase.Create
+ 0001:000037A0       BisIBaseConnection.TBisIBaseDatabase.GetPassword
+ 0001:000036DC       BisIBaseConnection.TBisIBaseDatabase.GetUserName
+ 0001:000037F8       BisIBaseConnection.TBisIBaseDatabase.SetPassword
+ 0001:00003734       BisIBaseConnection.TBisIBaseDatabase.SetUserName
+ 0001:00003178       BisIBaseConnection.TBisIBaseProc.CopyParamsFrom
+ 0001:00003314       BisIBaseConnection.TBisIBaseProc.CopyParamsTo
+ 0001:00002EF4       BisIBaseConnection.TBisIBaseProc.Create
+ 0001:00002F2C       BisIBaseConnection.TBisIBaseProc.GetQueryText
+ 0001:00003350       BisIBaseConnection.TBisIBaseProc.SetNullToParamValues
+ 0001:000033FC       BisIBaseConnection.TBisIBaseQuery.Create
+ 0001:00003434       BisIBaseConnection.TBisIBaseQuery.FetchAll
+ 0001:00003468       BisIBaseConnection.TBisIBaseQuery.GetQueryText
+ 0001:00006E58       BisIBaseConnection.TBisIBaseSession.CheckLocks
+ 0001:00006B88       BisIBaseConnection.TBisIBaseSession.CheckPermissions
+ 0001:00007EE8       BisIBaseConnection.TBisIBaseSession.CopyData
+ 0001:000038D4       BisIBaseConnection.TBisIBaseSession.Create
+ 0001:00006244       BisIBaseConnection.TBisIBaseSession.Delete
+ 0001:00005764       BisIBaseConnection.TBisIBaseSession.Destroy
+ 0001:000085FC       BisIBaseConnection.TBisIBaseSession.DumpParams
+ 0001:0000846C       BisIBaseConnection.TBisIBaseSession.DumpParams
+ 0001:00008E4C       BisIBaseConnection.TBisIBaseSession.Execute
+ 0001:00005894       BisIBaseConnection.TBisIBaseSession.GetPrefix
+ 0001:00008010       BisIBaseConnection.TBisIBaseSession.GetRecords
+ 0001:0000591C       BisIBaseConnection.TBisIBaseSession.GetRoleIds
+ 0001:00005A24       BisIBaseConnection.TBisIBaseSession.Insert
+ 0001:0000A498       BisIBaseConnection.TBisIBaseSession.LoadAlarms
+ 0001:0000B090       BisIBaseConnection.TBisIBaseSession.LoadDocument
+ 0001:0000770C       BisIBaseConnection.TBisIBaseSession.LoadInterfaces
+ 0001:00006900       BisIBaseConnection.TBisIBaseSession.LoadLocks
+ 0001:000091F4       BisIBaseConnection.TBisIBaseSession.LoadMenus
+ 0001:000064D8       BisIBaseConnection.TBisIBaseSession.LoadPermissions
+ 0001:000070B0       BisIBaseConnection.TBisIBaseSession.LoadProfile
+ 0001:0000ACB0       BisIBaseConnection.TBisIBaseSession.LoadReport
+ 0001:000066D4       BisIBaseConnection.TBisIBaseSession.LoadRoles
+ 0001:0000A8D0       BisIBaseConnection.TBisIBaseSession.LoadScript
+ 0001:000096F8       BisIBaseConnection.TBisIBaseSession.LoadTasks
+ 0001:00005A0C       BisIBaseConnection.TBisIBaseSession.Lock
+ 0001:000057DC       BisIBaseConnection.TBisIBaseSession.LoggerWrite
+ 0001:000058B8       BisIBaseConnection.TBisIBaseSession.PreparePrefix
+ 0001:000073C8       BisIBaseConnection.TBisIBaseSession.SaveProfile
+ 0001:0000A1A0       BisIBaseConnection.TBisIBaseSession.SaveTask
+ 0001:00005A18       BisIBaseConnection.TBisIBaseSession.Unlock
+ 0001:00005DA8       BisIBaseConnection.TBisIBaseSession.Update
+ 0001:0000B4F4       BisIBaseConnection.TBisIBaseSessions.Add
+ 0001:0000B7D4       BisIBaseConnection.TBisIBaseSessions.CopyFrom
+ 0001:0000B474       BisIBaseConnection.TBisIBaseSessions.Create
+ 0001:0000B4B0       BisIBaseConnection.TBisIBaseSessions.Destroy
+ 0001:0000B724       BisIBaseConnection.TBisIBaseSessions.Find
+ 0001:0000B4E0       BisIBaseConnection.TBisIBaseSessions.GetItems
+ 0001:0000B4D8       BisIBaseConnection.TBisIBaseSessions.GetSessionClass
+ 0001:0000B7B0       BisIBaseConnection.TBisIBaseSessions.Remove
+ 0001:000035EC       BisIBaseConnection.TBisIBaseTransaction.Create
+ 0001:00003678       BisIBaseConnection.TBisIBaseTransaction.Destroy
+ 0001:0000DF50       BisIBaseConnection.TryInsert
+ 0001:0000E3C0       BisIBaseConnection.TryUpdate
+ 0004:00000014       BisIBaseConsts..1
+ 0002:00000344       BisIBaseConsts.BisIBaseConsts
+ 0001:000012E8       BisIBaseConsts.Finalization
+ 0001:000002C8       SysInit.@InitPkg
+ 0001:0000032C       SysInit.@PackageLoad
+ 0001:00000338       SysInit.@PackageUnload
+ 0001:000001B8       SysInit.AllocTlsBuffer
+ 0001:00000274       SysInit.ExitProcessTLS
+ 0001:0000023C       SysInit.ExitThreadTLS
+ 0001:00000180       SysInit.FreeLibrary
+ 0001:000001C4       SysInit.GetTlsSize
+ 0004:00000004       SysInit.HInstance
+ 0001:00000298       SysInit.InitializeModule
+ 0001:00000210       SysInit.InitProcessTLS
+ 0001:000001CC       SysInit.InitThreadTLS
+ 0001:00000188       SysInit.LocalAlloc
+ 0001:00000190       SysInit.LocalFree
+ 0003:00000008       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0003:00000004       SysInit.PtrToNil
+ 0001:00000198       SysInit.TlsAlloc
+ 0004:00000008       SysInit.tlsBuffer
+ 0001:000001A0       SysInit.TlsFree
+ 0001:000001A8       SysInit.TlsGetValue
+ 0003:00000000       SysInit.TlsIndex
+ 0005:00000000       SysInit.TlsLast
+ 0003:00000020       SysInit.TlsProc
+ 0001:000001B0       SysInit.TlsSetValue
+ 0001:000002A4       SysInit.UninitializeModule
+ 0004:0000000C       Windows..3
+ 0001:00000344       Windows.DeleteCriticalSection
+ 0001:0000034C       Windows.EnterCriticalSection
+ 0001:0000036C       Windows.Finalization
+ 0001:00000354       Windows.FreeLibrary
+ 0004:00000010       Windows.HtmlHelpModule
+ 0001:0000035C       Windows.InitializeCriticalSection
+ 0001:00000364       Windows.LeaveCriticalSection
+ 0002:00000008       Windows.Windows
+
+
+  Address             Publics by Value
+
+ 0001:00000180       SysInit.FreeLibrary
+ 0001:00000188       SysInit.LocalAlloc
+ 0001:00000190       SysInit.LocalFree
+ 0001:00000198       SysInit.TlsAlloc
+ 0001:000001A0       SysInit.TlsFree
+ 0001:000001A8       SysInit.TlsGetValue
+ 0001:000001B0       SysInit.TlsSetValue
+ 0001:000001B8       SysInit.AllocTlsBuffer
+ 0001:000001C4       SysInit.GetTlsSize
+ 0001:000001CC       SysInit.InitThreadTLS
+ 0001:00000210       SysInit.InitProcessTLS
+ 0001:0000023C       SysInit.ExitThreadTLS
+ 0001:00000274       SysInit.ExitProcessTLS
+ 0001:00000298       SysInit.InitializeModule
+ 0001:000002A4       SysInit.UninitializeModule
+ 0001:000002C8       SysInit.@InitPkg
+ 0001:0000032C       SysInit.@PackageLoad
+ 0001:00000338       SysInit.@PackageUnload
+ 0001:00000344       Windows.DeleteCriticalSection
+ 0001:0000034C       Windows.EnterCriticalSection
+ 0001:00000354       Windows.FreeLibrary
+ 0001:0000035C       Windows.InitializeCriticalSection
+ 0001:00000364       Windows.LeaveCriticalSection
+ 0001:0000036C       Windows.Finalization
+ 0001:000012E8       BisIBaseConsts.Finalization
+ 0001:00001318       BisIBaseConnection..TBisIBaseProc
+ 0001:0000165C       BisIBaseConnection..TBisIBaseQuery
+ 0001:00001990       BisIBaseConnection..TBisIBaseTransaction
+ 0001:00001A60       BisIBaseConnection..TBisIBaseDatabase
+ 0001:00001B48       BisIBaseConnection..TBisIBaseSession
+ 0001:000029F0       BisIBaseConnection..TBisIBaseSessions
+ 0001:00002AB0       BisIBaseConnection..TBisIBaseConnection
+ 0001:00002EDC       BisIBaseConnection.InitConnectionModule
+ 0001:00002EF4       BisIBaseConnection.TBisIBaseProc.Create
+ 0001:00002F2C       BisIBaseConnection.TBisIBaseProc.GetQueryText
+ 0001:000030B0       BisIBaseConnection.SetToParam
+ 0001:00003178       BisIBaseConnection.TBisIBaseProc.CopyParamsFrom
+ 0001:0000325C       BisIBaseConnection.GetFromParam
+ 0001:00003314       BisIBaseConnection.TBisIBaseProc.CopyParamsTo
+ 0001:00003350       BisIBaseConnection.TBisIBaseProc.SetNullToParamValues
+ 0001:000033FC       BisIBaseConnection.TBisIBaseQuery.Create
+ 0001:00003434       BisIBaseConnection.TBisIBaseQuery.FetchAll
+ 0001:00003468       BisIBaseConnection.TBisIBaseQuery.GetQueryText
+ 0001:000035EC       BisIBaseConnection.TBisIBaseTransaction.Create
+ 0001:00003678       BisIBaseConnection.TBisIBaseTransaction.Destroy
+ 0001:000036A0       BisIBaseConnection.TBisIBaseDatabase.Create
+ 0001:000036DC       BisIBaseConnection.TBisIBaseDatabase.GetUserName
+ 0001:00003734       BisIBaseConnection.TBisIBaseDatabase.SetUserName
+ 0001:000037A0       BisIBaseConnection.TBisIBaseDatabase.GetPassword
+ 0001:000037F8       BisIBaseConnection.TBisIBaseDatabase.SetPassword
+ 0001:00003864       BisIBaseConnection.TBisIBaseDatabase.CopyFrom
+ 0001:000038D4       BisIBaseConnection.TBisIBaseSession.Create
+ 0001:00005764       BisIBaseConnection.TBisIBaseSession.Destroy
+ 0001:000057DC       BisIBaseConnection.TBisIBaseSession.LoggerWrite
+ 0001:00005894       BisIBaseConnection.TBisIBaseSession.GetPrefix
+ 0001:000058B8       BisIBaseConnection.TBisIBaseSession.PreparePrefix
+ 0001:0000591C       BisIBaseConnection.TBisIBaseSession.GetRoleIds
+ 0001:00005A0C       BisIBaseConnection.TBisIBaseSession.Lock
+ 0001:00005A18       BisIBaseConnection.TBisIBaseSession.Unlock
+ 0001:00005A24       BisIBaseConnection.TBisIBaseSession.Insert
+ 0001:00005DA8       BisIBaseConnection.TBisIBaseSession.Update
+ 0001:00006244       BisIBaseConnection.TBisIBaseSession.Delete
+ 0001:000064D8       BisIBaseConnection.TBisIBaseSession.LoadPermissions
+ 0001:000066D4       BisIBaseConnection.TBisIBaseSession.LoadRoles
+ 0001:00006900       BisIBaseConnection.TBisIBaseSession.LoadLocks
+ 0001:00006B88       BisIBaseConnection.TBisIBaseSession.CheckPermissions
+ 0001:00006DB4       BisIBaseConnection.ListFound
+ 0001:00006E58       BisIBaseConnection.TBisIBaseSession.CheckLocks
+ 0001:000070B0       BisIBaseConnection.TBisIBaseSession.LoadProfile
+ 0001:000073C8       BisIBaseConnection.TBisIBaseSession.SaveProfile
+ 0001:0000770C       BisIBaseConnection.TBisIBaseSession.LoadInterfaces
+ 0001:00007EB0       BisIBaseConnection.FetchAll
+ 0001:00007EE8       BisIBaseConnection.TBisIBaseSession.CopyData
+ 0001:00008010       BisIBaseConnection.TBisIBaseSession.GetRecords
+ 0001:0000846C       BisIBaseConnection.TBisIBaseSession.DumpParams
+ 0001:000085FC       BisIBaseConnection.TBisIBaseSession.DumpParams
+ 0001:000087AC       BisIBaseConnection.SetSessionId
+ 0001:000087F0       BisIBaseConnection.ExecuteOpen
+ 0001:00008BA8       BisIBaseConnection.ExecutePackage
+ 0001:00008E4C       BisIBaseConnection.TBisIBaseSession.Execute
+ 0001:000091F4       BisIBaseConnection.TBisIBaseSession.LoadMenus
+ 0001:000096F8       BisIBaseConnection.TBisIBaseSession.LoadTasks
+ 0001:0000A1A0       BisIBaseConnection.TBisIBaseSession.SaveTask
+ 0001:0000A498       BisIBaseConnection.TBisIBaseSession.LoadAlarms
+ 0001:0000A8D0       BisIBaseConnection.TBisIBaseSession.LoadScript
+ 0001:0000ACB0       BisIBaseConnection.TBisIBaseSession.LoadReport
+ 0001:0000B090       BisIBaseConnection.TBisIBaseSession.LoadDocument
+ 0001:0000B474       BisIBaseConnection.TBisIBaseSessions.Create
+ 0001:0000B4B0       BisIBaseConnection.TBisIBaseSessions.Destroy
+ 0001:0000B4D8       BisIBaseConnection.TBisIBaseSessions.GetSessionClass
+ 0001:0000B4E0       BisIBaseConnection.TBisIBaseSessions.GetItems
+ 0001:0000B4F4       BisIBaseConnection.TBisIBaseSessions.Add
+ 0001:0000B724       BisIBaseConnection.TBisIBaseSessions.Find
+ 0001:0000B7B0       BisIBaseConnection.TBisIBaseSessions.Remove
+ 0001:0000B7D4       BisIBaseConnection.TBisIBaseSessions.CopyFrom
+ 0001:0000B960       BisIBaseConnection.TBisIBaseConnection.Create
+ 0001:0000C148       BisIBaseConnection.TBisIBaseConnection.Destroy
+ 0001:0000C198       BisIBaseConnection.TBisIBaseConnection.GetSessionsClass
+ 0001:0000C1A0       BisIBaseConnection.TBisIBaseConnection.GetRealRealDefaultDatabase
+ 0001:0000C1B8       BisIBaseConnection.TBisIBaseConnection.Lock
+ 0001:0000C1D0       BisIBaseConnection.TBisIBaseConnection.UnLock
+ 0001:0000C1E8       BisIBaseConnection.TBisIBaseConnection.CloneConnection
+ 0001:0000C3BC       BisIBaseConnection.TBisIBaseConnection.RemoveConnection
+ 0001:0000C438       BisIBaseConnection.TBisIBaseConnection.ChangeParams
+ 0001:0000C60C       BisIBaseConnection.TBisIBaseConnection.GetPrefix
+ 0001:0000C678       BisIBaseConnection.TBisIBaseConnection.GetTimeOut
+ 0001:0000C6F8       BisIBaseConnection.TBisIBaseConnection.PreparePrefix
+ 0001:0000C790       BisIBaseConnection.TBisIBaseConnection.Init
+ 0001:0000C7A8       BisIBaseConnection.TBisIBaseConnection.GetDbUserName
+ 0001:0000CB44       BisIBaseConnection.TBisIBaseConnection.ApplicationExists
+ 0001:0000CDC0       BisIBaseConnection.TBisIBaseConnection.SessionExists
+ 0001:0000CFD4       BisIBaseConnection.TBisIBaseConnection.SessionFind
+ 0001:0000D05C       BisIBaseConnection.TBisIBaseConnection.GetSessionIDs
+ 0001:0000D1BC       BisIBaseConnection.TBisIBaseConnection.CheckSessions
+ 0001:0000D418       BisIBaseConnection.TBisIBaseConnection.GetFieldNameQuote
+ 0001:0000D430       BisIBaseConnection.TBisIBaseConnection.GetRecordsFilterDateValue
+ 0001:0000D514       BisIBaseConnection.TBisIBaseConnection.GetConnected
+ 0001:0000D528       BisIBaseConnection.TBisIBaseConnection.GetWorking
+ 0001:0000D530       BisIBaseConnection.TBisIBaseConnection.GetSessionCount
+ 0001:0000D53C       BisIBaseConnection.TBisIBaseConnection.Connect
+ 0001:0000D600       BisIBaseConnection.TBisIBaseConnection.Disconnect
+ 0001:0000D6C4       BisIBaseConnection.TBisIBaseConnection.GetTableName
+ 0001:0000D854       BisIBaseConnection.TBisIBaseConnection.ImportScript
+ 0001:0000DBA4       BisIBaseConnection.GetKeys
+ 0001:0000DD9C       BisIBaseConnection.DumpParams
+ 0001:0000DF50       BisIBaseConnection.TryInsert
+ 0001:0000E3C0       BisIBaseConnection.TryUpdate
+ 0001:0000E8FC       BisIBaseConnection.TBisIBaseConnection.ImportTable
+ 0001:0000EB50       BisIBaseConnection.TBisIBaseConnection.Import
+ 0001:0000EBE4       BisIBaseConnection.TBisIBaseConnection.ExportScript
+ 0001:0000EC24       BisIBaseConnection.TBisIBaseConnection.ExportTable
+ 0001:0000EE7C       BisIBaseConnection.TBisIBaseConnection.Export
+ 0001:0000EF24       BisIBaseConnection.TBisIBaseConnection.GetInternalServerDate
+ 0001:0000F11C       BisIBaseConnection.TBisIBaseConnection.GetServerDate
+ 0001:0000F1A0       BisIBaseConnection.TBisIBaseConnection.Login
+ 0001:0000F4A4       BisIBaseConnection.TBisIBaseConnection.Logout
+ 0001:0000F58C       BisIBaseConnection.TBisIBaseConnection.Check
+ 0001:0000F620       BisIBaseConnection.TBisIBaseConnection.Update
+ 0001:0000F6E0       BisIBaseConnection.TBisIBaseConnection.LoadProfile
+ 0001:0000F828       BisIBaseConnection.TBisIBaseConnection.SaveProfile
+ 0001:0000F970       BisIBaseConnection.TBisIBaseConnection.RefreshPermissions
+ 0001:0000FAB8       BisIBaseConnection.TBisIBaseConnection.LoadInterfaces
+ 0001:0000FC04       BisIBaseConnection.TBisIBaseConnection.GetRecords
+ 0001:0000FD64       BisIBaseConnection.TBisIBaseConnection.Execute
+ 0001:0000FEC4       BisIBaseConnection.TBisIBaseConnection.LoadMenus
+ 0001:00010010       BisIBaseConnection.TBisIBaseConnection.LoadTasks
+ 0001:0001015C       BisIBaseConnection.TBisIBaseConnection.SaveTask
+ 0001:000102A8       BisIBaseConnection.TBisIBaseConnection.LoadAlarms
+ 0001:000103F4       BisIBaseConnection.TBisIBaseConnection.LoadScript
+ 0001:00010560       BisIBaseConnection.TBisIBaseConnection.LoadReport
+ 0001:000106CC       BisIBaseConnection.TBisIBaseConnection.LoadDocument
+ 0001:0001083C       BisIBaseConnection.Finalization
+ 0001:000113B4       .cmibase.@GetPackageInfoTable
+ 0001:000113BC       .cmibase.@PackageLoad
+ 0001:000113C8       .cmibase.@PackageUnload
+ 0002:00000008       Windows.Windows
+ 0002:00000344       BisIBaseConsts.BisIBaseConsts
+ 0002:0000034C       BisIBaseConnection.BisIBaseConnection
+ 0002:00000354       .cmibase..cmibase
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.PtrToNil
+ 0003:00000008       SysInit.Module
+ 0003:00000020       SysInit.TlsProc
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       SysInit.tlsBuffer
+ 0004:0000000C       Windows..3
+ 0004:00000010       Windows.HtmlHelpModule
+ 0004:00000014       BisIBaseConsts..1
+ 0004:00000018       BisIBaseConnection..8
+ 0005:00000000       SysInit.TlsLast
+
+
+Line numbers for MiTeC_ToolHelp32(MiTeC_ToolHelp32.pas) segment .text
+
+   438 0001:00000000
+
+Line numbers for IpRtrMib(objects.bpl\IPHlpApi\Pas\IpRtrMib.pas) segment .text
+
+  1062 0001:00000000
+
+Line numbers for IpExport(objects.bpl\IPHlpApi\Pas\IpExport.pas) segment .text
+
+   343 0001:00000000
+
+Line numbers for IpTypes(objects.bpl\IPHlpApi\Pas\IpTypes.pas) segment .text
+
+   228 0001:00000000
+
+Line numbers for IpHlpApi(objects.bpl\IPHlpApi\Pas\IpHlpApi.pas) segment .text
+
+   752 0001:00000000
+
+Line numbers for BisIBaseConsts(cmibase.bpl\BisIBaseConsts.pas) segment .itext
+
+    25 0002:00000344
+
+Line numbers for BisIBaseConnection(cmibase.bpl\BisIBaseConnection.pas) segment .text
+
+   497 0001:00002EDC   498 0001:00002EDF   499 0001:00002EED   504 0001:00002EF4
+   505 0001:00002F06   506 0001:00002F0F   515 0001:00002F2C   516 0001:00002F52
+   517 0001:00002F61   518 0001:00002F6F   519 0001:00002F8A   520 0001:00002FA0
+   521 0001:00002FB2   522 0001:00002FC8   523 0001:00002FD7   524 0001:00002FE1
+   525 0001:0000300B   526 0001:00003016   519 0001:00003017   527 0001:0000301C
+   529 0001:0000303F   531 0001:0000304F   541 0001:000030B0   542 0001:000030EA
+   543 0001:00003101   544 0001:00003120   545 0001:00003124   546 0001:00003138
+   549 0001:00003140   553 0001:00003178   554 0001:000031A6   555 0001:000031B0
+   556 0001:000031C6   557 0001:000031D4   558 0001:000031EF   559 0001:00003204
+   560 0001:00003224   558 0001:00003225   561 0001:00003228   555 0001:0000322B
+   563 0001:00003230   573 0001:0000325C   574 0001:00003276   575 0001:00003293
+   576 0001:000032B4   577 0001:000032B8   578 0001:000032C8   581 0001:000032E0
+   585 0001:00003314   586 0001:00003322   587 0001:00003326   588 0001:00003331
+   589 0001:0000333D   590 0001:00003344   587 0001:00003345   592 0001:00003348
+   598 0001:00003350   599 0001:0000336D   600 0001:00003380   601 0001:0000338F
+   602 0001:000033A6   607 0001:000033BA   608 0001:000033C7   599 0001:000033C8
+   609 0001:000033CD   614 0001:000033FC   615 0001:0000340E   616 0001:00003417
+   619 0001:00003434   620 0001:00003437   621 0001:0000343F   623 0001:00003448
+   624 0001:0000344E   622 0001:00003455   626 0001:0000345E   627 0001:00003465
+   636 0001:00003468   637 0001:0000348E   638 0001:0000349D   639 0001:000034AB
+   640 0001:000034C6   641 0001:000034DC   642 0001:000034EE   643 0001:00003504
+   644 0001:00003513   645 0001:0000351D   646 0001:00003547   647 0001:00003552
+   640 0001:00003553   648 0001:00003558   650 0001:0000357B   652 0001:0000358B
+   657 0001:000035EC   658 0001:00003611   659 0001:0000361A   660 0001:0000361E
+   661 0001:00003627   662 0001:0000363F   665 0001:00003678   666 0001:00003683
+   667 0001:0000368F   672 0001:000036A0   673 0001:000036B2   674 0001:000036BB
+   675 0001:000036BF   678 0001:000036DC   679 0001:000036F5   680 0001:00003712
+   683 0001:00003734   684 0001:0000375B   685 0001:00003779   688 0001:000037A0
+   689 0001:000037B9   690 0001:000037D6   693 0001:000037F8   694 0001:0000381F
+   695 0001:0000383D   700 0001:00003864   701 0001:0000387B   702 0001:0000387F
+   703 0001:00003881   704 0001:0000388E   705 0001:000038AA   707 0001:000038B1
+   712 0001:000038D4   713 0001:000038E9   714 0001:000038F4   716 0001:000038FD
+   717 0001:00003900   718 0001:00003911   720 0001:00003922   721 0001:00003936
+   722 0001:00003948   723 0001:0000395C   724 0001:0000396E   726 0001:00003982
+   728 0001:00003992   729 0001:000039A2   730 0001:000039B2   731 0001:000039C2
+   733 0001:000039D2   734 0001:000039E2   735 0001:000039F2   736 0001:00003A02
+   738 0001:00003A12   739 0001:00003A22   740 0001:00003A32   741 0001:00003A42
+   743 0001:00003A52   744 0001:00003A62   745 0001:00003A72   746 0001:00003A82
+   748 0001:00003A92   749 0001:00003AA2   750 0001:00003AB2   751 0001:00003AC2
+   753 0001:00003AD2   754 0001:00003AE2   755 0001:00003AF2   756 0001:00003B02
+   758 0001:00003B12   759 0001:00003B22   760 0001:00003B32   761 0001:00003B42
+   762 0001:00003B52   764 0001:00003B62   765 0001:00003B72   766 0001:00003B82
+   767 0001:00003B92   768 0001:00003BA2   769 0001:00003BB2   770 0001:00003BC2
+   772 0001:00003BD2   773 0001:00003BE2   774 0001:00003BF2   775 0001:00003C02
+   777 0001:00003C12   778 0001:00003C22   779 0001:00003C32   780 0001:00003C42
+   782 0001:00003C52   783 0001:00003C62   784 0001:00003C72   785 0001:00003C82
+   787 0001:00003C92   788 0001:00003CA2   789 0001:00003CB2   790 0001:00003CC2
+   792 0001:00003CD2   793 0001:00003CE2   794 0001:00003CF2   795 0001:00003D02
+   797 0001:00003D12   798 0001:00003D22   799 0001:00003D32   800 0001:00003D42
+   802 0001:00003D52   803 0001:00003D62   804 0001:00003D72   805 0001:00003D82
+   807 0001:00003D92   808 0001:00003DA2   809 0001:00003DB2   811 0001:00003DC2
+   813 0001:00003DD2   816 0001:00003DE2   817 0001:00003DF2   820 0001:00003E02
+   824 0001:00003E12   825 0001:00003E22   826 0001:00003E32   827 0001:00003E42
+   839 0001:00003E52   840 0001:00003E62   841 0001:00003E72   850 0001:00003E82
+   861 0001:00003E92   862 0001:00003EA2   869 0001:00003EB2   870 0001:00003EC2
+   871 0001:00003ED2   872 0001:00003EE2   875 0001:00003EED   876 0001:00003EFA
+   879 0001:00005764   880 0001:0000576F   881 0001:0000577A   882 0001:00005785
+   883 0001:00005790   884 0001:0000579B   885 0001:000057A6   886 0001:000057AE
+   887 0001:000057B6   888 0001:000057BF   889 0001:000057CB   894 0001:000057DC
+   895 0001:00005804   896 0001:0000581A   897 0001:0000584F   899 0001:00005860
+   902 0001:00005894   903 0001:0000589B   904 0001:000058A2   905 0001:000058A9
+   906 0001:000058B2   909 0001:000058B8   910 0001:000058DC   911 0001:000058E6
+   912 0001:000058ED   913 0001:000058F9   918 0001:0000591C   919 0001:0000593F
+   920 0001:0000595C   921 0001:00005974   922 0001:00005998   924 0001:000059D0
+   920 0001:000059D1   925 0001:000059D4   929 0001:00005A0C   930 0001:00005A15
+   934 0001:00005A18   935 0001:00005A21   943 0001:00005A24   944 0001:00005A47
+   945 0001:00005A4F   946 0001:00005A5D   947 0001:00005A70   948 0001:00005A85
+   949 0001:00005A93   950 0001:00005AA4   951 0001:00005AB5   952 0001:00005AC4
+   953 0001:00005AD2   954 0001:00005AE0   955 0001:00005AEE   956 0001:00005AFD
+   957 0001:00005B07   958 0001:00005B12   959 0001:00005B20   960 0001:00005B2A
+   963 0001:00005BEC   964 0001:00005C23   965 0001:00005C53   966 0001:00005C64
+   967 0001:00005C75   968 0001:00005C81   969 0001:00005C98   970 0001:00005CA0
+   971 0001:00005CA8   973 0001:00005CCA   974 0001:00005CD2   975 0001:00005CDA
+   978 0001:00005D05   979 0001:00005D07   980 0001:00005D37   985 0001:00005D4E
+   987 0001:00005D5E   995 0001:00005DA8   996 0001:00005DE0   997 0001:00005DE8
+   998 0001:00005DF6   999 0001:00005E16  1000 0001:00005E2B  1001 0001:00005E39
+  1002 0001:00005E4A  1003 0001:00005E5B  1004 0001:00005E6A  1005 0001:00005E78
+  1006 0001:00005E86  1007 0001:00005E94  1008 0001:00005EA3  1009 0001:00005EAD
+  1010 0001:00005EB8  1011 0001:00005EC6  1012 0001:00005ED0  1013 0001:00005ED4
+  1015 0001:00005F12  1017 0001:00005F4E  1018 0001:00005F85  1019 0001:00005F96
+  1020 0001:00005F9A  1021 0001:00005FAB  1022 0001:00005FB7  1024 0001:00005FCE
+  1025 0001:00006028  1026 0001:0000607A  1028 0001:000060C1  1029 0001:000060C9
+  1030 0001:000060D1  1032 0001:000060F3  1033 0001:000060FB  1034 0001:00006103
+  1037 0001:0000612E  1038 0001:00006130  1039 0001:00006166  1044 0001:0000617D
+  1046 0001:0000618D  1053 0001:00006244  1054 0001:00006268  1055 0001:00006270
+  1056 0001:0000627E  1057 0001:00006291  1058 0001:000062A6  1059 0001:000062B4
+  1060 0001:000062C5  1061 0001:000062D6  1062 0001:000062E4  1063 0001:000062F2
+  1064 0001:00006300  1065 0001:0000630F  1066 0001:00006319  1067 0001:00006324
+  1068 0001:00006332  1069 0001:0000636E  1070 0001:000063A5  1071 0001:000063D5
+  1072 0001:000063E6  1073 0001:000063EE  1074 0001:000063F6  1076 0001:00006418
+  1077 0001:00006420  1080 0001:0000644B  1081 0001:0000644D  1082 0001:0000647D
+  1087 0001:00006494  1089 0001:000064A4  1097 0001:000064D8  1098 0001:000064F9
+  1099 0001:00006501  1100 0001:0000650F  1101 0001:0000651A  1102 0001:00006542
+  1103 0001:00006553  1104 0001:00006564  1105 0001:00006572  1106 0001:00006580
+  1107 0001:0000658E  1108 0001:0000659D  1109 0001:000065A7  1110 0001:000065B2
+  1111 0001:000065C0  1112 0001:000065E1  1113 0001:0000661E  1114 0001:00006626
+  1115 0001:00006632  1116 0001:00006643  1119 0001:00006661  1120 0001:00006669
+  1124 0001:00006686  1126 0001:00006696  1133 0001:000066D4  1134 0001:000066F4
+  1135 0001:000066FC  1136 0001:0000670A  1137 0001:0000671D  1138 0001:0000672B
+  1139 0001:0000673C  1140 0001:0000674D  1141 0001:0000675B  1142 0001:00006769
+  1143 0001:00006777  1144 0001:00006786  1145 0001:00006790  1146 0001:0000679B
+  1147 0001:000067A9  1148 0001:000067E7  1149 0001:00006824  1150 0001:0000682C
+  1151 0001:00006838  1153 0001:00006842  1154 0001:00006868  1152 0001:00006870
+  1158 0001:00006889  1159 0001:00006891  1163 0001:000068AE  1165 0001:000068BE
+  1174 0001:00006900  1175 0001:00006937  1176 0001:0000693F  1177 0001:0000694D
+  1178 0001:00006958  1179 0001:00006980  1180 0001:00006991  1181 0001:000069A2
+  1182 0001:000069B0  1183 0001:000069BE  1184 0001:000069CC  1185 0001:000069DB
+  1186 0001:000069E5  1187 0001:000069F0  1188 0001:000069FE  1189 0001:00006A29
+  1190 0001:00006A92  1191 0001:00006ACF  1192 0001:00006AD7  1193 0001:00006AE3
+  1194 0001:00006AF4  1197 0001:00006B12  1198 0001:00006B1A  1202 0001:00006B37
+  1204 0001:00006B47  1212 0001:00006B88  1213 0001:00006BBD  1214 0001:00006BC5
+  1215 0001:00006BF1  1216 0001:00006BF8  1217 0001:00006C38  1218 0001:00006C4B
+  1219 0001:00006C59  1221 0001:00006C6C  1222 0001:00006C80  1223 0001:00006C8C
+  1224 0001:00006C90  1225 0001:00006C9C  1226 0001:00006CA0  1227 0001:00006CBB
+  1228 0001:00006CC9  1229 0001:00006CCF  1230 0001:00006CDD  1232 0001:00006CE9
+  1220 0001:00006CF7  1235 0001:00006D1A  1236 0001:00006D2D  1239 0001:00006D48
+  1251 0001:00006DB4  1252 0001:00006DCE  1253 0001:00006DD2  1254 0001:00006DED
+  1255 0001:00006E20  1256 0001:00006E24  1258 0001:00006E26  1253 0001:00006E27
+  1259 0001:00006E2A  1261 0001:00006E58  1262 0001:00006E94  1263 0001:00006EA4
+  1264 0001:00006ED0  1265 0001:00006EDE  1266 0001:00006EED  1268 0001:00006F00
+  1269 0001:00006F14  1270 0001:00006F38  1271 0001:00006F53  1272 0001:00006F73
+  1273 0001:00006F99  1274 0001:00006FC0  1275 0001:00006FDB  1279 0001:00006FEF
+  1267 0001:00006FFD  1282 0001:00007020  1286 0001:00007030  1293 0001:000070B0
+  1294 0001:000070D5  1295 0001:000070DD  1296 0001:000070EB  1297 0001:00007106
+  1298 0001:0000711B  1299 0001:00007129  1300 0001:0000713A  1301 0001:0000714B
+  1302 0001:00007159  1303 0001:00007167  1304 0001:00007175  1305 0001:00007184
+  1306 0001:0000718E  1307 0001:00007199  1308 0001:000071A7  1309 0001:0000720F
+  1310 0001:00007246  1311 0001:00007276  1312 0001:00007287  1313 0001:0000728F
+  1314 0001:000072A7  1316 0001:000072C6  1318 0001:000072E8  1319 0001:000072F0
+  1322 0001:0000731B  1323 0001:0000731D  1324 0001:0000734D  1329 0001:00007364
+  1331 0001:00007374  1339 0001:000073C8  1340 0001:00007404  1341 0001:0000740C
+  1342 0001:0000741A  1343 0001:00007435  1344 0001:0000744A  1345 0001:00007458
+  1346 0001:00007469  1347 0001:0000747A  1348 0001:00007489  1349 0001:00007497
+  1350 0001:000074A1  1351 0001:000074AD  1352 0001:000074BB  1353 0001:000074C9
+  1354 0001:000074D8  1355 0001:000074E2  1356 0001:000074ED  1357 0001:000074FB
+  1358 0001:00007505  1359 0001:0000756D  1360 0001:000075A4  1361 0001:000075D4
+  1362 0001:000075E5  1363 0001:000075FC  1364 0001:00007604  1365 0001:0000760C
+  1367 0001:0000762E  1368 0001:00007636  1369 0001:0000763E  1372 0001:00007669
+  1373 0001:0000766B  1374 0001:0000769B  1379 0001:000076B2  1381 0001:000076C2
+  1396 0001:0000770C  1397 0001:00007732  1398 0001:0000773A  1399 0001:00007748
+  1400 0001:00007753  1401 0001:00007783  1402 0001:00007798  1403 0001:000077A6
+  1404 0001:000077B7  1405 0001:000077C8  1406 0001:000077D6  1407 0001:000077E4
+  1408 0001:000077F2  1409 0001:00007801  1410 0001:0000780B  1411 0001:00007816
+  1412 0001:00007824  1413 0001:0000786F  1414 0001:000078A6  1415 0001:000078D6
+  1416 0001:000078E7  1417 0001:000078EF  1418 0001:000078FF  1420 0001:0000790C
+  1421 0001:00007921  1422 0001:00007935  1423 0001:0000794A  1424 0001:00007967
+  1425 0001:0000796F  1427 0001:0000798C  1432 0001:000079EF  1433 0001:00007A04
+  1434 0001:00007A14  1439 0001:00007A5A  1440 0001:00007A6F  1441 0001:00007A7F
+  1446 0001:00007AC2  1447 0001:00007AD7  1448 0001:00007AE3  1454 0001:00007B24
+  1456 0001:00007B28  1457 0001:00007B4E  1458 0001:00007B51  1459 0001:00007B66
+  1462 0001:00007B74  1419 0001:00007B7C  1464 0001:00007B8C  1467 0001:00007BAE
+  1468 0001:00007BB6  1471 0001:00007BE1  1472 0001:00007BE3  1473 0001:00007C19
+  1478 0001:00007C30  1480 0001:00007C40  1485 0001:00007EB0  1486 0001:00007EBB
+  1487 0001:00007EBD  1489 0001:00007EC6  1490 0001:00007EC7  1488 0001:00007ECE
+  1492 0001:00007ED9  1493 0001:00007EE0  1501 0001:00007EE8  1502 0001:00007EF7
+  1504 0001:00007F0B  1507 0001:00007F13  1509 0001:00007F1B  1510 0001:00007F27
+  1511 0001:00007F2E  1514 0001:00007F31  1515 0001:00007F3D  1516 0001:00007F4B
+  1517 0001:00007F57  1518 0001:00007F66  1520 0001:00007F68  1521 0001:00007F71
+  1522 0001:00007F75  1524 0001:00007F7C  1525 0001:00007F84  1528 0001:00007F89
+  1529 0001:00007F8B  1530 0001:00007F97  1534 0001:00007FA4  1535 0001:00007FA8
+  1536 0001:00007FAF  1540 0001:00007FBE  1541 0001:00007FBF  1533 0001:00007FC7
+  1544 0001:00007FD3  1545 0001:00007FDB  1548 0001:00007FF4  1552 0001:00008006
+  1567 0001:00008010  1568 0001:0000803B  1569 0001:00008043  1570 0001:00008051
+  1571 0001:0000806C  1572 0001:00008081  1573 0001:0000808F  1574 0001:000080A0
+  1575 0001:000080B1  1576 0001:000080C2  1577 0001:000080D0  1578 0001:000080DE
+  1579 0001:000080EC  1580 0001:000080FB  1581 0001:00008105  1582 0001:00008110
+  1583 0001:0000811E  1585 0001:00008134  1586 0001:0000814B  1587 0001:00008162
+  1588 0001:00008179  1589 0001:00008193  1591 0001:000081AA  1593 0001:0000820B
+  1595 0001:0000820D  1596 0001:0000821A  1597 0001:0000827C  1598 0001:000082AC
+  1600 0001:000082BD  1601 0001:000082C5  1602 0001:000082D1  1604 0001:000082E7
+  1607 0001:000082EC  1608 0001:000082F4  1609 0001:00008305  1611 0001:0000831A
+  1613 0001:00008349  1615 0001:00008351  1617 0001:0000835F  1619 0001:00008381
+  1620 0001:00008389  1623 0001:000083B4  1624 0001:000083B6  1625 0001:000083E6
+  1630 0001:000083FD  1632 0001:0000840D  1641 0001:0000846C  1642 0001:000084A5
+  1643 0001:000084AF  1644 0001:000084C6  1645 0001:000084D3  1646 0001:000084DE
+  1647 0001:000084ED  1648 0001:00008504  1649 0001:00008513  1651 0001:00008539
+  1652 0001:0000854A  1654 0001:0000855B  1655 0001:000085A8  1643 0001:000085AB
+  1657 0001:000085B2  1667 0001:000085FC  1668 0001:00008638  1669 0001:00008642
+  1670 0001:0000865D  1671 0001:0000866A  1672 0001:00008675  1673 0001:00008684
+  1674 0001:0000869B  1675 0001:000086AA  1677 0001:000086D0  1678 0001:000086DB
+  1679 0001:000086F2  1681 0001:00008709  1682 0001:00008756  1669 0001:00008759
+  1684 0001:00008760  1691 0001:000087AC  1692 0001:000087AF  1693 0001:000087BF
+  1694 0001:000087C3  1695 0001:000087D1  1710 0001:000087F0  1711 0001:0000881D
+  1712 0001:00008823  1713 0001:0000882D  1714 0001:0000883E  1715 0001:0000884C
+  1716 0001:00008856  1717 0001:00008867  1718 0001:00008871  1719 0001:00008875
+  1720 0001:0000887D  1721 0001:0000889E  1722 0001:000088B1  1724 0001:000088C4
+  1725 0001:000088D4  1726 0001:000088DF  1727 0001:000088F3  1728 0001:00008903
+  1730 0001:00008913  1731 0001:00008919  1732 0001:00008934  1733 0001:0000893A
+  1735 0001:0000896B  1720 0001:0000896E  1736 0001:00008975  1737 0001:00008986
+  1738 0001:000089A0  1741 0001:000089AA  1742 0001:000089CE  1743 0001:000089EE
+  1744 0001:00008A15  1746 0001:00008A35  1748 0001:00008AA5  1749 0001:00008AB6
+  1753 0001:00008AD5  1754 0001:00008ADD  1755 0001:00008AE9  1756 0001:00008AF4
+  1757 0001:00008AFF  1760 0001:00008B12  1763 0001:00008B22  1771 0001:00008BA8
+  1772 0001:00008BCD  1773 0001:00008BDA  1774 0001:00008BF5  1775 0001:00008C03
+  1776 0001:00008C1D  1777 0001:00008C2A  1778 0001:00008C79  1779 0001:00008C95
+  1780 0001:00008CA6  1781 0001:00008CB4  1782 0001:00008CBF  1783 0001:00008CD0
+  1784 0001:00008CE9  1785 0001:00008CF4  1787 0001:00008CFC  1789 0001:00008D32
+  1790 0001:00008D3A  1791 0001:00008D47  1792 0001:00008D51  1794 0001:00008D65
+  1796 0001:00008D6D  1797 0001:00008D77  1799 0001:00008D84  1801 0001:00008DAC
+  1803 0001:00008DBC  1775 0001:00008DBF  1805 0001:00008DD5  1808 0001:00008DF8
+  1817 0001:00008E4C  1818 0001:00008E7A  1819 0001:00008E82  1820 0001:00008E90
+  1821 0001:00008EAD  1822 0001:00008EC2  1823 0001:00008ED0  1824 0001:00008EE4
+  1825 0001:00008EF5  1826 0001:00008F06  1827 0001:00008F17  1829 0001:00008F25
+  1830 0001:00008F33  1831 0001:00008F41  1832 0001:00008F50  1833 0001:00008F5A
+  1834 0001:00008F65  1835 0001:00008F73  1836 0001:00008F89  1837 0001:00008F94
+  1839 0001:00008F9C  1841 0001:00008FCC  1842 0001:00008FD4  1843 0001:00008FDE
+  1844 0001:00008FEF  1846 0001:00009000  1848 0001:00009003  1850 0001:00009019
+  1851 0001:0000901E  1853 0001:0000902A  1855 0001:0000903C  1856 0001:0000904D
+  1858 0001:00009063  1859 0001:00009071  1861 0001:00009084  1863 0001:0000908C
+  1864 0001:0000909D  1866 0001:000090AE  1868 0001:000090C1  1872 0001:000090E4
+  1873 0001:000090EC  1878 0001:000090F6  1880 0001:00009104  1882 0001:00009126
+  1883 0001:0000912E  1884 0001:00009136  1887 0001:00009161  1888 0001:00009163
+  1889 0001:00009193  1894 0001:000091AA  1896 0001:000091BA  1908 0001:000091F4
+  1909 0001:0000921A  1910 0001:00009222  1911 0001:00009230  1912 0001:0000923B
+  1913 0001:0000926D  1914 0001:00009282  1915 0001:00009290  1916 0001:000092A1
+  1917 0001:000092B2  1918 0001:000092C0  1919 0001:000092CE  1920 0001:000092DC
+  1921 0001:000092EB  1922 0001:000092F5  1923 0001:00009300  1924 0001:0000930E
+  1925 0001:00009359  1926 0001:00009390  1927 0001:000093C0  1928 0001:000093D1
+  1929 0001:000093D9  1930 0001:000093E9  1933 0001:000093F6  1934 0001:0000940B
+  1935 0001:00009420  1936 0001:00009430  1937 0001:00009438  1938 0001:00009457
+  1939 0001:00009477  1940 0001:00009497  1941 0001:000094AD  1942 0001:000094C2
+  1943 0001:000094D1  1944 0001:000094DF  1945 0001:000094F4  1946 0001:00009500
+  1948 0001:00009518  1952 0001:00009528  1931 0001:00009530  1954 0001:00009540
+  1957 0001:00009562  1958 0001:0000956A  1961 0001:00009595  1962 0001:00009597
+  1963 0001:000095C7  1968 0001:000095DE  1970 0001:000095EE  1981 0001:000096F8
+  1982 0001:0000971D  1983 0001:00009725  1984 0001:00009733  1985 0001:0000973E
+  1986 0001:0000976E  1987 0001:00009783  1988 0001:00009791  1989 0001:000097A2
+  1990 0001:000097B3  1991 0001:000097C1  1992 0001:000097CF  1993 0001:000097DD
+  1994 0001:000097EC  1995 0001:000097F6  1996 0001:00009801  1997 0001:0000980F
+  1998 0001:0000985A  1999 0001:00009891  2000 0001:000098C1  2001 0001:000098D2
+  2002 0001:000098DA  2003 0001:000098EA  2006 0001:000098F7  2007 0001:0000990C
+  2008 0001:00009921  2009 0001:0000992D  2010 0001:00009931  2011 0001:00009940
+  2013 0001:00009948  2014 0001:00009968  2015 0001:0000997D  2016 0001:00009992
+  2017 0001:000099A7  2018 0001:000099CA  2019 0001:000099EA  2020 0001:00009A0A
+  2021 0001:00009A20  2022 0001:00009A36  2023 0001:00009A4B  2024 0001:00009A60
+  2025 0001:00009A78  2026 0001:00009A90  2027 0001:00009AA8  2028 0001:00009AC0
+  2029 0001:00009AD8  2030 0001:00009AF0  2031 0001:00009B08  2032 0001:00009B20
+  2033 0001:00009B38  2034 0001:00009B50  2035 0001:00009B68  2036 0001:00009B80
+  2037 0001:00009B98  2038 0001:00009BB0  2039 0001:00009BC8  2040 0001:00009BE0
+  2041 0001:00009BF8  2042 0001:00009C10  2043 0001:00009C28  2044 0001:00009C40
+  2045 0001:00009C58  2046 0001:00009C70  2047 0001:00009C88  2048 0001:00009CA0
+  2049 0001:00009CB9  2052 0001:00009CDC  2004 0001:00009CE4  2054 0001:00009CF4
+  2057 0001:00009D16  2058 0001:00009D1E  2061 0001:00009D49  2062 0001:00009D4B
+  2063 0001:00009D7B  2068 0001:00009D92  2070 0001:00009DA2  2077 0001:0000A1A0
+  2078 0001:0000A1DC  2079 0001:0000A1E4  2080 0001:0000A1F2  2081 0001:0000A20D
+  2082 0001:0000A222  2083 0001:0000A230  2084 0001:0000A241  2085 0001:0000A252
+  2086 0001:0000A260  2087 0001:0000A26E  2088 0001:0000A27C  2089 0001:0000A28B
+  2090 0001:0000A295  2091 0001:0000A2A0  2092 0001:0000A2AE  2094 0001:0000A327
+  2095 0001:0000A35E  2096 0001:0000A38E  2097 0001:0000A39F  2098 0001:0000A3A7
+  2099 0001:0000A3AF  2101 0001:0000A3D1  2102 0001:0000A3D9  2105 0001:0000A404
+  2106 0001:0000A406  2107 0001:0000A436  2112 0001:0000A44D  2114 0001:0000A45D
+  2124 0001:0000A498  2125 0001:0000A4BE  2126 0001:0000A4C6  2127 0001:0000A4D4
+  2128 0001:0000A4DF  2129 0001:0000A50F  2130 0001:0000A524  2131 0001:0000A532
+  2132 0001:0000A543  2133 0001:0000A554  2134 0001:0000A562  2135 0001:0000A570
+  2136 0001:0000A57E  2137 0001:0000A58D  2138 0001:0000A597  2139 0001:0000A5A2
+  2140 0001:0000A5B0  2141 0001:0000A5D1  2142 0001:0000A608  2143 0001:0000A638
+  2144 0001:0000A649  2145 0001:0000A651  2146 0001:0000A661  2149 0001:0000A66E
+  2150 0001:0000A683  2151 0001:0000A68F  2152 0001:0000A693  2153 0001:0000A69F
+  2155 0001:0000A6A7  2156 0001:0000A6BC  2157 0001:0000A6D2  2158 0001:0000A6F2
+  2159 0001:0000A712  2162 0001:0000A732  2147 0001:0000A73A  2164 0001:0000A74A
+  2167 0001:0000A76C  2168 0001:0000A774  2171 0001:0000A79F  2172 0001:0000A7A1
+  2173 0001:0000A7D1  2178 0001:0000A7E8  2180 0001:0000A7F8  2189 0001:0000A8D0
+  2190 0001:0000A91B  2191 0001:0000A923  2192 0001:0000A931  2193 0001:0000A94E
+  2194 0001:0000A963  2195 0001:0000A971  2196 0001:0000A982  2197 0001:0000A993
+  2198 0001:0000A9A1  2199 0001:0000A9AF  2200 0001:0000A9BD  2201 0001:0000A9CC
+  2202 0001:0000A9D6  2203 0001:0000A9E1  2204 0001:0000A9EF  2205 0001:0000AA28
+  2206 0001:0000AA5F  2207 0001:0000AA8F  2208 0001:0000AAA0  2209 0001:0000AAA8
+  2210 0001:0000AAC8  2211 0001:0000AAE5  2212 0001:0000AB02  2214 0001:0000AB19
+  2215 0001:0000AB2E  2216 0001:0000AB3A  2217 0001:0000AB3F  2218 0001:0000AB4D
+  2219 0001:0000AB61  2221 0001:0000AB82  2226 0001:0000AB92  2229 0001:0000AB9E
+  2231 0001:0000ABC0  2232 0001:0000ABC8  2235 0001:0000ABF3  2236 0001:0000ABF5
+  2237 0001:0000AC25  2242 0001:0000AC3C  2244 0001:0000AC4C  2253 0001:0000ACB0
+  2254 0001:0000ACFB  2255 0001:0000AD03  2256 0001:0000AD11  2257 0001:0000AD2E
+  2258 0001:0000AD43  2259 0001:0000AD51  2260 0001:0000AD62  2261 0001:0000AD73
+  2262 0001:0000AD81  2263 0001:0000AD8F  2264 0001:0000AD9D  2265 0001:0000ADAC
+  2266 0001:0000ADB6  2267 0001:0000ADC1  2268 0001:0000ADCF  2269 0001:0000AE08
+  2270 0001:0000AE3F  2271 0001:0000AE6F  2272 0001:0000AE80  2273 0001:0000AE88
+  2274 0001:0000AEA8  2275 0001:0000AEC5  2276 0001:0000AEE2  2278 0001:0000AEF9
+  2279 0001:0000AF0E  2280 0001:0000AF1A  2281 0001:0000AF1F  2282 0001:0000AF2D
+  2283 0001:0000AF41  2285 0001:0000AF62  2290 0001:0000AF72  2293 0001:0000AF7E
+  2295 0001:0000AFA0  2296 0001:0000AFA8  2299 0001:0000AFD3  2300 0001:0000AFD5
+  2301 0001:0000B005  2306 0001:0000B01C  2308 0001:0000B02C  2317 0001:0000B090
+  2318 0001:0000B0DB  2319 0001:0000B0E3  2320 0001:0000B0F1  2321 0001:0000B10E
+  2322 0001:0000B123  2323 0001:0000B131  2324 0001:0000B142  2325 0001:0000B153
+  2326 0001:0000B161  2327 0001:0000B16F  2328 0001:0000B17D  2329 0001:0000B18C
+  2330 0001:0000B196  2331 0001:0000B1A1  2332 0001:0000B1AF  2333 0001:0000B1E8
+  2334 0001:0000B21F  2335 0001:0000B24F  2336 0001:0000B260  2337 0001:0000B268
+  2338 0001:0000B288  2339 0001:0000B2A5  2340 0001:0000B2C2  2342 0001:0000B2D9
+  2343 0001:0000B2EE  2344 0001:0000B2FA  2345 0001:0000B2FF  2346 0001:0000B30D
+  2347 0001:0000B321  2349 0001:0000B342  2354 0001:0000B352  2357 0001:0000B35E
+  2359 0001:0000B380  2360 0001:0000B388  2363 0001:0000B3B3  2364 0001:0000B3B5
+  2365 0001:0000B3E5  2370 0001:0000B3FC  2372 0001:0000B40C  2377 0001:0000B474
+  2378 0001:0000B489  2379 0001:0000B492  2380 0001:0000B495  2383 0001:0000B4B0
+  2384 0001:0000B4BB  2385 0001:0000B4C7  2389 0001:0000B4D8  2390 0001:0000B4DD
+  2393 0001:0000B4E0  2394 0001:0000B4E6  2395 0001:0000B4EF  2403 0001:0000B4F4
+  2404 0001:0000B571  2405 0001:0000B573  2406 0001:0000B57D  2407 0001:0000B58B
+  2408 0001:0000B59C  2409 0001:0000B5A6  2410 0001:0000B5B4  2411 0001:0000B5C9
+  2412 0001:0000B5D9  2413 0001:0000B5E9  2414 0001:0000B5F9  2415 0001:0000B609
+  2417 0001:0000B61A  2418 0001:0000B620  2419 0001:0000B631  2420 0001:0000B63B
+  2421 0001:0000B645  2424 0001:0000B64E  2425 0001:0000B65F  2427 0001:0000B670
+  2428 0001:0000B679  2429 0001:0000B67F  2430 0001:0000B68A  2431 0001:0000B692
+  2432 0001:0000B69A  2433 0001:0000B6A2  2436 0001:0000B6AA  2437 0001:0000B6B4
+  2441 0001:0000B6D2  2442 0001:0000B6DA  2446 0001:0000B6E4  2452 0001:0000B724
+  2453 0001:0000B74F  2454 0001:0000B754  2455 0001:0000B762  2456 0001:0000B76E
+  2457 0001:0000B77D  2458 0001:0000B780  2460 0001:0000B782  2454 0001:0000B783
+  2461 0001:0000B786  2464 0001:0000B7B0  2465 0001:0000B7B6  2466 0001:0000B7BA
+  2467 0001:0000B7BE  2468 0001:0000B7C5  2470 0001:0000B7CE  2477 0001:0000B7D4
+  2478 0001:0000B7FD  2479 0001:0000B801  2480 0001:0000B809  2481 0001:0000B813
+  2482 0001:0000B82D  2483 0001:0000B83A  2484 0001:0000B847  2485 0001:0000B84F
+  2489 0001:0000B8C7  2490 0001:0000B8CB  2491 0001:0000B8E7  2492 0001:0000B8F8
+  2493 0001:0000B909  2494 0001:0000B91A  2497 0001:0000B92B  2481 0001:0000B92E
+  2499 0001:0000B937  2505 0001:0000B960  2506 0001:0000B972  2507 0001:0000B97B
+  2508 0001:0000B987  2510 0001:0000B994  2511 0001:0000B9A8  2513 0001:0000B9B0
+  2515 0001:0000B9C7  2517 0001:0000B9DF  2518 0001:0000B9EF  2519 0001:0000B9FF
+  2520 0001:0000BA0F  2522 0001:0000BA1F  2523 0001:0000BA2F  2524 0001:0000BA3F
+  2525 0001:0000BA4F  2526 0001:0000BA5F  2527 0001:0000BA6F  2529 0001:0000BA7F
+  2533 0001:0000BA8F  2538 0001:0000BA9F  2539 0001:0000BAAF  2540 0001:0000BABF
+  2541 0001:0000BACF  2542 0001:0000BADF  2543 0001:0000BAEF  2544 0001:0000BAFF
+  2545 0001:0000BB0F  2546 0001:0000BB1F  2553 0001:0000BB2F  2555 0001:0000BB3F
+  2556 0001:0000BB44  2559 0001:0000C148  2560 0001:0000C153  2561 0001:0000C15E
+  2562 0001:0000C166  2563 0001:0000C171  2564 0001:0000C17D  2565 0001:0000C189
+  2569 0001:0000C198  2570 0001:0000C19D  2574 0001:0000C1A0  2575 0001:0000C1A6
+  2576 0001:0000C1B0  2577 0001:0000C1B2  2580 0001:0000C1B8  2581 0001:0000C1BB
+  2582 0001:0000C1C7  2583 0001:0000C1CE  2586 0001:0000C1D0  2587 0001:0000C1D3
+  2588 0001:0000C1DF  2589 0001:0000C1E6  2595 0001:0000C1E8  2596 0001:0000C214
+  2597 0001:0000C222  2598 0001:0000C23F  2599 0001:0000C241  2600 0001:0000C247
+  2601 0001:0000C258  2602 0001:0000C270  2604 0001:0000C27A  2605 0001:0000C286
+  2606 0001:0000C296  2607 0001:0000C29E  2611 0001:0000C31A  2612 0001:0000C320
+  2613 0001:0000C33F  2614 0001:0000C353  2615 0001:0000C367  2616 0001:0000C37B
+  2620 0001:0000C38F  2625 0001:0000C3BC  2626 0001:0000C3CD  2627 0001:0000C3E6
+  2628 0001:0000C3EA  2629 0001:0000C3F8  2630 0001:0000C3FC  2632 0001:0000C40D
+  2634 0001:0000C420  2635 0001:0000C42D  2643 0001:0000C438  2644 0001:0000C45B
+  2645 0001:0000C46A  2646 0001:0000C478  2647 0001:0000C497  2648 0001:0000C4A7
+  2649 0001:0000C4A9  2650 0001:0000C4D1  2651 0001:0000C4E2  2653 0001:0000C4E4
+  2655 0001:0000C534  2657 0001:0000C536  2658 0001:0000C53A  2659 0001:0000C579
+  2646 0001:0000C57C  2660 0001:0000C585  2662 0001:0000C5B4  2664 0001:0000C5C4
+  2669 0001:0000C60C  2670 0001:0000C625  2671 0001:0000C62C  2672 0001:0000C646
+  2673 0001:0000C64A  2674 0001:0000C654  2679 0001:0000C678  2680 0001:0000C694
+  2681 0001:0000C696  2682 0001:0000C6B0  2683 0001:0000C6B4  2684 0001:0000C6CB
+  2687 0001:0000C6F8  2688 0001:0000C722  2689 0001:0000C753  2692 0001:0000C790
+  2693 0001:0000C793  2694 0001:0000C79A  2695 0001:0000C7A4  2704 0001:0000C7A8
+  2705 0001:0000C7E3  2706 0001:0000C7EB  2707 0001:0000C7F9  2708 0001:0000C7FD
+  2709 0001:0000C812  2710 0001:0000C823  2711 0001:0000C834  2712 0001:0000C842
+  2713 0001:0000C852  2714 0001:0000C864  2715 0001:0000C872  2716 0001:0000C87C
+  2717 0001:0000C887  2718 0001:0000C899  2719 0001:0000C8D0  2720 0001:0000C90D
+  2721 0001:0000C915  2722 0001:0000C935  2723 0001:0000C94A  2724 0001:0000C95B
+  2725 0001:0000C97B  2726 0001:0000C99B  2727 0001:0000C9BB  2728 0001:0000C9DB
+  2729 0001:0000C9FB  2733 0001:0000CA0C  2734 0001:0000CA14  2738 0001:0000CA31
+  2740 0001:0000CA41  2747 0001:0000CB44  2748 0001:0000CB9A  2749 0001:0000CBA2
+  2750 0001:0000CBB0  2751 0001:0000CBB4  2752 0001:0000CBC9  2753 0001:0000CBDA
+  2754 0001:0000CBEB  2755 0001:0000CBF9  2756 0001:0000CC09  2757 0001:0000CC1B
+  2758 0001:0000CC29  2759 0001:0000CC33  2760 0001:0000CC3E  2761 0001:0000CC50
+  2762 0001:0000CCAE  2763 0001:0000CCEB  2764 0001:0000CCF3  2765 0001:0000CD0B
+  2768 0001:0000CD2F  2769 0001:0000CD37  2773 0001:0000CD54  2775 0001:0000CD64
+  2782 0001:0000CDC0  2783 0001:0000CDFE  2784 0001:0000CE06  2785 0001:0000CE14
+  2786 0001:0000CE18  2787 0001:0000CE2D  2788 0001:0000CE3E  2789 0001:0000CE4F
+  2790 0001:0000CE5D  2791 0001:0000CE6D  2792 0001:0000CE7F  2793 0001:0000CE8D
+  2794 0001:0000CE97  2795 0001:0000CEA2  2796 0001:0000CEB4  2797 0001:0000CEED
+  2798 0001:0000CF2A  2799 0001:0000CF32  2801 0001:0000CF60  2802 0001:0000CF68
+  2806 0001:0000CF85  2808 0001:0000CF95  2813 0001:0000CFD4  2814 0001:0000CFFE
+  2815 0001:0000D00A  2816 0001:0000D01A  2817 0001:0000D022  2818 0001:0000D031
+  2820 0001:0000D033  2826 0001:0000D05C  2827 0001:0000D083  2828 0001:0000D08B
+  2829 0001:0000D0A3  2830 0001:0000D0B5  2831 0001:0000D0D1  2833 0001:0000D14D
+  2828 0001:0000D14E  2834 0001:0000D155  2844 0001:0000D1BC  2845 0001:0000D1DF
+  2846 0001:0000D1E7  2847 0001:0000D1F5  2848 0001:0000D200  2849 0001:0000D22A
+  2850 0001:0000D23B  2851 0001:0000D24C  2852 0001:0000D25A  2853 0001:0000D26A
+  2854 0001:0000D27C  2855 0001:0000D28A  2856 0001:0000D294  2857 0001:0000D29F
+  2858 0001:0000D2B1  2859 0001:0000D2D2  2860 0001:0000D30F  2861 0001:0000D317
+  2862 0001:0000D323  2863 0001:0000D335  2864 0001:0000D347  2865 0001:0000D37C
+  2866 0001:0000D38E  2862 0001:0000D38F  2869 0001:0000D3A1  2870 0001:0000D3A9
+  2874 0001:0000D3C6  2876 0001:0000D3D6  2879 0001:0000D418  2880 0001:0000D41E
+  2881 0001:0000D42B  2886 0001:0000D430  2887 0001:0000D458  2888 0001:0000D467
+  2889 0001:0000D473  2891 0001:0000D4AF  2892 0001:0000D4E9  2895 0001:0000D514
+  2896 0001:0000D517  2897 0001:0000D523  2901 0001:0000D528  2902 0001:0000D52F
+  2906 0001:0000D530  2907 0001:0000D539  2910 0001:0000D53C  2911 0001:0000D548
+  2912 0001:0000D550  2913 0001:0000D55E  2914 0001:0000D56C  2915 0001:0000D57B
+  2917 0001:0000D5A5  2918 0001:0000D5A7  2921 0001:0000D5E6  2923 0001:0000D5F6
+  2926 0001:0000D600  2927 0001:0000D60C  2928 0001:0000D614  2929 0001:0000D622
+  2930 0001:0000D630  2931 0001:0000D63F  2933 0001:0000D669  2934 0001:0000D66B
+  2937 0001:0000D6AD  2939 0001:0000D6BD  2948 0001:0000D6C4  2949 0001:0000D6F9
+  2950 0001:0000D700  2951 0001:0000D732  2952 0001:0000D73A  2953 0001:0000D767
+  2954 0001:0000D779  2955 0001:0000D780  2956 0001:0000D790  2957 0001:0000D7A0
+  2958 0001:0000D7B4  2960 0001:0000D7B6  2953 0001:0000D7B7  2962 0001:0000D7BA
+  2963 0001:0000D7EC  2964 0001:0000D7F0  2966 0001:0000D820  2973 0001:0000D854
+  2974 0001:0000D87A  2975 0001:0000D882  2976 0001:0000D890  2977 0001:0000D8C1
+  2978 0001:0000D8CC  2979 0001:0000D8DC  2980 0001:0000D8EE  2981 0001:0000D903
+  2982 0001:0000D918  2983 0001:0000D926  2984 0001:0000D937  2985 0001:0000D948
+  2986 0001:0000D956  2987 0001:0000D966  2988 0001:0000D978  2989 0001:0000D986
+  2990 0001:0000D990  2991 0001:0000D99B  2992 0001:0000D9AD  2993 0001:0000D9B7
+  2994 0001:0000D9CD  2995 0001:0000D9FD  2996 0001:0000DA3A  2997 0001:0000DA44
+  2999 0001:0000DA52  3000 0001:0000DA5C  3001 0001:0000DA64  3002 0001:0000DA70
+  3003 0001:0000DA78  3005 0001:0000DAA8  3006 0001:0000DAAA  3007 0001:0000DAB2
+  3011 0001:0000DAD8  3012 0001:0000DAE0  3015 0001:0000DB0B  3016 0001:0000DB0D
+  3017 0001:0000DB3D  3023 0001:0000DB54  3025 0001:0000DB64  3034 0001:0000DBA4
+  3035 0001:0000DBD7  3036 0001:0000DBE8  3037 0001:0000DBF9  3038 0001:0000DC07
+  3039 0001:0000DC16  3040 0001:0000DC27  3041 0001:0000DC34  3042 0001:0000DC3E
+  3043 0001:0000DC49  3044 0001:0000DC5A  3045 0001:0000DC92  3046 0001:0000DCC8
+  3047 0001:0000DCD9  3048 0001:0000DCE1  3049 0001:0000DCF9  3051 0001:0000DD03
+  3052 0001:0000DD2D  3050 0001:0000DD35  3056 0001:0000DD4E  3057 0001:0000DD56
+  3059 0001:0000DD66  3069 0001:0000DD9C  3070 0001:0000DDD5  3071 0001:0000DDDF
+  3072 0001:0000DDFA  3073 0001:0000DE07  3074 0001:0000DE12  3075 0001:0000DE21
+  3076 0001:0000DE38  3077 0001:0000DE47  3079 0001:0000DE6D  3080 0001:0000DE78
+  3081 0001:0000DE8F  3083 0001:0000DEA6  3084 0001:0000DEFD  3071 0001:0000DF00
+  3086 0001:0000DF07  3098 0001:0000DF50  3099 0001:0000DF76  3100 0001:0000DF7A
+  3101 0001:0000DF88  3102 0001:0000DF99  3103 0001:0000DFAA  3104 0001:0000DFB8
+  3105 0001:0000DFCB  3106 0001:0000DFE0  3107 0001:0000DFF1  3108 0001:0000DFFB
+  3109 0001:0000E006  3110 0001:0000E01B  3111 0001:0000E025  3112 0001:0000E03B
+  3113 0001:0000E04A  3114 0001:0000E04E  3115 0001:0000E097  3117 0001:0000E0B7
+  3118 0001:0000E118  3120 0001:0000E149  3111 0001:0000E14A  3121 0001:0000E151
+  3122 0001:0000E1A3  3123 0001:0000E1DD  3124 0001:0000E213  3125 0001:0000E224
+  3126 0001:0000E23C  3127 0001:0000E24F  3128 0001:0000E25F  3129 0001:0000E263
+  3130 0001:0000E26F  3131 0001:0000E27B  3133 0001:0000E285  3135 0001:0000E2A0
+  3125 0001:0000E2A1  3136 0001:0000E2A4  3137 0001:0000E2B7  3139 0001:0000E2C1
+  3140 0001:0000E2CB  3141 0001:0000E2D3  3142 0001:0000E2DB  3144 0001:0000E2EC
+  3145 0001:0000E2F4  3148 0001:0000E31F  3149 0001:0000E321  3152 0001:0000E331
+  3164 0001:0000E3C0  3165 0001:0000E3EE  3166 0001:0000E3F2  3167 0001:0000E400
+  3168 0001:0000E411  3169 0001:0000E422  3170 0001:0000E430  3171 0001:0000E443
+  3172 0001:0000E458  3173 0001:0000E469  3174 0001:0000E473  3175 0001:0000E47E
+  3176 0001:0000E493  3177 0001:0000E49D  3178 0001:0000E4B3  3179 0001:0000E4C2
+  3180 0001:0000E4C6  3182 0001:0000E511  3184 0001:0000E572  3185 0001:0000E5A3
+  3177 0001:0000E5A4  3186 0001:0000E5AB  3187 0001:0000E5C1  3188 0001:0000E5C5
+  3190 0001:0000E5FC  3191 0001:0000E651  3192 0001:0000E676  3186 0001:0000E677
+  3193 0001:0000E67E  3194 0001:0000E6D0  3195 0001:0000E710  3196 0001:0000E755
+  3197 0001:0000E766  3198 0001:0000E77E  3199 0001:0000E791  3200 0001:0000E7A1
+  3201 0001:0000E7A5  3202 0001:0000E7B1  3203 0001:0000E7BD  3205 0001:0000E7C7
+  3207 0001:0000E7E2  3197 0001:0000E7E3  3209 0001:0000E7E6  3211 0001:0000E7F0
+  3212 0001:0000E7FA  3213 0001:0000E802  3214 0001:0000E80A  3216 0001:0000E81B
+  3217 0001:0000E823  3220 0001:0000E84E  3221 0001:0000E850  3224 0001:0000E860
+  3230 0001:0000E8FC  3231 0001:0000E920  3232 0001:0000E928  3233 0001:0000E936
+  3234 0001:0000E967  3235 0001:0000E97C  3236 0001:0000E98A  3237 0001:0000E99B
+  3238 0001:0000E9AA  3239 0001:0000E9B8  3240 0001:0000E9C2  3241 0001:0000E9CA
+  3242 0001:0000E9EA  3243 0001:0000E9FD  3246 0001:0000EA07  3247 0001:0000EA0F
+  3248 0001:0000EA20  3249 0001:0000EA34  3251 0001:0000EA48  3244 0001:0000EA50
+  3253 0001:0000EA5C  3255 0001:0000EA73  3257 0001:0000EA95  3258 0001:0000EA9D
+  3261 0001:0000EAC8  3262 0001:0000EACA  3263 0001:0000EAFA  3268 0001:0000EB11
+  3270 0001:0000EB21  3273 0001:0000EB50  3274 0001:0000EB5C  3275 0001:0000EB6A
+  3276 0001:0000EB6E  3277 0001:0000EB78  3278 0001:0000EB84  3282 0001:0000EBA9
+  3283 0001:0000EBAB  3285 0001:0000EBDD  3288 0001:0000EBE4  3289 0001:0000EBEB
+  3290 0001:0000EBF3  3293 0001:0000EC0E  3295 0001:0000EC1E  3306 0001:0000EC24
+  3307 0001:0000EC4F  3308 0001:0000EC57  3309 0001:0000EC65  3310 0001:0000EC7A
+  3311 0001:0000EC88  3312 0001:0000EC99  3313 0001:0000ECAA  3314 0001:0000ECBB
+  3315 0001:0000ECC9  3316 0001:0000ECCB  3317 0001:0000ECD0  3318 0001:0000ECD4
+  3319 0001:0000ECD7  3320 0001:0000ECDB  3321 0001:0000ECDD  3322 0001:0000ECE0
+  3323 0001:0000ECE4  3325 0001:0000ECE9  3326 0001:0000ECF9  3327 0001:0000ED0B
+  3328 0001:0000ED19  3329 0001:0000ED23  3330 0001:0000ED2E  3331 0001:0000ED40
+  3332 0001:0000ED4A  3333 0001:0000ED5B  3334 0001:0000ED63  3335 0001:0000ED6F
+  3336 0001:0000ED81  3337 0001:0000ED83  3338 0001:0000ED8B  3340 0001:0000ED98
+  3341 0001:0000ED9C  3342 0001:0000EDA3  3346 0001:0000EDB2  3347 0001:0000EDB3
+  3339 0001:0000EDBB  3349 0001:0000EDC7  3350 0001:0000EDD7  3353 0001:0000EDEF
+  3354 0001:0000EDF7  3355 0001:0000EDFF  3359 0001:0000EE2A  3364 0001:0000EE41
+  3366 0001:0000EE51  3370 0001:0000EE7C  3371 0001:0000EE8B  3372 0001:0000EE99
+  3373 0001:0000EE9D  3374 0001:0000EEA7  3375 0001:0000EEB8  3379 0001:0000EEE2
+  3380 0001:0000EEE4  3382 0001:0000EF19  3390 0001:0000EF24  3391 0001:0000EF45
+  3392 0001:0000EF4D  3393 0001:0000EF5B  3394 0001:0000EF64  3395 0001:0000EF79
+  3396 0001:0000EF8A  3397 0001:0000EF9B  3398 0001:0000EFA9  3399 0001:0000EFB9
+  3400 0001:0000EFCB  3401 0001:0000EFD9  3402 0001:0000EFE3  3403 0001:0000EFEE
+  3404 0001:0000F000  3405 0001:0000F011  3406 0001:0000F04E  3407 0001:0000F056
+  3408 0001:0000F06E  3409 0001:0000F083  3410 0001:0000F08F  3413 0001:0000F0AE
+  3414 0001:0000F0B6  3418 0001:0000F0D3  3420 0001:0000F0E3  3423 0001:0000F11C
+  3424 0001:0000F128  3425 0001:0000F136  3427 0001:0000F15D  3428 0001:0000F15F
+  3430 0001:0000F194  3442 0001:0000F1A0  3443 0001:0000F1CF  3444 0001:0000F1DD
+  3445 0001:0000F205  3447 0001:0000F21A  3449 0001:0000F250  3450 0001:0000F254
+  3451 0001:0000F264  3454 0001:0000F274  3455 0001:0000F27A  3456 0001:0000F288
+  3459 0001:0000F296  3462 0001:0000F2E6  3463 0001:0000F2F0  3464 0001:0000F2FE
+  3465 0001:0000F304  3466 0001:0000F312  3467 0001:0000F320  3470 0001:0000F32E
+  3471 0001:0000F348  3474 0001:0000F374  3475 0001:0000F387  3479 0001:0000F393
+  3482 0001:0000F3AC  3485 0001:0000F3C8  3488 0001:0000F40A  3489 0001:0000F40C
+  3491 0001:0000F441  3496 0001:0000F4A4  3497 0001:0000F4C3  3498 0001:0000F4D1
+  3499 0001:0000F4DB  3500 0001:0000F4DF  3501 0001:0000F4EC  3502 0001:0000F505
+  3505 0001:0000F532  3506 0001:0000F534  3508 0001:0000F566  3513 0001:0000F58C
+  3514 0001:0000F59A  3515 0001:0000F5A8  3516 0001:0000F5B0  3517 0001:0000F5B5
+  3518 0001:0000F5B9  3520 0001:0000F5DF  3521 0001:0000F5E1  3523 0001:0000F616
+  3528 0001:0000F620  3529 0001:0000F62E  3530 0001:0000F63C  3531 0001:0000F646
+  3532 0001:0000F64A  3533 0001:0000F657  3535 0001:0000F669  3537 0001:0000F6A1
+  3538 0001:0000F6A3  3540 0001:0000F6D8  3546 0001:0000F6E0  3547 0001:0000F701
+  3548 0001:0000F70F  3549 0001:0000F71A  3550 0001:0000F724  3551 0001:0000F72D
+  3552 0001:0000F73B  3553 0001:0000F755  3555 0001:0000F76C  3558 0001:0000F798
+  3560 0001:0000F7D0  3561 0001:0000F7D2  3563 0001:0000F804  3569 0001:0000F828
+  3570 0001:0000F849  3571 0001:0000F857  3572 0001:0000F862  3573 0001:0000F86C
+  3574 0001:0000F875  3575 0001:0000F883  3576 0001:0000F89D  3578 0001:0000F8B4
+  3581 0001:0000F8E0  3583 0001:0000F918  3584 0001:0000F91A  3586 0001:0000F94C
+  3592 0001:0000F970  3593 0001:0000F98F  3594 0001:0000F99D  3595 0001:0000F9A8
+  3596 0001:0000F9AE  3597 0001:0000F9B7  3598 0001:0000F9C5  3599 0001:0000F9DF
+  3600 0001:0000F9E7  3602 0001:0000F9FC  3605 0001:0000FA28  3607 0001:0000FA60
+  3608 0001:0000FA62  3610 0001:0000FA94  3616 0001:0000FAB8  3617 0001:0000FAD9
+  3618 0001:0000FAE7  3619 0001:0000FAF2  3620 0001:0000FAFC  3621 0001:0000FB05
+  3622 0001:0000FB13  3623 0001:0000FB2D  3625 0001:0000FB44  3628 0001:0000FB70
+  3630 0001:0000FBA8  3631 0001:0000FBAA  3633 0001:0000FBDF  3640 0001:0000FC04
+  3641 0001:0000FC28  3642 0001:0000FC36  3643 0001:0000FC41  3644 0001:0000FC4F
+  3645 0001:0000FC58  3646 0001:0000FC66  3647 0001:0000FC84  3649 0001:0000FC9E
+  3652 0001:0000FCCB  3654 0001:0000FD03  3655 0001:0000FD05  3657 0001:0000FD37
+  3664 0001:0000FD64  3665 0001:0000FD88  3666 0001:0000FD96  3667 0001:0000FDA1
+  3668 0001:0000FDAF  3669 0001:0000FDB8  3670 0001:0000FDC6  3671 0001:0000FDE4
+  3673 0001:0000FDFE  3676 0001:0000FE2B  3678 0001:0000FE63  3679 0001:0000FE65
+  3681 0001:0000FE97  3687 0001:0000FEC4  3688 0001:0000FEE5  3689 0001:0000FEF3
+  3690 0001:0000FEFE  3691 0001:0000FF08  3692 0001:0000FF11  3693 0001:0000FF1F
+  3694 0001:0000FF39  3696 0001:0000FF50  3699 0001:0000FF7C  3701 0001:0000FFB4
+  3702 0001:0000FFB6  3704 0001:0000FFEB  3710 0001:00010010  3711 0001:00010031
+  3712 0001:0001003F  3713 0001:0001004A  3714 0001:00010054  3715 0001:0001005D
+  3716 0001:0001006B  3717 0001:00010085  3719 0001:0001009C  3722 0001:000100C8
+  3724 0001:00010100  3725 0001:00010102  3727 0001:00010137  3733 0001:0001015C
+  3734 0001:0001017D  3735 0001:0001018B  3736 0001:00010196  3737 0001:000101A0
+  3738 0001:000101A9  3739 0001:000101B7  3740 0001:000101D1  3742 0001:000101E8
+  3745 0001:00010214  3747 0001:0001024C  3748 0001:0001024E  3750 0001:00010283
+  3756 0001:000102A8  3757 0001:000102C9  3758 0001:000102D7  3759 0001:000102E2
+  3760 0001:000102EC  3761 0001:000102F5  3762 0001:00010303  3763 0001:0001031D
+  3765 0001:00010334  3768 0001:00010360  3770 0001:00010398  3771 0001:0001039A
+  3773 0001:000103CF  3779 0001:000103F4  3780 0001:00010429  3781 0001:00010437
+  3782 0001:00010444  3783 0001:0001044E  3784 0001:00010457  3785 0001:00010465
+  3786 0001:0001047F  3788 0001:00010499  3791 0001:000104C5  3793 0001:000104FD
+  3794 0001:000104FF  3796 0001:00010531  3802 0001:00010560  3803 0001:00010595
+  3804 0001:000105A3  3805 0001:000105B0  3806 0001:000105BA  3807 0001:000105C3
+  3808 0001:000105D1  3809 0001:000105EB  3811 0001:00010605  3814 0001:00010631
+  3816 0001:00010669  3817 0001:0001066B  3819 0001:0001069D  3825 0001:000106CC
+  3826 0001:00010701  3827 0001:0001070F  3828 0001:0001071C  3829 0001:00010726
+  3830 0001:0001072F  3831 0001:0001073D  3832 0001:00010757  3834 0001:00010771
+  3837 0001:0001079D  3839 0001:000107D5  3840 0001:000107D7  3842 0001:0001080C
+
+Line numbers for BisIBaseConnection(cmibase.bpl\BisIBaseConnection.pas) segment .itext
+
+  3844 0002:0000034C
+
+Line numbers for .cmibase(cmibase.dpk) segment .itext
+
+    36 0002:00000354
+
+Bound resource files
+
+cmibase.res
+cmibase.drf
+
+
+Program entry point at 0002:00000354

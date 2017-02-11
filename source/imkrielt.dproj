@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{f8ea43b8-9465-43f3-8b82-c20069e5ee6b}</ProjectGuid>
+    <MainSource>imkrielt.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\imkrielt.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+    <DCC_UnitSearchPath>U:\source\_dcp</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp</DCC_IncludePath>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_IMPLICIT_IMPORT>False</DCC_IMPLICIT_IMPORT>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_OutputDRCFile>True</DCC_OutputDRCFile>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="HostApplication">U:\bin\loader.exe</Parameters><Parameters Name="RunParams">/config imkrielt.ini /noupdate</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">False</Package_Options><Package_Options Name="LibSuffix"></Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">938</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">Krasrielt interface module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.938</VersionInfoKeys><VersionInfoKeys Name="InternalName">imkrielt.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">imkrielt.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0</VersionInfoKeys><VersionInfoKeys Name="Comments">Krasrielt interface module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">imkrielt.dpk</Source></Source><Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dclofficexp100.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\bcboffice2k100.bpl">CodeGear C++Builder Office 2000 Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\bcbofficexp100.bpl">CodeGear C++Builder Office XP Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dcloffice2k100.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+      <Excluded_Packages Name="E:\work\!_for_bis\DwsNew\dws2src20-20030907\dws2rel\Dws2Tools\IdeDialog\dcldws2IdeDialog.bpl">DelphiWebScript II - Component IDE Dialog</Excluded_Packages>
+      <Excluded_Packages Name="E:\work\!_for_bis\DwsNew\dws2src20-20030907\dws2rel\Dws2Tools\IdeDialog\dws2IdeDialogRuntime.bpl">DelphiWebScript II - IDE Dialog</Excluded_Packages>
+    </Excluded_Packages><Language><Language Name="ProjectLang">$00000419</Language><Language Name="RootDir">U:\source\imdesign.bpl\</Language></Language>  <Resource_DLL_Projects>
+      <Resource_DLL_Projects Name="Item0">Русский*$00000419*RUS*RUS</Resource_DLL_Projects>
+    </Resource_DLL_Projects>
+  </Delphi.Personality><ModelSupport>False</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="imkrielt.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="C:\Users\Администратор\Desktop\core.dcp" />
+    <DCCReference Include="C:\Users\Администратор\Desktop\dbrtl.dcp" />
+    <DCCReference Include="C:\Users\Администратор\Desktop\omnet.dcp" />
+    <DCCReference Include="C:\Users\Администратор\Desktop\rtl.dcp" />
+    <DCCReference Include="C:\Users\Администратор\Desktop\vcl.dcp" />
+    <DCCReference Include="imkrielt.bpl\BisKrielt.pas" />
+    <DCCReference Include="imkrielt.bpl\BisKrieltConsts.pas" />
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataAccountParamEditFm.pas">
+      <Form>BisKrieltDataAccountParamEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataAccountParamsFm.pas">
+      <Form>BisKrieltDataAccountParamsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataAccountPresenatationsFm.pas">
+      <Form>BisKrieltDataAccountPresenatationsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataAccountPresentationEditFm.pas">
+      <Form>BisKrieltDataAccountPresentationEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataAccountSubscriptionEditFm.pas">
+      <Form>BisKrieltDataAccountSubscriptionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataAccountSubscriptionsFm.pas">
+      <Form>BisKrieltDataAccountSubscriptionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataAnswerEditFm.pas">
+      <Form>BisKrieltDataAnswerEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataAnswersFm.pas">
+      <Form>BisKrieltDataAnswersForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataArticleEditFm.pas">
+      <Form>BisKrieltDataArticleEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataArticlesFm.pas">
+      <Form>BisKrieltDataArticlesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataArticlesFrm.pas">
+      <Form>BisKrieltDataArticlesFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataBannerEditFm.pas">
+      <Form>BisKrieltDataBannerEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataBannersFm.pas">
+      <Form>BisKrieltDataBannersForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataColumnEditFm.pas">
+      <Form>BisKrieltDataColumnEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataColumnParamEditFm.pas">
+      <Form>BisKrieltDataColumnParamEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataColumnParamsFm.pas">
+      <Form>BisKrieltDataColumnParamsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataColumnsFm.pas">
+      <Form>BisKrieltDataColumnsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataColumnsFrm.pas">
+      <Form>BisKrieltDataColumnsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataCommentEditFm.pas">
+      <Form>BisKrieltDataCommentEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataCommentsFm.pas">
+      <Form>BisKrieltDataCommentsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataConsultantEditFm.pas">
+      <Form>BisKrieltDataConsultantEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataConsultantsFm.pas">
+      <Form>BisKrieltDataConsultantsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataCreditProgramEditFm.pas">
+      <Form>BisKrieltDataCreditProgramEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataCreditProgramsFm.pas">
+      <Form>BisKrieltDataCreditProgramsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataDesignEditFm.pas">
+      <Form>BisKrieltDataDesignEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataDesignsFm.pas">
+      <Form>BisKrieltDataDesignsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataExportEditFm.pas">
+      <Form>BisKrieltDataExportEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataExportsFm.pas">
+      <Form>BisKrieltDataExportsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataInputParamEditFm.pas">
+      <Form>BisKrieltDataInputParamEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataInputParamsFm.pas">
+      <Form>BisKrieltDataInputParamsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataIssueEditFm.pas">
+      <Form>BisKrieltDataIssueEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataIssuesFm.pas">
+      <Form>BisKrieltDataIssuesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataOperationEditFm.pas">
+      <Form>BisKrieltDataOperationEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataOperationsFm.pas">
+      <Form>BisKrieltDataOperationsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPageEditFm.pas">
+      <Form>BisKrieltDataPageEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPagesFm.pas">
+      <Form>BisKrieltDataPagesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataParamEditFm.pas">
+      <Form>BisKrieltDataParamEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataParamsFm.pas">
+      <Form>BisKrieltDataParamsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataParamsFrm.pas">
+      <Form>BisKrieltDataParamsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataParamValueDependEditFm.pas">
+      <Form>BisKrieltDataParamValueDependEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataParamValueDependsFm.pas">
+      <Form>BisKrieltDataParamValueDependsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataParamValueEditFm.pas">
+      <Form>BisKrieltDataParamValueEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataParamValuesFm.pas">
+      <Form>BisKrieltDataParamValuesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataParamValuesFrm.pas">
+      <Form>BisKrieltDataParamValuesFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPatternEditFm.pas">
+      <Form>BisKrieltDataPatternEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPatternsFm.pas">
+      <Form>BisKrieltDataPatternsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPlacementEditFm.pas">
+      <Form>BisKrieltDataPlacementEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPlacementsFm.pas">
+      <Form>BisKrieltDataPlacementsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPresentationEditFm.pas">
+      <Form>BisKrieltDataPresentationEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPresentationsFm.pas">
+      <Form>BisKrieltDataPresentationsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPresentationsFrm.pas">
+      <Form>BisKrieltDataPresentationsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPublishingEditFm.pas">
+      <Form>BisKrieltDataPublishingEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataPublishingFm.pas">
+      <Form>BisKrieltDataPublishingForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataQuestionEditFm.pas">
+      <Form>BisKrieltDataQuestionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataQuestionsFm.pas">
+      <Form>BisKrieltDataQuestionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataQuestionsFrm.pas">
+      <Form>BisKrieltDataQuestionsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataServiceEditFm.pas">
+      <Form>BisKrieltDataServiceEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataServicesFm.pas">
+      <Form>BisKrieltDataServicesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataSubjectEditFm.pas">
+      <Form>BisKrieltDataSubjectEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataSubjectsFm.pas">
+      <Form>BisKrieltDataSubjectsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataSubscriptionContentEditFm.pas">
+      <Form>BisKrieltDataSubscriptionContentEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataSubscriptionContentsFm.pas">
+      <Form>BisKrieltDataSubscriptionContentsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataSubscriptionEditFm.pas">
+      <Form>BisKrieltDataSubscriptionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataSubscriptionsFm.pas">
+      <Form>BisKrieltDataSubscriptionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataTypeEditFm.pas">
+      <Form>BisKrieltDataTypeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataTypeOperationEditFm.pas">
+      <Form>BisKrieltDataTypeOperationEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataTypeOperationsFm.pas">
+      <Form>BisKrieltDataTypeOperationsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataTypesFm.pas">
+      <Form>BisKrieltDataTypesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataTypesFrm.pas">
+      <Form>BisKrieltDataTypesFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataViewEditFm.pas">
+      <Form>BisKrieltDataViewEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataViewsFm.pas">
+      <Form>BisKrieltDataViewsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataViewsFrm.pas">
+      <Form>BisKrieltDataViewsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataViewTypeEditFm.pas">
+      <Form>BisKrieltDataViewTypeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltDataViewTypesFm.pas">
+      <Form>BisKrieltDataViewTypesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltExportRtfFm.pas">
+      <Form>BisKrieltExportRtfForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltExportXlsFm.pas">
+      <Form>BisKrieltExportXlsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltImportFm.pas">
+      <Form>BisKrieltImportForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltMainFm.pas">
+      <Form>BisKrieltMainForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltObjectDeleteFm.pas">
+      <Form>BisKrieltObjectDeleteForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltObjectEditFm.pas">
+      <Form>BisKrieltObjectEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltObjectParamEditFm.pas">
+      <Form>BisKrieltObjectParamEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltObjectParamFrm.pas">
+      <Form>BisKrieltObjectParamFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltObjectsDeleteFm.pas">
+      <Form>BisKrieltObjectsDeleteForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltObjectsFm.pas">
+      <Form>BisKrieltObjectsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltObjectsFrm.pas">
+      <Form>BisKrieltObjectsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltPresentationEditFm.pas">
+      <Form>BisKrieltPresentationEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltPresentationFm.pas">
+      <Form>BisKrieltPresentationForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltPresentationFrm.pas">
+      <Form>BisKrieltPresentationFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imkrielt.bpl\BisKrieltRefreshIface.pas" />
+    <DCCReference Include="imkrielt.bpl\BisRtfStream.pas" />
+    <DCCReference Include="imkrielt.bpl\ShockwaveFlashObjects_TLB.pas" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,37 @@
+package dws2IniLibrary;
+
+{$R *.res}
+{$R '..\IniLib\dws2IniLib.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS OFF}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScript II - Ini-File Library'}
+{$LIBSUFFIX '60'}
+{$IMPLICITBUILD OFF}
+
+requires
+  dws2Runtime,
+  vcl;
+
+contains
+  dws2IniModule in '..\IniLib\dws2IniModule.pas' {dws2Ini: TDataModule};
+
+end.

@@ -1,0 +1,314 @@
+object BisUtilTableEditFrame: TBisUtilTableEditFrame
+  Left = 0
+  Top = 0
+  Width = 390
+  Height = 340
+  TabOrder = 0
+  object Splitter: TSplitter
+    Left = 0
+    Top = 201
+    Width = 390
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitTop = 193
+    ExplicitWidth = 400
+  end
+  object PanelTop: TPanel
+    Left = 0
+    Top = 0
+    Width = 390
+    Height = 59
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 0
+    object LabelTableName: TLabel
+      Left = 10
+      Top = 8
+      Width = 70
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1048#1084#1103' '#1090#1072#1073#1083#1080#1094#1099':'
+      FocusControl = EditTableName
+    end
+    object LabelCount: TLabel
+      Left = 297
+      Top = 8
+      Width = 41
+      Height = 13
+      Caption = #1042#1089#1077#1075#1086': 0'
+    end
+    object ButtonLoad: TButton
+      Left = 85
+      Top = 31
+      Width = 75
+      Height = 25
+      Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
+      TabOrder = 1
+      OnClick = ButtonLoadClick
+    end
+    object ButtonSave: TButton
+      Left = 167
+      Top = 31
+      Width = 75
+      Height = 25
+      Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+      TabOrder = 2
+      OnClick = ButtonSaveClick
+    end
+    object ButtonCreate: TButton
+      Left = 3
+      Top = 31
+      Width = 75
+      Height = 25
+      Caption = #1057#1086#1079#1076#1072#1090#1100
+      TabOrder = 0
+      OnClick = ButtonCreateClick
+    end
+    object ButtonClear: TButton
+      Left = 249
+      Top = 31
+      Width = 75
+      Height = 25
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+      TabOrder = 3
+      OnClick = ButtonClearClick
+    end
+    object EditTableName: TEdit
+      Left = 86
+      Top = 5
+      Width = 205
+      Height = 21
+      TabOrder = 4
+    end
+    object btUpColumns: TBitBtn
+      Left = 330
+      Top = 31
+      Width = 25
+      Height = 25
+      Hint = #1042#1074#1077#1088#1093
+      TabOrder = 5
+      OnClick = btUpColumnsClick
+      Glyph.Data = {
+        F6000000424DF600000000000000760000002800000010000000100000000100
+        0400000000008000000000000000000000001000000010000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+        8888888888888888888888888888888888888888888888888888888880000088
+        8888888880666088888888888066608888888888806660888888880000666000
+        0888888066666660888888880666660888888888806660888888888888060888
+        8888888888808888888888888888888888888888888888888888}
+    end
+    object btDownColumns: TBitBtn
+      Left = 361
+      Top = 31
+      Width = 25
+      Height = 25
+      Hint = #1042#1085#1080#1079
+      TabOrder = 6
+      OnClick = btDownColumnsClick
+      Glyph.Data = {
+        F6000000424DF600000000000000760000002800000010000000100000000100
+        0400000000008000000000000000000000001000000010000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+        8888888888888888888888888888888888888888888888888888888888808888
+        8888888888060888888888888066608888888888066666088888888066666660
+        8888880000666000088888888066608888888888806660888888888880666088
+        8888888880000088888888888888888888888888888888888888}
+    end
+  end
+  object PanelGrid: TPanel
+    Left = 0
+    Top = 59
+    Width = 390
+    Height = 142
+    Align = alClient
+    BevelOuter = bvNone
+    BorderWidth = 3
+    Constraints.MinHeight = 130
+    TabOrder = 1
+    object DBNavigator: TDBNavigator
+      Left = 3
+      Top = 114
+      Width = 384
+      Height = 25
+      DataSource = DataSource
+      Align = alBottom
+      Flat = True
+      TabOrder = 1
+    end
+    object DBGrid: TDBGrid
+      Left = 3
+      Top = 3
+      Width = 384
+      Height = 111
+      Align = alClient
+      DataSource = DataSource
+      Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnCellClick = DBGridCellClick
+      OnColEnter = DBGridColEnter
+      OnDrawColumnCell = DBGridDrawColumnCell
+    end
+  end
+  object PanelBottom: TPanel
+    Left = 0
+    Top = 204
+    Width = 390
+    Height = 136
+    Align = alBottom
+    BevelOuter = bvNone
+    BorderWidth = 3
+    Constraints.MinHeight = 130
+    TabOrder = 2
+    object GroupBoxValue: TGroupBox
+      Left = 3
+      Top = 3
+      Width = 384
+      Height = 130
+      Align = alClient
+      Caption = ' '#1047#1085#1072#1095#1077#1085#1080#1077' '
+      TabOrder = 0
+      object PanelValue: TPanel
+        Left = 2
+        Top = 15
+        Width = 380
+        Height = 113
+        Align = alClient
+        BevelOuter = bvNone
+        BorderWidth = 5
+        TabOrder = 0
+        object PanelValueButton: TPanel
+          Left = 292
+          Top = 5
+          Width = 83
+          Height = 103
+          Align = alRight
+          BevelOuter = bvNone
+          TabOrder = 1
+          object ButtonLoadValue: TButton
+            Left = 6
+            Top = 0
+            Width = 75
+            Height = 21
+            Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
+            TabOrder = 0
+            OnClick = ButtonLoadValueClick
+          end
+          object ButtonSaveValue: TButton
+            Left = 6
+            Top = 27
+            Width = 75
+            Height = 21
+            Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+            TabOrder = 1
+            OnClick = ButtonSaveValueClick
+          end
+          object ButtonClearValue: TButton
+            Left = 6
+            Top = 54
+            Width = 75
+            Height = 21
+            Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+            TabOrder = 2
+            OnClick = ButtonClearValueClick
+          end
+          object ButtonEditorValue: TButton
+            Left = 6
+            Top = 81
+            Width = 75
+            Height = 21
+            Caption = #1044#1077#1081#1089#1090#1074#1080#1077
+            TabOrder = 3
+            OnClick = ButtonEditorValueClick
+          end
+        end
+        object PanelMemo: TPanel
+          Left = 5
+          Top = 5
+          Width = 287
+          Height = 103
+          Align = alClient
+          BevelOuter = bvNone
+          TabOrder = 0
+          DesignSize = (
+            287
+            103)
+          object LabelFilter: TLabel
+            Left = 5
+            Top = 3
+            Width = 42
+            Height = 13
+            Caption = #1060#1080#1083#1100#1090#1088':'
+            FocusControl = EditFilter
+          end
+          object DBMemoValue: TDBMemo
+            Left = 0
+            Top = 27
+            Width = 287
+            Height = 76
+            Align = alBottom
+            Anchors = [akLeft, akTop, akRight, akBottom]
+            DataSource = DataSource
+            ScrollBars = ssBoth
+            TabOrder = 2
+          end
+          object EditFilter: TEdit
+            Left = 53
+            Top = 0
+            Width = 153
+            Height = 21
+            Anchors = [akLeft, akTop, akRight]
+            TabOrder = 0
+          end
+          object ButtonApply: TButton
+            Left = 212
+            Top = 0
+            Width = 75
+            Height = 21
+            Anchors = [akTop, akRight]
+            Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
+            TabOrder = 1
+            OnClick = ButtonApplyClick
+          end
+        end
+      end
+    end
+  end
+  object DataSource: TDataSource
+    Left = 40
+    Top = 96
+  end
+  object OpenDialog: TOpenDialog
+    Filter = 
+      #1060#1072#1081#1083#1099' '#1080#1084#1087#1086#1088#1090#1072' (*.imp)|*.imp|'#1060#1072#1081#1083#1099' '#1101#1082#1089#1087#1086#1088#1090#1072' (*.exp)|*.exp|'#1060#1072#1081#1083#1099' S' +
+      'QL (*.sql)|*.sql|'#1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|*.*'
+    Left = 104
+    Top = 96
+  end
+  object SaveDialog: TSaveDialog
+    Filter = 
+      #1060#1072#1081#1083#1099' '#1080#1084#1087#1086#1088#1090#1072' (*.imp)|*.imp|'#1060#1072#1081#1083#1099' '#1101#1082#1089#1087#1086#1088#1090#1072' (*.exp)|*.exp|'#1060#1072#1081#1083#1099' S' +
+      'QL (*.sql)|*.sql|'#1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|*.*'
+    Left = 168
+    Top = 96
+  end
+  object PopupMenuEditor: TPopupMenu
+    Left = 240
+    Top = 96
+    object N1: TMenuItem
+      Caption = #1043#1077#1085#1077#1088#1072#1090#1086#1088
+      OnClick = ButtonGenClick
+    end
+    object MenuItemEditorTable: TMenuItem
+      Caption = #1058#1072#1073#1083#1080#1094#1072
+      OnClick = MenuItemEditorTableClick
+    end
+  end
+end

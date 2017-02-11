@@ -1,0 +1,55 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>TIntegerHashtable Demonstration</title>
+</head>
+
+<body>
+<pre>
+<%
+var lst: TStrings = TStringList.Create;
+
+lst.Add('Pi=3.14159265358');
+lst.Add('Key=Value');
+lst.Add('Result=Expression');
+lst.Add('E=2.71828');
+
+procedure ShowList;
+begin
+  var x: Integer;
+  for x := 0 to lst.Count - 1 do
+    SendLn(lst.Get(x));
+  SendLn('');
+end;
+
+ShowList;
+
+lst.AddStrings(lst);
+
+var x: Integer;
+for x := 0 to lst.Count - 1 do
+begin
+  Send(lst.GetNames(x));
+  Send('=');
+  SendLn(lst.GetValues(lst.GetNames(x)));
+end;
+
+ShowList;
+lst.Delete(0);
+ShowList;
+lst.Insert(0, 'Hallöchen');
+ShowList;
+SendLn(lst.IndexOfName('E'));
+SendLn(lst.IndexOf('Hallöchen'));
+
+lst.Text := 'Test';
+SendLn(lst.Text);
+
+
+%>
+</pre>
+</body>
+
+</html>

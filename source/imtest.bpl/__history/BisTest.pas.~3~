@@ -1,0 +1,35 @@
+unit BisTest;
+
+interface
+
+uses BisIfaceModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisTestFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  MainIface:=AModule.Ifaces.AddClass(TBisDesignMainFormIface);
+
+  HbookFirmTypesIface:=AModule.Ifaces.AddClass(TBisDesignHbookFirmTypesFormIface);
+  HbookFirmsIface:=AModule.Ifaces.AddClass(TBisDesignHbookFirmsFormIface);
+  HbookAccountsIface:=AModule.Ifaces.AddClass(TBisDesignHbookAccountsFormIface);
+  HbookRolesIface:=AModule.Ifaces.AddClass(TBisDesignHbookRolesFormIface);
+  HbookApplicationsIface:=AModule.Ifaces.AddClass(TBisDesignHbookApplicationsFormIface);
+  HbookInterfacesIface:=AModule.Ifaces.AddClass(TBisDesignHbookInterfacesFormIface);
+  HbookAccountRolesIface:=AModule.Ifaces.AddClass(TBisDesignHbookAccountRolesFormIface);
+  HbookProfilesIface:=AModule.Ifaces.AddClass(TBisDesignHbookProfilesFormIface);
+  HbookSessionsIface:=AModule.Ifaces.AddClass(TBisDesignHbookSessionsFormIface);
+  HbookRolesAndAccountsIface:=AModule.Ifaces.AddClass(TBisDesignHbookRolesAndAccountsFormIface);
+  HbookPermissionsIface:=AModule.Ifaces.AddClass(TBisDesignHbookPermissionsFormIface);
+  HbookApplicationInterfacesIface:=AModule.Ifaces.AddClass(TBisDesignHbookApplicationInterfacesFormIface);
+end;
+
+end.

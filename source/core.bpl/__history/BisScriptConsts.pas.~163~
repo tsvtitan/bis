@@ -1,0 +1,104 @@
+unit BisScriptConsts;
+
+interface
+
+uses Contnrs, TypInfo,
+     BisScriptSymbols, BisScriptVars;
+
+type
+
+  TBisScriptConst=class(TBisScriptVar)
+  private
+    function GetValue: Variant;
+  public
+    property Value: Variant read GetValue;
+  end;
+
+  TBisScriptConsts=class(TBisScriptvars)
+  private
+    function GetItem(Index: Integer): TBisScriptConst;
+  protected
+    function GetScriptSymbolClass: TBisScriptSymbolClass; override;
+  public
+    function Find(Name: String): TBisScriptConst; reintroduce;
+    function Add(Name: String; Value: Variant; TypeName: String): TBisScriptConst; reintroduce;
+    function AddInteger(Name: String; Value: Integer): TBisScriptConst; reintroduce;
+    function AddFloat(Name: String; Value: Extended): TBisScriptConst; reintroduce;
+    function AddString(Name: String; Value: String): TBisScriptConst; reintroduce;
+    function AddDate(Name: String; Value: TDateTime): TBisScriptConst; reintroduce;
+    function AddBoolean(Name: String; Value: Boolean): TBisScriptConst; reintroduce;
+    function AddVariant(Name: String; Value: Variant): TBisScriptConst; reintroduce;
+    function AddObject(Name: String; Value: TObject): TBisScriptConst; reintroduce;
+
+    property Items[Index: Integer]: TBisScriptConst read GetItem; default;
+  end;
+
+implementation
+
+uses Variants;
+
+{ TBisScriptConst }
+
+function TBisScriptConst.GetValue: Variant;
+begin
+  Result:=inherited Value;
+end;
+
+{ TBisScriptConsts }
+
+function TBisScriptConsts.Find(Name: String): TBisScriptConst;
+begin
+  Result:=TBisScriptConst(inherited Find(Name));
+end;
+
+function TBisScriptConsts.GetItem(Index: Integer): TBisScriptConst;
+begin
+  Result:=TBisScriptConst(inherited Items[Index]);
+end;
+
+function TBisScriptConsts.GetScriptSymbolClass: TBisScriptSymbolClass;
+begin
+  Result:=TBisScriptConst;
+end;
+
+function TBisScriptConsts.Add(Name: String; Value: Variant; TypeName: String): TBisScriptConst;
+begin
+  Result:=TBisScriptConst(inherited Add(Name,Value,TypeName));
+end;
+
+function TBisScriptConsts.AddInteger(Name: String; Value: Integer): TBisScriptConst;
+begin
+  Result:=TBisScriptConst(inherited AddInteger(Name,Value));
+end;
+
+function TBisScriptConsts.AddFloat(Name: String; Value: Extended): TBisScriptConst;
+begin
+  Result:=TBisScriptConst(inherited AddFloat(Name,Value));
+end;
+
+function TBisScriptConsts.AddBoolean(Name: String; Value: Boolean): TBisScriptConst;
+begin
+  Result:=TBisScriptConst(inherited AddBoolean(Name,Value));
+end;
+
+function TBisScriptConsts.AddDate(Name: String; Value: TDateTime): TBisScriptConst;
+begin
+  Result:=TBisScriptConst(inherited AddDate(Name,Value));
+end;
+
+function TBisScriptConsts.AddString(Name, Value: String): TBisScriptConst;
+begin
+  Result:=TBisScriptConst(inherited AddString(Name,Value));
+end;
+
+function TBisScriptConsts.AddVariant(Name: String; Value: Variant): TBisScriptConst;
+begin
+  Result:=TBisScriptConst(inherited AddVariant(Name,Value));
+end;
+
+function TBisScriptConsts.AddObject(Name: String; Value: TObject): TBisScriptConst;
+begin
+  Result:=TBisScriptConst(inherited AddObject(Name,Value));
+end;
+
+end.

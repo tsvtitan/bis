@@ -1,0 +1,49 @@
+Änderungen 
+Callback System kompett überarbeitet - Komponenten sollten nun auch außerhalb MainForm arbeiten. 
+
+Bisher war AppInfo ein String ! Dieser  war immer  leer. Deshalb wurden 2 neue Objekte eingeführt (TAppInfo und TAppInfoItem) 
+Mit Beta 3.8 muss über TAppInfos.Items zugegriffen werden. Jeder Eintrag entspricht einer Anwendung, welche das Leitungsgerät geöffnet hat. Achtung die Einträge der Kollektion werden automatisch aktualisiert - der Index auf ein Element kann ungültig werden !
+Änderungsdatum: 23.November 2002
+
+Es traten Abstürze der IDE auf wenn bereits zugewiesene Komponenten vom Formular entfernt wurden ohne die Referenzen vorher aufzulösen. Dieser Fehler wurde behoben. 
+Änderungsdatum: 24.November 2002
+
+TTAPILineDevice 
+BugFix : Das Ereignis OnReInit wurde intern fälschlicher Weise blockiert.
+Änderungsdatum: 24.November 2002
+ 
+TTAPICall  
+Neue Funktion : procedure ChangePrivilege(NewPriv: TLineCallPrivilege); eingeführt damit lassen sich nun die Rechte des aktiven Anrufs von zum Beispiel [cpOwner, cpMonitor] auf [cpMonitor] ändern. Achtung danach dürfen keine Funktionen mehr verwendet werden die Eigentümer Rechte erfordern, wie etwa  Drop.   
+Änderungsdatum: 14.Januar 2003
+ 
+Bugfix Callback:
+Das Handle ausgehender Anrufe wurde nicht an das Property Handle weitergeleitet 
+Änderungsdatum: 14.Januar 2003
+ 
+TTAPILine / TTAPICall 
+Neue Events AfterOpen /BeforeOpen
+Änderungsdatum: 2.Juni 2003 
+
+TTAPIWave 
+Änderungsdatum:10.Juni 2003
+
+Bugfix TTAPICall
+Nach Drop wurde das Handle des Anrufs auf 0 und nicht auf DWord(-1)=INVALID_HANDLE_VALUE.
+Fehler beseitigt ! Achtung eine Überprüfung des Propertys Handle sollte nicht mehr in der Form:
+if InboundCall.Handle > 0 erfolgen ! Immer wahr, da intern Cardinal ! 
+
+Neue Funktionen: Hold / Unhold in TTAPICall
+Erkennung Ankommender Anrufe geändert, die AddressID wird nun nicht mehr ausgewertet !
+Diese Änderung ist nötig, da einige TSP's (für ISDN) die AddressID nicht übertragen (immer 0).  
+Änderungsdatum: 20.Juni 2003 
+
+Diverse Datenstrukturen von Integer -> Cardinal geändert !
+"Fehler bei der Bereichsprüfung" behoben
+Änderungsdatum: 22.Juni 2003 
+
+Unit TAPIObj gelöscht
+
+Änderungsdatum: 24.Juni 2003
+
+
+  

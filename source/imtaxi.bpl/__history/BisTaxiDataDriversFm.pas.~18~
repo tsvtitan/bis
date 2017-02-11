@@ -1,0 +1,67 @@
+unit BisTaxiDataDriversFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataFrm, BisDataGridFm, BisTaxiDataDriversFrm;
+
+type
+  TBisTaxiDataDriversForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;    
+  public
+    constructor Create(AOwner: TComponent); override;
+
+  end;
+
+  TBisTaxiDataDriversFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataDriversForm: TBisTaxiDataDriversForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisTaxiDataDriversFormIface }
+
+constructor TBisTaxiDataDriversFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataDriversForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+end;
+
+{ TBisTaxiDataDriversForm }
+
+constructor TBisTaxiDataDriversForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  if Assigned(DataFrame) then begin
+
+    with DataFrame.CreateFilterMenuItem('Активные') do begin
+      FilterGroups.AddVisible.Filters.Add('LOCKED',fcNotEqual,1);
+      Checked:=true;
+    end;
+
+    with DataFrame.CreateFilterMenuItem('Заблокированные') do begin
+      FilterGroups.AddVisible.Filters.Add('LOCKED',fcEqual,1);
+    end;
+
+  end;
+
+end;
+
+class function TBisTaxiDataDriversForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataDriversFrame;
+end;
+
+end.

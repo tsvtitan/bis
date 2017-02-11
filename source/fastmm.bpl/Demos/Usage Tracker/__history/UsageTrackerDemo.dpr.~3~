@@ -1,0 +1,18 @@
+program UsageTrackerDemo;
+
+uses
+  Forms,
+  DemoForm in 'DemoForm.pas' {fDemo},
+  FastMM4Messages in '..\..\FastMM4Messages.pas',
+  FastMM4 in '..\..\FastMM4.pas';
+
+{$R *.res}
+
+{Enable large address space support for this demo}
+{$SetPEFlags $20}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TfDemo, fDemo);
+  Application.Run;
+end.

@@ -1,0 +1,330 @@
+inherited BisKrieltDataArticleEditForm: TBisKrieltDataArticleEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisKrieltDataArticleEditForm'
+  ClientHeight = 441
+  ClientWidth = 550
+  ExplicitWidth = 558
+  ExplicitHeight = 475
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 403
+    Width = 550
+    ExplicitTop = 403
+    ExplicitWidth = 550
+    inherited ButtonOk: TButton
+      Left = 371
+      ExplicitLeft = 371
+    end
+    inherited ButtonCancel: TButton
+      Left = 468
+      ExplicitLeft = 468
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 550
+    Height = 403
+    ExplicitWidth = 550
+    ExplicitHeight = 403
+    object LabelSubject: TLabel
+      Left = 54
+      Top = 70
+      Width = 28
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1058#1077#1084#1072':'
+    end
+    object LabelDateCreate: TLabel
+      Left = 282
+      Top = 341
+      Width = 80
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1044#1072#1090#1072' '#1089#1086#1079#1076#1072#1085#1080#1103':'
+      FocusControl = DateTimePickerCreate
+    end
+    object LabelTitle: TLabel
+      Left = 25
+      Top = 124
+      Width = 57
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1047#1072#1075#1086#1083#1086#1074#1086#1082':'
+      FocusControl = EditTitle
+    end
+    object LabelAccount: TLabel
+      Left = 195
+      Top = 314
+      Width = 61
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1050#1090#1086' '#1089#1086#1079#1076#1072#1083':'
+      FocusControl = EditAccount
+    end
+    object LabelText: TLabel
+      Left = 49
+      Top = 231
+      Width = 33
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1058#1077#1082#1089#1090':'
+      FocusControl = MemoText
+    end
+    object LabelLink: TLabel
+      Left = 40
+      Top = 97
+      Width = 42
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1057#1089#1099#1083#1082#1072':'
+      FocusControl = EditLink
+    end
+    object LabelSection: TLabel
+      Left = 42
+      Top = 43
+      Width = 40
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1056#1072#1079#1076#1077#1083':'
+      FocusControl = ComboBoxSection
+    end
+    object LabelDateArticle: TLabel
+      Left = 14
+      Top = 16
+      Width = 68
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1044#1072#1090#1072' '#1089#1090#1072#1090#1100#1080':'
+      FocusControl = DateTimePickerArticle
+    end
+    object LabelExcerpt: TLabel
+      Left = 25
+      Top = 151
+      Width = 57
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1042#1099#1076#1077#1088#1078#1082#1072':'
+      FocusControl = MemoExcerpt
+    end
+    object LabelViewsCounter: TLabel
+      Left = 18
+      Top = 314
+      Width = 64
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1055#1088#1086#1089#1084#1086#1090#1088#1086#1074':'
+      FocusControl = EditViewsCounter
+    end
+    object EditSubject: TEdit
+      Left = 88
+      Top = 67
+      Width = 225
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 3
+    end
+    object ButtonSubject: TButton
+      Left = 319
+      Top = 67
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1090#1077#1084#1091
+      Caption = '...'
+      TabOrder = 4
+    end
+    object DateTimePickerCreate: TDateTimePicker
+      Left = 368
+      Top = 338
+      Width = 88
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Checked = False
+      TabOrder = 11
+    end
+    object DateTimePickerCreateTime: TDateTimePicker
+      Left = 462
+      Top = 338
+      Width = 74
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 12
+    end
+    object EditTitle: TEdit
+      Left = 88
+      Top = 121
+      Width = 252
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 6
+    end
+    object EditAccount: TEdit
+      Left = 262
+      Top = 311
+      Width = 274
+      Height = 21
+      Anchors = [akRight, akBottom]
+      TabOrder = 10
+    end
+    object MemoText: TMemo
+      Left = 88
+      Top = 228
+      Width = 448
+      Height = 77
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      ScrollBars = ssVertical
+      TabOrder = 9
+    end
+    object EditLink: TEdit
+      Left = 88
+      Top = 94
+      Width = 252
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 5
+    end
+    object ComboBoxSection: TComboBox
+      Left = 88
+      Top = 40
+      Width = 168
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      TabOrder = 2
+    end
+    object DateTimePickerArticle: TDateTimePicker
+      Left = 88
+      Top = 13
+      Width = 88
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Checked = False
+      TabOrder = 0
+    end
+    object DateTimePickerArticleTime: TDateTimePicker
+      Left = 182
+      Top = 13
+      Width = 74
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 1
+    end
+    object MemoExcerpt: TMemo
+      Left = 88
+      Top = 148
+      Width = 448
+      Height = 74
+      Anchors = [akLeft, akTop, akRight]
+      ScrollBars = ssVertical
+      TabOrder = 8
+    end
+    object PanelPicture: TPanel
+      Left = 346
+      Top = 10
+      Width = 190
+      Height = 132
+      Anchors = [akTop, akRight]
+      BevelOuter = bvNone
+      Caption = #1053#1077#1090' '#1082#1072#1088#1090#1080#1085#1082#1080
+      Color = clWindow
+      ParentBackground = False
+      TabOrder = 7
+      DesignSize = (
+        190
+        132)
+      object ShapePicture: TShape
+        Left = 0
+        Top = 0
+        Width = 190
+        Height = 132
+        Align = alClient
+        Brush.Style = bsClear
+        Pen.Style = psDot
+        ExplicitTop = 1
+        ExplicitWidth = 180
+        ExplicitHeight = 129
+      end
+      object ImagePicture: TImage
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 184
+        Height = 126
+        Align = alClient
+        Center = True
+        PopupMenu = PopupActionBarPicture
+        Proportional = True
+        Stretch = True
+        ExplicitLeft = 0
+        ExplicitTop = -80
+        ExplicitWidth = 181
+        ExplicitHeight = 131
+      end
+      object ButtonPicture: TButton
+        Left = 108
+        Top = 100
+        Width = 75
+        Height = 25
+        Hint = #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077' '#1082#1072#1088#1090#1080#1085#1082#1086#1081
+        Anchors = [akRight, akBottom]
+        Caption = #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077
+        TabOrder = 0
+        OnClick = ButtonPictureClick
+      end
+    end
+    object EditViewsCounter: TEdit
+      Left = 88
+      Top = 311
+      Width = 88
+      Height = 21
+      Anchors = [akRight, akBottom]
+      TabOrder = 13
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 168
+    Top = 224
+  end
+  object SavePictureDialog: TSavePictureDialog
+    Options = [ofEnableSizing]
+    Left = 389
+    Top = 24
+  end
+  object OpenPictureDialog: TOpenPictureDialog
+    Options = [ofEnableSizing]
+    Left = 389
+    Top = 80
+  end
+  object PopupActionBarPicture: TPopupActionBar
+    OnPopup = PopupActionBarPicturePopup
+    Left = 469
+    Top = 40
+    object MenuItemLoadPicture: TMenuItem
+      Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
+      Hint = #1047#1072#1075#1088#1091#1079#1080#1090#1100' '#1082#1072#1088#1090#1080#1085#1082#1091
+      OnClick = MenuItemLoadPictureClick
+    end
+    object MenuItemSavePicture: TMenuItem
+      Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+      Hint = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1082#1072#1088#1090#1080#1085#1082#1091
+      OnClick = MenuItemSavePictureClick
+    end
+    object MenuItemClearPicture: TMenuItem
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+      Hint = #1054#1095#1080#1089#1090#1080#1090#1100' '#1082#1072#1088#1090#1080#1085#1082#1091
+      OnClick = MenuItemClearPictureClick
+    end
+  end
+end

@@ -1,0 +1,23 @@
+#
+#   Makefile.fpc for kbmMemTable.
+#
+
+[package]
+main=kbmMemFPCRun
+
+[target]
+units=kbmMemTable kbmMemCSVStreamFormat kbmMemBinaryStreamFormat kbmMemResEng
+
+[compiler]
+options=-Mdelphi
+targetdir=FPC/$(OS_TARGET)
+sourcedir=..\
+
+[require]
+packages=rtl
+
+[install]
+fpcpackage=y
+
+[default]
+fpcdir=c:\fpc\2.1.4

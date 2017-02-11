@@ -1,0 +1,75 @@
+unit BisDataGridDetailFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls,
+  ToolWin, StdCtrls, ExtCtrls, Grids, DBGrids,
+  BisDataGridFrm, BisDBTree, BisFrm, BisDataFrm, BisReportFrm, BisFastReportFrm;
+
+type
+  TBisDataGridDetailFrame = class(TBisDataGridFrame)
+  private
+{    FGridDetail: TBisDBTree;
+    function GetGridMaster: TBisDBTree;}
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  published
+//    property GridMaster: TBisDBTree read GetGridMaster;
+  //  property GridDetail: TBisDBTree read FGridDetail;
+  end;
+
+var
+  BisDataGridDetailFrame: TBisDataGridDetailFrame;
+
+implementation
+
+uses BisUtils;
+
+{$R *.dfm}
+
+{ TBisDataGridDetailFrame }
+
+constructor TBisDataGridDetailFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+ { FGridDetail:=TBisDBTree.Create(Self);
+  FGridDetail.Parent:=GridDetailPattern.Parent;
+  FGridDetail.SetBounds(GridDetailPattern.Left,GridDetailPattern.Top,GridDetailPattern.Width,GridDetailPattern.Height);
+  FGridDetail.Align:=GridDetailPattern.Align;
+  FGridDetail.ReadOnly:=GridDetailPattern.ReadOnly;
+  FGridDetail.PopupMenu:=GridDetailPattern.PopupMenu;
+  FGridDetail.DataSource:=GridDetailPattern.DataSource;
+  FGridDetail.Images:=ImageList;
+  FGridDetail.SortEnabled:=true;
+  FGridDetail.NavigatorVisible:=true;
+  FGridDetail.SearchEnabled:=true;
+  FGridDetail.SortColumnVisible:=true;
+  FGridDetail.ChessVisible:=false;
+  FGridDetail.GridEmulate:=true;
+  FGridDetail.RowVisible:=true;
+  FGridDetail.AutoResizeableColumns:=false;
+  FGridDetail.OnDblClick:=GridDetailPattern.OnDblClick;
+  FGridDetail.OnKeyDown:=GridDetailPattern.OnKeyDown;
+
+  GridDetailPattern.DataSource:=nil;
+  GridDetailPattern.Parent:=nil;   }
+//  Grid.Visible:=false;
+end;
+
+destructor TBisDataGridDetailFrame.Destroy;
+begin
+{  FGridDetail.DataSource:=nil;
+  FreeAndNilEx(FGridDetail);  }
+  inherited Destroy;
+end;
+
+{function TBisDataGridDetailFrame.GetGridMaster: TBisDBTree;
+begin
+  Result:=inherited Grid;
+end;}
+
+end.

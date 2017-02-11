@@ -1,0 +1,55 @@
+package dcldws2UnitEditorSynPkg;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScriptII - Tdws2Unit Component Editor (SynEdit)'}
+{$LIBSUFFIX '70'}
+{$LIBVERSION '20'}
+{$DESIGNONLY}
+{$IMPLICITBUILD ON}
+{$DEFINE USES_SYNEDIT}
+
+requires
+  rtl,
+  vcl,
+  vclx,
+  DesignIde,
+  dws2Runtime,
+  dws2VCLRuntime,
+  SynEdit_D7,
+  dws2PascalParsingRuntime,
+  dws2VCLPasGenRuntime,
+  dws2OTAFoundationRuntime,
+  dws2SynEditUtilsRuntime;
+
+contains
+  dwsUnitEditorBaseForm in '..\Source\dwsUnitEditorBaseForm.pas' {fmDwsUnitEditorBase},
+  dlgSearchText in '..\Source\dlgSearchText.pas' {TextSearchDialog},
+  dlgReplaceText in '..\Source\dlgReplaceText.pas' {TextReplaceDialog},
+  dlgConfirmReplace in '..\Source\dlgConfirmReplace.pas' {ConfirmReplaceDialog},
+  dwsUnitEditorSynEditForm in '..\Source\dwsUnitEditorSynEditForm.pas' {fmDwsUnitEditorSynEdit},
+  CreateDWSEval in '..\Source\CreateDWSEval.pas',
+  GenDelphiCodeForm in '..\Source\GenDelphiCodeForm.pas' {fmGenDelphiCode},
+  DWS_UnitEditor in '..\Source\DWS_UnitEditor.pas';
+
+end.

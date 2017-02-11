@@ -1,0 +1,12 @@
+var strings: TStrings;
+
+strings := TStrings.Create;
+strings.Add('Hello');
+strings.Add('World');
+
+// Without default property
+PrintLn(strings.GetString(0) + ' ' + strings.GetString(1));
+
+// With default property
+PrintLn(strings[0] + ' ' + strings[1]);
+

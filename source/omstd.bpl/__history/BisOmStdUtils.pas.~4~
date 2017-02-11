@@ -1,0 +1,27 @@
+unit BisOmStdUtils;
+
+interface
+
+uses Classes,
+     BisScriptUnits, BisScriptTypes, BisScriptFuncs;
+
+type
+  TBisUtilsScriptUnit=class(TBisScriptUnit)
+  private
+//    procedure ScriptShowInfo(Func: TBisScriptFunc);
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+
+implementation
+
+{ TBisUtilsScriptUnit }
+
+constructor TBisUtilsScriptUnit.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+end;
+
+end.

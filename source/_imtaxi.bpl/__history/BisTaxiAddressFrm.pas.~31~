@@ -1,0 +1,1393 @@
+unit BisTaxiAddressFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Contnrs, Buttons, ExtCtrls, ImgList,
+
+  BisFm, BisFrm, BisParam, BisControls;
+
+type
+  TBisTaxiStreet=class(TObject)
+  private
+    FId: Variant;
+    FName: String;
+    FPrefix: String;
+  public
+    property Id: Variant read FId write FId;
+    property Name: String read FName write FName;
+    property Prefix: String read FPrefix write FPrefix;
+  end;
+
+  TBisTaxiStreets=class(TObjectList)
+  private
+    function GetItems(Index: Integer): TBisTaxiStreet;
+  public
+    function Add(Id: Variant; Name, Prefix: String): TBisTaxiStreet;
+    procedure CopyFrom(Sender: TBisTaxiStreets);
+
+    property Items[Index: Integer]: TBisTaxiStreet read GetItems;
+  end;
+
+  TBisTaxiLocality=class(TObject)
+  private
+    FId: Variant;
+    FName: String;
+    FStreets: TBisTaxiStreets;
+    FPrefix: String;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    procedure CopyFrom(Sender: TBisTaxiLocality);
+
+    property Id: Variant read FId write FId;
+    property Name: String read FName write FName;
+    property Prefix: String read FPrefix write FPrefix;
+
+    property Streets: TBisTaxiStreets read FStreets;
+  end;
+
+  TBisTaxiTypeComposition=(tcAll,tcOdd,tcEven,tcCustom);
+
+  TBisTaxiComposition=class(TObject)
+  private
+    FStreetId: Variant;
+    FTypeComposition: TBisTaxiTypeComposition;
+    FHouses: String;
+    FExceptions: String;
+  public
+    property StreetId: Variant read FStreetId write FStreetId;
+    property TypeComposition: TBisTaxiTypeComposition read FTypeComposition write FTypeComposition;
+    property Houses: String read FHouses write FHouses;
+    property Exceptions: String read FExceptions write FExceptions;
+  end;
+
+  TBisTaxiCompositions=class(TObjectList)
+  private
+    function GetItems(Index: Integer): TBisTaxiComposition;
+  public
+    function Add(StreetId: Variant; TypeComposition: TBisTaxiTypeComposition; Houses, Exceptions: String): TBisTaxiComposition;
+    procedure CopyFrom(Sender: TBisTaxiCompositions);
+
+    property Items[Index: Integer]: TBisTaxiComposition read GetItems;
+  end;
+
+  TBisTaxiCost=class(TObject)
+  private
+    FZoneToId: Variant;
+    FCost: Variant;
+    FDistance: Variant;
+    FPeriod: Variant;
+  public
+    property ZoneToId: Variant read FZoneToId write FZoneToId;
+    property Distance: Variant read FDistance write FDistance;
+    property Period: Variant read FPeriod write FPeriod;
+    property Cost: Variant read FCost write FCost;
+  end;
+
+  TBisTaxiCosts=class(TObjectList)
+  private
+    function GetItems(Index: Integer): TBisTaxiCost;
+  public
+    function Add(ZoneToId,Distance,Period,Cost: Variant): TBisTaxiCost;
+    function Find(ZoneToId: Variant): TBisTaxiCost;
+    procedure CopyFrom(Sender: TBisTaxiCosts);
+
+    property Items[Index: Integer]: TBisTaxiCost read GetItems;
+  end;
+
+  TBisTaxiZone=class(TObject)
+  private
+    FId: Variant;
+    FName: String;
+    FCompositions: TBisTaxiCompositions;
+    FCosts: TBisTaxiCosts;
+    FCostIn: Variant;
+    FCostOut: Variant;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    procedure CopyFrom(Sender: TBisTaxiZone);
+
+    property Id: Variant read FId write FId;
+    property Name: String read FName write FName;
+    property CostIn: Variant read FCostIn write FCostIn;
+    property CostOut: Variant read FCostOut write FCostOut; 
+
+    property Compositions: TBisTaxiCompositions read FCompositions;
+    property Costs: TBisTaxiCosts read FCosts;
+  end;
+
+  TBisTaxiAddressFrame = class(TBisFrame)
+    LabelZone: TLabel;
+    ComboBoxZone: TComboBox;
+    LabelLocality: TLabel;
+    ComboBoxLocality: TComboBox;
+    LabelStreet: TLabel;
+    ComboBoxStreet: TComboBox;
+    LabelHouse: TLabel;
+    EditHouse: TEdit;
+    LabelFlat: TLabel;
+    EditFlat: TEdit;
+    LabelPorch: TLabel;
+    EditPorch: TEdit;
+    ButtonFirm: TBitBtn;
+    BitBtnCheckAddress: TBitBtn;
+    TimerChangeAddress: TTimer;
+    ImageAddress: TImage;
+    ImageList: TImageList;
+    BitBtnClear: TBitBtn;
+    procedure ButtonFirmClick(Sender: TObject);
+    procedure ComboBoxLocalityChange(Sender: TObject);
+    procedure ButtonStreetClick(Sender: TObject);
+    procedure BitBtnCheckAddressClick(Sender: TObject);
+    procedure ComboBoxLocalityExit(Sender: TObject);
+    procedure ComboBoxStreetExit(Sender: TObject);
+    procedure ComboBoxZoneChange(Sender: TObject);
+    procedure FrameResize(Sender: TObject);
+    procedure TimerChangeAddressTimer(Sender: TObject);
+    procedure EditHouseExit(Sender: TObject);
+    procedure BitBtnClearClick(Sender: TObject);
+  private
+    FRefreshStreets: Boolean;
+    FDetectZone: Boolean;
+    FCanChange: Boolean;
+    FDefaultLocalityName: String;
+    FOnChangeZone: TNotifyEvent;
+    FOnChangeAddress: TNotifyEvent;
+    FParentForm: TBisForm;
+    FOnHouseChange: TNotifyEvent;
+    FAddressFound: Boolean;
+    FCanDistance: Boolean;
+    FOnSetFirm: TNotifyEvent;
+    FFirmSmallName: String;
+    procedure RefreshLocalities;
+    procedure RefreshStreets;
+    procedure RefreshZones;
+    function GetLocalityId: Variant;
+    function GetLocalityPrefix: Variant;
+    function GetStreetId: Variant;
+    function GetStreetPrefix: Variant;
+    function GetZoneId: Variant;
+    function GetLocalityName: Variant;
+    function GetStreetName: Variant;
+    function FindLocalityById(Id: Variant; var Index: Integer): TBisTaxiLocality;
+    function FindStreetById(Id: Variant; var Index: Integer): TBisTaxiStreet;
+    function FindLocaloityByName(AName: String; var Index: Integer): TBisTaxiLocality;
+    function FindZoneById(Id: Variant; var Index: Integer): TBisTaxiZone;
+    procedure SetLocalityId(const Value: Variant);
+    procedure SetStreetId(const Value: Variant);
+    procedure CheckAddressBlack(Sender: TObject; SuccessMessage: Boolean);
+    function CanCheckAdressBlack: Boolean;
+    function GetFlat: Variant;
+    function GetHouse: Variant;
+    function GetPorch: Variant;
+    procedure SetHouse(const Value: Variant);
+    procedure SetFlat(const Value: Variant);
+    procedure SetPorch(const Value: Variant);
+    procedure SetZoneId(const Value: Variant);
+    procedure SetAddressFound(const Value: Boolean);
+    function GetZoneName: Variant;
+    function GetCostIn: Variant;
+  protected
+    procedure DoChangeZone; virtual;
+    procedure DoChangeAddress; virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure CopyFrom(Sender: TBisTaxiAddressFrame); virtual;
+    procedure DisableChanges; virtual;
+    procedure EnableChanges; virtual;
+    procedure EnableControls(AEnabled: Boolean); override;
+
+    procedure SetDefaultLocality;
+    procedure RefreshAll;
+    function ExistsAddressBlack: Boolean;
+    procedure UpdateButtons(AEnabled: Boolean);
+    procedure DetectZone;
+    procedure ChangeAddress;
+
+    property CanChange: Boolean read FCanChange write FCanChange;
+
+    property LocalityId: Variant read GetLocalityId write SetLocalityId;
+    property LocalityPrefix: Variant read GetLocalityPrefix;
+    property LocalityName: Variant read GetLocalityName;
+    property StreetId: Variant read GetStreetId write SetStreetId;
+    property StreetPrefix: Variant read GetStreetPrefix;
+    property StreetName: Variant read GetStreetName;
+    property House: Variant read GetHouse write SetHouse;
+    property Flat: Variant read GetFlat write SetFlat;
+    property Porch: Variant read GetPorch write SetPorch;
+    property ZoneId: Variant read GetZoneId write SetZoneId;
+    property ZoneName: Variant read GetZoneName;
+    property DefaultLocalityName: String read FDefaultLocalityName write FDefaultLocalityName;
+    property ParentForm: TBisForm read FParentForm write FParentForm;
+    property FirmSmallName: String read FFirmSmallName write FFirmSmallName;
+
+    property AddressFound: Boolean read FAddressFound write SetAddressFound;
+
+    property CanDistance: Boolean read FCanDistance;
+
+    property CostIn: Variant read GetCostIn; 
+
+    property OnChangeZone: TNotifyEvent read FOnChangeZone write FOnChangeZone;
+    property OnChangeAddress: TNotifyEvent read FOnChangeAddress write FOnChangeAddress;
+    property OnHouseChange: TNotifyEvent read FOnHouseChange write FOnHouseChange;
+    property OnSetFirm: TNotifyEvent read FOnSetFirm write FOnSetFirm;
+  end;
+
+implementation
+
+uses StrUtils,
+     BisUtils, BisProvider, BisTaxiConsts, BisCore, BisFilterGroups, BisDialogs;
+
+{$R *.dfm}
+
+{ TBisTaxiStreets }
+
+function TBisTaxiStreets.GetItems(Index: Integer): TBisTaxiStreet;
+begin
+  Result:=TBisTaxiStreet(inherited Items[Index]);
+end;
+
+function TBisTaxiStreets.Add(Id: Variant; Name, Prefix: String): TBisTaxiStreet;
+begin
+  Result:=TBisTaxiStreet.Create;
+  Result.Id:=Id;
+  Result.Name:=Name;
+  Result.Prefix:=Prefix;
+  inherited Add(Result);
+end;
+
+procedure TBisTaxiStreets.CopyFrom(Sender: TBisTaxiStreets);
+var
+  i: Integer;
+  Item: TBisTaxiStreet;
+begin
+  if Assigned(Sender) then
+    for i:=0 to Sender.Count-1 do begin
+      Item:=Sender.Items[i];
+      Add(Item.Id,Item.Name,Item.Prefix);
+    end;
+end;
+
+{ TBisTaxiLocality }
+
+constructor TBisTaxiLocality.Create;
+begin
+  inherited Create;
+  FStreets:=TBisTaxiStreets.Create;
+end;
+
+destructor TBisTaxiLocality.Destroy;
+begin
+  FStreets.Free;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiLocality.CopyFrom(Sender: TBisTaxiLocality);
+begin
+  if Assigned(Sender) then begin
+    Id:=Sender.Id;
+    Name:=Sender.Name;
+    Prefix:=Sender.Prefix;
+    Streets.CopyFrom(Sender.Streets);
+  end;
+end;
+
+{ TBisTaxiCompositions }
+
+function TBisTaxiCompositions.GetItems(Index: Integer): TBisTaxiComposition;
+begin
+  Result:=TBisTaxiComposition(inherited Items[Index]);
+end;
+
+function TBisTaxiCompositions.Add(StreetId: Variant; TypeComposition: TBisTaxiTypeComposition;
+                                  Houses, Exceptions: String): TBisTaxiComposition;
+begin
+  Result:=TBisTaxiComposition.Create;
+  Result.StreetId:=StreetId;
+  Result.TypeComposition:=TypeComposition;
+  Result.Houses:=Houses;
+  Result.Exceptions:=Exceptions;
+  inherited Add(Result);
+end;
+
+procedure TBisTaxiCompositions.CopyFrom(Sender: TBisTaxiCompositions);
+var
+  i: Integer;
+  Item: TBisTaxiComposition;
+begin
+  if Assigned(Sender) then
+    for i:=0 to Sender.Count-1 do begin
+      Item:=Sender.Items[i];
+      Add(Item.StreetId,Item.TypeComposition,Item.Houses,Item.Exceptions);
+    end;
+end;
+
+{ TBisTaxiCosts }
+
+function TBisTaxiCosts.GetItems(Index: Integer): TBisTaxiCost;
+begin
+  Result:=TBisTaxiCost(inherited Items[Index]);
+end;
+
+function TBisTaxiCosts.Add(ZoneToId,Distance,Period,Cost: Variant): TBisTaxiCost;
+begin
+  Result:=TBisTaxiCost.Create;
+  Result.ZoneToId:=ZoneToId;
+  Result.Distance:=Distance;
+  Result.Period:=Period;
+  Result.Cost:=Cost;
+  inherited Add(Result);
+end;
+
+procedure TBisTaxiCosts.CopyFrom(Sender: TBisTaxiCosts);
+var
+  i: Integer;
+  Item: TBisTaxiCost;
+begin
+  if Assigned(Sender) then
+    for i:=0 to Sender.Count-1 do begin
+      Item:=Sender.Items[i];
+      Add(Item.ZoneToId,Item.Distance,Item.Period,Item.Cost);
+    end;
+end;
+
+function TBisTaxiCosts.Find(ZoneToId: Variant): TBisTaxiCost;
+var
+  i: Integer;
+  Item: TBisTaxiCost;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if VarSameValue(Item.ZoneToId,ZoneToId) then begin
+       Result:=Item;
+       exit;
+    end;
+  end;
+end;
+
+{ TBisTaxiZone }
+
+constructor TBisTaxiZone.Create;
+begin
+  inherited Create;
+  FCompositions:=TBisTaxiCompositions.Create;
+  FCosts:=TBisTaxiCosts.Create;
+end;
+
+destructor TBisTaxiZone.Destroy;
+begin
+  FCosts.Free;
+  FCompositions.Free;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiZone.CopyFrom(Sender: TBisTaxiZone);
+begin
+  if Assigned(Sender) then begin
+    Id:=Sender.Id;
+    Name:=Sender.Name;
+    CostIn:=Sender.CostIn;
+    CostOut:=Sender.CostOut;
+    Compositions.CopyFrom(Sender.Compositions);
+    Costs.CopyFrom(Sender.Costs);
+  end;
+end;
+
+{ TBisTaxiAddressFrame }
+
+constructor TBisTaxiAddressFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FCanChange:=true;
+  AddressFound:=false;
+end;
+
+destructor TBisTaxiAddressFrame.Destroy;
+begin
+  ClearStrings(ComboBoxLocality.Items);
+  ClearStrings(ComboBoxZone.Items);
+  inherited Destroy;
+end;
+
+function TBisTaxiAddressFrame.FindLocalityById(Id: Variant; var Index: Integer): TBisTaxiLocality;
+var
+  i: Integer;
+  Item: TBisTaxiLocality;
+begin
+  Result:=nil;
+  for i:=0 to ComboBoxLocality.Items.Count-1 do begin
+    Item:=TBisTaxiLocality(ComboBoxLocality.Items.Objects[i]);
+    if VarSameValue(Item.Id,Id) then begin
+      Index:=i;
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisTaxiAddressFrame.FindStreetById(Id: Variant; var Index: Integer): TBisTaxiStreet;
+var
+  i: Integer;
+  Locality: TBisTaxiLocality;
+  Item: TBisTaxiStreet;
+begin
+  Result:=nil;
+  if ComboBoxLocality.ItemIndex<>-1 then begin
+    Locality:=TBisTaxiLocality(ComboBoxLocality.Items.Objects[ComboBoxLocality.ItemIndex]);
+    for i:=0 to Locality.Streets.Count-1 do begin
+      Item:=Locality.Streets.Items[i];
+      if VarSameValue(Item.Id,Id) then begin
+        Index:=i;
+        Result:=Item;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+function TBisTaxiAddressFrame.FindZoneById(Id: Variant; var Index: Integer): TBisTaxiZone;
+var
+  i: Integer;
+  Item: TBisTaxiZone;
+begin
+  Result:=nil;
+  for i:=0 to ComboBoxZone.Items.Count-1 do begin
+    Item:=TBisTaxiZone(ComboBoxZone.Items.Objects[i]);
+    if Assigned(Item) and VarSameValue(Item.Id,Id) then begin
+      Index:=i;
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.FrameResize(Sender: TObject);
+begin
+  if Assigned(FParentForm) then
+    ComboBoxStreet.SelLength:=iff(ComboBoxStreet.Enabled and (FParentForm.ActiveControl=ComboBoxStreet),ComboBoxStreet.SelLength,0);
+end;
+
+function TBisTaxiAddressFrame.FindLocaloityByName(AName: String; var Index: Integer): TBisTaxiLocality;
+var
+  i: Integer;
+  Item: TBisTaxiLocality;
+begin
+  Result:=nil;
+  for i:=0 to ComboBoxLocality.Items.Count-1 do begin
+    Item:=TBisTaxiLocality(ComboBoxLocality.Items.Objects[i]);
+    if AnsiSameText(Item.Name,AName) then begin
+      Index:=i;
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.DisableChanges;
+begin
+  FCanChange:=false;
+  ComboBoxLocality.OnChange:=nil;
+  ComboBoxStreet.OnChange:=nil;
+  EditHouse.OnChange:=nil;
+  EditFlat.OnChange:=nil;
+  EditPorch.OnChange:=nil;
+  ComboBoxZone.OnChange:=nil;
+end;
+
+procedure TBisTaxiAddressFrame.EnableChanges;
+begin
+  ComboBoxLocality.OnChange:=ComboBoxLocalityChange;
+  ComboBoxStreet.OnChange:=ComboBoxLocalityChange;
+  EditHouse.OnChange:=ComboBoxLocalityChange;
+  EditFlat.OnChange:=ComboBoxLocalityChange;
+  EditPorch.OnChange:=ComboBoxLocalityChange;
+  ComboBoxZone.OnChange:=ComboBoxZoneChange;
+  FCanChange:=true;
+end;
+
+procedure TBisTaxiAddressFrame.EnableControls(AEnabled: Boolean);
+begin
+  inherited EnableControls(AEnabled);
+  ButtonFirm.Enabled:=AEnabled;
+  LabelLocality.Enabled:=AEnabled;
+  ComboBoxLocality.Enabled:=AEnabled;
+  LabelStreet.Enabled:=AEnabled;
+  ComboBoxStreet.Enabled:=AEnabled;
+  LabelZone.Enabled:=AEnabled;
+  ComboBoxZone.Enabled:=AEnabled;
+  LabelHouse.Enabled:=AEnabled;
+  EditHouse.Enabled:=AEnabled;
+  LabelFlat.Enabled:=AEnabled;
+  EditFlat.Enabled:=AEnabled;
+  BitBtnCheckAddress.Enabled:=AEnabled;
+  LabelPorch.Enabled:=AEnabled;
+  EditPorch.Enabled:=AEnabled;
+  AddressFound:=AddressFound;
+  ImageAddress.Enabled:=AEnabled;
+end;
+
+procedure TBisTaxiAddressFrame.RefreshLocalities;
+var
+  Obj: TBisTaxiLocality;
+  PL: TBisProvider;
+  PS: TBisProvider;
+begin
+  ClearStrings(ComboBoxLocality.Items);
+  ComboBoxLocality.Items.BeginUpdate;
+  PL:=TBisProvider.Create(nil);
+  PS:=TBisProvider.Create(nil);
+  try
+    PL.WithWaitCursor:=false;
+    PL.ProviderName:='S_LOCALITIES';
+    with PL.FieldNames do begin
+      AddInvisible('LOCALITY_ID');
+      AddInvisible('NAME');
+      AddInvisible('PREFIX');
+    end;
+    PL.Orders.Add('NAME');
+
+    PS.WithWaitCursor:=false;
+    PS.ProviderName:='S_STREETS';
+    with PS.FieldNames do begin
+      AddInvisible('STREET_ID');
+      AddInvisible('LOCALITY_ID');
+      AddInvisible('NAME');
+      AddInvisible('PREFIX');
+    end;
+    PS.Orders.Add('NAME');
+
+    PL.Open;
+    PS.Open;
+    if PL.Active and not PL.IsEmpty and PS.Active then begin
+      PL.First;
+      while not PL.Eof do begin
+        Obj:=TBisTaxiLocality.Create;
+        Obj.Id:=PL.FieldByName('LOCALITY_ID').Value;
+        Obj.Name:=PL.FieldByName('NAME').AsString;
+        Obj.Prefix:=PL.FieldByName('PREFIX').AsString;
+        ComboBoxLocality.Items.AddObject(Obj.Name,Obj);
+        PS.Filtered:=false;
+        PS.Filter:=Format('LOCALITY_ID=%s',[QuotedStr(VarToStrDef(Obj.Id,''))]);
+        PS.Filtered:=true;
+        PS.First;
+        while not PS.Eof do begin
+          Obj.Streets.Add(PS.FieldByName('STREET_ID').Value,
+                          PS.FieldByName('NAME').AsString,
+                          PS.FieldByName('PREFIX').AsString);
+          PS.Next;
+        end;
+        PL.Next;
+      end;
+    end;
+  finally
+    PS.Free;
+    PL.Free;
+    ComboBoxLocality.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.RefreshStreets;
+var
+  i: Integer;
+  Locality: TBisTaxiLocality;
+  Street: TBisTaxiStreet;
+begin
+  ComboBoxStreet.Items.BeginUpdate;
+  try
+    ComboBoxStreet.ItemIndex:=-1;
+    ComboBoxStreet.Items.Clear;
+    if (ComboBoxLocality.ItemIndex<>-1) and (Trim(ComboBoxLocality.Text)<>'') then begin
+      Locality:=TBisTaxiLocality(ComboBoxLocality.Items.Objects[ComboBoxLocality.ItemIndex]);
+      for i:=0 to Locality.Streets.Count - 1 do begin
+        Street:=Locality.Streets.Items[i];
+        ComboBoxStreet.Items.AddObject(Street.Name,Street);
+      end;
+    end;
+  finally
+    ComboBoxStreet.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.RefreshZones;
+var
+  Obj: TBisTaxiZone;
+  PZ: TBisProvider;
+  PC: TBisProvider;
+  PC2: TBisProvider;
+begin
+  ClearStrings(ComboBoxZone.Items);
+  ComboBoxZone.Items.BeginUpdate;
+  PZ:=TBisProvider.Create(nil);
+  PC:=TBisProvider.Create(nil);
+  PC2:=TBisProvider.Create(nil);
+  try
+    PZ.WithWaitCursor:=false;
+    PZ.ProviderName:='S_ZONES';
+    with PZ.FieldNames do begin
+      AddInvisible('ZONE_ID');
+      AddInvisible('NAME');
+      AddInvisible('COST_IN');
+      AddInvisible('COST_OUT');
+    end;
+    PZ.Orders.Add('PRIORITY');
+
+    PC.WithWaitCursor:=false;
+    PC.ProviderName:='S_COMPOSITIONS';
+    with PC.FieldNames do begin
+      AddInvisible('ZONE_ID');
+      AddInvisible('STREET_ID');
+      AddInvisible('TYPE_COMPOSITION');
+      AddInvisible('HOUSES');
+      AddInvisible('EXCEPTIONS');
+    end;
+
+    PC2.WithWaitCursor:=false;
+    PC2.ProviderName:='S_COSTS';
+    with PC2.FieldNames do begin
+      AddInvisible('ZONE_FROM_ID');
+      AddInvisible('ZONE_TO_ID');
+      AddInvisible('DISTANCE');
+      AddInvisible('PERIOD');
+      AddInvisible('COST');
+    end;
+
+    PZ.Open;
+    PC.Open;
+    PC2.Open;
+    if PZ.Active and not PZ.IsEmpty and PC.Active and PC2.Active then begin
+
+      ComboBoxZone.Items.AddObject(' ',nil);
+
+      PZ.First;
+      while not PZ.Eof do begin
+        Obj:=TBisTaxiZone.Create;
+        Obj.Id:=PZ.FieldByName('ZONE_ID').Value;
+        Obj.Name:=PZ.FieldByName('NAME').AsString;
+        Obj.CostIn:=PZ.FieldByName('COST_IN').Value;
+        Obj.CostOut:=PZ.FieldByName('COST_OUT').Value;
+        ComboBoxZone.Items.AddObject(Obj.Name,Obj);
+
+        PC.Filtered:=false;
+        PC.Filter:=Format('ZONE_ID=%s',[QuotedStr(VarToStrDef(Obj.Id,''))]);
+        PC.Filtered:=true;
+        PC.First;
+        while not PC.Eof do begin
+          Obj.Compositions.Add(PC.FieldByName('STREET_ID').Value,
+                               TBisTaxiTypeComposition(PC.FieldByName('TYPE_COMPOSITION').AsInteger),
+                               PC.FieldByName('HOUSES').AsString,
+                               PC.FieldByName('EXCEPTIONS').AsString);
+          PC.Next;
+        end;
+
+        PC2.Filtered:=false;
+        PC2.Filter:=Format('ZONE_FROM_ID=%s',[QuotedStr(VarToStrDef(Obj.Id,''))]);
+        PC2.Filtered:=true;
+        PC2.First;
+        while not PC2.Eof do begin
+          Obj.Costs.Add(PC2.FieldByName('ZONE_TO_ID').Value,
+                        PC2.FieldByName('DISTANCE').Value,
+                        PC2.FieldByName('PERIOD').Value,
+                        PC2.FieldByName('COST').Value);
+          PC2.Next;
+        end;
+
+        PZ.Next;
+      end;
+    end;
+  finally
+    PC2.Free;
+    PC.Free;
+    PZ.Free;
+    ComboBoxZone.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.SetDefaultLocality;
+var
+  Locality: TBisTaxiLocality;
+  Index: Integer;
+begin
+  if Trim(FDefaultLocalityName)<>'' then begin
+    Index:=-1;
+    Locality:=FindLocaloityByName(FDefaultLocalityName,Index);
+    if Assigned(Locality) then begin
+      ComboBoxLocality.ItemIndex:=Index;
+      RefreshStreets;
+    end;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.RefreshAll;
+begin
+  RefreshLocalities;
+  SetDefaultLocality;
+  RefreshZones;
+end;
+
+procedure TBisTaxiAddressFrame.ButtonStreetClick(Sender: TObject);
+var
+  P: TBisProvider;
+  Locality: TBisTaxiLocality;
+  StreetId: Variant;
+begin
+  if (ComboBoxLocality.ItemIndex<>-1) and (Trim(ComboBoxLocality.Text)<>'') then begin
+    Locality:=TBisTaxiLocality(ComboBoxLocality.Items.Objects[ComboBoxLocality.ItemIndex]);
+    StreetId:=Null;
+    if (ComboBoxStreet.ItemIndex<>-1) and (Trim(ComboBoxStreet.Text)<>'') then
+      StreetId:=TBisTaxiStreet(ComboBoxStreet.Items.Objects[ComboBoxStreet.ItemIndex]).Id;
+    P:=TBisProvider.Create(nil);
+    try
+      P.FilterGroups.Add.Filters.Add('LOCALITY_ID',fcEqual,Locality.Id);
+      if Core.DataSelectInto(SClassDataStreetsFormIface,P,'STREET_ID',StreetId,false,imIfaceClass) then begin
+
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.ComboBoxLocalityChange(Sender: TObject);
+begin
+{  if Sender=ComboBoxLocality then
+    RefreshStreets;
+
+  if (Sender=ComboBoxLocality) or
+     (Sender=ComboBoxStreet) or
+     (Sender=EditHouse) then
+    DetectZone;}
+
+  FRefreshStreets:=false;
+  if Sender=ComboBoxLocality then
+    FRefreshStreets:=true;
+
+  FDetectZone:=false;  
+  if (Sender=ComboBoxLocality) or
+     (Sender=ComboBoxStreet) or
+     (Sender=EditHouse) then
+    FDetectZone:=true;
+
+  FCanDistance:=false;
+  if (Sender=ComboBoxStreet) or
+     (Sender=EditHouse) then
+    FCanDistance:=true;
+
+  TimerChangeAddress.Enabled:=false;
+  TimerChangeAddress.Enabled:=true;
+  UpdateButtons(true);
+end;
+
+procedure TBisTaxiAddressFrame.ComboBoxLocalityExit(Sender: TObject);
+begin
+  ComboBoxLocality.ItemIndex:=ComboBoxLocality.Items.IndexOf(ComboBoxLocality.Text);
+  if ComboBoxLocality.ItemIndex=-1 then
+    ComboBoxLocality.Text:=''
+  else
+    ComboBoxLocality.Text:=ComboBoxLocality.Items.Strings[ComboBoxLocality.ItemIndex];
+  CheckAddressBlack(Sender,false);
+end;
+
+procedure TBisTaxiAddressFrame.ComboBoxStreetExit(Sender: TObject);
+begin
+  ComboBoxStreet.ItemIndex:=ComboBoxStreet.Items.IndexOf(ComboBoxStreet.Text);
+  if ComboBoxStreet.ItemIndex=-1 then
+    ComboBoxStreet.Text:=''
+  else
+    ComboBoxStreet.Text:=ComboBoxStreet.Items.Strings[ComboBoxStreet.ItemIndex];
+  CheckAddressBlack(Sender,false);    
+end;
+
+procedure TBisTaxiAddressFrame.ComboBoxZoneChange(Sender: TObject);
+begin
+  DoChangeZone;
+end;
+
+procedure TBisTaxiAddressFrame.CopyFrom(Sender: TBisTaxiAddressFrame);
+var
+  i: Integer;
+  NewLocality: TBisTaxiLocality;
+  FrameLocality: TBisTaxiLocality;
+  NewZone: TBisTaxiZone;
+  FrameZone: TBisTaxiZone;
+begin
+  if Assigned(Sender) then begin
+
+    DefaultLocalityName:=Sender.DefaultLocalityName;
+
+    ClearStrings(ComboBoxLocality.Items);
+    ComboBoxLocality.Items.BeginUpdate;
+    try
+      for i:=0 to Sender.ComboBoxLocality.Items.Count-1 do begin
+        FrameLocality:=TBisTaxiLocality(Sender.ComboBoxLocality.Items.Objects[i]);
+        if Assigned(FrameLocality) then begin
+          NewLocality:=TBisTaxiLocality.Create;
+          NewLocality.CopyFrom(FrameLocality);
+          ComboBoxLocality.Items.AddObject(NewLocality.Name,NewLocality);
+        end;
+      end;
+      ComboBoxLocality.ItemIndex:=Sender.ComboBoxLocality.ItemIndex;
+    finally
+      ComboBoxLocality.Items.EndUpdate;
+    end;
+
+    RefreshStreets;
+    
+    ClearStrings(ComboBoxZone.Items);
+    ComboBoxZone.Items.BeginUpdate;
+    try
+      ComboBoxZone.Items.AddObject(' ',nil);
+      for i:=1 to Sender.ComboBoxZone.Items.Count-1 do begin
+        FrameZone:=TBisTaxiZone(Sender.ComboBoxZone.Items.Objects[i]);
+        if Assigned(FrameZone) then begin
+          NewZone:=TBisTaxiZone.Create;
+          NewZone.CopyFrom(FrameZone);
+          ComboBoxZone.Items.AddObject(NewZone.Name,NewZone);
+        end;
+      end;
+    finally
+      ComboBoxZone.Items.EndUpdate;
+    end;
+
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.DetectZone;
+var
+  Street: TBisTaxiStreet;
+  House: String;
+  HouseN: Integer;
+  Zone: TBisTaxiZone;
+
+  function GetOnlyNumber(Almost: String): String;
+  var
+    i: Integer;
+  begin
+    Result:='';
+    for i:=1 to Length(Almost) do begin
+      if Almost[i] in ['0','1','2','3','4','5','6','7','8','9'] then
+        Result:=Result+Almost[i]
+      else
+        break;
+    end;
+  end;
+
+  function DetectComposition: Boolean;
+  var
+    Comp: TBisTaxiComposition;
+
+    function InHouseString(S: String): Boolean;
+
+      function InInterval(FromS, ToS: String): Boolean;
+      var
+        FromN, ToN: Integer;
+      begin
+        FromN:=StrToIntDef(GetOnlyNumber(FromS),0);
+        ToN:=StrToIntDef(GetOnlyNumber(ToS),0);
+        Result:=(HouseN>=FromN) and (HouseN<=ToN);
+      end;
+
+      function ProcessInterval(Interval: String): Boolean;
+      var
+        Strings: TStringList;
+        i: Integer;
+        Prior: String;
+      begin
+        Result:=false;
+        Strings:=TStringList.Create;
+        try
+          Prior:='';
+          GetStringsByString(Interval,'-',Strings);
+          for i:=0 to Strings.Count-1 do begin
+            if i=0 then begin
+              Prior:=Trim(Strings[i]);
+              Result:=AnsiSameText(House,Prior);
+            end else begin
+              Result:=InInterval(Prior,Trim(Strings[i]));
+            end;
+            if Result then
+              break;
+          end;
+        finally
+          Strings.Free;
+        end;
+      end;
+
+      function ProcessHouse(Delim: String): Boolean;
+      var
+        Strings: TStringList;
+        i: Integer;
+      begin
+        Result:=false;
+        Strings:=TStringList.Create;
+        try
+          GetStringsByString(S,Delim,Strings);
+          for i:=0 to Strings.Count-1 do begin
+            Result:=ProcessInterval(Strings[i]);
+            if Result then
+              break;
+          end;
+        finally
+          Strings.Free;
+        end;
+      end;
+
+    begin
+      Result:=ProcessHouse(',');
+    end;
+
+    function DetectAll: Boolean;
+    begin
+      Result:=true;
+      if House<>'' then begin
+        Result:=not InHouseString(Comp.Exceptions);
+      end;
+    end;
+
+    function DetectOdd: Boolean;
+    begin
+      Result:=false;
+      if House<>'' then begin
+        Result:=not InHouseString(Comp.Exceptions);
+        if Result then begin
+          Result:=InHouseString(Comp.Houses);
+          if Result then
+            Result:=Odd(HouseN);
+        end;
+      end;
+    end;
+
+    function DetectEven: Boolean;
+    begin
+      Result:=false;
+      if House<>'' then begin
+        Result:=not InHouseString(Comp.Exceptions);
+        if Result then begin
+          Result:=InHouseString(Comp.Houses);
+          if Result then
+            Result:=not Odd(HouseN);
+        end;
+      end;
+    end;
+
+    function DetectCustom: Boolean;
+    begin
+      Result:=false;
+      if House<>'' then begin
+        Result:=not InHouseString(Comp.Exceptions);
+        if Result then
+          Result:=InHouseString(Comp.Houses);        
+      end;
+    end;
+
+  var
+    i: Integer;
+  begin
+    Result:=false;
+    for i:=0 to Zone.Compositions.Count-1 do begin
+      Comp:=Zone.Compositions.Items[i];
+      if VarSameValue(Comp.StreetId,Street.Id) then begin
+        case Comp.TypeComposition of
+          tcAll: Result:=DetectAll;
+          tcOdd: Result:=DetectOdd;
+          tcEven: Result:=DetectEven;
+          tcCustom: Result:=DetectCustom;
+        end;
+        if Result then
+          exit;
+      end;
+    end;
+  end;
+
+var
+  i: Integer;
+  OldZoneId: Variant;
+  Index: Integer;
+begin
+  OldZoneId:=ZoneId;
+  Index:=ComboBoxStreet.Items.IndexOf(ComboBoxStreet.Text);
+  if (Index<>-1) then begin
+
+    Street:=TBisTaxiStreet(ComboBoxStreet.Items.Objects[Index]);
+    House:=Trim(EditHouse.Text);
+    HouseN:=StrToIntDef(GetOnlyNumber(House),0);
+
+    ComboBoxZone.Items.BeginUpdate;
+    try
+      ComboBoxZone.ItemIndex:=-1;
+      for i:=1 to ComboBoxZone.Items.Count-1 do begin
+        Zone:=TBisTaxiZone(ComboBoxZone.Items.Objects[i]);
+        if DetectComposition then begin
+          ComboBoxZone.ItemIndex:=i;
+          break;
+        end;
+      end;
+      if not VarSameValue(OldZoneId,ZoneId) then
+        DoChangeZone;
+
+    finally
+      ComboBoxZone.Items.EndUpdate;
+    end;
+
+  end else begin
+    ComboBoxZone.ItemIndex:=-1;
+    if not VarSameValue(OldZoneId,ZoneId) then
+      DoChangeZone;
+  end;
+end;
+
+function TBisTaxiAddressFrame.GetLocalityId: Variant;
+var
+  Index: Integer;
+begin
+  Result:=Null;
+  Index:=ComboBoxLocality.ItemIndex;
+  if (Index=-1) and (Trim(ComboBoxLocality.Text)<>'') then
+    Index:=ComboBoxLocality.Items.IndexOf(Trim(ComboBoxLocality.Text));
+  if (Index<>-1) and (Trim(ComboBoxLocality.Text)<>'') then begin
+    Result:=TBisTaxiLocality(ComboBoxLocality.Items.Objects[Index]).Id;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.SetLocalityId(const Value: Variant);
+var
+  Index: Integer;
+  Locality: TBisTaxiLocality;
+begin
+  Index:=-1;
+  Locality:=FindLocalityById(Value,Index);
+  ComboBoxLocality.ItemIndex:=Index;
+  if Assigned(Locality) then
+    ComboBoxLocality.Text:=Locality.Name;
+  if FCanChange then begin
+    RefreshStreets;
+    DetectZone;
+  end;
+end;
+
+function TBisTaxiAddressFrame.GetLocalityName: Variant;
+var
+  Index: Integer;
+begin
+  Result:=Null;
+  Index:=ComboBoxLocality.ItemIndex;
+  if (Index=-1) and (Trim(ComboBoxLocality.Text)<>'') then
+    Index:=ComboBoxLocality.Items.IndexOf(Trim(ComboBoxLocality.Text));
+  if (Index<>-1) and (Trim(ComboBoxLocality.Text)<>'') then begin
+    Result:=TBisTaxiLocality(ComboBoxLocality.Items.Objects[Index]).Name;
+  end;
+end;
+
+function TBisTaxiAddressFrame.GetLocalityPrefix: Variant;
+var
+  Index: Integer;
+begin
+  Result:=Null;
+  Index:=ComboBoxLocality.ItemIndex;
+  if (Index=-1) and (Trim(ComboBoxLocality.Text)<>'') then
+    Index:=ComboBoxLocality.Items.IndexOf(Trim(ComboBoxLocality.Text));
+  if (Index<>-1) and (Trim(ComboBoxLocality.Text)<>'') then begin
+    Result:=TBisTaxiLocality(ComboBoxLocality.Items.Objects[Index]).Prefix;
+  end;
+end;
+
+function TBisTaxiAddressFrame.GetStreetId: Variant;
+var
+  Index: Integer;
+begin
+  Result:=Null;
+  Index:=ComboBoxStreet.ItemIndex;
+  if (Index=-1) and (Trim(ComboBoxStreet.Text)<>'') then
+    Index:=ComboBoxStreet.Items.IndexOf(Trim(ComboBoxStreet.Text));
+  if (Index<>-1) and (Trim(ComboBoxStreet.Text)<>'') then begin
+    Result:=TBisTaxiStreet(ComboBoxStreet.Items.Objects[Index]).Id;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.SetStreetId(const Value: Variant);
+var
+  Index: Integer;
+  Street: TBisTaxiStreet;
+begin
+  Index:=-1;
+  Street:=FindStreetById(Value,Index);
+  ComboBoxStreet.ItemIndex:=Index;
+  if Assigned(Street) then
+    ComboBoxStreet.Text:=Street.Name;
+  if FCanChange then
+    DetectZone;
+end;
+
+function TBisTaxiAddressFrame.GetStreetName: Variant;
+var
+  Index: Integer;
+begin
+  Result:=Null;
+  Index:=ComboBoxStreet.ItemIndex;
+  if (Index=-1) and (Trim(ComboBoxStreet.Text)<>'') then
+    Index:=ComboBoxStreet.Items.IndexOf(Trim(ComboBoxStreet.Text));
+  if (Index<>-1) and (Trim(ComboBoxStreet.Text)<>'') then begin
+    Result:=TBisTaxiStreet(ComboBoxStreet.Items.Objects[Index]).Name;
+  end;
+end;
+
+function TBisTaxiAddressFrame.GetStreetPrefix: Variant;
+var
+  Index: Integer;
+begin
+  Result:=Null;
+  Index:=ComboBoxStreet.ItemIndex;
+  if (Index=-1) and (Trim(ComboBoxStreet.Text)<>'') then
+    Index:=ComboBoxStreet.Items.IndexOf(Trim(ComboBoxStreet.Text));
+  if (Index<>-1)and (Trim(ComboBoxStreet.Text)<>'')  then begin
+    Result:=TBisTaxiStreet(ComboBoxStreet.Items.Objects[Index]).Prefix;
+  end;
+end;
+
+function TBisTaxiAddressFrame.GetCostIn: Variant;
+var
+  Index: Integer;
+  Zone: TBisTaxiZone;
+begin
+  Result:=Null;
+  if ComboBoxZone.ItemIndex<>-1 then begin
+    Zone:=TBisTaxiZone(ComboBoxZone.Items.Objects[ComboBoxZone.ItemIndex]);
+    if Assigned(Zone) then
+      Result:=Zone.CostIn;
+  end;
+end;
+
+function TBisTaxiAddressFrame.GetFlat: Variant;
+begin
+  Result:=Null;
+  if Trim(EditFlat.Text)<>'' then
+    Result:=Trim(EditFlat.Text);
+end;
+
+procedure TBisTaxiAddressFrame.SetFlat(const Value: Variant);
+begin
+  EditFlat.Text:=iff(VarIsNull(Value),'',VarToStrDef(Value,''));
+end;
+
+function TBisTaxiAddressFrame.GetHouse: Variant;
+begin
+  Result:=Null;
+  if Trim(EditHouse.Text)<>'' then
+    Result:=Trim(EditHouse.Text);
+end;
+
+procedure TBisTaxiAddressFrame.SetHouse(const Value: Variant);
+begin
+  EditHouse.Text:=iff(VarIsNull(Value),'',VarToStrDef(Value,''));
+end;
+
+function TBisTaxiAddressFrame.GetPorch: Variant;
+begin
+  Result:=Null;
+  if Trim(EditPorch.Text)<>'' then
+    Result:=Trim(EditPorch.Text);
+end;
+
+procedure TBisTaxiAddressFrame.SetPorch(const Value: Variant);
+begin
+  EditPorch.Text:=iff(VarIsNull(Value),'',VarToStrDef(Value,''));
+end;
+
+function TBisTaxiAddressFrame.GetZoneId: Variant;
+begin
+  Result:=Null;
+  if (ComboBoxZone.ItemIndex>0) then begin
+    Result:=TBisTaxiZone(ComboBoxZone.Items.Objects[ComboBoxZone.ItemIndex]).Id;
+  end;
+end;
+
+function TBisTaxiAddressFrame.GetZoneName: Variant;
+begin
+  Result:=Null;
+  if (ComboBoxZone.ItemIndex>0) then begin
+    Result:=TBisTaxiZone(ComboBoxZone.Items.Objects[ComboBoxZone.ItemIndex]).Name;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.SetZoneId(const Value: Variant);
+var
+  Index: Integer;
+  Zone: TBisTaxiZone;
+begin
+  Index:=-1;
+  Zone:=FindZoneById(Value,Index);
+  ComboBoxZone.ItemIndex:=Index;
+  if Assigned(Zone) then
+    ComboBoxZone.Text:=Zone.Name;
+end;
+
+procedure TBisTaxiAddressFrame.TimerChangeAddressTimer(Sender: TObject);
+begin
+  TimerChangeAddress.Enabled:=false;
+
+  if FRefreshStreets then
+    RefreshStreets;
+
+  if FDetectZone then
+    DetectZone;
+
+  DoChangeAddress;
+end;
+
+procedure TBisTaxiAddressFrame.EditHouseExit(Sender: TObject);
+begin
+  CheckAddressBlack(Sender,false);
+end;
+
+function TBisTaxiAddressFrame.ExistsAddressBlack: Boolean;
+var
+  P: TBisProvider;
+begin
+  Result:=false;
+  if CanCheckAdressBlack then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_BLACKS';
+      P.FieldNames.AddInvisible('BLACK_ID');
+      with P.FilterGroups.Add do begin
+        Filters.Add('LOCALITY_ID',fcEqual,LocalityId);
+        Filters.Add('STREET_ID',fcEqual,StreetId);
+        Filters.Add('HOUSE',fcEqual,Trim(EditHouse.Text));
+        Filters.Add('FLAT',fcEqual,Trim(EditFlat.Text));
+      end;
+      P.Open;
+      Result:=P.Active and not P.IsEmpty;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+function TBisTaxiAddressFrame.CanCheckAdressBlack: Boolean;
+begin
+  Result:=not VarIsNull(LocalityId) and not VarIsNull(StreetId) and
+          (Trim(EditHouse.Text)<>'') and (Trim(EditFlat.Text)<>'');
+end;
+
+procedure TBisTaxiAddressFrame.ChangeAddress;
+begin
+  DoChangeAddress;
+end;
+
+procedure TBisTaxiAddressFrame.CheckAddressBlack(Sender: TObject; SuccessMessage: Boolean);
+var
+  S: String;
+begin
+  if CanCheckAdressBlack then begin
+    S:=FormatEx('%s%s, %s%s %s-%s',[LocalityPrefix,LocalityName,StreetPrefix,StreetName,
+                                   Trim(EditHouse.Text),Trim(EditFlat.Text)]);
+    if ExistsAddressBlack then begin
+      if Assigned(Sender) then begin
+        if ShowWarningQuestion(FormatEx('Адрес %s находится в черном списке. Пропустить ввод?',[S]),mbNo)=mrNo then begin
+          if (Sender is TWinControl) then begin
+            if TWinControl(Sender).Visible and TWinControl(Sender).Enabled and TWinControl(Sender).CanFocus then
+              TWinControl(Sender).SetFocus;
+          end;
+        end;
+      end else
+        ShowWarning(FormatEx('Адрес %s находится в черном списке.',[S]))
+    end else
+      if SuccessMessage then
+        ShowInfo(FormatEx('Адрес %s не находится в черном списке.',[S]));
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.UpdateButtons(AEnabled: Boolean);
+begin
+  BitBtnCheckAddress.Enabled:=CanCheckAdressBlack and AEnabled;
+end;
+
+procedure TBisTaxiAddressFrame.BitBtnCheckAddressClick(Sender: TObject);
+begin
+  CheckAddressBlack(nil,true);
+end;
+
+procedure TBisTaxiAddressFrame.BitBtnClearClick(Sender: TObject);
+begin
+  DisableChanges;
+  try
+    LocalityId:=Null;
+    StreetId:=Null;
+    House:=Null;
+    Flat:=Null;
+    Porch:=Null;
+    ZoneId:=Null;
+    SetDefaultLocality;
+  finally
+    EnableChanges;
+    DoChangeAddress;
+    DoChangeZone;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.ButtonFirmClick(Sender: TObject);
+var
+  P: TBisProvider;
+begin
+  P:=TBisProvider.Create(nil);
+  try
+    if Core.DataSelectInto(SClassDataFirmsFormIface,P,'',Null,false,imIfaceClass) then begin
+      LocalityId:=P.FieldByName('LOCALITY_POST_ID').Value;
+      StreetId:=P.FieldByName('STREET_POST_ID').Value;
+      EditHouse.Text:=P.FieldByName('HOUSE_POST').AsString;
+      EditFlat.Text:=P.FieldByName('FLAT_POST').AsString;
+      FFirmSmallName:=P.FieldByName('SMALL_NAME').AsString;
+      if Assigned(FOnSetFirm) then
+        FOnSetFirm(Sender);
+    end;
+  finally
+    P.Free;
+  end;
+end;
+
+procedure TBisTaxiAddressFrame.DoChangeAddress;
+begin
+  if Assigned(FOnChangeAddress) and FCanChange then
+    FOnChangeAddress(Self);
+end;
+
+procedure TBisTaxiAddressFrame.DoChangeZone;
+begin
+  if Assigned(FOnChangeZone) and FCanChange then
+    FOnChangeZone(Self);
+end;
+
+procedure TBisTaxiAddressFrame.SetAddressFound(const Value: Boolean);
+var
+  Bmp: TBitmap;
+begin
+  FAddressFound := Value;
+  Bmp:=TBitmap.Create;
+  try
+    if ImageAddress.Enabled then begin
+      if FAddressFound then
+        ImageList.GetBitmap(0,Bmp)
+      else
+        ImageList.GetBitmap(1,Bmp);
+    end else begin
+      if FAddressFound then
+        ImageList.GetBitmap(2,Bmp)
+      else
+        ImageList.GetBitmap(3,Bmp);
+    end;
+
+    ImageAddress.Picture.Assign(Bmp);
+  finally
+    Bmp.Free;
+  end;
+end;
+
+
+
+end.

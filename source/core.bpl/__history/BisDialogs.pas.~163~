@@ -1,0 +1,224 @@
+unit BisDialogs;
+
+interface
+
+uses Windows, Classes, Variants, Dialogs, BisTimedMsgFm, BisDetailMsgFm;
+
+const
+  DefaultShowTimeOut=10;
+
+procedure ShowError(Msg: String; TimeOut: Integer); overload;
+procedure ShowError(Msg: String; UseTimer: Boolean=true); overload;
+procedure ShowDetailError(Msg: String; HelpContext: Integer; Detailed: Boolean=false; UseTimer: Boolean=true);
+procedure ShowWarning(Msg: String; UseTimer: Boolean=true);
+procedure ShowDetailWarning(Msg: String; HelpContext: Integer; Detailed: Boolean=false; UseTimer: Boolean=true);
+procedure ShowInfo(Msg: String; TimeOut: Integer); overload;
+procedure ShowInfo(Msg: String; UseTimer: Boolean=true); overload;
+procedure ShowDetailInfo(Msg: String; HelpContext: Integer; Detailed: Boolean=false; UseTimer: Boolean=true);
+function ShowQuestion(Msg: String; DefaultButton: TMsgDlgBtn=mbYes; UseTimer: Boolean=true): Integer;
+function ShowQuestionCancel(Msg: String; DefaultButton: TMsgDlgBtn=mbYes; UseTimer: Boolean=true): Integer;
+function ShowErrorQuestion(Msg: String; UseTimer: Boolean=true): Integer;
+function ShowWarningQuestion(Msg: String; DefaultButton: TMsgDlgBtn=mbYes; UseTimer: Boolean=true): Integer;
+
+type
+  TBisShowDialogOption = (sdoBrowseForComputer, sdoBrowseForPrinter, sdoBrowseIncludeFiles,
+                          sdoBrowseIncludeURLS, sdoDontGoBelowDomain, sdoEditBox, sdoNewDialogStyle, sdoNoNewFolderButton,
+                          sdoNoTranslateTargets, sdoReturnFSAncestors, sdoReturnOnlyFSDirs,
+                          sdoShareable, sdoStatusText, sdoUAHint, sdoUseNewUI, sdoValidate);
+
+  TBisShowDialogOptions=set of TBisShowDialogOption;
+
+  TBisShowDialogFolder=(sdfDESKTOP,sdfINTERNET,sdfPROGRAMS,sdfCONTROLS,sdfPRINTERS,sdfPERSONAL,sdfFAVORITES,
+                        sdfSTARTUP,sdfRECENT,sdfSENDTO,sdfBITBUCKET,sdfSTARTMENU,sdfMYDOCUMENTS,sdfMYMUSIC,
+                        sdfMYVIDEO,sdfDESKTOPDIRECTORY,sdfDRIVES,sdfNETWORK,sdfNETHOOD,sdfFONTS,sdfTEMPLATES,
+                        sdfPRINTHOOD,sdfCOOKIES,sdfHISTORY,sdfWINDOWS,sdfSYSTEM,sdfPROGRAM_FILES,sdfMYPICTURES);
+
+function ShowDialog(Title, Root: String; Folder: TBisShowDialogFolder; Options: TBisShowDialogOptions=[]): String;
+
+implementation
+
+uses ActiveX, ShellAPI, ShlObj, Forms,
+     BisConsts;
+
+procedure ShowError(Msg: String; TimeOut: Integer); overload;
+begin
+  MessageBeep(MB_ICONERROR);
+  BisTimedMessageBox(Msg,'',mtError,[mbOk],mbOk,TimeOut,0,TimeOut>);
+end;
+
+procedure ShowError(Msg: String; UseTimer: Boolean=true);
+begin
+  ShowError(Msg,DefaultShowTimeOut);
+end;
+
+procedure ShowDetailError(Msg: String; HelpContext: Integer; Detailed: Boolean=false; UseTimer: Boolean=true);
+begin
+  MessageBeep(MB_ICONERROR);
+  BisDetailMessageBox(Msg,'',mtError,HelpContext,DefaultShowTimeOut,Detailed,UseTimer);
+end;
+
+procedure ShowWarning(Msg: String; UseTimer: Boolean=true);
+begin
+  MessageBeep(MB_ICONWARNING);
+  BisTimedMessageBox(Msg,'',mtWarning,[mbOk],mbOk,DefaultShowTimeOut,0,UseTimer);
+end;
+
+procedure ShowDetailWarning(Msg: String; HelpContext: Integer; Detailed: Boolean=false; UseTimer: Boolean=true);
+begin
+  MessageBeep(MB_ICONWARNING);
+  BisDetailMessageBox(Msg,'',mtWarning,HelpContext,DefaultShowTimeOut,Detailed,UseTimer);
+end;
+
+procedure ShowInfo(Msg: String; TimeOut: Integer); overload;
+begin
+  MessageBeep(MB_ICONINFORMATION);
+  BisTimedMessageBox(Msg,'',mtInformation,[mbOk],mbOk,TimeOut,0,TimeOut>0);
+end;
+
+procedure ShowInfo(Msg: String; UseTimer: Boolean=true); overload;
+begin
+  ShowInfo(Msg,DefaultShowTimeOut);
+end;
+
+procedure ShowDetailInfo(Msg: String; HelpContext: Integer; Detailed: Boolean=false; UseTimer: Boolean=true);
+begin
+  MessageBeep(MB_ICONINFORMATION);
+  BisDetailMessageBox(Msg,'',mtInformation,HelpContext,DefaultShowTimeOut,Detailed,UseTimer);
+end;
+
+function ShowQuestion(Msg: String; DefaultButton: TMsgDlgBtn=mbYes; UseTimer: Boolean=true): Integer;
+begin
+  MessageBeep(MB_ICONQUESTION);
+  Result:=BisTimedMessageBox(Msg,'',mtConfirmation,[mbYes,mbNo],DefaultButton,DefaultShowTimeOut,0,UseTimer);
+end;
+
+function ShowQuestionCancel(Msg: String; DefaultButton: TMsgDlgBtn=mbYes; UseTimer: Boolean=true): Integer;
+begin
+  MessageBeep(MB_ICONQUESTION);
+  Result:=BisTimedMessageBox(Msg,'',mtConfirmation,[mbYes,mbNo,mbCancel],DefaultButton,DefaultShowTimeOut,0,UseTimer);
+end;
+
+function ShowErrorQuestion(Msg: String; UseTimer: Boolean=true): Integer;
+begin
+  MessageBeep(MB_ICONQUESTION);
+  Result:=BisTimedMessageBox(Msg,'',mtError,[mbYes,mbNo],mbYes,DefaultShowTimeOut,0,UseTimer);
+end;
+
+function ShowWarningQuestion(Msg: String; DefaultButton: TMsgDlgBtn=mbYes; UseTimer: Boolean=true): Integer;
+begin
+  MessageBeep(MB_ICONQUESTION);
+  Result:=BisTimedMessageBox(Msg,'',mtWarning,[mbYes,mbNo],DefaultButton,DefaultShowTimeOut,0,UseTimer);
+end;
+
+function ShowDialogCallbackProc(Wnd: HWND; uMsg: UINT; lParam, lpData: LPARAM): Integer stdcall;
+var
+  Rect: TRect;
+  Monitor: TMonitor;
+begin
+  if uMsg = BFFM_VALIDATEFAILED then
+    Result := 0
+  else begin
+    Result := 0;
+    if uMsg = BFFM_INITIALIZED then begin
+      Monitor := Screen.MonitorFromWindow(Application.MainForm.Handle);
+      GetWindowRect(Wnd, Rect);
+      SetWindowPos(Wnd, 0, (Monitor.Width - (Rect.Right - Rect.Left)) div 2,
+                   (Monitor.Height - (Rect.Bottom - Rect.Top)) div 2, 0, 0, SWP_NOSIZE or SWP_NOZORDER);
+  {    if FFolder <> '' then
+        SendMessage(Wnd, BFFM_SETSELECTION, Integer(True), Windows.LPARAM(PChar(FFolder)));}
+    end;
+  end;
+end;
+
+function ShowDialog(Title, Root: String; Folder: TBisShowDialogFolder; Options: TBisShowDialogOptions=[]): String;
+const
+  OptionsConsts: array[TBisShowDialogOption] of Integer = (
+    BIF_BROWSEFORCOMPUTER, BIF_BROWSEFORPRINTER, BIF_BROWSEINCLUDEFILES,
+    BIF_BROWSEINCLUDEURLS, BIF_DONTGOBELOWDOMAIN, BIF_EDITBOX, BIF_NEWDIALOGSTYLE,
+    BIF_NONEWFOLDERBUTTON, BIF_NOTRANSLATETARGETS, BIF_RETURNFSANCESTORS,
+    BIF_RETURNONLYFSDIRS, BIF_SHAREABLE, BIF_STATUSTEXT, BIF_UAHINT, BIF_USENEWUI,
+    BIF_VALIDATE);
+  FolderConsts: array[TBisShowDialogFolder] of Integer=(
+    CSIDL_DESKTOP, CSIDL_INTERNET, CSIDL_PROGRAMS, CSIDL_CONTROLS, CSIDL_PRINTERS, CSIDL_PERSONAL, CSIDL_FAVORITES,
+    CSIDL_STARTUP, CSIDL_RECENT, CSIDL_SENDTO, CSIDL_BITBUCKET, CSIDL_STARTMENU, CSIDL_MYDOCUMENTS, CSIDL_MYMUSIC,
+    CSIDL_MYVIDEO, CSIDL_DESKTOPDIRECTORY, CSIDL_DRIVES, CSIDL_NETWORK, CSIDL_NETHOOD, CSIDL_FONTS, CSIDL_TEMPLATES,
+    CSIDL_PRINTHOOD, CSIDL_COOKIES, CSIDL_HISTORY, CSIDL_WINDOWS, CSIDL_SYSTEM, CSIDL_PROGRAM_FILES, CSIDL_MYPICTURES{,
+    CSIDL_COMMON_STARTMENU, CSIDL_COMMON_PROGRAMS, CSIDL_COMMON_STARTUP, CSIDL_COMMON_DESKTOPDIRECTORY, CSIDL_APPDATA,
+    CSIDL_LOCAL_APPDATA, CSIDL_ALTSTARTUP, CSIDL_COMMON_ALTSTARTUP, CSIDL_COMMON_FAVORITES, CSIDL_INTERNET_CACHE,
+    CSIDL_COMMON_APPDATA, CSIDL_PROFILE, CSIDL_SYSTEMX86, CSIDL_PROGRAM_FILESX86, CSIDL_PROGRAM_FILES_COMMON, CSIDL_PROGRAM_FILES_COMMONX86,
+    CSIDL_COMMON_TEMPLATES, CSIDL_COMMON_DOCUMENTS, CSIDL_COMMON_ADMINTOOLS, CSIDL_ADMINTOOLS, CSIDL_CONNECTIONS, CSIDL_COMMON_MUSIC,
+    CSIDL_COMMON_PICTURES, CSIDL_COMMON_VIDEO, CSIDL_RESOURCES, CSIDL_RESOURCES_LOCALIZED, CSIDL_COMMON_OEM_LINKS, CSIDL_CDBURN_AREA,
+    CSIDL_COMPUTERSNEARME, CSIDL_PROFILES, CSIDL_FLAG_CREATE, CSIDL_FLAG_DONT_VERIFY, CSIDL_FLAG_DONT_UNEXPAND, CSIDL_FLAG_NO_ALIAS,
+    CSIDL_FLAG_PER_USER_INIT, CSIDL_FLAG_MASK});
+var
+  RootItemIDList, ItemIDList: PItemIDList;
+  BrowseInfo: TBrowseInfo;
+  DisplayName: array[0..MAX_PATH] of Char;
+  I: TBisShowDialogOption;
+  ShellMalloc: IMalloc;
+  IDesktopFolder: IShellFolder;
+  Buffer: PChar;
+  ARoot: WideString;
+  Eaten, Flags: LongWord;
+  CoInitResult: HRESULT;
+  WindowList: Pointer;
+  OldErrorMode: Cardinal;
+begin
+  Result:='';
+  if (ShGetMalloc(ShellMalloc) = S_OK) and (ShellMalloc <> nil) then begin
+    Buffer:=ShellMalloc.Alloc(MAX_PATH);
+    try
+      RootItemIDList := nil;
+      ARoot:=WideString(Root);
+      if Folder=sdfDESKTOP then begin
+        if ARoot <> '' then begin
+          SHGetDesktopFolder(IDesktopFolder);
+          IDesktopFolder.ParseDisplayName(Application.Handle, nil, POleStr(ARoot), Eaten, RootItemIDList, Flags);
+        end;
+      end else begin
+        SHGetSpecialFolderLocation(Application.Handle, FolderConsts[Folder], RootItemIDList);
+      end;
+      FillChar(BrowseInfo, SizeOf(TBrowseInfo), 0);
+      with BrowseInfo do begin
+        hwndOwner:=Application.Handle;
+        pidlRoot:=RootItemIDList;
+        pszDisplayName:=@DisplayName;
+        lpszTitle:=PChar(Title);
+        lpfn:=@ShowDialogCallbackProc;
+        lParam:=0;
+        for I:=Low(TBisShowDialogOption) to High(TBisShowDialogOption) do
+          if I in Options then
+            ulFlags:=ulFlags or Cardinal(OptionsConsts[I]);
+      end;
+      if sdoUseNewUI in Options then begin
+        CoInitResult := CoInitializeEx(nil, COINIT_APARTMENTTHREADED);
+        if CoInitResult = RPC_E_CHANGED_MODE then
+          BrowseInfo.ulFlags := BrowseInfo.ulFlags and not BIF_NEWDIALOGSTYLE;
+      end;
+      try
+        WindowList := DisableTaskWindows(0);
+        OldErrorMode := SetErrorMode(SEM_FAILCRITICALERRORS);
+        try
+          ItemIDList := ShBrowseForFolder(BrowseInfo);
+        finally
+          SetErrorMode(OldErrorMode);
+          EnableTaskWindows(WindowList);
+        end;
+      finally
+        if sdoUseNewUI in Options then
+          CoUninitialize;
+      end;
+      if Assigned(ItemIDList) then begin
+        if ShGetPathFromIDList(ItemIDList,Buffer) then
+          Result:=Buffer
+        else
+          Result:=DisplayName;  
+        ShellMalloc.Free(ItemIDList);
+      end;
+    finally
+      ShellMalloc.Free(Buffer);
+    end;
+  end;
+end;
+
+end.

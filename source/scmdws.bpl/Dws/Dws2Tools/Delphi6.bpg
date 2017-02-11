@@ -1,0 +1,37 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = dws2PascalParsingRuntime60.bpl.20 dws2VCLPasGenRuntime20.bpl.60 \
+  dcldws2PasGen20.bpl.60 dws2OTAFoundationRuntime60.bpl.20 \
+  dcldws2UnitEditorRichPkg60.bpl.20 dcldws2UnitEditorSynPkg60.bpl.20
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+dws2VCLPasGenRuntime20.bpl.60: PascalGeneration\Delphi6\dws2VCLPasGenRuntime.dpk
+  $(DCC)
+
+dcldws2PasGen20.bpl.60: PascalGeneration\Delphi6\dcldws2PasGen.dpk
+  $(DCC)
+
+dcldws2UnitEditorSynPkg60.bpl.20: UnitCompEditor\Delphi6\dcldws2UnitEditorSynPkg.dpk
+  $(DCC)
+
+dcldws2UnitEditorRichPkg60.bpl.20: UnitCompEditor\Delphi6\dcldws2UnitEditorRichPkg.dpk
+  $(DCC)
+
+dws2PascalParsingRuntime60.bpl.20: PascalParsing\Delphi6\dws2PascalParsingRuntime.dpk
+  $(DCC)
+
+dws2OTAFoundationRuntime60.bpl.20: OpenToolsAPI\Delphi6\dws2OTAFoundationRuntime.dpk
+  $(DCC)
+
+

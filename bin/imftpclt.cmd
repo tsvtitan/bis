@@ -1,0 +1,1 @@
+ftpclt.exe /config imftpclt.ini

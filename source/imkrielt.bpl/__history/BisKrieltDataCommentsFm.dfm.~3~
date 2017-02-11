@@ -1,0 +1,80 @@
+inherited BisKrieltDataCommentsForm: TBisKrieltDataCommentsForm
+  Left = 578
+  Top = 229
+  Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1080
+  ClientHeight = 323
+  ClientWidth = 492
+  ExplicitWidth = 500
+  ExplicitHeight = 357
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited StatusBar: TStatusBar
+    Top = 304
+    Width = 492
+    ExplicitTop = 304
+    ExplicitWidth = 492
+  end
+  inherited PanelFrame: TPanel
+    Width = 492
+    Height = 266
+    ExplicitWidth = 492
+    ExplicitHeight = 266
+    object PanelControls: TPanel
+      Left = 0
+      Top = 146
+      Width = 492
+      Height = 120
+      Align = alBottom
+      BevelOuter = bvNone
+      BorderWidth = 3
+      TabOrder = 0
+      ExplicitTop = 199
+      ExplicitWidth = 592
+      object GroupBoxControls: TGroupBox
+        Left = 3
+        Top = 3
+        Width = 486
+        Height = 114
+        Align = alClient
+        Caption = ' '#1058#1077#1082#1089#1090' '#1082#1086#1084#1084#1077#1085#1090#1072#1088#1080#1103' '
+        TabOrder = 0
+        object PanelDescription: TPanel
+          Left = 2
+          Top = 15
+          Width = 482
+          Height = 97
+          Align = alClient
+          BevelOuter = bvNone
+          BorderWidth = 5
+          TabOrder = 0
+          object DBMemoText: TDBMemo
+            Left = 5
+            Top = 5
+            Width = 472
+            Height = 87
+            Align = alClient
+            Color = clBtnFace
+            DataField = 'COMMENT_TEXT'
+            ReadOnly = True
+            ScrollBars = ssVertical
+            TabOrder = 0
+          end
+        end
+      end
+    end
+  end
+  inherited PanelButton: TPanel
+    Top = 266
+    Width = 492
+    ExplicitTop = 266
+    ExplicitWidth = 492
+    inherited ButtonOk: TButton
+      Left = 314
+      ExplicitLeft = 314
+    end
+    inherited ButtonCancel: TButton
+      Left = 409
+      ExplicitLeft = 409
+    end
+  end
+end

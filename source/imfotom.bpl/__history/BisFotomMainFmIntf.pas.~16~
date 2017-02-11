@@ -1,0 +1,89 @@
+unit BisFotomMainFmIntf;
+
+interface
+
+uses DB;
+
+
+type
+  IBisFotomMainForm=interface
+    ['{4EE70FFD-5E27-4440-B6AF-03839C6DBDC0}']
+
+    procedure ResultFrameProviderAfterScroll(DataSet: TDataSet);
+
+    function GetOutputDir: String;
+    function GetOutputFile: String;
+    function GetDataTag: String;
+    function GetRowTag: String;
+    function GetDateCreateTag: String;
+    function GetDateCreateFormat: String;
+    function GetUploadTag: String;
+    function GetBarcodeTag: String;
+    function GetCodeTag: String;
+    function GetNameTag: String;
+    function GetProducerTag: String;
+    function GetCountryTag: String;
+    function GetOwnerTag: String;
+    function GetFileNameTag: String;
+
+    function GetSuccessString: String;
+    function GetFormParam: String;
+    function GetFotoCount: Integer;
+    function GetDeleteAfterLoad: Boolean;
+    function GetRunAfterLoad: Boolean;
+    function GetShellCommand: String;
+
+    function GetWebProtocol: String;
+    function GetWebHost: String;
+    function GetWebPort: Integer;
+    function GetWebPath: String;
+    function GetUseProxy: Boolean;
+    property ProxyHost: String read GetProxyHost;
+    property ProxyPort: Integer read GetProxyPort;
+    property ProxyUser: String read GetProxyUser;
+    property ProxyPassword: String read GetProxyPassword;
+
+    function GetDisableScrolled: Boolean;
+    procedure SetDisableScrolled(Value: Boolean);
+    function GetChangesPresent: Boolean;
+    procedure SetChangesPresent(Value: Boolean);
+
+    property OutputDir: String read GetOutputDir;
+    property OutputFile: String read GetOutputFile;
+    property DataTag: String read GetDataTag;
+    property RowTag: String read GetRowTag;
+    property DateCreateTag: String read GetDateCreateTag;
+    property DateCreateFormat: String read GetDateCreateFormat;
+    property UploadTag: String read GetUploadTag;
+    property BarcodeTag: String read GetBarcodeTag;
+    property CodeTag: String read GetCodeTag;
+    property NameTag: String read GetNameTag;
+    property ProducerTag: String read GetProducerTag;
+    property CountryTag: String read GetCountryTag;
+    property OwnerTag: String read GetOwnerTag;
+    property FileNameTag: String read GetFileNameTag;
+
+    property SuccessString: String read GetSuccessString;
+    property FormParam: String read GetFormParam;
+    property FotoCount: Integer read GetFotoCount;
+    property DeleteAfterLoad: Boolean read GetDeleteAfterLoad;
+    property RunAfterLoad: Boolean read GetRunAfterLoad;
+    property ShellCommand: String read GetShellCommand;
+
+    property WebProtocol: String read GetWebProtocol; 
+    property WebHost: String read GetWebHost;
+    property WebPort: Integer read GetWebPort;
+    property WebPath: String read GetWebPath;
+    property UseProxy: Boolean read GetUseProxy;
+    property ProxyHost: String read GetProxyHost;
+    property ProxyPort: Integer read GetProxyPort;
+    property ProxyUser: String read GetProxyUser;
+    property ProxyPassword: String read GetProxyPassword;
+
+    property DisableScrolled: Boolean read GetDisableScrolled write SetDisableScrolled;
+    property ChangesPresent: Boolean read GetChangesPresent write SetChangesPresent;
+  end;
+
+implementation
+
+end.

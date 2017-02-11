@@ -1,0 +1,22 @@
+library ibaseudf;
+
+uses
+  Windows,
+  BisIBaseUdf in 'ibaseudf.dll\BisIBaseUdf.pas';
+
+{$R *.res}  
+
+procedure DLLEntryPoint(dwReason: DWord);
+begin
+  case dwReason of
+    DLL_PROCESS_ATTACH: begin
+      Init;
+    end;
+    DLL_PROCESS_DETACH: begin
+      DeInitAll;
+    end;
+  end;
+end;
+
+
+end.

@@ -1,0 +1,83 @@
+unit BisScriptIface;
+
+interface
+
+uses Classes,
+     BisIfaces, BisScriptUnits,
+     BisScriptConsts;
+
+type
+
+  TBisScriptIface=class(TBisIface)
+  private
+    FScriptId: String;
+    FSPermissionShow: String;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Init; override;
+    procedure Show; override;
+
+    function FindUnit(UnitName: String): TBisScriptUnit; virtual;
+    function FindConst(ConstName: String; UnitName: String=''): TBisScriptConst; virtual;
+
+
+    property ScriptId: String read FScriptId write FScriptId;
+  published
+    property SPermissionShow: String read FSPermissionShow write FSPermissionShow;
+  end;
+
+  TBisScriptIfaceClass=class of TBisScriptIface;
+
+implementation
+
+uses BisCore, BisObjectModules;
+
+{ TBisScriptIface }
+
+constructor TBisScriptIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Permissions.Enabled:=true;
+  FSPermissionShow:='Просмотр';
+end;
+
+procedure TBisScriptIface.Init;
+begin
+  inherited Init;
+  Permissions.AddDefault(FSPermissionUpdate);
+end;
+
+function TBisScriptIface.FindUnit(UnitName: String): TBisScriptUnit;
+var
+  i: Integer;
+  Module: TBisObjectModule;
+begin
+  Result:=nil;
+  if Assigned(Core) then begin
+    for i:=0 to Core.ObjectModules.Count-1 do begin
+      Module:=Core.ObjectModules.Items[i];
+      if Module.Enabled and Module.IsLoad then begin
+        Result:=Module.ScriptUnits.Find(UnitName);
+        if Assigned(Result) then
+          break;
+      end;
+    end;
+  end;
+end;
+
+function TBisScriptIface.FindConst(ConstName: String; UnitName: String=''): TBisScriptConst;
+var
+  AUnit: TBisScriptUnit;
+begin
+  Result:=nil;
+  AUnit:=FindUnit(UnitName);
+  if Assigned(AUnit) then
+    Result:=AUnit.Consts.Find(ConstName);
+end;
+
+procedure TBisScriptIface.Show;
+begin
+  inherited Show;
+end;
+
+end.

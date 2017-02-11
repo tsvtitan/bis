@@ -1,0 +1,113 @@
+unit BisTaxiDataDriverInMessageEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, StdCtrls, ComCtrls, ExtCtrls, DB,
+  BisTaxiDataInMessageEditFm, BisParam, BisControls;
+
+type
+  TBisTaxiDataDriverInMessageEditForm = class(TBisTaxiDataInMessageEditForm)
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure ChangeParam(Param: TBisParam); override;
+  end;
+
+  TBisTaxiDataDriverInMessageEditFormIface=class(TBisTaxiDataInMessageEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataDriverInMessageInsertFormIface=class(TBisTaxiDataDriverInMessageEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataDriverInMessageUpdateFormIface=class(TBisTaxiDataDriverInMessageEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataDriverInMessageDeleteFormIface=class(TBisTaxiDataDriverInMessageEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataDriverInMessageEditForm: TBisTaxiDataDriverInMessageEditForm;
+
+implementation
+
+uses
+     BisParamEditDataSelect,
+     BisTaxiDataDriversFm;
+
+{$R *.dfm}
+
+{ TBisTaxiDataDriverInMessageEditFormIface }
+
+constructor TBisTaxiDataDriverInMessageEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataDriverInMessageEditForm;
+  with Params do begin
+    AddInvisible('CAR_CALLSIGN',ptUnknown);
+    AddInvisible('CAR_COLOR',ptUnknown);
+    AddInvisible('CAR_BRAND',ptUnknown);
+    AddInvisible('CAR_STATE_NUM',ptUnknown);
+    with TBisParamEditDataSelect(ParamByName('SENDER_ID')) do begin
+      DataClass:=TBisTaxiDataDriversFormIface;
+      DataName:='SENDER_NAME';
+      Required:=true;
+      Alias:='DRIVER_ID';
+      DataAlias:='USER_NAME';
+    end;
+  end;
+end;
+
+{ TBisTaxiDataDriverInMessageInsertFormIface }
+
+constructor TBisTaxiDataDriverInMessageInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_IN_MESSAGE';
+  Caption:='Создать входящее сообщение';
+end;
+
+{ TBisTaxiDataDriverInMessageUpdateFormIface }
+
+constructor TBisTaxiDataDriverInMessageUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_IN_MESSAGE';
+  Caption:='Изменить входящее сообщение';
+end;
+
+{ TBisTaxiDataDriverInMessageDeleteFormIface }
+
+constructor TBisTaxiDataDriverInMessageDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_IN_MESSAGE';
+  Caption:='Удалить входящее сообщение';
+end;
+
+{ TBisTaxiDataDriverInMessageEditForm }
+
+constructor TBisTaxiDataDriverInMessageEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ButtonSender.OnClick:=nil;
+end;
+
+procedure TBisTaxiDataDriverInMessageEditForm.ChangeParam(Param: TBisParam);
+begin
+  inherited;
+
+end;
+
+
+end.

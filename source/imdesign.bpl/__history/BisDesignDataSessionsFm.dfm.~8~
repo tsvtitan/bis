@@ -1,0 +1,87 @@
+inherited BisDesignDataSessionsForm: TBisDesignDataSessionsForm
+  Left = 485
+  Top = 245
+  Caption = #1057#1077#1089#1089#1080#1080
+  ClientHeight = 376
+  ClientWidth = 542
+  ExplicitWidth = 550
+  ExplicitHeight = 410
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited StatusBar: TStatusBar
+    Top = 357
+    Width = 542
+    ExplicitLeft = -8
+    ExplicitTop = 271
+    ExplicitWidth = 492
+  end
+  inherited PanelFrame: TPanel
+    Width = 542
+    Height = 199
+    ExplicitWidth = 492
+    ExplicitHeight = 105
+  end
+  inherited PanelButton: TPanel
+    Top = 319
+    Width = 542
+    TabOrder = 2
+    ExplicitLeft = 8
+    ExplicitTop = 248
+    ExplicitWidth = 492
+    inherited ButtonOk: TButton
+      Left = 364
+      ExplicitLeft = 314
+    end
+    inherited ButtonCancel: TButton
+      Left = 459
+      ExplicitLeft = 409
+    end
+  end
+  object PanelControls: TPanel [3]
+    Left = 0
+    Top = 199
+    Width = 542
+    Height = 120
+    Align = alBottom
+    BevelOuter = bvNone
+    BorderWidth = 3
+    TabOrder = 1
+    ExplicitLeft = -8
+    ExplicitTop = 53
+    ExplicitWidth = 492
+    object GroupBoxControls: TGroupBox
+      Left = 3
+      Top = 3
+      Width = 536
+      Height = 114
+      Align = alClient
+      Caption = ' '#1047#1072#1087#1088#1086#1089' '
+      TabOrder = 0
+      ExplicitWidth = 626
+      object PanelDescription: TPanel
+        Left = 2
+        Top = 15
+        Width = 532
+        Height = 97
+        Align = alClient
+        BevelOuter = bvNone
+        BorderWidth = 5
+        TabOrder = 0
+        ExplicitWidth = 622
+        object DBMemoQueryText: TDBMemo
+          Left = 5
+          Top = 5
+          Width = 522
+          Height = 87
+          Align = alClient
+          Color = clBtnFace
+          DataField = 'QUERY_TEXT'
+          ReadOnly = True
+          ScrollBars = ssVertical
+          TabOrder = 0
+          ExplicitWidth = 612
+        end
+      end
+    end
+  end
+end

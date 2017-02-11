@@ -1,0 +1,49 @@
+package dws2IdeDialogRuntime;
+
+{$R *.res}
+{$R 'dws2IdeDialog.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScript II - IDE Dialog'}
+{$LIBSUFFIX '60'}
+{$IMPLICITBUILD OFF}
+
+requires
+  vcl,
+  dws2Runtime,
+  SynEdit_D6,
+  dws2IdeUtilsRuntime,
+  dws2SynEditUtilsRuntime;
+
+contains
+  frm_Editor in '..\Source\frm_Editor.pas' {frmEditor},
+  frm_EditorCallStack in '..\Source\frm_EditorCallStack.pas' {frmEditorCallStack},
+  frm_EditorConfirmReplace in '..\Source\frm_EditorConfirmReplace.pas' {frmEditorConfirmReplace},
+  frm_EditorEvaluate in '..\Source\frm_EditorEvaluate.pas' {frmEditorEvaluate},
+  frm_EditorSearch in '..\Source\frm_EditorSearch.pas' {frmEditorSearch},
+  dws2IdeDialog in '..\Source\dws2IdeDialog.pas',
+  frm_EditorReplace in '..\Source\frm_EditorReplace.pas' {frmEditorReplace},
+  dws2ThreadedDebugger in '..\Source\dws2ThreadedDebugger.pas',
+  Fibers in '..\Source\Fibers.pas',
+  dwsIdeTypes in '..\Source\dwsIdeTypes.pas';
+
+end.

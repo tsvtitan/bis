@@ -1,0 +1,398 @@
+unit BisKrieltObjectParamFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, StdCtrls, ExtCtrls,
+  BisFrm, BisKrieltDataParamEditFm,
+  BisProvider, BisControls;
+
+type
+  TBisKrieltObjectParamFrame = class(TBisFrame)
+    PageControl: TPageControl;
+    TabSheetList: TTabSheet;
+    TabSheetInteger: TTabSheet;
+    TabSheetFloat: TTabSheet;
+    TabSheetString: TTabSheet;
+    TabSheetDate: TTabSheet;
+    TabSheetDateTime: TTabSheet;
+    TabSheetImage: TTabSheet;
+    TabSheetDocument: TTabSheet;
+    TabSheetVideo: TTabSheet;
+    TabSheetLink: TTabSheet;
+    ComboBoxListValue: TComboBox;
+    EditInteger: TEdit;
+    EditFloat: TEdit;
+    MemoString: TMemo;
+    DateTimePicker: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    EditLink: TEdit;
+    procedure PageControlChange(Sender: TObject);
+    procedure ComboBoxListValueChange(Sender: TObject);
+  private
+    FParamId: Variant;
+    FParamSorting: TBisKrieltDataParamSorting;
+    FOnChange: TNotifyEvent;
+    FEditInteger: TEditInteger;
+    FEditFloat: TEditFloat;
+    FEditDate: TEditDate; 
+    procedure HideTabSheets;
+    function GetParamType: TBisKrieltDataParamType;
+    procedure SetParamType(const Value: TBisKrieltDataParamType);
+    procedure RefreshListValue;
+    function GetDescription: Variant;
+    function GetExport: Variant;
+    function GetValueString: Variant;
+    procedure SetValueString(const Value: Variant);
+    function GetValueNumber: Variant;
+    procedure SetValueNumber(const Value: Variant);
+    function GetParamMaxLength: Integer;
+    procedure SetParamMaxLength(const Value: Integer);
+    function GetValueDate: Variant;
+    procedure SetValueDate(const Value: Variant);
+    function GetValueBlob: Variant;
+    procedure SetValueBlob(const Value: Variant);
+  protected
+    procedure DoChange;  
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+
+    property ParamId: Variant read FParamId write FParamId;
+    property ParamSorting: TBisKrieltDataParamSorting read FParamSorting write FParamSorting;
+    property ParamMaxLength: Integer read GetParamMaxLength write SetParamMaxLength; 
+    property ParamType: TBisKrieltDataParamType read GetParamType write SetParamType;
+
+    property ValueString: Variant read GetValueString write SetValueString;
+    property ValueNumber: Variant read GetValueNumber write SetValueNumber;
+    property ValueDate: Variant read GetValueDate write SetValueDate;
+    property ValueBlob: Variant read GetValueBlob write SetValueBlob; 
+
+    property Description: Variant read GetDescription;
+    property Export: Variant read GetExport;
+
+    property OnChange: TNotifyEvent read FOnChange write FOnChange; 
+  end;
+
+implementation
+
+uses
+     BisConsts, BisUtils, BisFIlterGroups;
+
+{$R *.dfm}
+
+type
+  TBisKrieltParamValueInfo=class(TObject)
+  var
+    Export: Variant;
+    Description: Variant;
+  end;
+
+{ TBisKrieltObjectParamFrame }
+
+constructor TBisKrieltObjectParamFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FEditInteger:=ReplaceEditToEditInteger(EditInteger);
+  FEditFloat:=ReplaceEditToEditFloat(EditFloat);
+  FEditDate:=ReplaceDateTimePickerToEditDate(DateTimePicker);
+
+  HideTabSheets;
+
+  PageControl.TabIndex:=0;
+
+  FParamId:=Null;
+end;
+
+destructor TBisKrieltObjectParamFrame.Destroy;
+begin
+  ClearStrings(ComboBoxListValue.Items);
+  inherited Destroy;
+end;
+
+procedure TBisKrieltObjectParamFrame.DoChange;
+begin
+  if Assigned(FOnChange) then
+    FOnChange(Self);
+end;
+
+procedure TBisKrieltObjectParamFrame.HideTabSheets;
+begin
+  TabSheetList.TabVisible:=false;
+  TabSheetInteger.TabVisible:=false;
+  TabSheetFloat.TabVisible:=false;
+  TabSheetString.TabVisible:=false;
+  TabSheetDate.TabVisible:=false;
+  TabSheetDateTime.TabVisible:=false;
+  TabSheetImage.TabVisible:=false;
+  TabSheetDocument.TabVisible:=false;
+  TabSheetVideo.TabVisible:=false;
+  TabSheetLink.TabVisible:=false;
+end;
+
+procedure TBisKrieltObjectParamFrame.RefreshListValue;
+var
+  P: TBisProvider;
+  Obj: TBisKrieltParamValueInfo;
+begin
+  ClearStrings(ComboBoxListValue.Items);
+  if not VarIsNull(FParamId) then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_PARAM_VALUES';
+      with P.FieldNames do begin
+        AddInvisible('NAME');
+        AddInvisible('EXPORT');
+        AddInvisible('DESCRIPTION');
+      end;
+      P.FilterGroups.Add.Filters.Add('PARAM_ID',fcEqual,FParamId).CheckCase:=true;
+      case ParamSorting of
+        dpsNone: ;
+        dpsName: P.Orders.Add('NAME');
+        dpsPriority: P.Orders.Add('PRIORITY');
+      end;
+      P.Open;
+      if P.Active and not P.Empty then begin
+        P.First;
+        while not P.Eof do begin
+          Obj:=TBisKrieltParamValueInfo.Create;
+          Obj.Export:=P.FieldByName('EXPORT').Value;
+          Obj.Description:=P.FieldByName('DESCRIPTION').Value;
+          ComboBoxListValue.Items.AddObject(P.FieldByName('NAME').AsString,Obj);
+          P.Next;
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+function TBisKrieltObjectParamFrame.GetDescription: Variant;
+var
+  Index: Integer;
+  Obj: TBisKrieltParamValueInfo;
+begin
+  Result:=Null;
+  if TabSheetList.Visible then begin
+    Index:=ComboBoxListValue.ItemIndex;
+    if Index<>-1 then begin
+      Obj:=TBisKrieltParamValueInfo(ComboBoxListValue.Items.Objects[Index]);
+      Result:=Obj.Description;
+    end;
+  end;
+end;
+
+function TBisKrieltObjectParamFrame.GetExport: Variant;
+var
+  Index: Integer;
+  Obj: TBisKrieltParamValueInfo;
+begin
+  Result:=Null;
+  if TabSheetList.Visible then begin
+    Index:=ComboBoxListValue.ItemIndex;
+    if Index<>-1 then begin
+      Obj:=TBisKrieltParamValueInfo(ComboBoxListValue.Items.Objects[Index]);
+      Result:=Obj.Export;
+    end;
+  end;
+end;
+
+function TBisKrieltObjectParamFrame.GetParamType: TBisKrieltDataParamType;
+begin
+  Result:=TBisKrieltDataParamType(PageControl.ActivePageIndex);
+end;
+
+procedure TBisKrieltObjectParamFrame.SetParamType(const Value: TBisKrieltDataParamType);
+begin
+  HideTabSheets;
+  case Value of
+    dptList: TabSheetList.Visible:=true;
+    dptInteger: TabSheetInteger.Visible:=true;
+    dptFloat: TabSheetFloat.Visible:=true;
+    dptString: TabSheetString.Visible:=true;
+    dptDate: TabSheetDate.Visible:=true;
+    dptDateTime: TabSheetDateTime.Visible:=true;
+    dptImage: TabSheetImage.Visible:=true;
+    dptDocument: TabSheetDocument.Visible:=true;
+    dptVideo: TabSheetVideo.Visible:=true;
+    dptLink: TabSheetLink.Visible:=true;
+  end;
+  PageControl.ActivePageIndex:=Integer(Value);
+  PageControlChange(nil);
+end;
+
+procedure TBisKrieltObjectParamFrame.PageControlChange(Sender: TObject);
+begin
+  if PageControl.ActivePage=TabSheetList then begin
+    RefreshListValue;
+  end;
+end;
+
+function TBisKrieltObjectParamFrame.GetValueString: Variant;
+begin
+  Result:=Null;
+  case ParamType of
+    dptList: begin
+      if ComboBoxListValue.ItemIndex<>-1 then begin
+        Result:=ComboBoxListValue.Items[ComboBoxListValue.ItemIndex];
+      end;
+    end;
+    dptString: begin
+      if Trim(MemoString.Text)<>'' then
+        Result:=Trim(MemoString.Text);
+    end;
+    dptLink: begin
+    end;
+  end;
+end;
+
+procedure TBisKrieltObjectParamFrame.SetValueString(const Value: Variant);
+begin
+  case ParamType of
+    dptList: begin
+      if VarIsNull(Value) then
+        ComboBoxListValue.ItemIndex:=-1
+      else
+        ComboBoxListValue.ItemIndex:=ComboBoxListValue.Items.IndexOf(VarToStrDef(Value,''));
+    end;
+    dptString: begin
+      MemoString.OnChange:=nil;
+      try
+        if VarIsNull(Value) then
+          MemoString.Text:=''
+        else
+          MemoString.Text:=VarToStrDef(Value,'');
+      finally
+        MemoString.OnChange:=ComboBoxListValueChange;
+      end;
+    end;
+    dptLink: begin
+    end;
+  end;
+end;
+
+function TBisKrieltObjectParamFrame.GetValueNumber: Variant;
+begin
+  Result:=Null;
+  case ParamType of
+    dptInteger: begin
+      if Trim(FEditInteger.Text)<>'' then
+        Result:=FEditInteger.Value;
+    end;
+    dptFloat: begin
+      if Trim(FEditFloat.Text)<>'' then
+        Result:=FEditFloat.Value;
+    end;
+  end;
+end;
+
+procedure TBisKrieltObjectParamFrame.SetValueNumber(const Value: Variant);
+begin
+  case ParamType of
+    dptInteger: begin
+      FEditInteger.OnChange:=nil;
+      try
+        if VarIsNull(Value) then
+          FEditInteger.Text:=''
+        else
+          FEditInteger.Value:=VarToIntDef(Value,0);
+      finally
+        FEditInteger.OnChange:=ComboBoxListValueChange;
+      end;
+    end;
+    dptFloat: begin
+      FEditFloat.OnChange:=nil;
+      try
+        if VarIsNull(Value) then
+          FEditFloat.Text:=''
+        else
+          FEditFloat.Value:=VarToExtendedDef(Value,0);
+      finally
+        FEditFloat.OnChange:=ComboBoxListValueChange;
+      end;
+    end;
+  end;
+end;
+
+function TBisKrieltObjectParamFrame.GetValueDate: Variant;
+begin
+  Result:=null;
+  case ParamType of
+    dptDate: begin
+      FEditDate.OnChange:=nil;
+      try
+        if FEditDate.Date<>NullDate then
+          Result:=FEditDate.Date;
+      finally
+        FEditDate.OnChange:=ComboBoxListValueChange;
+      end;
+    end;
+    dptDateTime: ;
+  end;
+end;
+
+procedure TBisKrieltObjectParamFrame.SetValueDate(const Value: Variant);
+begin
+  case ParamType of
+    dptDate: begin
+      if VarIsNull(Value) then
+        FEditDate.Date:=NullDate
+      else
+        FEditDate.Date:=VarToDateDef(Value,NullDate);
+    end;
+    dptDateTime: ;
+  end;
+end;
+
+function TBisKrieltObjectParamFrame.GetValueBlob: Variant;
+begin
+  Result:=Null;
+  case ParamType of
+    dptImage: ;
+    dptDocument: ;
+    dptVideo: ;
+  end;
+end;
+
+procedure TBisKrieltObjectParamFrame.SetValueBlob(const Value: Variant);
+begin
+  case ParamType of
+    dptImage: ;
+    dptDocument: ;
+    dptVideo: ;
+  end;
+end;
+
+function TBisKrieltObjectParamFrame.GetParamMaxLength: Integer;
+begin
+  Result:=0;
+  case ParamType of
+    dptList: Result:=ComboBoxListValue.MaxLength;
+    dptString: Result:=MemoString.MaxLength;
+    dptLink: ;
+  end;
+end;
+
+procedure TBisKrieltObjectParamFrame.SetParamMaxLength(const Value: Integer);
+begin
+  case ParamType of
+    dptList: ComboBoxListValue.MaxLength:=Value;
+    dptString: MemoString.MaxLength:=Value;
+    dptLink: EditLink.MaxLength:=Value;
+  end;
+end;
+
+procedure TBisKrieltObjectParamFrame.ComboBoxListValueChange(Sender: TObject);
+begin
+  DoChange;
+end;
+
+
+end.

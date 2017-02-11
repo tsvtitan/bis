@@ -1,0 +1,1285 @@
+unit BisCallServerHandlerEvent;
+
+interface
+
+uses Windows, Classes, Contnrs, ZLib, mmSystem, SyncObjs,
+     IdGlobal, IdSocketHandle, IdUDPServer, IdException,
+     WaveAcmDrivers,
+     BisEvents, BisNotifyEvents, BisCrypter, BisValues, BisConnections,
+     BisAudioWave, BisThreads, BisRtp, BisRtpAcmDrivers, BisUdpServer,
+     BisCallServerHandlerModules, BisCallServerHandlers,
+     BisCallServerChannels, BisCallServerEventMessages;
+
+type
+  TBisCallServerHandlerEvent=class;                                               
+
+  TBisCallServerChannelEvents=class;
+
+  TBisCallServerChannelEvent=class;
+
+  TBisCallServerEventUdpServer=class(TBisUdpServer)
+  protected
+    function GetBinding: TIdSocketHandle; override;
+  end;
+
+  TBisCallServerChannelEvent=class(TBisCallServerChannel)
+  private
+    FServer: TBisCallServerEventUdpServer;
+    FHandler: TBisCallServerHandlerEvent;
+    FId: String;
+    FCreatorId: Variant;
+    FAcceptorId: Variant;
+    FCallId: Variant;
+    FCallResultId: Variant;
+    FCallerId, FCallerPhone: Variant;
+    FAcceptor: Variant;
+    FAcceptorType: TBisCallServerChannelAcceptorType;
+    FDateCreate: TDateTime;
+    FDirection: TBisCallServerChannelDirection;
+    FRequests: TBisCallServerEventRequests;
+    FReadyForDestroy: Boolean;
+//    FWaits: TBisCallServerEventWaitThreads;
+
+    FLocalIP: String;
+    FLocalPort: Integer;
+    FLocalUseCompressor: Boolean;
+    FLocalCompressorLevel: TCompressionLevel;
+    FLocalUseCrypter: Boolean;
+    FLocalCrypterKey: String;
+    FLocalCrypterAlgorithm: TBisCipherAlgorithm;
+    FLocalCrypterMode: TBisCipherMode;
+
+    FSequence: Word;
+    FTimeStamp: LongWord;
+    FSSRCIdentifier: LongWord;
+
+    FRemoteSessionId: Variant;
+    FRemoteIP: String;
+    FRemotePort: Integer;
+    FRemoteUseCompressor: Boolean;
+    FRemoteCompressorLevel: TCompressionLevel;
+    FRemoteUseCrypter: Boolean;
+    FRemoteCrypterKey: String;
+    FRemoteCrypterAlgorithm: TBisCipherAlgorithm;
+    FRemoteCrypterMode: TBisCipherMode;
+    FRemoteDataPort: Integer;
+
+    function SendEvent(Data: String): Boolean;
+    procedure SendMessage(Message: TBisCallServerEventMessage; WithWait: Boolean);
+    procedure ServerUDPException(Sender: TObject; ABinding: TIdSocketHandle; const AMessage: String; const AExceptionClass: TClass);
+    procedure ServerUDPRead(Sender: TObject; AData: TIdBytes; ABinding: TIdSocketHandle);
+    function DataPort: Integer;
+    function TryServerActive: Boolean;
+    function GetEventParams(SessionId: Variant;
+                            var AccountId: Variant;
+                            var IP: String; var Port: Integer;
+                            var UseCompressor: Boolean; var CompressorLevel: TCompressionLevel;
+                            var UseCrypter: Boolean; var CrypterKey: String;
+                            var CrypterAlgorithm: TBisCipherAlgorithm; var CrypterMode: TBisCipherMode): Boolean;
+    function GetRemoteEventParams(SessionId: Variant): Boolean;
+    function GetLocalEventParams: Boolean;
+
+    function DialRequest(Request: TBisCallServerEventRequest): Boolean;
+    function AnswerRequest(Request: TBisCallServerEventRequest): Boolean;
+    function HangupRequest(Request: TBisCallServerEventRequest): Boolean;
+    function HoldRequest(Request: TBisCallServerEventRequest): Boolean;
+    function UnHoldRequest(Request: TBisCallServerEventRequest): Boolean;
+
+    function DialResponse(Response: TBisCallServerEventResponse; var FreeChannel: Boolean): Boolean;
+    function AnswerResponse(Response: TBisCallServerEventResponse; var FreeChannel: Boolean): Boolean;
+    function HangupResponse(Response: TBisCallServerEventResponse; var FreeChannel: Boolean): Boolean;
+  protected
+    function GetActive: Boolean; override;
+    function GetCallId: Variant; override;
+    function GetCallResultId: Variant; override;
+    function GetDirection: TBisCallServerChannelDirection; override;
+    function GetCallerId: Variant; override;
+    function GetCallerPhone: Variant; override;
+    function GetAcceptor: Variant; override;
+    function GetAcceptorType: TBisCallServerChannelAcceptorType; override;
+    function GetAcceptorId: Variant; override;
+    function GetCreatorId: Variant; override;
+    function GetDateCreate: TDateTime; override;
+    function GetInFormat: PWaveFormatEx; override;
+    function GetInPacketTime: Word; override;
+    function GetInDataSize: LongWord; override;
+    function GetOutFormat: PWaveFormatEx; override;
+    function GetOutPacketTime: Word; override;
+    function GetOutDataSize: LongWord; override;
+  public
+    constructor Create(AChannels: TBisCallServerChannels); override;
+    destructor Destroy; override;
+
+    procedure Dial(Acceptor: Variant; AcceptorType: TBisCallServerChannelAcceptorType); override;
+    procedure Answer; override;
+    procedure Hangup; override;
+    procedure Send(const Data: Pointer; const DataSize: Cardinal); override;
+  end;
+
+  TBisCallServerChannelEvents=class(TBisCallServerChannels)
+  private
+    FHandler: TBisCallServerHandlerEvent;
+    FEventResult: TBisEvent;
+    FEventDial: TBisEvent;
+    FEventAnswer: TBisEvent;
+    FEventHangup: TBisEvent;
+    FEventHold: TBisEvent;
+    FEventUnHold: TBisEvent;
+
+    function GetItem(Index: Integer): TBisCallServerChannelEvent;
+    function ResultHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+    function DialHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+    function AnswerHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+    function HangupHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+    function HoldHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+    function UnHoldHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+    procedure TryToRemove(Channel: TBisCallServerChannelEvent);
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+
+    function Add(Id: String; Direction: TBisCallServerChannelDirection; CallId: Variant): TBisCallServerChannelEvent; reintroduce;
+    function AddOutgoing(CallId,CallerId,CallerPhone: Variant): TBisCallServerChannelEvent;
+    function LockAddOutgoing(CallId,CallerId,CallerPhone: Variant): TBisCallServerChannelEvent;
+    function AddIncoming(Request: TBisCallServerEventRequest): TBisCallServerChannelEvent;
+    function LockAddIncoming(Request: TBisCallServerEventRequest): TBisCallServerChannelEvent;
+    function Find(Id: String): TBisCallServerChannelEvent; reintroduce;
+    function LockFind(Id: String): TBisCallServerChannelEvent; 
+
+    property Items[Index: Integer]: TBisCallServerChannelEvent read GetItem; default;
+  end;
+
+  TBisCallServerHandlerEvent=class(TBisCallServerHandler)
+  private
+    FDrivers: TBisRtpAcmDrivers;
+    FFormat: TWaveACMDriverFormat;
+    FPayloadType: TBisRtpPacketPayloadType;
+    FPacketTime: Word;
+    FDataSize: LongWord;
+
+//    FWaitTimeOut: Integer;
+//    FWaitRetryCount: Integer;
+    FSFormatNotFound: String;
+    function GetChannels: TBisCallServerChannelEvents;
+  protected
+    function GetChannelsClass: TBisCallServerChannelsClass; override;
+    function GetConnected: Boolean; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    function AddOutgoingChannel(CallId,CallerId,CallerPhone: Variant): TBisCallServerChannel; override;
+
+    property Channels: TBisCallServerChannelEvents read GetChannels;
+  published
+    property SFormatNotFound: String read FSFormatNotFound write FSFormatNotFound;
+  end;
+
+procedure InitCallServerHandlerModule(AModule: TBisCallServerHandlerModule); stdcall;
+
+exports
+  InitCallServerHandlerModule;
+
+implementation
+
+uses SysUtils, Variants, DB,
+     IdUDPClient,
+     WaveUtils,
+     BisCore, BisProvider, BisFilterGroups, BisUtils, BisDataParams,
+     BisConfig, BisConsts, BisLogger, BisNetUtils, BisCryptUtils, BisCompressUtils,
+     BisCallServerHandlerEventConsts;
+
+procedure InitCallServerHandlerModule(AModule: TBisCallServerHandlerModule); stdcall;
+begin
+  AModule.HandlerClass:=TBisCallServerHandlerEvent;
+end;
+
+{ TBisCallServerEventUdpServer }
+
+function TBisCallServerEventUdpServer.GetBinding: TIdSocketHandle;
+begin
+  Result:=inherited GetBinding;
+  if Assigned(FListenerThread) then begin
+    FListenerThread.Priority:=tpHighest;
+  end;
+end;
+
+{ TBisCallServerChannelEvent }
+
+constructor TBisCallServerChannelEvent.Create(AChannels: TBisCallServerChannels);
+begin
+  inherited Create(AChannels);
+
+  FRequests:=TBisCallServerEventRequests.Create;
+
+  FServer:=TBisCallServerEventUdpServer.Create(nil);
+  FServer.OnUDPRead:=ServerUDPRead;
+  FServer.OnUDPException:=ServerUDPException;
+  FServer.ThreadedEvent:=true;
+  FServer.ThreadName:='CallServerEventListen';
+
+  FCreatorId:=Core.AccountId;
+  FAcceptorId:=Null;
+  FDateCreate:=Core.ServerDate;
+  FCallId:=Null;
+  FCallResultId:=Null;
+  FCallerId:=Null;
+  FCallerPhone:=Null;
+  FAcceptor:=Null;
+
+  Randomize;
+  FSequence:=Random(MaxByte);
+  FSSRCIdentifier:=Random(MaxInt);
+end;
+
+destructor TBisCallServerChannelEvent.Destroy;
+begin
+  FServer.OnUDPRead:=nil;
+  FServer.Free;
+//  FWaits.Free;
+  FRequests.Free;
+  inherited Destroy;
+end;
+
+function TBisCallServerChannelEvent.GetActive: Boolean;
+begin
+  Result:=Assigned(FServer) and FServer.Active and (State in [csProcessing]);
+end;
+
+function TBisCallServerChannelEvent.GetCallerId: Variant;
+begin
+  Result:=FCallerId;
+end;
+
+function TBisCallServerChannelEvent.GetCallerPhone: Variant;
+begin
+  Result:=FCallerPhone;
+end;
+
+function TBisCallServerChannelEvent.GetCallId: Variant;
+begin
+  Result:=FCallId;
+end;
+
+function TBisCallServerChannelEvent.GetCallResultId: Variant;
+begin
+  Result:=FCallResultId;
+end;
+
+function TBisCallServerChannelEvent.GetAcceptor: Variant;
+begin
+  Result:=FAcceptor;
+end;
+
+function TBisCallServerChannelEvent.GetAcceptorType: TBisCallServerChannelAcceptorType;
+begin
+  Result:=FAcceptorType;
+end;
+
+function TBisCallServerChannelEvent.GetAcceptorId: Variant;
+begin
+  Result:=FAcceptorId;
+end;
+
+function TBisCallServerChannelEvent.GetCreatorId: Variant;
+begin
+  Result:=FCreatorId;
+end;
+
+function TBisCallServerChannelEvent.GetDateCreate: TDateTime;
+begin
+  Result:=FDateCreate;
+end;
+
+function TBisCallServerChannelEvent.GetDirection: TBisCallServerChannelDirection;
+begin
+  Result:=FDirection;
+end;
+
+function TBisCallServerChannelEvent.GetInFormat: PWaveFormatEx;
+begin
+  Result:=inherited GetInFormat;
+  if Assigned(FHandler) and Assigned(FHandler.FFormat) then
+    Result:=FHandler.FFormat.WaveFormat;
+end;
+
+function TBisCallServerChannelEvent.GetInDataSize: LongWord;
+begin
+  Result:=inherited GetInDataSize;
+  if Assigned(FHandler) then
+    Result:=FHandler.FDataSize;
+end;
+
+function TBisCallServerChannelEvent.GetInPacketTime: Word;
+begin
+  Result:=inherited GetInPacketTime;
+  if Assigned(FHandler) then
+    Result:=FHandler.FPacketTime;
+end;
+
+function TBisCallServerChannelEvent.GetOutFormat: PWaveFormatEx;
+begin
+  Result:=GetInFormat;
+end;
+
+function TBisCallServerChannelEvent.GetOutDataSize: LongWord;
+begin
+  Result:=GetInDataSize;
+end;
+
+function TBisCallServerChannelEvent.GetOutPacketTime: Word;
+begin
+  Result:=GetInPacketTime;
+end;
+
+function TBisCallServerChannelEvent.SendEvent(Data: String): Boolean;
+var
+  Udp: TIdUDPClient;
+  S: String;
+begin
+  Result:=false;
+  if (Data<>'') and Assigned(FHandler) then begin
+    Udp:=TIdUDPClient.Create(nil);
+    try
+      S:=Data;
+
+      FHandler.LoggerWrite(S);
+      
+      if FRemoteUseCompressor then
+        S:=CompressString(S,FRemoteCompressorLevel);
+
+      if FRemoteUseCrypter then
+        S:=CrypterEncodeString(FRemoteCrypterKey,S,
+                               FRemoteCrypterAlgorithm,FRemoteCrypterMode);
+
+      Udp.Host:=FRemoteIP;
+      Udp.Port:=FRemotePort;
+      Udp.BufferSize:=Length(S);
+      Udp.Connect;
+      Udp.Send(S);
+
+      Result:=true;
+    finally
+      Udp.Free;
+    end;
+  end;
+end;
+
+procedure TBisCallServerChannelEvent.Send(const Data: Pointer; const DataSize: Cardinal);
+var
+  S: String;
+  Packet: TBisRtpPacket;
+begin
+  try
+    if (DataSize>0) and Assigned(FHandler) then begin
+      Packet:=TBisRtpPacket.Create;
+      try
+        Packet.Version:=vSecond;
+        Packet.Padding:=false;
+        Packet.Extension:=false;
+        Packet.Marker:=false;
+        Packet.PayloadType:=FHandler.FPayloadType;
+        Packet.Sequence:=FSequence;
+        Packet.TimeStamp:=FTimeStamp;
+        Packet.SSRCIdentifier:=FSSRCIdentifier;
+        Packet.ExternalHeader:=ToBytes('');
+
+        SetLength(S,DataSize);
+        Move(Data^,Pointer(S)^,DataSize);
+
+        if FRemoteUseCrypter then
+          S:=CrypterEncodeString(FRemoteCrypterKey,S,
+                                 FRemoteCrypterAlgorithm,FRemoteCrypterMode);
+
+        Packet.SetPayLoad(S);
+
+        if Packet.GetData(S) then begin
+          FServer.Send(FRemoteIP,FRemoteDataPort,S);
+          Inc(FSequence);
+          Inc(FTimeStamp,DataSize);
+        end;
+      finally
+        Packet.Free;
+      end;
+    end;
+  except
+    On E: Exception do
+      FHandler.LoggerWrite(E.Message,ltError);
+  end;
+end;
+
+procedure TBisCallServerChannelEvent.SendMessage(Message: TBisCallServerEventMessage; WithWait: Boolean);
+begin
+  if Assigned(Message) and Assigned(FHandler) then begin
+    if SendEvent(Message.AsString) {and (FHandler.FWaitRetryCount>0) }and WithWait then
+//      FWaits.Add(Message,FHandler.FWaitTimeOut).Resume;
+  end;
+end;
+
+procedure TBisCallServerChannelEvent.ServerUDPException(Sender: TObject; ABinding: TIdSocketHandle;
+                                                        const AMessage: String; const AExceptionClass: TClass);
+begin
+  FHandler.LoggerWrite(AMessage,ltError);
+end;
+
+procedure TBisCallServerChannelEvent.ServerUDPRead(Sender: TObject; AData: TIdBytes; ABinding: TIdSocketHandle);
+var
+  Packet: TBisRtpPacket;
+begin
+  try
+    if (Length(AData)>0) and Assigned(FHandler) then begin
+      Packet:=TBisRtpPacket.Create;
+      try
+        Packet.Parse(AData);
+        if (Packet.Version=vSecond) and
+           (Packet.PayloadType=FHandler.FPayloadType) then begin
+
+          if FLocalUseCrypter then
+            Packet.Payload:=CrypterDecodeBytes(FLocalCrypterKey,Packet.Payload,
+                                               FLocalCrypterAlgorithm,FLocalCrypterMode);
+           
+          if Length(Packet.Payload)=Integer(FHandler.FDataSize) then
+            DoData(Packet.Payload,FHandler.FDataSize);
+            
+        end;
+      finally
+        Packet.Free;
+      end;
+    end;
+  except
+    On E: Exception do begin
+      FHandler.LoggerWrite(E.Message,ltError);
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvent.DataPort: Integer;
+begin
+  Result:=0;
+  if Assigned(FServer) and (FServer.Bindings.Count>0) then begin
+    Result:=FServer.Bindings[0].Port;
+  end;
+end;
+
+function TBisCallServerChannelEvent.TryServerActive: Boolean;
+
+  procedure Disable;
+  begin
+    if FServer.Active then begin
+      FServer.OnUDPRead:=nil;
+      FServer.Active:=false;
+      FServer.Bindings.Clear;
+    end;
+  end;
+
+  function SetPort(P: Integer): Boolean;
+  var
+    B: TIdSocketHandle;
+  begin
+    Result:=false;
+    if not UDPPortExists(FLocalIP,P) then begin
+      try
+        B:=FServer.Bindings.Add;
+        B.IP:=FLocalIP;
+        B.Port:=P;
+        FServer.Active:=true;
+        Result:=FServer.Active;
+        if Result then
+          FServer.OnUDPRead:=ServerUDPRead;
+      except
+        FServer.Active:=false;
+        FServer.OnUDPRead:=nil;
+      end;
+    end;
+  end;
+
+var
+  First: Integer;
+  MaxPort: Integer;
+begin
+  Result:=false;
+  Disable;
+  if not Active then begin
+    First:=FLocalPort;
+    Inc(First);
+    MaxPort:=POWER_2;
+    while First<MaxPort do begin
+      Result:=SetPort(First);
+      if not Result then
+        Inc(First)
+      else begin
+        break;
+      end;
+    end;
+  end;
+end;
+
+
+function TBisCallServerChannelEvent.GetEventParams(SessionId: Variant;
+                                                   var AccountId: Variant;
+                                                   var IP: String; var Port: Integer;
+                                                   var UseCompressor: Boolean; var CompressorLevel: TCompressionLevel;
+                                                   var UseCrypter: Boolean; var CrypterKey: String;
+                                                   var CrypterAlgorithm: TBisCipherAlgorithm; var CrypterMode: TBisCipherMode): Boolean;
+var
+  P: TBisProvider;
+begin
+  Result:=false;
+  if not Result then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='GET_EVENT_PARAMS';
+      with P.Params do begin
+        AddInvisible('SESSION_ID').Value:=SessionId;
+        AddInvisible('ACCOUNT_ID',ptOutput);
+        AddInvisible('IP',ptOutput);
+        AddInvisible('PORT',ptOutput);
+        AddInvisible('USE_CRYPTER',ptOutput);
+        AddInvisible('CRYPTER_KEY',ptOutput);
+        AddInvisible('CRYPTER_ALGORITHM',ptOutput);
+        AddInvisible('CRYPTER_MODE',ptOutput);
+        AddInvisible('USE_COMPRESSOR',ptOutput);
+        AddInvisible('COMPRESSOR_LEVEL',ptOutput);
+      end;
+      P.Execute;
+      if P.Success then begin
+        AccountId:=P.ParamByName('ACCOUNT_ID').Value;
+        IP:=P.ParamByName('IP').AsString;
+        Port:=P.ParamByName('PORT').AsInteger;
+        UseCrypter:=Boolean(P.ParamByName('USE_CRYPTER').AsInteger);
+        CrypterKey:=P.ParamByName('CRYPTER_KEY').AsString;
+        CrypterAlgorithm:=TBisCipherAlgorithm(P.ParamByName('CRYPTER_ALGORITHM').AsInteger);
+        CrypterMode:=TBisCipherMode(P.ParamByName('CRYPTER_MODE').AsInteger);
+        UseCompressor:=Boolean(P.ParamByName('USE_COMPRESSOR').AsInteger);
+        CompressorLevel:=TCompressionLevel(P.ParamByName('COMPRESSOR_LEVEL').AsInteger);
+        Result:=true;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvent.GetRemoteEventParams(SessionId: Variant): Boolean;
+begin
+  Result:=GetEventParams(SessionId,
+                         FAcceptorId,
+                         FRemoteIP,FRemotePort,FRemoteUseCompressor,FRemoteCompressorLevel,
+                         FRemoteUseCrypter,FRemoteCrypterKey,FRemoteCrypterAlgorithm,FRemoteCrypterMode);
+end;
+
+function TBisCallServerChannelEvent.GetLocalEventParams: Boolean;
+begin
+  Result:=GetEventParams(Core.SessionId,
+                         FCreatorId,
+                         FLocalIP,FLocalPort,FLocalUseCompressor,FLocalCompressorLevel,
+                         FLocalUseCrypter,FLocalCrypterKey,FLocalCrypterAlgorithm,FLocalCrypterMode);
+end;
+
+function TBisCallServerChannelEvent.DialRequest(Request: TBisCallServerEventRequest): Boolean;
+
+  procedure SendResponse(AMessage: String; AResponseType: TBisCallServerEventResponseType);
+  var
+    Response: TBisCallServerEventResponse;
+  begin
+    Response:=TBisCallServerEventResponse.Create(mdOutgoing,SEventResult);
+    with Response do begin
+      AddSessionId(FRemoteSessionId);
+      AddRemoteSessionId(Core.SessionId);
+      AddChannelId(FId);
+      AddRequestName(Request.Name);
+      AddSequence(Request.Sequence);
+      AddResponseType(AResponseType);
+      AddMessage(AMessage);
+    end;
+    Request.Responses.Add(Response);
+    SendEvent(Response.AsString);
+  end;
+
+var
+  Message: String;
+  ResponseType: TBisCallServerEventResponseType;
+begin
+  Result:=false;
+  if Assigned(Request) then begin
+    Message:='';
+    ResponseType:=rtUnknown;
+    try
+      try
+        FRemoteSessionId:=Request.RemoteSessionId;
+        FRemoteDataPort:=Request.DataPort;
+        if GetRemoteEventParams(FRemoteSessionId) then begin
+          ResponseType:=rtBusy;
+          FAcceptor:=Request.Acceptor;
+          FAcceptorType:=Request.AcceptorType;
+          if DoCheck then begin
+            DoRing;
+            ResponseType:=rtOK;
+          end;
+          Result:=true;
+        end;
+      except
+        On E: Exception do begin
+          Message:=E.Message;
+          ResponseType:=rtError;
+        end;
+      end;
+    finally
+      SendResponse(Message,ResponseType);
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvent.AnswerRequest(Request: TBisCallServerEventRequest): Boolean;
+
+  procedure SendResponse(AMessage: String; AResponseType: TBisCallServerEventResponseType);
+  var
+    Response: TBisCallServerEventResponse;
+  begin
+    Response:=TBisCallServerEventResponse.Create(mdOutgoing,SEventResult);
+    with Response do begin
+      AddSessionId(FRemoteSessionId);
+      AddChannelId(FId);
+      AddRequestName(Request.Name);
+      AddSequence(Request.Sequence);
+      AddResponseType(AResponseType);
+      AddMessage(AMessage);
+    end;
+    Request.Responses.Add(Response);
+    SendEvent(Response.AsString);
+  end;
+
+var
+  Message: String;
+  ResponseType: TBisCallServerEventResponseType;
+begin
+  Result:=false;
+  if Assigned(Request) and Assigned(FHandler) and (State=csRinning) then begin
+    Message:='';
+    ResponseType:=rtUnknown;
+    try
+      try
+        ResponseType:=rtBusy;
+        FRemoteDataPort:=Request.DataPort;
+        DoConnect;
+        ResponseType:=rtOK;
+        Result:=true;
+      except
+        On E: Exception do begin
+          Message:=E.Message;
+          ResponseType:=rtError;
+        end;
+      end;
+    finally
+      SendResponse(Message,ResponseType);
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvent.HangupRequest(Request: TBisCallServerEventRequest): Boolean;
+
+  procedure SendResponse(AMessage: String; AResponseType: TBisCallServerEventResponseType);
+  var
+    Response: TBisCallServerEventResponse;
+  begin
+    Response:=TBisCallServerEventResponse.Create(mdOutgoing,SEventResult);
+    with Response do begin
+      AddSessionId(FRemoteSessionId);
+      AddChannelId(FId);
+      AddRequestName(Request.Name);
+      AddSequence(Request.Sequence);
+      AddResponseType(AResponseType);
+      AddMessage(AMessage);
+    end;
+    Request.Responses.Add(Response);
+    SendEvent(Response.AsString);
+  end;
+
+var
+  Message: String;
+  ResponseType: TBisCallServerEventResponseType;
+begin
+  Result:=false;
+  if Assigned(Request) and (State in [csRinning,csProcessing,csHolding]) then begin
+    Message:='';
+    ResponseType:=rtUnknown;
+    try
+      try
+        FCallResultId:=Request.CallResultId;
+        DoDisconnect;
+        ResponseType:=rtOK;
+        Result:=true;
+      except
+        On E: Exception do begin
+          Message:=E.Message;
+          ResponseType:=rtError;
+        end;
+      end;
+    finally
+      SendResponse(Message,ResponseType);
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvent.HoldRequest(Request: TBisCallServerEventRequest): Boolean;
+
+  procedure SendResponse(AMessage: String; AResponseType: TBisCallServerEventResponseType);
+  var
+    Response: TBisCallServerEventResponse;
+  begin
+    Response:=TBisCallServerEventResponse.Create(mdOutgoing,SEventResult);
+    with Response do begin
+      AddSessionId(FRemoteSessionId);
+      AddChannelId(FId);
+      AddRequestName(Request.Name);
+      AddSequence(Request.Sequence);
+      AddResponseType(AResponseType);
+      AddMessage(AMessage);
+    end;
+    Request.Responses.Add(Response);
+    SendEvent(Response.AsString);
+  end;
+  
+var
+  Message: String;
+  ResponseType: TBisCallServerEventResponseType;
+begin
+  Result:=false;
+  if Assigned(Request) and (State in [csProcessing]) then begin
+    Message:='';
+    ResponseType:=rtUnknown;
+    try
+      try
+        DoHold;
+        ResponseType:=rtOK;
+        Result:=true;
+      except
+        On E: Exception do begin
+          Message:=E.Message;
+          ResponseType:=rtError;
+        end;
+      end;
+    finally
+      SendResponse(Message,ResponseType);
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvent.UnHoldRequest(Request: TBisCallServerEventRequest): Boolean;
+
+  procedure SendResponse(AMessage: String; AResponseType: TBisCallServerEventResponseType);
+  var
+    Response: TBisCallServerEventResponse;
+  begin
+    Response:=TBisCallServerEventResponse.Create(mdOutgoing,SEventResult);
+    with Response do begin
+      AddSessionId(FRemoteSessionId);
+      AddChannelId(FId);
+      AddRequestName(Request.Name);
+      AddSequence(Request.Sequence);
+      AddResponseType(AResponseType);
+      AddMessage(AMessage);
+    end;
+    Request.Responses.Add(Response);
+    SendEvent(Response.AsString);
+  end;
+  
+var
+  Message: String;
+  ResponseType: TBisCallServerEventResponseType;
+begin
+  Result:=false;
+  if Assigned(Request) and (State in [csHolding]) then begin
+    Message:='';
+    ResponseType:=rtUnknown;
+    try
+      try
+        DoUnHold;
+        ResponseType:=rtOK;
+        Result:=true;
+      except
+        On E: Exception do begin
+          Message:=E.Message;
+          ResponseType:=rtError;
+        end;
+      end;
+    finally
+      SendResponse(Message,ResponseType);
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvent.DialResponse(Response: TBisCallServerEventResponse; var FreeChannel: Boolean): Boolean;
+begin
+  Result:=false;
+  if Assigned(Response) then begin
+    case Response.ResponseType of
+      rtUnknown: ;
+      rtOK: begin
+        if DoCheck then begin
+          DoRing;
+          Result:=true;
+        end;
+      end;
+      rtBusy: begin
+        FReadyForDestroy:=true;
+        DoCancel;
+        Result:=true;
+        FreeChannel:=true;
+      end;
+      rtError: begin
+        FReadyForDestroy:=true;
+        DoError(Response.Message);
+        Result:=true;
+        FreeChannel:=true;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallServerChannelEvent.Dial(Acceptor: Variant; AcceptorType: TBisCallServerChannelAcceptorType);
+var
+  Request: TBisCallServerEventRequest;
+begin
+  inherited Dial(Acceptor,AcceptorType);
+  if Assigned(FHandler) and Assigned(FHandler.FFormat) and Assigned(FHandler.FFormat.WaveFormat) then begin
+    if not VarIsNull(Acceptor) and (AcceptorType=catSession) then begin
+      if GetRemoteEventParams(Acceptor) and GetLocalEventParams and TryServerActive then begin
+        FRemoteSessionId:=Acceptor;
+        Request:=TBisCallServerEventRequest.Create(mdOutgoing,SEventDial);
+        with Request do begin
+          AddSessionId(FRemoteSessionId);
+          AddRemoteSessionId(Core.SessionId);
+          AddChannelId(Self.FId);
+          AddSequence(FRequests.NextSequence);
+          AddDataPort(Self.DataPort);
+          with FHandler.FFormat.WaveFormat^ do begin
+            AddFormatTag(wFormatTag);
+            AddChannels(nChannels);
+            AddSamplesPerSec(nSamplesPerSec);
+            AddBitsPerSample(wBitsPerSample);
+          end;
+          AddDataSize(FHandler.FDataSize);
+          AddPacketTime(FHandler.FPacketTime);
+          AddCallId(Self.FCallId);
+          AddCallerId(Self.FCallerId);
+          AddCallerPhone(Self.FCallerPhone);
+        end;
+        FRequests.Add(Request);
+        SendMessage(Request,true);
+      end;
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvent.AnswerResponse(Response: TBisCallServerEventResponse; var FreeChannel: Boolean): Boolean;
+begin
+  Result:=false;
+  if Assigned(Response) then begin
+    case Response.ResponseType of
+      rtUnknown: ;
+      rtOK: begin
+        DoConnect;
+        Result:=true;
+      end;
+      rtBusy: ;
+      rtError: begin
+        DoError(Response.Message);
+        Result:=true;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallServerChannelEvent.Answer;
+var
+  Request: TBisCallServerEventRequest;
+begin
+  inherited Answer;
+  if Assigned(FHandler) and Assigned(FHandler.FFormat) and Assigned(FHandler.FFormat.WaveFormat) and
+     GetLocalEventParams and TryServerActive then begin
+    Request:=TBisCallServerEventRequest.Create(mdOutgoing,SEventAnswer);
+    with Request do begin
+      AddSessionId(FRemoteSessionId);
+      AddChannelId(Self.FId);
+      AddSequence(FRequests.NextSequence);
+      AddDataPort(Self.DataPort);
+      with FHandler.FFormat.WaveFormat^ do begin
+        AddFormatTag(wFormatTag);
+        AddChannels(nChannels);
+        AddSamplesPerSec(nSamplesPerSec);
+        AddBitsPerSample(wBitsPerSample);
+      end;
+      AddDataSize(FHandler.FDataSize);
+      AddPacketTime(FHandler.FPacketTime);
+    end;
+    FRequests.Add(Request);
+    SendMessage(Request,true);
+  end;
+end;
+
+function TBisCallServerChannelEvent.HangupResponse(Response: TBisCallServerEventResponse; var FreeChannel: Boolean): Boolean;
+begin
+  Result:=false;
+  if Assigned(Response) then begin
+    case Response.ResponseType of
+      rtUnknown: ;
+      rtOK: begin
+        FReadyForDestroy:=true;
+        DoDisconnect;
+        FreeChannel:=true;
+        Result:=true;
+      end;
+      rtBusy: ;
+      rtError: begin
+        DoError(Response.Message);
+        Result:=true;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallServerChannelEvent.Hangup;
+var
+  Request: TBisCallServerEventRequest;
+begin
+  inherited Hangup;
+  if Assigned(FHandler) and (State in [csRinning,csProcessing,csHolding]) and not FReadyForDestroy then begin
+    Request:=TBisCallServerEventRequest.Create(mdOutgoing,SEventHangup);
+    with Request do begin
+      AddSessionId(FRemoteSessionId);
+      AddChannelId(Self.FId);
+      AddSequence(FRequests.NextSequence);
+    end;
+    FRequests.Add(Request);
+    SendMessage(Request,true);
+  end;
+end;
+
+{ TBisCallServerChannelEvents }
+
+constructor TBisCallServerChannelEvents.Create;
+begin
+  inherited Create;
+  with Core.Events do begin
+    FEventResult:=Add(SEventResult,ResultHandler,true);
+    FEventDial:=Add(SEventDial,DialHandler,true);
+    FEventAnswer:=Add(SEventAnswer,AnswerHandler,true);
+    FEventHangup:=Add(SEventHangup,HangupHandler,true);
+    FEventHold:=Add(SEventHold,HoldHandler,true);
+    FEventUnHold:=Add(SEventUnHold,UnHoldHandler,true);
+  end;
+end;
+
+destructor TBisCallServerChannelEvents.Destroy;
+begin
+  with Core.Events do begin
+    Remove(FEventUnHold);
+    Remove(FEventHold);
+    Remove(FEventHangup);
+    Remove(FEventAnswer);
+    Remove(FEventDial);
+    Remove(FEventResult);
+  end;
+  inherited Destroy;
+end;
+
+procedure TBisCallServerChannelEvents.TryToRemove(Channel: TBisCallServerChannelEvent);
+begin
+  if Assigned(Channel) and
+    ((Channel.State in [csFinished]) or Channel.FReadyForDestroy) then begin
+    LockRemove(Channel);
+  end;
+end;
+
+function TBisCallServerChannelEvents.Find(Id: String): TBisCallServerChannelEvent;
+var
+  i: Integer;
+  Item: TBisCallServerChannelEvent;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.FId,Id) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvents.LockFind(Id: String): TBisCallServerChannelEvent;
+begin
+  Lock;
+  try
+    Result:=Find(Id);
+  finally
+    UnLock;
+  end;
+end;
+
+function TBisCallServerChannelEvents.Add(Id: String; Direction: TBisCallServerChannelDirection; CallId: Variant): TBisCallServerChannelEvent;
+begin
+  Result:=Find(Id);
+  if not Assigned(Result) then begin
+    Result:=TBisCallServerChannelEvent(inherited AddClass(TBisCallServerChannelEvent,false));
+    if Assigned(Result) then begin
+      Result.FId:=Id;
+      Result.FCallId:=CallId;
+      Result.FHandler:=FHandler;
+      Result.FDirection:=Direction;
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvents.AddOutgoing(CallId, CallerId, CallerPhone: Variant): TBisCallServerChannelEvent;
+begin
+  Result:=Add(GetUniqueID,cdOutgoing,CallId);
+  if Assigned(Result) then begin
+    Result.FCallerId:=CallerId;
+    Result.FCallerPhone:=CallerPhone;
+    DoChannelCreate(Result);
+  end;
+end;
+
+function TBisCallServerChannelEvents.LockAddOutgoing(CallId, CallerId, CallerPhone: Variant): TBisCallServerChannelEvent;
+begin
+  Lock;
+  try
+    Result:=AddOutgoing(CallId,CallerId,CallerPhone);
+  finally
+    Unlock;
+  end;
+end;
+
+function TBisCallServerChannelEvents.AddIncoming(Request: TBisCallServerEventRequest): TBisCallServerChannelEvent;
+begin
+  Result:=nil;
+  if Assigned(Request) then begin
+    Result:=Add(Request.ChannelId,cdIncoming,Request.CallId);
+    if Assigned(Result) then begin
+      Result.FCallerId:=Request.CallerId;
+      Result.FCallerPhone:=Request.CallerPhone;
+      Result.FRequests.Add(Request);
+      DoChannelCreate(Result);
+    end;
+  end;
+end;
+
+function TBisCallServerChannelEvents.LockAddIncoming(Request: TBisCallServerEventRequest): TBisCallServerChannelEvent;
+begin
+  Lock;
+  try
+    Result:=AddIncoming(Request);
+  finally
+    Unlock;
+  end;
+end;
+
+function TBisCallServerChannelEvents.GetItem(Index: Integer): TBisCallServerChannelEvent;
+begin
+  Result:=TBisCallServerChannelEvent(inherited Items[Index]);
+end;
+
+function TBisCallServerChannelEvents.ResultHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+var
+  Channel: TBisCallServerChannelEvent;
+  Response: TBisCallServerEventResponse;
+  Request: TBisCallServerEventRequest;
+  FreeChannel: Boolean;
+begin
+  Result:=false;
+  Response:=TBisCallServerEventResponse.Create(mdIncoming,Event.Name,InParams);
+  if Assigned(Response) then begin
+    Channel:=LockFind(Response.ChannelId);
+    if Assigned(Channel) then begin
+      FreeChannel:=false;
+      try
+        Request:=Channel.FRequests.Find(Response);
+        if Assigned(Request) then begin
+
+          Request.Responses.Add(Response);
+
+          if AnsiSameText(Response.RequestName,SEventDial) then
+            Result:=Channel.DialResponse(Response,FreeChannel);
+
+          if AnsiSameText(Response.RequestName,SEventAnswer) then
+            Result:=Channel.AnswerResponse(Response,FreeChannel);
+
+          if AnsiSameText(Response.RequestName,SEventHangup) then
+            Result:=Channel.HangupResponse(Response,FreeChannel);
+
+          if not Result then
+            Request.Responses.Remove(Response);
+
+        end else
+          Response.Free;
+      finally
+        if FreeChannel then
+          TryToRemove(Channel);
+      end;
+    end else
+      Response.Free;
+  end;
+end;
+
+function TBisCallServerChannelEvents.DialHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+var
+  Request: TBisCallServerEventRequest;
+  Channel: TBisCallServerChannelEvent;
+begin
+  Result:=false;
+  Request:=TBisCallServerEventRequest.Create(mdIncoming,Event.Name,InParams);
+  if Assigned(Request) then begin
+    Channel:=LockAddIncoming(Request);
+    if Assigned(Channel) then begin
+      Result:=Channel.DialRequest(Request);
+      if not Result then
+        TryToRemove(Channel);
+    end else
+      Request.Free;
+  end;
+end;
+
+function TBisCallServerChannelEvents.AnswerHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+var
+  Request: TBisCallServerEventRequest;
+  Channel: TBisCallServerChannelEvent;
+begin
+  Result:=false;
+  Request:=TBisCallServerEventRequest.Create(mdIncoming,Event.Name,InParams);
+  if Assigned(Request) then begin
+    Channel:=LockFind(Request.ChannelId);
+    if Assigned(Channel) then begin
+      Channel.FRequests.Add(Request);
+      Result:=Channel.AnswerRequest(Request);
+    end else
+      Request.Free;
+  end;
+end;
+
+function TBisCallServerChannelEvents.HangupHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+var
+  Request: TBisCallServerEventRequest;
+  Channel: TBisCallServerChannelEvent;
+begin
+  Result:=false;
+  Request:=TBisCallServerEventRequest.Create(mdIncoming,Event.Name,InParams);
+  if Assigned(Request) then begin
+    Channel:=LockFind(Request.ChannelId);
+    if Assigned(Channel) then begin
+      Channel.FRequests.Add(Request);
+      Result:=Channel.HangupRequest(Request);
+      TryToRemove(Channel);
+    end else
+      Request.Free;
+  end;
+end;
+
+function TBisCallServerChannelEvents.HoldHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+var
+  Request: TBisCallServerEventRequest;
+  Channel: TBisCallServerChannelEvent;
+begin
+  Result:=false;
+  Request:=TBisCallServerEventRequest.Create(mdIncoming,Event.Name,InParams);
+  if Assigned(Request) then begin
+    Channel:=LockFind(Request.ChannelId);
+    if Assigned(Channel) then begin
+      Channel.FRequests.Add(Request);
+      Result:=Channel.HoldRequest(Request);
+    end else
+      Request.Free;
+  end;
+end;
+
+function TBisCallServerChannelEvents.UnHoldHandler(Event: TBisEvent; InParams, OutParams: TBisEventParams): Boolean;
+var
+  Request: TBisCallServerEventRequest;
+  Channel: TBisCallServerChannelEvent;
+begin
+  Result:=false;
+  Request:=TBisCallServerEventRequest.Create(mdIncoming,Event.Name,InParams);
+  if Assigned(Request) then begin
+    Channel:=LockFind(Request.ChannelId);
+    if Assigned(Channel) then begin
+      Channel.FRequests.Add(Request);
+      Result:=Channel.UnHoldRequest(Request);
+    end else
+      Request.Free;
+  end;
+end;
+
+{ TBisCallServerHandlerEvent }
+
+constructor TBisCallServerHandlerEvent.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Channels.FHandler:=Self;
+
+  FDrivers:=TBisRtpAcmDrivers.Create;
+  FFormat:=nil;
+  FPayloadType:=BisRtp.ptUnknown;
+  FPacketTime:=20;
+
+//  FWaitRetryCount:=3;
+//  FWaitTimeOut:=1000;
+
+  FSFormatNotFound:='Формат не найден.';
+end;
+
+destructor TBisCallServerHandlerEvent.Destroy;
+begin
+  FDrivers.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCallServerHandlerEvent.Init;
+var
+  DriverName,FormatName: String;
+  Channels, SamplesPerSec, BitsPerSample: Cardinal;
+begin
+  inherited Init;
+  with Params do begin
+
+    DriverName:=AsString(SParamAudioDriverName);
+    FormatName:=AsString(SParamAudioFormatName,'CCITT A-Law');
+    Channels:=AsInteger(SParamAudioChannels,1);
+    SamplesPerSec:=AsInteger(SParamAudioSamplesPerSec,8000);
+    BitsPerSample:=AsInteger(SParamAudioBitsPerSample,8);
+    FFormat:=FDrivers.FindFormat(DriverName,FormatName,Channels,SamplesPerSec,BitsPerSample);
+    if Assigned(FFormat) then begin
+      FPayloadType:=FDrivers.FormatToPayloadType(FFormat);
+      if Assigned(FFormat.WaveFormat) then
+        FDataSize:=CalcWaveBufferSize(FFormat.WaveFormat,FPacketTime);
+    end;
+
+//    FWaitRetryCount:=AsInteger(SParamRequestRetryCount,FWaitRetryCount);
+//    FWaitTimeOut:=AsInteger(SParamRequestTimeOut,FWaitTimeOut);
+  end;
+
+  if not Assigned(FFormat) then
+    LoggerWrite(SFormatNotFound,ltError);
+
+end;
+
+function TBisCallServerHandlerEvent.AddOutgoingChannel(CallId,CallerId,CallerPhone: Variant): TBisCallServerChannel;
+begin
+  Result:=Channels.LockAddOutgoing(CallId,CallerId,CallerPhone);
+end;
+
+function TBisCallServerHandlerEvent.GetChannels: TBisCallServerChannelEvents;
+begin
+  Result:=TBisCallServerChannelEvents(inherited Channels);
+end;
+
+function TBisCallServerHandlerEvent.GetChannelsClass: TBisCallServerChannelsClass;
+begin
+  Result:=TBisCallServerChannelEvents;
+end;
+
+function TBisCallServerHandlerEvent.GetConnected: Boolean;
+begin
+  Result:=true;
+end;
+
+end.

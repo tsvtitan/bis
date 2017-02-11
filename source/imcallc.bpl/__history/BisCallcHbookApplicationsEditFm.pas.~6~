@@ -1,0 +1,87 @@
+unit BisCallcHbookApplicationsEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisCallcHbookApplicationsEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    CheckBoxLocked: TCheckBox;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookApplicationsEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookApplicationsInsertFormIface=class(TBisCallcHbookApplicationsEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookApplicationsUpdateFormIface=class(TBisCallcHbookApplicationsEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookApplicationsDeleteFormIface=class(TBisCallcHbookApplicationsEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookApplicationsEditForm: TBisCallcHbookApplicationsEditForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisCallcHbookApplicationsEditFormIface }
+
+constructor TBisCallcHbookApplicationsEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookApplicationsEditForm;
+  with Params do begin
+    AddKey('APPLICATION_ID').Duplicate('OLD_APPLICATION_ID');
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription',false);
+  end;
+end;
+
+{ TBisCallcHbookApplicationsInsertFormIface }
+
+constructor TBisCallcHbookApplicationsInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_FIRM_TYPE';
+end;
+
+{ TBisCallcHbookApplicationsUpdateFormIface }
+
+constructor TBisCallcHbookApplicationsUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_FIRM_TYPE';
+end;
+
+{ TBisCallcHbookApplicationsDeleteFormIface }
+
+constructor TBisCallcHbookApplicationsDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_FIRM_TYPE';
+end;
+
+end.

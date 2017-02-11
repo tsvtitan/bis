@@ -1,0 +1,22 @@
+// -------------------------------------------------------------------
+// set and check the value of 'global' variabile
+//
+// global is defined in the dmClasses.dws2Unit
+// -------------------------------------------------------------------
+
+procedure setGlobalHi;
+begin
+  global := 'Hi';
+end;
+
+procedure setGlobalHallo;
+begin
+  global := 'Hallo';
+end;
+
+procedure printGlobalValue;
+begin
+  showMessage(global);
+end;
+
+

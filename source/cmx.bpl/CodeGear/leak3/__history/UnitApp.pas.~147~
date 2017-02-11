@@ -1,0 +1,105 @@
+unit UnitApp;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  UnitThread;
+
+type
+
+  TForm3 = class(TForm,IConnectionThreadForm)
+    Label1: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    FCounter: Integer;
+    FBreaked: Boolean;
+
+    procedure IncCounter;
+    function IsBreaked: Boolean;
+    
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+  end;
+
+var
+  Form3: TForm3;
+
+implementation
+
+{$R *.dfm}
+
+uses UnitConn;
+
+{ TThread3 }
+
+procedure TThread3.SetCounter;
+begin
+  if Assigned(FParent) then begin
+    Inc(FParent.FCounter);
+    FParent.Label1.Caption:=IntToStr(FParent.FCounter);
+    FParent.Label1.Update;
+  end;
+end;
+
+procedure TThread3.Execute;
+begin
+  if Assigned(FParent) then begin
+
+    try
+      while not FParent.FBreaked do begin
+        Sleep(1);
+
+        try
+
+          ExecuteSqlStoredProc;
+       //   ExecuteIBStoredProc;
+      //    ExecuteSqlQuery;
+       //   ExecuteIBQuery;
+
+          Synchronize(SetCounter);
+        finally
+          
+        end;
+      end;
+    finally
+
+    end;
+  end;
+end;
+
+{ TForm3 }
+
+procedure TForm3.Button1Click(Sender: TObject);
+begin
+  InitConn;
+  InitThread;
+end;
+
+procedure TForm3.Button2Click(Sender: TObject);
+begin
+  FBreaked:=true;
+  DoneThread;
+  DoneConn;
+end;
+
+constructor TForm3.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  //
+end;
+
+destructor TForm3.Destroy;
+begin
+  FBreaked:=true;
+  inherited Destroy;
+end;
+
+
+end.

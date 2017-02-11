@@ -1,0 +1,586 @@
+unit BisMapFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin, ExtCtrls,
+  StdCtrls, Contnrs,
+  BisFrm;
+
+type
+  TBisMapFrame=class;
+
+  TBisMapFrameCanEvent=function (Sender: TBisMapFrame): Boolean of object;
+
+  TBisMapFrameMode=(mmMove,mmZoomIn,mmZoomOut,mmDistance,mmRoute);
+
+  TBisMapFramePoint=class(TObject)
+  public
+    var Lat: Extended;
+    var Lon: Extended;
+
+    constructor Create; 
+  end;
+
+  TBisMapFramePoints=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisMapFramePoint;
+  public
+    function AddPoint(Lat, Lon: Extended): TBisMapFramePoint;
+
+    property Items[Index: Integer]: TBisMapFramePoint read GetItem;
+  end;
+
+  TBisMapFrame = class(TBisFrame)
+    PanelMap: TPanel;
+    ControlBar: TControlBar;
+    ToolBarRefresh: TToolBar;
+    ToolButtonRefresh: TToolButton;
+    ActionList: TActionList;
+    ActionRefresh: TAction;
+    Popup: TPopupActionBar;
+    MenuItemRefresh: TMenuItem;
+    ActionFind: TAction;
+    ToolButtonFind: TToolButton;
+    MenuItemPrint: TMenuItem;
+    MenuItemFind: TMenuItem;
+    ActionProperty: TAction;
+    ToolButtonProperty: TToolButton;
+    ActionExport: TAction;
+    ToolButtonExport: TToolButton;
+    ToolButtonPrint: TToolButton;
+    ImageList: TImageList;
+    ActionPrint: TAction;
+    ToolBarEdit: TToolBar;
+    MenuItemExport: TMenuItem;
+    MenuItemProperty: TMenuItem;
+    ActionOverview: TAction;
+    ActionZoomIn: TAction;
+    ActionZoomOut: TAction;
+    ActionMove: TAction;
+    ActionDistance: TAction;
+    ActionRoute: TAction;
+    ToolButtonOverview: TToolButton;
+    ToolButtonMove: TToolButton;
+    ToolButtonZoomIn: TToolButton;
+    ToolButtonZoomOut: TToolButton;
+    ToolButtonDistance: TToolButton;
+    ToolButtonRoute: TToolButton;
+    N1: TMenuItem;
+    MenuItemOverview: TMenuItem;
+    MenuItemMove: TMenuItem;
+    MenuItemZoomIn: TMenuItem;
+    MenuItemZoomOut: TMenuItem;
+    MenuItemDistance: TMenuItem;
+    MenuItemRoute: TMenuItem;
+    procedure ActionRefreshExecute(Sender: TObject);
+    procedure ActionRefreshUpdate(Sender: TObject);
+    procedure ActionPrintExecute(Sender: TObject);
+    procedure ActionPrintUpdate(Sender: TObject);
+    procedure ActionFindExecute(Sender: TObject);
+    procedure ActionFindUpdate(Sender: TObject);
+    procedure ActionPropertyExecute(Sender: TObject);
+    procedure ActionPropertyUpdate(Sender: TObject);
+    procedure ActionExportExecute(Sender: TObject);
+    procedure ActionExportUpdate(Sender: TObject);
+    procedure ActionOverviewExecute(Sender: TObject);
+    procedure ActionOverviewUpdate(Sender: TObject);
+    procedure ActionMoveExecute(Sender: TObject);
+    procedure ActionMoveUpdate(Sender: TObject);
+    procedure ActionZoomInExecute(Sender: TObject);
+    procedure ActionZoomInUpdate(Sender: TObject);
+    procedure ActionZoomOutExecute(Sender: TObject);
+    procedure ActionZoomOutUpdate(Sender: TObject);
+    procedure ActionDistanceExecute(Sender: TObject);
+    procedure ActionDistanceUpdate(Sender: TObject);
+    procedure ActionRouteExecute(Sender: TObject);
+  private
+    FOnCanRefreshMap: TBisMapFrameCanEvent;
+    FMapId: String;
+    FMode: TBisMapFrameMode;
+    function GetCurrentLat: Extended;
+    function GetCurrentLon: Extended;
+  protected
+    procedure Resize; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+
+    function MapExists: Boolean; virtual;
+    function MapLoaded: Boolean; virtual;
+    function MapPrepared: Boolean; virtual;
+
+    procedure LoadFromStream(Stream: TStream); virtual;
+    procedure LoadFromFile(const FileName: String); virtual;
+
+    function CanRefreshMap: Boolean; virtual;
+    procedure RefreshMap; virtual;
+
+    procedure OpenMap; virtual;
+
+    function CanExportMap: Boolean; virtual;
+    procedure ExportMap; virtual;
+
+    function CanPrintMap: Boolean; virtual;
+    procedure PrintMap; virtual;
+
+    function CanFindAddress: Boolean; virtual;
+    procedure FindAddress; virtual;
+
+    function CanPropertyMap: Boolean; virtual;
+    procedure PropertyMap; virtual;
+
+    function CanOverviewMap: Boolean; virtual;
+    procedure OverviewMap; virtual;
+
+    function CanMoveMap: Boolean; virtual;
+    procedure MoveMap; virtual;
+
+    function CanZoomInMap: Boolean; virtual;
+    procedure ZoomInMap; virtual;
+
+    function CanZoomOutMap: Boolean; virtual;
+    procedure ZoomOutMap; virtual;
+
+    function CanDistanceMap: Boolean; virtual;
+    procedure DistanceMap; virtual;
+
+    function CanRouteMap: Boolean; virtual;
+    procedure RouteMap; virtual;
+
+    procedure ResizeToolbar(Toolbar: TToolbar); virtual;
+    procedure ResizeToolbars; virtual;
+
+    function GetDirectDistance(Lat1, Lon1, Lat2, Lon2: Extended): Extended; virtual;
+    function GetRouteDistance(Lat1, Lon1, Lat2, Lon2: Extended): Extended; overload; virtual;
+    function GetRouteDistance(Points: TBisMapFramePoints): Extended; overload; virtual;
+
+    procedure VisibleRoute(Points: TBisMapFramePoints); virtual;
+    procedure ScaleRoute(Points: TBisMapFramePoints); virtual;
+
+    procedure RepositionControlBarControls;
+
+    property MapId: String read FMapId write FMapId;
+    property Mode: TBisMapFrameMode read FMode;
+    property CurrentLat: Extended read GetCurrentLat;
+    property CurrentLon: Extended read GetCurrentLon;
+
+    property OnCanRefreshMap: TBisMapFrameCanEvent read FOnCanRefreshMap write FOnCanRefreshMap;
+
+  published
+  end;
+
+  TBisMapFrameClass=class of TBisMapFrame;
+
+implementation
+
+{$R *.dfm}
+
+uses
+     BisUtils, BisCore;
+
+
+{ TBisMapFramePoint }
+
+constructor TBisMapFramePoint.Create;
+begin
+  inherited Create;
+  Lat:=0.0;
+  Lon:=0.0;
+end;
+
+{ TBisMapFramePoints }
+
+function TBisMapFramePoints.AddPoint(Lat, Lon: Extended): TBisMapFramePoint;
+begin
+  Result:=TBisMapFramePoint.Create;
+  Result.Lat:=Lat;
+  Result.Lon:=Lon;
+  inherited Add(Result);
+end;
+
+function TBisMapFramePoints.GetItem(Index: Integer): TBisMapFramePoint;
+begin
+  Result:=TBisMapFramePoint(inherited Items[Index]);
+end;
+
+{ TBisMapFrame }
+
+constructor TBisMapFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+//  FSFormatLabelCounter:='Всего: %d';
+end;
+
+
+destructor TBisMapFrame.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TBisMapFrame.Init;
+begin
+  inherited Init;
+
+  ResizeToolbars;    
+  RepositionControlBarControls;
+end;
+
+procedure TBisMapFrame.Resize;
+begin
+  inherited Resize;
+  ResizeToolbars;
+end;
+
+procedure TBisMapFrame.ResizeToolbar(Toolbar: TToolbar);
+var
+  i: Integer;
+  Button: TToolButton;
+  x: Integer;
+begin
+  if Assigned(Toolbar) then begin
+    x:=0;
+    for i:=0 to Toolbar.ButtonCount-1 do begin
+      Button:=Toolbar.Buttons[i];
+      if Button.Visible then begin
+        x:=x+Button.Width;
+        case Button.Style of
+          tbsButton: ;
+          tbsCheck: ;
+          tbsDropDown: x:=x+14;
+          tbsSeparator: ;
+          tbsDivider: ;
+          tbsTextButton: ;
+        end;
+      end;
+    end;
+    Toolbar.Visible:=x>0;
+    if Toolbar.Visible then
+      Toolbar.Width:=x+3;
+  end;
+end;
+
+procedure TBisMapFrame.RepositionControlBarControls;
+var
+  i: Integer;
+  List: TList;
+  Control: TControl;
+  x: Integer;
+begin
+  x:=0;
+  List:=TList.Create;
+  try
+    ControlBar.GetTabOrderList(List);
+    for i:=0 to List.Count-1 do begin
+      Control:=TControl(List.Items[i]);
+      if Control.Visible then begin
+        Control.Left:=x;
+        x:=x+Control.Width+1;
+      end;
+    end;
+    Constraints.MinWidth:=x+50;
+  finally
+    List.Free;
+  end;
+end;
+
+procedure TBisMapFrame.ResizeToolbars;
+begin
+  ResizeToolbar(ToolBarRefresh);
+  ResizeToolbar(ToolBarEdit);
+end;
+
+procedure TBisMapFrame.ActionOverviewExecute(Sender: TObject);
+begin
+  OverviewMap;
+end;
+
+procedure TBisMapFrame.ActionOverviewUpdate(Sender: TObject);
+begin
+  ActionOverview.Enabled:=CanOverviewMap;
+end;
+
+procedure TBisMapFrame.ActionDistanceExecute(Sender: TObject);
+begin
+  DistanceMap;
+end;
+
+procedure TBisMapFrame.ActionDistanceUpdate(Sender: TObject);
+begin
+  ActionDistance.Enabled:=CanDistanceMap;
+end;
+
+procedure TBisMapFrame.ActionExportExecute(Sender: TObject);
+begin
+  ExportMap;
+end;
+
+procedure TBisMapFrame.ActionExportUpdate(Sender: TObject);
+begin
+  ActionExport.Enabled:=CanExportMap;
+end;
+
+procedure TBisMapFrame.ActionFindExecute(Sender: TObject);
+begin
+  FindAddress;
+end;
+
+procedure TBisMapFrame.ActionFindUpdate(Sender: TObject);
+begin
+  ActionFind.Enabled:=CanFindAddress;
+end;
+
+procedure TBisMapFrame.ActionMoveExecute(Sender: TObject);
+begin
+  MoveMap;
+end;
+
+procedure TBisMapFrame.ActionMoveUpdate(Sender: TObject);
+begin
+  ActionMove.Enabled:=CanMoveMap;
+end;
+
+procedure TBisMapFrame.ActionPrintExecute(Sender: TObject);
+begin
+  PrintMap;
+end;
+
+procedure TBisMapFrame.ActionPrintUpdate(Sender: TObject);
+begin
+  ActionPrint.Enabled:=CanPrintMap;
+end;
+
+procedure TBisMapFrame.ActionPropertyExecute(Sender: TObject);
+begin
+  PropertyMap;
+end;
+
+procedure TBisMapFrame.ActionPropertyUpdate(Sender: TObject);
+begin
+  ActionProperty.Enabled:=CanPropertyMap;
+end;
+
+procedure TBisMapFrame.ActionRefreshExecute(Sender: TObject);
+begin
+  RefreshMap;
+end;
+
+procedure TBisMapFrame.ActionRefreshUpdate(Sender: TObject);
+begin
+  ActionRefresh.Enabled:=CanRefreshMap;
+end;
+
+procedure TBisMapFrame.ActionRouteExecute(Sender: TObject);
+begin
+  RouteMap;
+end;
+
+procedure TBisMapFrame.ActionZoomInExecute(Sender: TObject);
+begin
+  ZoomInMap;
+end;
+
+procedure TBisMapFrame.ActionZoomInUpdate(Sender: TObject);
+begin
+  ActionZoomIn.Enabled:=CanZoomInMap;
+end;
+
+procedure TBisMapFrame.ActionZoomOutExecute(Sender: TObject);
+begin
+  ZoomOutMap;
+end;
+
+procedure TBisMapFrame.ActionZoomOutUpdate(Sender: TObject);
+begin
+  ActionZoomOut.Enabled:=CanZoomOutMap;
+end;
+
+function TBisMapFrame.MapExists: Boolean;
+begin
+  Result:=Trim(FMapId)<>'';
+end;
+
+function TBisMapFrame.MapLoaded: Boolean;
+begin
+  Result:=false;
+end;
+
+function TBisMapFrame.MapPrepared: Boolean;
+begin
+  Result:=false;
+end;
+
+procedure TBisMapFrame.LoadFromFile(const FileName: String);
+begin
+end;
+
+procedure TBisMapFrame.LoadFromStream(Stream: TStream);
+begin
+end;
+
+function TBisMapFrame.CanRefreshMap: Boolean;
+begin
+  Result:=MapExists;
+  if Result and Assigned(FOnCanRefreshMap) then
+    Result:=FOnCanRefreshMap(Self);
+end;
+
+procedure TBisMapFrame.OpenMap;
+var
+  Stream: TMemoryStream;
+begin
+  if MapExists then begin
+    Stream:=TMemoryStream.Create;
+    try
+      if Core.Logged then begin
+//        Core.Connection.LoadMap(Core.SessionId,FMapId,Stream);
+        Stream.Position:=0;
+        LoadFromStream(Stream);
+        OverviewMap;
+      end;
+    finally
+      Stream.Free;
+    end;
+  end;
+end;
+
+procedure TBisMapFrame.RefreshMap;
+begin
+  if CanRefreshMap then begin
+    OpenMap;
+  end;
+end;
+
+function TBisMapFrame.CanExportMap: Boolean;
+begin
+  Result:=MapLoaded;
+end;
+
+procedure TBisMapFrame.ExportMap;
+begin
+end;
+
+function TBisMapFrame.CanPrintMap: Boolean;
+begin
+  Result:=MapLoaded;
+end;
+
+procedure TBisMapFrame.PrintMap;
+begin
+end;
+
+function TBisMapFrame.CanFindAddress: Boolean;
+begin
+  Result:=MapLoaded;
+end;
+
+procedure TBisMapFrame.FindAddress;
+begin
+end;
+
+function TBisMapFrame.CanPropertyMap: Boolean;
+begin
+  Result:=MapLoaded;
+end;
+
+procedure TBisMapFrame.PropertyMap;
+begin
+end;
+
+function TBisMapFrame.CanOverviewMap: Boolean;
+begin
+  Result:=MapLoaded;
+end;
+
+procedure TBisMapFrame.OverviewMap;
+begin
+end;
+
+function TBisMapFrame.CanMoveMap: Boolean;
+begin
+  Result:=MapLoaded;
+end;
+
+procedure TBisMapFrame.MoveMap;
+begin
+  FMode:=mmMove;
+end;
+
+function TBisMapFrame.CanZoomInMap: Boolean;
+begin
+  Result:=MapLoaded;
+end;
+
+procedure TBisMapFrame.ZoomInMap;
+begin
+  FMode:=mmZoomIn;
+end;
+
+function TBisMapFrame.CanZoomOutMap: Boolean;
+begin
+  Result:=MapLoaded;
+end;
+
+procedure TBisMapFrame.ZoomOutMap;
+begin
+  FMode:=mmZoomOut;
+end;
+
+function TBisMapFrame.CanDistanceMap: Boolean;
+begin
+  Result:=MapLoaded;
+end;
+
+procedure TBisMapFrame.DistanceMap;
+begin
+  FMode:=mmDistance;
+end;
+
+function TBisMapFrame.CanRouteMap: Boolean;
+begin
+  Result:=MapLoaded;
+end;
+
+procedure TBisMapFrame.RouteMap;
+begin
+  FMode:=mmRoute;
+end;
+
+procedure TBisMapFrame.ScaleRoute(Points: TBisMapFramePoints);
+begin
+end;
+
+procedure TBisMapFrame.VisibleRoute(Points: TBisMapFramePoints);
+begin
+end;
+
+function TBisMapFrame.GetCurrentLat: Extended;
+begin
+  Result:=0.0;
+end;
+
+function TBisMapFrame.GetCurrentLon: Extended;
+begin
+  Result:=0.0;
+end;
+
+function TBisMapFrame.GetDirectDistance(Lat1, Lon1, Lat2, Lon2: Extended): Extended;
+begin
+  Result:=0.0;
+end;
+
+function TBisMapFrame.GetRouteDistance(Lat1, Lon1, Lat2, Lon2: Extended): Extended;
+begin
+  Result:=0.0;
+end;
+
+function TBisMapFrame.GetRouteDistance(Points: TBisMapFramePoints): Extended;
+begin
+  Result:=0.0;
+end;
+
+
+end.

@@ -1,0 +1,19 @@
+unit BisCodecs;
+
+interface
+
+uses Windows, Classes,
+
+     BisCoreObjects;
+
+type
+
+  TBisWavCodec=class(TBisCoreObject)
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+end.

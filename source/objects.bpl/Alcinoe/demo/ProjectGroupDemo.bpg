@@ -1,0 +1,62 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = ALButtonDemo.exe ALComboBoxDemo.exe ALEditDemo.exe ALHintBalloonDemo.exe ALListBoxDemo.exe ALMemoDemo.exe ALSMTPClientDemo.exe ALWebSpiderDemo.exe ALWinHTTPClientDemo.exe ALWinInetHTTPClientDemo.exe AlXmlDocDemo.exe ALStringBenchmark.exe ALFBXDemo.exe ALNNTPClientDemo.exe ALPhpRunnerDemo.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+ALButtonDemo.exe: ALButton\ALButtonDemo.dpr
+  $(DCC)
+
+ALComboBoxDemo.exe: ALComboBox\ALComboBoxDemo.dpr
+  $(DCC)
+
+ALEditDemo.exe: ALEdit\ALEditDemo.dpr
+  $(DCC)
+
+ALHintBalloonDemo.exe: ALHintBalloon\ALHintBalloonDemo.dpr
+  $(DCC)
+
+ALListBoxDemo.exe: ALListBox\ALListBoxDemo.dpr
+  $(DCC)
+
+ALMemoDemo.exe: ALMemo\ALMemoDemo.dpr
+  $(DCC)
+
+ALSMTPClientDemo.exe: ALSMTPClient\ALSMTPClientDemo.dpr
+  $(DCC)
+
+ALWebSpiderDemo.exe: ALWebSpider\ALWebSpiderDemo.dpr
+  $(DCC)
+
+ALWinHTTPClientDemo.exe: ALWinHTTPClient\ALWinHTTPClientDemo.dpr
+  $(DCC)
+
+ALWinInetHTTPClientDemo.exe: ALWinInetHTTPClient\ALWinInetHTTPClientDemo.dpr
+  $(DCC)
+
+AlXmlDocDemo.exe: ALXmlDoc\AlXmlDocDemo.dpr
+  $(DCC)
+
+ALStringBenchmark.exe: AlStringBenchmark\ALStringBenchmark.dpr
+  $(DCC)
+
+ALFBXDemo.exe: ALFBXDemo\ALFBXDemo.dpr
+  $(DCC)
+
+ALNNTPClientDemo.exe: ALNNTPClient\ALNNTPClientDemo.dpr
+  $(DCC)
+
+ALPhpRunnerDemo.exe: ALPhpRunner\ALPhpRunnerDemo.dpr
+  $(DCC)
+
+

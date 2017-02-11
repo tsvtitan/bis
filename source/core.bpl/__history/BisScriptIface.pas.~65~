@@ -1,0 +1,78 @@
+unit BisScriptIface;
+
+interface
+
+uses Classes,
+     BisIfaces, BisScriptUnits;
+
+type
+
+  TBisScriptIface=class(TBisIface)
+  private
+    FScriptId: String;
+    FSPermissionShow: String;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Init; override;
+    function CanShow: Boolean; override;
+    procedure Show; override;
+
+    function FindUnit(UnitName: String): TBisScriptUnit; virtual;
+
+
+    property ScriptId: String read FScriptId write FScriptId;
+  published
+    property SPermissionShow: String read FSPermissionShow write FSPermissionShow;
+  end;
+
+  TBisScriptIfaceClass=class of TBisScriptIface;
+
+implementation
+
+uses BisCore, BisObjectModules;
+
+{ TBisScriptIface }
+
+constructor TBisScriptIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+//  Permissions.Enabled:=true;
+  FSPermissionShow:='Просмотр';
+end;
+
+procedure TBisScriptIface.Init;
+begin
+  inherited Init;
+  Permissions.AddDefault(FSPermissionShow);
+end;
+
+function TBisScriptIface.FindUnit(UnitName: String): TBisScriptUnit;
+var
+  i: Integer;
+  Module: TBisObjectModule;
+begin
+  Result:=nil;
+  if Assigned(Core) then begin
+    for i:=0 to Core.ObjectModules.Count-1 do begin
+      Module:=Core.ObjectModules.Items[i];
+      if Module.Enabled and Module.IsLoad then begin
+        Result:=Module.ScriptUnits.Find(UnitName);
+        if Assigned(Result) then
+          break;
+      end;
+    end;
+  end;
+end;
+
+function TBisScriptIface.CanShow: Boolean;
+begin
+  Result:=inherited CanShow and
+          Permissions.Exists(FSPermissionShow);
+end;
+
+procedure TBisScriptIface.Show;
+begin
+  inherited Show;
+end;
+
+end.

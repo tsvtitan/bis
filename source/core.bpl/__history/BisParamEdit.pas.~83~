@@ -1,0 +1,165 @@
+unit BisParamEdit;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisControls;
+
+type
+
+  TBisParamEdit=class(TBisParam)
+  private
+    FEdit: TEdit;
+    FLabelEdit: TLabel;
+    FEditName: String;
+    FLabelName: String;
+    FOldEditChange: TNotifyEvent;
+
+  protected
+    procedure EditChange(Sender: TObject); virtual;
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetEmpty: Boolean; override;
+    function GetSize: Integer; override;
+    procedure SetSize(const Value: Integer); override;
+    function GetCaption: String; override;
+    function GetControl: TWinControl; override;
+{    procedure SetEnabled(const Value: Boolean); override;
+    procedure SetVisible(const Value: Boolean); override;}
+  public
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+    property EditName: String read FEditName write FEditName;
+    property LabelName: String read FLabelName write FLabelName;
+    property Edit: TEdit read FEdit write FEdit;
+    property LabelEdit: TLabel read FLabelEdit;
+  end;
+
+implementation
+
+uses Variants, Graphics,
+     BisUtils, BisConsts;
+
+{ TBisParamEdit }
+
+constructor TBisParamEdit.Create;
+begin
+  inherited Create;
+  DataType:=ftString;
+end;
+
+procedure TBisParamEdit.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamEdit) then begin
+    EditName:=TBisParamEdit(Source).EditName;
+    LabelName:=TBisParamEdit(Source).LabelName;
+  end;
+end;
+
+procedure TBisParamEdit.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FEdit:=TEdit(DoFindComponent(FEditName));
+    if Assigned(FEdit) then begin
+      FOldEditChange:=FEdit.OnChange;
+      FEdit.OnChange:=EditChange;
+      FEdit.MaxLength:=inherited GetSize;
+      FEdit.Color:=iff(FEdit.Color=clBtnFace,ColorControlReadOnly,FEdit.Color);
+      FLabelEdit:=TLabel(DoFindComponent(FLabelName));
+      if Assigned(FLabelEdit) then
+        FLabelEdit.FocusControls.Add(FEdit);
+    end;
+    Value:=TempValue;
+  end;
+  inherited LinkControls(Parent);
+  if Assigned(FEdit) then begin
+  end;
+end;
+
+function TBisParamEdit.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FEdit) then
+    Result:=iff(not Empty,FEdit.Text,Result);
+end;
+
+procedure TBisParamEdit.SetValue(const AValue: Variant);
+begin
+  if not VarSameValue(Value,AValue) then begin
+    if Assigned(FEdit) then begin
+      FEdit.OnChange:=nil;
+      try
+        FEdit.Text:=VarToStrDef(AValue,'');
+      finally
+        FEdit.OnChange:=EditChange;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamEdit.GetControl: TWinControl;
+begin
+  Result:=FEdit;
+end;
+
+function TBisParamEdit.GetCaption: String;
+begin
+  Result:=inherited GetCaption;
+  if Assigned(FLabelEdit) then
+    Result:=FLabelEdit.Caption;
+end;
+
+function TBisParamEdit.GetEmpty: Boolean;
+begin
+  Result:=true;
+  if Assigned(FEdit) then
+    Result:=FEdit.Text='';
+end;
+
+function TBisParamEdit.GetSize: Integer;
+begin
+  Result:=inherited GetSize;
+  if Assigned(FEdit) then
+    Result:=FEdit.MaxLength;
+end;
+
+{procedure TBisParamEdit.SetEnabled(const Value: Boolean);
+begin
+  inherited SetEnabled(Value);
+  if Assigned(FLabelEdit) then begin
+    FLabelEdit.Enabled:=Value;
+  end;
+end;
+
+procedure TBisParamEdit.SetVisible(const Value: Boolean);
+begin
+  inherited SetVisible(Value);
+  if Assigned(FLabelEdit) then begin
+    FLabelEdit.Visible:=Value;
+  end;
+end;}
+
+procedure TBisParamEdit.SetSize(const Value: Integer);
+begin
+  if Size<>Value then
+    if Assigned(FEdit) then
+      FEdit.MaxLength:=Value
+    else
+      inherited SetSize(Value);
+end;
+
+procedure TBisParamEdit.EditChange(Sender: TObject);
+begin
+  DoChange(Self);
+  if Assigned(FOldEditChange) then
+    FOldEditChange(Sender);
+end;
+
+end.

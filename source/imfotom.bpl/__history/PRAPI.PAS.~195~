@@ -1,0 +1,615 @@
+unit PRAPI;
+
+interface
+
+uses Windows;
+
+const
+  prPTP_EXIF_JPEG = $3801; {/* EXIF JPEG*/}
+  prPTP_CRW = $B101; {/* RAW*/}
+  prANY = 1;
+
+  prPTP_DATA_BUFFER_SIZE = (1024*1024);
+  prPTP_INITIATE_RELEASE_CONTROL = $9008;
+  prPTP_TERMINATE_RELEASE_CONTROL = $9009;
+
+  prPTP_RC_INITIATE_VIEW_FINDER = $900B;
+  prPTP_RC_TERMINATE_VIEW_FINDER = $900C;
+  prPTP_RC_RELEASE_DO_AE_AF_AWB = $900D;
+  prPTP_RC_FOCUS_LOCK = $9014;
+  prPTP_RC_FOCUS_UNLOCK = $9015;
+  prPTP_RC_CAPTURE = $901A;
+  prPTP_RC_GET_CHANGED_RELEASE_PARAMS_LIST = $9020;
+
+  prMSG_DATA_HEADER = $0001;
+  prMSG_DATA = $0002;
+  prMSG_TERMINATION = $0004;
+
+  prPTP_DEVICE_PROP_CHANGED = $4006; {/* Deveice property has been changed.*/}
+  prPTP_CAPTURE_COMPLETE = $400D; {/* Capture has finished.*/}
+  prPTP_SHUTDOWN_CF_GATE_WAS_OPENED = $C001; {/* The Device has shut down due to the opening of the SD card cover.*/}
+  prPTP_RESET_HW_ERROR = $C005; {/* The device has generated a hardware error.*/}
+  prPTP_ABORT_PC_EVF = $C006; {/* The Viewfinder mode has been cancelled.*/}
+  prPTP_ENABLE_PC_EVF = $C007; {/* The Viewfinder mode has been enablede.*/}
+  prPTP_FULL_VIEW_RELEASED = $C008; {/* Transfer timing of main image data*/}
+  prPTP_THUMBNAIL_RELEASED = $C009; {/* Transfer timing of thumbnail image data*/}
+  prPTP_CHANGE_BATTERY_STATUS = $C00A; {/* The power condition of the camera has changed.*/}
+  prPTP_PUSHED_RELEASE_SW = $C00B; {/* User has pressed the release swtich on camera.*/}
+  prPTP_RC_PROP_CHANGED = $C00C; {/* A group of properties relating to release control have been changed.*/}
+  prPTP_RC_ROTATION_ANGLE_CHANGED = $C00D; {/* The angle of rotation of the camera has been changed.*/}
+  prPTP_RC_CHANGED_BY_CAM_UI = $C00E; {/* An operation control on the camera has been operated.*/}
+  prCAL_SHUTDOWN = $D001; {/* Shutdown*/}
+
+  prPTP_DEV_PROP_BUZZER = $D001; {/* Set on/off the device buzzer*/}
+  prPTP_DEV_PROP_BATTERY_KIND = $D002; {/* Type of the battery*/}
+  prPTP_DEV_PROP_BATTERY_STATUS = $D003; {/* Buttery Status*/}
+  prPTP_DEV_PROP_COMP_QUALITY = $D006; {/* Image quality*/}
+  prPTP_DEV_PROP_FULLVIEW_FILE_FORMAT = $D007; {/* Image type*/}
+  prPTP_DEV_PROP_IMAGE_SIZE = $D008; {/* Image size*/}
+  prPTP_DEV_PROP_SELFTIMER = $D009; {/* Self-timer*/}
+  prPTP_DEV_PROP_STROBE_SETTING = $D00A; {/* Strobe setting*/}
+  prPTP_DEV_PROP_BEEP = $D00B; {/* Buzzer setting*/}
+  prPTP_DEV_PROP_EXPOSURE_MODE = $D00C; {/* Exposure mode setting*/}
+  prPTP_DEV_PROP_IMAGE_MODE = $D00D; {/* Image mode setting*/}
+  prPTP_DEV_PROP_DRIVE_MODE = $D00E; {/* Drive mode*/}
+  prPTP_DEV_PROP_EZOOM = $D00; {/* Electonic zoom setting*/}
+  prPTP_DEV_PROP_ML_WEI_MODE = $D010; {/* Metering method*/}
+  prPTP_DEV_PROP_AF_DISTANCE = $D011; {/* Search range in the AF mode*/}
+  prPTP_DEV_PROP_FOCUS_POINT_SETTING = $D012; {/* Selection mode for focusing point*/}
+  prPTP_DEV_PROP_WB_SETTING = $D013; {/* White balance setting*/}
+  prPTP_DEV_PROP_SLOW_SHUTTER_SETTING = $D014; {/* Slow Shutter setting*/}
+  prPTP_DEV_PROP_AF_MODE = $D015; {/* Auto focus mode setting*/}
+  prPTP_DEV_PROP_IMAGE_STABILIZATION = $D016; {/* Image stabilization processing*/}
+  prPTP_DEV_PROP_CONTRAST = $D017; {/* Contrast*/}
+  prPTP_DEV_PROP_COLOR_GAIN = $D018; {/* Color Compensation*/}
+  prPTP_DEV_PROP_SHARPNESS = $D019; {/* Sharpness*/}
+  prPTP_DEV_PROP_SENSITIVITY = $D01A; {/* Sensitivity*/}
+  prPTP_DEV_PROP_PARAMETER_SET = $D01B; {/* Development parameter setting*/}
+  prPTP_DEV_PROP_ISO = $D01C; {/* ISO value*/}
+  prPTP_DEV_PROP_AV = $D01D; {/* Av value*/}
+  prPTP_DEV_PROP_TV = $D01E; {/* Tv value*/}
+  prPTP_DEV_PROP_EXPOSURE_COMP = $D01; {/* Exposure compensation value*/}
+  prPTP_DEV_PROP_FLASH_COMP = $D020; {/* Flash exposure compensation value*/}
+  prPTP_DEV_PROP_AEB_EXPOSURE_COMP = $D021; {/* AEB exposure compensation value*/}
+  prPTP_DEV_PROP_AV_OPEN = $D023; {/* Open aperture value*/}
+  prPTP_DEV_PROP_AV_MAX = $D024; {/* maximum aperture value*/}
+  prPTP_DEV_PROP_FOCAL_LENGTH = $D025; {/* Value corresponding to the current focal distance multiplied by FocalLengthDenominator*/}
+  prPTP_DEV_PROP_FOCAL_LENGTH_TELE = $D026; {/* Value corresponding to the telescopic focal distance multiplied by FocalLengthDenominator*/}
+  prPTP_DEV_PROP_FOCAL_LENGTH_WIDE = $D027; {/* Value corresponding to the wide-angle focus distance multiplied by FocalLengthDenominator*/}
+  prPTP_DEV_PROP_FOCAL_LENGTH_DENOMI = $D028; {/* Focus information multiplier value*/}
+  prPTP_DEV_PROP_CAPTURE_TRANSFER_MODE = $D029; {/* Image transfer mode to be applied at caputre*/}
+  prPTP_DEV_PROP_ZOOM_POS = $D02A; {/* Current zoom position*/}
+  prPTP_DEV_PROP_SUPPORTED_SIZE = $D02C; {/* Support size*/}
+  prPTP_DEV_PROP_SUPPORTED_THUMB_SIZE = $D02D; {/* Thumbnail size supported by the device*/}
+  prPTP_DEV_PROP_FIRMWARE_VERSION = $D031; {/* Version of the camera device firmware*/}
+  prPTP_DEV_PROP_CAMERA_MODEL_NAME = $D032; {/* Camera model*/}
+  prPTP_DEV_PROP_OWNER_NAME = $D033; {/* Owner name*/}
+  prPTP_DEV_PROP_CAMERA_TIME = $D034; {/* Current time information in the device*/}
+  prPTP_DEV_PROP_CAMERA_OUTPUT = $D036; {/* Destination of image signal output in the Viewfinder mode*/}
+  prPTP_DEV_PROP_DISP_AV = $D037; {/* How to display the Av value*/}
+  prPTP_DEV_PROP_AV_OPEN_APEX = $D038; {/* Open aperture value*/}
+  prPTP_DEV_PROP_EZOOM_SIZE = $D039; {/* Horizontal size of image to be cut out from CCD image using electronic zoom*/}
+  prPTP_DEV_PROP_ML_SPOT_POS = $D03A; {/* Spot metering positon*/}
+  prPTP_DEV_PROP_DISP_AV_MAX = $D03B; {/* How to display the maximin Av value*/}
+  prPTP_DEV_PROP_AV_MAX_APEX = $D03C; {/* minimum aperture value*/}
+  prPTP_DEV_PROP_EZOOM_START_POS = $D03D; {/* Zoom position at which the electornic zoom range starts*/}
+  prPTP_DEV_PROP_FOCAL_LENGTH_OF_TELE = $D03E; {/* Focal distance at the optical telescopic end*/}
+  prPTP_DEV_PROP_EZOOM_SIZE_OF_TELE = $D03; {/* Horizontal size of image to be cut out from CCD image at the telescopic end of the electronic zoom range*/}
+  prPTP_DEV_PROP_PHOTO_EFFECT = $D040; {/* Photo effect*/}
+  prPTP_DEV_PROP_AF_LIGHT = $D041; {/* ON/OFF of AF assist light*/}
+  prPTP_DEV_PROP_FLASH_QUANTITY = $D042; {/* Number of flash levels that can be set in the manual mode*/}
+  prPTP_DEV_PROP_ROTATION_ANGLE = $D043; {/* Angle of rotation detected by the gravity sensor*/}
+  prPTP_DEV_PROP_ROTATION_SENCE = $D044; {/* Whether the gravity sensor is enable or disable*/}
+  prPTP_DEV_PROP_IMEGE_FILE_SIZE = $D048; {/* Image file size supported be the camera*/}
+  prPTP_DEV_PROP_CAMERA_MODEL_ID = $D049; {/* Camera model ID*/}
+
+  prptpAEAFAWB_RESET_AE = $00000001; {/* AE Reset*/}
+  prptpAEAFAWB_RESET_AF = $00000002; {/* AF Reset*/}
+  prptpAEAFAWB_RESET_AWB = $00000004; {/* AWB Reset*/}
+
+  prPORTTYPE_WIA = $0001; {/* WIA*/}
+  prPORTTYPE_STI = $0002; {/* STI*/}
+
+  prGENERATION_CAMERA_MASK = $ff00;
+
+  prCURRENT_FUNCTABLE_VERSION = $00000001;
+
+  prERROR_COMPONENTID_MASK = $00F00000;
+  prERROR_ERRORID_MASK = $0000FFFF;
+  prERROR_PTP_COMPONENTID = $00100000; {/* PTP operation errors*/}
+  prERROR_PRSDK_COMPONENTID = $00200000; {/* PRSDK Internal Error*/}
+  prERROR_WIA_STI_COMPONENTID = $00300000; {/* Errors generated by the Windows WIA/STI*/}
+  prERROR_WINDOWS_COMPONENTID = $00400000; {/* Errors generated by the GetLastError() function in WIN32 API*/}
+  prERROR_COMIF_COMPONENTID = $00500000; {/* Windows COM I/F errors*/}
+
+  prOK = $00000000;
+
+  prRESPONSE_Undefined = $00002000;
+  prRESPONSE_GeneralError = $00002002;
+  prRESPONSE_SessionNotOpen = $00002003;
+  prRESPONSE_InvalidTransactionID = $00002004;
+  prRESPONSE_OperationNotSupported = $00002005;
+  prRESPONSE_ParameterNotSupported = $00002006;
+  prRESPONSE_IncompleteTransfer = $00002007;
+  prRESPONSE_InvalidStorageID = $00002008;
+  prRESPONSE_InvalidObjectHandle = $00002009;
+  prRESPONSE_DevicePropNotSupported = $0000200A;
+  prRESPONSE_InvalidObjectFormatCode = $0000200B;
+  prRESPONSE_StoreFull = $0000200C;
+  prRESPONSE_ObjectWriteProtected = $0000200D;
+  prRESPONSE_StoreRead_Only = $0000200E;
+  prRESPONSE_AccessDenied = $0000200;
+  prRESPONSE_NoThumbnailPresent = $00002010;
+  prRESPONSE_SelfTestFailed = $00002011;
+  prRESPONSE_PartialDeletion = $00002012;
+  prRESPONSE_StoreNotAvailable = $00002013;
+  prRESPONSE_SpecificationByFormatUnsupported = $00002014;
+  prRESPONSE_NoValidObjectInfo = $00002015;
+  prRESPONSE_InvalidCodeFormat = $00002016;
+  prRESPONSE_UnknownVendorCode = $00002017;
+  prRESPONSE_CaptureAlreadyTerminated = $00002018;
+  prRESPONSE_DeviceBusy = $00002019;
+  prRESPONSE_InvalidParentObject = $0000201A;
+  prRESPONSE_InvalidDevicePropFormat = $0000201B;
+  prRESPONSE_InvalidDevicePropValue = $0000201C;
+  prRESPONSE_InvalidParameter = $0000201D;
+  prRESPONSE_SessionAlreadyOpen = $0000201E;
+  prRESPONSE_TransactionCancelled = $0000201;
+  prRESPONSE_SpecificationOfDestinationUnsupported = $00002020;
+  prRESPONSE_Ex_Undefined = $0000A000;
+  prRESPONSE_Ex_UnknownCommandReceived = $0000A001;
+  prRESPONSE_Ex_MemAllocFailed = $0000A002;
+  prRESPONSE_Ex_InternalError = $0000A003;
+  prRESPONSE_Ex_DirIOError = $0000A004;
+  prRESPONSE_Ex_RefusedByOtherProcess = $0000A005;
+  prRESPONSE_Ex_CoverClosed = $0000A006;
+  prRESPONSE_Ex_NoRelease = $0000A007;
+  prRESPONSE_Ex_DeviceIsHot = $0000A008;
+  prRESPONSE_Ex_LowBattery = $0000A009;
+  prRESPONSE_Ex_AlreadyExit = $0000A00A;
+
+  prUNIMPLEMENTED = $00000001;
+  prINTERNAL_ERROR = $00000002;
+  prMEM_ALLOC_FAILED = $00000003;
+  prMEM_FREE_FAILED = $00000004;
+  prOPERATION_CANCELLED = $00000005;
+  prINCOMPATIBLE_VERSION = $00000006;
+  prNOT_SUPPORTED = $00000007;
+  prUNEXPECTED_EXCEPTION = $00000008;
+  prPROTECTION_VIOLATION = $00000009;
+  prMISSING_SUBCOMPONENT = $0000000A;
+  prSELECTION_UNAVAILABLE = $0000000B;
+
+  prINVALID_PARAMETER = $00000021;
+  prINVALID_HANDLE = $00000022;
+
+  prINVALID_FN_CALL = $00000061;
+  prWAIT_TIMEOUT_ERROR = $00000062;
+  prINSUFFICIENT_BUFFER = $00000063;
+  prEVENT_CALLBACK_EXIST = $00000064;
+
+
+type
+  prVoid = Integer;
+  pprVoid=^prVoid;
+  prUInt8 = Byte;
+  pprUInt8=^prUInt8;
+  prInt8 = Char;
+  prChar = Char;
+  prWChar = WideChar;
+  prUInt16 = Word;
+  prInt16 = SmallInt;
+  prUInt32 = LongInt;
+  pprUInt32=^prUInt32;
+  prInt32 = LongInt;
+  prFloat32 = Single;
+  prUInt64 = Int64;
+  prResponse = PRUINT32;
+  prBoolean = PRUINT16;
+  prTime = PRUINT32;
+  prEventID = PRUINT32;
+  prContext = PRUINT32;
+  prHWND = HWND;
+  prHandle = PRUINT32;
+  pprHandle=^prHandle;
+  prObjectHandle = PRUINT32;
+  prOperationCode = PRUINT16;
+  prProgressMsg = PRINT32;
+  prProgressSts = PRINT32;
+  prptpEventCode = PRUINT16;
+  prptpDevicePropCode = PRUINT16;
+  prptpAeAfAwbResetFlag = PRUINT32;
+  prPorttype = PRUINT16;
+  prptpObjectFormatCode = PRUINT16;
+
+(*typedef struct{
+	prWChar ModuleName[512];				/* Module name (512 characters)	*/
+	prWChar Version[32];					/* Version (32 characters) */
+}prVerInfo;*)
+
+  prVerInfo=record
+    ModuleName: array[0..511] of prWChar;				// Module name (512 characters)	*/
+   	Version: array[0..31] of  prWChar;					// Version (32 characters) */
+  end;
+
+(*typedef struct{
+	prUInt32  Entry;						/* Number of modules included in this structure */
+	prVerInfo VerInfo[prANY]; 				/* Array of file version number information of PS-ReC SDK modules */
+}prDllsVerInfo;*)
+
+  prDllsVerInfo=record
+    Entry: prUInt32;
+    VerInfo: array[0..prANY-1] of prVerInfo;
+  end;
+  pprDllsVerInfo=^prDllsVerInfo;
+
+(*typedef struct{
+	prWChar           DeviceInternalName[512];	/* Internal devicve name (512 characters) */
+	prWChar    	      ModelName[32];          	/* Camera model name (32 characters) */
+	prUInt16	      Generation;				/* Camera generation number */
+	prUInt32		  Reserved1;				/* Reserved */
+	prUInt32	      ModelID;					/* Camera model ID */
+	prUInt16		  Reserved2;				/* Reserved */
+	prPorttype	      PortType;					/* Port type 0x01FWIA / 0x02FSTI */
+	prUInt32		  Reserved3;				/* Reserved */
+}prDeviceInfoTable;*)
+
+  prDeviceInfoTable=record
+    DeviceInternalName: array[0..511] of prWChar;
+    ModelName: array[0..31] of prWChar;
+    Generation: prUInt16;
+    Reserved1: prUInt32;
+    ModelID: prUInt32;
+    Reserved2: prUInt16;
+    PortType: prPorttype;
+    Reserved3: prUInt32;
+  end;
+  pprDeviceInfoTable=^prDeviceInfoTable;
+
+(*typedef struct{
+	prUInt32	NumList;					/* Number of camera device information included in this structure */
+	prDeviceInfoTable DeviceInfo[prANY];	/* Camera device information */
+}prDeviceList;*)
+
+  prDeviceList=record
+    NumList: prUInt32;
+    DeviceInfo: array[0..prANY-1] of prDeviceInfoTable;
+  end;
+  pprDeviceList=^prDeviceList;
+
+(*typedef struct{
+	prProgressMsg lMessage;					/* Message */
+	prProgressSts lStatus;					/* Status */
+	prUInt32	  lPercentComplete;			/* The uint of this parameter is percent */
+	prUInt32	  lOffset;					/* Offset */
+	prUInt32	  lLength;					/* Size */
+	prUInt32	  lReserved;				/* Reserved */
+	prUInt32	  lResLength;				/* Reserved */
+	prUInt8 *	  pbData;					/* Pointer to the buffer in which the transferred data is stored. */
+}prProgress;*)
+
+  prProgress=record
+    lMessage: prProgressMsg;
+    lStatus: prProgressSts;
+    lPercentComplete: prUInt32;
+    lOffset: prUInt32;
+    lLength: prUInt32;
+    lReserved: prUInt32;
+    lResLength: prUInt32;
+    pbData: pprUInt8;
+  end;
+  pprProgress=^prProgress;
+
+
+(*typedef struct {
+	prUInt32		ContainerLength;
+	prUInt16		ContainerType;
+	prUInt16		Code;
+	prUInt32		TransactionID;
+	prUInt32		Parameter[prANY];
+} EVENT_GENERIC_CONTAINER;*)
+
+  EVENT_GENERIC_CONTAINER=record
+    ContainerLength: prUInt32;
+    ContainerType: prUInt16;
+    Code: prUInt16;
+    TransactionID: prUInt32;
+    Parameter: array[0..prANY-1] of prUInt32;
+  end;
+  pEVENT_GENERIC_CONTAINER=^EVENT_GENERIC_CONTAINER;
+
+
+(*typedef prResponse prSTDCALL  prSetEventCB(
+	prHandle 	CameraHandle,
+	prContext 	Context,
+	prVoid* 	pEventData
+);*)
+
+  prSetEventCB=function (CameraHandle: prHandle; Context: prContext; pEventData: pEVENT_GENERIC_CONTAINER): prResponse; stdcall;
+  pprSetEventCB=^prSetEventCB;
+
+(*typedef prResponse prSTDCALL  prGetFileDataCB(
+	prHandle       CameraHandle,
+	prObjectHandle ObjectHandle,
+	prContext      Context,
+	prProgress*    pProgress
+);*)
+
+  prGetFileDataCB=function(CameraHandle: prHandle; ObjectHandle: prObjectHandle;
+                           Context: prContext; pProgress: pprProgress): prResponse; stdcall;
+  pprGetFileDataCB=^prGetFileDataCB;
+
+(*typedef prResponse prSTDCALL  prViewFinderCB (
+	prHandle CameraHandle,
+	prContext Context,
+	prUInt32 Size,
+	prVoid * pVFData
+);*)
+
+  prViewFinderCB=function(CameraHandle: prHandle; Context: prContext; Size: prUInt32; pVFData: pprVoid): prResponse; stdcall;
+  pprViewFinderCB=^prViewFinderCB;
+
+
+var
+
+(*prResponse  PR_StartSDK(
+	prVoid
+);*)
+
+  PR_StartSDK: function: prResponse; stdcall;
+  {$EXTERNALSYM PR_StartSDK}
+
+(*prCAPI  PR_FinishSDK(
+	prVoid
+);*)
+
+  PR_FinishSDK: function: prResponse; stdcall;
+  {$EXTERNALSYM PR_FinishSDK}
+
+  PR_GetDllsVersion: function(var pBufferSize: pprUInt32;
+                              var pDllVersion: pprDllsVerInfo): prResponse; stdcall;
+
+  PR_GetFunctions: function(var pFunctions: Pointer): prResponse; stdcall;
+
+(*prCAPI  PR_GetDeviceList( 
+	prUInt32*		pBufferSize,
+	prDeviceList*	pDeviceList
+);*)
+  
+  PR_GetDeviceList: function(var pBufferSize: prUInt32;
+                             pDeviceList: pprDeviceList): prResponse; stdcall;
+  {$EXTERNALSYM PR_GetDeviceList}
+
+(*prCAPI  PR_CreateCameraObject(
+	prDeviceInfoTable*	pDeviceInfo,
+	prHandle*			pCameraHandle
+);*)
+                             
+  PR_CreateCameraObject: function(pDeviceInfo: pprDeviceInfoTable;
+                                  var pCameraHandle: prHandle): prResponse; stdcall;
+  {$EXTERNALSYM PR_CreateCameraObject}
+
+(*prCAPI  PR_DestroyCameraObject(
+	prHandle	CameraHandle
+);*)
+  
+  PR_DestroyCameraObject: function(CameraHandle: prHandle): prResponse; stdcall;
+  {$EXTERNALSYM PR_DestroyCameraObject}
+
+(*prCAPI  PR_ConnectCamera(
+	prHandle	CameraHandle
+);*)
+  
+  PR_ConnectCamera: function(CameraHandle: prHandle): prResponse; stdcall;
+  {$EXTERNALSYM PR_ConnectCamera}
+
+(*prCAPI  PR_DisconnectCamera(
+	prHandle	CameraHandle
+);*)
+
+  PR_DisconnectCamera: function(CameraHandle: prHandle): prResponse; stdcall;
+  {$EXTERNALSYM PR_DisconnectCamera}
+
+(*prCAPI  PR_SetEventCallBack(
+	prHandle	CameraHandle,
+	prContext	Context,
+	prSetEventCB*	pSetEventCB
+);*)
+
+  PR_SetEventCallBack: function(CameraHandle: prHandle;
+                                Context: prContext;
+                                pSetEventCB: pprSetEventCB): prResponse; stdcall;
+  {$EXTERNALSYM PR_SetEventCallBack}
+
+(*prCAPI  PR_ClearEventCallBack(
+	prHandle	CameraHandle
+);*)
+  
+  PR_ClearEventCallBack: function(CameraHandle: prHandle): prResponse; stdcall;
+  {$EXTERNALSYM PR_ClearEventCallBack}
+
+(*prCAPI  PR_GetDeviceInfo(
+	prHandle	CameraHandle,
+	prUInt32*	pBufferSize,
+	prVoid*		pDeviceInfo
+);*)
+  
+  PR_GetDeviceInfo: function(CameraHandle: prHandle;
+                             var pBufferSize: prUInt32;
+                             pDeviceInfo: pprVoid): prResponse; stdcall;
+  {$EXTERNALSYM PR_GetDeviceInfo}
+
+(*prCAPI  PR_InitiateReleaseControl(
+	prHandle	CameraHandle
+);*)
+
+  PR_InitiateReleaseControl: function(CameraHandle: prHandle): prResponse; stdcall;
+  {$EXTERNALSYM PR_InitiateReleaseControl}
+
+(*prCAPI  PR_TerminateReleaseControl(
+	prHandle	CameraHandle
+);
+*)
+  
+  PR_TerminateReleaseControl: function(CameraHandle: prHandle): prResponse; stdcall;
+  {$EXTERNALSYM PR_TerminateReleaseControl}
+
+(*prCAPI PR_RC_Release(
+	prHandle        CameraHandle
+);*)
+  
+  PR_RC_Release: function(CameraHandle: prHandle): prResponse; stdcall;
+  {$EXTERNALSYM PR_RC_Release}
+
+(*prCAPI PR_RC_GetReleasedData(
+	prHandle        CameraHandle,
+	prObjectHandle  ObjectHandle,
+	prptpEventCode  EventCode,
+	prUInt32        TransSize,
+	prContext		Context,
+	prGetFileDataCB*	pGetFileDataCB
+);*)
+
+  PR_RC_GetReleasedData: function(CameraHandle: prHandle;
+                                  ObjectHandle: prObjectHandle;
+                                  EventCode: prptpEventCode;
+                                  TransSize: prUInt32;
+                                  Context: prContext;
+                                  pGetFileDataCB: pprGetFileDataCB): prResponse; stdcall;
+  {$EXTERNALSYM PR_RC_GetReleasedData}
+
+  PR_RC_GetNumAvailableShot: function(var CameraHandle: prHandle;
+                                      var pNum: PRUINT32): prResponse; stdcall;
+
+(*prCAPI PR_RC_StartViewFinder(
+	prHandle        CameraHandle,
+	prContext		Context,
+	prViewFinderCB*	pViewFinderCB
+);*)
+                                      
+  PR_RC_StartViewFinder: function(CameraHandle: prHandle;
+                                  Context: prContext;
+                                  pViewFinderCB: pprViewFinderCB): prResponse; stdcall;
+  {$EXTERNALSYM PR_RC_StartViewFinder}
+
+(*prCAPI PR_RC_TermViewFinder(
+	prHandle        CameraHandle
+);*)
+  
+  PR_RC_TermViewFinder: function(CameraHandle: prHandle): prResponse; stdcall;
+  {$EXTERNALSYM PR_RC_TermViewFinder}
+
+  PR_RC_DoAeAfAwb: function(var CameraHandle: prHandle;
+                            var ResetFlag: prptpAeAfAwbResetFlag): prResponse; stdcall;
+
+  PR_RC_FocusLock: function(var CameraHandle: prHandle): prResponse; stdcall;
+
+  PR_RC_FocusUnlock: function(var CameraHandle: prHandle): prResponse; stdcall;
+
+(*prCAPI  PR_GetDevicePropDesc(
+	prHandle				CameraHandle,
+	prptpDevicePropCode		DevicePropCode,
+	prUInt32*				pBufferSize,
+	prVoid*					pDevicePropDesc
+);*)
+  
+  PR_GetDevicePropDesc: function(CameraHandle: prHandle;
+                                 DevicePropCode: prptpDevicePropCode;
+                                 pBufferSize: prUInt32;
+                                 pDevicePropDesc: pprVoid): prResponse; stdcall;
+  {$EXTERNALSYM PR_GetDevicePropDesc}
+
+(*prCAPI  PR_SetDevicePropValue(
+	prHandle      		CameraHandle,
+	prptpDevicePropCode	DevicePropCode,
+	prUInt32			DataSize,
+	prVoid*				pDeviceProperty
+);*)
+  
+  PR_GetDevicePropValue: function(CameraHandle: prHandle;
+                                  DevicePropCode: prptpDevicePropCode;
+                                  pBufferSize: pprUInt32;
+                                  pDeviceProperty: pprVoid): prResponse; stdcall;
+  {$EXTERNALSYM PR_GetDevicePropValue}
+
+(*prCAPI  PR_SetDevicePropValue(
+	prHandle      		CameraHandle,
+	prptpDevicePropCode	DevicePropCode,
+	prUInt32			DataSize,
+	prVoid*				pDeviceProperty
+);*)
+
+  PR_SetDevicePropValue: function(CameraHandle: prHandle;
+                                  DevicePropCode: prptpDevicePropCode;
+                                  DataSize: prUInt32;
+                                  pDeviceProperty: pprVoid): prResponse; stdcall;
+  {$EXTERNALSYM PR_GetDevicePropDesc}
+
+  PR_RC_GetChangedReleaseParamesList: function(var CameraHandle: prHandle;
+                                               var pBufferSize: pprUInt32;
+                                               var pParamsList: pprVoid): prResponse; stdcall;
+
+function PRAPILoaded: Boolean;
+
+implementation
+
+const
+  prsdklib = 'PRSDK.dll';
+
+var
+  DLLHandle: THandle=0;
+
+procedure LoadDLL;
+begin
+  if DLLHandle=0 then DLLHandle:=LoadLibrary(prsdklib);
+  if DLLHandle >= HINSTANCE_ERROR then begin
+    @PR_StartSDK:=GetProcAddress(DLLHandle,'PR_StartSDK');
+    @PR_FinishSDK:=GetProcAddress(DLLHandle,'PR_FinishSDK');
+    @PR_GetDeviceList:=GetProcAddress(DLLHandle,'PR_GetDeviceList');
+    @PR_CreateCameraObject:=GetProcAddress(DLLHandle,'PR_CreateCameraObject');
+    @PR_SetEventCallBack:=GetProcAddress(DLLHandle,'PR_SetEventCallBack');
+    @PR_ConnectCamera:=GetProcAddress(DLLHandle,'PR_ConnectCamera');
+    @PR_GetDeviceInfo:=GetProcAddress(DLLHandle,'PR_GetDeviceInfo');
+    @PR_GetDevicePropDesc:=GetProcAddress(DLLHandle,'PR_GetDevicePropDesc');
+    @PR_TerminateReleaseControl:=GetProcAddress(DLLHandle,'PR_TerminateReleaseControl');
+    @PR_DisconnectCamera:=GetProcAddress(DLLHandle,'PR_DisconnectCamera');
+    @PR_ClearEventCallBack:=GetProcAddress(DLLHandle,'PR_ClearEventCallBack');
+    @PR_DestroyCameraObject:=GetProcAddress(DLLHandle,'PR_DestroyCameraObject');
+    @PR_InitiateReleaseControl:=GetProcAddress(DLLHandle,'PR_InitiateReleaseControl');
+    @PR_RC_StartViewFinder:=GetProcAddress(DLLHandle,'PR_RC_StartViewFinder');
+    @PR_RC_TermViewFinder:=GetProcAddress(DLLHandle,'PR_RC_TermViewFinder');
+    @PR_RC_Release:=GetProcAddress(DLLHandle,'PR_RC_Release');
+    @PR_RC_GetReleasedData:=GetProcAddress(DLLHandle,'PR_RC_GetReleasedData');
+    @PR_SetDevicePropValue:=GetProcAddress(DLLHandle,'PR_SetDevicePropValue');
+    @PR_GetDevicePropValue:=GetProcAddress(DLLHandle,'PR_GetDevicePropValue');
+
+(*
+    @PR_GetDllsVersion := GetProcAddress(DLLHandle,'PR_GetDllsVersion');
+    @PR_GetFunctions := GetProcAddress(DLLHandle,'PR_GetFunctions');
+    @PR_RC_GetNumAvailableShot := GetProcAddress(DLLHandle,'PR_RC_GetNumAvailableShot');
+    @PR_RC_DoAeAfAwb := GetProcAddress(DLLHandle,'PR_RC_DoAeAfAwb');
+    @PR_RC_FocusLock := GetProcAddress(DLLHandle,'PR_RC_FocusLock');
+    @PR_RC_FocusUnlock := GetProcAddress(DLLHandle,'PR_RC_FocusUnlock');
+    @PR_RC_GetChangedReleaseParamesList := GetProcAddress(DLLHandle,'PR_RC_GetChangedReleaseParamesList');*)
+  end;  
+end;
+
+procedure UnLoadDLL;
+begin
+  if DLLHandle<>0 then
+    FreeLibrary(DLLHandle);
+  DLLHandle:=0;  
+end;
+
+function PRAPILoaded: Boolean;
+begin
+  Result:=DLLHandle<>0;
+end;
+  
+initialization
+  LoadDLL;
+
+finalization
+  UnLoadDLL;
+
+end.

@@ -1,0 +1,76 @@
+unit BisKrieltDataRubricsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList,
+  BisDataGridFm, BisDataTreeFm;
+
+type
+  TBisKrieltDataRubricsForm = class(TBisDataTreeForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisDesignDataRubricsFormIface=class(TBisDataTreeFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataRubricsForm: TBisKrieltDataRubricsForm;
+
+implementation
+
+uses BisDesignDataRubricEditFm;
+
+{$R *.dfm}
+
+{ TBisDesignDataRubricsFormIface }
+
+constructor TBisDesignDataRubricsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDesignDataRubricsForm;
+  FilterClass:=TBisDesignDataRubricEditFormIface;
+  InsertClasses.Add(TBisDesignDataRubricInsertFormIface);
+  InsertClasses.Add(TBisDesignDataRubricInsertChildFormIface);
+  UpdateClass:=TBisDesignDataRubricUpdateFormIface;
+  DeleteClass:=TBisDesignDataRubricDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_RUBRICS';
+  with FieldNames do begin
+    AddKey('RUBRIC_ID');
+    AddParentKey('PARENT_ID');
+    AddInvisible('VIEW_ID');
+    AddInvisible('VIEW_NAME');
+    AddInvisible('VIEW_NUM');
+    AddInvisible('TYPE_ID');
+    AddInvisible('TYPE_NAME');
+    AddInvisible('TYPE_NUM');
+    AddInvisible('OPERATION_ID');
+    AddInvisible('OPERATION_NAME');
+    AddInvisible('OPERATION_NUM');
+    AddInvisible('PARAM_ID');
+    AddInvisible('PARAM_NAME');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('EXPORT');
+    AddInvisible('RUBRIC_TYPE');
+    AddInvisible('RUBRIC_TYPE');
+    AddInvisible('PRIORITY');
+    AddInvisible('COND');
+    AddInvisible('VALUE');
+    AddInvisible('PATTERN');
+    AddInvisible('SORTING');
+    AddInvisible('FONT');
+    Add('NAME','Наименование',225);
+    Add('PARENT_NAME','Родитель',175);
+  end;
+  Orders.Add('LEVEL');
+  Orders.Add('PRIORITY');
+end;
+
+end.

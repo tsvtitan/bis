@@ -1,0 +1,114 @@
+inherited BisCallcDealsFrameTasksFilterForm: TBisCallcDealsFrameTasksFilterForm
+  Left = 255
+  Top = 186
+  Caption = 'BisCallcDealsFrameTasksFilterForm'
+  ClientHeight = 510
+  ClientWidth = 786
+  Font.Name = 'Tahoma'
+  ExplicitLeft = 255
+  ExplicitTop = 186
+  ExplicitWidth = 794
+  ExplicitHeight = 537
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 472
+    Width = 786
+    ExplicitTop = 181
+    ExplicitWidth = 286
+    inherited ButtonOk: TButton
+      Left = 609
+      ExplicitLeft = 109
+    end
+    inherited ButtonCancel: TButton
+      Left = 705
+      ExplicitLeft = 205
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 786
+    Height = 472
+    ExplicitWidth = 286
+    ExplicitHeight = 181
+    object LabelDealNum: TLabel
+      Left = 76
+      Top = 31
+      Width = 63
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1053#1086#1084#1077#1088' '#1076#1077#1083#1072':'
+      FocusControl = EditDealNum
+    end
+    object LabelFirm: TLabel
+      Left = 85
+      Top = 58
+      Width = 54
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1050#1088#1077#1076#1080#1090#1086#1088':'
+      FocusControl = EditFirm
+    end
+    object LabelSurname: TLabel
+      Left = 91
+      Top = 90
+      Width = 48
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1060#1072#1084#1080#1083#1080#1103':'
+      FocusControl = EditSurname
+    end
+    object LabelName: TLabel
+      Left = 116
+      Top = 117
+      Width = 23
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1048#1084#1103':'
+      FocusControl = EditName
+    end
+    object LabelPatronymic: TLabel
+      Left = 86
+      Top = 144
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1090#1095#1077#1089#1090#1074#1086':'
+      FocusControl = EditPatronymic
+    end
+    object EditDealNum: TEdit
+      Left = 145
+      Top = 28
+      Width = 129
+      Height = 21
+      TabOrder = 0
+    end
+    object EditFirm: TEdit
+      Left = 145
+      Top = 55
+      Width = 131
+      Height = 21
+      TabOrder = 1
+    end
+    object EditSurname: TEdit
+      Left = 145
+      Top = 87
+      Width = 120
+      Height = 21
+      TabOrder = 2
+    end
+    object EditName: TEdit
+      Left = 145
+      Top = 114
+      Width = 120
+      Height = 21
+      TabOrder = 3
+    end
+    object EditPatronymic: TEdit
+      Left = 145
+      Top = 141
+      Width = 161
+      Height = 21
+      TabOrder = 4
+    end
+  end
+end

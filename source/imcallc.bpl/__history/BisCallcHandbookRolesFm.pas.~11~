@@ -1,0 +1,62 @@
+unit BisCallcHandbookRolesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm;
+
+type
+  TBiCallcHandbookRolesForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBiCallcHandbookRolesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHandbookRolesForm: TBiCallcHandbookRolesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHandbookRolesEditFm;
+
+{ TBiCallcHandbookRolesFormIface }
+
+constructor TBiCallcHandbookRolesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBiCallcHandbookRolesForm;
+  InsertClass:=TBisCallcHandbookRolesInsertFormIface;
+  UpdateClass:=TBisCallcHandbookRolesUpdateFormIface;
+  DeleteClass:=TBisCallcHandbookRolesDeleteFormIface;
+  ProviderName:='S_ACCOUNTS';
+  with FieldNames do begin
+    AddKey('ACCOUNT_ID');
+    AddInvisible('FIRM_ID');
+    AddInvisible('PASSWORD');
+    AddInvisible('DB_USER_NAME');
+    AddInvisible('DB_PASSWORD');
+    AddInvisible('IS_ROLE');
+    AddInvisible('LOCKED');
+    AddInvisible('AUTO_CREATED');
+    AddInvisible('EMAIL');
+    AddInvisible('SURNAME');
+    AddInvisible('NAME');
+    AddInvisible('PATRONYMIC');
+    AddInvisible('PHONE');
+    Add('USER_NAME','Роль',100);
+    Add('DESCRIPTION','Описание',250);
+  end;
+  FilterGroups.Add.Filters.Add('IS_ROLE',fcEqual,1);
+  Orders.Add('USER_NAME');
+end;
+
+end.

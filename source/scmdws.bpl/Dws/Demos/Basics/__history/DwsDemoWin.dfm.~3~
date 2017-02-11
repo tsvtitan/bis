@@ -1,0 +1,891 @@
+object FDwsDemo: TFDwsDemo
+  Left = 169
+  Top = 164
+  Caption = 'DWS Demo'
+  ClientHeight = 520
+  ClientWidth = 725
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  Menu = MainMenu1
+  OldCreateOrder = True
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter2: TSplitter
+    Left = 448
+    Top = 0
+    Height = 520
+    Align = alRight
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 448
+    Height = 520
+    Align = alClient
+    BevelOuter = bvNone
+    Caption = 'Panel2'
+    TabOrder = 0
+    object Splitter1: TSplitter
+      Left = 0
+      Top = 436
+      Width = 448
+      Height = 3
+      Cursor = crVSplit
+      Align = alBottom
+      Visible = False
+    end
+    object LBMsgs: TListBox
+      Left = 0
+      Top = 439
+      Width = 448
+      Height = 81
+      Align = alBottom
+      ItemHeight = 13
+      TabOrder = 0
+      Visible = False
+      OnClick = LBMsgsClick
+      OnDblClick = LBMsgsDblClick
+    end
+    object MSource: TRichEdit
+      Left = 0
+      Top = 0
+      Width = 448
+      Height = 436
+      Align = alClient
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Courier New'
+      Font.Style = []
+      HideSelection = False
+      ParentFont = False
+      PlainText = True
+      ScrollBars = ssVertical
+      TabOrder = 1
+      WantTabs = True
+      WordWrap = False
+      OnChange = MSourceChange
+    end
+  end
+  object Panel3: TPanel
+    Left = 451
+    Top = 0
+    Width = 274
+    Height = 520
+    Align = alRight
+    BevelOuter = bvNone
+    TabOrder = 1
+    object Splitter3: TSplitter
+      Left = 0
+      Top = 310
+      Width = 274
+      Height = 3
+      Cursor = crVSplit
+      Align = alBottom
+    end
+    object LBLog: TListBox
+      Left = 0
+      Top = 313
+      Width = 274
+      Height = 207
+      Align = alBottom
+      ItemHeight = 13
+      Items.Strings = (
+        'Log')
+      TabOrder = 0
+    end
+    object MResult: TRichEdit
+      Left = 0
+      Top = 0
+      Width = 274
+      Height = 310
+      Align = alClient
+      Lines.Strings = (
+        'This memo displays the value of '
+        'TDelphiWebScript.Result ')
+      TabOrder = 1
+      WantTabs = True
+      WordWrap = False
+    end
+  end
+  object MainMenu1: TMainMenu
+    Left = 28
+    Top = 348
+    object MIFile: TMenuItem
+      Caption = 'File'
+      object MIFileNew: TMenuItem
+        Caption = '&New'
+        ShortCut = 16462
+        OnClick = MIFileNewClick
+      end
+      object MIFileOpen: TMenuItem
+        Caption = '&Open'
+        ShortCut = 16463
+        OnClick = MIFileOpenClick
+      end
+      object MIFileSave: TMenuItem
+        Caption = '&Save'
+        ShortCut = 16467
+        OnClick = MIFileSaveClick
+      end
+      object MIFileSaveAs: TMenuItem
+        Caption = 'Save As...'
+        OnClick = MIFileSaveAsClick
+      end
+      object MIFileN1: TMenuItem
+        Caption = '-'
+      end
+      object MIFileExit: TMenuItem
+        Caption = '&Exit'
+        OnClick = MIFileExitClick
+      end
+    end
+    object MIScript: TMenuItem
+      Caption = 'Script'
+      object MIScriptCompile: TMenuItem
+        Caption = '&Compile'
+        ShortCut = 16504
+        OnClick = MIScriptCompileClick
+      end
+      object MIScriptExecute: TMenuItem
+        Caption = '&Execute'
+        ShortCut = 120
+        OnClick = MIScriptExecuteClick
+      end
+      object MIScriptStop: TMenuItem
+        Caption = '&Stop'
+        ShortCut = 27
+        OnClick = MIScriptStopClick
+      end
+      object MIScriptN2: TMenuItem
+        Caption = '-'
+      end
+      object MIScriptStep: TMenuItem
+        Caption = 'Step'
+        ShortCut = 119
+        OnClick = MIScriptStepClick
+      end
+      object MIScriptN3: TMenuItem
+        Caption = '-'
+      end
+      object MIScriptOptionOptimization: TMenuItem
+        Caption = 'Optimization (ON/OFF)'
+        OnClick = CompilerOptionClick
+      end
+    end
+    object MIFilter: TMenuItem
+      Caption = 'Filter'
+      object MIFilterStandard: TMenuItem
+        Caption = 'Standard'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = MIFilterStandardClick
+      end
+      object MIFilterHtml: TMenuItem
+        Caption = 'HtmlFilter'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = MIFilterHtmlClick
+      end
+    end
+    object MIDemos: TMenuItem
+      Caption = 'Demos'
+      OnClick = MIDemosClick
+    end
+    object MIDebugger: TMenuItem
+      Caption = 'Debugger'
+      object MIDebuggerNone: TMenuItem
+        Caption = 'None'
+        Checked = True
+        RadioItem = True
+        OnClick = MIDebuggerNoneClick
+      end
+      object MIDebuggerSimple: TMenuItem
+        Caption = 'SimpleDebugger'
+        RadioItem = True
+        OnClick = MIDebuggerSimpleClick
+      end
+      object MIDebuggerRemote: TMenuItem
+        Caption = 'RemoteDebugger'
+        RadioItem = True
+        OnClick = MIDebuggerRemoteClick
+      end
+    end
+    object MIHelp: TMenuItem
+      Caption = 'Help'
+      object MIHelpDelphi5: TMenuItem
+        Caption = 'WinHelp Help Delphi 5'
+        OnClick = MIHelpDelphi5Click
+      end
+      object MIHelpDelphi6: TMenuItem
+        Caption = 'WinHelp Help Delphi 6'
+        OnClick = MIHelpDelphi6Click
+      end
+      object MIHelpHtml: TMenuItem
+        Caption = 'Html Help'
+        OnClick = MIHelpHtmlClick
+      end
+      object MIHelpHomepage: TMenuItem
+        Caption = 'DWS Homepage'
+        OnClick = MIHelpHomepageClick
+      end
+      object MIHelpN5: TMenuItem
+        Caption = '-'
+      end
+      object MIHelpAbout: TMenuItem
+        Caption = 'About'
+        OnClick = MIHelpAboutClick
+      end
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    DefaultExt = 'dws'
+    Filter = 'DWS files|*.dws|TScript files|*.sct|All files|*.*'
+    Options = [ofExtensionDifferent, ofPathMustExist, ofFileMustExist]
+    Left = 60
+    Top = 348
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = 'dws'
+    Filter = 'DWS files|*.dws|TScript files|*.sct|All files|*.*'
+    FilterIndex = 0
+    Options = [ofExtensionDifferent, ofPathMustExist]
+    Left = 92
+    Top = 348
+  end
+  object dws2Unit: Tdws2Unit
+    Script = Script
+    Arrays = <
+      item
+        Name = 'TMyArray'
+        DataType = 'Integer'
+        LowBound = 0
+        HighBound = 2
+      end>
+    Classes = <
+      item
+        Name = 'TList'
+        Constructors = <
+          item
+            Name = 'Create'
+            Parameters = <>
+            OnAssignExternalObject = dws2UnitClassesTListConstructorsCreateAssignExternalObject
+          end>
+        Fields = <>
+        Methods = <
+          item
+            Name = 'Destroy'
+            Parameters = <>
+            OnEval = dws2UnitClassesTListMethodsDestroyEval
+            Attributes = [maOverride]
+            Kind = mkDestructor
+          end
+          item
+            Name = 'Add'
+            Parameters = <
+              item
+                Name = 'Obj'
+                DataType = 'TObject'
+                IsWritable = False
+              end>
+            ResultType = 'Integer'
+            OnEval = dws2UnitClassesTListMethodsAddEval
+            Kind = mkFunction
+          end
+          item
+            Name = 'Get'
+            Parameters = <
+              item
+                Name = 'Index'
+                DataType = 'Integer'
+                IsWritable = False
+              end>
+            ResultType = 'TObject'
+            OnEval = dws2UnitClassesTListMethodsGetEval
+            Kind = mkFunction
+          end
+          item
+            Name = 'Clear'
+            Parameters = <>
+            OnEval = dws2UnitClassesTListMethodsClearEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'GetCount'
+            Parameters = <>
+            ResultType = 'Integer'
+            OnEval = dws2UnitClassesTListMethodsGetCountEval
+            Kind = mkFunction
+          end>
+        Properties = <
+          item
+            Name = 'Count'
+            DataType = 'Integer'
+            ReadAccess = 'GetCount'
+            Parameters = <>
+            IsDefault = False
+          end>
+      end
+      item
+        Name = 'TStrings'
+        Constructors = <
+          item
+            Name = 'Create'
+            Parameters = <>
+            OnAssignExternalObject = dws2UnitClassesTStringsConstructorsCreateAssignExternalObject
+          end>
+        Fields = <>
+        Methods = <
+          item
+            Name = 'Add'
+            Parameters = <
+              item
+                Name = 's'
+                DataType = 'String'
+                IsWritable = False
+              end>
+            OnEval = dws2UnitClassesTStringsAddEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'GetString'
+            Parameters = <
+              item
+                Name = 'x'
+                DataType = 'Integer'
+                IsWritable = False
+              end>
+            ResultType = 'String'
+            OnEval = dws2UnitClassesTStringsMethodsGetStringEval
+            Kind = mkFunction
+          end
+          item
+            Name = 'Destroy'
+            Parameters = <>
+            OnEval = dws2UnitClassesTStringsMethodsDestroyEval
+            Attributes = [maOverride]
+            Kind = mkDestructor
+          end>
+        Properties = <
+          item
+            Name = 'String'
+            DataType = 'String'
+            ReadAccess = 'GetString'
+            Parameters = <
+              item
+                Name = 'Idx'
+                DataType = 'Integer'
+                IsWritable = False
+              end>
+            IsDefault = True
+          end>
+      end
+      item
+        Name = 'TWindow'
+        Constructors = <
+          item
+            Name = 'Create'
+            Parameters = <
+              item
+                Name = 'Left'
+                DataType = 'Integer'
+                IsWritable = False
+              end
+              item
+                Name = 'Top'
+                DataType = 'Integer'
+                IsWritable = False
+              end
+              item
+                Name = 'Caption'
+                DataType = 'String'
+                IsWritable = False
+              end>
+            OnAssignExternalObject = dws2UnitClassesTWindowConstructorsCreateAssignExternalObject
+          end>
+        Fields = <
+          item
+            Name = 'Left'
+            DataType = 'Integer'
+          end
+          item
+            Name = 'Top'
+            DataType = 'Integer'
+          end
+          item
+            Name = 'Width'
+            DataType = 'Integer'
+          end
+          item
+            Name = 'Height'
+            DataType = 'Integer'
+          end
+          item
+            Name = 'Caption'
+            DataType = 'String'
+          end>
+        Methods = <
+          item
+            Name = 'SetCaption'
+            Parameters = <
+              item
+                Name = 's'
+                DataType = 'String'
+                IsWritable = False
+              end>
+            OnEval = dws2UnitClassesTWindowMethodsSetCaptionEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'SetPosition'
+            Parameters = <
+              item
+                Name = 'Left'
+                DataType = 'Integer'
+                IsWritable = False
+              end
+              item
+                Name = 'Top'
+                DataType = 'Integer'
+                IsWritable = False
+              end>
+            OnEval = dws2UnitClassesTWindowMethodsSetPositionEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'SetSize'
+            Parameters = <
+              item
+                Name = 'Width'
+                DataType = 'Integer'
+                IsWritable = False
+              end
+              item
+                Name = 'Height'
+                DataType = 'Integer'
+                IsWritable = False
+              end>
+            OnEval = dws2UnitClassesTWindowMethodsSetSizeEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'Update'
+            Parameters = <>
+            OnEval = dws2UnitClassesTWindowMethodsUpdateEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'SetParams'
+            Parameters = <
+              item
+                Name = 'params'
+                DataType = 'TWindowParams'
+                IsWritable = False
+              end>
+            OnEval = dws2UnitClassesTWindowMethodsSetParamsEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'VarParamTest'
+            Parameters = <
+              item
+                Name = 'a'
+                DataType = 'Integer'
+                IsVarParam = True
+              end
+              item
+                Name = 'b'
+                DataType = 'Integer'
+                IsVarParam = True
+              end>
+            OnEval = dws2UnitClassesTWindowMethodsVarParamTestEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'UseVarParamTest'
+            Parameters = <>
+            OnEval = dws2UnitClassesTWindowMethodsUseVarParamTestEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'NewInstance'
+            Parameters = <>
+            ResultType = 'TObject'
+            OnEval = dws2UnitClassesTWindowMethodsNewInstanceEval
+            Kind = mkFunction
+          end
+          item
+            Name = 'Destroy'
+            Parameters = <>
+            OnEval = dws2UnitClassesTWindowMethodsDestroyEval
+            Attributes = [maOverride]
+            Kind = mkDestructor
+          end>
+        Properties = <
+          item
+            Name = 'OnShow'
+            DataType = 'TNotifyEvent'
+            Parameters = <>
+            IsDefault = False
+          end>
+      end
+      item
+        Name = 'TField'
+        Constructors = <>
+        Fields = <>
+        Methods = <
+          item
+            Name = 'AsString'
+            Parameters = <>
+            ResultType = 'String'
+            OnEval = dws2UnitClassesTFieldMethodsAsStringEval
+            Kind = mkFunction
+          end
+          item
+            Name = 'AsInteger'
+            Parameters = <>
+            ResultType = 'Integer'
+            OnEval = dws2UnitClassesTFieldMethodsAsIntegerEval
+            Kind = mkFunction
+          end>
+        Properties = <>
+      end
+      item
+        Name = 'TFields'
+        Constructors = <
+          item
+            Name = 'Create'
+            Parameters = <>
+            OnEval = dws2UnitClassesTFieldsConstructorsCreateEval
+          end>
+        Fields = <>
+        Methods = <
+          item
+            Name = 'GetField'
+            Parameters = <
+              item
+                Name = 'FieldName'
+                DataType = 'String'
+                IsWritable = False
+              end>
+            ResultType = 'TField'
+            OnEval = dws2UnitClassesTFieldsMethodsGetFieldEval
+            Kind = mkFunction
+          end
+          item
+            Name = 'Destroy'
+            Parameters = <>
+            OnEval = dws2UnitClassesTFieldsMethodsDestroyEval
+            Attributes = [maOverride]
+            Kind = mkDestructor
+          end>
+        Properties = <>
+      end
+      item
+        Name = 'TQuery'
+        Ancestor = 'TObject'
+        Constructors = <
+          item
+            Name = 'Create'
+            Parameters = <
+              item
+                Name = 'Db'
+                DataType = 'String'
+              end
+              item
+                Name = 'Query'
+                DataType = 'String'
+              end>
+            OnEval = dws2UnitClassesTQueryConstructorsCreateEval
+            OnAssignExternalObject = dws2UnitClassesTQueryConstructorsCreateAssignExternalObject
+          end>
+        Fields = <
+          item
+            Name = 'FFields'
+            DataType = 'TFields'
+          end>
+        Methods = <
+          item
+            Name = 'Destroy'
+            Parameters = <>
+            OnEval = dws2UnitClassesTQueryDestroyEval
+            Attributes = [maOverride]
+            Kind = mkDestructor
+          end
+          item
+            Name = 'First'
+            Parameters = <>
+            OnEval = dws2UnitClassesTQueryFirstEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'Next'
+            Parameters = <>
+            OnEval = dws2UnitClassesTQueryNextEval
+            Kind = mkProcedure
+          end
+          item
+            Name = 'Eof'
+            Parameters = <>
+            ResultType = 'Boolean'
+            OnEval = dws2UnitClassesTQueryEofEval
+            Kind = mkFunction
+          end
+          item
+            Name = 'FieldByName'
+            Parameters = <
+              item
+                Name = 'FieldName'
+                DataType = 'String'
+                IsWritable = False
+              end>
+            ResultType = 'TField'
+            OnEval = dws2UnitClassesTQueryFieldByNameEval
+            Kind = mkFunction
+          end>
+        Properties = <>
+      end>
+    Constants = <
+      item
+        Name = 'BirthDay'
+        DataType = 'DateTime'
+        Value = 27913d
+      end>
+    Dependencies.Strings = (
+      'Internal')
+    Enumerations = <>
+    Forwards = <
+      item
+        Name = 'TField'
+      end>
+    Functions = <
+      item
+        Name = 'Input'
+        Parameters = <
+          item
+            Name = 'title'
+            DataType = 'String'
+            IsWritable = False
+          end
+          item
+            Name = 'prompt'
+            DataType = 'String'
+            IsWritable = False
+          end>
+        ResultType = 'String'
+        OnEval = dws2UnitFunctionsInputEval
+      end
+      item
+        Name = 'Test'
+        Parameters = <
+          item
+            Name = 'r'
+            DataType = 'TTestRec'
+            IsVarParam = True
+          end>
+        OnEval = dws2UnitFunctionsTestEval
+      end
+      item
+        Name = 'ShowGlobal'
+        Parameters = <>
+        OnEval = dws2UnitFunctionsShowGlobalEval
+      end
+      item
+        Name = 'Pause'
+        Parameters = <
+          item
+            Name = 'Duration'
+            DataType = 'Integer'
+            HasDefaultValue = True
+            DefaultValue = 100
+          end>
+        OnEval = dws2UnitFunctionsPauseEval
+      end
+      item
+        Name = 'RedrawDwsDemo'
+        Parameters = <>
+        OnEval = dws2UnitFunctionsRedrawDwsDemoEval
+      end>
+    Instances = <
+      item
+        Name = 'scriptCode'
+        DataType = 'TStrings'
+        OnInstantiate = dws2UnitVariablesscriptCodeInstantiate
+      end>
+    Records = <
+      item
+        Name = 'TPoint'
+        Members = <
+          item
+            Name = 'x'
+            DataType = 'Integer'
+          end
+          item
+            Name = 'y'
+            DataType = 'Integer'
+          end>
+      end
+      item
+        Name = 'TWindowParams'
+        Members = <
+          item
+            Name = 'Left'
+            DataType = 'Integer'
+          end
+          item
+            Name = 'Top'
+            DataType = 'Integer'
+          end
+          item
+            Name = 'Height'
+            DataType = 'Integer'
+          end
+          item
+            Name = 'Width'
+            DataType = 'Integer'
+          end
+          item
+            Name = 'Caption'
+            DataType = 'String'
+          end>
+      end
+      item
+        Name = 'TTestRec'
+        Members = <
+          item
+            Name = 'a'
+            DataType = 'TObject'
+          end
+          item
+            Name = 'p'
+            DataType = 'TPoint'
+          end>
+      end>
+    Synonyms = <>
+    UnitName = 'MyUnit'
+    Variables = <
+      item
+        Name = 'global'
+        DataType = 'String'
+      end
+      item
+        Name = 'Caption'
+        DataType = 'String'
+        OnReadVar = dws2UnitVariablestestReadVar
+        OnWriteVar = dws2UnitVariablestestWriteVar
+      end>
+    StaticSymbols = False
+    Left = 156
+    Top = 136
+  end
+  object Table1: TTable
+    DatabaseName = 'DBDEMOS'
+    TableName = 'customer.db'
+    Left = 104
+    Top = 128
+    object Table1CustNo: TFloatField
+      Alignment = taLeftJustify
+      CustomConstraint = 'CustNo IS NOT NULL'
+      ConstraintErrorMessage = 'CustNo cannot be blank'
+      FieldName = 'CustNo'
+      DisplayFormat = 'CN 0000'
+      MaxValue = 9999.000000000000000000
+      MinValue = 1000.000000000000000000
+    end
+    object Table1Company: TStringField
+      CustomConstraint = 'X IS NOT NULL'
+      ConstraintErrorMessage = 'Company Field has to have a value'
+      FieldName = 'Company'
+      Size = 30
+    end
+    object Table1Addr1: TStringField
+      FieldName = 'Addr1'
+      Size = 30
+    end
+    object Table1Addr2: TStringField
+      FieldName = 'Addr2'
+      Size = 30
+    end
+    object Table1City: TStringField
+      FieldName = 'City'
+      Size = 15
+    end
+    object Table1State: TStringField
+      FieldName = 'State'
+    end
+    object Table1Zip: TStringField
+      FieldName = 'Zip'
+      Size = 10
+    end
+    object Table1Country: TStringField
+      FieldName = 'Country'
+    end
+    object Table1Phone: TStringField
+      FieldName = 'Phone'
+      Size = 15
+    end
+    object Table1FAX: TStringField
+      FieldName = 'FAX'
+      Size = 15
+    end
+    object Table1TaxRate: TFloatField
+      FieldName = 'TaxRate'
+      DisplayFormat = '0.00%'
+      MaxValue = 100.000000000000000000
+    end
+    object Table1Contact: TStringField
+      FieldName = 'Contact'
+    end
+    object Table1LastInvoiceDate: TDateTimeField
+      FieldName = 'LastInvoiceDate'
+    end
+  end
+  object SimpleDebugger: Tdws2SimpleDebugger
+    OnDebug = SimpleDebuggerDoDebug
+    Left = 340
+    Top = 96
+  end
+  object Script: TDelphiWebScriptII
+    Config.CompilerOptions = []
+    Config.MaxDataSize = 0
+    Config.ScriptPaths.Strings = (
+      'scripts\')
+    Config.Timeout = 0
+    Left = 108
+    Top = 24
+  end
+  object dws2ComConnector1: Tdws2ComConnector
+    Script = Script
+    StaticSymbols = False
+    Left = 236
+    Top = 104
+  end
+  object dws2GUIFunctions1: Tdws2GUIFunctions
+    Left = 180
+    Top = 16
+  end
+  object dws2FileFunctions1: Tdws2FileFunctions
+    Left = 324
+    Top = 24
+  end
+  object dws2HtmlUnit: Tdws2HtmlUnit
+    Script = Script
+    Left = 280
+    Top = 168
+  end
+  object HtmlFilter: Tdws2HtmlFilter
+    PatternClose = '%>'
+    PatternEval = '='
+    PatternOpen = '<%'
+    Left = 136
+    Top = 192
+  end
+end

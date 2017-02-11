@@ -1,0 +1,74 @@
+inherited BisTaxiPhoneFormatForm: TBisTaxiPhoneFormatForm
+  Left = 0
+  Top = 0
+  ActiveControl = ListBoxFormats
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSizeable
+  Caption = #1060#1086#1088#1084#1072#1090' '#1076#1072#1085#1085#1099#1093
+  ClientHeight = 257
+  ClientWidth = 479
+  ExplicitWidth = 487
+  ExplicitHeight = 291
+  PixelsPerInch = 96
+  TextHeight = 13
+  object LabelDriver: TLabel [0]
+    Left = 8
+    Top = 11
+    Width = 48
+    Height = 13
+    Alignment = taRightJustify
+    Caption = #1044#1088#1072#1081#1074#1077#1088':'
+  end
+  inherited PanelButton: TPanel
+    Top = 222
+    Width = 479
+    TabOrder = 2
+    ExplicitTop = 306
+    ExplicitWidth = 643
+    inherited ButtonOk: TButton
+      Left = 312
+      Enabled = False
+      ModalResult = 1
+      ExplicitLeft = 476
+    end
+    inherited ButtonCancel: TButton
+      Left = 394
+      ExplicitLeft = 558
+    end
+    object CheckBoxMono: TCheckBox
+      Left = 8
+      Top = 8
+      Width = 48
+      Height = 17
+      Hint = #1058#1086#1083#1100#1082#1086' '#1084#1086#1085#1086
+      Caption = #1052#1086#1085#1086
+      TabOrder = 2
+      OnClick = CheckBoxMonoClick
+    end
+  end
+  object ComboBoxDrivers: TComboBox
+    Left = 62
+    Top = 8
+    Width = 409
+    Height = 21
+    Style = csDropDownList
+    Anchors = [akLeft, akTop, akRight]
+    ItemHeight = 13
+    TabOrder = 0
+    OnChange = ComboBoxDriversChange
+    OnCloseUp = ComboBoxDriversCloseUp
+    ExplicitWidth = 411
+  end
+  object ListBoxFormats: TListBox
+    Left = 8
+    Top = 35
+    Width = 463
+    Height = 172
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    ItemHeight = 13
+    TabOrder = 1
+    OnClick = ListBoxFormatsClick
+    ExplicitWidth = 465
+    ExplicitHeight = 174
+  end
+end

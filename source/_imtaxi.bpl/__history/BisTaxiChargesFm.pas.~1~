@@ -1,0 +1,87 @@
+unit BisTaxiChargesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataGridFm;
+
+type
+  TBisTaxiChargesForm = class(TBisDataGridForm)
+  public
+    constructor Create(AOwner: TComponent); override;
+
+  end;
+
+  TBisTaxiChargesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiChargesForm: TBisTaxiChargesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses DateUtils,
+     BisUtils, BisTaxiChargeEditFm, BisConsts, BisOrders, BisCore, BisFilterGroups;
+
+{ TBisTaxiChargesFormIface }
+
+constructor TBisTaxiChargesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiChargesForm;
+  FilterClass:=TBisTaxiChargeFilterFormIface;
+  InsertClass:=TBisTaxiChargeInsertFormIface;
+  UpdateClass:=TBisTaxiChargeUpdateFormIface;
+  DeleteClass:=TBisTaxiChargeDeleteFormIface;
+  Permissions.Enabled:=true;
+  Available:=true;
+  ProviderName:='S_CHARGES';
+  with FieldNames do begin
+    AddKey('CHARGE_ID');
+    AddInvisible('CHARGE_TYPE_ID');
+    AddInvisible('ACCOUNT_ID');
+    AddInvisible('WHO_CREATE_ID');
+    AddInvisible('WHO_USER_NAME');
+    AddInvisible('DATE_CREATE');
+    AddInvisible('DESCRIPTION');
+    Add('DATE_CHARGE','Дата',110);
+    Add('USER_NAME','Счет',110);
+    Add('SUM_CHARGE','Сумма',70).DisplayFormat:='#0.00';
+    Add('CHARGE_TYPE_NAME','Вид списания',110);
+  end;
+  Orders.Add('DATE_CHARGE',otDesc);
+end;
+
+{ TBisTaxiChargesForm }
+
+constructor TBisTaxiChargesForm.Create(AOwner: TComponent);
+var
+  D: TDateTime;
+begin
+  inherited Create(AOwner);
+  if Assigned(DataFrame) then begin
+
+    D:=Core.ServerDate;
+
+    with DataFrame.CreateFilterMenuItem('Сегодня') do begin
+      with FilterGroups.AddVisible do begin
+        Filters.Add('DATE_CHARGE',fcEqualGreater,DateOf(D));
+        Filters.Add('DATE_CHARGE',fcLess,IncDay(DateOf(D)));
+      end;
+      Checked:=true;
+    end;
+
+    with DataFrame.CreateFilterMenuItem('Архив') do begin
+      FilterGroups.AddVisible.Filters.Add('DATE_CHARGE',fcLess,DateOf(D));
+    end;
+
+  end;
+end;
+
+end.

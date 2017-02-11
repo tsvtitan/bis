@@ -1,0 +1,192 @@
+unit BisKrieltDataRubricEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ExtDlgs, CheckLst, ImgList,
+  BisFm, BisDataEditFm, BisParam, BisControls;
+
+type
+  TBisKrieltDataRubricEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    LabelView: TLabel;
+    EditName: TEdit;
+    EditView: TEdit;
+    ButtonView: TButton;
+    LabelParent: TLabel;
+    EditParent: TEdit;
+    ButtonParent: TButton;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelPriority: TLabel;
+    EditPriority: TEdit;
+    LabelType: TLabel;
+    EditType: TEdit;
+    ButtonType: TButton;
+    LabelOperation: TLabel;
+    EditOperation: TEdit;
+    ButtonOperation: TButton;
+    LabelParam: TLabel;
+    EditParam: TEdit;
+    ButtonParam: TButton;
+    LabelRubricType: TLabel;
+    ComboBoxRubricType: TComboBox;
+    LabelCond: TLabel;
+    ComboBoxCond: TComboBox;
+    LabelValue: TLabel;
+    EditValue: TEdit;
+    LabelPattern: TLabel;
+    MemoPattern: TMemo;
+  private
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure ChangeParam(Param: TBisParam); override;
+    procedure BeforeShow; override;
+  end;
+
+  TBisKrieltDataRubricEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataRubricInsertFormIface=class(TBisKrieltDataRubricEditFormIface)
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataRubricInsertChildFormIface=class(TBisKrieltDataRubricEditFormIface)
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataRubricUpdateFormIface=class(TBisKrieltDataRubricEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataRubricDeleteFormIface=class(TBisKrieltDataRubricEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataRubricEditForm: TBisKrieltDataRubricEditForm;
+
+implementation
+
+uses BisProvider, BisFilterGroups, BisUtils, BisCore,
+     BisKrieltDataViewsFm, BisKrieltDataRubricsFm;
+
+{$R *.dfm}
+
+{ TBisKrieltDataRubricEditFormIface }
+
+constructor TBisKrieltDataRubricEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataRubricEditForm;
+  with Params do begin
+    AddKey('RUBRIC_ID').Older('OLD_RUBRIC_ID');
+    AddEditDataSelect('PARENT_ID','EditParent','LabelParent','ButtonParent',
+                      TBisKrieltDataRubricsFormIface,'PARENT_NAME',false,false,'RUBRIC_ID','NAME');
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription',false);
+    AddEditInteger('PRIORITY','EditPriority','LabelPriority',true);
+
+    AddEditDataSelect('VIEW_ID','EditView','LabelView','ButtonView',
+                      TBisKrieltDataViewsFormIface,'VIEW_NAME',false,false,'','NAME');
+  end;
+end;
+
+{ TBisKrieltDataRubricInsertFormIface }
+
+constructor TBisKrieltDataRubricInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_RUBRIC';
+  Caption:='Создать рубрику';
+end;
+
+function TBisKrieltDataRubricInsertFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then begin
+    if Assigned(ParentProvider) and ParentProvider.Active and not ParentProvider.IsEmpty then begin
+      with LastForm.Provider do begin
+        Params.ParamByName('PARENT_ID').SetNewValue(ParentProvider.FieldByName('PARENT_ID').Value);
+        Params.ParamByName('PARENT_NAME').SetNewValue(ParentProvider.FieldByName('PARENT_NAME').Value);
+      end;
+    end;
+  end;
+end;
+
+{ TBisKrieltDataRubricInsertChildFormIface }
+
+constructor TBisKrieltDataRubricInsertChildFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_RUBRIC';
+  Caption:='Создать дочернюю рубрику';
+end;
+
+
+function TBisKrieltDataRubricInsertChildFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then begin
+    if Assigned(ParentProvider) and ParentProvider.Active and not ParentProvider.IsEmpty then begin
+      with LastForm.Provider do begin
+        Params.ParamByName('PARENT_ID').SetNewValue(ParentProvider.FieldByName('Rubric_ID').Value);
+        Params.ParamByName('PARENT_NAME').SetNewValue(ParentProvider.FieldByName('NAME').Value);
+      end;
+    end;
+  end;
+end;
+
+{ TBisKrieltDataRubricUpdateFormIface }
+
+constructor TBisKrieltDataRubricUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_RUBRIC';
+  Caption:='Изменить рубрику';
+end;
+
+{ TBisKrieltDataRubricDeleteFormIface }
+
+constructor TBisKrieltDataRubricDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_RUBRIC';
+  Caption:='Удалить рубрику';
+end;
+
+{ TBisKrieltDataRubricEditForm }
+
+constructor TBisKrieltDataRubricEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+procedure TBisKrieltDataRubricEditForm.ChangeParam(Param: TBisParam);
+begin
+  inherited ChangeParam(Param);
+  if AnsiSameText(Param.ParamName,'PICTURE') then begin
+  
+  end;
+end;
+
+procedure TBisKrieltDataRubricEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+
+  if Mode in [emDelete,emFilter] then begin
+  end;
+end;
+
+end.

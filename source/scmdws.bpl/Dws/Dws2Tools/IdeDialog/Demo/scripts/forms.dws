@@ -1,0 +1,39 @@
+// ------------------------------------------------------------------------
+//  Demonstrates how to call methods from native
+//  Delphi code and how to access the datastructures
+//  of DWS.
+//  Have a look at the Delphi source code of
+//  the DWSII class "TWindow"!
+// --------------------------------------------------------------------------
+var w: TWindow;
+var i, j, k: integer;
+
+w := TWindow.Create(10, 10, 'Hello World');
+ 
+for i := 10 to 100 do
+begin
+  for j := 1 to 10000 do; // Sleep
+  w.SetPosition(i, i);
+end;
+
+var p: TWindowParams;
+
+type test = array [1..2] of record a, b: integer end;
+var t: Test;
+
+p.Left := 200;
+p.Top := 200;
+p.Width := 300;
+p.Height := 50;
+p.Caption := '';
+w.SetParams(p);
+
+w.UseVarParamTest;
+
+var v: TWindow;
+
+v := TWindow(w.NewInstance);
+
+v.Free;
+
+w.Free;

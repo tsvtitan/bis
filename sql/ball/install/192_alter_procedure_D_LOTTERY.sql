@@ -1,0 +1,20 @@
+/* Изменение процедуры удаления розыгрыша */
+
+CREATE OR ALTER PROCEDURE /*PREFIX*/D_LOTTERY
+(
+  OLD_LOTTERY_ID VARCHAR(32)
+)
+AS
+BEGIN
+  DELETE FROM /*PREFIX*/WINNINGS
+        WHERE LOTTERY_ID=:OLD_LOTTERY_ID;
+
+  DELETE FROM /*PREFIX*/LOTTERY
+        WHERE LOTTERY_ID=:OLD_LOTTERY_ID;
+END;
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

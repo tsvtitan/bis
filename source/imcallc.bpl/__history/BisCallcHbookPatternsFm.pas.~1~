@@ -1,0 +1,51 @@
+unit BisCallcHbookPatternsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBisCallcHbookPatternsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookActionsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookPatternsForm: TBisCallcHbookPatternsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHbookActionEditFm;
+
+{ TBisCallcHbookActionsFormIface }
+
+constructor TBisCallcHbookActionsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookActionsForm;
+  InsertClass:=TBisCallcHbookActionInsertFormIface;
+  UpdateClass:=TBisCallcHbookActionUpdateFormIface;
+  DeleteClass:=TBisCallcHbookActionDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_ACTIONS';
+  with FieldNames do begin
+    AddKey('ACTION_ID');
+    Add('NAME','Наименование',150);
+    Add('DESCRIPTION','Описание',200);
+    Add('PERIOD','Период',50);
+  end;
+  Orders.Add('NAME');
+end;
+
+end.

@@ -1,0 +1,59 @@
+inherited BisFastReportEditorForm: TBisFastReportEditorForm
+  Caption = 'BisFastReportEditorForm'
+  ClientHeight = 323
+  ClientWidth = 492
+  Constraints.MinHeight = 350
+  Constraints.MinWidth = 500
+  ExplicitWidth = 500
+  ExplicitHeight = 350
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited StatusBar: TStatusBar
+    Top = 304
+    Width = 492
+    ExplicitTop = 304
+    ExplicitWidth = 492
+  end
+  inherited PanelReport: TPanel
+    Top = 24
+    Width = 492
+    Height = 280
+    ExplicitLeft = -8
+    ExplicitTop = 56
+    ExplicitWidth = 492
+    ExplicitHeight = 304
+  end
+  object ActionMainMenuBar: TActionMainMenuBar
+    Left = 0
+    Top = 0
+    Width = 492
+    Height = 24
+    ActionManager = ActionManager
+    Caption = 'ActionMainMenuBar'
+    ColorMap.HighlightColor = 14410210
+    ColorMap.BtnSelectedColor = clBtnFace
+    ColorMap.UnusedColor = 14410210
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clMenuText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    PersistentHotKeys = True
+    Spacing = 0
+    ExplicitTop = -6
+    ExplicitHeight = 29
+  end
+  object ImageList: TImageList
+    Left = 72
+    Top = 92
+  end
+  object ActionManager: TActionManager
+    ActionBars = <
+      item
+        ActionBar = ActionMainMenuBar
+      end>
+    Left = 160
+    Top = 96
+    StyleName = 'XP Style'
+  end
+end

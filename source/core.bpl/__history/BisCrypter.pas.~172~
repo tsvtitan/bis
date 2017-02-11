@@ -1,0 +1,516 @@
+unit BisCrypter;
+
+interface
+
+uses Classes, SysUtils;
+
+type
+
+  TBisHashAlgorithm=(haMD4,haMD5,haSHA,haSHA1,haRipeMD128,haRipeMD160,haRipeMD256,haRipeMD320,
+                     haHaval128,haHaval160,haHaval192,haHaval224,haHaval256,haSapphire128,
+                     haSapphire160,haSapphire192,haSapphire224,haSapphire256,haSapphire288,
+                     haSapphire320,haSnefru,haSquare,haTiger,haXOR16,haXOR32,haCRC16_CCITT,
+                     haCRC16_Standard,haCRC32);
+
+  TBisHashFormat=(hfDefault,hfHEX,hfHEXL,hfMIME64,hfUU,hfXX);
+
+  TBisCipherAlgorithm=(ca3Way,caBlowfish,caGost,caIDEA,caQ128,caSAFER_K40,caSAFER_SK40,caSAFER_K64,
+                       caSAFER_SK64,caSAFER_K128,caSAFER_SK128,caSCOP,caShark,caSquare,caTEA,caTEAN,
+                       caTwofish,caCast128,caCast256,ca1DES,ca2DES,ca2DDES,ca3DES,ca3DDES,ca3TDES,
+                       caDESX,caDiamond2,caDiamond2Lite,caFROG,caMars,caMisty,caNewDES,caRC2,
+                       caRC4,caRC5,caRC6,caRijndael,caSapphire,caSkipjack,
+                       caMcryptRijndael);
+
+  TBisCipherMode=(cmCTS,cmCBC,cmCFB,cmOFB,cmECB,cmCTSMAC,cmCBCMAC,cmCFBMAC);
+
+  TBisCrypter=class(TObject)
+  private
+    FDefaultKey: String;
+    FDefaultCipherAlgorithm: TBisCipherAlgorithm;
+    FDefaultCipherMode: TBisCipherMode;
+    FDefaultHashAlgorithm: TBisHashAlgorithm;
+    FDefaultHashFormat: TBisHashFormat;
+    FDefaultVector: Pointer;
+  public
+    constructor Create;
+
+    function HashString(S: string): String; overload;
+    function HashString(S: string; Algorithm: TBisHashAlgorithm; Format: TBisHashFormat): String; overload;
+
+    function HashStream(Stream: TStream; Algorithm: TBisHashAlgorithm; Format: TBisHashFormat): String;
+    function HashFile(FileName: string; Algorithm: TBisHashAlgorithm; Format: TBisHashFormat): String;
+
+{    procedure EncodeFile(FileName: String); overload;
+    procedure EncodeFile(Key: String; FileName: String; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode);overload;}
+
+    procedure EncodeStream(Source, Dest: TStream); overload;
+    procedure EncodeStream(Key: string; Source, Dest: TStream; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode); overload;
+
+    procedure DecodeStream(Source, Dest: TStream); overload;
+    procedure DecodeStream(Key: string; Source, Dest: TStream; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode); overload;
+
+    function EncodeString(Key: string; S: String; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): string; overload;
+    function EncodeString(S: String): String; overload;
+
+    function DecodeString(Key: string; S: String; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): string; overload;
+    function DecodeString(S: String): String; overload;
+
+    function EncodeBytes(Key: string; B: TBytes; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): TBytes; overload;
+    function EncodeBytes(B: TBytes): TBytes; overload;
+
+    function DecodeBytes(Key: string; B: TBytes; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): TBytes; overload;
+    function DecodeBytes(B: TBytes): TBytes; overload;
+
+    property DefaultKey: String read FDefaultKey write FDefaultKey;
+    property DefaultCipherAlgorithm: TBisCipherAlgorithm read FDefaultCipherAlgorithm write FDefaultCipherAlgorithm;
+    property DefaultCipherMode: TBisCipherMode read FDefaultCipherMode write FDefaultCipherMode;
+    property DefaultHashAlgorithm: TBisHashAlgorithm read FDefaultHashAlgorithm write FDefaultHashAlgorithm;
+    property DefaultHashFormat: TBisHashFormat read FDefaultHashFormat write FDefaultHashFormat;
+    property DefaultVector: Pointer read FDefaultVector write FDefaultVector;
+  end;
+
+implementation
+
+uses Cipher, Cipher1, HCMngr, Hash, DECUtil,
+     DCPrijndael;
+
+
+function PadWithZeros(const str : string; size : integer) : string;
+var
+  origsize, i : integer;
+begin
+  Result := str;
+  origsize := Length(Result);
+  if ((origsize mod size) <> 0) or (origsize = 0) then
+  begin
+    SetLength(Result,((origsize div size)+1)*size);
+    for i := origsize+1 to Length(Result) do
+      Result[i] := #0;
+  end;
+end;
+
+{ TBisCrypter }
+
+constructor TBisCrypter.Create;
+begin
+  inherited Create;
+  FDefaultVector:=nil;
+end;
+
+function GetHashClassByAlgorithm(Algorithm: TBisHashAlgorithm): THashClass;
+begin
+  Result:=nil;
+  case Algorithm of
+    haMD4: Result:=THash_MD4;
+    haMD5: Result:=THash_MD5;
+    haSHA: Result:=THash_SHA;
+    haSHA1: Result:=THash_SHA1;
+    haRipeMD128: Result:=THash_RipeMD128;
+    haRipeMD160: Result:=THash_RipeMD160;
+    haRipeMD256: Result:=THash_RipeMD256;
+    haRipeMD320: Result:=THash_RipeMD320;
+    haHaval128: Result:=THash_Haval128;
+    haHaval160: Result:=THash_Haval160;
+    haHaval192: Result:=THash_Haval192;
+    haHaval224: Result:=THash_Haval224;
+    haHaval256: Result:=THash_Haval256;
+    haSapphire128: Result:=THash_Sapphire128;
+    haSapphire160: Result:=THash_Sapphire160;
+    haSapphire192: Result:=THash_Sapphire192;
+    haSapphire224: Result:=THash_Sapphire224;
+    haSapphire256: Result:=THash_Sapphire256;
+    haSapphire288: Result:=THash_Sapphire288;
+    haSapphire320: Result:=THash_Sapphire320;
+    haSnefru: Result:=THash_Snefru;
+    haSquare: Result:=THash_Square;
+    haTiger: Result:=THash_Tiger;
+    haXOR16: Result:=THash_XOR16;
+    haXOR32: Result:=THash_XOR32;
+    haCRC16_CCITT: Result:=THash_CRC16_CCITT;
+    haCRC16_Standard: Result:=THash_CRC16_Standard;
+    haCRC32: Result:=THash_CRC32;
+  end;
+end;
+
+function GetHashFormat(Format: TBisHashFormat): Integer;
+begin
+  Result:=0;
+  case Format of
+    hfDefault: Result:=fmtDEFAULT;
+    hfHEX: Result:=fmtHEX;
+    hfHEXL: Result:=fmtHEXL;
+    hfMIME64: Result:=fmtMIME64;
+    hfUU: Result:=fmtUU;
+    hfXX: Result:=fmtXX;
+  end;
+end;
+
+function GetCipherClassByAlgorithm(Algorithm: TBisCipherAlgorithm): TCipherClass;
+begin
+  Result:=nil;
+  case Algorithm of
+    ca3Way: Result:=TCipher_3Way;
+    caBlowfish: Result:=TCipher_Blowfish;
+    caGost: Result:=TCipher_Gost;
+    caIDEA: Result:=TCipher_IDEA;
+    caQ128: Result:=TCipher_Q128;
+    caSAFER_K40: Result:=TCipher_SAFER_K40;
+    caSAFER_SK40: Result:=TCipher_SAFER_SK40;
+    caSAFER_K64: Result:=TCipher_SAFER_K64;
+    caSAFER_SK64: Result:=TCipher_SAFER_SK64;
+    caSAFER_K128: Result:=TCipher_SAFER_K128;
+    caSAFER_SK128: Result:=TCipher_SAFER_SK128;
+    caSCOP: Result:=TCipher_SCOP;
+    caShark: Result:=TCipher_Shark;
+    caSquare: Result:=TCipher_Square;
+    caTEA: Result:=TCipher_TEA;
+    caTEAN: Result:=TCipher_TEAN;
+    caTwofish: Result:=TCipher_Twofish;
+    caCast128: Result:=TCipher_Cast128;
+    caCast256: Result:=TCipher_Cast256;
+    ca1DES: Result:=TCipher_1DES;
+    ca2DES: Result:=TCipher_2DES;
+    ca2DDES: Result:=TCipher_2DDES;
+    ca3DES: Result:=TCipher_3DES;
+    ca3DDES: Result:=TCipher_3DDES;
+    ca3TDES: Result:=TCipher_3TDES;
+    caDESX: Result:=TCipher_DESX;
+    caDiamond2: Result:=TCipher_Diamond2;
+    caDiamond2Lite: Result:=TCipher_Diamond2Lite;
+    caFROG: Result:=TCipher_FROG;
+    caMars: Result:=TCipher_Mars;
+    caMisty: Result:=TCipher_Misty;
+    caNewDES: Result:=TCipher_NewDES;
+    caRC2: Result:=TCipher_RC2;
+    caRC4: Result:=TCipher_RC4;
+    caRC5: Result:=TCipher_RC5;
+    caRC6: Result:=TCipher_RC6;
+    caRijndael: Result:=TCipher_Rijndael;
+    caSapphire: Result:=TCipher_Sapphire;
+    caSkipjack: Result:=TCipher_Skipjack;
+  end;
+end;
+
+function GetCipherMode(Mode: TBisCipherMode): TCipherMode;
+begin
+  Result:=Cipher.cmCTS;
+  case Mode of
+    cmCTS: Result:=Cipher.cmCTS;
+    cmCBC: Result:=Cipher.cmCBC;
+    cmCFB: Result:=Cipher.cmCFB;
+    cmOFB: Result:=Cipher.cmOFB;
+    cmECB: Result:=Cipher.cmECB;
+    cmCTSMAC: Result:=Cipher.cmCTSMAC;
+    cmCBCMAC: Result:=Cipher.cmCBCMAC;
+    cmCFBMAC: Result:=Cipher.cmCFBMAC;
+  end;
+end;
+
+function TBisCrypter.HashString(S: string): String;
+begin
+  Result:=HashString(S,FDefaultHashAlgorithm,FDefaultHashFormat);
+end;
+
+function TBisCrypter.HashString(S: string; Algorithm: TBisHashAlgorithm; Format: TBisHashFormat): String;
+var
+  HashManager: THashManager;
+begin
+  Result:=S;
+  HashManager:=THashManager.Create(nil);
+  try
+    HashManager.HashClass:=GetHashClassByAlgorithm(Algorithm);
+    HashManager.CalcString(S);
+    Result:=HashManager.DigestString[GetHashFormat(Format)];
+  finally
+    HashManager.Free;
+  end;
+end;
+
+function TBisCrypter.HashStream(Stream: TStream; Algorithm: TBisHashAlgorithm; Format: TBisHashFormat): String;
+var
+  HashManager: THashManager;
+begin
+  HashManager:=THashManager.Create(nil);
+  try
+    HashManager.HashClass:=GetHashClassByAlgorithm(Algorithm);
+    HashManager.CalcStream(Stream,Stream.Size);
+    Result:=HashManager.DigestString[GetHashFormat(Format)];
+  finally
+    HashManager.Free;
+  end;
+end;
+
+function TBisCrypter.HashFile(FileName: string; Algorithm: TBisHashAlgorithm; Format: TBisHashFormat): String;
+var
+  HashManager: THashManager;
+begin
+  HashManager:=THashManager.Create(nil);
+  try
+    HashManager.HashClass:=GetHashClassByAlgorithm(Algorithm);
+    HashManager.CalcFile(FileName);
+    Result:=HashManager.DigestString[GetHashFormat(Format)];
+  finally
+    HashManager.Free;
+  end;
+end;
+
+{procedure TBisCrypter.EncodeFile(FileName: String);
+begin
+  EncodeFile(FDefaultKey,FileName,FDefaultCipherAlgorithm,FDefaultCipherMode);
+end;
+
+procedure TBisCrypter.EncodeFile(Key: String; FileName: String; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode);
+var
+  CipherManager: TCipherManager;
+  MemoryStream: TMemoryStream;
+  CipherClass: TCipherClass;
+begin
+  CipherClass:=GetCipherClassByAlgorithm(Algorithm);
+  if not Assigned(CipherClass) then begin
+    case Algorithm of
+      caMcryptRijndael: begin
+         //
+      end;
+    end;
+  end else begin
+    CipherManager:=TCipherManager.Create(nil);
+    MemoryStream:=TMemoryStream.Create;
+    try
+      //
+    finally
+      MemoryStream.Free;
+      CipherManager.Free;
+    end;
+  end;
+end;}
+
+procedure TBisCrypter.EncodeStream(Key: string; Source, Dest: TStream; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode);
+
+  procedure EncodeMcryptRijndael;
+  var
+    Cipher: TDCP_rijndael;
+    Vector: String;
+    S: String;
+  const
+    KeySize=32;
+    BlockSize=16;
+  begin
+    Cipher:=TDCP_rijndael.Create(nil);
+    try
+      Key:=PadWithZeros(Key,KeySize);
+      Vector:=PadWithZeros('',BlockSize);
+
+      SetLength(S,Source.Size);
+      Source.Position:=0;
+      Source.Read(Pointer(S)^,Length(S));
+      S:=PadWithZeros(S,BlockSize);
+
+      Cipher.Init(Key[1],256,@Vector[1]);
+      case Mode of
+        cmCBC: Cipher.EncryptCBC(S[1],S[1],Length(S));
+      end;
+
+      Dest.Size:=0;
+      Dest.Write(Pointer(S)^,Length(S));
+      Dest.Position:=0;
+
+    finally
+      Cipher.Free;
+    end;
+  end;
+
+var
+  CipherManager: TCipherManager;
+  CipherClass: TCipherClass;
+begin
+  CipherClass:=GetCipherClassByAlgorithm(Algorithm);
+  if not Assigned(CipherClass) then begin
+    case Algorithm of
+      caMcryptRijndael: EncodeMcryptRijndael;
+    end;
+  end else begin
+    CipherManager:=TCipherManager.Create(nil);
+    try
+      CipherManager.CipherClass:=CipherClass;
+      CipherManager.Mode:=GetCipherMode(Mode);
+      CipherManager.InitKey(Key,FDefaultVector);
+      CipherManager.EncodeStream(Source,Dest,Source.Size);
+    finally
+      CipherManager.Free;
+    end;
+  end;
+end;
+
+procedure TBisCrypter.EncodeStream(Source, Dest: TStream);
+begin
+  EncodeStream(FDefaultKey,Source,Dest,FDefaultCipherAlgorithm,FDefaultCipherMode);
+end;
+
+procedure TBisCrypter.DecodeStream(Key: string; Source, Dest: TStream; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode);
+
+  procedure DecodeMcryptRijndael;
+  var
+    Cipher: TDCP_rijndael;
+    Vector: String;
+    S: String;
+  const
+    KeySize=32;
+    BlockSize=16;
+  begin
+    Cipher:=TDCP_rijndael.Create(nil);
+    try
+      Key:=PadWithZeros(Key,KeySize);
+      Vector:=PadWithZeros('',BlockSize);
+
+      SetLength(S,Source.Size);
+      Source.Position:=0;
+      Source.Read(Pointer(S)^,Length(S));
+
+      Cipher.Init(Key[1],256,@Vector[1]);
+      case Mode of
+        cmCBC: Cipher.DecryptCBC(S[1],S[1],Length(S));
+      end;
+
+      S:=TrimRight(S);
+
+      Dest.Size:=0;
+      Dest.Write(Pointer(S)^,Length(S));
+      Dest.Position:=0;
+
+    finally
+      Cipher.Free;
+    end;
+  end;
+
+var
+  CipherManager: TCipherManager;
+  CipherClass: TCipherClass;
+begin
+  CipherClass:=GetCipherClassByAlgorithm(Algorithm);
+  if not Assigned(CipherClass) then begin
+    case Algorithm of
+      caMcryptRijndael: DecodeMcryptRijndael;
+    end;
+  end else begin
+    CipherManager:=TCipherManager.Create(nil);
+    try
+      CipherManager.CipherClass:=CipherClass;
+      CipherManager.Mode:=GetCipherMode(Mode);
+      CipherManager.InitKey(Key,FDefaultVector);
+      CipherManager.DecodeStream(Source,Dest,Source.Size);
+    finally
+      CipherManager.Free;
+    end;
+  end;
+end;
+
+procedure TBisCrypter.DecodeStream(Source, Dest: TStream);
+begin
+  DecodeStream(DefaultKey,Source,Dest,FDefaultCipherAlgorithm,FDefaultCipherMode);
+end;
+
+function TBisCrypter.EncodeString(Key: string; S: String; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): string;
+var
+  Source: TMemoryStream;
+  Dest: TMemoryStream;
+begin
+  Source:=TMemoryStream.Create;
+  Dest:=TMemoryStream.Create;
+  try
+    Source.Write(Pointer(S)^,Length(S));
+    Source.Position:=0;
+    EncodeStream(Key,Source,Dest,Algorithm,Mode);
+    Dest.Position:=0;
+    SetLength(S,Dest.Size);
+    Dest.Read(Pointer(S)^,Dest.Size);
+    Result:=S;
+  finally
+    Dest.Free;
+    Source.Free;
+  end;
+end;
+
+function TBisCrypter.EncodeString(S: String): String;
+begin
+  Result:=EncodeString(FDefaultKey,S,FDefaultCipherAlgorithm,FDefaultCipherMode);
+end;
+
+function TBisCrypter.DecodeString(Key: string; S: String; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): string;
+var
+  Source: TMemoryStream;
+  Dest: TMemoryStream;
+begin
+  Source:=TMemoryStream.Create;
+  Dest:=TMemoryStream.Create;
+  try
+    Source.Write(Pointer(S)^,Length(S));
+    Source.Position:=0;
+    DecodeStream(Key,Source,Dest,Algorithm,Mode);
+    Dest.Position:=0;
+    SetLength(S,Dest.Size);
+    Dest.Read(Pointer(S)^,Dest.Size);
+    Result:=S;
+  finally
+    Dest.Free;
+    Source.Free;
+  end;
+end;
+
+function TBisCrypter.DecodeString(S: String): String;
+begin
+  Result:=DecodeString(FDefaultKey,S,FDefaultCipherAlgorithm,FDefaultCipherMode);
+end;
+
+function TBisCrypter.EncodeBytes(Key: string; B: TBytes; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): TBytes;
+var
+  Source: TMemoryStream;
+  Dest: TMemoryStream;
+begin
+  Source:=TMemoryStream.Create;
+  Dest:=TMemoryStream.Create;
+  try
+    Source.Write(Pointer(B)^,Length(B));
+    Source.Position:=0;
+    EncodeStream(Key,Source,Dest,Algorithm,Mode);
+    Dest.Position:=0;
+    SetLength(B,Dest.Size);
+    Dest.Read(Pointer(B)^,Dest.Size);
+    Result:=B;
+  finally
+    Dest.Free;
+    Source.Free;
+  end;
+end;
+
+function TBisCrypter.EncodeBytes(B: TBytes): TBytes;
+begin
+  Result:=EncodeBytes(FDefaultKey,B,FDefaultCipherAlgorithm,FDefaultCipherMode);
+end;
+
+function TBisCrypter.DecodeBytes(Key: string; B: TBytes; Algorithm: TBisCipherAlgorithm; Mode: TBisCipherMode): TBytes;
+var
+  Source: TMemoryStream;
+  Dest: TMemoryStream;
+begin
+  Source:=TMemoryStream.Create;
+  Dest:=TMemoryStream.Create;
+  try
+    Source.Write(Pointer(B)^,Length(B));
+    Source.Position:=0;
+    DecodeStream(Key,Source,Dest,Algorithm,Mode);
+    Dest.Position:=0;
+    SetLength(Result,Dest.Size);
+    Dest.Read(Pointer(B)^,Dest.Size);
+    Result:=B;
+  finally
+    Dest.Free;
+    Source.Free;
+  end;
+end;
+
+function TBisCrypter.DecodeBytes(B: TBytes): TBytes;
+begin
+  Result:=DecodeBytes(FDefaultKey,B,FDefaultCipherAlgorithm,FDefaultCipherMode);
+end;
+
+end.

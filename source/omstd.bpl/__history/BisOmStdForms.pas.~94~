@@ -1,0 +1,74 @@
+unit BisOmStdForms;
+
+interface
+
+uses Classes, Forms,
+     BisScriptUnits, BisScriptTypes, BisScriptFuncs, BisScriptClasses;
+
+type
+  TBisFormsScriptUnit=class(TBisScriptUnit)
+  private
+    function ClassTFormMethodCreate(Method: TBisScriptClassMethod; var Obj: TObject): Variant;
+    function ClassTFormMethodShow(Method: TBisScriptClassMethod; var Obj: TObject): Variant;
+    function ClassTFormMethodShowModal(Method: TBisScriptClassMethod; var Obj: TObject): Variant;
+    procedure ClassTFormEventOnShow(Sender: TObject);
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+implementation
+
+uses BisUtils, BisDialogs;
+
+{ TBisFormsScriptUnit }
+
+constructor TBisFormsScriptUnit.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  UnitName:='Forms';
+
+  Depends.Add('Classes');
+  Depends.Add('Controls');
+
+  with Classes.Add('TForm',TForm,'TWinControl') do begin
+    with Methods.AddConstructor('Create',ClassTFormMethodCreate) do begin
+      Params.Add('AOwner','TComponent');
+    end;
+    Methods.AddProcedure('Show',ClassTFormMethodShow);
+    Methods.AddFunction('ShowModal',ClassTFormMethodShowModal,'Integer');
+    Props.AddByClass;
+    Events.Add('OnShow','TNotifyEvent',@TBisFormsScriptUnit.ClassTFormEventOnShow);
+  end;
+end;
+
+function TBisFormsScriptUnit.ClassTFormMethodCreate(Method: TBisScriptClassMethod; var Obj: TObject): Variant;
+var
+  AClass: TPersistentClass;
+begin
+  AClass:=GetClass(Method.Parent.Name);
+  if Assigned(AClass) and IsClassParent(AClass,TForm) then
+    Obj:=TFormClass(AClass).Create(TComponent(Method.Params[0].AsObject));
+end;
+
+function TBisFormsScriptUnit.ClassTFormMethodShow(Method: TBisScriptClassMethod; var Obj: TObject): Variant;
+begin
+  TForm(Obj).Show;
+end;
+
+function TBisFormsScriptUnit.ClassTFormMethodShowModal(Method: TBisScriptClassMethod; var Obj: TObject): Variant;
+begin
+  Result:=TForm(Obj).ShowModal;
+end;
+
+procedure TBisFormsScriptUnit.ClassTFormEventOnShow(Sender: TObject);
+begin
+  with TBisScriptClassEventHandler(Self) do begin
+    Params[0].AsObject:=Sender;
+    Execute;
+  end;
+end;
+
+initialization
+  RegisterClass(TForm);
+
+end.

@@ -1,0 +1,41 @@
+unit BisCounters;
+
+interface
+
+uses Classes, Contnrs;
+
+type
+  TBisCounter=class(TObject)
+  end;
+
+  TBisCounters=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisCounter;
+  published
+
+  public
+
+    procedure Reset;
+
+    property Items[Index: Integer]: TBisCounter read GetItem; default;
+
+  end;
+
+implementation
+
+{ TBisCounters }
+
+function TBisCounters.GetItem(Index: Integer): TBisCounter;
+begin
+  Result:=
+end;
+
+procedure TBisCounters.Reset;
+var
+  i: Integer;
+  Item: TBisCounter;
+begin
+
+end;
+
+end.

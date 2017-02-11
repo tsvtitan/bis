@@ -1,0 +1,555 @@
+unit BisSupportConnection;
+
+interface
+
+
+uses Windows, Classes, Controls, DB,
+     WinInet, ZLib,
+     Ras, RasUtils, RasHelperClasses,
+     IdHttp, IdComponent, IdGlobal, IdAuthentication,
+     BisCrypter, BisSupportTypes;
+
+type
+  TBisSupportConnection=class;
+
+  TBisSupportConnectionType=(ctDirect,ctRemote,ctModem);
+
+  TBisSupportConnectionInternetType=(citUnknown,citModem,citLan,citProxy);
+
+  TBisDialer=class(TRasDialer)
+  end;
+
+  TBisSupportConnectionProgressEvent=procedure(Sender: TObject; Min,Max,Position: Integer; var Interrupted: Boolean) of object;
+
+  TBisSupportConnection=class(TIdHttp)
+  private
+    FConnectionType: TBisSupportConnectionType;
+    FRemoteAuto: Boolean;
+    FRemoteName: String;
+    FInternet: DWord;
+    FDialer: TBisDialer;
+    FConnected: Boolean;
+    FWorkCountMax: Integer;
+
+    FUseCrypter: Boolean;
+    FCrypterAlgorithm: TBisCipherAlgorithm;
+    FCrypterMode: TBisCipherMode;
+    FCrypterKey: String;
+    FPath: String;
+    FProtocol: String;
+    FUseCompressor: Boolean;
+    FParentHandle: THandle;
+    FOnProgress: TBisSupportConnectionProgressEvent;
+    FStreamFormat: TBisSupportStreamFormat;
+    FCompressorLevel: TCompressionLevel;
+    FAuthUserName: String;
+    FAuthPassword: String;
+    FConnectionTimeout: Integer;
+    FExists: Boolean;
+
+    function GetFullUrl(const Document: String=''): String;
+    function GetKey(Key: String): String;
+    procedure Compress(Stream: TStream);
+    procedure Decompress(Stream: TStream);
+
+    function GetInternetType: TBisSupportConnectionInternetType;
+    procedure DialerNotify(Sender: TObject; State: TRasConnState; ErrorCode: DWORD);
+    procedure ConnectionWorkBegin(ASender: TObject; AWorkMode: TWorkMode; AWorkCountMax: Integer);
+    procedure ConnectionWork(ASender: TObject; AWorkMode: TWorkMode; AWorkCount: Integer);
+    procedure ConnectionWorkEnd(ASender: TObject; AWorkMode: TWorkMode);
+
+    procedure ConnectDirect;
+    procedure ConnectRemote;
+    procedure ConnectModem;
+
+    procedure DisconnectDirect;
+    procedure DisconnectRemote;
+    procedure DisconnectModem;
+  protected
+    procedure DoOnConnected; override;
+    procedure DoProgress(Min,Max,Position: Integer; var Interrupted: Boolean); virtual;
+  public
+    constructor Create(AOwner: TComponent);
+    destructor Destroy; override;
+    procedure Connect; reintroduce;
+    procedure Disconnect; reintroduce;
+
+    function Send(Request: TBisSupportRequest): Boolean;
+
+    property ConnectionType: TBisSupportConnectionType read FConnectionType write FConnectionType;
+    property RemoteAuto: Boolean read FRemoteAuto write FRemoteAuto;
+    property RemoteName: String read FRemoteName write FRemoteName;
+
+    property UseCrypter: Boolean read FUseCrypter write FUseCrypter;
+    property CrypterAlgorithm: TBisCipherAlgorithm read FCrypterAlgorithm write FCrypterAlgorithm;
+    property CrypterMode: TBisCipherMode read FCrypterMode write FCrypterMode;
+    property CrypterKey: String read FCrypterKey write FCrypterKey;
+    property Path: String read FPath write FPath;
+    property Protocol: String read FProtocol write FProtocol;
+    property UseCompressor: Boolean read FUseCompressor write FUseCompressor;
+    property CompressorLevel: TCompressionLevel read FCompressorLevel write FCompressorLevel;
+    property StreamFormat: TBisSupportStreamFormat read FStreamFormat write FStreamFormat;
+    property AuthUserName: String read FAuthUserName write FAuthUserName;
+    property AuthPassword: String read FAuthPassword write FAuthPassword;
+    property ConnectionTimeout: Integer read FConnectionTimeout write FConnectionTimeout;
+
+    property ParentHandle: THandle read FParentHandle write FParentHandle;
+
+    property Dialer: TBisDialer read FDialer;
+    property Exists: Boolean read FExists;
+
+    property Host;
+    property Port;
+
+    property OnProgress: TBisSupportConnectionProgressEvent read FOnProgress write FOnProgress;
+  end;
+
+implementation
+
+uses SysUtils, Forms, Variants, ActiveX, 
+     IdAssignedNumbers, IdStack, IdStackConsts,
+     ALXmlDoc,
+     BisBase64, BisUtils, BisNetUtils,
+     BisSupportConsts;
+
+function GetSocketErrorMessage(E: EIdSocketError): String;
+begin
+  Result:=E.Message;
+  case E.LastError of
+{    Id_WSAEINTR: Result           := RSStackEINTR;
+    Id_WSAEBADF: Result           := RSStackEBADF;
+    Id_WSAEACCES: Result          := RSStackEACCES;
+    Id_WSAEFAULT: Result          := RSStackEFAULT;
+    Id_WSAEINVAL: Result          := RSStackEINVAL;
+    Id_WSAEMFILE: Result          := RSStackEMFILE;
+
+    Id_WSAEWOULDBLOCK: Result     := RSStackEWOULDBLOCK;
+    Id_WSAEINPROGRESS: Result     := RSStackEINPROGRESS;
+    Id_WSAEALREADY: Result        := RSStackEALREADY;
+    Id_WSAENOTSOCK: Result        := RSStackENOTSOCK;
+    Id_WSAEDESTADDRREQ: Result    := RSStackEDESTADDRREQ;
+    Id_WSAEMSGSIZE: Result        := RSStackEMSGSIZE;
+    Id_WSAEPROTOTYPE: Result      := RSStackEPROTOTYPE;
+    Id_WSAENOPROTOOPT: Result     := RSStackENOPROTOOPT;
+    Id_WSAEPROTONOSUPPORT: Result := RSStackEPROTONOSUPPORT;
+    Id_WSAESOCKTNOSUPPORT: Result := RSStackESOCKTNOSUPPORT;
+    Id_WSAEOPNOTSUPP: Result      := RSStackEOPNOTSUPP;
+    Id_WSAEPFNOSUPPORT: Result    := RSStackEPFNOSUPPORT;
+    Id_WSAEAFNOSUPPORT: Result    := RSStackEAFNOSUPPORT;
+    Id_WSAEADDRINUSE: Result      := RSStackEADDRINUSE;
+    Id_WSAEADDRNOTAVAIL: Result   := RSStackEADDRNOTAVAIL;
+    Id_WSAENETDOWN: Result        := RSStackENETDOWN;
+    Id_WSAENETUNREACH: Result     := RSStackENETUNREACH;
+    Id_WSAENETRESET: Result       := RSStackENETRESET;
+    Id_WSAECONNABORTED: Result    := RSStackECONNABORTED;
+    Id_WSAECONNRESET: Result      := RSStackECONNRESET;
+    Id_WSAENOBUFS: Result         := RSStackENOBUFS;
+    Id_WSAEISCONN: Result         := RSStackEISCONN;
+    Id_WSAENOTCONN: Result        := 'Socket is not connected.';
+    Id_WSAESHUTDOWN: Result       := RSStackESHUTDOWN;
+    Id_WSAETOOMANYREFS: Result    := RSStackETOOMANYREFS;
+    Id_WSAETIMEDOUT: Result       := RSStackETIMEDOUT;}
+    Id_WSAECONNREFUSED: Result    := 'Соединение отклонено.';
+{    Id_WSAELOOP: Result           := RSStackELOOP;
+    Id_WSAENAMETOOLONG: Result    := RSStackENAMETOOLONG;
+    Id_WSAEHOSTDOWN: Result       := RSStackEHOSTDOWN;
+    Id_WSAEHOSTUNREACH: Result    := RSStackEHOSTUNREACH;
+    Id_WSAENOTEMPTY: Result       := RSStackENOTEMPTY;}
+  end;
+end;     
+
+{ TBisSupportConnection }
+
+constructor TBisSupportConnection.Create(AOwner: TComponent);
+begin
+  inherited Create(Aowner);
+
+  FDialer:=TBisDialer.Create;
+  FDialer.Mode:=dmSync;
+  FDialer.OnNotify:=DialerNotify;
+
+  OnWorkBegin:=ConnectionWorkBegin;
+  OnWork:=ConnectionWork;
+  OnWorkEnd:=ConnectionWorkEnd;
+
+  FCompressorLevel:=clFastest;
+  FConnectionTimeout:=100;
+end;
+
+destructor TBisSupportConnection.Destroy;
+begin
+  FDialer.OnNotify:=nil;
+  FDialer.Free;
+  inherited Destroy;
+end;
+
+procedure TBisSupportConnection.DoOnConnected;
+begin
+  inherited DoOnConnected;
+end;
+
+function TBisSupportConnection.GetInternetType: TBisSupportConnectionInternetType;
+var
+  Connected: Bool;
+  dwFlags: Dword;
+begin
+  Result:=citUnknown;
+  Connected:=InternetGetConnectedState(@dwFlags,0) and ((dwFlags and INTERNET_CONNECTION_MODEM_BUSY)=0);
+  if Connected then begin
+    if (dwFlags and INTERNET_CONNECTION_MODEM)=1 then Result:=citModem;
+    if (dwFlags and INTERNET_CONNECTION_LAN)=1 then Result:=citLan;
+    if (dwFlags and INTERNET_CONNECTION_PROXY)=1 then Result:=citProxy;
+  end;
+end;
+
+procedure TBisSupportConnection.DialerNotify(Sender: TObject; State: TRasConnState;
+  ErrorCode: DWORD);
+begin
+  FConnected:=FDialer.Active;
+end;
+
+procedure TBisSupportConnection.DoProgress(Min,Max,Position: Integer; var Interrupted: Boolean);
+begin
+  if Assigned(FOnProgress) then
+    FOnProgress(Self,Min,Max,Position,Interrupted);
+end;
+
+procedure TBisSupportConnection.ConnectionWorkBegin(ASender: TObject; AWorkMode: TWorkMode; AWorkCountMax: Integer);
+var
+  Interrupted: Boolean;
+begin
+  FWorkCountMax:=AWorkCountMax;
+  Interrupted:=false;
+  DoProgress(0,AWorkCountMax,0,Interrupted);
+end;
+
+procedure TBisSupportConnection.ConnectionWork(ASender: TObject; AWorkMode: TWorkMode; AWorkCount: Integer);
+var
+  Interrupted: Boolean;
+begin
+  Interrupted:=false;
+  DoProgress(0,FWorkCountMax,AWorkCount,Interrupted);
+  if Interrupted then
+    inherited Disconnect;
+end;
+
+procedure TBisSupportConnection.ConnectionWorkEnd(ASender: TObject; AWorkMode: TWorkMode);
+var
+  Interrupted: Boolean;
+begin
+  Interrupted:=false;
+  DoProgress(0,0,0,Interrupted);
+end;
+
+procedure TBisSupportConnection.ConnectDirect;
+var
+  AConnected: Boolean;
+begin
+  AConnected:=false;
+  try
+    AConnected:=true;
+  finally
+    FConnected:=AConnected;
+  end;
+end;
+
+procedure TBisSupportConnection.ConnectRemote;
+var
+  InternetType: TBisSupportConnectionInternetType;
+  Ret: Dword;
+  dwConnection: DWord;
+  AConnected: Boolean;
+  NewRemoteName: string;
+  S: String;
+begin
+  AConnected:=false;
+  try
+    if FRemoteAuto then
+      NewRemoteName:=''
+    else
+      NewRemoteName:=FRemoteName;
+    InternetType:=GetInternetType;
+    if InternetType<>citLan then begin
+      if FRemoteAuto then begin
+        AConnected:=InternetAutoDial(INTERNET_AUTODIAL_FORCE_UNATTENDED,FParentHandle);
+      end else begin
+        Ret:=InternetDial(FParentHandle,PChar(FRemoteName),INTERNET_AUTODIAL_FORCE_UNATTENDED,@dwConnection,0);
+        if Ret=ERROR_SUCCESS then begin
+          FInternet:=dwConnection;
+          AConnected:=true;
+        end;
+      end;
+    end else AConnected:=true;
+
+    if AConnected then begin
+      S:=GetFullUrl;
+      InternetGoOnline(PChar(S),FParentHandle,0);
+    end;
+  finally
+    FConnected:=AConnected;
+  end;
+end;
+
+procedure TBisSupportConnection.ConnectModem;
+var
+  InternetType: TBisSupportConnectionInternetType;
+  Ret: Dword;
+  AConnected: Boolean;
+  S: String;
+begin
+  AConnected:=false;
+  try
+    Ret:=ERROR_SUCCESS;
+    InternetType:=GetInternetType;
+    if InternetType<>citLan then begin
+      try
+        FDialer.Dial;
+      except
+        On E: EWin32Error do begin
+          Ret:=E.ErrorCode;
+        end;
+      end;
+      if Ret=ERROR_SUCCESS then begin
+        FInternet:=FDialer.ConnHandle;
+        AConnected:=true;
+      end;
+    end else AConnected:=true;
+
+    if AConnected then begin
+      S:=GetFullUrl;
+      InternetGoOnline(PChar(S),FParentHandle,0);
+    end;
+  finally
+    FConnected:=AConnected;
+  end;
+end;
+
+procedure TBisSupportConnection.Connect;
+begin
+  if not FConnected then
+    case FConnectionType of
+      ctDirect: ConnectDirect;
+      ctRemote: ConnectRemote;
+      ctModem: ConnectModem;
+    end;
+end;
+
+procedure TBisSupportConnection.DisconnectDirect;
+begin
+  FConnected:=false;
+end;
+
+procedure TBisSupportConnection.DisconnectRemote;
+var
+  InternetType: TBisSupportConnectionInternetType;
+begin
+  InternetType:=GetInternetType;
+  if InternetType<>citLan then begin
+    if FRemoteAuto then
+      InternetAutodialHangup(0)
+    else begin
+      InternetHangUp(FInternet,0);
+    end;
+  end;
+  FConnected:=false;
+end;
+
+procedure TBisSupportConnection.DisconnectModem;
+var
+  InternetType: TBisSupportConnectionInternetType;
+begin
+  InternetType:=GetInternetType;
+  if InternetType<>citLan then begin
+    try
+      if FDialer.Active then
+        FDialer.HangUp;
+    except
+    end;
+  end;
+  FConnected:=false;
+end;
+
+procedure TBisSupportConnection.Disconnect;
+begin
+  if FConnected then
+    case FConnectionType of
+      ctDirect: DisconnectDirect;
+      ctRemote: DisconnectRemote;
+      ctModem: DisconnectModem;
+    end;
+end;
+
+function TBisSupportConnection.GetFullUrl(const Document: String=''): String;
+begin
+  Result:='';
+  try
+    URL.Host:=Host;
+    URL.Port:=IntToStr(Port);
+    URL.Protocol:=FProtocol;
+    URL.Path:=FPath;
+    URL.Document:=Document;
+    Result:=URL.GetFullURI([]);
+  except
+  end;
+end;
+
+function TBisSupportConnection.GetKey(Key: String): String;
+begin
+  Result:=Key;
+end;
+
+procedure TBisSupportConnection.Compress(Stream: TStream);
+var
+  Zip: TCompressionStream;
+  TempStream: TMemoryStream;
+begin
+  if Assigned(Stream) then begin
+    TempStream:=TMemoryStream.Create;
+    try
+      Zip:=TCompressionStream.Create(FCompressorLevel,TempStream);
+      try
+        Stream.Position:=0;
+        Zip.CopyFrom(Stream,Stream.Size);
+      finally
+        Zip.Free;
+      end;
+      Stream.Size:=0;
+      TempStream.Position:=0;
+      Stream.CopyFrom(TempStream,TempStream.Size);
+      Stream.Position:=0;
+    finally
+      TempStream.Free;
+    end;
+  end;
+end;
+
+procedure TBisSupportConnection.Decompress(Stream: TStream);
+var
+  Zip: TDecompressionStream;
+  Count: Integer;
+  Buffer: array[0..1023] of Char;
+  TempStream: TMemoryStream;
+begin
+  if Assigned(Stream) then begin
+    TempStream:=TMemoryStream.Create;
+    try
+      Stream.Position:=0; 
+      Zip:=TDecompressionStream.Create(Stream);
+      try
+        repeat
+          Count:=Zip.Read(Buffer,SizeOf(Buffer));
+          TempStream.Write(Buffer,Count);
+        until Count=0;
+      finally
+        Zip.Free;
+      end;
+      TempStream.Position:=0;
+      Stream.Size:=0;
+      Stream.CopyFrom(TempStream,TempStream.Size);
+      Stream.Position:=0;
+    finally
+      TempStream.Free;
+    end;
+  end;
+end;
+
+function TBisSupportConnection.Send(Request: TBisSupportRequest): Boolean;
+var
+  RequestStream: TMemoryStream;
+  ResponseStream: TMemoryStream;
+  TempStream: TMemoryStream;
+  FullUrl: String;
+  Key: String;
+  Error: String;
+  Crypter: TBisCrypter;
+  Success: Boolean;
+begin
+  Result:=false;
+  if Assigned(Request) then begin
+    try
+      FExists:=ServerExists(ResolveIP(Host),Port,FConnectionTimeout);
+      RequestStream:=TMemoryStream.Create;
+      ResponseStream:=TMemoryStream.Create;
+      TempStream:=TMemoryStream.Create;
+      Crypter:=TBisCrypter.Create;
+      try
+        FullUrl:=GetFullUrl();
+        Key:=GetKey(FCrypterKey);
+
+        if Trim(FAuthUserName)<>'' then begin
+          Self.Request.BasicAuthentication:=true;
+          if not Assigned(Self.Request.Authentication) then
+            Self.Request.Authentication:=TIdBasicAuthentication.Create;
+          Self.Request.Authentication.Username:=FAuthUserName;
+          Self.Request.Authentication.Password:=FAuthPassword;
+        end;
+
+        Request.Rnd:=GetUniqueID;
+        Request.SaveToStream(TempStream,FStreamFormat);
+
+        if FUseCompressor then
+          Compress(TempStream);
+
+        RequestStream.Clear;
+        TempStream.Position:=0;
+        if FUseCrypter then
+          Crypter.EncodeStream(Key,TempStream,RequestStream,FCrypterAlgorithm,FCrypterMode)
+        else
+          RequestStream.CopyFrom(TempStream,TempStream.Size);
+
+        RequestStream.Position:=0;
+
+        Post(FullUrl,RequestStream,ResponseStream);
+
+        Key:=GetKey(FCrypterKey);
+
+        ResponseStream.Position:=0;
+        TempStream.Clear;
+        if FUseCrypter then
+          Crypter.DecodeStream(Key,ResponseStream,TempStream,FCrypterAlgorithm,FCrypterMode)
+        else
+          TempStream.CopyFrom(ResponseStream,ResponseStream.Size);
+
+        if FUseCompressor then
+          Decompress(TempStream);
+
+        Success:=false;
+        TempStream.Position:=0;
+
+        if TempStream.Size>0 then begin
+          try
+            Request.LoadFromStream(TempStream,FStreamFormat);
+            Success:=Request.Success;
+            Error:=Request.Error;
+          except
+            on E: Exception do begin
+              Success:=false;
+              Error:=E.Message;
+            end;
+          end;
+        end;
+
+        Result:=Success;
+        if not Result then begin
+          if Trim(Error)<>'' then
+            raise Exception.Create(Error);
+        end;
+        
+      finally
+        Crypter.Free;
+        TempStream.Free;
+        ResponseStream.Free;
+        RequestStream.Free;
+      end;
+    except
+      On E: Exception do begin
+        if E is EIdSocketError then
+          raise Exception.Create(GetSocketErrorMessage(EIdSocketError(E)))
+        else
+          raise;  
+      end;
+    end;
+  end;
+end;
+
+end.

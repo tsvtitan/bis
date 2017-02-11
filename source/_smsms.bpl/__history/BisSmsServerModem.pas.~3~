@@ -1,0 +1,32 @@
+unit BisSmsServerModem;
+
+interface
+
+
+uses
+     BisCoreObject;
+
+type
+  TBisSmsServerModem=class(TBisCoreObject)
+  private
+    FMode: TBisSmsServerModemMode;
+    FComPort: Integer;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property Mode: TBisSmsServerModemMode read FMode write FMode;
+    property ComPort: Integer read FComPort write FComPort;
+  end;
+
+  TBisSmsServerModems=class(TObjectList)
+  private
+    function GetItems(Index: Integer): TBisSmsServerModem;
+  public
+    property Items[Index: Integer]: TBisSmsServerModem read GetItems;
+  end;
+
+
+implementation
+
+end.

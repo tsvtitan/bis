@@ -1,0 +1,171 @@
+unit BisCoreObjects;
+
+interface
+
+uses Classes,
+     BisObject, BisObjects,
+     BisLogger, BisConfig;
+
+type
+
+  TBisCoreObject=class(TBisObject)
+  private
+    FTranslateClass: TClass;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Init; override;
+
+    procedure LoggerWrite(const Message: String; LogType: TBisLoggerType=ltInformation; const LoggerName: String=''); virtual;
+
+    function ConfigRead(const Param: String; Default: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''): Variant; virtual;
+    procedure ConfigWrite(const Param: String; Value: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''); virtual;
+
+    function ProfileRead(const Param: String; Default: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''): Variant; virtual;
+    procedure ProfileWrite(const Param: String; Value: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''); virtual;
+
+    procedure Progress(const Min, Max, Position: Integer; var Interrupted: Boolean); virtual;
+
+
+    property TranslateClass: TClass read FTranslateClass write FTranslateClass;
+  end;
+
+  TBisCoreObjects=class(TBisObjects)
+  private
+    FTranslateClass: TClass;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Init; override;
+
+    procedure LoggerWrite(const Message: String; LogType: TBisLoggerType=ltInformation; const LoggerName: String=''); virtual;
+
+    property TranslateClass: TClass read FTranslateClass write FTranslateClass;
+  end;
+
+implementation
+
+uses SysUtils,
+     BisCore, BisUtils, BisCoreUtils;
+
+{ TBisCoreObject }
+
+constructor TBisCoreObject.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FTranslateClass:=TBisCoreObject;
+end;
+
+procedure TBisCoreObject.Init;
+begin
+  inherited Init;
+  TranslateObject(Self,FTranslateClass);
+end;
+
+procedure TBisCoreObject.LoggerWrite(const Message: String; LogType: TBisLoggerType=ltInformation; const LoggerName: String='');
+var
+  S: String;
+begin
+  if Assigned(Core) and
+     Assigned(Core.Logger) then begin
+    S:=LoggerName;
+    if Trim(S)='' then
+      S:=Self.ObjectName
+    else
+      S:=Self.ObjectName+'.'+LoggerName;      
+    Core.Logger.Write(Message,LogType,S);
+  end;
+end;
+
+function TBisCoreObject.ConfigRead(const Param: String; Default: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''): Variant;
+var
+  S: String;
+begin
+  if Assigned(Core) and
+     Assigned(Core.Config) then begin
+    S:=Section;
+    if Trim(S)='' then
+      S:=Self.ObjectName;
+    Result:=Core.Config.Read(S,Param,Default,Mode);
+  end;
+end;
+
+procedure TBisCoreObject.ConfigWrite(const Param: String; Value: Variant; Mode: TBisConfigMode=cmDefault; const Section: String='');
+var
+  S: String;
+begin
+  if Assigned(Core) and
+     Assigned(Core.Config) then begin
+    S:=Section;
+    if Trim(S)='' then
+      S:=Self.ObjectName;
+    Core.Config.Write(S,Param,Value,Mode);
+  end;
+end;
+
+function TBisCoreObject.ProfileRead(const Param: String; Default: Variant; Mode: TBisConfigMode=cmDefault; const Section: String=''): Variant;
+var
+  S: String;
+begin
+  if Assigned(Core) and
+     Assigned(Core.Profile) then begin
+    S:=Section;
+    if Trim(S)='' then
+      S:=Self.ObjectName;
+    Result:=Core.Profile.Read(S,Param,Default,Mode);
+  end;
+end;
+
+procedure TBisCoreObject.ProfileWrite(const Param: String; Value: Variant; Mode: TBisConfigMode=cmDefault; const Section: String='');
+var
+  S: String;
+begin
+  if Assigned(Core) and
+     Assigned(Core.Profile) then begin
+    S:=Section;
+    if Trim(S)='' then
+      S:=Self.ObjectName;
+    Core.Profile.Write(S,Param,Value,Mode);
+  end;
+end;
+
+procedure TBisCoreObject.Progress(const Min, Max, Position: Integer;  var Interrupted: Boolean);
+begin
+  if Assigned(Core) then
+    Core.Progress(Min,Max,Position,Interrupted);
+end;
+
+{ TBisCoreObjects }
+
+constructor TBisCoreObjects.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FTranslateClass:=TBisCoreObjects;
+end;
+
+function TBisCoreObjects.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisCoreObject;
+end;
+
+procedure TBisCoreObjects.Init;
+begin
+  inherited Init;
+  TranslateObject(Self,FTranslateClass);
+end;
+
+procedure TBisCoreObjects.LoggerWrite(const Message: String; LogType: TBisLoggerType; const LoggerName: String);
+var
+  S: String;
+begin
+  if Assigned(Core) and
+     Assigned(Core.Logger) then begin
+    S:=LoggerName;
+    if Trim(S)='' then
+      S:=Self.ObjectName;
+    Core.Logger.Write(Message,LogType,S);
+  end;
+end;
+
+
+end.

@@ -1,0 +1,26 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs,
+  BisThreads;
+
+type
+  TWaitForm = class(TForm)
+  private
+    FThread: TBisWorkThread;
+    { Private declarations }
+  public
+    property Thread: TBisWorkThread read FThread write FThread; 
+  end;
+
+var
+  WaitForm: TWaitForm;
+
+implementation
+
+{$R *.dfm}
+
+end.

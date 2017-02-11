@@ -1,0 +1,145 @@
+unit BisParamHotKey;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB, ComCtrls,
+     BisParam, BisControls;
+
+type
+
+  TBisParamHotKey=class(TBisParam)
+  private
+    FHotKey: THotKey;
+    FLabelHotKey: TLabel;
+    FHotKeyName: String;
+    FLabelName: String;
+    FOldHotKeyChange: TNotifyEvent;
+
+    procedure HotKeyChange(Sender: TObject);
+    procedure SetEnabled(const Value: Boolean);
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetEmpty: Boolean; override;
+    function GetCaption: String; override;
+    function GetControl: TWinControl; override;
+//    procedure SetEnabled(const Value: Boolean); override;
+    procedure GetControls(List: TList); override;
+  public
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+    property HotKeyName: String read FHotKeyName write FHotKeyName;
+    property LabelName: String read FLabelName write FLabelName;
+    property HotKey: THotKey read FHotKey write FHotKey;
+    property LabelHotKey: TLabel read FLabelHotKey;
+  end;
+
+implementation
+
+uses Variants, Graphics,
+     BisUtils, BisConsts;
+
+{ TBisParamHotKey }
+
+constructor TBisParamHotKey.Create;
+begin
+  inherited Create;
+  DataType:=ftInteger;
+end;
+
+procedure TBisParamHotKey.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamHotKey) then begin
+    HotKeyName:=TBisParamHotKey(Source).HotKeyName;
+    LabelName:=TBisParamHotKey(Source).LabelName;
+  end;
+end;
+
+procedure TBisParamHotKey.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FHotKey:=THotKey(DoFindComponent(FHotKeyName));
+    if Assigned(FHotKey) then begin
+      FOldHotKeyChange:=FHotKey.OnChange;
+      FHotKey.OnChange:=HotKeyChange;
+      FHotKey.Color:=iff(FHotKey.Color=clBtnFace,ColorControlReadOnly,FHotKey.Color);
+      FLabelHotKey:=TLabel(DoFindComponent(FLabelName));
+      if Assigned(FLabelHotKey) then
+        FLabelHotKey.FocusControls.Add(FHotKey);
+    end;
+    Value:=TempValue;
+  end;
+  inherited LinkControls(Parent);
+  if Assigned(FHotKey) then begin
+  end;
+end;
+
+function TBisParamHotKey.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FHotKey) then
+    Result:=iff(not Empty,FHotKey.HotKey,Result);
+end;
+
+procedure TBisParamHotKey.SetValue(const AValue: Variant);
+begin
+  if not VarSameValue(Value,AValue) then begin
+    if Assigned(FHotKey) then begin
+      FHotKey.OnChange:=nil;
+      try
+        FHotKey.HotKey:=VarToIntDef(AValue,0);
+      finally
+        FHotKey.OnChange:=HotKeyChange;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamHotKey.GetControl: TWinControl;
+begin
+  Result:=FHotKey;
+end;
+
+procedure TBisParamHotKey.GetControls(List: TList);
+begin
+  inherited GetControls(List);
+  if Assigned(List) then
+    List.Add(FLabelHotKey);
+end;
+
+{procedure TBisParamHotKey.SetEnabled(const Value: Boolean);
+begin
+  inherited SetEnabled(Value);
+  if Assigned(FLabelHotKey) then
+    FLabelHotKey.Enabled:=Value;
+end;}
+
+function TBisParamHotKey.GetCaption: String;
+begin
+  Result:=inherited GetCaption;
+  if Assigned(FLabelHotKey) then
+    Result:=FLabelHotKey.Caption;   
+end;
+
+function TBisParamHotKey.GetEmpty: Boolean;
+begin
+  Result:=true;
+  if Assigned(FHotKey) then
+    Result:=FHotKey.HotKey=0;
+end;
+
+procedure TBisParamHotKey.HotKeyChange(Sender: TObject);
+begin
+  DoChange(Self);
+  if Assigned(FOldHotKeyChange) then
+    FOldHotKeyChange(Sender);
+end;
+
+end.

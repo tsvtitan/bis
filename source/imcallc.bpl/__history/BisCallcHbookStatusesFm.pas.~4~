@@ -1,0 +1,51 @@
+unit BisCallcHbookStatusesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBiCallcHbookStatusesForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookStatusesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHbookStatusesForm: TBiCallcHbookStatusesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHbookStatuseEditFm;
+
+{ TBisCallcHbookStatusesFormIface }
+
+constructor TBisCallcHbookStatusesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBiCallcHbookStatusesForm;
+  InsertClass:=TBisCallcHbookStatusInsertFormIface;
+  UpdateClass:=TBisCallcHbookStatusUpdateFormIface;
+  DeleteClass:=TBisCallcHbookStatusDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_StatuseS';
+  with FieldNames do begin
+    AddKey('Statuse_ID');
+    Add('NAME','Наименование',150);
+    Add('DESCRIPTION','Описание',200);
+    AddInvisible('PRIORITY');
+  end;
+  Orders.Add('NAME');
+end;
+
+end.

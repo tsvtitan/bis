@@ -1,0 +1,15 @@
+unit BisProviderIntf;
+
+interface
+
+uses BisCoreObjectsIntf;
+
+type
+  IBisProvider=interface(IBisCoreObject)
+  ['{5B308E5C-0521-4CC6-BD96-F67DA8A2642D}']
+    procedure GetRecords(ADataSet: TBisDataSet);
+  end;
+
+implementation
+
+end.

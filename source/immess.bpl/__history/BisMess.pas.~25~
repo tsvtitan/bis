@@ -1,0 +1,39 @@
+unit BisMess;
+
+interface
+
+uses BisModules, BisIfaceModules;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisCore, BisMessConsts,
+     BisMessDataPatternMessagesFm, BisMessDataCodeMessagesFm,
+     BisMessDataInMessagesFm,
+     BisMessDataOutMessageEditFm, BisMessDataOutMessageInsertExFm,
+     BisMessDataOutMessagesImportFm
+     {,
+     BisMessMainFm, BisMessDataOutMessagesFm, BisMessDataOutMessageEditFm,
+     BisMessDataCodeMessagesFm, BisMessDataInMessagesFm, BisMessDataPatternMessagesFm,
+     BisMessDataAccountsFm, BisMessDataRolesFm,
+     BisMessDataOutMessageInsertExFm};
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  IsMainModule:=Core.IfaceModules.IsFirstModule(AModule);
+  with AModule do begin
+    Classes.Add(TBisMessDataPatternMessagesFormIface);
+    Classes.Add(TBisMessDataCodeMessagesFormIface);
+    Classes.Add(TBisMessDataInMessagesFormIface);
+ //   Classes.Add(TBisTaxiDataOutMessagesFormIface);
+    Classes.Add(TBisMessDataOutMessageInsertFormIface);
+    Classes.Add(TBisMessDataOutMessageInsertExFormIface);
+    Classes.Add(TBisMessDataOutMessagesImportFormIface);
+  end;
+end;
+
+end.

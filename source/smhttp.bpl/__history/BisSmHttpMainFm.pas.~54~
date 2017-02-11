@@ -1,0 +1,186 @@
+unit BisSmHttpMainFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ToolWin, ExtCtrls, Menus, ActnPopup, ImgList,
+  StdCtrls,
+
+  BisFm, BisObject;
+
+type
+  TBisSmHttpMainForm = class(TBisForm)
+    ControlBar: TControlBar;
+    TrayIcon: TTrayIcon;
+    PopupActionBar: TPopupActionBar;
+    LabelTime: TLabel;
+    MenuItemShow: TMenuItem;
+    N1: TMenuItem;
+    MenuItemHide: TMenuItem;
+    MenuItemExit: TMenuItem;
+    Timer: TTimer;
+    ImageList: TImageList;
+    procedure MenuItemHideClick(Sender: TObject);
+    procedure MenuItemShowClick(Sender: TObject);
+    procedure TrayIconDblClick(Sender: TObject);
+    procedure MenuItemExitClick(Sender: TObject);
+    procedure PopupActionBarPopup(Sender: TObject);
+    procedure TimerTimer(Sender: TObject);
+  private
+    FWorking: Boolean;
+    FVisible: Boolean;
+    FDays: Integer;
+    FTime: TDateTime;
+    FSFormatTime: String;
+    FSServerWorking: String;
+    FSServerIdle: String;
+    procedure SetIcon;
+  protected
+    procedure DoClose(var Action: TCloseAction); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function CanShow: Boolean; override;
+  published
+    property SFormatTime: String read FSFormatTime write FSFormatTime;
+    property SServerWorking: String read FSServerWorking write FSServerWorking;
+    property SServerIdle: String read FSServerIdle write FSServerIdle;
+  end;
+
+  TBisSmHttpMainFormIface=class(TBisFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+
+var
+  BisSmHttpMainForm: TBisSmHttpMainForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisConsts, BisSmHttpConsts, BisUtils, BisSmHttpServer;
+
+{ TTBisSmHttpMainFormIface }
+
+constructor TBisSmHttpMainFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisSmHttpMainForm;
+  AutoShow:=true;
+  ApplicationCreateForm:=true;
+  Permissions.Enabled:=false;
+end;
+
+{ TTBisSmHttpMainForm }
+
+constructor TBisSmHttpMainForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FDays:=0;
+  FTime:=Now;
+
+  FSFormatTime:='Время с момента запуска: %d дн. %s';
+  FSServerWorking:='Сервер обрабатывает команды...';
+  FSServerIdle:='Сервер простаивает...';
+
+  SetIcon;
+  TimerTimer(nil);
+end;
+
+destructor TBisSmHttpMainForm.Destroy;
+begin
+
+  inherited Destroy;
+end;
+
+procedure TBisSmHttpMainForm.DoClose(var Action: TCloseAction);
+begin
+  inherited DoClose(Action);
+  Action:=caNone;
+  Hide;
+end;
+
+function TBisSmHttpMainForm.CanShow: Boolean;
+begin
+  Result:=FVisible;
+end;
+
+procedure TBisSmHttpMainForm.MenuItemExitClick(Sender: TObject);
+begin
+  Application.Terminate;
+end;
+
+procedure TBisSmHttpMainForm.MenuItemHideClick(Sender: TObject);
+begin
+  Hide;
+end;
+
+procedure TBisSmHttpMainForm.MenuItemShowClick(Sender: TObject);
+begin
+  FVisible:=true;
+  Show;
+  BringToFront;
+end;
+
+procedure TBisSmHttpMainForm.PopupActionBarPopup(Sender: TObject);
+begin
+  MenuItemExit.Visible:=Application.MainForm=Self;
+end;
+
+procedure TBisSmHttpMainForm.TimerTimer(Sender: TObject);
+var
+  Hour, Min, Sec, MSec: Word;
+  Current: TDateTime;
+begin
+  Timer.Enabled:=false;
+  try
+    try
+      Current:=Now-FTime;
+      DecodeTime(Current,Hour,Min,Sec,MSec);
+      if Hour>=24 then begin
+        FDays:=FDays+1;
+        FTime:=Now;
+        Current:=Now-FTime;
+      end;
+      LabelTime.Caption:=Format(FSFormatTime,[FDays,FormatDateTime('hh:nn:ss',Current)]);
+      LabelTime.Font.Color:=iff(Servers.Working,clRed,clWindowText);
+      TrayIcon.Hint:=LabelTime.Caption;
+      SetIcon;
+      if FWorking<>Servers.Working then begin
+        if Servers.Working then
+          TrayIcon.BalloonHint:=FSServerWorking
+        else
+          TrayIcon.BalloonHint:=FSServerIdle;
+        TrayIcon.ShowBalloonHint;
+      end;
+      FWorking:=Servers.Working;
+    except
+    end;
+  finally
+    Timer.Enabled:=true;
+  end;
+end;
+
+procedure TBisSmHttpMainForm.TrayIconDblClick(Sender: TObject);
+begin
+  MenuItemShowClick(nil);
+end;
+
+procedure TBisSmHttpMainForm.SetIcon;
+var
+  NewIcon: TIcon;
+begin
+  NewIcon:=TIcon.Create;
+  try
+    TrayIcon.IconIndex:=iff(Servers.Working,1,0);
+    ImageList.GetIcon(TrayIcon.IconIndex,NewIcon);
+    Icon.Handle:=NewIcon.Handle;
+  finally
+    NewIcon.Free;
+  end;
+end;
+
+end.

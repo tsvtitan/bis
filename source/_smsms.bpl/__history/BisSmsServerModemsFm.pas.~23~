@@ -1,0 +1,673 @@
+unit BisSmsServerModemsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, DB,
+  BisFm, BisDialogFm, BisDataSet, BisControls;
+
+type
+  TBisSmsServerModemsForm = class(TBisDialogForm)
+    ButtonSave: TButton;
+    PanelControls: TPanel;
+    GroupBoxModem: TGroupBox;
+    LabelComport: TLabel;
+    ComboBoxComport: TComboBox;
+    CheckBoxEnabled: TCheckBox;
+    LabelBaudRate: TLabel;
+    ComboBoxBaudRate: TComboBox;
+    LabelDatabits: TLabel;
+    LabelStopbits: TLabel;
+    LabelParitybits: TLabel;
+    ComboBoxDatabits: TComboBox;
+    ComboBoxStopbits: TComboBox;
+    ComboBoxParitybits: TComboBox;
+    GroupBoxGeneral: TGroupBox;
+    LabelInterval: TLabel;
+    EditInterval: TEdit;
+    LabelMode: TLabel;
+    ComboBoxMode: TComboBox;
+    LabelStorages: TLabel;
+    ComboBoxStorages: TComboBox;
+    LabelTimeout: TLabel;
+    EditTimeout: TEdit;
+    GroupBoxRestrict: TGroupBox;
+    LabelImei: TLabel;
+    LabelImsi: TLabel;
+    EditImei: TEdit;
+    EditImsi: TEdit;
+    GroupBoxOutgoing: TGroupBox;
+    LabelMaxcount: TLabel;
+    EditMaxcount: TEdit;
+    LabelPeriod: TLabel;
+    EditPeriod: TEdit;
+    LabelUnknownSender: TLabel;
+    EditUnknownSender: TEdit;
+    LabelUnknownCode: TLabel;
+    EditUnknownCode: TEdit;
+    ButtonTest: TButton;
+    procedure ButtonSaveClick(Sender: TObject);
+    procedure ComboBoxComportChange(Sender: TObject);
+    procedure ButtonOkClick(Sender: TObject);
+    procedure CheckBoxEnabledClick(Sender: TObject);
+    procedure ButtonTestClick(Sender: TObject);
+  private
+    FModems: TBisDataSet;
+    FEditInterval: TEditInteger;
+    FEditTimeout: TEditInteger;
+    FEditMaxcount: TEditInteger;
+    FEditPeriod: TEditInteger;
+    FOldPort: String;
+    FOnlyOneModem: Boolean;
+    FSOnlyOneModem: String;
+    FSModemConnected: String;
+    FSModemNotConnected: String;
+    FSNeedValue: String;
+    FShowByCommand: Boolean;
+    FSAllMessages: String;
+    FSOnlyIncoming: String;
+    FSOnlyOutgoing: String;
+    FSParitybitsNone: String;
+    FSParitybitsEven: String;
+    procedure FillDefault;
+    procedure LoadFromBase;
+    procedure SaveModems;
+    procedure SetModems(Port: String);
+    procedure GetModems(Port: String);
+    procedure SetOnlyOneModem(const Value: Boolean);
+    procedure TestModem;
+    function CheckFields: Boolean;
+    procedure EnableModems(AEnabled: Boolean);
+    procedure RestartServer;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+
+    property OnlyOneModem: Boolean read FOnlyOneModem write SetOnlyOneModem;
+    property ShowByCommand: Boolean read FShowByCommand write FShowByCommand; 
+  published
+    property SOnlyOneModem: String read FSOnlyOneModem write FSOnlyOneModem;
+    property SModemConnected: String read FSModemConnected write FSModemConnected;
+    property SModemNotConnected: String read FSModemNotConnected write FSModemNotConnected;
+    property SNeedValue: String read FSNeedValue write FSNeedValue;
+    property SAllMessages: String read FSAllMessages write FSAllMessages;
+    property SOnlyIncoming: String read FSOnlyIncoming write FSOnlyIncoming;
+    property SOnlyOutgoing: String read FSOnlyOutgoing write FSOnlyOutgoing;
+    property SParitybitsNone: String read FSParitybitsNone write FSParitybitsNone;
+    property SParitybitsEven: String read FSParitybitsEven write FSParitybitsEven;  
+//    prOdd, prEven, prMark, prSpace
+  end;
+
+  TBisSmsServerModemsFormIface=class(TBisDialogFormIface)
+  private
+    FShowByCommand: Boolean;
+  protected
+    class function GetFormClass: TBisFormClass; override;
+    function CreateForm: TBisForm; override;
+  public
+    procedure ShowByCommand(const Command: string); override;
+  end;
+
+var
+  BisSmsServerModemsForm: TBisSmsServerModemsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisCoreIntf, BisCore, BisDialogs, BisUtils, BisGsmModem, BisComPort, BisSmsServerConsts,
+     BisServerModules, BisServers;
+
+{ TBisSmsServerModemsFormIface }
+
+function TBisSmsServerModemsFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then
+    TBisSmsServerModemsForm(Result).ShowByCommand:=FShowByCommand;
+end;
+
+class function TBisSmsServerModemsFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisSmsServerModemsForm;
+end;
+
+procedure TBisSmsServerModemsFormIface.ShowByCommand(const Command: string);
+begin
+  FShowByCommand:=true;
+  ShowModal;
+end;
+
+{ TBisSmsServerModemsForm }
+
+constructor TBisSmsServerModemsForm.Create(AOwner: TComponent);
+var
+  Buffer: String;
+begin
+  inherited Create(AOwner);
+
+  FEditInterval:=ReplaceEditToEditInteger(EditInterval);
+  FEditTimeout:=ReplaceEditToEditInteger(EditTimeout);
+  FEditMaxcount:=ReplaceEditToEditInteger(EditMaxcount);
+  FEditPeriod:=ReplaceEditToEditInteger(EditPeriod);
+
+  FModems:=TBisDataSet.Create(nil);
+  with FModems.FieldDefs do begin
+    Add('PORT',ftString,100);
+    Add('INTERVAL',ftInteger);
+    Add('BAUD_RATE',ftInteger);
+    Add('DATA_BITS',ftInteger);
+    Add('STOP_BITS',ftInteger);
+    Add('PARITY_BITS',ftInteger);
+    Add('MODE',ftInteger);
+    Add('IMEI',ftString,100);
+    Add('IMSI',ftString,100);
+    Add('STORAGES',ftString,100);
+    Add('MAX_COUNT',ftInteger);
+    Add('TIME_OUT',ftInteger);
+    Add('UNKNOWN_SENDER',ftString,100);
+    Add('UNKNOWN_CODE',ftString,100);
+    Add('ENABLED',ftInteger);
+    Add('PERIOD',ftInteger);
+  end;
+  FModems.CreateTable;
+
+  FOldPort:='';
+  FillDefault;
+  LoadFromBase;
+
+  FSOnlyOneModem:='В ограниченной версии можно использовать только один модем.';
+  FSModemConnected:='Соединение с модемом прошло успешно. Параметры: '+#13#10+'%s';
+  FSModemNotConnected:='Соединение с модемом прошло неудачно.';
+  FSNeedValue:='Необходимо заполнить поле: %s';
+  FSAllMessages:='Все сообщения';
+  FSOnlyIncoming:='Входящие';
+  FSOnlyOutgoing:='Исходящие';
+
+  OnlyOneModem:=false;
+  if Core.LocalBase.ReadParam(SParamOnlyOneModem,Buffer) then
+    OnlyOneModem:=Boolean(StrToIntDef(Buffer,0));
+
+end;
+
+destructor TBisSmsServerModemsForm.Destroy;
+begin
+  FModems.Free;
+  inherited Destroy;
+end;
+
+procedure TBisSmsServerModemsForm.Init;
+var
+  OldIndex: Integer;
+begin
+  inherited Init;
+  OldIndex:=ComboBoxMode.ItemIndex;
+  try
+    ComboBoxMode.Items.Strings[0]:=FSAllMessages;
+    ComboBoxMode.Items.Strings[1]:=FSOnlyIncoming;
+    ComboBoxMode.Items.Strings[2]:=FSOnlyOutgoing;
+  finally
+    ComboBoxMode.ItemIndex:=OldIndex;
+  end;
+end;
+
+procedure TBisSmsServerModemsForm.FillDefault;
+var
+  i: Integer;
+begin
+  ComboBoxComport.Items.BeginUpdate;
+  try
+    ComboBoxComport.Items.Clear;
+    FModems.EmptyTable;
+    for i:=1 to 255 do begin
+      FModems.Append;
+      FModems.FieldByName('PORT').AsString:='COM'+IntToStr(i);
+      FModems.FieldByName('INTERVAL').AsInteger:=1000;
+      FModems.FieldByName('BAUD_RATE').AsInteger:=11;
+      FModems.FieldByName('DATA_BITS').AsInteger:=3;
+      FModems.FieldByName('STOP_BITS').AsInteger:=0;
+      FModems.FieldByName('PARITY_BITS').AsInteger:=0;
+      FModems.FieldByName('MODE').AsInteger:=0;
+      FModems.FieldByName('IMEI').AsString:='';
+      FModems.FieldByName('IMSI').AsString:='';
+      FModems.FieldByName('STORAGES').AsString:='ME;SM';
+      FModems.FieldByName('MAX_COUNT').AsInteger:=5;
+      FModems.FieldByName('TIME_OUT').AsInteger:=5000;
+      FModems.FieldByName('UNKNOWN_SENDER').AsString:='';
+      FModems.FieldByName('UNKNOWN_CODE').AsString:='';
+      FModems.FieldByName('ENABLED').AsInteger:=0;
+      FModems.FieldByName('PERIOD').AsInteger:=600;
+      FModems.Post;
+    end;
+
+    FModems.First;
+    while not FModems.Eof do begin
+      ComboBoxComport.Items.Add(FModems.FieldByName('PORT').AsString);
+      FModems.Next;
+    end;
+
+    if ComboBoxComport.Items.Count>0 then begin
+      ComboBoxComport.ItemIndex:=0;
+      GetModems(ComboBoxComport.Text);
+    end;
+
+  finally
+    ComboBoxComport.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisSmsServerModemsForm.LoadFromBase;
+var
+  i: Integer;
+  Server: TBisServer;
+  Param: TBisServerParam;
+  DS: TBisDataSet;
+  Stream: TMemoryStream;
+  IsFound: Boolean;
+  Port: String;
+  FirstPort: String;
+  AEnabled: Boolean;
+begin
+  if FModems.Active and Assigned(ServerModule) then begin
+
+    Server:=nil;
+    for i:=0 to ServerModule.Servers.Count-1 do begin
+      Server:=ServerModule.Servers.Items[i];
+      if Server.Enabled then begin
+        break;
+      end;
+    end;
+
+    if Assigned(Server) then begin
+      Param:=Server.Params.Find(SParamModems);
+      if Assigned(Param) then begin
+        Stream:=TMemoryStream.Create;
+        DS:=TBisDataSet.Create(nil);
+        try
+          Param.SaveValueToStream(Stream);
+          if Stream.Size>0 then begin
+            FirstPort:='';
+            Stream.Position:=0;
+            DS.LoadFromStream(Stream);
+            DS.Open;
+            if DS.Active and not DS.Empty then begin
+              DS.First;
+              while not DS.Eof do begin
+                Port:=DS.FieldByName('PORT').AsString;
+                AEnabled:=Boolean(DS.FieldByName('ENABLED').AsInteger);
+                IsFound:=FModems.Locate('PORT',Port,[loCaseInsensitive]);
+                if IsFound then begin
+                  if AEnabled and (FirstPort='') then
+                    FirstPort:=Port;
+                  FModems.CopyRecord(DS,false);
+                end;
+                DS.Next;
+              end;
+
+              if FirstPort='' then
+                FirstPort:=ComboBoxComport.Text;
+              
+              GetModems(FirstPort);
+            end;
+          end;
+        finally
+          DS.Free;
+          Stream.Free;
+        end;
+      end;
+    end;
+
+  end;
+end;
+
+procedure TBisSmsServerModemsForm.EnableModems(AEnabled: Boolean);
+begin
+  ButtonTest.Enabled:=AEnabled;
+  FEditInterval.Enabled:=AEnabled;
+  FEditInterval.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelInterval.Enabled:=AEnabled;
+  LabelMode.Enabled:=AEnabled;
+  ComboBoxMode.Enabled:=AEnabled;
+  ComboBoxMode.Color:=iff(AEnabled,clWindow,clBtnFace);
+  ComboBoxStorages.Enabled:=AEnabled;
+  ComboBoxStorages.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelStorages.Enabled:=AEnabled;
+  LabelTimeout.Enabled:=AEnabled;
+  FEditTimeout.Enabled:=AEnabled;
+  FEditTimeout.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelMaxcount.Enabled:=AEnabled;
+  FEditMaxcount.Enabled:=AEnabled;
+  FEditMaxcount.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelUnknownSender.Enabled:=AEnabled;
+  EditUnknownSender.Enabled:=AEnabled;
+  EditUnknownSender.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelUnknownCode.Enabled:=AEnabled;
+  EditUnknownCode.Enabled:=AEnabled;
+  EditUnknownCode.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelPeriod.Enabled:=AEnabled;
+  FEditPeriod.Enabled:=AEnabled;
+  FEditPeriod.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelImei.Enabled:=AEnabled and not FOnlyOneModem;
+  EditImei.Enabled:=AEnabled and not FOnlyOneModem;
+  EditImei.Color:=iff(AEnabled and not FOnlyOneModem,clWindow,clBtnFace);
+  LabelImsi.Enabled:=AEnabled and not FOnlyOneModem;
+  EditImsi.Enabled:=AEnabled and not FOnlyOneModem;
+  EditImsi.Color:=iff(AEnabled and not FOnlyOneModem,clWindow,clBtnFace);
+  LabelBaudRate.Enabled:=AEnabled;
+  ComboBoxBaudRate.Enabled:=AEnabled;
+  ComboBoxBaudRate.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelDatabits.Enabled:=AEnabled;
+  ComboBoxDatabits.Enabled:=AEnabled;
+  ComboBoxDatabits.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelStopbits.Enabled:=AEnabled;
+  ComboBoxStopbits.Enabled:=AEnabled;
+  ComboBoxStopbits.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelParitybits.Enabled:=AEnabled;
+  ComboBoxParitybits.Enabled:=AEnabled;
+  ComboBoxParitybits.Color:=iff(AEnabled,clWindow,clBtnFace);
+end;
+
+procedure TBisSmsServerModemsForm.CheckBoxEnabledClick(Sender: TObject);
+begin
+  if FOnlyOneModem and CheckBoxEnabled.Checked then begin
+    try
+      FModems.Filter:='ENABLED=1';
+      FModems.Filtered:=true;
+      if FModems.RecordCount>0 then begin
+        FModems.First;
+        while not FModems.Eof do begin
+          FModems.Edit;
+          FModems.FieldByName('ENABLED').AsInteger:=0;
+          FModems.Post;
+          FModems.Next;
+        end;
+        ShowWarning(FSOnlyOneModem);
+      end;
+    finally
+      FModems.Filter:='';
+      FModems.Filtered:=false;
+    end;
+  end;
+
+  EnableModems(CheckBoxEnabled.Checked);
+end;
+
+procedure TBisSmsServerModemsForm.SetModems(Port: String);
+begin
+  if FModems.Locate('PORT',Port,[loCaseInsensitive]) then begin
+    FModems.Edit;
+    FModems.FieldByName('ENABLED').AsInteger:=Integer(CheckBoxEnabled.Checked);
+    FModems.FieldByName('INTERVAL').AsInteger:=FEditInterval.Value;
+    FModems.FieldByName('MODE').AsInteger:=ComboBoxMode.ItemIndex;
+    FModems.FieldByName('STORAGES').AsString:=ComboBoxStorages.Text;
+    FModems.FieldByName('TIME_OUT').AsInteger:=FEditTimeout.Value;
+    FModems.FieldByName('MAX_COUNT').AsInteger:=FEditMaxcount.Value;
+    FModems.FieldByName('UNKNOWN_SENDER').AsString:=EditUnknownSender.Text;
+    FModems.FieldByName('UNKNOWN_CODE').AsString:=EditUnknownCode.Text;
+    FModems.FieldByName('PERIOD').Value:=iff(Trim(FEditPeriod.Text)<>'',FEditPeriod.Value,Null);
+    FModems.FieldByName('IMEI').AsString:=EditImei.Text;
+    FModems.FieldByName('IMSI').AsString:=EditImsi.Text;
+    FModems.FieldByName('BAUD_RATE').AsInteger:=ComboBoxBaudRate.ItemIndex;
+    FModems.FieldByName('DATA_BITS').AsInteger:=ComboBoxDatabits.ItemIndex;
+    FModems.FieldByName('STOP_BITS').AsInteger:=ComboBoxStopbits.ItemIndex;
+    FModems.FieldByName('PARITY_BITS').AsInteger:=ComboBoxParitybits.ItemIndex;
+    FModems.Post;
+  end;
+end;
+
+procedure TBisSmsServerModemsForm.GetModems(Port: String);
+begin
+  if FModems.Locate('PORT',Port,[loCaseInsensitive]) then begin
+    ComboBoxComport.OnChange:=nil;
+    CheckBoxEnabled.OnClick:=nil;
+    try
+      ComboBoxComport.ItemIndex:=ComboBoxComport.Items.IndexOf(Port);
+      CheckBoxEnabled.Checked:=Boolean(FModems.FieldByName('ENABLED').AsInteger);
+      FEditInterval.Value:=FModems.FieldByName('INTERVAL').AsInteger;
+      ComboBoxMode.ItemIndex:=FModems.FieldByName('MODE').AsInteger;
+      ComboBoxStorages.ItemIndex:=ComboBoxStorages.Items.IndexOf(FModems.FieldByName('STORAGES').AsString);
+      FEditTimeout.Value:=FModems.FieldByName('TIME_OUT').AsInteger;
+      FEditMaxcount.Value:=FModems.FieldByName('MAX_COUNT').AsInteger;
+      EditUnknownSender.Text:=FModems.FieldByName('UNKNOWN_SENDER').AsString;
+      EditUnknownCode.Text:=FModems.FieldByName('UNKNOWN_CODE').AsString;
+      if not VarIsNull(FModems.FieldByName('PERIOD').Value) then
+        FEditPeriod.Value:=FModems.FieldByName('PERIOD').AsInteger
+      else FEditPeriod.Text:='';
+      EditImei.Text:=FModems.FieldByName('IMEI').AsString;
+      EditImsi.Text:=FModems.FieldByName('IMSI').AsString;
+      ComboBoxBaudRate.ItemIndex:=FModems.FieldByName('BAUD_RATE').AsInteger;
+      ComboBoxDatabits.ItemIndex:=FModems.FieldByName('DATA_BITS').AsInteger;
+      ComboBoxStopbits.ItemIndex:=FModems.FieldByName('STOP_BITS').AsInteger;
+      ComboBoxParitybits.ItemIndex:=FModems.FieldByName('PARITY_BITS').AsInteger;
+      EnableModems(CheckBoxEnabled.Checked);
+    finally
+      CheckBoxEnabled.OnClick:=CheckBoxEnabledClick;
+      ComboBoxComport.OnChange:=ComboBoxComportChange;
+    end;
+  end;
+end;
+
+procedure TBisSmsServerModemsForm.ComboBoxComportChange(Sender: TObject);
+begin
+  if FOldPort<>ComboBoxComport.Text then begin
+    SetModems(FOldPort);
+    GetModems(ComboBoxComport.Text);
+    FOldPort:=ComboBoxComport.Text;
+  end;
+end;
+
+function TBisSmsServerModemsForm.CheckFields: Boolean;
+begin
+  Result:=false;
+
+  if ComboBoxComport.ItemIndex=-1 then begin
+    ShowError(FormatEx(FSNeedValue,[LabelComport.Caption]));
+    ComboBoxComport.SetFocus;
+    exit;
+  end;
+
+  if CheckBoxEnabled.Checked then begin
+
+    if ComboBoxBaudRate.ItemIndex=-1 then begin
+      ShowError(FormatEx(FSNeedValue,[LabelBaudRate.Caption]));
+      ComboBoxBaudRate.SetFocus;
+      exit;
+    end;
+
+    if ComboBoxDatabits.ItemIndex=-1 then begin
+      ShowError(FormatEx(FSNeedValue,[LabelDatabits.Caption]));
+      ComboBoxDatabits.SetFocus;
+      exit;
+    end;
+
+    if ComboBoxStopbits.ItemIndex=-1 then begin
+      ShowError(FormatEx(FSNeedValue,[LabelStopbits.Caption]));
+      ComboBoxStopbits.SetFocus;
+      exit;
+    end;
+
+    if ComboBoxParitybits.ItemIndex=-1 then begin
+      ShowError(FormatEx(FSNeedValue,[LabelParitybits.Caption]));
+      ComboBoxParitybits.SetFocus;
+      exit;
+    end;
+
+    if ComboBoxMode.ItemIndex=-1 then begin
+      ShowError(FormatEx(FSNeedValue,[LabelMode.Caption]));
+      ComboBoxMode.SetFocus;
+      exit;
+    end;
+
+    if ComboBoxStorages.ItemIndex=-1 then begin
+      ShowError(FormatEx(FSNeedValue,[LabelStorages.Caption]));
+      ComboBoxStorages.SetFocus;
+      exit;
+    end;
+
+    if Trim(FEditInterval.Text)='' then begin
+      ShowError(FormatEx(FSNeedValue,[LabelInterval.Caption]));
+      FEditInterval.SetFocus;
+      exit;
+    end;
+
+    if Trim(FEditTimeout.Text)='' then begin
+      ShowError(FormatEx(FSNeedValue,[LabelTimeout.Caption]));
+      FEditTimeout.SetFocus;
+      exit;
+    end;
+
+    if Trim(FEditMaxcount.Text)='' then begin
+      ShowError(FormatEx(FSNeedValue,[LabelMaxcount.Caption]));
+      FEditMaxcount.SetFocus;
+      exit;
+    end;
+  end;
+
+  Result:=true;
+end;
+
+procedure TBisSmsServerModemsForm.ButtonOkClick(Sender: TObject);
+begin
+  if CheckFields then begin
+    SaveModems;
+    RestartServer;
+    ModalResult:=mrOk;
+  end;
+end;
+
+procedure TBisSmsServerModemsForm.ButtonSaveClick(Sender: TObject);
+begin
+  if CheckFields then
+    SaveModems;
+end;
+
+procedure TBisSmsServerModemsForm.ButtonTestClick(Sender: TObject);
+begin
+  if CheckFields then
+    TestModem;
+end;
+
+procedure TBisSmsServerModemsForm.SetOnlyOneModem(const Value: Boolean);
+begin
+  FOnlyOneModem:= Value;
+
+  LabelImei.Enabled:=not FOnlyOneModem;
+  EditImei.Enabled:=not FOnlyOneModem;
+  EditImei.Color:=iff(not FOnlyOneModem,clWindow,clBtnFace);
+
+  LabelImsi.Enabled:=not FOnlyOneModem;
+  EditImsi.Enabled:=not FOnlyOneModem;
+  EditImsi.Color:=iff(not FOnlyOneModem,clWindow,clBtnFace);
+end;
+
+procedure TBisSmsServerModemsForm.TestModem;
+var
+  Modem: TBisGsmModem;
+  OldCursor: TCursor;
+  S: String;
+begin
+  if CheckBoxEnabled.Checked then begin
+    OldCursor:=Screen.Cursor;
+    Screen.Cursor:=crHourGlass;
+    Modem:=TBisGsmModem.Create(nil);
+    try
+      Modem.Port:=ComboBoxComport.Text;
+      Modem.BaudRate:=TBisComPortBaudRate(ComboBoxBaudRate.ItemIndex);
+      Modem.StopBits:=TBisComPortStopBits(ComboBoxStopbits.ItemIndex);
+      Modem.DataBits:=TBisComPortDataBits(ComboBoxDatabits.ItemIndex);
+      Modem.ParityBits:=TBisComPortParityBits(ComboBoxParitybits.ItemIndex);
+      Modem.Timeout:=FEditTimeout.Value;
+      try
+        Modem.Connect;
+        if Modem.Connected then begin
+          S:=FormatEx('%s'+#13#10+'%s',[Modem.Manufacturer,Modem.Model]);
+          ShowInfo(FormatEx(FSModemConnected,[S]));
+        end else
+          ShowError(FSModemNotConnected);
+      except
+        On E: Exception do
+          ShowError(E.Message);
+      end;
+    finally
+      Modem.Free;
+      Screen.Cursor:=OldCursor;
+    end;
+  end;
+end;
+
+procedure TBisSmsServerModemsForm.SaveModems;
+var
+  i: Integer;
+  Server: TBisServer;
+  Param: TBisServerParam;
+  DS: TBisDataSet;
+  Stream: TMemoryStream;
+begin
+  SetModems(ComboBoxComport.Text);
+  if FModems.Active and Assigned(ServerModule) then begin
+
+    Server:=nil;
+    for i:=0 to ServerModule.Servers.Count-1 do begin
+      Server:=ServerModule.Servers.Items[i];
+      if Server.Enabled then begin
+        break;
+      end;
+    end;
+
+    if Assigned(Server) then begin
+      Param:=Server.Params.Find(SParamModems);
+      if Assigned(Param) then begin
+        Stream:=TMemoryStream.Create;
+        DS:=TBisDataSet.Create(nil);
+        try
+          Param.SaveValueToStream(Stream);
+          if Stream.Size>0 then begin
+            Stream.Position:=0;
+            DS.LoadFromStream(Stream);
+            DS.Open;
+            DS.EmptyTable;
+            DS.CopyRecords(FModems);
+            Stream.Clear;
+            DS.SaveToStream(Stream);
+            Stream.Position:=0;
+            Param.LoadValueFromStream(Stream);
+            Server.SaveParams;
+          end;
+        finally
+          DS.Free;
+          Stream.Free;
+        end;
+      end;
+    end;
+    
+  end;
+end;
+
+procedure TBisSmsServerModemsForm.RestartServer;
+var
+  i: Integer;
+  Server: TBisServer;
+begin
+  if not FShowByCommand and FModems.Active and Assigned(ServerModule) and (Core.Mode<>smService) then begin
+
+    Server:=nil;
+    for i:=0 to ServerModule.Servers.Count-1 do begin
+      Server:=ServerModule.Servers.Items[i];
+      if Server.Enabled then begin
+        break;
+      end;
+    end;
+
+    if Assigned(Server) then begin
+      Server.Stop;
+      Server.Params.Change;
+      Server.Start;
+    end;
+    
+  end;
+end;
+
+
+end.

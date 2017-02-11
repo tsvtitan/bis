@@ -1,0 +1,157 @@
+package imtaxi;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  omnet,
+  imdesign,
+  immess,
+  imcall;
+
+contains
+  BisTaxiInit in 'imtaxi.bpl\BisTaxiInit.pas',
+  BisTaxiConsts in 'imtaxi.bpl\BisTaxiConsts.pas',
+  BisTaxiMainFm in 'imtaxi.bpl\BisTaxiMainFm.pas' {BisTaxiMainForm},
+  BisTaxiDataCarTypesFm in 'imtaxi.bpl\BisTaxiDataCarTypesFm.pas' {BisTaxiDataCarTypesForm},
+  BisTaxiDataCarTypeEditFm in 'imtaxi.bpl\BisTaxiDataCarTypeEditFm.pas' {BisTaxiDataCarTypeEditForm},
+  BisTaxiDataCarsFm in 'imtaxi.bpl\BisTaxiDataCarsFm.pas' {BisTaxiDataCarsForm},
+  BisTaxiDataCarEditFm in 'imtaxi.bpl\BisTaxiDataCarEditFm.pas' {BisTaxiDataCarEditForm},
+  BisTaxiDataServicesFm in 'imtaxi.bpl\BisTaxiDataServicesFm.pas' {BisTaxiDataServicesForm},
+  BisTaxiDataServiceEditFm in 'imtaxi.bpl\BisTaxiDataServiceEditFm.pas' {BisTaxiDataServiceEditForm},
+  BisTaxiDataSourcesFm in 'imtaxi.bpl\BisTaxiDataSourcesFm.pas' {BisTaxiDataSourcesForm},
+  BisTaxiDataSourceEditFm in 'imtaxi.bpl\BisTaxiDataSourceEditFm.pas' {BisTaxiDataSourceEditForm},
+  BisTaxiDataZonesFm in 'imtaxi.bpl\BisTaxiDataZonesFm.pas' {BisTaxiDataZonesForm},
+  BisTaxiDataZoneEditFm in 'imtaxi.bpl\BisTaxiDataZoneEditFm.pas' {BisTaxiDataZoneEditForm},
+  BisTaxiDataDiscountsFm in 'imtaxi.bpl\BisTaxiDataDiscountsFm.pas' {BisTaxiDataDiscountsForm},
+  BisTaxiDataDiscountEditFm in 'imtaxi.bpl\BisTaxiDataDiscountEditFm.pas' {BisTaxiDataDiscountEditForm},
+  BisTaxiDataCalcsFm in 'imtaxi.bpl\BisTaxiDataCalcsFm.pas' {BisTaxiDataCalcsForm},
+  BisTaxiDataCalcEditFm in 'imtaxi.bpl\BisTaxiDataCalcEditFm.pas' {BisTaxiDataCalcEditForm},
+  BisTaxiDataParksFm in 'imtaxi.bpl\BisTaxiDataParksFm.pas' {BisTaxiDataParksForm},
+  BisTaxiDataParkEditFm in 'imtaxi.bpl\BisTaxiDataParkEditFm.pas' {BisTaxiDataParkEditForm},
+  BisTaxiDataBlacksFm in 'imtaxi.bpl\BisTaxiDataBlacksFm.pas' {BisTaxiDataBlacksForm},
+  BisTaxiDataBlackEditFm in 'imtaxi.bpl\BisTaxiDataBlackEditFm.pas' {BisTaxiDataBlackEditForm},
+  BisTaxiDataDriversFm in 'imtaxi.bpl\BisTaxiDataDriversFm.pas' {BisTaxiDataDriversForm},
+  BisTaxiDataDriverEditFm in 'imtaxi.bpl\BisTaxiDataDriverEditFm.pas' {BisTaxiDataDriverEditForm},
+  BisTaxiDataDispatchersFm in 'imtaxi.bpl\BisTaxiDataDispatchersFm.pas' {BisTaxiDataDispatchersForm},
+  BisTaxiDataDispatcherEditFm in 'imtaxi.bpl\BisTaxiDataDispatcherEditFm.pas' {BisTaxiDataDispatcherEditForm},
+  BisTaxiDataShiftEditFm in 'imtaxi.bpl\BisTaxiDataShiftEditFm.pas' {BisTaxiDataShiftEditForm},
+  BisTaxiDataShiftsFm in 'imtaxi.bpl\BisTaxiDataShiftsFm.pas' {BisTaxiDataShiftsForm},
+  BisTaxiDataReceiptTypeEditFm in 'imtaxi.bpl\BisTaxiDataReceiptTypeEditFm.pas' {BisTaxiDataReceiptTypeEditForm},
+  BisTaxiDataReceiptTypesFm in 'imtaxi.bpl\BisTaxiDataReceiptTypesFm.pas' {BisTaxiDataReceiptTypesForm},
+  BisTaxiDataChargeTypesFm in 'imtaxi.bpl\BisTaxiDataChargeTypesFm.pas' {BisTaxiDataChargeTypesForm},
+  BisTaxiDataChargeTypeEditFm in 'imtaxi.bpl\BisTaxiDataChargeTypeEditFm.pas' {BisTaxiDataChargeTypeEditForm},
+  BisTaxiDataReceiptsFm in 'imtaxi.bpl\BisTaxiDataReceiptsFm.pas' {BisTaxiDataReceiptsForm},
+  BisTaxiDataReceiptEditFm in 'imtaxi.bpl\BisTaxiDataReceiptEditFm.pas' {BisTaxiDataReceiptEditForm},
+  BisTaxiDataChargesFm in 'imtaxi.bpl\BisTaxiDataChargesFm.pas' {BisTaxiDataChargesForm},
+  BisTaxiDataChargeEditFm in 'imtaxi.bpl\BisTaxiDataChargeEditFm.pas' {BisTaxiDataChargeEditForm},
+  BisTaxiDataParksFrm in 'imtaxi.bpl\BisTaxiDataParksFrm.pas' {BisTaxiDataParksFrame: TFrame},
+  BisTaxiDataParkStatesFm in 'imtaxi.bpl\BisTaxiDataParkStatesFm.pas' {BisTaxiDataParkStatesForm},
+  BisTaxiDataZonesFrm in 'imtaxi.bpl\BisTaxiDataZonesFrm.pas' {BisTaxiDataZonesFrame: TFrame},
+  BisTaxiDataZoneParksFm in 'imtaxi.bpl\BisTaxiDataZoneParksFm.pas' {BisTaxiDataZoneParksForm},
+  BisTaxiDataParkStateFilterFm in 'imtaxi.bpl\BisTaxiDataParkStateFilterFm.pas' {BisTaxiDataParkStateFilterForm},
+  BisTaxiDataZoneParkEditFm in 'imtaxi.bpl\BisTaxiDataZoneParkEditFm.pas' {BisTaxiDataZoneParkEditForm},
+  BisTaxiDataCostsFm in 'imtaxi.bpl\BisTaxiDataCostsFm.pas' {BisTaxiDataCostsForm},
+  BisTaxiDataCostEditFm in 'imtaxi.bpl\BisTaxiDataCostEditFm.pas' {BisTaxiDataCostEditForm},
+  BisTaxiDataCompositionsFm in 'imtaxi.bpl\BisTaxiDataCompositionsFm.pas' {BisTaxiDataCompositionsForm},
+  BisTaxiDataCompositionEditFm in 'imtaxi.bpl\BisTaxiDataCompositionEditFm.pas' {BisTaxiDataCompositionEditForm},
+  BisTaxiDataActionsFm in 'imtaxi.bpl\BisTaxiDataActionsFm.pas' {BisTaxiDataActionsForm},
+  BisTaxiDataActionEditFm in 'imtaxi.bpl\BisTaxiDataActionEditFm.pas' {BisTaxiDataActionEditForm},
+  BisTaxiDataActionsFrm in 'imtaxi.bpl\BisTaxiDataActionsFrm.pas' {BisTaxiDataActionsFrame: TFrame},
+  BisTaxiDataResultsFm in 'imtaxi.bpl\BisTaxiDataResultsFm.pas' {BisTaxiDataResultsForm},
+  BisTaxiDataResultEditFm in 'imtaxi.bpl\BisTaxiDataResultEditFm.pas' {BisTaxiDataResultEditForm},
+  BisTaxiDataRateEditFm in 'imtaxi.bpl\BisTaxiDataRateEditFm.pas' {BisTaxiDataRateEditForm},
+  BisTaxiDataRatesFm in 'imtaxi.bpl\BisTaxiDataRatesFm.pas' {BisTaxiDataRatesForm},
+  BisTaxiOrdersFm in 'imtaxi.bpl\BisTaxiOrdersFm.pas' {BisTaxiOrdersForm},
+  BisTaxiOrdersFrm in 'imtaxi.bpl\BisTaxiOrdersFrm.pas' {BisTaxiOrdersFrame: TFrame},
+  BisTaxiDriverParksFrm in 'imtaxi.bpl\BisTaxiDriverParksFrm.pas' {BisTaxiDriverParksFrame: TFrame},
+  BisTaxiOrderEditFm in 'imtaxi.bpl\BisTaxiOrderEditFm.pas' {BisTaxiOrderEditForm},
+  BisTaxiDriverShiftsFrm in 'imtaxi.bpl\BisTaxiDriverShiftsFrm.pas' {BisTaxiDriverShiftsFrame: TFrame},
+  BisTaxiAddressFrm in 'imtaxi.bpl\BisTaxiAddressFrm.pas' {BisTaxiAddressFrame: TFrame},
+  BisTaxiRouteFrm in 'imtaxi.bpl\BisTaxiRouteFrm.pas' {BisTaxiRouteFrame: TFrame},
+  BisTaxiHistoryFrm in 'imtaxi.bpl\BisTaxiHistoryFrm.pas' {BisTaxiHistoryFrame: TFrame},
+  BisTaxiDataDriverShiftsFm in 'imtaxi.bpl\BisTaxiDataDriverShiftsFm.pas' {BisTaxiDataDriverShiftsForm},
+  BisTaxiDataDriverShiftEditFm in 'imtaxi.bpl\BisTaxiDataDriverShiftEditFm.pas' {BisTaxiDataDriverShiftEditForm},
+  BisTaxiDriverShiftInsertFm in 'imtaxi.bpl\BisTaxiDriverShiftInsertFm.pas' {BisTaxiDriverShiftInsertForm},
+  BisTaxiDriverShiftDeleteFm in 'imtaxi.bpl\BisTaxiDriverShiftDeleteFm.pas' {BisTaxiDriverShiftDeleteForm},
+  BisTaxiOrderFilterFm in 'imtaxi.bpl\BisTaxiOrderFilterFm.pas' {BisTaxiOrderFilterForm},
+  BisTaxiDriverParkInsertFm in 'imtaxi.bpl\BisTaxiDriverParkInsertFm.pas' {BisTaxiDriverParkInsertForm},
+  BisTaxiDriverParkDeleteFm in 'imtaxi.bpl\BisTaxiDriverParkDeleteFm.pas' {BisTaxiDriverParkDeleteForm},
+  BisTaxiDataMapObjectsFm in 'imtaxi.bpl\BisTaxiDataMapObjectsFm.pas' {BisTaxiDataMapObjectsForm},
+  BisTaxiDataMapObjectEditFm in 'imtaxi.bpl\BisTaxiDataMapObjectEditFm.pas' {BisTaxiDataMapObjectEditForm},
+  BisTaxiDataMapObjectInsertFm in 'imtaxi.bpl\BisTaxiDataMapObjectInsertFm.pas' {BisTaxiDataMapObjectInsertForm},
+  BisTaxiDataDriverInMessagesFm in 'imtaxi.bpl\BisTaxiDataDriverInMessagesFm.pas' {BisTaxiDataDriverInMessagesForm},
+  BisTaxiDataDriverOutMessagesFm in 'imtaxi.bpl\BisTaxiDataDriverOutMessagesFm.pas' {BisTaxiDataDriverOutMessagesForm},
+  BisTaxiDataMethodsFm in 'imtaxi.bpl\BisTaxiDataMethodsFm.pas' {BisTaxiDataMethodsForm},
+  BisTaxiDataMethodEditFm in 'imtaxi.bpl\BisTaxiDataMethodEditFm.pas' {BisTaxiDataMethodEditForm},
+  BisTaxiDataParkStateEditFm in 'imtaxi.bpl\BisTaxiDataParkStateEditFm.pas' {BisTaxiDataParkStateEditForm},
+  BisTaxiDataReceiptFilterFm in 'imtaxi.bpl\BisTaxiDataReceiptFilterFm.pas' {BisTaxiDataReceiptFilterForm},
+  BisTaxiDataChargeFilterFm in 'imtaxi.bpl\BisTaxiDataChargeFilterFm.pas' {BisTaxiDataChargeFilterForm},
+  BisTaxiDataOrdersFrm in 'imtaxi.bpl\BisTaxiDataOrdersFrm.pas' {BisTaxiDataOrdersFrame: TFrame},
+  BisTaxiDataClientGroupsFm in 'imtaxi.bpl\BisTaxiDataClientGroupsFm.pas' {BisTaxiDataClientGroupsForm},
+  BisTaxiDataClientGroupEditFm in 'imtaxi.bpl\BisTaxiDataClientGroupEditFm.pas' {BisTaxiDataClientGroupEditForm},
+  BisTaxiDataClientsFm in 'imtaxi.bpl\BisTaxiDataClientsFm.pas' {BisTaxiDataClientsForm},
+  BisTaxiDataClientsFrm in 'imtaxi.bpl\BisTaxiDataClientsFrm.pas' {BisTaxiDataClientsFrame: TFrame},
+  BisTaxiDataClientEditFm in 'imtaxi.bpl\BisTaxiDataClientEditFm.pas' {BisTaxiDataClientEditForm},
+  BisTaxiDataDiscountTypesFm in 'imtaxi.bpl\BisTaxiDataDiscountTypesFm.pas' {BisTaxiDataDiscountTypesForm},
+  BisTaxiDataDiscountTypeEditFm in 'imtaxi.bpl\BisTaxiDataDiscountTypeEditFm.pas' {BisTaxiDataDiscountTypeEditForm},
+  BisTaxiDataDriverOutMessageEditFm in 'imtaxi.bpl\BisTaxiDataDriverOutMessageEditFm.pas' {BisTaxiDataDriverOutMessageEditForm},
+  BisTaxiDataDriverOutMessageFilterFm in 'imtaxi.bpl\BisTaxiDataDriverOutMessageFilterFm.pas' {BisTaxiDataDriverOutMessageFilterForm},
+  BisTaxiDataDriverInMessageEditFm in 'imtaxi.bpl\BisTaxiDataDriverInMessageEditFm.pas' {BisTaxiDataDriverInMessageEditForm},
+  BisTaxiDataDriverInMessageFilterFm in 'imtaxi.bpl\BisTaxiDataDriverInMessageFilterFm.pas' {BisTaxiDataDriverInMessageFilterForm},
+  BisTaxiDataClientPhonesFm in 'imtaxi.bpl\BisTaxiDataClientPhonesFm.pas' {BisTaxiDataClientPhonesForm},
+  BisTaxiDataClientPhoneEditFm in 'imtaxi.bpl\BisTaxiDataClientPhoneEditFm.pas' {BisTaxiDataClientPhoneEditForm},
+  BisTaxiDataChargesFrm in 'imtaxi.bpl\BisTaxiDataChargesFrm.pas' {BisTaxiDataChargesFrame: TFrame},
+  BisTaxiDataReceiptsFrm in 'imtaxi.bpl\BisTaxiDataReceiptsFrm.pas' {BisTaxiDataReceiptsFrame: TFrame},
+  BisTaxiDataDriverWeekScheduleFrm in 'imtaxi.bpl\BisTaxiDataDriverWeekScheduleFrm.pas' {BisTaxiDataDriverWeekScheduleFrame: TFrame},
+  BisTaxiRouteHistoryFrm in 'imtaxi.bpl\BisTaxiRouteHistoryFrm.pas' {BisTaxiRouteHistoryFrame: TFrame},
+  BisTaxiDataClientChildsFrm in 'imtaxi.bpl\BisTaxiDataClientChildsFrm.pas' {BisTaxiDataClientChildsFrame: TFrame},
+  BisTaxiDataDriversFrm in 'imtaxi.bpl\BisTaxiDataDriversFrm.pas' {BisTaxiDataDriversFrame: TFrame},
+  BisTaxiDataCallsFm in 'imtaxi.bpl\BisTaxiDataCallsFm.pas' {BisTaxiDataCallsForm},
+  BisTaxiDataCallEditFm in 'imtaxi.bpl\BisTaxiDataCallEditFm.pas' {BisTaxiDataCallEditForm},
+  BisTaxiDataCallFilterFm in 'imtaxi.bpl\BisTaxiDataCallFilterFm.pas' {BisTaxiDataCallFilterForm},
+  BisTaxiClientFm in 'imtaxi.bpl\BisTaxiClientFm.pas' {BisTaxiClientForm},
+  BisTaxiDataClientDriversFm in 'imtaxi.bpl\BisTaxiDataClientDriversFm.pas' {BisTaxiDataClientDriversForm},
+  BisTaxiDataClientDriverEditFm in 'imtaxi.bpl\BisTaxiDataClientDriverEditFm.pas' {BisTaxiDataClientDriverEditForm},
+  BisTaxiDataDriverTypesFm in 'imtaxi.bpl\BisTaxiDataDriverTypesFm.pas' {BisTaxiDataDriverTypesForm},
+  BisTaxiDataDriverTypeEditFm in 'imtaxi.bpl\BisTaxiDataDriverTypeEditFm.pas' {BisTaxiDataDriverTypeEditForm},
+  BisTaxiDataRatingsFm in 'imtaxi.bpl\BisTaxiDataRatingsFm.pas' {BisTaxiDataRatingsForm},
+  BisTaxiDataRatingEditFm in 'imtaxi.bpl\BisTaxiDataRatingEditFm.pas' {BisTaxiDataRatingEditForm},
+  BisTaxiDataScoresFm in 'imtaxi.bpl\BisTaxiDataScoresFm.pas' {BisTaxiDataScoresForm},
+  BisTaxiDataScoreEditFm in 'imtaxi.bpl\BisTaxiDataScoreEditFm.pas' {BisTaxiDataScoreEditForm},
+  BisTaxiDataScoresFrm in 'imtaxi.bpl\BisTaxiDataScoresFrm.pas' {BisTaxiDataScoresFrame: TFrame},
+  BisTaxiDataScoreFilterFm in 'imtaxi.bpl\BisTaxiDataScoreFilterFm.pas' {BisTaxiDataScoreFilterForm},
+  BisTaxiDataDriverDayScheduleFrm in 'imtaxi.bpl\BisTaxiDataDriverDayScheduleFrm.pas' {BisTaxiDataDriverDayScheduleFrame: TFrame},
+  BisTaxiDataInMessageEditFm in 'imtaxi.bpl\BisTaxiDataInMessageEditFm.pas' {BisTaxiDataInMessageEditForm},
+  BisTaxiDataInMessagesFm in 'imtaxi.bpl\BisTaxiDataInMessagesFm.pas' {BisTaxiDataInMessagesForm},
+  BisTaxiDataOutMessagesFm in 'imtaxi.bpl\BisTaxiDataOutMessagesFm.pas' {BisTaxiDataOutMessagesForm},
+  BisTaxiDataOutMessageEditFm in 'imtaxi.bpl\BisTaxiDataOutMessageEditFm.pas' {BisTaxiDataOutMessageEditForm},
+  BisTaxiDataInMessageFilterFm in 'imtaxi.bpl\BisTaxiDataInMessageFilterFm.pas' {BisTaxiDataInMessageFilterForm},
+  BisTaxiDataOutMessageFilterFm in 'imtaxi.bpl\BisTaxiDataOutMessageFilterFm.pas' {BisTaxiDataOutMessageFilterForm},
+  BisTaxiPhoneFrm in 'imtaxi.bpl\BisTaxiPhoneFrm.pas' {BisTaxiPhoneFrame: TFrame},
+  BisTaxiPhoneFm in 'imtaxi.bpl\BisTaxiPhoneFm.pas' {BisTaxiPhoneForm};
+
+end.

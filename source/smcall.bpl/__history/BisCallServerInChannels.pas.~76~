@@ -1,0 +1,141 @@
+unit BisCallServerInChannels;
+
+interface
+
+uses Classes,
+     BisObject, BisCoreObjects; 
+
+type
+  TBisCallServerInChannel=class;
+
+  TBisCallServerInChannelCallType=(ctAudio,ctVideo,ctAudioVideo);
+
+  TBisCallServerInChannelAcceptorType=(atSessionId,atAccounId,atPhone);
+
+  TBisCallServerInChannelEvent=function(InChannel: TBisCallServerInChannel): Boolean of object;
+
+  TBisCallServerInChannel=class(TBisCoreObject)
+  private
+    FId: String;
+    FCallType: TBisCallServerInChannelCallType;
+    FCallerId: String;
+    FCallerPhone: String;
+    FAcceptor: String;
+    FAcceptorType: TBisCallServerInChannelAcceptorType;
+    FOnInvite: TBisCallServerInChannelInviteEvent;
+    FOnCancel:
+    FCreatorId: String;
+  protected
+    function DoInvite: Boolean; virtual;
+    function DoCancel: Boolean; virtual;
+    function GetActive: Boolean; virtual;
+  public
+    procedure Open; virtual;
+    procedure Close; virtual;
+
+    property Active: Boolean read GetActive;
+    property Id: String read FId;
+
+    property CreatorId: String read FCreatorId write FCreatorId;
+    property CallType: TBisCallServerInChannelCallType read FCallType write FCallType;
+    property CallerId: String read FCallerId write FCallerId;
+    property CallerPhone: String read FCallerPhone write FCallerPhone;
+    property Acceptor: String read FAcceptor write FAcceptor;
+    property AcceptorType: TBisCallServerInChannelAcceptorType read FAcceptorType write FAcceptorType;
+
+    property OnInvite: TBisCallServerInChannelInviteEvent read FOnInvite write FOnInvite;
+  end;
+
+  TBisCallServerInChannelClass=class of TBisCallServerInChannel;
+
+  TBisCallServerInChannels=class(TBisCoreObjects)
+  private
+    FAfterCreateChannel: TNotifyEvent;
+    function GetItem(Index: Integer): TBisCallServerInChannel;
+  protected
+    procedure DoAfterCreateChannel; virtual;
+  public
+    function Find(Id: String): TBisCallServerInChannel;
+    function AddClass(AClass: TBisCallServerInChannelClass; Id: String): TBisCallServerInChannel;
+
+    property Items[Index: Integer]: TBisCallServerInChannel read GetItem; default;
+
+    property AfterCreateChannel: TNotifyEvent read FAfterCreateChannel write FAfterCreateChannel;
+  end;
+
+  TBisCallServerInChannelsClass=class of TBisCallServerInChannels;
+
+implementation
+
+uses SysUtils;
+
+{ TBisCallServerInChannel }
+
+function TBisCallServerInChannel.DoCancel: Boolean;
+begin
+  Result:=false;
+  if Assigned(FOnCancel) then
+    Result:=FOnCancel(Self);
+end;
+
+function TBisCallServerInChannel.DoInvite: Boolean;
+begin
+  Result:=false;
+  if Assigned(FOnInvite) then
+    Result:=FOnInvite(Self);
+end;
+
+function TBisCallServerInChannel.GetActive: Boolean;
+begin
+  Result:=false;
+end;
+
+procedure TBisCallServerInChannel.Open;
+begin
+end;
+
+procedure TBisCallServerInChannel.Close;
+begin
+end;
+
+{ TBisCallServerInChannels }
+
+function TBisCallServerInChannels.Find(Id: String): TBisCallServerInChannel;
+var
+  i: Integer;
+  Item: TBisCallServerInChannel;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Id,Item.Id) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisCallServerInChannels.AddClass(AClass: TBisCallServerInChannelClass; Id: String): TBisCallServerInChannel;
+begin
+  Result:=Find(Id);
+  if Assigned(AClass) then begin
+    Result:=AClass.Create(Self);
+    Result.FId:=Id;
+    Objects.Add(Result);
+    DoAfterCreateChannel;
+  end;
+end;
+
+procedure TBisCallServerInChannels.DoAfterCreateChannel;
+begin
+  if Assigned(FAfterCreateChannel) then
+    FAfterCreateChannel(Self);
+end;
+
+function TBisCallServerInChannels.GetItem(Index: Integer): TBisCallServerInChannel;
+begin
+  Result:=TBisCallServerInChannel(inherited Items[Index]);
+end;
+
+
+end.

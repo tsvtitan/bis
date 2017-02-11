@@ -1,0 +1,22 @@
+inherited BisTaxiDataInMessageEditForm: TBisTaxiDataInMessageEditForm
+  Caption = 'BisTaxiDataInMessageEditForm'
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PopupAccount: TPopupActionBar
+    OnPopup = PopupAccountPopup
+    Left = 120
+    Top = 120
+    object MenuItemAccounts: TMenuItem
+      Caption = #1059#1095#1077#1090#1085#1099#1077' '#1079#1072#1087#1080#1089#1080
+      OnClick = MenuItemAccountsClick
+    end
+    object MenuItemDrivers: TMenuItem
+      Caption = #1042#1086#1076#1080#1090#1077#1083#1080
+      OnClick = MenuItemDriversClick
+    end
+    object MenuItemClients: TMenuItem
+      Caption = #1050#1083#1080#1077#1085#1090#1099
+      OnClick = MenuItemClientsClick
+    end
+  end
+end

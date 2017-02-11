@@ -1,0 +1,38 @@
+package dws2VCLRuntime50_20;
+
+{$R *.RES}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS OFF}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScript II'}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  dws2Runtime50_20;
+
+contains
+  dws2VCLGUIFunctions in '..\source\dws2VCLGUIFunctions.pas',
+  dws_VCLmwPasToRtf in '..\Source\dws_VCLmwPasToRtf.pas',
+  dws2VCLSymbolsToTree in '..\Source\dws2VCLSymbolsToTree.pas',
+  dws2VCLIDEUtils in '..\Source\dws2VCLIDEUtils.pas';
+
+end.

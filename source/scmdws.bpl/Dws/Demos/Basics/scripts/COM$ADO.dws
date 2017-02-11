@@ -1,0 +1,38 @@
+{
+COM-Demonstration in DWSII
+
+To execute this demo you have to copy the file 
+"DbDemos.mdb" to the current directory that is part
+of every Delphi Professional installation.
+
+To connect to your own database you need a different
+connection string. Create a file called "test.udl".
+Double click on this file. Set up all fields to
+connect to your database. Open "test.udl" in a text
+editor and there it is!
+}
+
+var conn: ComVariant;
+var rs: ComVariant;
+
+try
+  conn := CreateOleObject('ADODB.Connection');
+  conn.ConnectionString := 'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=DbDemos.mdb;Persist Security Info=False';
+  conn.Open();
+
+  rs := conn.Execute('select * from Customer');
+  rs.MoveFirst();
+  
+  while not (rs.EOF = True) do
+  begin
+    PrintLn(rs.Fields('Company').Value);
+    rs.MoveNext();
+  end;
+
+except
+  var x, cnt: Integer;
+  cnt := conn.Errors.Count;
+  for x := 0 to cnt - 1 do
+    ShowMessage(conn.Errors.Item(0).Description);
+end;
+

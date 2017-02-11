@@ -1,0 +1,51 @@
+unit BisCanonMainFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StdCtrls,
+  ComCtrls, ExtCtrls,
+  BisFm, BisIfaces;
+
+type
+
+  TBisCanonMainForm = class(TBisForm)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCanonMainFormIface=class(TBisFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCanonMainForm: TBisCanonMainForm;
+
+var
+  MainIface: TBisIface=nil;
+
+implementation
+
+uses BisCore, BisInterfaces, BisDataFm, BisProvider, BisIfaceModules, BisUtils,
+     BisPeriodFm;
+
+{$R *.dfm}
+
+{ TBisCanonMainFormIface }
+
+constructor TBisCanonMainFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCanonMainForm;
+end;
+
+{ TBisCanonMainForm }
+
+constructor TBisCanonMainForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FreeOnClose:=true;
+end;
+
+end.

@@ -1,0 +1,109 @@
+unit BisKrieltDataConsultantsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList,
+  BisDataGridFm, BisFm, BisDataGridFrm, BisDataFrm;
+
+type
+  TBisKrieltDataConsultantsFrame=class(TBisDataGridFrame)
+  private
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Init; override;
+  end;
+
+  TBisKrieltDataConsultantsForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+  end;
+
+  TBisKrieltDataConsultantsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiKrieltDataConsultantsForm: TBisKrieltDataConsultantsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisKrieltDataConsultantEditFm;
+
+{ TBisKrieltDataConsultantsFrame }
+
+constructor TBisKrieltDataConsultantsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FilterClass:=TBisKrieltDataConsultantEditFormIface;
+  InsertClass:=TBisKrieltDataConsultantInsertFormIface;
+  UpdateClass:=TBisKrieltDataConsultantUpdateFormIface;
+  DeleteClass:=TBisKrieltDataConsultantDeleteFormIface;
+  
+  with Provider do begin
+    ProviderName:='S_CONSULTANTS';
+    with FieldNames do begin
+      AddKey('CONSULTANT_ID');
+      AddInvisible('FIRM_ID');
+      AddInvisible('FIRM_SMALL_NAME');
+      AddInvisible('DATE_CREATE');
+      AddInvisible('PASSWORD');
+      AddInvisible('PHONE');
+      AddInvisible('JOB_TITLE');
+      AddInvisible('LOCKED');
+      AddInvisible('DESCRIPTION');
+      Add('SURNAME','Фамилия',110);
+      Add('NAME','Имя',100);
+      Add('PATRONYMIC','Отчество',120);
+      Add('USER_NAME','Логин',100);
+      Add('EMAIL','Email',100);
+    end;
+    Orders.Add('SURNAME');
+    Orders.Add('NAME');
+    Orders.Add('PATRONYMIC');
+  end;
+
+end;
+
+procedure TBisKrieltDataConsultantsFrame.Init;
+begin
+  inherited Init;
+end;
+
+{ TBisKrieltDataConsultantsFormIface }
+
+constructor TBisKrieltDataConsultantsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataConsultantsForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+end;
+
+{ TBisKrieltDataConsultantsForm }
+
+constructor TBisKrieltDataConsultantsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+destructor TBisKrieltDataConsultantsForm.Destroy;
+begin
+  inherited Destroy;
+end;
+
+class function TBisKrieltDataConsultantsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisKrieltDataConsultantsFrame;
+end;
+
+end.

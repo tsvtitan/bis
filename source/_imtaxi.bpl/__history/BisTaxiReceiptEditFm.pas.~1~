@@ -1,0 +1,156 @@
+unit BisTaxiReceiptEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ImgList,
+  BisDataEditFm, BisParam, BisControls;
+
+type
+  TBisTaxiReceiptEditForm = class(TBisDataEditForm)
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelSum: TLabel;
+    EditSum: TEdit;
+    LabelAccount: TLabel;
+    LabelDateReceipt: TLabel;
+    DateTimePickerReceipt: TDateTimePicker;
+    DateTimePickerReceiptTime: TDateTimePicker;
+    EditAccount: TEdit;
+    ButtonAccount: TButton;
+    LabelType: TLabel;
+    ComboBoxType: TComboBox;
+    LabelWho: TLabel;
+    EditWho: TEdit;
+    LabelDateCreate: TLabel;
+    DateTimePickerCreate: TDateTimePicker;
+    DateTimePickerCreateTime: TDateTimePicker;
+  private
+  public
+    procedure BeforeShow; override;
+    procedure ChangeParam(Param: TBisParam); override;
+  end;
+
+  TBisTaxiReceiptEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiReceiptFilterFormIface=class(TBisTaxiReceiptEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiReceiptInsertFormIface=class(TBisTaxiReceiptEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiReceiptUpdateFormIface=class(TBisTaxiReceiptEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiReceiptDeleteFormIface=class(TBisTaxiReceiptEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiReceiptEditForm: TBisTaxiReceiptEditForm;
+
+implementation
+
+uses BisUtils, BisTaxiConsts, BisTaxiDataReceiptTypesFm, BisCore;
+
+{$R *.dfm}
+
+{ TBisTaxiReceiptEditFormIface }
+
+constructor TBisTaxiReceiptEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiReceiptEditForm;
+  with Params do begin
+    AddKey('RECEIPT_ID').Older('OLD_RECEIPT_ID');
+    AddInvisible('WHO_CREATE_ID');
+    AddComboBoxDataSelect('RECEIPT_TYPE_ID','ComboBoxType','LabelType','',
+                          TBisTaxiDataReceiptTypesFormIface,'RECEIPT_TYPE_NAME',true,false,'','NAME');
+    AddEditDataSelect('ACCOUNT_ID','EditAccount','LabelAccount','ButtonAccount',
+                       SClassDataAccountsFormIface,'USER_NAME',true,false);
+    AddEditFloat('SUM_RECEIPT','EditSum','LabelSum',true);
+    AddEditDateTime('DATE_RECEIPT','DateTimePickerReceipt','DateTimePickerReceiptTime','LabelDateReceipt',true).ExcludeModes([emFilter]);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+    AddEdit('WHO_USER_NAME','EditWho','LabelWho',true).ExcludeModes(AllParamEditModes);
+    AddEditDateTime('DATE_CREATE','DateTimePickerCreate','DateTimePickerCreateTime','LabelDateCreate',true).ExcludeModes(AllParamEditModes);
+  end;
+end;
+
+{ TBisTaxiReceiptFilterFormIface }
+
+constructor TBisTaxiReceiptFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Фильтр поступлений';
+end;
+
+{ TBisTaxiReceiptInsertFormIface }
+
+constructor TBisTaxiReceiptInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Permissions.Enabled:=true;
+  Available:=true;
+  ProviderName:='I_RECEIPT';
+  ParentProviderName:='S_RECEIPTS';
+  Caption:='Добавить поступление';
+  SMessageSuccess:='Поступление успешно добавлено.';
+end;
+
+{ TBisTaxiReceiptUpdateFormIface }
+
+constructor TBisTaxiReceiptUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_RECEIPT';
+  Caption:='Изменить поступление';
+end;
+
+{ TBisTaxiReceiptDeleteFormIface }
+
+constructor TBisTaxiReceiptDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_RECEIPT';
+  Caption:='Удалить поступление';
+end;
+
+{ TBisTaxiReceiptEditForm }
+
+procedure TBisTaxiReceiptEditForm.BeforeShow;
+var
+  D: TDateTime;
+begin
+  inherited BeforeShow;
+  if Mode in [emInsert,emDuplicate] then begin
+    with Provider.Params do begin
+      D:=Core.ServerDate;
+      Find('DATE_RECEIPT').SetNewValue(D);
+      Find('WHO_CREATE_ID').SetNewValue(Core.AccountId);
+      Find('WHO_USER_NAME').SetNewValue(Core.AccountUserName);
+      Find('DATE_CREATE').SetNewValue(D);
+    end;
+    UpdateButtonState;
+  end;
+end;
+
+procedure TBisTaxiReceiptEditForm.ChangeParam(Param: TBisParam);
+begin
+  inherited ChangeParam(Param);
+  if AnsiSameText(Param.ParamName,'RECEIPT_TYPE_ID') and not Param.Empty then begin
+
+  end;
+end;
+
+end.

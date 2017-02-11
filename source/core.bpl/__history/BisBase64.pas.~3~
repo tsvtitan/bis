@@ -1,0 +1,50 @@
+unit BisBase64;
+
+interface
+
+function Base64ToStr(S: String): String;
+function StrToBase64(S: String): String;
+
+implementation
+
+uses DIMime;
+
+type
+   TBisBase64Encoder=class(TIdEncoderMIME)
+   end;
+
+   TBisBase64Decoder=class(TIdDecoderMIME)
+   end;
+
+function Base64ToStr(S: String): String;
+var
+  Decoder: TBisBase64Decoder;
+begin
+  Decoder:=TBisBase64Decoder.Create(nil);
+  try
+    try
+      Result:=Decoder.DecodeString(S);
+    except
+    end;  
+  finally
+    Decoder.Free;
+  end;
+end;
+
+function StrToBase64(S: String): String;
+var
+  Encoder: TBisBase64Encoder;
+begin
+  Encoder:=TBisBase64Encoder.Create(nil);
+  try
+    try
+      Result:=Encoder.Encode(S);
+    except
+    end;  
+  finally
+    Encoder.Free;
+  end;
+end;
+
+
+end.

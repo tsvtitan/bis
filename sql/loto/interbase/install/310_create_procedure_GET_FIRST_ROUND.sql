@@ -1,0 +1,27 @@
+/* Создание процедуры получения первого раунда */
+
+CREATE PROCEDURE /*PREFIX*/GET_FIRST_ROUND
+(
+  TIRAGE_ID VARCHAR(32),
+  PRIZE_ID VARCHAR(32)
+)
+RETURNS
+(
+  TICKET_COUNT INTEGER
+)
+AS
+BEGIN
+  TICKET_COUNT=0;
+
+  SELECT COUNT(*)
+    FROM /*PREFIX*/GET_TICKET_LINES(:TIRAGE_ID,:PRIZE_ID,1,1)
+    INTO :TICKET_COUNT;
+
+ -- SUSPEND;
+END;
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

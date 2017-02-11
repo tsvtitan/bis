@@ -1,0 +1,651 @@
+unit BisHttpServerHandlerSupportWm;
+
+interface
+
+uses Forms,
+     SysUtils, Classes, HTTPApp, DB, Contnrs,
+     BisLogger,
+     BisDataParams, BisDataSet, BisSystemUtils,
+     BisHttpServerHandlers, BisSupportTypes;
+
+type
+
+  TBisHttpServerHandlerSupportProcess=class(TBisDataParam)
+  private
+    FParams: TBisDataValueParams;
+  protected
+    procedure SetDataSet(DataSet: TBisDataSet); override;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+
+    function FileName: String;
+    function CommandLine: String;
+    function ServiceName: String;
+    function StartCommand: String;
+    function StopCommand: String;
+    function StopTimeout: Cardinal;
+    function StartTimeout: Cardinal;
+    function StartReasons: String;
+    function StopReasons: String;
+    function Password: String;
+  end;
+
+  TBisHttpServerHandlerSupportProcesses=class(TBisDataParams)
+  private
+    function GetItem(Index: Integer): TBisHttpServerHandlerSupportProcess;
+  protected
+    class function GetDataParamClass: TBisDataParamClass; override; 
+  public
+    function Find(const Name: String): TBisHttpServerHandlerSupportProcess;
+
+    property Items[Index: Integer]: TBisHttpServerHandlerSupportProcess read GetItem; default;
+  end;
+
+  TBisHttpServerHandlerSupportWebModule = class(TWebModule)
+    procedure BisHttpServerHandlerSupportWebModuleDefaultAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure BisHttpServerHandlerSupportWebModuleXmlAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure BisHttpServerHandlerSupportWebModuleRawAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+  private
+    FHandler: TBisHttpServerHandler;
+    FProcesses: TBisHttpServerHandlerSupportProcesses;
+    FPassword: String;
+    FShutReasons: TStringList;
+
+    FSProcessNotFound: String;
+    FSCommandFail: String;
+    FSProcessesNotFound: String;
+    FSCommandStart: String;
+    FSCommandSuccess: String;
+    FSReason: String;
+    FSPasswordWrong: String;
+
+    procedure LoggerWrite(Message: String; LogType: TBisLoggerType=ltInformation);
+    function GetProcess(Process: TBisHttpServerHandlerSupportProcess;
+                        SystemProcesses: TBisSystemProcesses; SystemServices: TBisSystemServices;
+                        var ProcessID: Cardinal; var State: TBisSupportProcessState;
+                        var FlagService: Boolean): Boolean;
+
+    function CheckPassword(Command: TBisSupportPassword; APassword: String): Boolean;
+    procedure TryShutdown(Command: TBisSupportShutdown);
+    procedure TryProcesses(Command: TBisSupportProcesses);
+    procedure TryStart(Command: TBisSupportStart);
+    procedure TryStop(Command: TBisSupportStop);
+    procedure TrySleep(Command: TBisSupportSleep);
+    procedure TryStatus(Command: TBisSupportStatus);
+
+    function Execute(Request: TWebRequest; Response: TWebResponse; StreamFormat: TBisSupportStreamFormat): Boolean;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property Handler: TBisHttpServerHandler read FHandler write FHandler;
+    property Password: String read FPassword write FPassword;
+
+    property Processes: TBisHttpServerHandlerSupportProcesses read FProcesses;
+    property ShutReasons: TStringList read FShutReasons;
+  published
+    property SProcessNotFound: String read FSProcessNotFound write FSProcessNotFound;
+    property SProcessesNotFound: String read FSProcessesNotFound write FSProcessesNotFound;
+    property SCommandStart: String read FSCommandStart write FSCommandStart;
+    property SCommandSuccess: String read FSCommandSuccess write FSCommandSuccess;
+    property SCommandFail: String read FSCommandFail write FSCommandFail;
+    property SReason: String read FSReason write FSReason;
+    property SPasswordWrong: String read FSPasswordWrong write FSPasswordWrong; 
+  end;
+
+var
+  BisHttpServerHandlerSupportWebModule: TBisHttpServerHandlerSupportWebModule;
+
+implementation
+
+{$R *.dfm}
+
+uses Windows, Variants, StrUtils,
+     AlXmlDoc,
+     BisCore, BisConsts, BisUtils, BisWatchGroups, BisCoreUtils,
+     BisHttpServerHandlerSupportConsts;
+
+{ TBisHttpServerHandlerSupportProcess }
+
+constructor TBisHttpServerHandlerSupportProcess.Create;
+begin
+  inherited Create;
+  FParams:=TBisDataValueParams.Create;
+end;
+
+destructor TBisHttpServerHandlerSupportProcess.Destroy;
+begin
+  FParams.Free;
+  inherited Destroy;
+end;
+
+procedure TBisHttpServerHandlerSupportProcess.SetDataSet(DataSet: TBisDataSet);
+var
+  Field: TField;
+begin
+  inherited SetDataSet(DataSet);
+
+  FParams.Clear;
+  Field:=DataSet.FindField(SFieldParams);
+  if Assigned(Field) then
+    FParams.CopyFromDataSet(Field.AsString);
+end;
+
+function TBisHttpServerHandlerSupportProcess.FileName: String;
+begin
+  Result:=FParams.AsString(SParamFileName);
+end;
+
+function TBisHttpServerHandlerSupportProcess.CommandLine: String;
+begin
+  Result:=FParams.AsString(SParamCommandLine);
+end;
+
+function TBisHttpServerHandlerSupportProcess.ServiceName: String;
+begin
+  Result:=FParams.AsString(SParamServiceName);
+end;
+
+function TBisHttpServerHandlerSupportProcess.StartCommand: String;
+begin
+  Result:=FParams.AsString(SParamStartCommand);
+end;
+
+function TBisHttpServerHandlerSupportProcess.StartTimeout: Cardinal;
+begin
+  Result:=FParams.AsInteger(SParamStartTimeout);
+end;
+
+function TBisHttpServerHandlerSupportProcess.StopCommand: String;
+begin
+  Result:=FParams.AsString(SParamStopCommand);
+end;
+
+function TBisHttpServerHandlerSupportProcess.StopTimeout: Cardinal;
+begin
+  Result:=FParams.AsInteger(SParamStopTimeout);
+end;
+
+function TBisHttpServerHandlerSupportProcess.Password: String;
+begin
+  Result:=FParams.AsString(SParamPassword);
+end;
+
+function TBisHttpServerHandlerSupportProcess.StartReasons: String;
+begin
+  Result:=FParams.AsString(SParamStartReasons);
+end;
+
+function TBisHttpServerHandlerSupportProcess.StopReasons: String;
+begin
+  Result:=FParams.AsString(SParamStopReasons);
+end;
+
+{ TBisHttpServerHandlerSupportProcesses }
+
+class function TBisHttpServerHandlerSupportProcesses.GetDataParamClass: TBisDataParamClass;
+begin
+  Result:=TBisHttpServerHandlerSupportProcess;
+end;
+
+function TBisHttpServerHandlerSupportProcesses.GetItem(Index: Integer): TBisHttpServerHandlerSupportProcess;
+begin
+  Result:=TBisHttpServerHandlerSupportProcess(inherited Items[Index]);
+end;
+
+function TBisHttpServerHandlerSupportProcesses.Find(const Name: String): TBisHttpServerHandlerSupportProcess;
+begin
+  Result:=TBisHttpServerHandlerSupportProcess(inherited Find(Name));
+end;
+
+{ TBisHttpServerHandlerMessageWebModule }
+
+constructor TBisHttpServerHandlerSupportWebModule.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FProcesses:=TBisHttpServerHandlerSupportProcesses.Create;
+  FShutReasons:=TStringList.Create;
+
+  FSProcessNotFound:='Процесс %s не найден.';
+  FSProcessesNotFound:='Процессы не найдены.';
+  FSCommandStart:='Выполнение команды %s ...';
+  FSCommandSuccess:='Команда %s выполнена успешно.';
+  FSCommandFail:='Команда %s не выполнена. %s';
+  FSReason:='Причина => %s';
+  FSPasswordWrong:='Неправильный пароль %s';
+end;
+
+destructor TBisHttpServerHandlerSupportWebModule.Destroy;
+begin
+  FShutReasons.Free;
+  FProcesses.Free;
+  inherited Destroy;
+end;
+
+procedure TBisHttpServerHandlerSupportWebModule.LoggerWrite(Message: String; LogType: TBisLoggerType);
+begin
+  BisCoreUtils.ClassLoggerWrite(ClassName,Message,LogType);
+end;
+
+function TBisHttpServerHandlerSupportWebModule.GetProcess(Process: TBisHttpServerHandlerSupportProcess;
+                                                          SystemProcesses: TBisSystemProcesses; SystemServices: TBisSystemServices;
+                                                          var ProcessID: Cardinal; var State: TBisSupportProcessState;
+                                                          var FlagService: Boolean): Boolean;
+var
+  FileName, CommandLine: String;
+  ServiceName: String;
+  i: Integer;
+  List1: TBisSystemProcesses;
+  List2: TBisSystemServices;
+  SystemProcess: TBisSystemProcess;
+  SystemService: TBisSystemService;
+  Flag: Boolean;
+begin
+  Result:=false;
+
+  List1:=TBisSystemProcesses.Create;
+  List2:=TBisSystemServices.Create;
+  try
+    List1.OwnsObjects:=false;
+    List2.OwnsObjects:=false;
+
+    FileName:=Process.FileName;
+    CommandLine:=Process.CommandLine;
+    ServiceName:=Process.ServiceName;
+
+    if FileExists(FileName) then begin
+      SystemProcesses.GetProcesses(FileName,List1);
+      if List1.Count>0 then begin
+        for i:=0 to List1.Count-1 do begin
+          SystemProcess:=List1.Items[i];
+          Flag:=true;
+          if Trim(CommandLine)<>'' then
+            Flag:=AnsiPos(CommandLine,SystemProcess.CommandLine)>0;
+          if Flag then begin
+            if Trim(ServiceName)<>'' then begin
+              List2.Clear;
+              SystemServices.GetServices(SystemProcess.ProcessID,List2);
+              if List2.Count>0 then begin
+                SystemService:=List2.Find(ServiceName);
+                if Assigned(SystemService) then begin
+                  ProcessID:=SystemProcess.ProcessID;
+                  case SystemService.ServiceState of
+                    ssRunning: State:=psUp;
+                    ssStopped: State:=psDown;
+                  else
+                    State:=psUnknown;
+                  end;
+                  FlagService:=true;
+                  Result:=true;
+                  break;
+                end;
+              end;
+            end else begin
+              ProcessID:=SystemProcess.ProcessID;
+              State:=psUp;
+              Result:=true;
+              break;
+            end;
+          end;
+        end;
+
+        if not Result then begin
+          if Trim(ServiceName)<>'' then begin
+            List2.Clear;
+            SystemServices.GetServices(FileName,List2);
+            if List2.Count>0 then begin
+              SystemService:=List2.Find(ServiceName);
+              if Assigned(SystemService) then begin
+                Flag:=true;
+                if Trim(CommandLine)<>'' then
+                  Flag:=AnsiPos(CommandLine,SystemService.CommandLine)>0;
+                if Flag then begin
+                  case SystemService.ServiceState of
+                    ssRunning: State:=psUp;
+                    ssStopped: State:=psDown;
+                  else
+                    State:=psUnknown;
+                  end;
+                  FlagService:=true;
+                  Result:=true;
+                end;
+              end;
+            end;
+          end else begin
+            State:=psDown;
+            Result:=true;
+          end;
+        end;
+
+      end else begin
+        if Trim(ServiceName)<>'' then begin
+          List2.Clear;
+          SystemServices.GetServices(FileName,List2);
+          if List2.Count>0 then begin
+            SystemService:=List2.Find(ServiceName);
+            if Assigned(SystemService) then begin
+              State:=psDown;
+              FlagService:=true;
+              Result:=true;
+            end;
+          end;
+        end else begin
+          State:=psDown;
+          Result:=true;
+        end;
+      end;
+    end else begin
+      SystemService:=SystemServices.Find(ServiceName);
+      if Assigned(SystemService) then begin
+        ProcessID:=SystemService.ProcessID;
+        case SystemService.ServiceState of
+          ssRunning: State:=psUp;
+          ssStopped: State:=psDown;
+        else
+          State:=psUnknown;
+        end;
+        FlagService:=true;
+        Result:=true;
+      end;
+    end;
+
+  finally
+    List2.Free;
+    List1.Free;
+  end;
+end;
+
+procedure TBisHttpServerHandlerSupportWebModule.TryProcesses(Command: TBisSupportProcesses);
+var
+  SystemProcesses: TBisSystemProcesses;
+  SystemProcess: TBisSystemProcess;
+  SystemServices: TBisSystemServices;
+  Item: TBisHttpServerHandlerSupportProcess;
+  i: Integer;
+  ProcessID: Cardinal;
+  State: TBisSupportProcessState;
+  FlagService: Boolean;
+  Process: TBisSupportProcess;
+begin
+  Command.Success:=false;
+  SystemProcesses:=TBisSystemProcesses.Create;
+  SystemServices:=TBisSystemServices.Create;
+  try
+    SystemProcesses.Refresh;
+    SystemServices.Refresh;
+    for i:=0 to FProcesses.Count-1 do begin
+      Item:=FProcesses.Items[i];
+      if Item.Enabled then begin
+        ProcessID:=0;
+        State:=psUnknown;
+        FlagService:=false;
+        if not GetProcess(Item,SystemProcesses,SystemServices,
+                          ProcessID,State,FlagService) then
+          State:=psNotFound;
+        Process:=Command.Add(ProcessID,
+                             Item.Name,Item.Caption,Item.Description,
+                             State,FlagService,
+                             Item.StartReasons,Item.StopReasons,
+                             Trim(Item.Password)<>'');
+        if ProcessID>0 then begin
+          SystemProcess:=SystemProcesses.Find(ProcessID);
+          if Assigned(Process) then
+            Process.StartTime:=SystemProcess.CreateTime;
+        end;
+      end;
+    end;
+    Command.Success:=Command.Count>0;
+    if not Command.Success then
+      raise Exception.Create(FSProcessesNotFound);
+  finally
+    SystemServices.Free;
+    SystemProcesses.Free;
+  end;
+end;
+
+function TBisHttpServerHandlerSupportWebModule.CheckPassword(Command: TBisSupportPassword; APassword: String): Boolean;
+begin
+  Result:=AnsiSameStr()
+end;
+
+procedure TBisHttpServerHandlerSupportWebModule.TryShutdown(Command: TBisSupportShutdown);
+begin
+  if CheckPassword(Command,FPassword) then begin
+    Command.Success:=ShutDown(Command.Message,Command.TimeOut,Command.Forced,Command.Reboot);
+    if not Command.Success then
+      raise Exception.Create(SysErrorMessage(GetLastError));
+  end else
+    raise Exception.Create(FormatEx(FSPasswordWrong,[Command.Password]));
+end;
+
+procedure TBisHttpServerHandlerSupportWebModule.TryStart(Command: TBisSupportStart);
+var
+  Process: TBisHttpServerHandlerSupportProcess;
+  SystemProcesses: TBisSystemProcesses;
+  SystemServices: TBisSystemServices;
+  ProcessID: Cardinal;
+  State: TBisSupportProcessState;
+  FlagService: Boolean;
+  StartCommand: String;
+begin
+  Process:=FProcesses.Find(Command.ProcessName);
+  if Assigned(Process) then begin
+    SystemProcesses:=TBisSystemProcesses.Create;
+    SystemServices:=TBisSystemServices.Create;
+    try
+      SystemProcesses.Refresh;
+      SystemServices.Refresh;
+
+      ProcessID:=0;
+      State:=psUnknown;
+      FlagService:=false;
+      if GetProcess(Process,SystemProcesses,SystemServices,
+                    ProcessID,State,FlagService) then begin
+
+        Command.Success:=false;
+        if not Command.Success then begin
+          StartCommand:=Process.StartCommand;
+          if Trim(StartCommand)='' then begin
+            if not FlagService then
+              Command.Success:=ProcessStart(Process.FileName,Process.CommandLine,ProcessID)
+            else
+              Command.Success:=ServiceStart(Process.ServiceName,Process.StartTimeout);
+          end else
+            Command.Success:=ProcessStart(StartCommand,'',ProcessID);
+        end;
+
+        if not Command.Success then
+          raise Exception.Create(SysErrorMessage(GetLastError));
+
+      end else
+        raise Exception.Create(FormatEx(FSProcessNotFound,[Process.Name]));
+
+    finally
+      SystemServices.Free;
+      SystemProcesses.Free;
+    end;
+  end else
+    raise Exception.Create(FormatEx(FSProcessNotFound,[Command.ProcessName]));
+end;
+
+procedure TBisHttpServerHandlerSupportWebModule.TryStop(Command: TBisSupportStop);
+var
+  Process: TBisHttpServerHandlerSupportProcess;
+  SystemProcesses: TBisSystemProcesses;
+  SystemServices: TBisSystemServices;
+  ProcessID: Cardinal;
+  State: TBisSupportProcessState;
+  FlagService: Boolean;
+  StopCommand: String;
+begin
+  Process:=FProcesses.Find(Command.ProcessName);
+  if Assigned(Process) then begin
+    if CheckPassword(Command.Password,Process.Password) then
+    
+    SystemProcesses:=TBisSystemProcesses.Create;
+    SystemServices:=TBisSystemServices.Create;
+    try
+      SystemProcesses.Refresh;
+      SystemServices.Refresh;
+
+      ProcessID:=0;
+      State:=psUnknown;
+      FlagService:=false;
+      if GetProcess(Process,SystemProcesses,SystemServices,
+                    ProcessID,State,FlagService) then begin
+
+        Command.Success:=false;
+        if not Command.Success then begin
+          StopCommand:=Process.StopCommand;
+          if Trim(StopCommand)='' then begin
+            if not FlagService then
+              Command.Success:=ProcessStop(ProcessID,Process.StopTimeout)
+            else begin
+              Command.Success:=ServiceStop(Process.ServiceName,Process.StopTimeout);
+              if ProcessExists(ProcessID) then
+                Command.Success:=ProcessStop(ProcessID,Process.StopTimeout)
+            end;
+          end else
+            Command.Success:=ProcessStart(StopCommand,'',ProcessID);
+        end;
+
+        if not Command.Success then
+          raise Exception.Create(SysErrorMessage(GetLastError));
+
+      end else
+        raise Exception.Create(FormatEx(FSProcessNotFound,[Process.Name]));
+
+    finally
+      SystemServices.Free;
+      SystemProcesses.Free;
+    end;
+  end else
+    raise Exception.Create(FormatEx(FSProcessNotFound,[Command.ProcessName]));
+end;
+
+procedure TBisHttpServerHandlerSupportWebModule.TrySleep(Command: TBisSupportSleep);
+begin
+  Command.Success:=SleepEx(Command.Timeout,false)=0;
+  if not Command.Success then
+    raise Exception.Create(SysErrorMessage(GetLastError));
+end;
+
+procedure TBisHttpServerHandlerSupportWebModule.TryStatus(Command: TBisSupportStatus);
+begin
+  Command.ShutReasons.Assign(FShutReasons);
+  Command.NeedCheck:=Trim(FPassword)<>'';
+  Command.Success:=true;
+end;
+
+function TBisHttpServerHandlerSupportWebModule.Execute(Request: TWebRequest; Response: TWebResponse;
+                                                       StreamFormat: TBisSupportStreamFormat): Boolean;
+
+  function LoadFromStream(RequestStream: TMemoryStream; ARequest: TBisSupportRequest): Boolean;
+  begin
+    try
+      ARequest.LoadFromStream(RequestStream,StreamFormat);
+      Result:=true;
+    except
+      on E: Exception do begin
+        Result:=false;
+        LoggerWrite(E.Message,ltError);
+      end;
+    end;
+  end;
+
+var
+  RequestStream: TMemoryStream;
+  ARequest: TBisSupportRequest;
+  Valid: Boolean;
+  i: Integer;
+  Command: TBisSupportCommand;
+begin
+  Result:=false;                                                    
+  if Assigned(FHandler) and Assigned(Core) then begin
+    RequestStream:=TMemoryStream.Create;
+    ARequest:=TBisSupportRequest.Create;
+    try
+      RequestStream.WriteBuffer(Pointer(Request.Content)^,Length(Request.Content));
+      RequestStream.Position:=0;
+
+      Valid:=LoadFromStream(RequestStream,ARequest);
+      if Valid then begin
+
+        for i:=0 to ARequest.Commands.Count-1 do begin
+          Command:=ARequest.Commands.Items[i];
+          try
+            Command.Success:=false;
+            Command.Error:='';
+
+            LoggerWrite(FormatEx(FSCommandStart,[Command.Name]));
+            
+            if Trim(Command.Reason)<>'' then
+              LoggerWrite(FormatEx(FSReason,[Command.Reason]));
+
+            if Command.Same(TBisSupportStatus) then
+              TryStatus(TBisSupportStatus(Command));
+
+            if Command.Same(TBisSupportProcesses) then
+              TryProcesses(TBisSupportProcesses(Command));
+
+            if Command.Same(TBisSupportShutdown) then
+              TryShutdown(TBisSupportShutdown(Command));
+
+            if Command.Same(TBisSupportStart) then
+              TryStart(TBisSupportStart(Command));
+
+            if Command.Same(TBisSupportStop) then
+              TryStop(TBisSupportStop(Command));
+
+            if Command is TBisSupportSleep then
+              TrySleep(TBisSupportSleep(Command));
+
+            LoggerWrite(Format(FSCommandSuccess,[Command.Name]));
+              
+          except
+            On E: Exception do begin
+              Command.Success:=false;
+              Command.Error:=E.Message;
+              LoggerWrite(FormatEx(FSCommandFail,[Command.Name,E.Message]),ltError);
+            end;
+          end;
+        end;
+        ARequest.Success:=true;
+
+        if Assigned(Response.ContentStream) then begin
+          Response.ContentStream.Position:=0;
+          ARequest.SaveToStream(Response.ContentStream,StreamFormat);
+          Result:=true;
+        end;
+        
+      end;
+    finally
+      ARequest.Free;
+      RequestStream.Free;
+    end;
+  end;
+end;
+
+procedure TBisHttpServerHandlerSupportWebModule.BisHttpServerHandlerSupportWebModuleRawAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Handled:=Execute(Request,Response,sfRaw);
+end;
+
+procedure TBisHttpServerHandlerSupportWebModule.BisHttpServerHandlerSupportWebModuleXmlAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Handled:=Execute(Request,Response,sfXml);
+end;
+
+procedure TBisHttpServerHandlerSupportWebModule.BisHttpServerHandlerSupportWebModuleDefaultAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Handled:=Execute(Request,Response,sfRaw);
+end;
+
+end.

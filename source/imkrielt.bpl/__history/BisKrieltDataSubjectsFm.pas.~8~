@@ -1,0 +1,57 @@
+unit BisKrieltDataSubjectsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList,
+  BisDataGridFm, BisDataTreeFm;
+
+type
+  TBisKrieltDataSubjectsForm = class(TBisDataTreeForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisKrieltDataSubjectsFormIface=class(TBisDataTreeFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataSubjectsForm: TBisKrieltDataSubjectsForm;
+
+implementation
+
+uses BisKrieltDataSubjectEditFm;
+
+{$R *.dfm}
+
+{ TBisKrieltDataSubjectsFormIface }
+
+constructor TBisKrieltDataSubjectsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataSubjectsForm;
+{  FilterClass:=TBisKrieltDataSubjectEditFormIface;
+  InsertClasses.Add(TBisKrieltDataSubjectInsertFormIface);
+  InsertClasses.Add(TBisKrieltDataSubjectInsertChildFormIface);
+  UpdateClass:=TBisKrieltDataSubjectUpdateFormIface;
+  DeleteClass:=TBisKrieltDataSubjectDeleteFormIface;}
+  Permissions.Enabled:=true;
+  ProviderName:='S_SUBJECTS';
+  with FieldNames do begin
+    AddKey('SUBJECT_ID');
+    AddParentKey('PARENT_ID');
+    AddInvisible('DESCRIPTION');
+    Add('NAME','Наименование',225);
+    Add('PARENT_NAME','Родитель',175);
+    Add('PRIORITY','Порядок',50);
+  end;
+  Orders.Add('LEVEL');
+  Orders.Add('PRIORITY');
+end;
+
+end.

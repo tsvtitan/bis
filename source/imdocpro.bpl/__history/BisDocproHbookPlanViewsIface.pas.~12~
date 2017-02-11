@@ -1,0 +1,32 @@
+unit BisDocproHbookPlanViewsIface;
+
+interface
+
+uses Classes,
+     BisDataGridFm;
+
+type
+
+  TBisDocproHbookPlanViewsIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+implementation
+
+uses BisFieldNames;
+
+{ TBisDocproHbookPlanViewsIface }
+
+constructor TBisDocproHbookPlanViewsIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='S_PLAN_VIEWS';
+  with FieldNames do begin
+    AddKey('PLAN_ID').FuncType:=ftDistinct;
+    Add('PLAN_NAME','План',150);
+  end;
+  Orders.Add('PLAN_NAME');
+end;
+
+end.

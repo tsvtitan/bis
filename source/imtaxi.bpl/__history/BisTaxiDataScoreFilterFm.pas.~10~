@@ -1,0 +1,66 @@
+unit BisTaxiDataScoreFilterFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, StdCtrls, ExtCtrls,
+  BisTaxiDataScoreEditFm, BisControls;
+
+type
+  TBisTaxiDataScoreEditForm1 = class(TBisTaxiDataScoreEditForm)
+    LabelDateCreateTo: TLabel;
+    DateTimePicketCreateTo: TDateTimePicker;
+    DateTimePickerCreateToTime: TDateTimePicker;
+    ButtonDateCreate: TButton;
+    procedure ButtonDateCreateClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisTaxiDataScoreFilterFormIface=class(TBisTaxiDataScoreEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataScoreEditForm1: TBisTaxiDataScoreEditForm1;
+
+implementation
+
+uses DateUtils,
+     BisFilterGroups, BisParam, BisPeriodFm;
+
+{$R *.dfm}
+
+{ TBisTaxiDataScoreFilterFormIface }
+
+constructor TBisTaxiDataScoreFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Фильтр оценок водителей';
+end;
+
+procedure TBisTaxiDataScoreEditForm1.ButtonDateCreateClick(Sender: TObject);
+var
+  AIface: TBisPeriodFormIface;
+  PeriodType: TBisPeriodType;
+  D1,D2: TDate;
+begin
+  AIface:=TBisPeriodFormIface.Create(nil);
+  try
+    PeriodType:=ptMonth;
+    D1:=DateOf(Provider.Params.ParamByName('DATE_RECEIPT').AsDateTime);
+    D2:=DateOf(Provider.Params.ParamByName('DATE_RECEIPT',1).AsDateTime);
+    if AIface.Select(PeriodType,D1,D2) then begin
+      Provider.Params.ParamByName('DATE_RECEIPT').Value:=D1;
+      Provider.Params.ParamByName('DATE_RECEIPT',1).Value:=D2;
+    end;
+  finally
+    AIface.Free;
+  end;
+end;
+
+end.

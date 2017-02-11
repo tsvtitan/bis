@@ -1,0 +1,193 @@
+<html>
+<body>
+<h1>Class Session</h1>
+<b>Declaration</b><br>
+
+<pre>Session = class(TObject)
+  <a href="#SessionManager$Session$ActiveUsers">property ActiveUsers: Integer read GetActiveUsers</a>;
+  <a href="#SessionManager$Session$ClientState">property ClientState: Integer read GetCState write SetCState</a>;
+  <a href="#SessionManager$Session$GetActiveUsers">function GetActiveUsers: Integer</a>;
+  <a href="#SessionManager$Session$GetCState">function GetCState: Integer</a>;
+  <a href="#SessionManager$Session$GetIpAddr">function GetIpAddr: String</a>;
+  <a href="#SessionManager$Session$GetSBrand">function GetSBrand: String</a>;
+  <a href="#SessionManager$Session$GetTLastAction">function GetTLastAction: DateTime</a>;
+  <a href="#SessionManager$Session$GetTLogin">function GetTLogin: DateTime</a>;
+  <a href="#SessionManager$Session$IpAddr">property IpAddr: String read GetIpAddr write SetIpAddr</a>;
+  <a href="#SessionManager$Session$Param">function Param(Name: String): Variant</a>;
+  <a href="#SessionManager$Session$SBrand">property SBrand: String read GetSBrand write SetSBrand</a>;
+  <a href="#SessionManager$Session$SetCState">procedure SetCState(Value: Integer)</a>;
+  <a href="#SessionManager$Session$SetIpAddr">procedure SetIpAddr(Value: String)</a>;
+  <a href="#SessionManager$Session$SetSBrand">procedure SetSBrand(Value: String)</a>;
+  <a href="#SessionManager$Session$SetTLastAction">procedure SetTLastAction(Value: DateTime)</a>;
+  <a href="#SessionManager$Session$SetTLogin">procedure SetTLogin(Value: DateTime)</a>;
+  <a href="#SessionManager$Session$Store">procedure Store(name: String; value: Variant)</a>;
+  <a href="#SessionManager$Session$TLastAction">property TLastAction: DateTime read GetTLastAction write SetTLastAction</a>;
+  <a href="#SessionManager$Session$TLogin">property TLogin: DateTime read GetTLogin write SetTLogin</a>;
+end;</pre>
+<b>Description</b>
+<p></p>
+
+<hr>
+
+    <h2><a name=SessionManager$Session$ActiveUsers>Property Session.ActiveUsers</a></h2>
+    <b>Declaration</b><br>
+    <pre>property ActiveUsers: Integer read GetActiveUsers;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$ClientState>Property Session.ClientState</a></h2>
+    <b>Declaration</b><br>
+    <pre>property ClientState: Integer read GetCState write SetCState;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$GetActiveUsers>Method Session.GetActiveUsers</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetActiveUsers: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$GetCState>Method Session.GetCState</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetCState: Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$GetIpAddr>Method Session.GetIpAddr</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetIpAddr: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$GetSBrand>Method Session.GetSBrand</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetSBrand: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$GetTLastAction>Method Session.GetTLastAction</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetTLastAction: DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$GetTLogin>Method Session.GetTLogin</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetTLogin: DateTime;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$IpAddr>Property Session.IpAddr</a></h2>
+    <b>Declaration</b><br>
+    <pre>property IpAddr: String read GetIpAddr write SetIpAddr;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$Param>Method Session.Param</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Param(Name: String): Variant;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$SBrand>Property Session.SBrand</a></h2>
+    <b>Declaration</b><br>
+    <pre>property SBrand: String read GetSBrand write SetSBrand;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$Self>Property Session.Self</a></h2>
+    <b>Declaration</b><br>
+    <pre>Self;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$SetCState>Method Session.SetCState</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetCState(Value: Integer);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$SetIpAddr>Method Session.SetIpAddr</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetIpAddr(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$SetSBrand>Method Session.SetSBrand</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetSBrand(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$SetTLastAction>Method Session.SetTLastAction</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetTLastAction(Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$SetTLogin>Method Session.SetTLogin</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetTLogin(Value: DateTime);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$Store>Method Session.Store</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Store(name: String; value: Variant);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$TLastAction>Property Session.TLastAction</a></h2>
+    <b>Declaration</b><br>
+    <pre>property TLastAction: DateTime read GetTLastAction write SetTLastAction;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=SessionManager$Session$TLogin>Property Session.TLogin</a></h2>
+    <b>Declaration</b><br>
+    <pre>property TLogin: DateTime read GetTLogin write SetTLogin;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+</body>
+</html>

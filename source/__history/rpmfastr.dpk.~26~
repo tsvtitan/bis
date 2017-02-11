@@ -1,0 +1,64 @@
+package rpmfastr;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  vcl,
+  rtl,
+  vclx,
+  vclactnband,
+  dbrtl,
+  vcldb,
+  vcljpg;
+
+contains
+  BisFastReport in 'rptfastr.bpl\BisFastReport.pas',
+  BisFastReportFunctions in 'rptfastr.bpl\BisFastReportFunctions.pas',
+  BisFastReportClasses in 'rptfastr.bpl\BisFastReportClasses.pas',
+  BisFastReportComponents in 'rptfastr.bpl\BisFastReportComponents.pas',
+  BisFastReportControls in 'rptfastr.bpl\BisFastReportControls.pas',
+  BisFastReportEditorFm in 'rptfastr.bpl\BisFastReportEditorFm.pas',
+  BisFastReportFm in 'rptfastr.bpl\BisFastReportFm.pas',
+  BisFastReportFrm in 'rptfastr.bpl\BisFastReportFrm.pas',
+  frxPreview in 'rptfastr.bpl\FastReport\Source\frxPreview.pas',
+  frxClass in 'rptfastr.bpl\FastReport\Source\frxClass.pas',
+  fs_iinterpreter in 'rptfastr.bpl\FastReport\FastScript\fs_iinterpreter.pas',
+  frxExportXML in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportXML.pas',
+  frxExportCSV in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportCSV.pas',
+  frxExportHTML in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportHTML.pas',
+  frxExportImage in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportImage.pas',
+  frxExportMail in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportMail.pas',
+  frxExportMatrix in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportMatrix.pas',
+  frxExportODF in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportODF.pas',
+  frxExportPDF in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportPDF.pas',
+  frxExportRTF in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportRTF.pas',
+  frxExportText in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportText.pas',
+  frxExportTXT in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportTXT.pas',
+  frxExportTxtPrn in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportTxtPrn.pas',
+  frxExportXLS in 'rptfastr.bpl\FastReport\Source\ExportPack\frxExportXLS.pas';
+
+end.

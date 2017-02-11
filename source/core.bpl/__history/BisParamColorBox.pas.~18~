@@ -1,0 +1,136 @@
+unit BisParamColorBox;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisControls;
+
+type
+  TBisParamColorBox=class(TBisParam)
+  private
+    FColorBox: TColorBox;
+    FLabelColorBox: TLabel;
+    FColorBoxName: String;
+    FLabelName: String;
+    FOldColorBoxChange: TNotifyEvent;
+
+    procedure ColorBoxChange(Sender: TObject);
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetEmpty: Boolean; override;
+    function GetCaption: String; override;
+    function GetControl: TWinControl; override;
+ //   procedure SetEnabled(const Value: Boolean); override;
+
+  public
+    constructor Create; override;
+    procedure LinkControls(Parent: TWinControl); override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+
+    property ColorBoxName: String read FColorBoxName write FColorBoxName;
+    property LabelName: String read FLabelName write FLabelName;
+    property ColorBox: TColorBox read FColorBox;
+    property LabelColorBox: TLabel read FLabelColorBox;
+  end;
+
+implementation
+
+uses Variants, Graphics,
+     BisUtils, BisConsts;
+
+{ TBisParamColorBox }
+
+constructor TBisParamColorBox.Create;
+begin
+  inherited Create;
+end;
+
+procedure TBisParamColorBox.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamColorBox) then begin
+    ColorBoxName:=TBisParamColorBox(Source).ColorBoxName;
+    LabelName:=TBisParamColorBox(Source).LabelName;
+  end;
+end;
+
+procedure TBisParamColorBox.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FColorBox:=TColorBox(DoFindComponent(FColorBoxName));
+    if Assigned(FColorBox) then begin
+      FOldColorBoxChange:=FColorBox.OnChange;
+      FColorBox.OnChange:=ColorBoxChange;
+      FColorBox.Color:=iff(FColorBox.Color=clBtnFace,ColorControlReadOnly,FColorBox.Color);
+      FLabelColorBox:=TLabel(DoFindComponent(FLabelName));
+      if Assigned(FLabelColorBox) then
+        FLabelColorBox.FocusControl:=FColorBox;
+    end;
+    Value:=TempValue;
+  end;
+  inherited LinkControls(Parent);
+  if Assigned(FColorBox) then begin
+  end;
+end;
+
+procedure TBisParamColorBox.SetEnabled(const Value: Boolean);
+begin
+  inherited SetEnabled(Value);
+  if Assigned(FLabelColorBox) then
+    FLabelColorBox.Enabled:=Value;
+end;
+
+function TBisParamColorBox.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FColorBox) then
+    Result:=iff(not Empty,FColorBox.Selected,Result);
+end;
+
+procedure TBisParamColorBox.SetValue(const AValue: Variant);
+begin
+  if not VarSameValue(Value,AValue) then begin
+    if Assigned(FColorBox) then begin
+      FColorBox.OnChange:=nil;
+      try
+        FColorBox.Selected:=TColor(VarToIntDef(AValue,FColorBox.NoneColorColor));
+      finally
+        FColorBox.OnChange:=ColorBoxChange;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamColorBox.GetControl: TWinControl;
+begin
+  Result:=FColorBox;
+end;
+
+function TBisParamColorBox.GetCaption: String;
+begin
+  Result:=inherited GetCaption;
+  if Assigned(FLabelColorBox) then
+    Result:=FLabelColorBox.Caption;
+end;
+
+function TBisParamColorBox.GetEmpty: Boolean;
+begin
+  Result:=true;
+  if Assigned(FColorBox) then
+    Result:=FColorBox.Selected=FColorBox.NoneColorColor;
+end;
+
+procedure TBisParamColorBox.ColorBoxChange(Sender: TObject);
+begin
+  DoChange(Self);
+  if Assigned(FOldColorBoxChange) then
+    FOldColorBoxChange(Sender);
+end;
+
+
+end.

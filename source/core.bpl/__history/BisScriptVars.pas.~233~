@@ -1,0 +1,199 @@
+unit BisScriptVars;
+
+interface
+
+uses Contnrs, TypInfo,
+     BisScriptSymbols, BisScriptType;
+
+type
+
+  TBisScriptVar=class(TBisScriptSymbol)
+  private
+    FValue: Variant;
+    FTypeName: String;
+    FReadOnly: Boolean;
+    function GetAsInteger: Integer;
+    procedure SetAsInteger(const Value: Integer);
+    function GetAsFloat: Extended;
+    procedure SetAsFloat(const Value: Extended);
+    function GetAsString: String;
+    procedure SetAsString(const Value: String);
+    function GetAsDateTime: TDateTime;
+    procedure SetAsDateTime(const Value: TDateTime);
+    function GetAsBoolean: Boolean;
+    procedure SetAsBoolean(const Value: Boolean);
+{    function GetAsVariant: Variant;
+    procedure SetAsVariant(const Value: Variant);}
+    function GetAsObject: TObject;
+    procedure SetAsObject(const Value: TObject);
+  public
+    property TypeName: String read FTypeName;
+    property ReadOnly: Boolean read FReadOnly;
+    property Value: Variant read FValue write FValue;
+
+    property AsInteger: Integer read GetAsInteger write SetAsInteger;
+    property AsFloat: Extended read GetAsFloat write SetAsFloat;
+    property AsString: String read GetAsString write SetAsString;
+    property AsDateTime: TDateTime read GetAsDateTime write SetAsDateTime;
+    property AsBoolean: Boolean read GetAsBoolean write SetAsBoolean;
+//    property AsVariant: Variant read GetAsVariant write SetAsVariant;
+    property AsObject: TObject read GetAsObject write SetAsObject;
+  end;
+
+  TBisScriptVars=class(TBisScriptSymbols)
+  private
+    function GetItem(Index: Integer): TBisScriptVar;
+  protected
+    function GetScriptSymbolClass: TBisScriptSymbolClass; override;
+  public
+    function Find(Name: String): TBisScriptVar; reintroduce;
+    function Add(Name: String; Value: Variant; TypeName: String; ReadOnly: Boolean=false): TBisScriptVar; reintroduce; overload;
+    function Add(Name: String; Value: Integer; TypeName: String; ReadOnly: Boolean=false): TBisScriptVar; reintroduce; overload;
+    function Add(Name: String; Value: Extended; TypeName: String; ReadOnly: Boolean=false): TBisScriptVar; reintroduce; overload;
+    function Add(Name: String; Value: String; TypeName: String; ReadOnly: Boolean=false): TBisScriptVar; reintroduce; overload;
+    function Add(Name: String; Value: TDateTime; TypeName: String; ReadOnly: Boolean=false): TBisScriptVar; reintroduce; overload;
+    function Add(Name: String; Value: Boolean; TypeName: String; ReadOnly: Boolean=false): TBisScriptVar; reintroduce; overload;
+    function Add(Name: String; Value: TObject; TypeName: String; ReadOnly: Boolean=false): TBisScriptVar; reintroduce; overload;
+
+    property Items[Index: Integer]: TBisScriptVar read GetItem; default;
+  end;
+
+implementation
+
+uses Variants, SysUtils,
+     BisUtils, BisScriptUtils;
+
+{ TBisScriptVar }
+
+function TBisScriptVar.GetAsBoolean: Boolean;
+begin
+  Result:=ScriptTypeAsBoolean(FValue);
+end;
+
+function TBisScriptVar.GetAsDateTime: TDateTime;
+begin
+  Result:=ScriptTypeAsDateTime(FValue);
+end;
+
+function TBisScriptVar.GetAsFloat: Extended;
+begin
+  Result:=ScriptTypeAsFloat(FValue);
+end;
+
+function TBisScriptVar.GetAsInteger: Integer;
+begin
+  Result:=ScriptTypeAsInteger(FValue);
+end;
+
+function TBisScriptVar.GetAsObject: TObject;
+begin
+  Result:=ScriptTypeAsObject(FValue);
+end;
+
+function TBisScriptVar.GetAsString: String;
+begin
+  Result:=ScriptTypeAsString(FValue);
+end;
+
+{function TBisScriptVar.GetAsVariant: Variant;
+begin
+  Result:=FValue;
+end;}
+
+procedure TBisScriptVar.SetAsBoolean(const Value: Boolean);
+begin
+  FValue:=BooleanAsScriptType(Value);
+end;
+
+procedure TBisScriptVar.SetAsDateTime(const Value: TDateTime);
+begin
+  FValue:=DateTimeAsScriptType(Value);
+end;
+
+procedure TBisScriptVar.SetAsFloat(const Value: Extended);
+begin
+  FValue:=FloatAsScriptType(Value);
+end;
+
+procedure TBisScriptVar.SetAsInteger(const Value: Integer);
+begin
+  FValue:=IntegerAsScriptType(Value);
+end;
+
+procedure TBisScriptVar.SetAsObject(const Value: TObject);
+begin
+  FValue:=ObjectAsScriptType(Value);
+end;
+
+procedure TBisScriptVar.SetAsString(const Value: String);
+begin
+  FValue:=StringAsScriptType(Value);
+end;
+
+{procedure TBisScriptVar.SetAsVariant(const Value: Variant);
+begin
+  FValue:=Value;
+end;}
+
+{ TBisScriptVars }
+
+function TBisScriptVars.Find(Name: String): TBisScriptVar;
+begin
+  Result:=TBisScriptVar(inherited Find(Name));
+end;
+
+function TBisScriptVars.GetItem(Index: Integer): TBisScriptVar;
+begin
+  Result:=TBisScriptVar(inherited Items[Index]);
+end;
+
+function TBisScriptVars.GetScriptSymbolClass: TBisScriptSymbolClass;
+begin
+  Result:=TBisScriptVar;
+end;
+
+function TBisScriptVars.Add(Name: String; Value: Variant; TypeName: String; ReadOnly: Boolean): TBisScriptVar;
+begin
+  Result:=TBisScriptVar(inherited Add(Name));
+  if Assigned(Result) then begin
+    Result.FValue:=Value;
+    Result.FTypeName:=TypeName;
+    Result.FReadOnly:=ReadOnly;
+  end;
+end;
+
+function TBisScriptVars.Add(Name: String; Value: Integer; TypeName: String; ReadOnly: Boolean): TBisScriptVar;
+begin
+  Result:=TBisScriptVar(Add(Name,Value,TypeName,ReadOnly));
+end;
+
+function TBisScriptVars.Add(Name: String; Value: Extended; TypeName: String; ReadOnly: Boolean): TBisScriptVar;
+begin
+  Result:=TBisScriptVar(Add(Name,Value,TypeName,ReadOnly));
+end;
+
+function TBisScriptVars.Add(Name: String; Value: String; TypeName: String; ReadOnly: Boolean): TBisScriptVar;
+begin
+  Result:=TBisScriptVar(Add(Name,Value,TypeName,ReadOnly));
+end;
+
+function TBisScriptVars.Add(Name: String; Value: TDateTime; TypeName: String; ReadOnly: Boolean): TBisScriptVar;
+begin
+  Result:=TBisScriptVar(Add(Name,Value,TypeName,ReadOnly));
+end;
+
+function TBisScriptVars.Add(Name: String; Value: Boolean; TypeName: String; ReadOnly: Boolean): TBisScriptVar;
+begin
+  Result:=TBisScriptVar(Add(Name,Value,TypeName,ReadOnly));
+end;
+
+function TBisScriptVars.Add(Name: String; Value: TObject; TypeName: String; ReadOnly: Boolean): TBisScriptVar;
+begin
+  Result:=TBisScriptVar(Add(Name,Null,TypeName,ReadOnly));
+  if Assigned(Result) then begin
+    Result.AsObject:=Value;
+  end;
+end;
+
+
+end.

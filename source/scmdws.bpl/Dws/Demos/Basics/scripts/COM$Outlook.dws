@@ -1,0 +1,9 @@
+var Outlook : ComVariant;
+Outlook := CreateOleObject('Outlook.Application');
+var Mail : ComVariant;
+Mail := Outlook.CreateItem(0); // olMailItem
+Mail.To := 'me@home.org';
+Mail.Subject := 'Hello again';
+Mail.Body := 'Something usefull Text';
+Mail.Display();
+// Mail.Send()

@@ -1,0 +1,1079 @@
+unit BisLoginFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Menus, ImgList, DB,
+  BisConnections, BisFm, BisObject, BisLoginStatusFm, BisGradient, BisControls;
+
+type
+  TBisLoginFormIface=class;
+
+  TBisLoginFormLoginEvent=function (AConnection: TBisConnection; AUserName, APassword: String;
+                                    var Retry: Integer; WithConnect: Boolean; Counter: Integer): Boolean of object;
+
+  TBisLoginForm = class(TBisForm)
+    PanelButton: TPanel;
+    PanelControls: TPanel;
+    ButtonOk: TButton;
+    ButtonCancel: TButton;
+    PanelGradientHead: TPanel;
+    Image: TImage;
+    PanelGradientDelim: TPanel;
+    LabelApplicationTitle: TLabel;
+    PanelUserPass: TPanel;
+    LabelConnection: TLabel;
+    LabeledEditUser: TLabeledEdit;
+    LabeledEditPass: TLabeledEdit;
+    ComboBoxConnections: TComboBox;
+    ButtonConnection: TButton;
+    LabelApplication: TLabel;
+    ComboBoxApplications: TComboBox;
+    LabelVersion: TLabel;
+    procedure ButtonOkClick(Sender: TObject);
+    procedure ComboBoxConnectionsChange(Sender: TObject);
+    procedure ButtonConnectionClick(Sender: TObject);
+    procedure ComboBoxApplicationsChange(Sender: TObject);
+  private
+    FGradientHead: TBisGradient;
+    FGradientDelim: TBisGradient;
+    FOldHeight: Integer;
+    FConnection: TBisConnection;
+    FRetry: Integer;
+    FFirstRetry: Integer;
+    FConnectionEditing: Boolean;
+    FOnLogin: TBisLoginFormLoginEvent;
+    FConnectionVisible: Boolean;
+    FDefaultConnection: String;
+    FApplicationVisible: Boolean;
+    FOldLabelApplicationTop,FOldComboBoxApplicationsTop: Integer;
+    procedure RefreshConnections;
+    procedure RefreshApplications;
+    procedure SetRetry(Value: Integer);
+    procedure SetNewHeight;
+    procedure SetApplication;
+    procedure SetConnectionEditing(const Value: Boolean);
+    procedure SetConnectionVisible(const Value: Boolean);
+    procedure SetApplicationVisible(const Value: Boolean);
+
+  protected
+    property Retry: Integer read FRetry write SetRetry;
+    property Connection: TBisConnection read FConnection write FConnection;
+    property ConnectionEditing: Boolean read FConnectionEditing write SetConnectionEditing;
+    property ConnectionVisible: Boolean read FConnectionVisible write SetConnectionVisible;
+    property DefaultConnection: String read FDefaultConnection write FDefaultConnection;
+    property ApplicationVisible: Boolean read FApplicationVisible write SetApplicationVisible;
+
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+
+
+    property OnLogin: TBisLoginFormLoginEvent read FOnLogin write FOnLogin;
+  end;
+
+  TBisLoginResult=(lrConnectBegin,lrConnectSuccess,lrConnectFailed,
+                   lrLoginBegin,lrLoginSuccess,lrLoginFailed,
+                   lrLoadProfileBegin,lrLoadProfileSuccess,lrLoadProfileFailed,
+                   lrLoadInterfacesBegin,lrLoadInterfacesSuccess,lrLoadInterfacesFailed,
+                   lrApplicationRun);
+
+  TBisLoginFormIface=class(TBisFormIface)
+  private
+    FStatusIface: TBisLoginStatusFormIface;
+    FEnabled: Boolean;
+    FUserName: String;
+    FPassword: String;
+    FAutoConnect: Boolean;
+    FStatusVisible: Boolean;
+    FLoginRetry: Integer;
+    FDefaultConnection: String;
+    FSecondaryLogin: Boolean;
+    FConnectionEditing: Boolean;
+    FSendSystemInfo: Boolean;
+    FSleepTime: Integer;
+    FConnection: TBisConnection;
+
+    FSessionId: Variant;
+    FAccountId: Variant;
+    FFirmId: Variant;
+    FFirmSmallName: Variant;
+    FAccountUserName: String;
+
+    FGoodLoginResult: TBisLoginResult;
+    FCanceled: Boolean;
+
+    FSConnectionBegin: String;
+    FSConnectionSuccess: String;
+    FSConnectionFailed: String;
+    FSLoginBegin: String;
+    FSLoginSuccess: String;
+    FSLoginFailed: String;
+    FSLoadProfileBegin: String;
+    FSLoadProfileSuccess: String;
+    FSLoadProfileFailed: String;
+    FSLoadInterfacesBegin: String;
+    FSLoadInterfacesSuccess: String;
+    FSLoadInterfacesFailed: String;
+    FSApplicationRun: String;
+    FConnectionVisible: Boolean;
+    FInLogin: Boolean;
+    FSUnknownSession: String;
+    FApplicationVisible: Boolean;
+    FHeadColor: TColor;
+    FDelimColor: TColor;
+    FLoginDelayed: Boolean;
+    FSCheckFail: String;
+
+    procedure AutoLogin;
+    procedure FormLogin;
+    function GetLogged: Boolean;
+    function FormVisible: Boolean;
+    function LoginByConnection(AConnection: TBisConnection; AUserName, APassword: String; Counter: Integer;
+                               var ACanceled: Boolean; ASecondaryLogin: Boolean; WithConnect: Boolean): TBisLoginResult;
+    procedure StatusProgress(const Min, Max, Position: Integer; var Breaked: Boolean);
+    function FormOnLogin(AConnection: TBisConnection; AUserName, APassword: String;
+                         var Retry: Integer; WithConnect: Boolean; Counter: Integer): Boolean;
+    procedure SetLogged(const Value: Boolean);
+
+    property GoodLoginResult: TBisLoginResult read FGoodLoginResult;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure Init; override;
+    procedure Done; override;
+    function Login: Boolean;
+    procedure Logout;
+    function TryLogin(AUserName, APassword: String): Boolean;
+
+    property Enabled: Boolean read FEnabled;
+    property UserName: String read FUserName;
+    property Password: String read FPassword;
+    property AutoConnect: Boolean read FAutoConnect write FAutoConnect;
+    property StatusVisible: Boolean read FStatusVisible;
+    property LoginRetry: Integer read FLoginRetry;
+    property SecondaryLogin: Boolean read FSecondaryLogin;
+    property ConnectionEditing: Boolean read FConnectionEditing;
+    property ConnectionVisible: Boolean read FConnectionVisible;
+    property SendSystemInfo: Boolean read FSendSystemInfo;
+    property SleepTime: Integer read FSleepTime;
+    property DefaultConnection: String read FDefaultConnection;
+    property ApplicationVisible: Boolean read FApplicationVisible;
+    property Connection: TBisConnection read FConnection;
+    property SessionId: Variant read FSessionId;
+    property AccountId: Variant read FAccountId;
+    property AccountUserName: String read FAccountUserName;
+    property FirmId: Variant read FFirmId;
+    property FirmSmallName: Variant read FFirmSmallName;
+
+    property Logged: Boolean read GetLogged write SetLogged;
+    property Canceled: Boolean read FCanceled write FCanceled;
+    property StatusIface: TBisLoginStatusFormIface read FStatusIface;
+    property InLogin: Boolean read FInLogin write FInLogin;
+    property LoginDelayed: Boolean read FLoginDelayed write FLoginDelayed;
+
+  published
+
+    property SConnectionBegin: String read FSConnectionBegin write FSConnectionBegin;
+    property SConnectionSuccess: String read FSConnectionSuccess write FSConnectionSuccess;
+    property SConnectionFailed: String read FSConnectionFailed write FSConnectionFailed;
+    property SLoginBegin: String read FSLoginBegin write FSLoginBegin;
+    property SLoginSuccess: String read FSLoginSuccess write FSLoginSuccess;
+    property SLoginFailed: String read FSLoginFailed write FSLoginFailed;
+    property SLoadProfileBegin: String read FSLoadProfileBegin write FSLoadProfileBegin;
+    property SLoadProfileSuccess: String read FSLoadProfileSuccess write FSLoadProfileSuccess;
+    property SLoadProfileFailed: String read FSLoadProfileFailed write FSLoadProfileFailed;
+    property SLoadInterfacesBegin: String read FSLoadInterfacesBegin write FSLoadInterfacesBegin;
+    property SLoadInterfacesSuccess: String read FSLoadInterfacesSuccess write FSLoadInterfacesSuccess;
+    property SLoadInterfacesFailed: String read FSLoadInterfacesFailed write FSLoadInterfacesFailed;
+    property SApplicationRun: String read FSApplicationRun write FSApplicationRun;
+    property SUnknownSession: String read FSUnknownSession write FSUnknownSession;
+    property SCheckFail: String read FSCheckFail write FSCheckFail;  
+
+  end;
+
+var
+  BisLoginForm: TBisLoginForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisConnectionModules, BisUtils, BisNetUtils, BisCore, BisConfig,
+     BisConsts, BisDialogs, BisExceptions, BisConnectionEditFm, BisProgressEvents,
+     BisSystemInfo, BisDataSet, BisLogger, BisTasks;
+
+type
+  TBisLoginFormApplicationInfo=class(TObject)
+  private
+    FIcon: TIcon;
+  var
+    ID: String;
+    Name: String;
+    Title: String;
+    Description: String;
+    Version: String;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    property Icon: TIcon read FIcon;
+  end;
+
+{ TBisLoginFormApplicationInfo }
+
+constructor TBisLoginFormApplicationInfo.Create;
+begin
+  inherited Create;
+  FIcon:=TIcon.Create;
+end;
+
+destructor TBisLoginFormApplicationInfo.Destroy;
+begin
+  FIcon.Free;
+  inherited Destroy;
+end;
+
+
+{ TBisLoginFormIface }
+
+constructor TBisLoginFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ObjectName:='LoginIface';
+  FormClass:=nil;
+
+  FStatusIface:=TBisLoginStatusFormIface.Create(Self);
+  FLoginRetry:=3;
+  FSecondaryLogin:=true;
+  FConnectionEditing:=false;
+  FConnectionVisible:=true;
+  FSendSystemInfo:=false;
+  FApplicationVisible:=false;
+  FHeadColor:=$00FEDFCD;
+  FDelimColor:=$00FDB184;
+
+  FSleepTime:=LoginSleepTime;
+  FGoodLoginResult:=lrApplicationRun;
+
+  FSConnectionBegin:='Попытка #%d: Соединение [%s] начало подключение ...';
+  FSConnectionSuccess:='Соединение [%s] успешно подключено';
+  FSConnectionFailed:='Соединение [%s] прошло с ошибкой: %s';
+  FSLoginBegin:='Пользователь [%s] начал аутентификацию ...';
+  FSLoginSuccess:='Пользователь [%s] успешно аутентифицирован';
+  FSLoginFailed:='Пользователь [%s] не прошел аутентификацию: %s';
+  FSLoadProfileBegin:='Начата загрузка профиля ...';
+  FSLoadProfileSuccess:='Загрузка профиля прошла успешно';
+  FSLoadProfileFailed:='Загрузка профиля прошла с ошибкой: %s';
+  FSLoadInterfacesBegin:='Начата загрузка интерфейсов ...';
+  FSLoadInterfacesSuccess:='Загрузка интерфейсов прошла успешно';
+  FSLoadInterfacesFailed:='Загрузка интерфейсов прошла с ошибкой: %s';
+  FSApplicationRun:='Запуск приложения ...';
+  FSUnknownSession:='Неизвестная сессия.';
+  FSCheckFail:='Проверка сессии не прошла.';
+
+end;
+
+destructor TBisLoginFormIface.Destroy;
+begin
+  FConnection:=nil;
+  FStatusIface.Free;
+  inherited Destroy;
+end;
+
+procedure TBisLoginFormIface.Done;
+begin
+  inherited Done;
+  FConnection:=nil;
+
+end;
+
+function TBisLoginFormIface.GetLogged: Boolean;
+begin
+  Result:=Assigned(FConnection) and
+          FConnection.Connected and
+          not VarIsNull(SessionId) and
+          not FCanceled;
+end;
+
+procedure TBisLoginFormIface.SetLogged(const Value: Boolean);
+begin
+  if not Value then begin
+    FSessionId:=Null;
+  end;
+end;
+
+procedure TBisLoginFormIface.Init;
+
+  procedure LoadParams(Config: TBisConfig);
+  begin
+    if Assigned(Config) then begin
+      FEnabled:=Config.Read(ObjectName,SEnabled,FEnabled);
+      FUserName:=Config.Read(ObjectName,SUserName,FUserName);
+      FPassword:=Config.Read(ObjectName,SPassword,FPassword);
+      FAutoConnect:=Config.Read(ObjectName,SAutoConnect,FAutoConnect);
+      FStatusVisible:=Config.Read(ObjectName,SStatusVisible,FStatusVisible);
+      FLoginRetry:=Config.Read(ObjectName,SLoginRetry,FLoginRetry);
+      FDefaultConnection:=Config.Read(ObjectName,SDefaultConnection,FDefaultConnection);
+      FSecondaryLogin:=Config.Read(ObjectName,SSecondaryLogin,FSecondaryLogin);
+      FConnectionEditing:=Config.Read(ObjectName,SConnectionEditing,FConnectionEditing);
+      FConnectionVisible:=Config.Read(ObjectName,SConnectionVisible,FConnectionVisible);
+      FSendSystemInfo:=Config.Read(ObjectName,SSendSystemInfo,FSendSystemInfo);
+      FApplicationVisible:=Config.Read(ObjectName,SApplicationVisible,FApplicationVisible);
+      FHeadColor:=Config.Read(ObjectName,SHeadColor,FHeadColor);
+      FDelimColor:=Config.Read(ObjectName,SDelimColor,FDelimColor);
+    end;
+  end;
+
+var
+  Config: TBisConfig;
+begin
+  inherited Init;
+  FStatusIface.Init;
+  Config:=TBisConfig.Create(Self);
+  try
+    if Core.LocalBase.ReadToConfig(ObjectName,Config) then
+      LoadParams(Config);
+    LoadParams(Core.Config);
+  finally
+    Config.Free;
+  end;
+end;
+
+procedure TBisLoginFormIface.Logout;
+begin
+  try
+    if Assigned(FConnection) then begin
+      try
+        try
+          if not VarIsNull(FSessionId) then begin
+            FConnection.SaveProfile(FSessionId,Core.Profile);
+            Core.BeforeLogoutEvents.Call;
+            FConnection.Logout(FSessionId);
+          end;
+        finally
+          FConnection.Disconnect;
+        end;
+      except
+      end;
+    end;
+  finally
+    FSessionId:=Null;
+    FAccountId:=Null;
+    FFirmId:=Null;
+    FFirmSmallName:=Null;
+    FAccountUserName:='';
+  end;
+end;
+
+function TBisLoginFormIface.FormVisible: Boolean;
+begin
+  Result:=false;
+  if Assigned(LastForm) then
+    Result:=LastForm.Visible;
+end;
+
+function TBisLoginFormIface.LoginByConnection(AConnection: TBisConnection; AUserName, APassword: String; Counter: Integer;
+                                              var ACanceled: Boolean; ASecondaryLogin: Boolean; WithConnect: Boolean): TBisLoginResult;
+var
+  LocalSleepEnabled: Boolean;
+
+  function AutoLoginForm: Boolean;
+  var
+    AForm: TBisLoginForm;
+  begin
+    AForm:=TBisLoginForm.Create(nil);
+    try
+      AForm.LabeledEditUser.Text:=FUserName;
+      AForm.LabeledEditPass.Text:=FPassword;
+      AForm.Retry:=FLoginRetry;
+      AForm.ComboBoxConnections.Enabled:=false;
+      AForm.ComboBoxConnections.Color:=clBtnFace;
+      AForm.LabelConnection.Enabled:=false;
+      AForm.Connection:=FConnection;
+      AForm.ConnectionEditing:=FConnectionEditing;
+      AForm.ConnectionVisible:=FConnectionVisible;
+      AForm.DefaultConnection:=FDefaultConnection;
+      AForm.ApplicationVisible:=FApplicationVisible;
+      AForm.FGradientHead.EndColor:=FHeadColor;
+      AForm.FGradientDelim.EndColor:=FDelimColor;
+      AForm.OnLogin:=FormOnLogin;
+      AForm.Init;
+      Result:=AForm.ShowModal=mrOk;
+      if Result then begin
+        FUserName:=AForm.LabeledEditUser.Text;
+        FPassword:=AForm.LabeledEditPass.Text;
+      end;
+      ACanceled:=not Result and (AForm.Retry>0);
+      if FLoginDelayed and ACanceled then
+        Application.Terminate;
+    finally
+      AForm.Free;
+    end;
+  end;
+
+  procedure CheckOutPutStatus(LoginResult: TBisLoginResult; Error: String='');
+  var
+    FlagOut: Boolean;
+    NotBreaked: Boolean;
+  begin
+    FlagOut:=true;
+    Result:=LoginResult;
+    if not WithConnect then
+      if Result in [lrConnectBegin,lrConnectSuccess,lrConnectFailed] then
+        FlagOut:=false;
+
+    if FlagOut then begin
+      FStatusIface.Progress(Integer(lrConnectBegin),Integer(FGoodLoginResult),Integer(LoginResult),NotBreaked);
+      case Result of
+        lrConnectBegin: FStatusIface.Write(FormatEx(FSConnectionBegin,[Counter,AConnection.Caption]),16);
+        lrConnectSuccess: FStatusIface.Write(FormatEx(FSConnectionSuccess,[AConnection.Caption]),17);
+        lrConnectFailed: begin
+          FStatusIface.Progress(0,0,0,NotBreaked);
+          FStatusIface.Write(FormatEx(FSConnectionFailed,[AConnection.Caption,Error]),18);
+        end;
+        lrLoginBegin: FStatusIface.Write(FormatEx(FSLoginBegin,[AUserName]),19);
+        lrLoginSuccess: FStatusIface.Write(FormatEx(FSLoginSuccess,[AUserName]),20);
+        lrLoginFailed: begin
+          FStatusIface.Progress(0,0,0,NotBreaked);
+          FStatusIface.Write(FormatEx(FSLoginFailed,[AUserName,Error]),21);
+        end;
+        lrLoadProfileBegin: FStatusIface.Write(FSLoadProfileBegin,37);
+        lrLoadProfileSuccess: FStatusIface.Write(FSLoadProfileSuccess,38);
+        lrLoadProfileFailed: begin
+          FStatusIface.Progress(0,0,0,NotBreaked);
+          FStatusIface.Write(FormatEx(FSLoadProfileFailed,[Error]),39);
+        end;
+        lrLoadInterfacesBegin: FStatusIface.Write(FSLoadInterfacesBegin,34);
+        lrLoadInterfacesSuccess: FStatusIface.Write(FSLoadInterfacesSuccess,35);
+        lrLoadInterfacesFailed: begin
+          FStatusIface.Progress(0,0,0,NotBreaked);
+          FStatusIface.Write(FormatEx(FSLoadInterfacesFailed,[Error]),36);
+        end;
+        lrApplicationRun: begin
+          FStatusIface.Write(FSApplicationRun,0);
+          if FStatusVisible then begin
+            Sleep(FSleepTime*2);
+          end;
+        end;
+      end;
+    end;
+
+    if FStatusVisible and LocalSleepEnabled then
+      Sleep(FSleepTime);
+
+    Application.ProcessMessages;
+
+    if FStatusIface.Breaked then begin
+      ACanceled:=true;
+    end;
+  end;
+
+  procedure GetSystemInfo(Strings: TStringList);
+  var
+    Info: TBisSystemInfo;
+  begin
+    Info:=TBisSystemInfo.Create(nil);
+    try
+      try
+        Info.Report(Strings,[siCPU,siMemory,siOS,siDisk,siMachine,siNetwork,siDisplay,
+                             {siEngines,siDevices,}siAPM,siDirectX,{siMedia,}siProcesses,
+                             siModules,siPrinters,siSoftware,siStartup]);
+      except
+      end;
+    finally
+      Info.Free;
+    end;
+  end;
+
+  procedure LoadTasks(Tasks: TBisTasks);
+  var
+    Flag: Boolean;
+  begin
+    if Tasks.Enabled then begin
+      Flag:=Tasks.Running;
+      if Flag then Tasks.Stop;
+      try
+        Tasks.InternalClear;
+        AConnection.LoadTasks(FSessionId,Tasks);
+      finally
+        if Flag then Tasks.Start;
+      end;
+    end;
+  end;
+
+var
+  FProgressEvent: TBisProgressEvent;
+  LoginParams: TBisConnectionLoginParams;
+begin
+  FProgressEvent:=Core.ProgressEvents.Add(StatusProgress);
+  LoginParams:=TBisConnectionLoginParams.Create;
+  try
+    FConnection:=AConnection;
+    LocalSleepEnabled:=not FSendSystemInfo;
+    CheckOutPutStatus(lrConnectBegin); if ACanceled then exit;
+    try
+      LoginParams.SessionParams.Clear;
+      if FSendSystemInfo then begin
+//        GetSystemInfo(LoginParams.SessionParams);
+      end;
+      LoginParams.IPList.Clear;
+      GetIPList(LoginParams.IPList);
+      LoginParams.Version:=Core.Application.Version;
+      AConnection.Connect;
+      LoginParams.SessionParams.Write(ObjectName,SConnection,AConnection.Caption);
+      if AConnection.Connected then begin
+        LocalSleepEnabled:=true;
+        CheckOutPutStatus(lrConnectSuccess); if ACanceled then exit;
+        try
+          CheckOutPutStatus(lrLoginBegin);  if ACanceled then exit;
+          FSessionId:=AConnection.Login(Core.Application.ID,AUserName,APassword,LoginParams);
+          if not VarIsNull(FSessionId) then begin
+
+            FAccountId:=LoginParams.AccountId;
+            FAccountUserName:=AUserName;
+            FFirmId:=LoginParams.FirmId;
+            FFirmSmallName:=LoginParams.FirmSmallName;
+
+            Core.AfterLoginEvents.Call;
+            CheckOutPutStatus(lrLoginSuccess); if ACanceled then exit;
+            try
+              CheckOutPutStatus(lrLoadProfileBegin); if ACanceled then exit;
+              AConnection.LoadProfile(FSessionId,Core.Profile);
+              CheckOutPutStatus(lrLoadProfileSuccess); if ACanceled then exit;
+              try
+                CheckOutPutStatus(lrLoadInterfacesBegin); if ACanceled then exit;
+                AConnection.LoadInterfaces(FSessionId,Core.Interfaces);
+
+                LoadTasks(Core.Tasks);
+
+                CheckOutPutStatus(lrLoadInterfacesSuccess); if ACanceled then exit;
+                CheckOutPutStatus(lrApplicationRun); if ACanceled then exit;
+              except
+                on E: Exception do begin
+                  if not FStatusVisible and FormVisible then
+                    ShowError(E.Message);
+                  CheckOutPutStatus(lrLoadInterfacesFailed,E.Message); if ACanceled then exit;
+                end;
+              end;
+            except
+              on E: Exception do begin
+                if not FStatusVisible and FormVisible then
+                  ShowError(E.Message);
+                CheckOutPutStatus(lrLoadProfileFailed,E.Message); if ACanceled then exit;
+              end;
+            end;
+          end;
+        except
+          on E: Exception do begin
+            if not FStatusVisible and FormVisible then
+              ShowError(E.Message);
+            CheckOutPutStatus(lrLoginFailed,E.Message); if ACanceled then exit;
+            if ASecondaryLogin then begin
+              if AutoLoginForm then
+                Result:=FGoodLoginResult;
+            end;
+          end;
+        end;
+      end;
+    except
+      on E: Exception do begin
+        if not FStatusVisible and FormVisible then
+          ShowError(E.Message);
+        CheckOutPutStatus(lrConnectFailed,E.Message); if ACanceled then exit;
+      end;
+    end;
+  finally
+    LoginParams.Free;
+    Core.ProgressEvents.Remove(FProgressEvent)
+  end;
+end;
+
+procedure TBisLoginFormIface.StatusProgress(const Min, Max, Position: Integer; var Breaked: Boolean);
+begin
+  if Assigned(FStatusIface) then
+    FStatusIface.Progress(Min,Max,Position,Breaked);
+end;
+
+procedure TBisLoginFormIface.AutoLogin;
+
+  function AutoLoginRetry(AConnection: TBisConnection; var ACanceled: Boolean): Boolean;
+  var
+    i: Integer;
+  begin
+    Result:=false;
+    for i:=1 to FLoginRetry do begin
+      Result:=LoginByConnection(AConnection,FUserName,FPassword,i,ACanceled,FSecondaryLogin,true)=FGoodLoginResult;
+      if ACanceled then
+        Result:=true;
+      if Result then
+        exit;
+    end;
+  end;
+
+var
+  i,j: Integer;
+  AModule: TBisConnectionModule;
+  AConnection: TBisConnection;
+  LastConnection: TBisConnection;
+  Flag: Boolean;
+begin
+  Flag:=false;
+  LastConnection:=nil;
+  for i:=0 to Core.ConnectionModules.Count-1 do begin
+    AModule:=Core.ConnectionModules.Items[i];
+    if AModule.Enabled then begin
+      for j:=0 to AModule.Connections.Count-1 do begin
+        AConnection:=AModule.Connections.Items[j];
+        if AConnection.Enabled and
+          (AnsiSameText(AConnection.Caption,FDefaultConnection) or (Trim(FDefaultConnection)='')) then begin
+          FCanceled:=false;
+          if AutoLoginRetry(AConnection,FCanceled) then begin
+            exit;
+          end else begin
+            Flag:=true;
+            LastConnection:=AConnection;
+          end;
+        end;
+      end;
+    end;
+  end;
+
+  if Flag then begin
+    for i:=0 to Core.ConnectionModules.Count-1 do begin
+      AModule:=Core.ConnectionModules.Items[i];
+      if AModule.Enabled then begin
+        for j:=0 to AModule.Connections.Count-1 do begin
+          AConnection:=AModule.Connections.Items[j];
+          if AConnection.Enabled and (AConnection<>LastConnection) then begin
+            FCanceled:=false;
+            if AutoLoginRetry(AConnection,FCanceled) then begin
+              exit;
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisLoginFormIface.FormLogin;
+var
+  AForm: TBisLoginForm;
+  Old: Boolean;
+begin
+  AForm:=TBisLoginForm.Create(nil);
+  try
+    Forms.Add(AForm);
+    AForm.LabeledEditUser.Text:=FUserName;
+    AForm.LabeledEditPass.Text:=FPassword;
+    AForm.Connection:=FConnection;
+    AForm.OnLogin:=FormOnLogin;
+    AForm.ConnectionEditing:=FConnectionEditing;
+    AForm.ConnectionVisible:=FConnectionVisible;
+    AForm.DefaultConnection:=FDefaultConnection;
+    AForm.ApplicationVisible:=FApplicationVisible;
+    AForm.FGradientHead.EndColor:=FHeadColor;
+    AForm.FGradientDelim.EndColor:=FDelimColor;
+    AForm.Retry:=FLoginRetry;
+    AForm.Init;
+    FCanceled:=false;
+    if AForm.ShowModal=mrOk then begin
+      FUserName:=AForm.LabeledEditUser.Text;
+      FPassword:=AForm.LabeledEditPass.Text;
+    end else begin
+      FCanceled:=true;
+      if FLoginDelayed then
+        Application.Terminate;
+    end;
+  finally
+    Old:=Forms.OwnsObjects;
+    Forms.OwnsObjects:=false;
+    Forms.Remove(AForm);
+    Forms.OwnsObjects:=Old;
+    AForm.Free;
+  end;
+end;
+
+function TBisLoginFormIface.FormOnLogin(AConnection: TBisConnection; AUserName, APassword: String;
+                                        var Retry: Integer; WithConnect: Boolean; Counter: Integer): Boolean;
+var
+  ACanceled: Boolean;
+begin
+  Result:=false;
+  if FStatusVisible then begin
+    AConnection.Disconnect;
+    FStatusIface.Show;
+    FStatusIface.ModeStop;
+  end;
+  ACanceled:=false;
+  if LoginByConnection(AConnection,AUserName,APassword,Counter,ACanceled,False,WithConnect)=GoodLoginResult then begin
+    if not ACanceled then begin
+      if WithConnect then begin
+        FStatusIface.Hide;
+      end;
+      Result:=true;
+    end;
+  end else begin
+    Dec(Retry);
+    if (Retry>=0) and WithConnect then begin
+      FStatusIface.ModeClose;
+    end;
+  end;
+  FCanceled:=ACanceled;
+end;
+
+function TBisLoginFormIface.Login: Boolean;
+begin
+  FInLogin:=true;
+  try
+    Result:=false;
+    if not Logged then begin
+      Logout;
+      if FEnabled then begin
+        if FAutoConnect and (Trim(FUserName)<>'') then begin
+          try
+            if FStatusVisible then
+              FStatusIface.Show;
+            AutoLogin;
+          finally
+            if FStatusVisible then
+              FStatusIface.Hide;
+          end;
+        end else FormLogin;
+        Result:=Logged;
+      end;
+    end;
+  finally
+    FInLogin:=false;
+  end;
+end;
+
+function TBisLoginFormIface.TryLogin(AUserName, APassword: String): Boolean;
+var
+  OldUserName: String;
+  OldPassword: String;
+begin
+  OldUserName:=FUserName;
+  OldPassword:=FPassword;
+
+  FUserName:=AUserName;
+  FPassword:=APassword;
+
+  Result:=Login;
+  if not Result then begin
+    FUserName:=OldUserName;
+    FPassword:=OldPassword;
+  end;
+end;
+
+{ TBisLoginForm }
+
+constructor TBisLoginForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  ButtonOk.Enabled:=false;
+  ButtonConnection.Enabled:=false;
+  LabeledEditPass.Password:=true;
+
+  PanelGradientHead.Color:=ColorSelected;
+
+  FGradientHead:=TBisGradient.Create(nil);
+  FGradientHead.Parent:=PanelGradientHead;
+  FGradientHead.Align:=alClient;
+//  FGradientHead.Style:=gsHorizontal;
+  FGradientHead.Style:=gsVertical;
+  FGradientHead.BeginColor:=clWhite;
+  FGradientHead.EndColor:=PanelGradientHead.Color;
+
+  FGradientDelim:=TBisGradient.Create(nil);
+  FGradientDelim.Parent:=PanelGradientDelim;
+  FGradientDelim.Align:=alClient;
+  FGradientDelim.Style:=gsVertCenter;
+  FGradientDelim.BeginColor:=clWhite;
+  FGradientDelim.EndColor:=PanelGradientDelim.Color;
+
+  LabelVersion.Transparent:=false;
+  Image.BringToFront;
+  LabelApplicationTitle.BringToFront;
+  LabelVersion.BringToFront;
+  LabelVersion.Transparent:=false;
+
+  FOldHeight:=Height;
+  FOldLabelApplicationTop:=LabelApplication.Top;
+  FOldComboBoxApplicationsTop:=ComboBoxApplications.Top;
+
+  SetApplication;
+end;
+
+destructor TBisLoginForm.Destroy;
+begin
+  FGradientDelim.Free;
+  FGradientHead.Free;
+  ClearStrings(ComboBoxApplications.Items);
+  inherited Destroy;
+end;
+
+procedure TBisLoginForm.Init;
+begin
+  inherited Init;
+  RefreshConnections;
+  RefreshApplications;
+end;
+
+procedure TBisLoginForm.SetApplication;
+begin
+  if Assigned(Core) then begin
+    Image.Picture.Icon.Assign(Core.Application.Icon);
+    LabelApplicationTitle.Caption:=Core.Application.Title;
+    LabelVersion.Caption:=Core.Application.Version;
+  end;
+end;
+
+procedure TBisLoginForm.SetRetry(Value: Integer);
+begin
+  if FRetry<>Value then begin
+    FRetry:=Value;
+    FFirstRetry:=Value;
+  end;
+end;
+
+procedure TBisLoginForm.RefreshConnections;
+var
+  i: Integer;
+  j: Integer;
+  Index, IndexConnection: Integer;
+  Module: TBisConnectionModule;
+  AConnection: TBisConnection;
+begin
+  ComboBoxConnections.Items.BeginUpdate;
+  try
+    ComboBoxConnections.Items.Clear;
+    IndexConnection:=-1;
+    for i:=0 to Core.ConnectionModules.Count-1 do begin
+      Module:=Core.ConnectionModules.Items[i];
+      if Module.Enabled then begin
+        for j:=0 to Module.Connections.Count-1 do begin
+          AConnection:=Module.Connections.Items[j];
+          if AConnection.Enabled then begin
+            Index:=ComboBoxConnections.Items.AddObject(AConnection.Caption,AConnection);
+            if (AConnection=FConnection) then
+              IndexConnection:=Index
+            else if AnsiSameText(AConnection.Caption,FDefaultConnection) then
+              IndexConnection:=Index;
+          end;
+        end;
+      end;
+    end;
+    if ComboBoxConnections.Items.Count>0 then begin
+      if IndexConnection<>-1 then begin
+        ComboBoxConnections.ItemIndex:=IndexConnection;
+      end else begin
+        ComboBoxConnections.ItemIndex:=0;
+      end;
+      ComboBoxConnectionsChange(nil);
+    end;
+  finally
+    ComboBoxConnections.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisLoginForm.RefreshApplications;
+var
+  DS: TBisDataSet;
+  Stream: TMemoryStream;
+  Obj: TBisLoginFormApplicationInfo;
+  Index: Integer;
+  IndexApplication: Integer;
+begin
+  ClearStrings(ComboBoxApplications.Items);
+  ComboBoxApplications.Items.BeginUpdate;
+  DS:=TBisDataSet.Create(nil);
+  Stream:=TMemoryStream.Create;
+  try
+    if Core.LocalBase.ReadParam(SParamApplications,Stream) then begin
+      DS.LoadFromStream(Stream);
+      DS.Open;
+      if DS.Active and not DS.Empty then begin
+        IndexApplication:=-1;
+        DS.First;
+        while not DS.Eof do begin
+          Obj:=TBisLoginFormApplicationInfo.Create;
+          Obj.ID:=DS.FieldByName('APPLICATION_ID').AsString;
+          Obj.Name:=DS.FieldByName('NAME').AsString;
+          Obj.Title:=DS.FieldByName('TITLE').AsString;
+          Obj.Description:=DS.FieldByName('DESCRIPTION').AsString;
+          Obj.Version:=DS.FieldByName('VERSION').AsString;
+          Stream.Clear;
+          TBlobField(DS.FieldByName('ICON')).SaveToStream(Stream);
+          if Stream.Size>0 then begin
+            try
+              Stream.Position:=0;
+              Obj.Icon.LoadFromStream(Stream);
+            except
+              On E: Exception do
+                LoggerWrite(E.Message,ltError);
+            end;
+          end;
+          Index:=ComboBoxApplications.Items.AddObject(Obj.Title,Obj);
+          if AnsiSameText(Obj.ID,Core.Application.ID) then begin
+            IndexApplication:=Index;
+            Obj.Title:=Core.Application.Title;
+            Obj.Description:=Core.Application.Description;
+            Obj.Version:=Core.Application.Version;
+            Obj.Icon.Assign(Core.Application.Icon);
+            ComboBoxApplications.Items.Strings[Index]:=Obj.Title;
+          end;
+          DS.Next;
+        end;
+        ComboBoxApplications.ItemIndex:=IndexApplication;
+      end;
+    end;
+  finally
+    Stream.Free;
+    DS.Free;
+    ComboBoxApplications.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisLoginForm.SetConnectionEditing(const Value: Boolean);
+begin
+  FConnectionEditing:=Value;
+  ComboBoxConnectionsChange(nil);
+end;
+
+procedure TBisLoginForm.SetNewHeight;
+var
+  H: Integer;
+begin
+  H:=210;
+  if FConnectionVisible then
+    H:=H+25;
+  if FApplicationVisible then
+    H:=H+25;
+
+  Constraints.MinHeight:=H;
+  Height:=Constraints.MinHeight;
+end;
+
+procedure TBisLoginForm.SetConnectionVisible(const Value: Boolean);
+begin
+  FConnectionVisible:=Value;
+  LabelConnection.Visible:=Value;
+  ComboBoxConnections.Visible:=Value;
+  ButtonConnection.Visible:=Value;
+  if ButtonConnection.Visible then begin
+    ComboBoxConnections.Width:=LabeledEditPass.Width-ButtonConnection.Width-5;
+  end else ComboBoxConnections.Width:=LabeledEditPass.Width;
+  SetNewHeight;
+end;
+
+procedure TBisLoginForm.SetApplicationVisible(const Value: Boolean);
+begin
+  FApplicationVisible:=Value;
+  LabelApplication.Visible:=Value;
+  ComboBoxApplications.Visible:=Value;
+  SetNewHeight;
+  if not FConnectionVisible then begin
+    LabelApplication.Top:=LabelConnection.Top;
+    ComboBoxApplications.Top:=ComboBoxConnections.Top;
+  end else begin
+    LabelApplication.Top:=FOldLabelApplicationTop;
+    ComboBoxApplications.Top:=FOldComboBoxApplicationsTop;
+  end;
+end;
+
+procedure TBisLoginForm.ButtonOkClick(Sender: TObject);
+var
+  Index: Integer;
+  OldCursor: TCursor;
+  OldEnabled: Boolean;
+begin
+  OldCursor:=Screen.Cursor;
+  OldEnabled:=ButtonOk.Enabled;
+  ButtonOk.Enabled:=false;
+  EnableControl(PanelUserPass,false);
+  Screen.Cursor:=crHourGlass;
+  try
+    if FRetry>0 then begin
+      Index:=ComboBoxConnections.ItemIndex;
+      if Index<>-1 then begin
+        FConnection:=TBisConnection(ComboBoxConnections.Items.Objects[Index]);
+        if Assigned(FOnLogin) then begin
+          if FOnLogin(FConnection,LabeledEditUser.Text,LabeledEditPass.Text,FRetry,LabelConnection.Enabled,FFirstRetry-FRetry+1) then begin
+            Update;
+            Sleep(LoginSleepTime);
+            ModalResult:=mrOk;
+          end else begin
+            BringToFront;
+            if FRetry<=0 then
+              ModalResult:=mrCancel;
+          end;
+        end;
+      end;
+    end else
+      ModalResult:=mrCancel;
+  finally
+    EnableControl(PanelUserPass,true);
+    ButtonOk.Enabled:=OldEnabled;
+    Screen.Cursor:=OldCursor;
+  end;
+end;
+
+procedure TBisLoginForm.ComboBoxConnectionsChange(Sender: TObject);
+begin
+  ButtonOk.Enabled:=ComboBoxConnections.ItemIndex<>-1;
+  ButtonConnection.Enabled:=ButtonOk.Enabled and FConnectionEditing;
+  ButtonConnection.Visible:=FConnectionEditing and FConnectionVisible;
+  if ButtonConnection.Visible then begin
+    ComboBoxConnections.Width:=LabeledEditPass.Width-ButtonConnection.Width-5;
+  end else ComboBoxConnections.Width:=LabeledEditPass.Width;
+end;
+
+procedure TBisLoginForm.ComboBoxApplicationsChange(Sender: TObject);
+var
+  Index: Integer;
+  Obj: TBisLoginFormApplicationInfo;
+begin
+  Index:=ComboBoxApplications.ItemIndex;
+  if Index<>-1 then begin
+    Obj:=TBisLoginFormApplicationInfo(ComboBoxApplications.Items.Objects[Index]);
+    if Assigned(Obj) then begin
+      Core.Application.ID:=Obj.ID;
+      Core.Application.Title:=Obj.Title;
+      Core.Application.Description:=Obj.Description;
+      Core.Application.Version:=Obj.Version;
+      Core.Application.Icon:=Obj.Icon;
+      SetApplication;
+    end;
+  end;
+end;
+
+procedure TBisLoginForm.ButtonConnectionClick(Sender: TObject);
+var
+  Form: TBisConnectionEditForm;
+  AConnection: TBisConnection;
+begin
+  if ComboBoxConnections.ItemIndex<>-1 then begin
+    AConnection:=TBisConnection(ComboBoxConnections.Items.Objects[ComboBoxConnections.ItemIndex]);
+    if Assigned(AConnection) then begin
+      Form:=TBisConnectionEditForm.Create(nil);
+      try
+        Form.Init; 
+        Form.Connection:=AConnection;
+        Form.DisableConnections;
+        if Form.ShowModal=mrOk then begin
+        end;
+      finally
+        Form.Free;
+      end;
+    end;
+  end;
+end;
+
+
+end.

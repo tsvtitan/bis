@@ -1,0 +1,165 @@
+/* Создание процедуры постановки на стоянку с открытием смены */
+
+CREATE PROCEDURE /*PREFIX*/CODE_PARK_IN
+(
+  ACCOUNT_ID VARCHAR(32),
+  IN_MESSAGE_ID VARCHAR(32)
+)
+AS
+  DECLARE CONTACT VARCHAR(100);
+  DECLARE SENDER_ID VARCHAR(32);
+  DECLARE CODE VARCHAR(100);
+  DECLARE S VARCHAR(1000);
+  DECLARE CNT INTEGER;
+  DECLARE SUM_CHARGE NUMERIC(15,2);
+  DECLARE SUM_RECEIPT NUMERIC(15,2);
+  DECLARE BALANCE NUMERIC(15,2);
+  DECLARE MIN_BALANCE NUMERIC(15,2);
+  DECLARE D TIMESTAMP;
+  DECLARE PARK_ID VARCHAR(32);
+  DECLARE PARK_NAME VARCHAR(100);
+  DECLARE PARK_DESCRIPTION VARCHAR(250);
+  DECLARE PRIORITY INTEGER;
+BEGIN
+  SELECT IM.CONTACT, IM.SENDER_ID, CM.CODE
+    FROM /*PREFIX*/IN_MESSAGES IM
+    LEFT JOIN/*PREFIX*/CODE_MESSAGES CM ON CM.CODE_MESSAGE_ID=IM.CODE_MESSAGE_ID
+   WHERE IN_MESSAGE_ID=:IN_MESSAGE_ID
+    INTO :CONTACT, :SENDER_ID, :CODE;
+
+  IF ((CONTACT IS NOT NULL) AND (SENDER_ID IS NOT NULL) AND (CODE IS NOT NULL)) THEN BEGIN
+
+    SELECT COUNT(*)
+      FROM /*PREFIX*/DRIVERS D
+      JOIN /*PREFIX*/ ACCOUNTS A ON A.ACCOUNT_ID=D.DRIVER_ID
+     WHERE D.DRIVER_ID=:SENDER_ID
+       AND A.LOCKED<>1
+      INTO :CNT;
+
+    IF (CNT>0) THEN BEGIN
+
+      SELECT (CASE WHEN SUM(SUM_CHARGE) IS NULL THEN 0.0 ELSE SUM(SUM_CHARGE) END)
+        FROM /*PREFIX*/CHARGES
+       WHERE ACCOUNT_ID=:SENDER_ID
+        INTO :SUM_CHARGE;
+
+      SELECT (CASE WHEN SUM(SUM_RECEIPT) IS NULL THEN 0.0 ELSE SUM(SUM_RECEIPT) END)
+        FROM /*PREFIX*/RECEIPTS
+       WHERE ACCOUNT_ID=:SENDER_ID
+        INTO :SUM_RECEIPT;
+
+      BALANCE=SUM_RECEIPT-SUM_CHARGE;
+
+      SELECT MIN_BALANCE
+        FROM /*PREFIX*/DRIVERS
+       WHERE DRIVER_ID=:SENDER_ID
+        INTO :MIN_BALANCE;
+
+      IF ((MIN_BALANCE IS NULL) OR ((MIN_BALANCE IS NOT NULL) AND (BALANCE>MIN_BALANCE))) THEN BEGIN
+
+        SELECT COUNT(*)
+          FROM /*PREFIX*/ORDERS
+         WHERE DRIVER_ID=:SENDER_ID
+           AND PARENT_ID IS NULL
+           AND DATE_HISTORY IS NULL
+           AND FINISHED<>1
+          INTO :CNT;
+
+        IF (CNT>0) THEN BEGIN
+
+          S='Вы не можете встать на стоянку во время выполнения заказа';
+
+          INSERT INTO /*PREFIX*/OUT_MESSAGES (OUT_MESSAGE_ID,CREATOR_ID,RECIPIENT_ID,DATE_CREATE,
+                                              TEXT_OUT,DATE_OUT,TYPE_MESSAGE,CONTACT,DESCRIPTION,PRIORITY,LOCKED)
+                                       VALUES (/*PREFIX*/GET_UNIQUE_ID(),:ACCOUNT_ID,:SENDER_ID,CURRENT_TIMESTAMP,
+                                               :S,NULL,0,:CONTACT,NULL,2,NULL);
+
+        END ELSE BEGIN
+
+          UPDATE /*PREFIX*/PARK_STATES
+             SET DATE_OUT=CURRENT_TIMESTAMP
+           WHERE DRIVER_ID=:SENDER_ID
+             AND DATE_OUT IS NULL;
+
+          SELECT COUNT(*)
+            FROM /*PREFIX*/SHIFTS
+           WHERE ACCOUNT_ID=:SENDER_ID
+             AND DATE_END IS NULL
+            INTO :CNT;
+
+          D=CURRENT_TIMESTAMP;
+
+          IF (CNT=0) THEN BEGIN
+
+            INSERT INTO /*PREFIX*/SHIFTS (SHIFT_ID,ACCOUNT_ID,DATE_BEGIN,DATE_END)
+                                  VALUES (GET_UNIQUE_ID(),:SENDER_ID,:D,NULL);
+
+          END
+
+          PARK_ID=NULL;
+          PARK_NAME=NULL;
+
+          FOR SELECT P.PARK_ID, P.NAME, P.DESCRIPTION
+                FROM /*PREFIX*/PARKS P
+               WHERE (((P.MAX_COUNT IS NOT NULL) AND
+                       (P.MAX_COUNT> (SELECT COUNT(*)
+                                        FROM /*PREFIX*/PARK_STATES
+                                       WHERE DATE_OUT IS NULL
+                                         AND PARK_ID=P.PARK_ID)))
+                      OR (P.MAX_COUNT IS NULL))
+                 AND P.NAME=:CODE
+                INTO :PARK_ID, :PARK_NAME, :PARK_DESCRIPTION  DO BEGIN
+            BREAK;
+          END
+
+          IF (PARK_ID IS NOT NULL) THEN BEGIN
+
+            INSERT INTO /*PREFIX*/PARK_STATES (PARK_STATE_ID,PARK_ID,DRIVER_ID,DATE_IN,DATE_OUT)
+                                       VALUES (GET_UNIQUE_ID(),:PARK_ID,:SENDER_ID,:D,NULL);
+
+            SELECT COUNT(*)
+              FROM /*PREFIX*/ PARK_STATES
+             WHERE PARK_ID=:PARK_ID
+               AND DATE_OUT IS NULL
+              INTO PRIORITY;
+
+            S='Вы поставлены '||CAST(PRIORITY AS VARCHAR(10))||' на стоянку '||PARK_NAME||' ('||PARK_DESCRIPTION||')';
+
+            INSERT INTO /*PREFIX*/OUT_MESSAGES (OUT_MESSAGE_ID,CREATOR_ID,RECIPIENT_ID,DATE_CREATE,
+                                                TEXT_OUT,DATE_OUT,TYPE_MESSAGE,CONTACT,DESCRIPTION,PRIORITY,LOCKED)
+                                        VALUES (/*PREFIX*/GET_UNIQUE_ID(),:ACCOUNT_ID,:SENDER_ID,CURRENT_TIMESTAMP,
+                                                :S,NULL,0,:CONTACT,NULL,1,NULL);
+          END ELSE BEGIN
+
+            S='Нет свободных стоянок';
+
+            INSERT INTO /*PREFIX*/OUT_MESSAGES (OUT_MESSAGE_ID,CREATOR_ID,RECIPIENT_ID,DATE_CREATE,
+                                                TEXT_OUT,DATE_OUT,TYPE_MESSAGE,CONTACT,DESCRIPTION,PRIORITY,LOCKED)
+                                        VALUES (/*PREFIX*/GET_UNIQUE_ID(),:ACCOUNT_ID,:SENDER_ID,CURRENT_TIMESTAMP,
+                                                :S,NULL,0,:CONTACT,NULL,1,NULL);
+
+          END
+
+        END
+
+      END ELSE BEGIN
+
+        S='Ваш баланс меньше или равен минимальному';
+
+        INSERT INTO /*PREFIX*/OUT_MESSAGES (OUT_MESSAGE_ID,CREATOR_ID,RECIPIENT_ID,DATE_CREATE,
+                                            TEXT_OUT,DATE_OUT,TYPE_MESSAGE,CONTACT,DESCRIPTION,PRIORITY,LOCKED)
+                                    VALUES (/*PREFIX*/GET_UNIQUE_ID(),:ACCOUNT_ID,:SENDER_ID,CURRENT_TIMESTAMP,
+                                            :S,NULL,0,:CONTACT,NULL,1,NULL);
+
+      END
+
+    END
+
+  END
+END
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

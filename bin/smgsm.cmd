@@ -1,0 +1,1 @@
+taxi.exe /config smgsm.ini /noupdate

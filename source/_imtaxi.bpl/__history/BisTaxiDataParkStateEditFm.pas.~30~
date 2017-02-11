@@ -1,0 +1,139 @@
+unit BisTaxiDataParkStateEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, ImgList,
+  BisDataEditFm, BisParam, BisControls;
+
+type
+  TBisTaxiDataParkStateEditForm = class(TBisDataEditForm)
+    LabelDriver: TLabel;
+    EditDriver: TEdit;
+    LabelDateIn: TLabel;
+    DateTimePickerIn: TDateTimePicker;
+    DateTimePickerInTime: TDateTimePicker;
+    ButtonDriver: TButton;
+    LabelDateOut: TLabel;
+    DateTimePickerOut: TDateTimePicker;
+    DateTimePickerOutTime: TDateTimePicker;
+    EditPark: TEdit;
+    ButtonPark: TButton;
+    LabelPark: TLabel;
+  private
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure BeforeShow; override;
+    procedure ChangeParam(Param: TBisParam); override;
+
+  end;
+
+  TBisTaxiDataParkStateEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataParkStateInsertFormIface=class(TBisTaxiDataParkStateEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataParkStateUpdateFormIface=class(TBisTaxiDataParkStateEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataParkStateDeleteFormIface=class(TBisTaxiDataParkStateEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataParkStateEditForm: TBisTaxiDataParkStateEditForm;
+
+implementation
+
+uses BisUtils, BisTaxiConsts, BisCore, BisFilterGroups, BisTaxiDataDriversFm, BisParamEditDataSelect;
+
+{$R *.dfm}
+
+{ TBisTaxiDataParkStateEditFormIface }
+
+constructor TBisTaxiDataParkStateEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataParkStateEditForm;
+  with Params do begin
+    AddKey('PARK_STATE_ID').Older('OLD_PARK_STATE_ID');
+    AddInvisible('DRIVER_ID');
+    AddInvisible('CAR_CALLSIGN');
+    AddEditDataSelect('PARK_ID','EditPark','LabelPark','ButtonDriver',
+                       TBisTaxiDataDriversFormIface,'DRIVER_NAME',true,false,'','USER_NAME');
+    AddEditDataSelect('DRIVER_ID','EditDriver','LabelDriver','ButtonDriver',
+                       TBisTaxiDataDriversFormIface,'DRIVER_NAME',true,false,'','USER_NAME');
+    AddEditDateTime('DATE_IN','DateTimePickerIn','DateTimePickerInTime','LabelDateIn',true).FilterCondition:=fcEqualGreater;
+    AddEditDateTime('DATE_OUT','DateTimePickerOut','DateTimePickerOutTime','LabelDateOut').FilterCondition:=fcEqualLess;
+  end;
+end;
+
+{ TBisTaxiDataParkStateInsertFormIface }
+
+constructor TBisTaxiDataParkStateInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_PARK_STATE';
+  Caption:='Создать постановку';
+end;
+
+{ TBisTaxiDataParkStateUpdateFormIface }
+
+constructor TBisTaxiDataParkStateUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_PARK_STATE';
+  Caption:='Изменить постановку';
+end;
+
+{ TBisTaxiDataParkStateDeleteFormIface }
+
+constructor TBisTaxiDataParkStateDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_PARK_STATE';
+  Caption:='Удалить постановку';
+end;
+
+{ TBisTaxiDataParkStateEditForm }
+
+constructor TBisTaxiDataParkStateEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+procedure TBisTaxiDataParkStateEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  if Mode in [emInsert,emDuplicate] then begin
+    with Provider.Params do begin
+      Find('DATE_IN').SetNewValue(Core.ServerDate);
+    end;
+  end;
+  UpdateButtonState;
+end;
+
+procedure TBisTaxiDataParkStateEditForm.ChangeParam(Param: TBisParam);
+var
+  DriverIdParam: TBisParamEditDataSelect;
+begin
+  inherited ChangeParam(Param);
+  if AnsiSameText(Param.ParamName,'DRIVER_NAME') and not Param.Empty then begin
+    DriverIdParam:=TBisParamEditDataSelect(Provider.Params.ParamByName('DRIVER_ID'));
+    if DriverIdParam.Empty then
+      Provider.Params.ParamByName('CAR_CALLSIGN').SetNewValue(Null)
+    else
+      Provider.Params.ParamByName('CAR_CALLSIGN').SetNewValue(DriverIdParam.Values.GetVariant('CAR_CALLSIGN'));
+  end;
+end;
+
+end.

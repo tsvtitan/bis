@@ -1,0 +1,144 @@
+unit BisTaxiDataClientsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList, DB,
+  BisDataFrm, BisDataTreeFm, BisDataTreeFrm, BisDataGridFm;
+
+type
+  TBisTaxiDataClientsFrame=class(TBisDataTreeFrame)
+  public
+    procedure FillProvider;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure OpenRecords; override;
+  end;
+
+  TBisTaxiDataClientsForm = class(TBisDataTreeForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataClientsFormIface=class(TBisDataTreeFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataClientsForm: TBisTaxiDataClientsForm;
+
+implementation
+
+uses BisProvider;
+
+//BisTaxiDataClientEditFm;
+
+{$R *.dfm}
+
+{ TBisTaxiDataClientsFrame }
+
+constructor TBisTaxiDataClientsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+{  FilterClass:=TBisTaxiDataClientEditFormIface;
+  InsertClasses.Add(TBisTaxiDataClientInsertFormIface);
+  InsertClasses.Add(TBisTaxiDataClientInsertChildFormIface);
+  UpdateClass:=TBisTaxiDataClientUpdateFormIface;
+  DeleteClass:=TBisTaxiDataClientDeleteFormIface;}
+
+  with Provider.FieldDefs do begin
+    Add('ID',ftString,32);
+    Add('PARENT_ID',ftString,32);
+    Add('NAME',ftString,100);
+    Add('PARENT_NAME',ftString,100);
+    Add('DESCRIPTION',ftString,250);
+    Add('PRIORITY',ftInteger);
+    Add('TYPE',ftInteger);
+  end;
+
+  with Provider.FieldNames do begin
+    AddKey('ID');
+    AddParentKey('PARENT_ID');
+    Add('NAME','Группа / Логин',40);
+    Add('TYPE','Тип',0).Visible:=false;
+  end;
+  Provider.CreateTable();
+  
+end;
+
+procedure TBisTaxiDataClientsFrame.FillProvider;
+var
+  PGroup: TBisProvider;
+begin
+  PGroup:=TBisProvider.Create(nil);
+  try
+    PGroup.WithWaitCursor:=false;
+    PGroup.ProviderName:='S_CLIENT_GROUPS';
+    with PGroup.FieldNames do begin
+      AddInvisible('CLIENT_GROUP_ID');
+      AddInvisible('PARENT_ID');
+      AddInvisible('NAME');
+      AddInvisible('PARENT_NAME');
+      AddInvisible('DESCRIPTION');
+      AddInvisible('PRIORITY');
+    end;
+    with PGroup.Orders do begin
+      Add('LEVEL');
+      Add('PRIORITY');
+    end;
+
+    PGroup.Open;
+    if PGroup.Active then begin
+      Provider.BeginUpdate;
+      try
+        Provider.EmptyTable;
+        PGroup.First;
+        while not PGroup.Eof do begin
+
+          Provider.Append;
+          Provider.FieldByName('ID').Value:=PGroup.FieldByName('CLIENT_GROUP_ID').Value;
+          Provider.FieldByName('PARENT_ID').Value:=PGroup.FieldByName('PARENT_ID').Value;
+          Provider.FieldByName('DESCRIPTION').Value:=PGroup.FieldByName('DESCRIPTION').Value;
+          Provider.FieldByName('DESCRIPTION').Value:=PGroup.FieldByName('DESCRIPTION').Value;
+          Provider.FieldByName('TYPE').Value:=0;
+          Provider.Post;
+
+          PGroup.Next;
+        end;
+        Provider.First;
+      finally
+        Provider.EndUpdate;
+      end;
+    end;
+  finally
+    PGroup.Free;
+  end;
+end;
+
+procedure TBisTaxiDataClientsFrame.OpenRecords;
+begin
+  inherited OpenRecords;
+  FillProvider;
+  DoUpdateCounters;
+end;
+
+{ TBisTaxiDataClientsFormIface }
+
+constructor TBisTaxiDataClientsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataClientsForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+end;
+
+{ TBisTaxiDataClientsForm }
+
+class function TBisTaxiDataClientsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataClientsFrame;
+end;
+
+end.

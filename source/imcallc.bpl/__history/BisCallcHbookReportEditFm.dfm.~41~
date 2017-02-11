@@ -1,0 +1,170 @@
+inherited BisCallcHbookReportEditForm: TBisCallcHbookReportEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisCallcHbookReportEditForm'
+  ClientHeight = 157
+  ClientWidth = 426
+  ExplicitLeft = 513
+  ExplicitTop = 212
+  ExplicitWidth = 434
+  ExplicitHeight = 184
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 119
+    Width = 426
+    ExplicitTop = 120
+    ExplicitWidth = 426
+    inherited ButtonOk: TButton
+      Left = 249
+      ExplicitLeft = 249
+    end
+    inherited ButtonCancel: TButton
+      Left = 346
+      ExplicitLeft = 346
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 426
+    Height = 119
+    ExplicitWidth = 426
+    ExplicitHeight = 120
+    object LabelInterface: TLabel
+      Left = 33
+      Top = 11
+      Width = 60
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1048#1085#1090#1077#1088#1092#1077#1081#1089':'
+      FocusControl = EditInterface
+    end
+    object LabelReport: TLabel
+      Left = 61
+      Top = 65
+      Width = 32
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1090#1095#1077#1090':'
+      FocusControl = EditReport
+    end
+    object LabelType: TLabel
+      Left = 13
+      Top = 38
+      Width = 80
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1044#1074#1080#1078#1086#1082' '#1086#1090#1095#1077#1090#1072':'
+      FocusControl = ComboBoxType
+    end
+    object LabelPlace: TLabel
+      Left = 217
+      Top = 38
+      Width = 45
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1061#1088#1072#1085#1080#1090#1100':'
+      FocusControl = ComboBoxPlace
+    end
+    object EditInterface: TEdit
+      Left = 99
+      Top = 8
+      Width = 291
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonInterface: TButton
+      Left = 396
+      Top = 8
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1080#1085#1090#1077#1088#1092#1077#1081#1089
+      Caption = '...'
+      TabOrder = 1
+    end
+    object EditReport: TEdit
+      Left = 99
+      Top = 62
+      Width = 318
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 2
+      Text = #1053#1077' '#1079#1072#1075#1088#1091#1078#1077#1085
+      OnChange = EditReportChange
+    end
+    object ComboBoxType: TComboBox
+      Left = 99
+      Top = 35
+      Width = 102
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      TabOrder = 3
+    end
+    object ComboBoxPlace: TComboBox
+      Left = 268
+      Top = 35
+      Width = 149
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      TabOrder = 4
+      Items.Strings = (
+        #1074' '#1073#1072#1079#1077' '#1076#1072#1085#1085#1099#1093
+        #1074' '#1092#1072#1081#1083#1086#1074#1086#1081' '#1089#1080#1089#1090#1077#1084#1077)
+    end
+    object ButtonLoad: TButton
+      Left = 180
+      Top = 89
+      Width = 75
+      Height = 25
+      Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
+      TabOrder = 6
+      OnClick = ButtonLoadClick
+    end
+    object ButtonSave: TButton
+      Left = 261
+      Top = 89
+      Width = 75
+      Height = 25
+      Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+      Enabled = False
+      TabOrder = 7
+      OnClick = ButtonSaveClick
+    end
+    object ButtonClear: TButton
+      Left = 342
+      Top = 89
+      Width = 75
+      Height = 25
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+      Enabled = False
+      TabOrder = 8
+      OnClick = ButtonClearClick
+    end
+    object ButtonEditor: TButton
+      Left = 99
+      Top = 89
+      Width = 75
+      Height = 25
+      Caption = #1056#1077#1076#1072#1082#1090#1086#1088
+      TabOrder = 5
+      OnClick = ButtonEditorClick
+    end
+  end
+  object OpenDialog: TOpenDialog
+    Filter = #1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|*.*|'#1054#1090#1095#1077#1090#1099' FastReport (*.fr3)|*.fr3'
+    Options = [ofEnableSizing]
+    Left = 152
+    Top = 24
+  end
+  object SaveDialog: TSaveDialog
+    Filter = #1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|*.*|'#1054#1090#1095#1077#1090#1099' FastReport (*.fr3)|*.fr3'
+    Options = [ofEnableSizing]
+    Left = 216
+    Top = 24
+  end
+end

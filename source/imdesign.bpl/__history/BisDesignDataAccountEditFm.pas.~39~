@@ -1,0 +1,479 @@
+unit BisDesignDataAccountEditFm;
+
+interface
+
+uses                                                                                                                    
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, CheckLst, ComCtrls, Menus, ActnPopup, ExtDlgs, ImgList,
+  BisDataEditFm, BisParam, BisControls;
+
+type
+  TBisDesignDataAccountEditForm = class(TBisDataEditForm)
+    LabelUserName: TLabel;
+    EditUserName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelPassword: TLabel;
+    EditPassword: TEdit;
+    LabelSurname: TLabel;
+    EditSurname: TEdit;
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelPatronymic: TLabel;
+    EditPatronymic: TEdit;
+    LabelPhone: TLabel;
+    EditPhone: TEdit;
+    LabelEmail: TLabel;
+    EditEmail: TEdit;
+    LabelFirm: TLabel;
+    EditFirm: TEdit;
+    ButtonFirm: TButton;
+    GroupBoxRoles: TGroupBox;
+    CheckListBoxRoles: TCheckListBox;
+    CheckBoxProfile: TCheckBox;
+    GroupBoxDB: TGroupBox;
+    LabelDbUserName: TLabel;
+    EditDbUserName: TEdit;
+    LabelDbPassword: TLabel;
+    EditDbPassword: TEdit;
+    LabelDateCreate: TLabel;
+    DateTimePickerCreate: TDateTimePicker;
+    DateTimePickerCreateTime: TDateTimePicker;
+    PanelPhoto: TPanel;
+    PopupActionBarPhoto: TPopupActionBar;
+    MenuItemLoadPhoto: TMenuItem;
+    MenuItemSavePhoto: TMenuItem;
+    MenuItemClearPhoto: TMenuItem;
+    ShapePhoto: TShape;
+    ImagePhoto: TImage;
+    ButtonPhoto: TButton;
+    OpenPictureDialog: TOpenPictureDialog;
+    SavePictureDialog: TSavePictureDialog;
+    LabelJobTitle: TLabel;
+    EditJobTitle: TEdit;
+    LabelPhoneInternal: TLabel;
+    EditPhoneInternal: TEdit;
+    GroupBoxLock: TGroupBox;
+    CheckBoxLocked: TCheckBox;
+    LabelDateLock: TLabel;
+    DateTimePickerLock: TDateTimePicker;
+    DateTimePickerLockTime: TDateTimePicker;
+    LabelReasonLock: TLabel;
+    EditReasonLock: TEdit;
+    procedure CheckListBoxRolesClickCheck(Sender: TObject);
+    procedure CheckBoxProfileClick(Sender: TObject);
+    procedure ButtonPhotoClick(Sender: TObject);
+    procedure PopupActionBarPhotoPopup(Sender: TObject);
+    procedure MenuItemLoadPhotoClick(Sender: TObject);
+    procedure MenuItemSavePhotoClick(Sender: TObject);
+    procedure MenuItemClearPhotoClick(Sender: TObject);
+    procedure CheckBoxLockedClick(Sender: TObject);
+  private
+    FChangeRoles: Boolean;
+    FChangeProfile: Boolean;
+    procedure RefreshRoles;
+    procedure RefreshAccountRoles;
+    procedure DeleteAccountRoles;
+    procedure InsertAccountRoles;
+    procedure InsertProfile;
+  public
+    constructor Create(AOwner: TComponent); override;
+    function ChangesExists: Boolean; override;
+    procedure Execute; override;
+    procedure BeforeShow; override;
+    procedure ChangeParam(Param: TBisParam); override;
+  end;
+
+  TBisDesignDataAccountEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDesignDataAccountInsertFormIface=class(TBisDesignDataAccountEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDesignDataAccountUpdateFormIface=class(TBisDesignDataAccountEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDesignDataAccountDeleteFormIface=class(TBisDesignDataAccountEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDesignDataAccountEditForm: TBisDesignDataAccountEditForm;
+
+implementation
+
+uses DateUtils, DB,
+     BisDesignDataFirmsFm, BisFilterGroups, BisProvider, BisUtils, BisCore;
+
+{$R *.dfm}
+
+type
+
+  TBisRoleInfo=class(TObject)
+  private
+    var RoleId: Variant;
+  end;
+
+{ TBisDesignDataAccountEditFormIface }
+
+constructor TBisDesignDataAccountEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDesignDataAccountEditForm;
+  with Params do begin
+    with AddKey('ACCOUNT_ID') do begin
+      Older('OLD_ACCOUNT_ID');
+    end;
+    AddInvisible('IS_ROLE').Value:=0;
+    AddInvisible('AUTO_CREATED').Value:=0;
+    AddEdit('USER_NAME','EditUserName','LabelUserName',true);
+    AddEdit('PASSWORD','EditPassword','LabelPassword');
+    AddEdit('DB_USER_NAME','EditDbUserName','LabelDbUserName').ExcludeModes(AllParamEditModes);
+    AddEdit('DB_PASSWORD','EditDbPassword','LabelDbPassword').ExcludeModes(AllParamEditModes);
+    AddImage('PHOTO','ImagePhoto');
+    AddEdit('SURNAME','EditSurname','LabelSurname');
+    AddEdit('NAME','EditName','LabelName');
+    AddEdit('PATRONYMIC','EditPatronymic','LabelPatronymic');
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+    AddEdit('PHONE','EditPhone','LabelPhone');
+    AddEdit('PHONE_INTERNAL','EditPhoneInternal','LabelPhoneInternal');
+    AddEdit('EMAIL','EditEmail','LabelEmail');
+    AddEditDataSelect('FIRM_ID','EditFirm','LabelFirm','ButtonFirm',
+                      TBisDesignDataFirmsFormIface,'FIRM_SMALL_NAME',false,false,'','SMALL_NAME');
+    AddEdit('JOB_TITLE','EditJobTitle','LabelJobTitle');
+    AddEditDateTime('DATE_CREATE','DateTimePickerCreate','DateTimePickerCreateTime','LabelDateCreate',true).ExcludeModes([emFilter,emUpdate]);
+    AddCheckBox('LOCKED','CheckBoxLocked').ExcludeModes([emFilter]);
+    AddEditDateTime('DATE_LOCK','DateTimePickerLock','DateTimePickerLockTime','LabelDateLock').ExcludeModes([emFilter,emUpdate]);
+    AddEdit('REASON_LOCK','EditReasonLock','LabelReasonLock');
+  end;
+end;
+
+{ TBisDesignDataAccountInsertFormIface }
+
+constructor TBisDesignDataAccountInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_ACCOUNT';
+end;
+
+{ TBisDesignDataAccountUpdateFormIface }
+
+constructor TBisDesignDataAccountUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_ACCOUNT';
+end;
+
+{ TBisDesignDataAccountDeleteFormIface }
+
+constructor TBisDesignDataAccountDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_ACCOUNT';
+end;
+
+{ TBisDesignDataAccountEditForm }
+
+constructor TBisDesignDataAccountEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FChangeRoles:=false;
+  FChangeProfile:=false;
+  Provider.WithWaitCursor:=false;
+  EditPassword.Password:=true;
+  ImagePhoto.ControlStyle:=ImagePhoto.ControlStyle+[csReflector];
+  RefreshRoles;
+end;
+
+procedure TBisDesignDataAccountEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  CheckBoxProfile.Enabled:=Mode in [emInsert,emDuplicate];
+  CheckBoxProfile.Visible:=CheckBoxProfile.Enabled;
+  GroupBoxRoles.Enabled:=Mode in [emInsert,emUpdate,emDuplicate];
+  CheckListBoxRoles.Color:=iff(GroupBoxRoles.Enabled,clWindow,clBtnFace);
+  PanelPhoto.Color:=CheckListBoxRoles.Color;
+  ButtonPhoto.Enabled:=GroupBoxRoles.Enabled;
+  if Mode in [emInsert,emDuplicate] then begin
+    with Provider.Params do begin
+      Find('DATE_CREATE').SetNewValue(Core.ServerDate);
+    end;
+  end;
+  CheckBoxLockedClick(nil);
+  UpdateButtonState;
+  if not (Mode in [emInsert,emDuplicate,emFilter])then
+    RefreshAccountRoles;
+end;
+
+procedure TBisDesignDataAccountEditForm.ButtonPhotoClick(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  Pt:=PanelPhoto.ClientToScreen(Point(ButtonPhoto.Left,ButtonPhoto.Top+ButtonPhoto.Height));
+  PopupActionBarPhoto.Popup(Pt.X,Pt.Y);
+end;
+
+procedure TBisDesignDataAccountEditForm.ChangeParam(Param: TBisParam);
+var
+  P: TBisProvider;
+begin
+  inherited ChangeParam(Param);
+  if AnsiSameText(Param.ParamName,'ACCOUNT_ID') and not Param.Empty then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_ACCOUNTS';
+      P.FieldNames.AddInvisible('PHOTO');
+      P.FilterGroups.Add.Filters.Add('ACCOUNT_ID',fcEqual,Param.Value).CheckCase:=true;
+      P.Open;
+      if P.Active and not P.IsEmpty then begin
+        with Provider.Params.ParamByName('PHOTO') do begin
+          SetNewValue(P.FieldByName('PHOTO').AsString);
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+function TBisDesignDataAccountEditForm.ChangesExists: Boolean;
+begin
+  Result:=inherited ChangesExists or FChangeRoles or FChangeProfile;
+end;
+
+procedure TBisDesignDataAccountEditForm.CheckBoxLockedClick(Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.ParamByName('DATE_LOCK');
+  Param.Enabled:=CheckBoxLocked.Checked;
+  if Param.Empty and Param.Enabled then
+    Param.SetNewValue(Core.ServerDate);
+  Provider.ParamByName('REASON_LOCK').Enabled:=CheckBoxLocked.Checked;
+end;
+
+procedure TBisDesignDataAccountEditForm.CheckBoxProfileClick(Sender: TObject);
+begin
+  FChangeProfile:=true;
+end;
+
+procedure TBisDesignDataAccountEditForm.CheckListBoxRolesClickCheck(
+  Sender: TObject);
+begin
+  FChangeRoles:=true;
+  UpdateButtonState;
+end;
+
+procedure TBisDesignDataAccountEditForm.DeleteAccountRoles;
+var
+  P: TBisProvider;
+  Obj: TBisRoleInfo;
+  Param: TBisParam;
+  i: Integer;
+begin
+  Param:=Provider.Params.Find('ACCOUNT_ID');
+  if Assigned(Param) and not Param.Empty then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='D_ACCOUNT_ROLE';
+      P.WithWaitCursor:=false;
+      with P.Params do begin
+        AddInvisible('ROLE_ID').Older('OLD_ROLE_ID');
+        with AddInvisible('ACCOUNT_ID') do begin
+          Older('OLD_ACCOUNT_ID');
+          SetNewValue(Param.Value);
+        end;
+      end;
+      for i:=0 to CheckListBoxRoles.Items.Count-1 do begin
+        Obj:=TBisRoleInfo(CheckListBoxRoles.Items.Objects[i]);
+        P.Params.ParamByName('ROLE_ID').SetNewValue(Obj.RoleId);
+        P.Execute;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+procedure TBisDesignDataAccountEditForm.InsertAccountRoles;
+var
+  P: TBisProvider;
+  Obj: TBisRoleInfo;
+  Param: TBisParam;
+  i: Integer;
+begin
+  Param:=Provider.Params.Find('ACCOUNT_ID');
+  if Assigned(Param) and not Param.Empty then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='I_ACCOUNT_ROLE';
+      P.WithWaitCursor:=false;
+      with P.Params do begin
+        AddInvisible('ROLE_ID');
+        AddInvisible('ACCOUNT_ID').SetNewValue(Param.Value);
+      end;
+      for i:=0 to CheckListBoxRoles.Items.Count-1 do begin
+        if CheckListBoxRoles.Checked[i] then begin
+          Obj:=TBisRoleInfo(CheckListBoxRoles.Items.Objects[i]);
+          P.Params.ParamByName('ROLE_ID').SetNewValue(Obj.RoleId);
+          P.Execute;
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+procedure TBisDesignDataAccountEditForm.RefreshAccountRoles;
+var
+  P: TBisProvider;
+  Param: TBisParam;
+  RoleId: Variant;
+  i: Integer;
+  Obj: TBisRoleInfo;
+begin
+  Param:=Provider.Params.Find('ACCOUNT_ID');
+  if Assigned(Param) and not Param.Empty then begin
+    CheckListBoxRoles.Items.BeginUpdate;
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_ACCOUNT_ROLES';
+      P.FieldNames.AddInvisible('ROLE_ID');
+      P.FilterGroups.Add.Filters.Add('ACCOUNT_ID',fcEqual,Param.Value);
+      P.Open;
+      if P.Active then begin
+        P.First;
+        while not P.Eof do begin
+          RoleId:=P.FieldByName('ROLE_ID').Value;
+          for i:=0 to CheckListBoxRoles.Items.Count-1 do begin
+            Obj:=TBisRoleInfo(CheckListBoxRoles.Items.Objects[i]);
+            if VarSameValue(RoleId,Obj.RoleId) then begin
+              CheckListBoxRoles.Checked[i]:=true;
+            end;
+          end;
+          P.Next;
+        end;
+      end;
+    finally
+      P.Free;
+      CheckListBoxRoles.Items.EndUpdate;
+    end;
+  end;
+end;
+
+procedure TBisDesignDataAccountEditForm.RefreshRoles;
+var
+  P: TBisProvider;
+  Obj: TBisRoleInfo;
+begin
+  ClearStrings(CheckListBoxRoles.Items);
+  CheckListBoxRoles.Items.BeginUpdate;
+  P:=TBisProvider.Create(nil);
+  try
+    P.ProviderName:='S_ACCOUNTS';
+    with P.FieldNames do begin
+      AddInvisible('ACCOUNT_ID');
+      AddInvisible('USER_NAME');
+    end;
+    P.FilterGroups.Add.Filters.Add('IS_ROLE',fcEqual,1);
+    P.Orders.Add('USER_NAME');
+    P.Open;
+    if P.Active then begin
+      P.First;
+      while not P.Eof do begin
+        Obj:=TBisRoleInfo.Create;
+        Obj.RoleId:=P.FieldByName('ACCOUNT_ID').Value;
+        CheckListBoxRoles.Items.AddObject(P.FieldByName('USER_NAME').AsString,Obj);
+        P.Next;
+      end;
+    end;
+  finally
+    P.Free;
+    CheckListBoxRoles.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisDesignDataAccountEditForm.InsertProfile;
+var
+  P: TBisProvider;
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.Find('ACCOUNT_ID');
+  if Assigned(Param) and not Param.Empty then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='I_PROFILE';
+      P.WithWaitCursor:=false;
+      with P.Params do begin
+        AddInvisible('ACCOUNT_ID').SetNewValue(Param.Value);
+        AddInvisible('APPLICATION_ID').SetNewValue(Core.Application.ID);
+      end;
+      P.Execute;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+procedure TBisDesignDataAccountEditForm.MenuItemClearPhotoClick(
+  Sender: TObject);
+begin
+  Provider.Params.ParamByName('PHOTO').Clear;
+end;
+
+procedure TBisDesignDataAccountEditForm.MenuItemLoadPhotoClick(
+  Sender: TObject);
+begin
+  if OpenPictureDialog.Execute then
+    Provider.Params.ParamByName('PHOTO').LoadFromFile(OpenPictureDialog.FileName);
+end;
+
+procedure TBisDesignDataAccountEditForm.MenuItemSavePhotoClick(
+  Sender: TObject);
+begin
+  if SavePictureDialog.Execute then
+    Provider.Params.ParamByName('PHOTO').SaveToFile(SavePictureDialog.FileName);
+end;
+
+procedure TBisDesignDataAccountEditForm.PopupActionBarPhotoPopup(
+  Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.ParamByName('PHOTO');
+  MenuItemSavePhoto.Enabled:=not Param.Empty;
+  MenuItemClearPhoto.Enabled:=MenuItemSavePhoto.Enabled;
+end;
+
+procedure TBisDesignDataAccountEditForm.Execute;
+var
+  OldCursor: TCursor;
+begin
+  OldCursor:=Screen.Cursor;
+  Screen.Cursor:=crHourGlass;
+  try
+    if Mode in [emDelete] then
+      DeleteAccountRoles;
+    inherited Execute;
+    if Mode in [emUpdate] then
+      DeleteAccountRoles;
+    if Mode in [emInsert,emUpdate,emDuplicate] then
+    InsertAccountRoles;
+    if Mode in [emInsert,emDuplicate] then
+      if CheckBoxProfile.Checked then
+        InsertProfile;
+  finally
+    Screen.Cursor:=OldCursor;
+  end;
+end;
+
+
+end.

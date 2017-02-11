@@ -1,0 +1,42 @@
+
+
+function GetRet(S: String): String;
+begin
+  Result:=S;
+  S:=S+S;
+end;
+
+procedure TestClick3(Sender1: String; Sender2: String);
+begin
+  ShowMessage('TestClick2 '+Sender1);
+end;
+
+procedure TestClick5(Sender: TObject);
+var
+  i, Start: Integer;
+  But: TButton;
+begin
+  ShowMessage('TestClick5'+TButton(Sender).Caption);
+  TButton(Sender).Caption:='Test';
+  Start:=TButton(Sender).Left;
+  for i:=Start to Start+100 do begin
+    TButton(Sender).Left:=i;
+  end;
+  
+  But:=TButton.Create(TButton(Sender).Parent);
+  ShowMessage(But.Owner.Name);
+  But.Parent:=TButton(Sender).Parent;
+  But.Caption:='New';
+  //But.OnClick:=TestClick5;
+end;
+
+procedure TestClick2(Sender1: TObject);
+var
+  S: String;
+begin
+//  ShowMessage('TestClick2'+TComponent(Sender1).Name);
+  S:='Test';
+  ShowMessage(GetRet(S));
+  ShowMessage(S);
+end;
+

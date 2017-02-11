@@ -1,0 +1,112 @@
+unit BisBallSecondRoundFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, ExtCtrls, DB, Buttons,
+  BisBallBarrelFrm, BisControls;
+
+type
+  TBisBallSecondRoundFrame = class(TBisBallBarrelFrame)
+  public
+    constructor Create(AOwner: TComponent); override;
+    function CanAdd: Boolean; override;
+    function CheckBarrelNum(BarrelNum: String): Boolean; override;
+    procedure RefreshBarrels(WithCursor: Boolean); override;
+  end;
+
+var
+  BisLotoRound2Frame: TBisBallSecondRoundFrame;
+
+implementation
+
+uses BisProvider, BisConsts, BisFilterGroups;
+
+{$R *.dfm}
+
+{ TBisBallSecondRoundFrame }
+
+constructor TBisBallSecondRoundFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  RoundNum:=2;
+  ProviderName:='GET_SECOND_ROUND';
+end;
+
+function TBisBallSecondRoundFrame.CanAdd: Boolean;
+begin
+  Result:=inherited CanAdd;
+end;
+
+function TBisBallSecondRoundFrame.CheckBarrelNum(BarrelNum: String): Boolean;
+var
+  Num: Integer;
+begin
+  Result:=inherited CheckBarrelNum(BarrelNum);
+  if Result then begin
+    Result:=TryStrToInt(BarrelNum,Num);
+    if Result then
+      Result:=(Num>0) and (Num<78);
+  end;
+end;
+
+{procedure TBisBallSecondRoundFrame.RefreshBarrels(WithCursor: Boolean);
+var
+  P: TBisProvider;
+  ARoundNum: Integer;
+  FS: TFormatSettings;
+begin
+  FirstState;
+  if not VarIsNull(TirageId) then begin
+    FS.ThousandSeparator:=' ';
+    EditPrizeSum.Text:=FloatToStrF(RoundSum,ffNumber,15,0,FS);
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=WithCursor;
+      P.ProviderName:='S_LOTTERY';
+      with P.FieldNames do begin
+        AddInvisible('LOTTERY_ID');
+        AddInvisible('ROUND_NUM');
+        AddInvisible('BARREL_NUM');
+      end;
+      P.FilterGroups.Add.Filters.Add('TIRAGE_ID',fcEqual,TirageId).CheckCase:=true;
+      with P.FilterGroups.Add do begin
+        Filters.Add('ROUND_NUM',fcEqual,1).CheckCase:=true;
+        with Filters.Add('ROUND_NUM',fcEqual,RoundNum) do begin
+          &Operator:=foOr;
+          CheckCase:=true;
+        end;
+      end;
+      P.Orders.Add('ROUND_NUM');
+      P.Orders.Add('PRIORITY');
+      P.Open;
+      if P.Active then begin
+        P.First;
+        while not P.Eof do begin
+          ARoundNum:=P.FieldByName('ROUND_NUM').AsInteger;
+          if ARoundNum<>RoundNum then
+            MinCount:=MinCount+1;
+          StringGrid.ColCount:=StringGrid.ColCount+1;
+          StringGrid.Cells[StringGrid.ColCount-2,0]:=IntToStr(StringGrid.ColCount-2);
+          StringGrid.Cells[StringGrid.ColCount-2,1]:=P.FieldByName('BARREL_NUM').AsString;
+          StringGrid.Cells[StringGrid.ColCount-1,0]:='';
+          StringGrid.Cells[StringGrid.ColCount-1,1]:='';
+          LotteryList.Add(P.FieldByName('LOTTERY_ID').AsString);
+          P.Next;
+        end;
+        UpdateButtons;
+        StringGrid.Repaint;
+        UpdateScrollBars;
+        DoAction(false);
+        SetStatistics;
+      end;
+    finally
+      P.Free;
+    end;
+  end else
+    EditPrizeSum.Text:='';
+end;}
+
+
+end.

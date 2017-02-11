@@ -1,0 +1,46 @@
+unit BisCallcHandbookFirmsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataTreeFm, StdCtrls, ExtCtrls, ComCtrls, BisDataGridFm;
+
+type
+  TBisCallcHandbookFirmsForm = class(TBisDataTreeForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHandbookFirmsIface=class(TBisDataTreeFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHandbookFirmsForm: TBisCallcHandbookFirmsForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisCallcHandbookFirmsIface }
+
+constructor TBisCallcHandbookFirmsIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHandbookFirmsForm;
+  ProviderName:='S_FIRMS';
+  with FieldNames do begin
+    AddKey('FIRM_ID');
+    AddInvisible('FIRM_TYPE_ID');
+    Add('SMALL_NAME','Наименование|Краткое',100);
+    Add('FULL_NAME','Наименование|Полное',150);
+    Add('PHONE','Телефоны',150);
+  end;
+  KeyFieldName:='FIRM_ID';
+end;
+
+end.

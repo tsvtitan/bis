@@ -1,0 +1,114 @@
+unit BisCallcHbookReportsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, StdCtrls, ExtCtrls, ComCtrls, ActnList, DBCtrls,
+
+  BisFm, BisDataGridFm, BisFieldNames, BisDataFrm, BisCallcHbookReportsFrm;
+
+type
+  TBiCallcHbookReportsForm = class(TBisDataGridForm)
+  private
+    function GetDataFrame: TBisCallcHbookReportsFrame;
+  protected
+    function GetDataFrameClass: TBisDataFrameClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property DataFrame: TBisCallcHbookReportsFrame read GetDataFrame;
+  end;
+
+  TBisCallcHbookReportsFormIface=class(TBisDataGridFormIface)
+  private
+    function GetReportTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+    function GetLastForm: TBiCallcHbookReportsForm;
+    function DataFrameCanEditor(Sender: TBisDataFrame): Boolean;
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property LastForm: TBiCallcHbookReportsForm read GetLastForm;
+  end;
+
+var
+  BiCallcHbookReportsForm: TBiCallcHbookReportsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHbookReportEditFm;
+
+{ TBisCallcHbookReportsFormIface }
+
+constructor TBisCallcHbookReportsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBiCallcHbookReportsForm;
+  InsertClass:=TBisCallcHbookReportInsertFormIface;
+  UpdateClass:=TBisCallcHbookReportUpdateFormIface;
+  DeleteClass:=TBisCallcHbookReportDeleteFormIface;
+  Permissions.Enabled:=true;
+  Available:=true;
+  ProviderName:='S_REPORTS';
+  with FieldNames do begin
+    AddInvisible('REPORT_ID').IsKey:=true;
+    AddInvisible('REPORT_TYPE');
+    AddInvisible('PLACE');
+    Add('INTERFACE_NAME','Интерфейс',300);
+    AddCalculate('REPORT_TYPE_NAME','Движок отчета',GetReportTypeName,ftString,100,100);
+  end;
+  Orders.Add('INTERFACE_NAME');
+end;
+
+function TBisCallcHbookReportsFormIface.GetReportTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S: String;
+begin
+  Result:=Null;
+  S:=GetReportTypeByIndex(DataSet.FieldByName('REPORT_TYPE').AsInteger);
+  if Trim(S)<>'' then
+    Result:=S;
+end;
+
+function TBisCallcHbookReportsFormIface.GetLastForm: TBiCallcHbookReportsForm;
+begin
+  Result:=TBiCallcHbookReportsForm(inherited LastForm);
+end;
+
+function TBisCallcHbookReportsFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(LastForm) and Assigned(LastForm.DataFrame) then begin
+    with LastForm do begin
+      DataFrame.OnCanEditor:=DataFrameCanEditor;
+    end;
+  end;
+end;
+
+function TBisCallcHbookReportsFormIface.DataFrameCanEditor(Sender: TBisDataFrame): Boolean;
+begin
+  Result:=
+end;
+
+{ TBiCallcHbookReportsForm }
+
+constructor TBiCallcHbookReportsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+function TBiCallcHbookReportsForm.GetDataFrame: TBisCallcHbookReportsFrame;
+begin
+  Result:=TBisCallcHbookReportsFrame(inherited DataFrame);
+end;
+
+function TBiCallcHbookReportsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisCallcHbookReportsFrame;
+end;
+
+end.

@@ -1,0 +1,94 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{671efbfb-2d2a-4c75-9fca-01f7607aeb7b}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="core.dproj" />
+    <Projects Include="imfotom.dproj" />
+    <Projects Include="loader.dproj" />
+    <Projects Include="objects.dproj" />
+    <Projects Include="omarch.dproj" />
+    <Projects Include="omcom.dproj" />
+    <Projects Include="omnet.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+<BorlandProject xmlns=""><Default.Personality></Default.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="loader">
+    <MSBuild Projects="loader.dproj" Targets="" />
+  </Target>
+  <Target Name="loader:Clean">
+    <MSBuild Projects="loader.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="loader:Make">
+    <MSBuild Projects="loader.dproj" Targets="Make" />
+  </Target>
+  <Target Name="objects">
+    <MSBuild Projects="objects.dproj" Targets="" />
+  </Target>
+  <Target Name="objects:Clean">
+    <MSBuild Projects="objects.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="objects:Make">
+    <MSBuild Projects="objects.dproj" Targets="Make" />
+  </Target>
+  <Target Name="core">
+    <MSBuild Projects="core.dproj" Targets="" />
+  </Target>
+  <Target Name="core:Clean">
+    <MSBuild Projects="core.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="core:Make">
+    <MSBuild Projects="core.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omnet">
+    <MSBuild Projects="omnet.dproj" Targets="" />
+  </Target>
+  <Target Name="omnet:Clean">
+    <MSBuild Projects="omnet.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omnet:Make">
+    <MSBuild Projects="omnet.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omcom">
+    <MSBuild Projects="omcom.dproj" Targets="" />
+  </Target>
+  <Target Name="omcom:Clean">
+    <MSBuild Projects="omcom.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omcom:Make">
+    <MSBuild Projects="omcom.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omarch">
+    <MSBuild Projects="omarch.dproj" Targets="" />
+  </Target>
+  <Target Name="omarch:Clean">
+    <MSBuild Projects="omarch.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omarch:Make">
+    <MSBuild Projects="omarch.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imfotom">
+    <MSBuild Projects="imfotom.dproj" Targets="" />
+  </Target>
+  <Target Name="imfotom:Clean">
+    <MSBuild Projects="imfotom.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imfotom:Make">
+    <MSBuild Projects="imfotom.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="loader;objects;core;omnet;omcom;omarch;imfotom" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="loader:Clean;objects:Clean;core:Clean;omnet:Clean;omcom:Clean;omarch:Clean;imfotom:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="loader:Make;objects:Make;core:Make;omnet:Make;omcom:Make;omarch:Make;imfotom:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

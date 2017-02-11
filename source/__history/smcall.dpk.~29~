@@ -1,0 +1,43 @@
+package smcall;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+{$DEFINE EXCEPT_NOTIFIER_IGNORES}
+
+requires
+  core,
+  omaudio,
+  rtl;
+
+contains
+  BisCallServer in 'smcall.bpl\BisCallServer.pas',
+  BisCallServerConsts in 'smcall.bpl\BisCallServerConsts.pas',
+  BisCallServerMainFm in 'smcall.bpl\BisCallServerMainFm.pas' {BisCallServerMainForm},
+  BisCallServerHandlers in 'smcall.bpl\BisCallServerHandlers.pas',
+  BisCallServerHandlerModules in 'smcall.bpl\BisCallServerHandlerModules.pas',
+  BisCallServerChannels in 'smcall.bpl\BisCallServerChannels.pas',
+  BisCallServerScenarios in 'smcall.bpl\BisCallServerScenarios.pas';
+
+end.

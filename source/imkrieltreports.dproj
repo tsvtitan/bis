@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{10c95a0a-061a-48ac-9583-85e4dd2fcde6}</ProjectGuid>
+    <MainSource>imkrieltreports.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\imkrieltreports.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_UnitSearchPath>U:\source\_dcp</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp</DCC_IncludePath>
+    <DCC_OutputDRCFile>True</DCC_OutputDRCFile>
+    <DCC_MapFile>3</DCC_MapFile>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="HostApplication">U:\bin\loader.exe</Parameters><Parameters Name="RunParams">/config imkrielt.ini</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">True</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">55</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">KrasRielt reports module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.55</VersionInfoKeys><VersionInfoKeys Name="InternalName">imkrieltreports.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">imkrieltreports.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments">KrasRielt reports module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">imkrieltreports.dpk</Source></Source><Excluded_Packages>
+      
+      
+      
+      
+      <Excluded_Packages Name="$(BDS)\bin\bcboffice2k100.bpl">CodeGear C++Builder Office 2000 Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\bcbofficexp100.bpl">CodeGear C++Builder Office XP Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dcloffice2k100.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dclofficexp100.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+    </Excluded_Packages></Delphi.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="imkrieltreports.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="core.dcp" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReports.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsBuy.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsChange.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsDeliverLand.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsDeliverResidential.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsDeliverUnresidential.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsFm.pas">
+      <Form>BisKrieltReportsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsSellResidential.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsSellUnresidential.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsShootLand.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsShootResidential.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsShootUnresidential.pas" />
+    <DCCReference Include="imkrieltreports.bpl\BisKrieltReportsUtils.pas" />
+    <DCCReference Include="omnet.bpl\Ras\c.dcp" />
+    <DCCReference Include="omnet.bpl\Ras\co.dcp" />
+    <DCCReference Include="omnet.bpl\Ras\cor.dcp" />
+    <DCCReference Include="omnet.bpl\Ras\rtl.dcp" />
+    <DCCReference Include="omnet.bpl\Ras\vcl.dcp" />
+  </ItemGroup>
+</Project>

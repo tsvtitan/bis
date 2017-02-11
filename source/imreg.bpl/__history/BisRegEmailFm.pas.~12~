@@ -1,0 +1,34 @@
+unit BisRegEmailFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisFm, BisControls, BisSizeGrip;
+
+type
+  TBisRegEmailForm = class(TBisForm)
+    GroupBoxDesc: TGroupBox;
+    MemoDesc: TMemo;
+    LabelFrom: TLabel;
+    EditFrom: TEdit;
+    LabelTo: TLabel;
+    EditTo: TEdit;
+    GroupBoxBody: TGroupBox;
+    LabelSubject: TLabel;
+    EditSubject: TEdit;
+  private
+    FSizeGrip: TBisSizeGrip;
+  public
+    { Public declarations }
+  end;
+
+var
+  BisRegEmailForm: TBisRegEmailForm;
+
+implementation
+
+{$R *.dfm}
+
+end.

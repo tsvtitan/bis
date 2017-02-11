@@ -1,0 +1,315 @@
+unit BisIfaces;
+
+interface
+
+uses Classes, Contnrs,
+     BisObject, BisCoreObjects, BisPermissions, BisDataSet, BisDataParams,
+     BisOptionsFrm;
+
+type
+  TBisIface=class;
+
+  TBisIface=class(TBisCoreObject)
+  private
+    FAutoShow: Boolean;
+    FPermissions: TBisPermissions;
+    FMenu: String;
+    FOptionsFrameClass: TBisOptionsFrameClass;
+    FSPermissionShow: String;
+    FSPermissionOptions: String;
+    FDataParams: TBisDataValueParams;
+  protected
+    function GetOptionsFormOwner: TComponent; virtual;
+    function GetWorking: Boolean; virtual;
+    procedure BeforeOptions(AFrame: TBisOptionsFrame); virtual;
+    procedure AfterOptions(AFrame: TBisOptionsFrame); virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+
+    function CanShow: Boolean; virtual;
+    procedure Show; virtual;
+    procedure Hide; virtual;
+    procedure ShowByCommand(const Command: String); virtual;
+    function CanOptions: Boolean; virtual;
+    procedure Options; virtual;
+    procedure LoadOptions; virtual;
+    procedure SaveOptions; virtual;
+
+    property Permissions: TBisPermissions read FPermissions;
+    property Working: Boolean read GetWorking;
+    property DataParams: TBisDataValueParams read FDataParams;
+
+    property AutoShow: Boolean read FAutoShow write FAutoShow;
+    property Menu: String read FMenu write FMenu;
+
+    property OptionsFrameClass: TBisOptionsFrameClass read FOptionsFrameClass write FOptionsFrameClass;
+  published
+    property SPermissionShow: String read FSPermissionShow write FSPermissionShow;
+    property SPermissionOptions: String read FSPermissionOptions write FSPermissionOptions;
+  end;
+
+  TBisIfaceClass=class of TBisIface;
+
+  TBisIfaces=class(TBisCoreObjects)
+  private
+    function GetItem(Index: Integer): TBisIface;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    function Find(const Name: String): TBisIface;
+
+    procedure IfacesShow; virtual;
+    procedure IfacesHide; virtual;
+    procedure IfacesLoadOptions; virtual;
+    procedure IfacesSaveOptions; virtual;
+
+    function AddClass(AClass: TBisIfaceClass): TBisIface;
+    function AddIface(AIface: TBisIface): Boolean;
+
+    property Items[Index: Integer]: TBisIface read GetItem;
+  end;
+
+  TBisIfaceClasses=class(TClassList)
+  private
+    function GetItem(Index: Integer): TBisIfaceClass;
+  public
+    function Find(AClassName: String): TBisIfaceClass;
+    function Add(AClass: TBisIfaceClass): Boolean;
+
+    property Items[Index: Integer]: TBisIfaceClass read GetItem;
+  end;
+
+implementation
+
+uses SysUtils, Controls,
+     BisConsts, BisCore, BisModules, BisUtils,
+     BisOptionsFm;
+
+{ TBisIface }
+
+constructor TBisIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FPermissions:=TBisPermissions.Create(Self);
+  FPermissions.Enabled:=false;
+
+  FDataParams:=TBisDataValueParams.Create;
+
+  TranslateClass:=TBisIface;
+  FSPermissionShow:='Просмотр';
+  FSPermissionOptions:='Настройка';
+end;
+
+destructor TBisIface.Destroy;
+begin
+  FDataParams.Free;
+  FPermissions.Free;
+  inherited Destroy;
+end;
+
+function TBisIface.GetOptionsFormOwner: TComponent;
+begin
+  Result:=nil;
+end;
+
+function TBisIface.GetWorking: Boolean;
+begin
+  Result:=false;
+end;
+
+procedure TBisIface.Init;
+begin
+  inherited Init;
+  FPermissions.Init;
+  Permissions.AddDefault(FSPermissionShow);
+  Permissions.AddDefault(FSPermissionOptions);
+end;
+
+function TBisIface.CanShow: Boolean;
+begin
+  Result:=Permissions.Exists(FSPermissionShow);
+end;
+
+procedure TBisIface.Show;
+begin
+end;
+
+procedure TBisIface.ShowByCommand(const Command: String);
+begin
+  Show;
+end;
+
+procedure TBisIface.Hide;
+begin
+  //
+end;
+
+procedure TBisIface.BeforeOptions(AFrame: TBisOptionsFrame);
+begin
+  //
+end;
+
+procedure TBisIface.AfterOptions(AFrame: TBisOptionsFrame);
+begin
+  //
+end;
+
+function TBisIface.CanOptions: Boolean;
+begin
+  Result:=Assigned(FOptionsFrameClass) and
+          Permissions.Exists(FSPermissionOptions);
+end;
+
+procedure TBisIface.Options;
+var
+  Form: TBisOptionsForm;
+  Frame: TBisOptionsFrame;
+begin
+  if CanOptions then begin
+    Form:=TBisOptionsForm.Create(GetOptionsFormOwner);
+    Frame:=FOptionsFrameClass.Create(Form);
+    try
+      Form.Init;
+      Frame.Init;
+      LoadOptions;
+      Form.SetFrame(Frame);
+      BeforeOptions(Frame);
+      if Form.ShowModal=mrOk then begin
+        AfterOptions(Frame);
+        SaveOptions;
+      end;
+    finally
+      Form.SetFrame(nil);
+      Frame.Free;
+      Form.Free;
+    end;
+  end;
+end;
+
+procedure TBisIface.LoadOptions;
+begin
+end;
+
+procedure TBisIface.SaveOptions;
+begin
+end;
+
+
+{ TBisIfaces }
+
+function TBisIfaces.GetItem(Index: Integer): TBisIface;
+begin
+  Result:=TBisIface(inherited Items[Index]);
+end;
+
+function TBisIfaces.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisIface;
+end;
+
+procedure TBisIfaces.IfacesShow;
+var
+  i: Integer;
+  Item: TBisIface;
+begin
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.AutoShow then
+      Item.Show;
+  end;
+end;
+
+procedure TBisIfaces.IfacesHide;
+var
+  i: Integer;
+begin
+  for i:=Count-1 downto 0 do begin
+    Items[i].Hide;
+  end;
+end;
+
+procedure TBisIfaces.IfacesSaveOptions;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    Items[i].SaveOptions;
+  end;
+end;
+
+procedure TBisIfaces.IfacesLoadOptions;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    Items[i].LoadOptions;
+  end;
+end;
+
+function TBisIfaces.AddClass(AClass: TBisIfaceClass): TBisIface;
+begin
+  Result:=nil;
+  if Assigned(AClass) then begin
+    Result:=AClass.Create(Self);
+    if not Assigned(Find(Result.ObjectName)) then begin
+      AddObject(Result);
+    end else begin
+      FreeAndNilEx(Result);
+    end;
+  end;
+end;
+
+function TBisIfaces.AddIface(AIface: TBisIface): Boolean;
+begin
+  Result:=false;
+  if Assigned(AIface) and not Assigned(Find(AIface.ObjectName)) then begin
+    AddObject(AIface);
+    Result:=true;
+  end;
+end;
+
+function TBisIfaces.Find(const Name: String): TBisIface;
+begin
+  Result:=TBisIface(inherited Find(Name));
+end;
+
+{ TBisIfaceClasses }
+
+function TBisIfaceClasses.Add(AClass: TBisIfaceClass): Boolean;
+begin
+  Result:=false;
+  if Assigned(AClass) then begin
+    if not Assigned(Find(AClass.ClassName)) then begin
+      inherited Add(AClass);
+      Result:=true;
+    end;
+  end;
+end;
+
+function TBisIfaceClasses.Find(AClassName: String): TBisIfaceClass;
+var
+  i: Integer;
+  Item: TBisIfaceClass;
+  S: String;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    S:=Item.GetObjectName;
+    if IsClassParent(Item,TBisIface) and
+       AnsiSameText(S,AClassName) then begin
+      Result:=TBisIfaceClass(Item);
+      exit;
+    end;
+  end;
+end;
+
+function TBisIfaceClasses.GetItem(Index: Integer): TBisIfaceClass;
+begin
+  Result:=TBisIfaceClass(inherited Items[Index]);
+end;
+
+end.

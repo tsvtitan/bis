@@ -1,0 +1,19 @@
+unit BisAudioRtpAcmDrivers;
+
+interface
+
+type
+  TBisCallPhoneAcmDrivers=class(TBisAcmDrivers)
+  private
+    function PayloadTypeToFormatTag(PayloadType: TBisRtpPacketPayloadType): LongWord;
+    function FormatToPayloadType(DriverFormat: TWaveAcmDriverFormat): TBisRtpPacketPayloadType;
+  public
+    function FindFormat(DriverName, FormatName: String;
+                        Channels: Word; SamplesPerSec: Longword; BitsPerSample: Word): TWaveAcmDriverFormat; overload;
+    function FindFormat(PayloadType: TBisRtpPacketPayloadType;
+                        Channels: Word; SamplesPerSec: Longword; BitsPerSample: Word): TWaveAcmDriverFormat; overload;
+  end;
+
+implementation
+
+end.

@@ -1,0 +1,57 @@
+function DriveInfo(Drive: Integer): String;
+var
+  T: Integer;
+  TS: String;
+  TR: String;
+begin
+  T := GetDriveType(Drive);
+
+  if T = DRIVE_NO_ROOT_DIR then
+  begin
+    Result := 'Drive ' + Chr(Drive + 64) + ': -';
+    Exit;
+  end;
+
+  if T = DRIVE_REMOVABLE then
+      TS := 'Removable drive / '
+  else
+    if T = DRIVE_FIXED then
+      TS := 'Harddisk / '
+    else
+      if T = DRIVE_REMOTE then
+        TS := 'Network drive / '
+      else
+        if T = DRIVE_CDROM then
+          TS := 'CD-ROM / '
+        else
+          if T = DRIVE_RAMDISK then
+            TS := 'RAM-Disk / '
+          else
+            TS := 'Unknown / ';
+
+  if GetDriveReady(Drive) then
+  begin
+    TS := TS + 'ready / ';
+    TR := Trim(GetDriveName(Drive));
+    if TR = '' then
+      TS := TS + '(unnamed)'
+    else
+      TS := TS + TR;
+  end
+  else
+    TS := TS + 'not ready';
+
+  Result := 'Drive ' + Chr(Drive + 64) + ': ' + TS;
+end;
+
+procedure Main;
+var
+  i: Integer;
+begin
+  PrintLn('Demonstration of the GetDrive... functions!');
+  PrintLn('');
+  for i := 1 to 26 do
+    PrintLn(DriveInfo(i));
+end;
+
+Main;

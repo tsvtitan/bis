@@ -1,0 +1,400 @@
+<html>
+<body>
+<h1>Class TFTPConnection</h1>
+<b>Declaration</b><br>
+
+<pre>TFTPConnection = class(TObject)
+  <a href="#FTP$TFTPConnection$Abort">procedure Abort</a>;
+  <a href="#FTP$TFTPConnection$ChangeDir">function ChangeDir(Dirname: String): Boolean</a>;
+  <a href="#FTP$TFTPConnection$Close">procedure Close</a>;
+  <a href="#FTP$TFTPConnection$Connect">function Connect: Boolean</a>;
+  <a href="#FTP$TFTPConnection$Create">constructor Create</a>;
+  <a href="#FTP$TFTPConnection$CreateSAVF">function CreateSAVF(Library: String; File: String; Description: String): Integer</a>;
+  <a href="#FTP$TFTPConnection$CurrentDir">function CurrentDir: String</a>;
+  <a href="#FTP$TFTPConnection$DefaultDir">property DefaultDir: String read GetDefaultDir write SetDefaultDir</a>;
+  <a href="#FTP$TFTPConnection$DeleteFile">function DeleteFile(FileName: String): Boolean</a>;
+  <a href="#FTP$TFTPConnection$Disconnect">procedure Disconnect</a>;
+  <a href="#FTP$TFTPConnection$Execute">function Execute(Command: String): Integer</a>;
+  <a href="#FTP$TFTPConnection$Filesize">function Filesize(Filename: String): Integer</a>;
+  <a href="#FTP$TFTPConnection$FindClose">procedure FindClose</a>;
+  <a href="#FTP$TFTPConnection$FindFirst">function FindFirst(Specifier: String): String</a>;
+  <a href="#FTP$TFTPConnection$FindNext">function FindNext: String</a>;
+  <a href="#FTP$TFTPConnection$Free">destructor Free</a>;
+  <a href="#FTP$TFTPConnection$GetDefaultDir">function GetDefaultDir: String</a>;
+  <a href="#FTP$TFTPConnection$GetFile">function GetFile(Source: String; Dest: String): Boolean</a>;
+  <a href="#FTP$TFTPConnection$GetHost">function GetHost: String</a>;
+  <a href="#FTP$TFTPConnection$GetLogFile">function GetLogFile: String</a>;
+  <a href="#FTP$TFTPConnection$GetMaskPassword">function GetMaskPassword: Boolean</a>;
+  <a href="#FTP$TFTPConnection$GetPWD">function GetPWD: String</a>;
+  <a href="#FTP$TFTPConnection$GetUserID">function GetUserID: String</a>;
+  <a href="#FTP$TFTPConnection$Host">property Host: String read GetHost write SetHost</a>;
+  <a href="#FTP$TFTPConnection$IsDirectory">function IsDirectory(Value: String): Boolean</a>;
+  <a href="#FTP$TFTPConnection$LastError">function LastError: String</a>;
+  <a href="#FTP$TFTPConnection$LastResponse">function LastResponse: String</a>;
+  <a href="#FTP$TFTPConnection$LogFile">property LogFile: String read GetLogFile write SetLogFile</a>;
+  <a href="#FTP$TFTPConnection$MakeDir">function MakeDir(Dirname: String): Boolean</a>;
+  <a href="#FTP$TFTPConnection$MaskPassword">property MaskPassword: Boolean read GetMaskPassword write SetMaskPassword</a>;
+  <a href="#FTP$TFTPConnection$Open">function Open(Host: String; UserID: String; PWD: String): Boolean</a>;
+  <a href="#FTP$TFTPConnection$Password">property Password: String read GetPWD write SetPwd</a>;
+  <a href="#FTP$TFTPConnection$PutFile">function PutFile(Source: String; Dest: String): Boolean</a>;
+  <a href="#FTP$TFTPConnection$RemoveDir">function RemoveDir(Dirname: String): Boolean</a>;
+  <a href="#FTP$TFTPConnection$SetDefaultDir">procedure SetDefaultDir(Value: String)</a>;
+  <a href="#FTP$TFTPConnection$SetHost">procedure SetHost(Value: String)</a>;
+  <a href="#FTP$TFTPConnection$SetLogFile">procedure SetLogFile(Value: String)</a>;
+  <a href="#FTP$TFTPConnection$SetMaskPassword">procedure SetMaskPassword(Value: Boolean)</a>;
+  <a href="#FTP$TFTPConnection$SetPwd">procedure SetPwd(Value: String)</a>;
+  <a href="#FTP$TFTPConnection$SetUserID">procedure SetUserID(Value: String)</a>;
+  <a href="#FTP$TFTPConnection$Status">function Status: String</a>;
+  <a href="#FTP$TFTPConnection$Username">property Username: String read GetUserID write SetUserID</a>;
+end;</pre>
+<b>Description</b>
+<p></p>
+
+<hr>
+
+    <h2><a name=FTP$TFTPConnection$Abort>Method TFTPConnection.Abort</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Abort;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$ChangeDir>Method TFTPConnection.ChangeDir</a></h2>
+    <b>Declaration</b><br>
+    <pre>function ChangeDir(Dirname: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Close>Method TFTPConnection.Close</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Close;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Connect>Method TFTPConnection.Connect</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Connect: Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Create>Method TFTPConnection.Create</a></h2>
+    <b>Declaration</b><br>
+    <pre>constructor Create;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$CreateSAVF>Method TFTPConnection.CreateSAVF</a></h2>
+    <b>Declaration</b><br>
+    <pre>function CreateSAVF(Library: String; File: String; Description: String): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$CurrentDir>Method TFTPConnection.CurrentDir</a></h2>
+    <b>Declaration</b><br>
+    <pre>function CurrentDir: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$DefaultDir>Property TFTPConnection.DefaultDir</a></h2>
+    <b>Declaration</b><br>
+    <pre>property DefaultDir: String read GetDefaultDir write SetDefaultDir;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$DeleteFile>Method TFTPConnection.DeleteFile</a></h2>
+    <b>Declaration</b><br>
+    <pre>function DeleteFile(FileName: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Disconnect>Method TFTPConnection.Disconnect</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure Disconnect;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Execute>Method TFTPConnection.Execute</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Execute(Command: String): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Filesize>Method TFTPConnection.Filesize</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Filesize(Filename: String): Integer;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$FindClose>Method TFTPConnection.FindClose</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure FindClose;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$FindFirst>Method TFTPConnection.FindFirst</a></h2>
+    <b>Declaration</b><br>
+    <pre>function FindFirst(Specifier: String): String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$FindNext>Method TFTPConnection.FindNext</a></h2>
+    <b>Declaration</b><br>
+    <pre>function FindNext: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Free>Method TFTPConnection.Free</a></h2>
+    <b>Declaration</b><br>
+    <pre>destructor Free;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$GetDefaultDir>Method TFTPConnection.GetDefaultDir</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetDefaultDir: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$GetFile>Method TFTPConnection.GetFile</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetFile(Source: String; Dest: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$GetHost>Method TFTPConnection.GetHost</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetHost: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$GetLogFile>Method TFTPConnection.GetLogFile</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetLogFile: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$GetMaskPassword>Method TFTPConnection.GetMaskPassword</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetMaskPassword: Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$GetPWD>Method TFTPConnection.GetPWD</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetPWD: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$GetUserID>Method TFTPConnection.GetUserID</a></h2>
+    <b>Declaration</b><br>
+    <pre>function GetUserID: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Host>Property TFTPConnection.Host</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Host: String read GetHost write SetHost;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$IsDirectory>Method TFTPConnection.IsDirectory</a></h2>
+    <b>Declaration</b><br>
+    <pre>function IsDirectory(Value: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$LastError>Method TFTPConnection.LastError</a></h2>
+    <b>Declaration</b><br>
+    <pre>function LastError: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$LastResponse>Method TFTPConnection.LastResponse</a></h2>
+    <b>Declaration</b><br>
+    <pre>function LastResponse: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$LogFile>Property TFTPConnection.LogFile</a></h2>
+    <b>Declaration</b><br>
+    <pre>property LogFile: String read GetLogFile write SetLogFile;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$MakeDir>Method TFTPConnection.MakeDir</a></h2>
+    <b>Declaration</b><br>
+    <pre>function MakeDir(Dirname: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$MaskPassword>Property TFTPConnection.MaskPassword</a></h2>
+    <b>Declaration</b><br>
+    <pre>property MaskPassword: Boolean read GetMaskPassword write SetMaskPassword;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Open>Method TFTPConnection.Open</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Open(Host: String; UserID: String; PWD: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Password>Property TFTPConnection.Password</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Password: String read GetPWD write SetPwd;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$PutFile>Method TFTPConnection.PutFile</a></h2>
+    <b>Declaration</b><br>
+    <pre>function PutFile(Source: String; Dest: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$RemoveDir>Method TFTPConnection.RemoveDir</a></h2>
+    <b>Declaration</b><br>
+    <pre>function RemoveDir(Dirname: String): Boolean;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Self>Method TFTPConnection.Self</a></h2>
+    <b>Declaration</b><br>
+    <pre>Self;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$SetDefaultDir>Method TFTPConnection.SetDefaultDir</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetDefaultDir(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$SetHost>Method TFTPConnection.SetHost</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetHost(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$SetLogFile>Method TFTPConnection.SetLogFile</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetLogFile(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$SetMaskPassword>Method TFTPConnection.SetMaskPassword</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetMaskPassword(Value: Boolean);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$SetPwd>Method TFTPConnection.SetPwd</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetPwd(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$SetUserID>Method TFTPConnection.SetUserID</a></h2>
+    <b>Declaration</b><br>
+    <pre>procedure SetUserID(Value: String);</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Status>Method TFTPConnection.Status</a></h2>
+    <b>Declaration</b><br>
+    <pre>function Status: String;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+    <h2><a name=FTP$TFTPConnection$Username>Property TFTPConnection.Username</a></h2>
+    <b>Declaration</b><br>
+    <pre>property Username: String read GetUserID write SetUserID;</pre>
+    <b>Description</b>
+    <p></p>
+    
+    <br><hr>
+    
+</body>
+</html>

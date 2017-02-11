@@ -1,0 +1,45 @@
+package VT_Addons;
+
+{$R *.RES}
+{$R '..\Source\VSTEdit\VSTEdit.dcr'}
+{$R '..\Source\VSTEdit\MFEdit.dcr'}
+{$R '..\Source\VirtualDBTree\VirtualDBTree.dcr'}
+{$R '..\Source\VirtualDBTree\VirtualDBTreeEx.dcr'}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Virtual Treeview addons'}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl50,
+  VirtualTreesD5,
+  Vcldb50;
+
+contains
+  VirtualTreesExReg in '..\Source\VirtualTreesEx\VirtualTreesExReg.pas',
+  VirtualTreesEx in '..\Source\VirtualTreesEx\VirtualTreesEx.pas',
+  VSTEdit in '..\Source\VSTEdit\VSTEdit.pas',
+  MFEdit in '..\Source\VSTEdit\MFEdit.pas',
+  VirtualDBTree in '..\Source\VirtualDBTree\VirtualDBTree.pas',
+  VirtualDBTreeEx in '..\Source\VirtualDBTree\VirtualDBTreeEx.pas';
+
+end.

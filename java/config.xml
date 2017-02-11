@@ -1,0 +1,77 @@
+ <config version="2.1">
+  <login name="Логин" />
+  <response name="Ответ" />
+  <mode name="Тип" />
+  <ok name="ОК" />
+  <cancel name="Отмена" />
+  <back name="Назад" />
+  <connection name="Соединение" /> 
+  <keep name="Постоянно" /> 
+  <message name="Сообщение" />
+  <exit name="Выход" />
+  <version name="Версия" /> 
+  <url name="Адрес" />
+  <error name="Ошибка" />
+  <info name="Информация" />
+  <warn name="Предупреждение" />
+  <menunotfound name="Меню не найдено" />
+  <unknownmessage name="Неизвестный формат сообщения" />
+  <configsuccessloaded name="Конфигурация успешно загружена" />
+  <invalidversion name="Неверная версия" />
+  <sms name="сообщение" url="sms://+79123456789" text="%TEXT" message="Сообщение отправлено. Ожидайте ответа" waiturl="sms://:55555" />
+  <http name="запрос" url="http://%HOST:%PORT/mobile" message="Запрос принят без ответа" keepurl="socket://%HOST:%KPORT">
+    <server name="Основной сервер" host="host.ru" port="50000" kport="55555" timeout="5000" />
+    <server name="Резервный сервер" host="host.ru" port="50000" kport="55555" timeout="5000" />
+  </http>
+  <call name="вызов" url="tel:%PHONE" message="Вызов сделан. Ожидайте ответа" />
+  <menu>
+    <code name="Код" desc="Отправить код" />
+    <list name="Заказ" desc="Запросы, связанные с выполнением заказа">
+      <item name="Подтверждение" text="1" phone="" />
+      <item name="Выходят" text="2" />
+      <item name="Посадка" text="3" />
+      <item name="Расчет" text="4" />
+      <item name="Отказ от заказа" text="5" />
+      <item name="Отказ клиента" text="6" enabled="0" />
+      <item name="Не полный расчет" text="7" enabled="0" />
+      <item name="Смена маршрута" text="8" />
+      <item name="Заблудился" text="9" />
+      <item name="Помощь диспетчера" text="17" />
+      <item name="Клиент не вышел" text="50" />
+      <item name="Свободная посадка" text="18" enabled="0" />
+      <item name="Проишествие" desc="Чрезвычайное проишествие" text="0" />
+    </list>
+    <list name="Запросы" desc="Другие запросы" >
+      <item name="Баланс" text="10" />
+      <item name="Стоянки" text="11" />
+      <item name="Снятие со стоянки" text="12" />
+      <item name="Закрытие смены" text="13" />
+      <item name="Очередь" text="14" />
+      <item name="Свободные заказы" text="15" />
+      <item name="Логины" text="16" mode="6" />
+    </list>
+    <list name="Стоянки" desc="Постановка на стоянку" >
+      <item name="Северо-Западный" text="20" />
+      <item name="ГорДК" text="21" />
+      <item name="Красная площадь" text="22" />
+      <item name="Речной вокзал" text="23" />
+      <item name="Взлётка" text="24" />
+      <item name="Северный" text="25" />
+      <item name="Зелёная роща" text="26" />
+      <item name="Солнечный" text="27" />
+      <item name="Станция Енисей" text="28" />
+      <item name="Предмостная" text="29" />
+      <item name="Первомайский" text="30" />
+      <item name="Торговый центр" text="31" />
+      <item name="Спутник" text="32" />
+      <item name="КрасТЭЦ" text="33" />
+      <item name="Черёмушки" text="34" />
+      <item name="Космос" text="35" />
+      <item name="Пашенный" text="36" />
+      <item name="Студгородок" text="37" />
+    </list>
+    <responses name="Ответы" maxcount="10" /> 
+    <setup name="Настройка" />
+    <update name="Обновление" url="http://host.ru/files/java/config.xml" />
+  </menu>
+</config>

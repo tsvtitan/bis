@@ -1,0 +1,98 @@
+unit BisCallcHandbookRolesEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisCallcHandbookRolesEditForm = class(TBisDataEditForm)
+    LabelUserName: TLabel;
+    EditUserName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHandbookRolesEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHandbookRolesInsertFormIface=class(TBisCallcHandbookRolesEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHandbookRolesUpdateFormIface=class(TBisCallcHandbookRolesEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHandbookRolesDeleteFormIface=class(TBisCallcHandbookRolesEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHandbookRolesEditForm: TBisCallcHandbookRolesEditForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisCallcHandbookRolesEditFormIface }
+
+constructor TBisCallcHandbookRolesEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHandbookRolesEditForm;
+  with Params do begin
+    AddKey('ACCOUNT_ID').Duplicate('OLD_ACCOUNT_ID');
+    AddInvisible('FIRM_ID');
+    AddInvisible('IS_ROLE').Value:=1;
+    AddInvisible('AUTO_CREATED').Value:=0;
+    AddEdit('USER_NAME','EditUserName','LabelUserName',true);
+    AddCheckBox('LOCKED','CheckBoxLocked');
+    AddEdit('PASSWORD','EditPassword','LabelUserName');
+    AddEdit('SURNAME','EditSurname','LabelSurname');
+    AddEdit('NAME','EditName','LabelName');
+    AddEdit('PATRONYMIC','EditPatronymic','LabelPatronymic');
+    AddEdit('PHONE','EditPhone','LabelPhone');
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+    AddEdit('DB_USER_NAME','EditDbUserName','LabelDbUserName');
+    AddEdit('DB_PASSWORD','EditDbPassword','LabelDbPassword');
+    AddEdit('EMAIL','EditEmail','LabelEmail');
+  end;
+end;
+
+{ TBisCallcHandbookRolesInsertFormIface }
+
+constructor TBisCallcHandbookRolesInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_ACCOUNT';
+end;
+
+{ TBisCallcHandbookRolesUpdateFormIface }
+
+constructor TBisCallcHandbookRolesUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_ACCOUNT';
+end;
+
+{ TBisCallcHandbookRolesDeleteFormIface }
+
+constructor TBisCallcHandbookRolesDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_ACCOUNT';
+end;
+
+end.

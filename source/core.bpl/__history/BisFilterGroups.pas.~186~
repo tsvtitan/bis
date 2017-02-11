@@ -1,0 +1,566 @@
+unit BisFilterGroups;
+
+interface
+
+uses Classes, Contnrs;
+
+type
+  TBisFilterOperator=(foAnd,foOr);
+
+  TBisFilterCondition=(fcEqual,fcGreater,fcLess,fcNotEqual,fcEqualGreater,fcEqualLess,fcLike,fcNotLike,fcIsNull,fcIsNotNull,fcInside);
+  TBisFilterType=(ftFieldName,ftSQL);
+
+  TBisFilterGroups=class;
+
+  TBisFilter=class(TObject)
+  private
+    FFieldName: string;
+    FCaption: String;
+    FOperator: TBisFilterOperator;
+    FCondition: TBisFilterCondition;
+    FCheckCase: Boolean;
+    FRightSide: Boolean;
+    FLeftSide: Boolean;
+    FValue: Variant;
+    FFilterType: TBisFilterType;
+    FInsideFieldName: String;
+    FInsideProviderName: String;
+    FInsideFilterGroups: TBisFilterGroups;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    property FieldName: string read FFieldName write FFieldName;
+    property Caption: String read FCaption write FCaption; 
+    property Operator: TBisFilterOperator read FOperator write FOperator;
+    property Condition: TBisFilterCondition read FCondition write FCondition;
+    property CheckCase: Boolean read FCheckCase write FCheckCase;
+    property RightSide: Boolean read FRightSide write FRightSide;
+    property LeftSide: Boolean read FLeftSide write FLeftSide;
+    property Value: Variant read FValue write FValue;
+    property FilterType: TBisFilterType read FFilterType write FFilterType;
+    property InsideFieldName: String read FInsideFieldName write FInsideFieldName;
+    property InsideProviderName: String read FInsideProviderName write FInsideProviderName;
+
+    property InsideFilterGroups: TBisFilterGroups read FInsideFilterGroups;
+  end;
+
+  TBisFilters=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisFilter;
+  public
+    function Find(const FieldName: string): TBisFilter;
+    function Add(const FieldName: string; Condition: TBisFilterCondition; Value: Variant): TBisFilter;
+    function AddSql(const Sql: String): TBisFilter;
+    function AddInside(const FieldName, InsideFieldName, InsideProviderName: String): TBisFilter;
+    procedure CopyFrom(Source: TBisFilters; WithClear: Boolean=true);
+
+    property Items[Index: Integer]: TBisFilter read GetItem; default;
+  end;
+
+  TBisFilterGroup=class(TObject)
+  private
+    FGroupName: String;
+    FOperator: TBisFilterOperator;
+    FFilters: TBisFilters;
+    FEnabled: Boolean;
+    FVisible: Boolean;
+    FActive: Boolean;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure CopyFrom(Source: TBisFilterGroup; WithClear: Boolean=true);
+
+    property GroupName: String read FGroupName write FGroupName;
+    property Operator: TBisFilterOperator read FOperator write FOperator;
+    property Filters: TBisFilters read FFilters;
+    property Enabled: Boolean read FEnabled write FEnabled;
+    property Visible: Boolean read FVisible write FVisible;
+    property Active: Boolean read FActive write FActive;
+  end;
+
+  TBisFilterGroups=class(TObjectList)
+  private
+    FSOr: String;
+    FSAnd: String;
+    FSEqual: String;
+    FSGreater: String;
+    FSLess: String;
+    FSNotEqual: String;
+    FSEqualGreater: String;
+    FSEqualLess: String;
+    FSLike: String;
+    FSNotLike: String;
+    FSIsNull: String;
+    FSIsNotNull: String;
+    FSInside: String;
+    function GetVisibleEnabled: Boolean;
+    function GetItem(Index: Integer): TBisFilterGroup;
+    function GetFilterOperatorName(Operator: TBisFilterOperator): String;
+    function GetFilterConditionName(Condition: TBisFilterCondition): string;
+  public
+    constructor Create;
+    function Add(Operator: TBisFilterOperator=foAnd): TBisFilterGroup;
+    function AddVisible(Operator: TBisFilterOperator=foAnd): TBisFilterGroup;
+    function Insert(Index: Integer; Operator: TBisFilterOperator=foAnd): TBisFilterGroup;
+    function AddByName(GroupName: String; Operator: TBisFilterOperator=foAnd; Visible: Boolean=false): TBisFilterGroup;
+    function Find(GroupName: String): TBisFilterGroup;
+    procedure CopyFrom(Source: TBisFilterGroups; WithClear: Boolean=true; UseInsert: Boolean=false; ACount: Integer=0);
+    procedure DeleteInactive;
+    procedure DeleteVisible;
+    function GetViewString: String;
+
+    procedure WriteData(Writer: TWriter);
+    procedure ReadData(Reader: TReader);
+
+    procedure SaveToStream(Stream: TStream);
+    procedure LoadFromStream(Stream: TStream);
+
+    property Items[Index: Integer]: TBisFilterGroup read GetItem; default;
+    property VisibleEnabled: Boolean read GetVisibleEnabled;
+  published
+    property SOr: String read FSOr write FSOr;
+    property SAnd: String read FSAnd write FSAnd;
+    property SEqual: String read FSEqual write FSEqual;
+    property SGreater: String read FSGreater write FSGreater;
+    property SLess: String read FSLess write FSLess;
+    property SNotEqual: String read FSNotEqual write FSNotEqual;
+    property SEqualGreater: String read FSEqualGreater write FSEqualGreater;
+    property SEqualLess: String read FSEqualLess write FSEqualLess;
+    property SLike: String read FSLike write FSLike;
+    property SNotLike: String read FSNotLike write FSNotLike;
+    property SIsNull: String read FSIsNull write FSIsNull;
+    property SIsNotNull: String read FSIsNotNull write FSIsNotNull;
+    property SInside: String read FSInside write FSInside; 
+  end;
+
+
+implementation
+
+uses SysUtils, Variants,
+     BisConsts;
+
+{ TBisFilter}
+
+constructor TBisFilter.Create;
+begin
+  inherited Create;
+  FInsideFilterGroups:=TBisFilterGroups.Create;
+end;
+
+destructor TBisFilter.Destroy;
+begin
+  FInsideFilterGroups.Free;
+  inherited Destroy;
+end;
+
+{ TBisFilters }
+
+function TBisFilters.GetItem(Index: Integer): TBisFilter;
+begin
+  Result:=TBisFilter(inherited Items[Index]);
+end;
+
+function TBisFilters.Find(const FieldName: string): TBisFilter;
+var
+  i: Integer;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do
+    if AnsiSameText(Items[i].FieldName,FieldName) then begin
+      Result:=Items[i];
+      exit;
+    end;
+end;
+
+function TBisFilters.Add(const FieldName: string; Condition: TBisFilterCondition; Value: Variant): TBisFilter;
+begin
+  Result:=TBisFilter.Create;
+  Result.FieldName:=FieldName;
+  Result.Condition:=Condition;
+  Result.Operator:=foAnd;
+  Result.CheckCase:=false;
+  Result.Value:=Value;
+  Result.FilterType:=ftFieldName;
+  inherited Add(Result);
+end;
+
+function TBisFilters.AddSql(const Sql: String): TBisFilter;
+begin
+  Result:=TBisFilter.Create;
+  Result.FieldName:='';
+  Result.Condition:=fcEqual;
+  Result.Operator:=foAnd;
+  Result.FilterType:=ftSQL;
+  Result.Value:=SQL;
+  inherited Add(Result);
+end;
+
+function TBisFilters.AddInside(const FieldName, InsideFieldName, InsideProviderName: String): TBisFilter;
+begin
+  Result:=TBisFilter.Create;
+  Result.FieldName:=FieldName;
+  Result.Condition:=fcInside;
+  Result.Operator:=foAnd;
+  Result.FilterType:=ftFieldName;
+  Result.InsideFieldName:=InsideFieldName;
+  Result.InsideProviderName:=InsideProviderName;
+  inherited Add(Result);
+end;
+
+procedure TBisFilters.CopyFrom(Source: TBisFilters; WithClear: Boolean=true);
+var
+  i: Integer;
+  Filter, NewFilter: TBisFilter;
+begin
+  if WithClear then
+    Clear;
+  if Assigned(Source) then begin
+    for i:=0 to Source.Count-1 do begin
+      Filter:=Source.Items[i];
+      NewFilter:=Add(Filter.FieldName,Filter.Condition,Filter.Value);
+      NewFilter.Caption:=Filter.Caption;
+      NewFilter.Operator:=Filter.Operator;
+      NewFilter.CheckCase:=Filter.CheckCase;
+      NewFilter.RightSide:=Filter.RightSide;
+      NewFilter.LeftSide:=Filter.LeftSide;
+      NewFilter.FilterType:=Filter.FilterType;
+      NewFilter.InsideFieldName:=Filter.InsideFieldName;
+      NewFilter.InsideProviderName:=Filter.InsideProviderName;
+      NewFilter.InsideFilterGroups.CopyFrom(Filter.InsideFilterGroups);
+    end;
+  end;
+end;
+
+{ TBisFilterGroup }
+
+constructor TBisFilterGroup.Create;
+begin
+  inherited Create;
+  FFilters:=TBisFilters.Create;
+  FEnabled:=true;
+  FVisible:=false;
+  FActive:=true;
+end;
+
+destructor TBisFilterGroup.Destroy;
+begin
+  FFilters.Free;
+  inherited Destroy;
+end;
+
+procedure TBisFilterGroup.CopyFrom(Source: TBisFilterGroup; WithClear: Boolean);
+begin
+  if Assigned(Source) then begin
+    GroupName:=Source.GroupName;
+    Enabled:=Source.Enabled;
+    Visible:=Source.Visible;
+    Active:=Source.Active;
+    FFilters.CopyFrom(Source.Filters,WithClear);
+  end;
+end;
+
+{ TBisFilterGroups }
+
+constructor TBisFilterGroups.Create;
+begin
+  inherited Create;
+  FSOr:='или';
+  FSAnd:='и';
+  FSEqual:='=';
+  FSGreater:='>';
+  FSLess:='<';
+  FSNotEqual:='<>';
+  FSEqualGreater:='>=';
+  FSEqualLess:='<=';
+  FSLike:='содержит';
+  FSNotLike:='не содержит';
+  FSIsNull:='пусто';
+  FSIsNotNull:='не пусто';
+  FSInside:='входит';
+end;
+
+function TBisFilterGroups.GetItem(Index: Integer): TBisFilterGroup;
+begin
+  Result:=TBisFilterGroup(inherited Items[Index]);
+end;
+
+function TBisFilterGroups.Add(Operator: TBisFilterOperator=foAnd): TBisFilterGroup;
+begin
+  Result:=TBisFilterGroup.Create;
+  Result.Operator:=Operator;
+  inherited Add(Result);
+end;
+
+function TBisFilterGroups.AddVisible(Operator: TBisFilterOperator=foAnd): TBisFilterGroup;
+begin
+  Result:=Add(Operator);
+  Result.Visible:=true;;
+end;
+
+function TBisFilterGroups.Insert(Index: Integer; Operator: TBisFilterOperator): TBisFilterGroup;
+begin
+  Result:=TBisFilterGroup.Create;
+  Result.Operator:=Operator;
+  inherited Insert(Index,Result);
+end;
+
+function TBisFilterGroups.AddByName(GroupName: String;  Operator: TBisFilterOperator; Visible: Boolean): TBisFilterGroup;
+begin
+  Result:=Add(Operator);
+  if Assigned(Result) then begin
+    Result.GroupName:=GroupName;
+    Result.Visible:=Visible;
+  end;  
+end;
+
+function TBisFilterGroups.Find(GroupName: String): TBisFilterGroup;
+var
+  i: Integer;
+  Item: TBisFilterGroup;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.GroupName,GroupName) then begin
+      Result:=Item;
+    end;
+  end;
+end;
+
+procedure TBisFilterGroups.CopyFrom(Source: TBisFilterGroups; WithClear: Boolean; UseInsert: Boolean; ACount: Integer);
+var
+  i: Integer;
+  Group, NewGroup: TBisFilterGroup;
+  NCount: Integer;
+begin
+  if WithClear then
+    Clear;
+  if Assigned(Source) then begin
+    NCount:=Source.Count;
+    if (ACount>0) and (ACount<=NCount) then
+      NCount:=ACount;
+    for i:=0 to NCount-1 do begin
+      Group:=Source.Items[i];
+      if not UseInsert then
+        NewGroup:=Add(Group.Operator)
+      else NewGroup:=Insert(i,Group.Operator);
+      NewGroup.CopyFrom(Group);
+    end;
+  end;
+end;
+
+function TBisFilterGroups.GetVisibleEnabled: Boolean;
+var
+  i: Integer;
+  Group: TBisFilterGroup;
+begin
+  Result:=false;
+  for i:=0 to Count-1 do begin
+    Group:=Items[i];
+    Result:=Group.Visible and Group.Enabled and (Group.Filters.Count>0);
+    if Result then
+      break;
+  end;
+end;
+
+procedure TBisFilterGroups.DeleteInactive;
+var
+  i: Integer;
+  Group: TBisFilterGroup;
+begin
+  for i:=Count-1 downto 0 do begin
+    Group:=Items[i];
+    if not Group.Active then
+      Delete(i);
+  end;
+end;
+
+procedure TBisFilterGroups.DeleteVisible;
+var
+  i: Integer;
+  Group: TBisFilterGroup;
+begin
+  for i:=Count-1 downto 0 do begin
+    Group:=Items[i];
+    if Group.Visible then
+      Delete(i);
+  end;
+end;
+
+function TBisFilterGroups.GetFilterOperatorName(Operator: TBisFilterOperator): String;
+begin
+  Result:='';
+  case Operator of
+    foAnd: Result:=FSAnd;
+    foOr: Result:=FSOr;
+  end;
+end;
+
+function TBisFilterGroups.GetFilterConditionName(Condition: TBisFilterCondition): string;
+begin
+  Result:='';
+  case Condition of
+    fcEqual: Result:=FSEqual;
+    fcGreater: Result:=FSGreater;
+    fcLess: Result:=FSLess;
+    fcNotEqual: Result:=FSNotEqual;
+    fcEqualGreater: Result:=FSEqualGreater;
+    fcEqualLess: Result:=FSEqualLess;
+    fcLike: Result:=FSLike;
+    fcNotLike: Result:=FSNotLike;
+    fcIsNull: Result:=FSIsNull;
+    fcIsNotNull: Result:=FSIsNotNull;
+  end;
+end;
+
+function TBisFilterGroups.GetViewString: String;
+var
+  i,j: Integer;
+  Group: TBisFilterGroup;
+  Filter: TBisFilter;
+  S1,S2,S3,S4: String;
+begin
+  Result:='';
+  for i:=0 to Count-1 do begin
+    Group:=Items[i];
+    S1:='';
+    if (Group.Filters.Count>0) and
+       Group.Enabled and
+       Group.Visible then begin
+      S1:='( ';
+      for j:=0 to Group.Filters.Count-1 do begin
+        Filter:=Group.Filters.Items[j];
+        if Filter.Condition<>fcInside then begin
+          S2:=GetFilterOperatorName(Filter.Operator);
+          S3:=GetFilterConditionName(Filter.Condition);
+          S4:=VarToStrDef(Filter.Value,'');
+          case Filter.Condition of
+            fcIsNull,fcIsNotNull: begin
+              S4:=S3;
+              S3:=GetFilterConditionName(fcEqual);
+            end;
+          end;
+          if j=0 then begin
+            S1:=S1+''+Group.GroupName+' '+S3+' ['+S4;
+            if j=Group.Filters.Count-1 then
+              S1:=S1+']';
+          end else if j=Group.Filters.Count-1 then begin
+            S1:=S1+','+S4+']';
+          end else begin
+            S1:=S1+','+S4;
+          end;
+        end;
+      end;
+      S1:=Trim(S1)+' )';
+    end;
+    if Trim(Result)='' then begin
+      if Trim(S1)<>'' then
+        Result:=S1;
+    end else begin
+      if Trim(S1)<>'' then
+        Result:=Result+' '+GetFilterOperatorName(foAnd)+' '+S1;
+    end;
+  end;
+end;
+
+procedure TBisFilterGroups.WriteData(Writer: TWriter);
+var
+  i,j: Integer;
+  Item: TBisFilterGroup;
+  Filter: TBisFilter;
+begin
+  Writer.WriteListBegin;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    Writer.WriteInteger(Integer(Item.Operator));
+    Writer.WriteListBegin;
+    for j:=0 to Item.Filters.Count-1 do begin
+      Filter:=Item.Filters.Items[j];
+      Writer.WriteString(Filter.FieldName);
+      Writer.WriteString(Filter.Caption);
+      Writer.WriteInteger(Integer(Filter.Condition));
+      Writer.WriteVariant(Filter.Value);
+      Writer.WriteInteger(Integer(Filter.Operator));
+      Writer.WriteBoolean(Filter.CheckCase);
+      Writer.WriteBoolean(Filter.RightSide);
+      Writer.WriteBoolean(Filter.LeftSide);
+      Writer.WriteInteger(Integer(Filter.FilterType));
+      Writer.WriteString(Filter.InsideFieldName);
+      Writer.WriteString(Filter.InsideProviderName);
+      Filter.InsideFilterGroups.WriteData(Writer);
+    end;
+    Writer.WriteListEnd;
+    Writer.WriteString(Item.GroupName);
+    Writer.WriteBoolean(Item.Enabled);
+    Writer.WriteBoolean(Item.Visible);
+    Writer.WriteBoolean(Item.Active);
+  end;
+  Writer.WriteListEnd;
+end;
+
+procedure TBisFilterGroups.ReadData(Reader: TReader);
+var
+  Item: TBisFilterGroup;
+  Filter: TBisFilter;
+  FieldName: String;
+  Condition: TBisFilterCondition;
+  Value: Variant;
+begin
+  Reader.ReadListBegin;
+  while not Reader.EndOfList do begin
+    Item:=Add(TBisFilterOperator(Reader.ReadInteger));
+    if Assigned(Item) then begin
+      Reader.ReadListBegin;
+      while not Reader.EndOfList do begin
+        FieldName:=Reader.ReadString;
+        Condition:=TBisFilterCondition(Reader.ReadInteger);
+        Value:=Reader.ReadVariant;
+        Filter:=Item.Filters.Add(FieldName,Condition,Value);
+        if Assigned(Filter) then begin
+          Filter.Caption:=Reader.ReadString;
+          Filter.Operator:=TBisFilterOperator(Reader.ReadInteger);
+          Filter.CheckCase:=Reader.ReadBoolean;
+          Filter.RightSide:=Reader.ReadBoolean;
+          Filter.LeftSide:=Reader.ReadBoolean;
+          Filter.FilterType:=TBisFilterType(Reader.ReadInteger);
+          Filter.InsideFieldName:=Reader.ReadString;
+          Filter.InsideProviderName:=Reader.ReadString;
+          Filter.InsideFilterGroups.ReadData(Reader);
+        end;
+      end;
+      Reader.ReadListEnd;
+      Item.GroupName:=Reader.ReadString;
+      Item.Enabled:=Reader.ReadBoolean;
+      Item.Visible:=Reader.ReadBoolean;
+      Item.Active:=Reader.ReadBoolean;
+    end;
+  end;
+  Reader.ReadListEnd;
+end;
+
+procedure TBisFilterGroups.SaveToStream(Stream: TStream);
+var
+  Writer: TWriter;
+begin
+  Writer:=TWriter.Create(Stream,WriterBufferSize);
+  try
+    WriteData(Writer);
+  finally
+    Writer.Free;
+  end;
+end;
+
+procedure TBisFilterGroups.LoadFromStream(Stream: TStream);
+var
+  Reader: TReader;
+begin
+  Reader:=TReader.Create(Stream,ReaderBufferSize);
+  try
+    ReadData(Reader);
+  finally
+    Reader.Free;
+  end;
+end;
+
+end.

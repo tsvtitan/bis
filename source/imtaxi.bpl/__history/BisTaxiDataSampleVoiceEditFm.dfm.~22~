@@ -1,0 +1,132 @@
+inherited BisTaxiDataSampleVoiceEditForm: TBisTaxiDataSampleVoiceEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisTaxiDataSampleVoiceEditForm'
+  ClientHeight = 304
+  ClientWidth = 382
+  ExplicitWidth = 390
+  ExplicitHeight = 338
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 266
+    Width = 382
+    ExplicitTop = 343
+    ExplicitWidth = 388
+    inherited ButtonOk: TButton
+      Left = 203
+      ExplicitLeft = 209
+    end
+    inherited ButtonCancel: TButton
+      Left = 299
+      ExplicitLeft = 305
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 382
+    Height = 266
+    ExplicitTop = -1
+    ExplicitWidth = 390
+    ExplicitHeight = 254
+    object LabelText: TLabel
+      Left = 44
+      Top = 41
+      Width = 33
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1058#1077#1082#1089#1090':'
+      FocusControl = EditText
+    end
+    object LabelType: TLabel
+      Left = 11
+      Top = 14
+      Width = 66
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1058#1080#1087' '#1086#1073#1088#1072#1079#1094#1072':'
+      FocusControl = ComboBoxType
+    end
+    object LabelDescription: TLabel
+      Left = 24
+      Top = 170
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1087#1080#1089#1072#1085#1080#1077':'
+      FocusControl = MemoDescription
+    end
+    object LabelPriority: TLabel
+      Left = 250
+      Top = 14
+      Width = 48
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1086#1088#1103#1076#1086#1082':'
+      FocusControl = EditPriority
+    end
+    object EditText: TEdit
+      Left = 83
+      Top = 38
+      Width = 283
+      Height = 21
+      TabOrder = 0
+    end
+    object ComboBoxType: TComboBox
+      Left = 83
+      Top = 11
+      Width = 119
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      TabOrder = 1
+    end
+    object MemoDescription: TMemo
+      Left = 83
+      Top = 167
+      Width = 283
+      Height = 84
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      TabOrder = 2
+      ExplicitWidth = 290
+      ExplicitHeight = 194
+    end
+    object GroupBoxVoiceData: TGroupBox
+      Left = 83
+      Top = 60
+      Width = 283
+      Height = 101
+      Caption = ' '#1040#1091#1076#1080#1086' '
+      TabOrder = 3
+      object PanelVoiceData: TPanel
+        AlignWithMargins = True
+        Left = 7
+        Top = 15
+        Width = 269
+        Height = 79
+        Margins.Left = 5
+        Margins.Top = 0
+        Margins.Right = 5
+        Margins.Bottom = 5
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 0
+        ExplicitLeft = 5
+        ExplicitTop = -25
+        ExplicitWidth = 335
+        ExplicitHeight = 83
+      end
+    end
+    object EditPriority: TEdit
+      Left = 304
+      Top = 11
+      Width = 62
+      Height = 21
+      Constraints.MaxWidth = 300
+      TabOrder = 4
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 456
+    Top = 176
+  end
+end

@@ -1,0 +1,90 @@
+package tapi_ex;
+
+{$R *.res}
+{$R 'Std\AssistedTAPI.dcr'}
+{$R 'Std\CallList.dcr'}
+{$R 'Std\DevConf.dcr'}
+{$R 'Std\TAPIAddress.dcr'}
+{$R 'Std\TAPICall.dcr'}
+{$R 'Std\TAPIConference.dcr'}
+{$R 'Std\TAPIForward.dcr'}
+{$R 'Std\TAPILineConfigDlg.dcr'}
+{$R 'Std\TAPILines.dcr'}
+{$R 'Std\TAPIPhone.dcr'}
+{$R 'Std\TAPIProv.dcr'}
+{$R 'Std\TAPIServices.dcr'}
+{$R 'Std\TAPITon.dcr'}
+{$R 'Misc\TAPILineSelectDialog.dcr'}
+{$R 'Misc\TAPIWave.dcr'}
+{$R 'ACD\ACDProxy.dcr'}
+{$R 'ACD\TAPIAgent.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESIGNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  designide;
+
+contains
+  TAPITrans in 'Std\TAPITrans.pas',
+  AssistedTAPI in 'Std\AssistedTAPI.pas',
+  CallList in 'Std\CallList.pas',
+  D4Comp in 'Std\D4Comp.pas',
+  DevConf in 'Std\DevConf.pas',
+  DevConfProp in 'Std\DevConfProp.pas',
+  tapi in 'Std\tapi.pas',
+  TAPIAddress in 'Std\TAPIAddress.pas',
+  TAPICall in 'Std\TAPICall.pas',
+  TAPICallBack in 'Std\TAPICallBack.pas',
+  TAPIConference in 'Std\TAPIConference.pas',
+  TAPICurVer in 'Std\TAPICurVer.pas',
+  TAPIDevices in 'Std\TAPIDevices.pas',
+  tapierr in 'Std\tapierr.pas',
+  TAPIForward in 'Std\TAPIForward.pas',
+  TAPIHelpfunc in 'Std\TAPIHelpfunc.pas',
+  TAPILineConfigDlg in 'Std\TAPILineConfigDlg.pas',
+  TAPILines in 'Std\TAPILines.pas',
+  TAPILists in 'Std\TAPILists.pas',
+  TAPIMediaCtl in 'Std\TAPIMediaCtl.pas',
+  TAPIObj in 'Std\TAPIObj.pas',
+  TAPIPhone in 'Std\TAPIPhone.pas',
+  TAPIPhoneConfigDlg in 'Std\TAPIPhoneConfigDlg.pas',
+  TAPIProv in 'Std\TAPIProv.pas',
+  TAPIProvProp in 'Std\TAPIProvProp.pas',
+  TAPIRedirect in 'Std\TAPIRedirect.pas',
+  TAPIServices in 'Std\TAPIServices.pas',
+  TAPISystem in 'Std\TAPISystem.pas',
+  TAPIThread in 'Std\TAPIThread.pas',
+  TAPITon in 'Std\TAPITon.pas',
+  TAPICtrls in 'Misc\TAPICtrls.pas',
+  TAPIDlg in 'Misc\TAPIDlg.pas',
+  TAPILineSelectDialog in 'Misc\TAPILineSelectDialog.pas',
+  TAPIPDlg in 'Misc\TAPIPDlg.pas',
+  TAPIPhoneSelectDialog in 'Misc\TAPIPhoneSelectDialog.pas',
+  TAPIWave in 'Misc\TAPIWave.pas',
+  ACDProxy in 'ACD\ACDProxy.pas',
+  TAPIAgent in 'ACD\TAPIAgent.pas';
+
+end.

@@ -1,0 +1,51 @@
+Stato avanzamento componente ILFScriptEngine
+-----------------------------------------------------------------
+Versione: 0.78
+
+FIXED:
+* Aggiornamento a Synedit 1.1
+* Aggiornamento a DWSII 1.1. Ora lo stack delle chiamate e' utilizzabile in debug.
+* Realizzato Reset in modo sicuro e pulito
+* Aumentata solidita' di Execute in caso di errori RunTime
+* Razionalizzato codice componente
+* Risolto problema di deadlock. Il meccanismo di bloccaggio delle Execute fermava l'Ide
+  Utilizzato un ciclo di ProcessMessages al posto di WaitFor sul thread
+* Risolto baco nel Reset. Access violation se chiamato in fase di destroy.
+  Non bisognava fare la Free del TProgram in quanto e' un TInterfacedObject
+* Aggiunte CoInitialize e CoUnInitialize nel ThreadRunner
+* Corretto bachettino in NotSoSimpleDebugger sul raddoppio dei TBits per Statements e BreakPoints
+* Piccola pulizia codice
+
+TO FIX:
+* ! Ora che la form dell'IDE non viene distrutta, attenzione a cio' che succede se da componente si cambia
+    lo script. Probabilmente non viene cambiato il TStrings di SynEdit
+* ! Controllare nuovamente coerenza di tutto il componente.
+  Aggiustare cio' che c'e' senza agguingere nulla
+* Realizzare un vero test per stressare il componente
+
+
+
+DONE:
++ Realizzato il debug anche per una Call (prima era solo per l'intero programma)
++ Trap dell'errore a RunTime e possibilita' dell'apertura automatica del debugger,
+  posizionato sull'errore, stile VBA. (property "DebugMode")
++ ToolTip Insight sull'evento OnMouseMove (stile Borland)
++ Il componente DWSII e l'HighLighter di Synedit sono ora esterni e si linkano a property del componente
++ Le due versioni di execute sono entrambe implementate da un thread, ma
+  Execute;                        NON e' bloccante
+  Execute(FunctionName, Params);  e' bloccante
++ Input/Output Console, che permette di fare l'evaluate di espressioni al volo.
++ Evaluate di Input/Output Console funziona sia in esecuzione che non.
++ Cambiato funzionamento di Execute. Ora sono ENTRAMBE BLOCCANTI
++ La form dell'IDE non viene distrutta sull'OnClose, ma nascosta. Fare attenzione alle inizializzazioni.
+  In questo modo e' piu' semplice aprire l'IDE riposizionandosi sull'espressione corrente.
++ Aggiunto evento OnError che sputa fuori errori Compile/Runtime anche se DebugMode=False
++ L'IDE puo' chiudersi o nascondersi. Sulla chiusura viene lanciato OnEditorClose
++ Se DebugMode=False non viene utilizzato il thread, ma viene fatta la execute diretta a DWS
++ Input/Output Console funziona anche per procedure. Con prefisso '?' si valutano espressioni
++ Albero dei simboli stile CodeTree
+
+
+TO DO:
++ Code Completion
++ Designer visuale

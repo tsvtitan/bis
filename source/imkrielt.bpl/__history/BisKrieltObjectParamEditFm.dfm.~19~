@@ -1,0 +1,173 @@
+inherited BisKrieltObjectParamEditForm: TBisKrieltObjectParamEditForm
+  Left = 721
+  Top = 256
+  Caption = 'BisKrieltObjectParamEditForm'
+  ClientHeight = 435
+  ClientWidth = 366
+  ExplicitWidth = 374
+  ExplicitHeight = 469
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 397
+    Width = 366
+    ExplicitTop = 219
+    ExplicitWidth = 302
+    inherited ButtonOk: TButton
+      Left = 187
+      ExplicitLeft = 123
+    end
+    inherited ButtonCancel: TButton
+      Left = 284
+      ExplicitLeft = 220
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 366
+    Height = 397
+    ExplicitLeft = -64
+    ExplicitTop = -1
+    ExplicitWidth = 501
+    ExplicitHeight = 385
+    object LabelParam: TLabel
+      Left = 36
+      Top = 16
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1072#1088#1072#1084#1077#1090#1088':'
+      FocusControl = EditParam
+    end
+    object LabelAccount: TLabel
+      Left = 92
+      Top = 344
+      Width = 61
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1050#1090#1086' '#1089#1086#1079#1076#1072#1083':'
+      FocusControl = EditAccount
+    end
+    object LabelDateCreate: TLabel
+      Left = 73
+      Top = 370
+      Width = 80
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1044#1072#1090#1072' '#1089#1086#1079#1076#1072#1085#1080#1103':'
+      FocusControl = DateTimePickerCreate
+    end
+    object LabelExport: TLabel
+      Left = 23
+      Top = 248
+      Width = 46
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1069#1082#1089#1087#1086#1088#1090':'
+      FocusControl = EditExport
+    end
+    object LabelDescription: TLabel
+      Left = 16
+      Top = 272
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1087#1080#1089#1072#1085#1080#1077':'
+      FocusControl = MemoDescription
+    end
+    object EditParam: TEdit
+      Left = 95
+      Top = 13
+      Width = 231
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonParam: TButton
+      Left = 332
+      Top = 13
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1072#1088#1072#1084#1077#1090#1088
+      Caption = '...'
+      TabOrder = 1
+    end
+    object EditAccount: TEdit
+      Left = 159
+      Top = 341
+      Width = 167
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 3
+    end
+    object ButtonAccount: TButton
+      Left = 332
+      Top = 341
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1091#1095#1077#1090#1085#1091#1102' '#1079#1072#1087#1080#1089#1100' ('#1088#1086#1083#1100')'
+      Caption = '...'
+      TabOrder = 4
+    end
+    object DateTimePickerCreate: TDateTimePicker
+      Left = 159
+      Top = 368
+      Width = 88
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Checked = False
+      TabOrder = 5
+    end
+    object DateTimePickerCreateTime: TDateTimePicker
+      Left = 253
+      Top = 368
+      Width = 73
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 6
+    end
+    object GroupBoxValue: TGroupBox
+      Left = 11
+      Top = 38
+      Width = 342
+      Height = 201
+      Caption = ' '#1047#1085#1072#1095#1077#1085#1080#1077' '
+      TabOrder = 2
+      object PanelFrame: TPanel
+        Left = 2
+        Top = 15
+        Width = 338
+        Height = 184
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 0
+        ExplicitLeft = -132
+        ExplicitTop = -60
+        ExplicitWidth = 317
+        ExplicitHeight = 165
+      end
+    end
+    object EditExport: TEdit
+      Left = 75
+      Top = 245
+      Width = 278
+      Height = 21
+      TabOrder = 7
+    end
+    object MemoDescription: TMemo
+      Left = 75
+      Top = 272
+      Width = 278
+      Height = 63
+      TabOrder = 8
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 104
+    Top = 104
+  end
+end

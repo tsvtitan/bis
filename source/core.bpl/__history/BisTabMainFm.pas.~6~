@@ -1,0 +1,33 @@
+unit BisTabMainFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs,
+  BisMainFm, Menus, ActnPopup, ImgList, ExtCtrls, AppEvnts, ComCtrls;
+
+type
+  TBisTabMainForm = class(TBisMainForm)
+    StatusBar: TStatusBar;
+    ApplicationEvents: TApplicationEvents;
+    procedure ApplicationEventsHint(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BisTabMainForm: TBisTabMainForm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TBisTabMainForm.ApplicationEventsHint(Sender: TObject);
+begin
+  StatusBar.Panels[1].Text:=Application.Hint;
+end;
+
+end.

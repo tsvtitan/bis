@@ -1,0 +1,35 @@
+inherited BisDataGridFrame: TBisDataGridFrame
+  Width = 450
+  Height = 153
+  OnResize = FrameResize
+  ExplicitWidth = 450
+  ExplicitHeight = 153
+  inherited PanelData: TPanel
+    Width = 450
+    Height = 124
+    ExplicitWidth = 450
+    ExplicitHeight = 124
+    object GridPattern: TDBGrid
+      Left = 0
+      Top = 0
+      Width = 450
+      Height = 124
+      Align = alClient
+      DataSource = DataSource
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+      PopupMenu = Popup
+      ReadOnly = True
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDblClick = GridPatternDblClick
+    end
+  end
+  inherited ControlBar: TControlBar
+    Width = 450
+    ExplicitWidth = 450
+  end
+end

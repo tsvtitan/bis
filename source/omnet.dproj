@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{f8ea43b8-9465-43f3-8b82-c20069e5ee6b}</ProjectGuid>
+    <MainSource>omnet.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\omnet.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+    <DCC_UnitSearchPath>U:\source\_dcp;U:\source\omnet.bpl\Ras\Par;U:\source\omnet.bpl\Ras;U:\source\omnet.bpl\Indy\Core;U:\source\omnet.bpl\Indy\Protocols;U:\source\omnet.bpl\Indy\System</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp;U:\source\omnet.bpl\Ras\Par;U:\source\omnet.bpl\Ras;U:\source\omnet.bpl\Indy\Core;U:\source\omnet.bpl\Indy\Protocols;U:\source\omnet.bpl\Indy\System</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp;U:\source\omnet.bpl\Ras\Par;U:\source\omnet.bpl\Ras;U:\source\omnet.bpl\Indy\Core;U:\source\omnet.bpl\Indy\Protocols;U:\source\omnet.bpl\Indy\System</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp;U:\source\omnet.bpl\Ras\Par;U:\source\omnet.bpl\Ras;U:\source\omnet.bpl\Indy\Core;U:\source\omnet.bpl\Indy\Protocols;U:\source\omnet.bpl\Indy\System</DCC_IncludePath>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_IMPLICIT_IMPORT>False</DCC_IMPLICIT_IMPORT>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_OutputDRCFile>True</DCC_OutputDRCFile>
+    <DCC_TYPEINFO_IMPLICITLY_ADDED>False</DCC_TYPEINFO_IMPLICITLY_ADDED>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="HostApplication">U:\bin\taxi.exe</Parameters><Parameters Name="RunParams">/config smcall.ini /noupdate</Parameters><Parameters Name="DebugSourceDirs">U:\source\objects.bpl\Jcl\</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options><Package_Options Name="LibSuffix"></Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">2</VersionInfo><VersionInfo Name="MinorVer">1</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">6</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">Network object module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">2.1.0.6</VersionInfoKeys><VersionInfoKeys Name="InternalName">omnet.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">omnet.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">2.1</VersionInfoKeys><VersionInfoKeys Name="Comments">Network object module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">omnet.dpk</Source></Source><Excluded_Packages>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <Excluded_Packages Name="$(BDS)\bin\bcboffice2k100.bpl">CodeGear C++Builder Office 2000 Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\bcbofficexp100.bpl">CodeGear C++Builder Office XP Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dcloffice2k100.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dclofficexp100.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+    </Excluded_Packages><Language><Language Name="ProjectLang">$00000419</Language><Language Name="RootDir">U:\source\imdesign.bpl\</Language></Language>  
+    
+    
+    <Resource_DLL_Projects>
+      <Resource_DLL_Projects Name="Item0">Русский*$00000419*RUS*RUS</Resource_DLL_Projects>
+    </Resource_DLL_Projects>
+  </Delphi.Personality><ModelSupport>False</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="omnet.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="E:\Work\bis\source\core.dcp" />
+    <DCCReference Include="omnet.bpl\BisNetInit.pas" />
+    <DCCReference Include="omnet.bpl\BisRtp.pas" />
+    <DCCReference Include="omnet.bpl\BisSdp.pas" />
+    <DCCReference Include="omnet.bpl\BisSip.pas" />
+    <DCCReference Include="omnet.bpl\BisSmpp.pas" />
+    <DCCReference Include="omnet.bpl\BisUdpServer.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Core\IdContext.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Core\IdExceptionCore.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Core\IdIOHandler.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Core\IdIOHandlerStack.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Core\IdSocketHandle.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Core\IdTCPClient.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Core\IdUDPBase.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Core\IdUDPClient.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Core\IdUDPServer.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Protocols\IdCustomHTTPServer.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Protocols\IdDNSResolver.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Protocols\IdFTP.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Protocols\IdHTTP.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Protocols\IdHTTPServer.pas" />
+    <DCCReference Include="omnet.bpl\Indy\Protocols\IdMessage.pas" />
+    <DCCReference Include="omnet.bpl\Ras\Lmcons.pas" />
+    <DCCReference Include="omnet.bpl\Ras\LmErr.pas" />
+    <DCCReference Include="omnet.bpl\Ras\Ras.pas" />
+    <DCCReference Include="omnet.bpl\Ras\RasHelperClasses.pas" />
+    <DCCReference Include="omnet.bpl\Ras\RasUtils.pas" />
+  </ItemGroup>
+</Project>

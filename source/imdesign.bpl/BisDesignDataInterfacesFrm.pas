@@ -1,0 +1,588 @@
+unit BisDesignDataInterfacesFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin,
+  ExtCtrls, Grids, DBGrids, Contnrs, StdCtrls,
+
+  BisIfaces, BisFm, BisDataFrm, BisDataEditFm, BisDataGridFrm,
+  BisFieldNames, BisInterfaces, BisOptionsFm, BisOptionsFrm,
+  BisModules, BisIfaceModules,
+  BisScriptIface, BisScriptModules,
+  BisDocumentFm, BisReportEditorFm, BisReportFm, BisReportModules,
+  BisDesignDataPermissionsFm;
+
+type
+  TBisDesignDataReportsFrameIfaces=class(TObjectList)
+  public
+    function FindByClass(AClass: TClass; ACaption: String): TBisIface;
+    function FindPermissionById(InterfaceId: Variant): TBisDesignDataPermissionsFormIface;
+  end;
+
+  TBisDesignDataInterfacesFrame = class(TBisDataGridFrame)
+    ToolBarExtra: TToolBar;
+    ToolButtonInterfaceShow: TToolButton;
+    ActionInterfaceShow: TAction;
+    MenuItemInterfaceShow: TMenuItem;
+    N16: TMenuItem;
+    ToolButtonPermissions: TToolButton;
+    ActionPermissions: TAction;
+    MenuItemPermissions: TMenuItem;
+    ToolButtonInterfaceOptions: TToolButton;
+    ActionInterfaceOptions: TAction;
+    MenuItemInterfaceOptions: TMenuItem;
+    procedure ActionInterfaceShowExecute(Sender: TObject);
+    procedure ActionInterfaceShowUpdate(Sender: TObject);
+    procedure ActionPermissionsExecute(Sender: TObject);
+    procedure ActionPermissionsUpdate(Sender: TObject);
+    procedure ActionInterfaceOptionsExecute(Sender: TObject);
+    procedure ActionInterfaceOptionsUpdate(Sender: TObject);
+  private
+    FIfaces: TBisDesignDataReportsFrameIfaces;
+    FOldInterfaceId: Variant;
+    FOldClass: TBisIfaceClass;
+    function GetInterfaceTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+    function GetInterfaceType: TBisInterfaceType;
+    function GetInterfaceClass(var OleClass: String; var Module: TBisModule): TBisIfaceClass;
+    function GetInternalClass(var Module: TBisModule): TBisIfaceClass;
+    function GetScriptClass(ScriptId: Variant): TBisScriptIfaceClass;
+    function GetReportClass(ReportId: Variant): TBisReportFormIfaceClass;
+    function GetDocumentClass(DocumentId: Variant; var OleClass: String): TBisDocumentFormIfaceClass;
+  protected
+    function GetCurrentUpdateClass: TBisDataEditFormIfaceClass; override;
+    function GetCurrentDuplicateClass: TBisDataEditFormIfaceClass; override;
+    function GetCurrentDeleteClass: TBisDataEditFormIfaceClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function CanInterfaceShow: Boolean;
+    procedure InterfaceShow;
+    function CanInterfaceOptions: Boolean;
+    procedure InterfaceOptions;
+    function CanPermissions: Boolean;
+    procedure Permissions;
+  end;
+
+implementation
+
+uses BisProvider, BisDialogs, BisUtils, BisFilterGroups,
+     BisParam, BisCore,
+     BisDesignDataInterfaceFilterFm, BisDesignDataInterfaceEditFm, BisDesignDataReportEditFm,
+     BisDesignDataScriptEditFm, BisDesignDataDocumentEditFm;
+
+{$R *.dfm}
+
+{ TBisDesignDataReportsFrameIfaces }
+
+function TBisDesignDataReportsFrameIfaces.FindByClass(AClass: TClass; ACaption: String): TBisIface;
+var
+  i: Integer;
+  Obj: TObject;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Obj:=Items[i];
+    if Assigned(Obj) and (Obj is TBisIface) and (Obj.ClassType=AClass) then begin
+      if Trim(ACaption)<>'' then begin
+        if AnsiSameText(TBisIface(Obj).Caption,ACaption) then begin
+          Result:=TBisIface(Obj);
+          exit;
+        end;
+      end else begin
+        Result:=TBisIface(Obj);
+        exit;
+      end;
+    end;
+  end;
+end;
+
+function TBisDesignDataReportsFrameIfaces.FindPermissionById(InterfaceId: Variant): TBisDesignDataPermissionsFormIface;
+var
+  i: Integer;
+  Obj: TObject;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Obj:=Items[i];
+    if Assigned(Obj) and (Obj is TBisDesignDataPermissionsFormIface) then begin
+      if VarSameValue(TBisDesignDataPermissionsFormIface(Obj).InterfaceId,InterfaceId) then begin
+        Result:=TBisDesignDataPermissionsFormIface(Obj);
+        exit;
+      end;
+    end;
+  end;
+end;
+
+{ TBisDesignDataReportsFrame }
+
+constructor TBisDesignDataInterfacesFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FIfaces:=TBisDesignDataReportsFrameIfaces.Create;
+
+  FilterClass:=TBisDesignDataInterfaceFilterFormIface;
+  
+  InsertClasses.Add(TBisDesignDataInterfaceInsertFormIface);
+  InsertClasses.Add(TBisDesignDataReportInsertFormIface);
+  InsertClasses.Add(TBisDesignDataScriptInsertFormIface);
+  InsertClasses.Add(TBisDesignDataDocumentInsertFormIface);
+
+  with Provider do begin
+    ProviderName:='S_INTERFACES';
+    with FieldNames do begin
+      AddKey('INTERFACE_ID');
+      AddInvisible('DESCRIPTION');
+      AddInvisible('INTERFACE_TYPE');
+      AddInvisible('MODULE_NAME');
+      AddInvisible('MODULE_INTERFACE');
+      Add('NAME','Наименование',320);
+      AddCalculate('INTERFACE_TYPE_NAME','Тип интерфейса',GetInterfaceTypeName,ftString,100,100);
+    end;
+    Orders.Add('NAME');
+  end;
+
+  with CreateFilterMenuItem('Все типы') do begin
+    Checked:=true;
+  end;
+
+  with CreateFilterMenuItem(GetInterfaceTypeByIndex(0)) do begin
+    FilterGroups.AddVisible.Filters.Add('INTERFACE_TYPE',fcEqual,0);
+  end;
+
+  with CreateFilterMenuItem(GetInterfaceTypeByIndex(1)) do begin
+    FilterGroups.AddVisible.Filters.Add('INTERFACE_TYPE',fcEqual,1);
+  end;
+
+  with CreateFilterMenuItem(GetInterfaceTypeByIndex(2)) do begin
+    FilterGroups.AddVisible.Filters.Add('INTERFACE_TYPE',fcEqual,2);
+  end;
+
+  with CreateFilterMenuItem(GetInterfaceTypeByIndex(3)) do begin
+    FilterGroups.AddVisible.Filters.Add('INTERFACE_TYPE',fcEqual,3);
+  end;
+
+  FOldInterfaceId:=Null;
+end;
+
+destructor TBisDesignDataInterfacesFrame.Destroy;
+begin
+  FIfaces.Free;
+  inherited Destroy;
+end;
+
+function TBisDesignDataInterfacesFrame.GetInterfaceTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S: String;
+begin
+  Result:=Null;
+  S:=GetInterfaceTypeByIndex(DataSet.FieldByName('INTERFACE_TYPE').AsInteger);
+  if Trim(S)<>'' then
+    Result:=S;
+end;
+
+function TBisDesignDataInterfacesFrame.GetInterfaceType: TBisInterfaceType;
+begin
+  Result:=itInternal;
+  if Provider.Active and not Provider.Empty then begin
+    Result:=TBisInterfaceType(Provider.FieldByName('INTERFACE_TYPE').AsInteger);
+  end;
+end;
+
+function TBisDesignDataInterfacesFrame.GetInterfaceClass(var OleClass: String; var Module: TBisModule): TBisIfaceClass;
+var
+  InterfaceType: TBisInterfaceType;
+  Id: Variant;
+begin
+  Result:=nil;
+  if Provider.Active and not Provider.Empty then begin
+    Id:=Provider.FieldByName('INTERFACE_ID').Value;
+    InterfaceType:=GetInterfaceType;
+    case InterfaceType of
+      itInternal: Result:=GetInternalClass(Module);
+      itScript: Result:=GetScriptClass(Id);
+      itReport: Result:=GetReportClass(Id);
+      itDocument: Result:=GetDocumentClass(Id,OleClass);
+    end;
+  end;
+end;
+
+function TBisDesignDataInterfacesFrame.GetInternalClass(var Module: TBisModule): TBisIfaceClass;
+var
+  i,j: Integer;
+  Item: TBisIfaceModule;
+  ModuleName: String;
+  IfaceName: String;
+  AClass: TBisIfaceClass;
+begin
+  Result:=nil;
+  if Provider.Active and not Provider.Empty then begin
+    ModuleName:=Provider.FieldByName('MODULE_NAME').AsString;
+    IfaceName:=Provider.FieldByName('MODULE_INTERFACE').AsString;
+    for i:=0 to Core.IfaceModules.Count-1 do begin
+      Item:=Core.IfaceModules.Items[i];
+      if Item.Enabled and AnsiSameText(Item.ObjectName,ModuleName) then begin
+        for j:=0 to Item.Classes.Count-1 do begin
+          AClass:=Item.Classes.Items[j];
+          if AnsiSameText(AClass.GetObjectName,IfaceName) then begin
+            Result:=AClass;
+            Module:=Item;
+            exit;
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TBisDesignDataInterfacesFrame.GetScriptClass(ScriptId: Variant): TBisScriptIfaceClass;
+var
+  P: TBisProvider;
+  i: Integer;
+  Module: TBisScriptModule;
+  Engine: String;
+begin
+  Result:=nil;
+  if Provider.Active and not Provider.Empty then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_SCRIPTS';
+      P.FieldNames.AddInvisible('ENGINE');
+      P.FilterGroups.Add.Filters.Add('SCRIPT_ID',fcEqual,ScriptId);
+      P.Open;
+      if P.Active and not P.Empty then begin
+        Engine:=P.FieldByName('ENGINE').AsString;
+        for i:=0 to Core.ScriptModules.Count-1 do begin
+          Module:=Core.ScriptModules.Items[i];
+          if Module.Enabled and AnsiSameText(Module.ObjectName,Engine) then begin
+            Result:=Module.ScriptClass;
+            exit;
+          end;
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+function TBisDesignDataInterfacesFrame.GetReportClass(ReportId: Variant): TBisReportFormIfaceClass;
+var
+  P: TBisProvider;
+  i: Integer;
+  Module: TBisReportModule;
+  Engine: String;
+begin
+  Result:=nil;
+  if Provider.Active and not Provider.Empty then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_REPORTS';
+      P.FieldNames.AddInvisible('ENGINE');
+      P.FilterGroups.Add.Filters.Add('REPORT_ID',fcEqual,ReportId);
+      P.Open;
+      if P.Active and not P.Empty then begin
+        Engine:=P.FieldByName('ENGINE').AsString;
+        for i:=0 to Core.ReportModules.Count-1 do begin
+          Module:=Core.ReportModules.Items[i];
+          if Module.Enabled and AnsiSameText(Module.ObjectName,Engine) then begin
+            Result:=Module.ReportClass;
+            exit;
+          end;
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+function TBisDesignDataInterfacesFrame.GetDocumentClass(DocumentId: Variant; var OleClass: String): TBisDocumentFormIfaceClass;
+var
+  P: TBisProvider;
+begin
+  Result:=nil;
+  if Provider.Active and not Provider.Empty then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_DOCUMENTS';
+      P.FieldNames.AddInvisible('OLE_CLASS');
+      P.FilterGroups.Add.Filters.Add('DOCUMENT_ID',fcEqual,DocumentId);
+      P.Open;
+      if P.Active and not P.Empty then begin
+        OleClass:=P.FieldByName('OLE_CLASS').AsString;
+        Result:=TBisDocumentFormIface;
+        exit;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+function TBisDesignDataInterfacesFrame.GetCurrentDuplicateClass: TBisDataEditFormIfaceClass;
+var
+  InterfaceType: TBisInterfaceType;
+begin
+  Result:=nil;
+  InterfaceType:=GetInterfaceType;
+  case InterfaceType of
+    itInternal: Result:=TBisDesignDataInterfaceInsertFormIface;
+    itScript: Result:=TBisDesignDataScriptInsertFormIface;
+    itReport: Result:=TBisDesignDataReportInsertFormIface;
+    itDocument: Result:=TBisDesignDataDocumentInsertFormIface;
+  end;
+end;
+
+function TBisDesignDataInterfacesFrame.GetCurrentUpdateClass: TBisDataEditFormIfaceClass;
+var
+  InterfaceType: TBisInterfaceType;
+begin
+  Result:=nil;
+  InterfaceType:=GetInterfaceType;
+  case InterfaceType of
+    itInternal: Result:=TBisDesignDataInterfaceUpdateFormIface;
+    itScript: Result:=TBisDesignDataScriptUpdateFormIface;
+    itReport: Result:=TBisDesignDataReportUpdateFormIface;
+    itDocument: Result:=TBisDesignDataDocumentUpdateFormIface;
+  end;
+end;
+
+function TBisDesignDataInterfacesFrame.GetCurrentDeleteClass: TBisDataEditFormIfaceClass;
+var
+  InterfaceType: TBisInterfaceType;
+begin
+  Result:=nil;
+  InterfaceType:=GetInterfaceType;
+  case InterfaceType of
+    itInternal: Result:=TBisDesignDataInterfaceDeleteFormIface;
+    itScript: Result:=TBisDesignDataScriptDeleteFormIface;
+    itReport: Result:=TBisDesignDataReportDeleteFormIface;
+    itDocument: Result:=TBisDesignDataDocumentDeleteFormIface;
+  end;
+end;
+
+procedure TBisDesignDataInterfacesFrame.ActionInterfaceShowUpdate(Sender: TObject);
+begin
+  ActionInterfaceShow.Enabled:=CanInterfaceShow;
+end;
+
+procedure TBisDesignDataInterfacesFrame.ActionPermissionsExecute(Sender: TObject);
+begin
+  Permissions;
+end;
+
+procedure TBisDesignDataInterfacesFrame.ActionPermissionsUpdate(Sender: TObject);
+begin
+  ActionPermissions.Enabled:=CanPermissions;
+end;
+
+procedure TBisDesignDataInterfacesFrame.ActionInterfaceOptionsExecute(Sender: TObject);
+begin
+  InterfaceOptions;
+end;
+
+procedure TBisDesignDataInterfacesFrame.ActionInterfaceOptionsUpdate(Sender: TObject);
+begin
+  ActionInterfaceOptions.Enabled:=CanInterfaceOptions;
+end;
+
+procedure TBisDesignDataInterfacesFrame.ActionInterfaceShowExecute(Sender: TObject);
+begin
+  InterfaceShow;
+end;
+
+function TBisDesignDataInterfacesFrame.CanInterfaceShow: Boolean;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+end;
+
+procedure TBisDesignDataInterfacesFrame.InterfaceShow;
+var
+  Id: Variant;
+  ACaption: String;
+  OleClass: String;
+
+  procedure LocalShow(AClass: TBisIfaceClass; AModule: TBisModule);
+  var
+    Iface: TBisIface;
+  begin
+    if Assigned(AClass) then begin
+      Iface:=FIfaces.FindByClass(AClass,ACaption);
+      if not Assigned(Iface) then begin
+        Iface:=AClass.Create(Self);
+        Iface.Permissions.Enabled:=false;
+        FIfaces.Add(Iface);
+        Iface.Init;
+      end;
+      if Assigned(AModule) and (AModule is TBisIfaceModule) then
+        TBisIfaceModule(AModule).ReadIfaceDataParams(Iface);
+      Iface.LoadOptions;
+      Iface.Caption:=ACaption;
+
+ {     if Iface is TBisFormIface then
+        TBisFormIface(Iface).ShowType:=ShowType;   }
+
+      if Iface Is TBisScriptIface then
+        TBisScriptIface(Iface).ScriptId:=Id;
+
+      if Iface is TBisReportFormIface then
+        TBisReportFormIface(Iface).ReportId:=Id;
+
+      if Iface is TBisDocumentFormIface then begin
+        TBisDocumentFormIface(Iface).DocumentId:=Id;
+        TBisDocumentFormIface(Iface).OleClass:=OleClass;
+      end;
+
+      if not AsModal then
+        Iface.Show
+      else begin
+        if Iface is TBisFormIface then
+          TBisFormIface(Iface).ShowModal
+        else
+          Iface.Show;
+      end;
+    end;
+  end;
+
+var
+  AClass: TBisIfaceClass;
+  AModule: TBisModule;
+begin
+  if CanInterfaceShow then begin
+    ACaption:=Provider.FieldByName('NAME').AsString;
+    Id:=Provider.FieldByName('INTERFACE_ID').Value;
+    AClass:=GetInterfaceClass(OleClass,AModule);
+    LocalShow(AClass,AModule);
+  end;
+end;
+
+function TBisDesignDataInterfacesFrame.CanInterfaceOptions: Boolean;
+var
+  AClass: TBisIfaceClass;
+  AModule: TBisModule;
+  OleClass: String;
+  Iface: TBisIface;
+  InterfaceId: Variant;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+  if Result then begin
+    InterfaceId:=Provider.FieldByName('INTERFACE_ID').Value;
+    if not VarSameValueEx(FOldInterfaceId,InterfaceId) then begin
+      FOldInterfaceId:=Provider.FieldByName('INTERFACE_ID').Value;
+      AClass:=GetInterfaceClass(OleClass,AModule);
+      FOldClass:=AClass;
+    end else
+      AClass:=FOldClass;
+    Result:=Assigned(AClass);
+    if Result then begin
+      Iface:=AClass.Create(nil);
+      try
+        Iface.Permissions.Enabled:=false;
+        Iface.Init;
+        Result:=Iface.CanOptions;
+      finally
+        Iface.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisDesignDataInterfacesFrame.InterfaceOptions;
+var
+  Id: Variant;
+  ACaption: String;
+  OleClass: String;
+
+  procedure OtherIfaceLoadOptions(Iface: TBisIface);
+  var
+    Other: TBisIface;
+  begin
+    if Assigned(Core) then begin
+      Other:=Core.FindIface(Iface.ObjectName);
+      if Assigned(Other) then
+        Other.LoadOptions;
+    end;
+  end;
+
+  procedure LocalShow(AClass: TBisIfaceClass);
+  var
+    Iface: TBisIface;
+  begin
+    if Assigned(AClass) then begin
+      Iface:=AClass.Create(Self);
+      try
+        Iface.Permissions.Enabled:=false;
+        Iface.Init;
+        Iface.LoadOptions;
+
+        Iface.Caption:=ACaption;
+
+    {    if Iface is TBisFormIface then
+          TBisFormIface(Iface).ShowType:=ShowType;  }
+
+        if Iface Is TBisScriptIface then
+          TBisScriptIface(Iface).ScriptId:=Id;
+
+        if Iface is TBisReportFormIface then
+          TBisReportFormIface(Iface).ReportId:=Id;
+
+        if Iface is TBisDocumentFormIface then begin
+          TBisDocumentFormIface(Iface).DocumentId:=Id;
+          TBisDocumentFormIface(Iface).OleClass:=OleClass;
+        end;
+
+        Iface.Options;
+        OtherIfaceLoadOptions(Iface);
+      finally
+        Iface.Free;
+      end;
+    end;
+  end;
+
+var
+  AClass: TBisIfaceClass;
+  AModule: TBisModule;
+begin
+  if CanInterfaceOptions then begin
+    AClass:=GetInterfaceClass(OleClass,AModule);
+    LocalShow(AClass);
+  end;
+end;
+
+function TBisDesignDataInterfacesFrame.CanPermissions: Boolean;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+end;
+
+procedure TBisDesignDataInterfacesFrame.Permissions;
+var
+  Iface: TBisDesignDataPermissionsFormIface;
+  InterfaceId: Variant;
+  InterfaceName: String;
+begin
+  if CanPermissions then begin
+    InterfaceId:=Provider.FieldByName('INTERFACE_ID').Value;
+    InterfaceName:=Provider.FieldByName('NAME').AsString;
+    Iface:=FIfaces.FindPermissionById(InterfaceId);
+    if not Assigned(Iface) then begin
+      Iface:=TBisDesignDataPermissionsFormIface.Create(Self);
+      Iface.Permissions.Enabled:=false;
+      Iface.InterfaceId:=InterfaceId;
+      Iface.InterfaceName:=InterfaceName;
+      Iface.MaxFormCount:=1;
+      FIfaces.Add(Iface);
+      Iface.Init;
+      Iface.FilterGroups.Add.Filters.Add('INTERFACE_ID',fcEqual,InterfaceId);
+    end;
+    Iface.Caption:=FormatEx('%s => %s',[ActionPermissions.Caption,InterfaceName]);
+    Iface.ShowType:=ShowType;
+    if AsModal then
+      Iface.ShowModal
+    else Iface.Show;
+  end;
+end;
+
+end.

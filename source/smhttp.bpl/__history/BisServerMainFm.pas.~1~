@@ -1,0 +1,183 @@
+unit BisServerMainFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ToolWin, ExtCtrls, Menus, ActnPopup, ImgList,
+  StdCtrls,
+
+  BisFm, BisObject;
+
+type
+  TBisServerMainForm = class(TBisForm)
+    ControlBar: TControlBar;
+    TrayIcon: TTrayIcon;
+    PopupActionBar: TPopupActionBar;
+    LabelTime: TLabel;
+    MenuItemShow: TMenuItem;
+    N1: TMenuItem;
+    MenuItemHide: TMenuItem;
+    MenuItemExit: TMenuItem;
+    Timer: TTimer;
+    ImageList: TImageList;
+    procedure MenuItemHideClick(Sender: TObject);
+    procedure MenuItemShowClick(Sender: TObject);
+    procedure TrayIconDblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure MenuItemExitClick(Sender: TObject);
+    procedure PopupActionBarPopup(Sender: TObject);
+    procedure TimerTimer(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    FActive: Boolean;
+    FVisible: Boolean;
+    FDays: Integer;
+    FTime: TDateTime;
+    FFormatTime: String;
+    procedure SetIcon;
+  public
+    procedure InitByIface(AIface: TBisFormIface); override;
+    function CanShow: Boolean; override;
+  end;
+
+  TBisServerMainFormIface=class(TBisFormIface)
+  public
+    procedure InitByParent(AObject: TBisObject); override;
+  end;
+
+
+var
+  BisServerMainForm: TBisServerMainForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisCoreConsts, BisServerList, BisServerConsts, BisUtils;
+
+{ TBisServerMainFormIface }
+
+procedure TBisServerMainFormIface.InitByParent(AObject: TBisObject);
+begin
+  inherited InitByParent(AObject);
+  FormClass:=TBisServerMainForm;
+  AutoShow:=true;
+  AutoCreateForm:=true;
+end;
+
+{ TBisServerMainForm }
+
+procedure TBisServerMainForm.FormCreate(Sender: TObject);
+begin
+  inherited;
+  FDays:=0;
+  FTime:=Now;
+  FFormatTime:=SFormatTime;
+  FActive:=false;
+  SetIcon;
+  TimerTimer(nil);
+end;
+
+procedure TBisServerMainForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:=caNone;
+  Hide;
+end;
+
+procedure TBisServerMainForm.InitByIface(AIface: TBisFormIface);
+begin
+  inherited InitByIface(AIface);
+  FVisible:=Iface.ConfigRead(SVisible,FVisible);
+  Position:=poDefaultSizeOnly;
+  Left:=Iface.ConfigRead(SLeft,Left);
+  Top:=Iface.ConfigRead(STop,Top);
+  TrayIcon.BalloonTitle:=Caption;
+  if Application.MainForm=Self then begin
+    Application.ShowMainForm:=FVisible;
+  end;
+end;
+
+procedure TBisServerMainForm.MenuItemExitClick(Sender: TObject);
+begin
+  Application.Terminate;
+end;
+
+procedure TBisServerMainForm.MenuItemHideClick(Sender: TObject);
+begin
+  Hide;
+end;
+
+procedure TBisServerMainForm.MenuItemShowClick(Sender: TObject);
+begin
+  FVisible:=true;
+  Show;
+  BringToFront;
+end;
+
+procedure TBisServerMainForm.PopupActionBarPopup(Sender: TObject);
+begin
+  MenuItemExit.Visible:=Application.MainForm=Self;
+end;
+
+procedure TBisServerMainForm.TimerTimer(Sender: TObject);
+var
+  Hour, Min, Sec, MSec: Word;
+  Current: TDateTime;
+begin
+  Timer.Enabled:=false;
+  try
+    try
+      Current:=Now-FTime;
+      DecodeTime(Current,Hour,Min,Sec,MSec);
+      if Hour>=24 then begin
+        FDays:=FDays+1;
+        FTime:=Now;
+        Current:=Now-FTime;
+      end;
+      LabelTime.Caption:=Format(SFormatTime,[FDays,FormatDateTime('hh:nn:ss',Current)]);
+      LabelTime.Font.Color:=iff(ServerList.Active,clRed,clWindowText);
+      TrayIcon.Hint:=LabelTime.Caption;
+      SetIcon;
+      if ServerList.Active<>FActive then begin
+        if ServerList.Active then begin
+          TrayIcon.BalloonHint:=SServerWorks;
+        end else begin
+          TrayIcon.BalloonHint:=SServerIdle;
+        end;
+        TrayIcon.ShowBalloonHint;
+      end;
+      FActive:=ServerList.Active;
+    except
+    end;
+  finally
+    Timer.Enabled:=true;
+  end;
+end;
+
+procedure TBisServerMainForm.TrayIconDblClick(Sender: TObject);
+begin
+  MenuItemShowClick(nil);
+end;
+
+procedure TBisServerMainForm.SetIcon;
+var
+  NewIcon: TIcon;
+begin
+  NewIcon:=TIcon.Create;
+  try
+    TrayIcon.IconIndex:=iff(ServerList.Active,1,0);
+    ImageList.GetIcon(TrayIcon.IconIndex,NewIcon);
+    Icon.Handle:=NewIcon.Handle;
+  finally
+    NewIcon.Free;
+  end;
+end;
+
+function TBisServerMainForm.CanShow: Boolean;
+begin
+  Result:=FVisible;
+end;
+
+end.

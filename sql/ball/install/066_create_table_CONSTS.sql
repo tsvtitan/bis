@@ -1,0 +1,73 @@
+/* Создание таблицы констант */
+
+CREATE TABLE /*PREFIX*/CONSTS
+(
+  NAME VARCHAR(100) NOT NULL,
+  DESCRIPTION VARCHAR(250),
+  "VALUE" BLOB NOT NULL,
+  PRIMARY KEY (NAME)
+)
+
+--
+
+/* Создание просмотра таблицы констант */
+
+CREATE VIEW /*PREFIX*/S_CONSTS
+AS
+SELECT * FROM /*PREFIX*/CONSTS
+
+--
+
+/* Создание процедуры добавления константы */
+
+CREATE PROCEDURE /*PREFIX*/I_CONST
+(
+  NAME VARCHAR(100),
+  DESCRIPTION VARCHAR(250),
+  "VALUE" BLOB
+)
+AS
+BEGIN
+  INSERT INTO /*PREFIX*/CONSTS (NAME,DESCRIPTION,"VALUE")
+       VALUES (:NAME,:DESCRIPTION,:"VALUE");
+END;
+
+--
+
+/* Создание процедуры изменения константы */
+
+CREATE PROCEDURE /*PREFIX*/U_CONST
+(
+  NAME VARCHAR(100),
+  DESCRIPTION VARCHAR(250),
+  "VALUE" BLOB,
+  OLD_NAME VARCHAR(100)
+)
+AS
+BEGIN
+  UPDATE /*PREFIX*/CONSTS
+     SET NAME=:NAME,
+         DESCRIPTION=:DESCRIPTION,
+         "VALUE"=:"VALUE"
+   WHERE NAME=:OLD_NAME;
+END;
+
+--
+
+/* Создание процедуры удаления константы */
+
+CREATE PROCEDURE /*PREFIX*/D_CONST
+(
+  OLD_NAME VARCHAR(100)
+)
+AS
+BEGIN
+  DELETE FROM /*PREFIX*/CONSTS 
+        WHERE NAME=:OLD_NAME;
+END;
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

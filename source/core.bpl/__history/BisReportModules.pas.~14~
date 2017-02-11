@@ -1,0 +1,74 @@
+unit BisReportModules;
+
+interface
+
+uses Classes,
+     BisObject, BisModules, BisReportFm, BisReportEditorFm;
+
+type
+  TBisReportModule=class;
+
+  TBisReportModuleInitProc=procedure (AModule: TBisReportModule); stdcall;
+
+  TBisReportModule=class(TBisModule)
+  private
+    FInitProc: TBisReportModuleInitProc;
+    FReportClass: TBisReportFormIfaceClass;
+    FReportEditorClass: TBisReportEditorFormIfaceClass;
+  protected
+    procedure DoInitProc(AModule: TBisModule); override;
+  public
+    property ReportClass: TBisReportFormIfaceClass read FReportClass write FReportClass;
+    property ReportEditorClass: TBisReportEditorFormIfaceClass read FReportEditorClass write FReportEditorClass; 
+  end;
+
+  TBisReportModules=class(TBisModules)
+  private
+    function GetItems(Index: Integer): TBisReportModule;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+
+    property Items[Index: Integer]: TBisReportModule read GetItems;
+  end;
+
+
+implementation
+
+uses Windows, SysUtils, 
+     BisConsts, BisLogger, BisUtils;
+
+{ TBisReportModule }
+
+procedure TBisReportModule.DoInitProc(AModule: TBisModule);
+begin
+  @FInitProc:=GetProcAddress(Module,PChar(SInitReportModule));
+  if Assigned(@FInitProc) then begin
+    try
+      FInitProc(Self);
+{      RefreshServers;
+      FServers.Init;}
+      LoggerWrite(FormatEx(SInitSuccess,[FileName]));
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SInitFailed,[FileName,E.Message]),ltError);
+      end;
+    end;
+  end else begin
+    LoggerWrite(FormatEx(SInitProcNotFound,[FileName]),ltError);
+  end;
+end;
+
+{ TBisReportModules }
+
+function TBisReportModules.GetItems(Index: Integer): TBisReportModule;
+begin
+  Result:=TBisReportModule(inherited Items[Index]);
+end;
+
+function TBisReportModules.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisReportModule;
+end;
+
+end.

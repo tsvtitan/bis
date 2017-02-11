@@ -1,0 +1,239 @@
+unit BisDBTable;
+
+interface
+
+uses Classes, DB, DBCtrls, Windows, DBGrids,
+     kbmMemTable,
+     BisDataSet;
+
+type
+
+  TBisDBTable=class(TDBGrid)
+  private
+    FDataSet: TBisDataSet;
+    FDataSource: TDataSource;
+    FDataLink: TFieldDataLink;
+    FBeginEdit: boolean;
+    function GetDataField: string;
+    function GetDataSource: TDataSource;
+    function GetField: TField;
+    procedure SetDataField(const Value: string);
+    procedure SetDataSource(Value: TDataSource);
+    procedure DataChange(Sender: TObject);
+    procedure EditingChange(Sender: TObject);
+    procedure UpdateData(Sender: TObject);
+    procedure LoadTable;
+    procedure DataSetAfterEdit(DataSet: TDataSet);
+    procedure DataSetBeforeEdit(DataSet: TDataSet);
+//    procedure DataSetLoad(DataSet:TDataSet; StorageType:TkbmMemTableStorageType; Stream:TStream);
+  protected
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+    procedure KeyPress(var Key: Char); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure Loaded; override;
+    property DataSet: TBisDataSet read FDataSet;
+  published
+    property DataField: string read GetDataField write SetDataField;
+    property DataSource: TDataSource read GetDataSource write SetDataSource;
+    property Field: TField read GetField;
+  end;
+
+implementation
+
+{ TBisDBTable }
+
+constructor TBisDBTable.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FDataSource:=TDataSource.Create(nil);
+  inherited DataSource:=FDataSource;
+  FDataSet:=TBisDataSet.Create(nil);
+  FDataSet.AfterEdit:=DataSetAfterEdit;
+  FDataSet.AfterDelete:=DataSetAfterEdit;
+  FDataSet.AfterOpen:=DataSetAfterEdit;
+  FDataSet.AfterClose:=DataSetAfterEdit;
+  FDataSet.AfterInsert:=DataSetAfterEdit;
+  FDataSet.AfterPost:=DataSetAfterEdit;
+  FDataSet.BeforeEdit:=DataSetBeforeEdit;
+  FDataSet.BeforeInsert:=DataSetBeforeEdit;
+//  FDataSet.OnLoad:=DataSetLoad;
+
+  FDataSource.DataSet:=FDataSet;
+  FDataLink:=TFieldDataLink.Create;
+  FDataLink.Control:=Self;
+  FDataLink.OnDataChange:=DataChange;
+  FDataLink.OnEditingChange:=EditingChange;
+  FDataLink.OnUpdateData:=UpdateData;
+end;
+
+destructor TBisDBTable.Destroy;
+begin
+  FDataLink.Free;
+  FDataLink := nil;
+  FDataSet.Free;
+  FDataSource.Free;
+  inherited Destroy;
+end;
+
+procedure TBisDBTable.Notification(AComponent: TComponent; Operation: TOperation);
+begin
+  inherited Notification(AComponent, Operation);
+  if (Operation = opRemove) and (FDataLink <> nil) and (AComponent = DataSource)
+  then
+    DataSource:=nil;
+end;
+
+function TBisDBTable.GetDataField: string;
+begin
+  Result:=FDataLink.FieldName;
+end;
+
+function TBisDBTable.GetDataSource: TDataSource;
+begin
+  Result:=FDataLink.DataSource;
+end;
+
+function TBisDBTable.GetField: TField;
+begin
+  Result:=FDataLink.Field;
+end;
+
+procedure TBisDBTable.SetDataField(const Value: string);
+begin
+  FDataLink.FieldName:=Value;
+end;
+
+procedure TBisDBTable.SetDataSource(Value: TDataSource);
+begin
+  if not (FDataLink.DataSourceFixed and (csLoading in ComponentState)) then
+    FDataLink.DataSource:=Value;
+  if Value <> nil then
+    Value.FreeNotification(Self);
+end;
+
+procedure TBisDBTable.LoadTable;
+var
+  BlobStream: TStream;
+begin
+  try
+    BlobStream:=FDataLink.DataSet.CreateBlobStream(FDataLink.Field, bmRead);
+    FDataSet.AfterClose:=nil;
+    try
+      FDataSet.Close;
+      if BlobStream.Size>0 then begin
+        FDataSet.LoadFromStream(BlobStream);
+      end;  
+    finally
+      FDataSet.AfterClose:=DataSetAfterEdit;
+      BlobStream.Free;
+    end;
+  except
+  end;
+  EditingChange(Self);
+end;
+
+procedure TBisDBTable.DataChange(Sender: TObject);
+begin
+  if FDataLink.Field <> nil then begin
+    if FBeginEdit then
+    begin
+      FBeginEdit:=False;
+      Exit;
+    end;
+    if FDataLink.Field.IsBlob then
+      LoadTable
+    else
+  end else begin
+    if csDesigning in ComponentState then
+      Text:=Name
+    else
+      Text:='';
+  end;
+end;
+
+procedure TBisDBTable.EditingChange(Sender: TObject);
+begin
+  if FDataLink.Editing then begin
+    if Assigned(FDataLink.DataSource)
+      and (FDataLink.DataSource.State <> dsInsert)
+    then
+      FBeginEdit:=True;
+  end;
+end;
+
+procedure TBisDBTable.UpdateData(Sender: TObject);
+var
+  BlobStream: TStream;
+begin
+  if FDataLink.Field.IsBlob then begin
+    if FDataSet.State in [dsEdit, dsInsert] then begin
+      FDataSet.AfterPost:=nil;
+      try
+        FDataSet.Post;
+      finally
+        FDataSet.AfterPost:=DataSetAfterEdit;
+      end;  
+    end;
+    try
+      BlobStream:=FDataLink.DataSet.CreateBlobStream(FDataLink.Field,bmWrite);
+      try
+        FDataSet.SaveToStream(BlobStream);
+      finally
+        BlobStream.Free;
+      end;
+    except
+    end;  
+  end;
+end;
+
+procedure TBisDBTable.Loaded;
+begin
+  inherited Loaded;
+  if (csDesigning in ComponentState) then DataChange(Self);
+end;
+
+procedure TBisDBTable.KeyDown(var Key: Word; Shift: TShiftState);
+begin
+  inherited KeyDown(Key,Shift);
+  if (Key = VK_DELETE) or ((Key = VK_INSERT) and (ssShift in Shift)) then
+    FDataLink.Edit;
+end;
+
+procedure TBisDBTable.KeyPress(var Key: Char);
+begin
+  if (Key in [#32..#255]) and (FDataLink.Field <> nil) and
+    not FDataLink.Field.IsValidChar(Key) then
+  begin
+    Key := #0;
+  end;
+  case Key of
+    ^H, ^V, ^X, #32..#255:
+      FDataLink.Edit;
+    #27:
+      begin
+        FDataLink.Reset;
+        Key := #0;
+      end;
+  end;
+end;
+
+procedure TBisDBTable.DataSetBeforeEdit(DataSet: TDataSet);
+begin
+
+end;
+
+procedure TBisDBTable.DataSetAfterEdit(DataSet: TDataSet);
+begin
+  FDataLink.Modified;
+end;
+
+{procedure TBisDBTable.DataSetLoad(DataSet:TDataSet; StorageType:TkbmMemTableStorageType; Stream:TStream);
+begin
+  if DataSet.Active then
+    FDataLink.Modified;
+end;}
+
+end.

@@ -1,0 +1,16 @@
+/* Создание просмотра свободных водителей */
+
+CREATE VIEW /*PREFIX*/S_DRIVER_FREE
+AS
+SELECT *
+  FROM S_DRIVERS
+ WHERE DRIVER_ID NOT IN (SELECT ACCOUNT_ID FROM SHIFTS
+                          WHERE DATE_END IS NULL)
+   AND LOCKED=0
+   AND ((MIN_BALANCE IS NULL) OR (ACTUAL_BALANCE>MIN_BALANCE))
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

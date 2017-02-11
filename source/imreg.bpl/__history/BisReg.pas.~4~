@@ -1,0 +1,29 @@
+unit BisReg;
+
+interface
+
+uses BisIfaceModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisCore,
+     BisRegFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+var
+  IsMainModule: Boolean;
+begin
+  IsMainModule:=Core.IfaceModules.IsFirstModule(AModule);
+  with AModule.Ifaces do begin
+//    if IsMainModule then
+    AddClass(TBisImportFormIface);
+  end;
+end;
+
+end.

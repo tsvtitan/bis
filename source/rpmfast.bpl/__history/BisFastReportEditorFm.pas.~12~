@@ -1,0 +1,287 @@
+unit BisFastReportEditorFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ComCtrls, StdCtrls, ToolWin, Menus,
+  ActnPopup, ImgList, ActnList, XPStyleActnCtrls, ActnMan, ActnCtrls,
+  ActnMenus,
+
+  BisReportEditorFm, BisFm, BisFastReportClasses;
+
+type
+  TActionMainMenuBar=class(ActnMenus.TActionMainMenuBar)
+  end;
+
+  TAction=class(ActnList.TAction)
+  private
+    FMenuItem: TMenuItem;
+  public
+    property MenuItem: TMenuItem read FMenuItem write FMenuItem;
+  end;
+
+  TBisFastReportEditorForm = class(TBisReportEditorForm)
+    ActionManager: TActionManager;
+    ActionMainMenuBar: TActionMainMenuBar;
+  private
+    FReport: TBisFastReport;
+    procedure ActionUpdate(Sender: TObject);
+    procedure ActionExecute(Sender: TObject);
+    procedure RefreshActionByMenu(Action: TAction; MenuItem: TMenuItem);
+    procedure RefreshDesigner(Designer: TBisFastReportDesignerForm);
+    procedure NewSaveCmdExecute(Sender: TObject);
+    procedure NewPreviewCmdExecute(Sender: TObject);
+  protected
+    function GetFileName: String; override;
+    procedure SetFileName(const Value: String); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure BeforeShow; override;
+    procedure LoadFromStream(Stream: TStream); override;
+    procedure LoadFromFile(const FileName: String); override;
+    procedure SaveToStream(Stream: TStream); override;
+    procedure SaveToFile(const FileName: String); override;
+    function Modified: Boolean; override;
+  end;
+
+  TBisFastReportEditorFormIface=class(TBisReportEditorFormIface)
+  protected
+    class function GetFormClass: TBisFormClass; override;
+  end;
+
+var
+  BisFastReportEditorForm: TBisFastReportEditorForm;
+
+implementation
+
+{$R *.dfm}
+
+uses StrUtils,
+     BisConsts, BisCore;
+
+{ TBisFastReportEditorFormIface }
+
+class function TBisFastReportEditorFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisFastReportEditorForm;
+end;
+
+{ TBisFastReportEditorForm }
+
+constructor TBisFastReportEditorForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  SizesStored:=true;
+  FReport:=TBisFastReport.Create(nil);
+  FReport.IniFile:=Core.Profile.IniFile;
+  FReport.EngineOptions.UseFileCache:=false;
+end;
+
+destructor TBisFastReportEditorForm.Destroy;
+begin
+  PanelReport.Visible:=false;
+  FReport.Free;
+  inherited Destroy;
+end;
+
+function TBisFastReportEditorForm.GetFileName: String;
+begin
+  Result:=FReport.FileName;
+end;
+
+procedure TBisFastReportEditorForm.BeforeShow;
+var
+  OldCursor: TCursor;
+begin
+  inherited BeforeShow;
+  OldCursor:=Screen.Cursor;
+  Screen.Cursor:=crHourGlass;
+  PanelReport.Visible:=false;
+  try
+    if Assigned(FReport.Designer) then begin
+      FReport.Designer.Free;
+      FReport.Designer:=nil;
+    end;
+    FReport.DesignReportInPanel(PanelReport);
+    if Assigned(FReport.Designer) and
+       (FReport.Designer is TBisFastReportDesignerForm) then begin
+      RefreshDesigner(TBisFastReportDesignerForm(FReport.Designer));
+    end;
+  finally
+    PanelReport.Visible:=true;
+    Screen.Cursor:=OldCursor;
+  end;
+end;
+
+function TBisFastReportEditorForm.Modified: Boolean;
+var
+  Designer: TBisFastReportDesignerForm;
+begin
+  Result:=FReport.Modified;
+  Designer:=nil;
+  if Assigned(FReport.Designer) and
+    (FReport.Designer is TBisFastReportDesignerForm) then
+    Designer:=TBisFastReportDesignerForm(FReport.Designer);
+
+  if Assigned(Designer) then
+    Result:=Designer.SaveCmd.Enabled;
+end;
+
+procedure TBisFastReportEditorForm.LoadFromFile(const FileName: String);
+begin
+  FReport.LoadFromFile(FileName,true);
+end;
+
+procedure TBisFastReportEditorForm.LoadFromStream(Stream: TStream);
+begin
+  if Stream.Size>0 then
+    FReport.LoadFromStream(Stream);
+end;
+
+procedure TBisFastReportEditorForm.SaveToFile(const FileName: String);
+begin
+  FReport.SaveToFile(FileName);
+end;
+
+procedure TBisFastReportEditorForm.SaveToStream(Stream: TStream);
+begin
+  FReport.SaveToStream(Stream);
+end;
+
+procedure TBisFastReportEditorForm.SetFileName(const Value: String);
+begin
+  inherited SetFileName(Value);
+  FReport.FileName:=Value;
+end;
+
+procedure TBisFastReportEditorForm.ActionUpdate(Sender: TObject);
+begin
+  if Assigned(Sender) then
+    if Sender is TAction then begin
+      RefreshActionByMenu(TAction(Sender),TAction(Sender).MenuItem);
+    end;
+end;
+
+procedure TBisFastReportEditorForm.ActionExecute(Sender: TObject);
+begin
+  if Assigned(Sender) then
+    if Sender is TAction then begin
+      if Assigned(TAction(Sender).MenuItem) and Assigned(TAction(Sender).MenuItem.OnClick) then
+        TAction(Sender).MenuItem.OnClick(TAction(Sender).MenuItem);
+    end;
+end;
+
+procedure TBisFastReportEditorForm.RefreshActionByMenu(Action: TAction; MenuItem: TMenuItem);
+begin
+  Action.Caption:=ReplaceStr(MenuItem.Caption,'&','');
+  Action.Hint:=MenuItem.Hint;
+  Action.ShortCut:=MenuItem.ShortCut;
+  Action.Enabled:=MenuItem.Enabled;
+  Action.Checked:=MenuItem.Checked;
+  Action.Visible:=MenuItem.Visible;
+  Action.AutoCheck:=MenuItem.AutoCheck;
+  Action.ImageIndex:=MenuItem.ImageIndex;
+end;
+
+procedure TBisFastReportEditorForm.RefreshDesigner(Designer: TBisFastReportDesignerForm);
+
+  procedure Recurse(Menu: TMenuItem; Clients: TActionClients);
+  var
+    MenuItem: TMenuItem;
+    i: Integer;
+    ActionItem: TActionClientItem;
+    Action: TAction;
+  begin
+    if Assigned(Menu) then begin
+      for i:=0 to Menu.Count-1 do begin
+        MenuItem:=Menu.Items[i];
+        ActionItem:=TActionClientItem(Clients.Insert(MenuItem.MenuIndex));
+        ActionItem.Caption:=ReplaceStr(MenuItem.Caption,'&','');
+        ActionItem.Visible:=MenuItem.Visible;
+        if Assigned(MenuItem.OnClick) then begin
+          Action:=TAction.Create(Self);
+          Action.MenuItem:=MenuItem;
+          RefreshActionByMenu(Action,MenuItem);
+          Action.ActionList:=ActionManager;
+          Action.OnExecute:=ActionExecute;
+          Action.OnUpdate:=ActionUpdate;
+          ActionItem.Action:=Action;
+        end;
+        if MenuItem.Count>0 then
+          Recurse(MenuItem,ActionItem.Items);
+      end;
+    end;
+  end;
+
+var
+  AMainMenu: TMainMenu;
+begin
+  ActionMainMenuBar.ActionClient.Items.Clear;
+  AMainMenu:=Designer.MainMenu;
+  if Assigned(AMainMenu) then begin
+    ActionManager.Images:=AMainMenu.Images;
+    Recurse(AMainMenu.Items,ActionMainMenuBar.ActionClient.Items);
+    ActionMainMenuBar.CreateControls;
+  end;
+  with Designer do begin
+    StandardTBCmd.Checked:=true;
+    TextTBCmd.Checked:=true;
+    FrameTBCmd.Checked:=true;
+    AlignTBCmd.Checked:=true;
+    ExtraTBCmd.Checked:=true;
+    InspectorTBCmd.Checked:=false;
+    DataTreeTBCmd.Checked:=false;
+    ReportTreeTBCmd.Checked:=false;
+//    DataTree.Visible:=false;
+//    ReportTree.Visible:=false;
+    DataTree.ManualDock(RightDockSite):
+    ReportTree.ManualDock(RightDockSite);
+
+    LeftDockSite1.Width:=Inspector.Width+1;
+    Inspector.ManualDock(LeftDockSite1);
+    Inspector.Visible:=true;
+    AlignTB.Visible:=true;
+    ObjectsTB1.Left:=0;
+    Inspector.Left:=ObjectsTB1.Left+ObjectsTB1.Width+1;
+    Inspector.UpdateProperties;
+    SaveCmd.OnExecute:=NewSaveCmdExecute;
+    PreviewCmd.OnExecute:=NewPreviewCmdExecute;
+  end;
+end;
+
+procedure TBisFastReportEditorForm.NewSaveCmdExecute(Sender: TObject);
+var
+  Designer: TBisFastReportDesignerForm;
+begin
+  Designer:=nil;
+  if Assigned(FReport.Designer) and
+    (FReport.Designer is TBisFastReportDesignerForm) then
+    Designer:=TBisFastReportDesignerForm(FReport.Designer);
+
+  if Assigned(Designer) then begin
+    DoSaveChanges;
+    FReport.Modified:=false;
+    Designer.SaveCmd.Enabled:=false;
+  end;
+end;
+
+procedure TBisFastReportEditorForm.NewPreviewCmdExecute(Sender: TObject);
+var
+  Designer: TBisFastReportDesignerForm;
+begin
+  Designer:=nil;
+  if Assigned(FReport.Designer) and
+    (FReport.Designer is TBisFastReportDesignerForm) then
+    Designer:=TBisFastReportDesignerForm(FReport.Designer);
+
+  if Assigned(Designer) then begin
+    DoSaveChanges;
+    FReport.Modified:=false;
+    Designer.SaveCmd.Enabled:=false;
+    DoPreview;
+  end;
+end;
+
+end.

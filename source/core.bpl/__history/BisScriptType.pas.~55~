@@ -1,0 +1,106 @@
+unit BisScriptType;
+
+interface
+
+uses
+     BisScriptSymbols;
+
+type
+
+  TBisScriptTypeKind=(stkUnknown,stkInteger,stkFloat,stkString,stkDateTime,stkBoolean,stkVariant,stkMethod,stkClass);
+
+  TBisScriptType=class(TBisScriptSymbol)
+  private
+    FKind: TBisScriptTypeKind;
+    FAncestor: String;
+  public
+    property Kind: TBisScriptTypeKind read FKind write FKind;
+    property Ancestor: String read FAncestor write FAncestor;
+  end;
+
+  TBisScriptTypeClass=class of TBisScriptType;
+
+  TBisScriptIntegerType=class(TBisScriptType)
+  public
+    constructor Create; override;
+  end;
+
+  TBisScriptFloatType=class(TBisScriptType)
+  public
+    constructor Create; override;
+  end;
+
+  TBisScriptStringType=class(TBisScriptType)
+  public
+    constructor Create; override;
+  end;
+
+  TBisScriptDateTimeType=class(TBisScriptType)
+  public
+    constructor Create; override;
+  end;
+
+  TBisScriptBooleanType=class(TBisScriptType)
+  public
+    constructor Create; override;
+  end;
+
+  TBisScriptVariantType=class(TBisScriptType)
+  public
+    constructor Create; override;
+  end;
+
+function TypeIntegerToVar
+
+implementation
+
+{ TBisScriptIntegerType }
+
+constructor TBisScriptIntegerType.Create;
+begin
+  inherited Create;
+  FKind:=stkInteger;
+end;
+
+{ TBisScriptFloatType }
+
+constructor TBisScriptFloatType.Create;
+begin
+  inherited Create;
+  FKind:=stkFloat;
+end;
+
+{ TBisScriptStringType }
+
+constructor TBisScriptStringType.Create;
+begin
+  inherited Create;
+  FKind:=stkString;
+end;
+
+{ TBisScriptDateTimeType }
+
+constructor TBisScriptDateTimeType.Create;
+begin
+  inherited Create;
+  FKind:=stkDateTime;
+end;
+
+{ TBisScriptBooleanType }
+
+constructor TBisScriptBooleanType.Create;
+begin
+  inherited Create;
+  FKind:=stkBoolean;
+end;
+
+{ TBisScriptVariantType }
+
+constructor TBisScriptVariantType.Create;
+begin
+  inherited Create;
+  FKind:=stkVariant;
+end;
+
+
+end.

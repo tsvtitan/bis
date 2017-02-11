@@ -1,0 +1,304 @@
+unit BisPopupEdit;
+
+interface
+
+uses Messages, Windows, Classes, Controls, Variants, StdCtrls, ExtCtrls,
+     rxToolEdit;
+
+type
+  TBisPopupEdit=class;
+
+  TBisPopupEditPopup=class(TPopupWindow)
+  private
+    FEdit: TBisPopupEdit;
+    FSizeGripWidth: Integer;
+    FSizeGripHeight: Integer;
+    FBorderWidth: Integer;
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
+    procedure CreateWnd; override;
+    function GetClientRect: TRect; override;
+    procedure Paint; override;
+    procedure WMNCHitTest(var Message: TWMNCHitTest); message WM_NCHITTEST;
+    procedure WMMouseActivate(var Message: TMessage); message WM_MOUSEACTIVATE;
+
+    function GetValue: Variant; override;
+    procedure SetValue(const Value: Variant); override;
+
+    property Edit: TBisPopupEdit read FEdit write FEdit;
+    property SizeGripWidth: Integer read FSizeGripWidth;
+    property SizeGripHeight: Integer read FSizeGripHeight;
+    property BorderWidth: Integer read FBorderWidth write FBorderWidth;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Show(Origin: TPoint); override;
+  end;
+
+  TBisPopupEdit=class(TCustomComboEdit)
+  private
+    FControl: TControl;
+    FOnDropDown: TNotifyEvent;
+    procedure SetControl(const Value: TControl);
+    function GetPopup: TBisPopupEditPopup;
+  protected
+    procedure PopupDropDown(DisableEdit: Boolean); override;
+    procedure PopupCloseUp(Sender: TObject; Accept: Boolean); override;
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+    procedure KeyPress(var Key: Char); override;
+    procedure WMKillFocus(var Message: TWMKillFocus); message WM_KILLFOCUS;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property Popup: TBisPopupEditPopup read GetPopup;
+
+    property Control: TControl read FControl write SetControl;
+
+    property OnDropDown: TNotifyEvent read FOnDropDown write FOnDropDown;
+
+    property OnChange;
+    property MaxLength;
+    property Color;
+    property Font;
+    property Ctl3D;
+
+  end;
+
+
+implementation
+
+uses Graphics, Themes;
+
+type
+  THackControl=class(TControl)
+  end;
+
+  THackWinControl=class(TWinControl)
+  end;
+
+{ TBisPopupEditPopup }
+
+constructor TBisPopupEditPopup.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Color:=clBtnFace;
+  inherited BorderWidth:=0;
+  FBorderWidth:=1;
+  FSizeGripWidth:=GetSystemMetrics(SM_CXHSCROLL);
+  FSizeGripHeight:=GetSystemMetrics(SM_CYVSCROLL);
+end;
+
+destructor TBisPopupEditPopup.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TBisPopupEditPopup.CreateParams(var Params: TCreateParams);
+begin
+  inherited CreateParams(Params);
+  with Params do begin
+    Style := Style and not WS_BORDER;
+   // ExStyle := ExStyle or WS_EX_TOPMOST;
+  end;
+end;
+
+procedure TBisPopupEditPopup.CreateWnd;
+begin
+  inherited CreateWnd;
+{  if HandleAllocated then begin
+//    Windows.SetParent(Handle, 0);
+    if Assigned(FEdit) and Assigned(FEdit.Control) then
+      if (FEdit.Control is TWinControl) then
+        PostMessage(TWinControl(FEdit.Control).Handle,WM_SETFOCUS, 0, 0);
+  end;}
+end;
+
+function TBisPopupEditPopup.GetClientRect: TRect;
+begin
+  Result:=inherited GetClientRect;
+  Result.Left:=Result.Left+FBorderWidth;
+  Result.Right:=Result.Right-FBorderWidth;
+  Result.Top:=Result.Top+FBorderWidth;
+  Result.Bottom:=Result.Bottom-FSizeGripHeight-FBorderWidth;
+end;
+
+procedure TBisPopupEditPopup.Paint;
+var
+  Rect: TRect;
+  Details: TThemedElementDetails;
+begin
+  inherited Paint;
+  Rect:=inherited GetClientRect;
+
+  if ThemeServices.ThemesEnabled then begin
+    Details:=ThemeServices.GetElementDetails(teEditTextNormal);
+    ThemeServices.DrawElement(Canvas.Handle,Details,Rect);
+  end else begin
+    Canvas.Pen.Color:=clWindowFrame;
+    Canvas.Rectangle(0,0,Rect.Right,Rect.Bottom);
+  end;
+
+  InflateRect(Rect,-1,-1);
+  Canvas.Brush.Style:=bsClear;
+  Canvas.Brush.Color:=Color;
+  Canvas.FillRect(Rect);
+
+  Rect.Left:=Rect.Right-FSizeGripWidth-1;
+  Rect.Top:=Rect.Bottom-FSizeGripHeight-1;
+  if ThemeServices.ThemesEnabled then begin
+    Details:=ThemeServices.GetElementDetails(tsSizeBoxRightAlign);
+    ThemeServices.DrawElement(Canvas.Handle,Details,Rect);
+  end else begin
+    DrawFrameControl(Canvas.Handle,Rect,DFC_SCROLL,DFCS_SCROLLSIZEGRIP);
+  end;
+end;
+
+procedure TBisPopupEditPopup.WMMouseActivate(var Message: TMessage);
+begin
+  Message.Result := MA_NOACTIVATE;
+  //SetWindowPos(Handle, HWND_TOP, Left, Top, Width, Height,  SWP_NOACTIVATE or SWP_SHOWWINDOW);
+end;
+
+procedure TBisPopupEditPopup.WMNCHitTest(var Message: TWMNCHitTest);
+ var
+  R, WindowR: TRect;
+  BS: Integer;
+
+  function InSizeArea(XPos, YPos: integer): boolean;
+  begin
+    R := WindowR;
+    InflateRect(R, -BS, -BS);
+    R.Top  := R.Bottom - FSizeGripHeight;
+    R.Left := R.Right  - FSizeGripWidth;
+    Result := PtInRect(R, Point(XPos, YPos));
+  end;
+
+begin
+  inherited;
+  BS:=0;
+  GetWindowRect(Handle, WindowR);
+  with Message do begin
+    if InSizeArea(XPos,YPos) then
+      Message.Result:=HTBOTTOMRIGHT;
+  end;
+end;
+
+function TBisPopupEditPopup.GetValue: Variant;
+begin
+  Result:=Null;
+end;
+
+procedure TBisPopupEditPopup.SetValue(const Value: Variant);
+begin
+end;
+
+procedure TBisPopupEditPopup.Show(Origin: TPoint);
+begin
+  SetWindowPos(Handle, HWND_TOP, Origin.X, Origin.Y, Width, Height,  SWP_NOACTIVATE or SWP_SHOWWINDOW);
+  Visible := True;
+end;
+
+{ TBisPopupEdit }
+
+constructor TBisPopupEdit.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  PopupAlign:=epaLeft;
+
+  ControlState := ControlState + [csCreating];
+  try
+    FPopup:=TBisPopupEditPopup.Create(Self);
+    TBisPopupEditPopup(FPopup).Edit:=Self;
+    TBisPopupEditPopup(FPopup).OnCloseUp:=PopupCloseUp;
+  finally
+    ControlState := ControlState - [csCreating];
+  end;
+end;
+
+destructor TBisPopupEdit.Destroy;
+begin
+  FControl:=nil;
+  if Assigned(FPopup) then
+    with TBisPopupEditPopup(FPopup) do begin
+      OnCloseUp := nil;
+    end;
+  FPopup.Free;
+  FPopup := nil;
+  inherited Destroy;
+end;
+
+function TBisPopupEdit.GetPopup: TBisPopupEditPopup;
+begin
+  Result:=TBisPopupEditPopup(FPopup);
+end;
+
+procedure TBisPopupEdit.KeyDown(var Key: Word; Shift: TShiftState);
+begin
+  if FPopupVisible then begin
+    if not (Key in [VK_ESCAPE,VK_RETURN]) then begin
+      if Assigned(FControl) then begin
+        if FControl is TWinControl then begin
+          THackWinControl(FControl).KeyDown(Key,Shift);
+        end;
+      end;
+    end else
+      inherited KeyDown(Key,Shift);
+  end else
+    inherited KeyDown(Key,Shift);
+end;
+
+procedure TBisPopupEdit.KeyPress(var Key: Char);
+begin
+  if FPopupVisible then begin
+    if not (Word(Key) in [VK_ESCAPE,VK_RETURN]) then begin
+      if Assigned(FControl) then begin
+        if FControl is TWinControl then begin
+          THackWinControl(FControl).KeyPress(Key);
+          Key:=#0;
+        end;
+      end;
+    end else
+      inherited KeyPress(Key);
+  end else
+    inherited KeyPress(Key);
+end;
+
+procedure TBisPopupEdit.PopupCloseUp(Sender: TObject; Accept: Boolean);
+begin
+  inherited PopupCloseUp(Sender,Accept);
+end;
+
+procedure TBisPopupEdit.PopupDropDown(DisableEdit: Boolean);
+begin
+  if not (ReadOnly or PopupVisible) then begin
+    if Assigned(FOnDropDown) then FOnDropDown(Self);
+    with TBisPopupEditPopup(FPopup) do begin
+      ReadOnly := Self.ReadOnly;
+    end;
+  end;
+  inherited PopupDropDown(DisableEdit);
+end;
+
+procedure TBisPopupEdit.SetControl(const Value: TControl);
+begin
+  FControl := Value;
+  if Assigned(FControl) then begin
+    FControl.Parent:=Popup;
+
+    Popup.Width:=FControl.Width+Popup.BorderWidth*2;
+    Popup.Height:=FControl.Height+Popup.BorderWidth*2+Popup.SizeGripHeight;
+
+    FPopup.Constraints.MinWidth:=FControl.Constraints.MinWidth+Popup.BorderWidth*2;
+    FPopup.Constraints.MinHeight:=FControl.Constraints.MinHeight+Popup.BorderWidth*2+Popup.SizeGripHeight;
+
+  end;
+end;
+
+procedure TBisPopupEdit.WMKillFocus(var Message: TWMKillFocus);
+begin
+  inherited;
+  Focused:=false;
+end;
+
+end.

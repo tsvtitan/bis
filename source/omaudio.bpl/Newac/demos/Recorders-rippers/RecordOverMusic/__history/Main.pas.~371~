@@ -1,0 +1,392 @@
+unit Main;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Spin, ACS_AudioMix, ACS_Classes, ACS_Wave, ACS_DXAudio,
+  ComCtrls, NewACIndicators, ACS_WinMedia, ACS_smpeg, ACS_LAME, NewACDSAudio,
+  ACS_Converters, AudioPass, ACS_Misc, ZLib, IdUDPBase,
+  IdUDPClient, IdGlobal, IdSocketHandle, IdUDPServer, ACS_Streams;
+
+type
+  TForm15 = class(TForm)
+    DXAudioIn1: TDXAudioIn;
+    _WaveOut1: TWaveOut;
+    _WaveIn1: TWaveIn;
+    RealTimeMixer1: TRealTimeMixer;
+    OpenDialog1: TOpenDialog;
+    Button1: TButton;
+    Label1: TLabel;
+    SpinEdit1: TSpinEdit;
+    StatusBar1: TStatusBar;
+    Button2: TButton;
+    ProgressBar1: TProgressBar;
+    ProgressBar2: TProgressBar;
+    FastGainIndicator1: TFastGainIndicator;
+    FastGainIndicator2: TFastGainIndicator;
+    SaveDialog1: TSaveDialog;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    MP3In1: TMP3In;
+    _MP3Out1: TMP3Out;
+    DSAudioOut1: TDSAudioOut;
+    AudioProcessor1: TAudioProcessor;
+    NULLOut1: TNULLOut;
+    MemoryIn1: TMemoryIn;
+    WMStreamedIn1: TWMStreamedIn;
+    DSAudioOut2: TDSAudioOut;
+    StreamIn1: TStreamIn;
+    EditHost: TEdit;
+    EditPort: TEdit;
+    Button3: TButton;
+    Button4: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure SpinEdit1Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure _WaveOut1Done(Sender: TComponent);
+    procedure GainIndicator1GainData(Sender: TComponent);
+    procedure GainIndicator2GainData(Sender: TComponent);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure AudioProcessor1GetData(Sender: TComponent; var Buffer: Pointer; var Bytes: Cardinal);
+    procedure AudioProcessor2GetData(Sender: TComponent; var Buffer: Pointer; var Bytes: Cardinal);
+    procedure MemoryIn1BufferDone(Sender: TComponent; var DataBuffer: Pointer; var DataSize: Cardinal;
+      var RepeatCount: Integer);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+  private
+    FLock: TRTLCriticalSection;
+    FClient: TIdUDPClient;
+    FServer: TIdUDPServer;
+    FStream: TMemoryStream;
+    FPosition: Int64;
+    MemBlock: Pointer;
+    procedure ServerUDPRead(Sender: TObject; AData: TIdBytes; ABinding: TIdSocketHandle);
+    function DecompressString(S: String): String;
+    function CompressString(S: String; Level: TCompressionLevel): String;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+  end;
+
+var
+  Form15: TForm15;
+
+implementation
+
+{$R *.dfm}
+
+constructor TForm15.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  InitializeCriticalSection(FLock);
+  FStream:=TMemoryStream.Create;
+  FPosition:=0;
+  FClient:=TIdUDPClient.Create(nil);
+  FServer:=TIdUDPServer.Create(nil);
+  FServer.ThreadedEvent:=true;
+  MemBlock := nil;
+end;
+
+destructor TForm15.Destroy;
+begin
+  if Assigned(MemBlock) then begin
+    FreeMem(MemBlock,MemoryIn1.DataSize);
+    MemBlock := nil;
+  end;
+
+  FServer.Active:=false;
+  FServer.Free;
+  FClient.Active:=false;
+  FClient.Free;
+  FStream.Free;
+  DeleteCriticalSection(FLock);
+  inherited Destroy;
+end;
+
+function TForm15.DecompressString(S: String): String;
+var
+  Zip: TDecompressionStream;
+  Count: Integer;
+  Buffer: array[0..1023] of Char;
+  Stream: TStringStream;
+begin
+  Result:='';
+  Stream:=TStringStream.Create(S);
+  try
+    Stream.Position:=0;
+    Zip:=TDecompressionStream.Create(Stream);
+    try
+      repeat
+        Count:=Zip.Read(Buffer,SizeOf(Buffer));
+        Result:=Result+Copy(Buffer,1,Count);
+      until Count=0;
+    finally
+      Zip.Free;
+    end;
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure TForm15.ServerUDPRead(Sender: TObject; AData: TIdBytes; ABinding: TIdSocketHandle);
+var
+  S: String;
+  L: Integer;
+begin
+  S:=BytesToString(AData);
+  L:=Length(S);
+  if L>0 then begin
+//    S:=DecompressString(S);
+//    L:=Length(S);
+    EnterCriticalSection(FLock);
+    try
+      FStream.
+      FStream.Write(Pointer(S)^,L);
+    finally
+      LeaveCriticalSection(FLock);
+    end;
+  end;
+end;
+
+function TForm15.CompressString(S: String; Level: TCompressionLevel): String;
+var
+  Zip: TCompressionStream;
+  TempStream: TMemoryStream;
+begin
+  TempStream:=TMemoryStream.Create;
+  try
+    Zip:=TCompressionStream.Create(Level,TempStream);
+    try
+      Zip.Write(Pointer(S)^,Length(S));
+    finally
+      Zip.Free;
+    end;
+    TempStream.Position:=0;
+    SetLength(Result,TempStream.Size);
+    TempStream.Read(Pointer(Result)^,Length(Result))
+  finally
+    TempStream.Free;
+  end;
+end;
+
+procedure TForm15.AudioProcessor1GetData(Sender: TComponent; var Buffer: Pointer; var Bytes: Cardinal);
+var
+  S: String;
+  S2: String;
+  i: Integer;
+  L,M,D: Integer;
+  P: Integer;
+begin
+  AudioProcessor1.Input.GetData(Buffer,Bytes);
+  if FClient.Active and Assigned(Buffer) and (Bytes>0) then begin
+    SetLength(S,Bytes);
+    Move(Buffer^,Pointer(S)^,Bytes);
+ //   S2:=CompressString(S,clDefault);
+    S2:=S;
+
+//    S2:='012345678901234567890';
+
+    L:=FClient.BufferSize;
+    M:=Length(S2) mod L;
+    D:=Length(S2) div L;
+
+ //   S2:=S;
+    S:='';
+    for i:=0 to D do begin
+      P:=i*L;
+      if i=D then begin
+        S:=Copy(S2,P+1,M);
+      end else begin
+        S:=Copy(S2,P+1,L);
+      end;
+      FClient.Send(EditHost.Text,StrToIntDef(EditPort.Text,80),S);
+      Sleep(1);
+    end;
+
+
+{    EnterCriticalSection(FLock);
+    try
+      FStream.Write(Pointer(S)^,Length(S));
+    finally
+      LeaveCriticalSection(FLock);
+    end;}
+
+  end;
+end;
+
+procedure TForm15.AudioProcessor2GetData(Sender: TComponent; var Buffer: Pointer; var Bytes: Cardinal);
+begin
+  //
+end;
+
+procedure TForm15.Button1Click(Sender: TObject);
+begin
+  if OpenDialog1.Execute then
+  begin
+    MP3In1.FileName := OpenDialog1.FileName;
+    if MP3In1.Valid then
+
+//    WaveIn1.FileName := OpenDialog1.FileName;
+//    if WaveIn1.Valid then
+    begin
+      DXAudioIn1.InBitsPerSample := MP3In1.BitsPerSample;
+      DXAudioIn1.InChannels := MP3In1.Channels;
+      DXAudioIn1.InSampleRate := MP3In1.SampleRate;
+
+      RealTimeMixer1.OutBitsPerSample := MP3In1.BitsPerSample;
+      RealTimeMixer1.OutChannels := MP3In1.Channels;
+      RealTimeMixer1.OutSampleRate := MP3In1.SampleRate;
+
+      MemoryIn1.InBitsPerSample:=MP3In1.BitsPerSample;
+      MemoryIn1.InChannels:=MP3In1.Channels;
+      MemoryIn1.InSampleRate:=MP3In1.SampleRate;
+
+      if Assigned(MemBlock) then begin
+        FreeMem(MemBlock,MemoryIn1.DataSize);
+        MemBlock := nil;
+      end;
+
+      GetMem(MemBlock,MP3In1.SampleRate*4);
+      FillChar(MemBlock^,MP3In1.SampleRate*4,0);
+
+      MemoryIn1.DataBuffer:=MemBlock;
+      MemoryIn1.DataSize:=MP3In1.SampleRate*4;
+
+{      DXAudioIn1.InBitsPerSample := WaveIn1.BitsPerSample;
+      DXAudioIn1.InChannels := WaveIn1.Channels;
+      DXAudioIn1.InSampleRate := WaveIn1.SampleRate;
+      RealTimeMixer1.OutBitsPerSample := WaveIn1.BitsPerSample;
+      RealTimeMixer1.OutChannels := WaveIn1.Channels;
+      RealTimeMixer1.OutSampleRate := WaveIn1.SampleRate;}
+      if SaveDialog1.Execute then
+      begin
+        Button1.Enabled := False;
+        NULLOut1.Run;
+        DSAudioOut1.Run;
+//        DSAudioOut2.Run;
+//        MP3Out1.FileName := SaveDialog1.FileName;
+//        MP3Out1.Run;
+//        WaveOut1.FileName := SaveDialog1.FileName;
+//        WaveOut1.Run;
+      end;
+    end else
+    begin
+      StatusBar1.Panels[0].Text := 'Input file is not valid';
+    end;
+  end;
+end;
+
+procedure TForm15.Button2Click(Sender: TObject);
+begin
+  FPosition:=0;
+  NULLOut1.Stop();
+//  DSAudioOut2.Stop();
+  DSAudioOut1.Stop();
+//  MP3Out1.Stop;
+//  WaveOut1.Stop;
+end;
+
+procedure TForm15.Button3Click(Sender: TObject);
+begin
+  FClient.Active:=true;
+end;
+
+procedure TForm15.Button4Click(Sender: TObject);
+begin
+      FServer.Active:=false;
+      FServer.Bindings.Clear;
+      with FServer.Bindings.Add do begin
+        IP:=EditHost.Text;
+        Port:=StrToIntDef(EditPort.Text,80);
+      end;
+      FServer.OnUDPRead:=ServerUDPRead;
+      FServer.Active:=true;
+
+end;
+
+procedure TForm15.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  NULLOut1.Stop(false);
+//  DSAudioOut2.Stop(false);
+  DSAudioOut1.Stop(false);
+//  MP3Out1.Stop(false);
+//  WaveOut1.Stop(False);
+end;
+
+procedure TForm15.FormCreate(Sender: TObject);
+begin
+{  SpinEdit1.MaxValue := DXAudioIn1.DeviceCount - 1;
+  Label1.Caption := DXAudioIn1.DeviceName[SpinEdit1.Value];}
+  SpinEdit1.MaxValue := DSAudioOut1.DeviceCount - 1;
+  Label1.Caption := DSAudioOut1.DeviceName[SpinEdit1.Value];
+end;
+
+procedure TForm15.GainIndicator1GainData(Sender: TComponent);
+begin
+  ProgressBar1.Position := FastGainIndicator1.GainValue;
+end;
+
+procedure TForm15.GainIndicator2GainData(Sender: TComponent);
+begin
+  ProgressBar2.Position := FastGainIndicator2.GainValue;
+end;
+
+procedure TForm15.MemoryIn1BufferDone(Sender: TComponent; var DataBuffer: Pointer; var DataSize: Cardinal;
+  var RepeatCount: Integer);
+var
+  D: Integer;
+  MS: TMemoryStream;
+  MS2: TMemoryStream;
+begin
+    DataSize:=MemoryIn1.DataSize;
+
+    if FStream.Size>DataSize then begin
+
+      EnterCriticalSection(FLock);
+      MS:=TMemoryStream.Create;
+      MS2:=TMemoryStream.Create;
+      try
+{        FStream.Position:=0;
+        FStream.ReadBuffer(DataBuffer^,DataSize);
+
+        MS2.CopyFrom(FStream,FStream.Size-FStream.Position);
+        FStream.Clear;
+
+        MS2.Position:=0;
+        FStream.CopyFrom(MS2,MS2.Size);}
+
+        FStream.Position:=FPosition;
+        FStream.ReadBuffer(DataBuffer^,DataSize);
+        FPosition:=FStream.Position;
+        FStream.Position:=FStream.Size;
+
+      finally
+        MS2.Free;
+        MS.Free;
+        LeaveCriticalSection(FLock);
+      end;
+
+    end else begin
+      Sleep(DSAudioOut1.Latency);
+    end;
+
+    RepeatCount:=1;
+
+end;
+
+procedure TForm15.SpinEdit1Change(Sender: TObject);
+begin
+  DSAudioOut1.DeviceNumber := SpinEdit1.Value;
+  Label1.Caption := DSAudioOut1.DeviceName[SpinEdit1.Value];
+end;
+
+procedure TForm15._WaveOut1Done(Sender: TComponent);
+begin
+  Button1.Enabled := True;
+end;
+
+end.

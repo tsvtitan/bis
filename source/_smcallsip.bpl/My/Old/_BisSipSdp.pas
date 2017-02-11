@@ -1,0 +1,92 @@
+unit BisSipSdp;
+
+interface
+
+uses Classes, Contnrs;
+
+type
+
+  TBisSipSdpName=class(TObject)
+  protected
+    class function GetName: String; virtual;
+  public
+    function AsString: String; virtual;
+    
+    property Name: String read GetName;
+  end;
+
+  TBisSipSdpNameClass=class of TBisSipSdpName;
+
+  TBisSipSdpVersionName=class(TBisSipSdpName)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipSdp=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisSipSdpName;
+  public
+    function AsString: String;
+    function Add(AClass: TBisSipSdpNameClass): TBisSipSdpName;
+
+    property Items[Index: Integer]: TBisSipSdpName read GetItem; default;
+  end;
+
+implementation
+
+uses SysUtils;
+
+{ TBisSipSdpName }
+
+function TBisSipSdpName.AsString: String;
+begin
+  Result:='';
+end;
+
+class function TBisSipSdpName.GetName: String;
+begin
+  Result:='';
+end;
+
+{ TBisSipSdpVersionName }
+
+class function TBisSipSdpVersionName.GetName: String;
+begin
+  Result:='v';
+end;
+
+{ TBisSipSdp }
+
+function TBisSipSdp.GetItem(Index: Integer): TBisSipSdpName;
+begin
+  Result:=TBisSipSdpName(inherited Items[Index]);
+end;
+
+function TBisSipSdp.AsString: String;
+var
+  i: Integer;
+  Item: TBisSipSdpName;
+  Strings: TStringList;
+begin
+  Strings:=TStringList.Create;
+  try
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      Strings.Add(Item.AsString);
+    end;
+    Result:=Trim(Strings.Text);
+  finally
+    Strings.Free;
+  end;
+end;
+
+function TBisSipSdp.Add(AClass: TBisSipSdpNameClass): TBisSipSdpName;
+begin
+  Result:=nil;
+  if Assigned(AClass) then begin
+    Result:=AClass.Create;
+    inherited Add(Result);
+  end;
+end;
+
+end.

@@ -1,0 +1,35 @@
+package dws2SymbolsLibrary50;
+
+{$R *.RES}
+{$R '..\SymbolsLib\dws2SymbolsLib.dcr'}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS OFF}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScript II - Symboltable Access '}
+{$IMPLICITBUILD OFF}
+
+requires
+  dws2Runtime50_20;
+
+contains
+  dws2SymbolsLibModule in '..\SymbolsLib\dws2SymbolsLibModule.pas' {dws2SymbolsLib: TDataModule};
+
+end.

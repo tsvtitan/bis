@@ -1,0 +1,464 @@
+unit BisServiceApplication;
+
+interface
+
+uses Windows, Classes, Contnrs,
+     BisSvcMgr, BisObject, BisApplication;
+
+type
+  TBisServiceApplication=class;
+
+  TChangeServiceConfig2A = function (hService: Integer; dwInfoLevel: DWORD; lpBuffer: PByte): BOOL; stdcall;
+
+  TBisService=class(TService)
+  private
+    FParent: TBisServiceApplication;
+    FServiceController: TServiceController;
+    FDescription: String;
+    FChangeServiceConfig2A: TChangeServiceConfig2A;
+    procedure DoAfterInstall(Sender: TService);
+    procedure SetDescription;
+    function GetChangeServiceConfig2A: Boolean;
+    procedure Start(Sender: TService; var Started: Boolean);
+    procedure Stop(Sender: TService; var Stopped: Boolean);
+
+    function GetNTDependencies: String;
+    function GetNTServiceType: Integer;
+    function GetNTStartType: Integer;
+    function GetNTErrorSeverity: Integer;
+  public
+    constructor CreateNew(AOwner: TComponent; Dummy: Integer); override;
+    function GetServiceController: TServiceController; override;
+    procedure Controller(CtrlCode: DWord);
+
+    property ServiceController: TServiceController read FServiceController write FServiceController;
+    property Description: String read FDescription write FDescription;
+    property Parent: TBisServiceApplication read FParent write FParent;
+  end;
+
+  TBisServiceApplication=class(TBisApplication)
+  private
+    FService: TBisService;
+    FOldApplication: TServiceApplication;
+    procedure ServiceStop(Sender: TService; var Stopped: Boolean);
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure Run; override;
+    procedure Install; override;
+    procedure Uninstall; override;
+    procedure Terminate; override;
+  end;
+
+implementation
+
+uses Messages, SysUtils, WinSvc, Consts, Dialogs, StrUtils, Forms,
+     BisUtils, BisConsts, BisCmdLine, BisValues,
+     BisCore, BisCoreIntf;
+
+const
+  advapi32 = 'advapi32.dll';
+  SERVICE_CONFIG_DESCRIPTION     = 1;
+  SERVICE_CONFIG_FAILURE_ACTIONS = 2;
+
+type
+  LPSERVICE_DESCRIPTIONA = ^SERVICE_DESCRIPTIONA;
+  _SERVICE_DESCRIPTIONA = record
+    lpDescription: LPSTR;
+  end;
+  SERVICE_DESCRIPTIONA = _SERVICE_DESCRIPTIONA;
+  TServiceDescriptionA = SERVICE_DESCRIPTIONA;
+  PServiceDescriptionA = LPSERVICE_DESCRIPTIONA;
+
+{ TBisService }
+
+constructor TBisService.CreateNew(AOwner: TComponent; Dummy: Integer);
+begin
+  inherited CreateNew(AOwner,Dummy);
+  AfterInstall:=DoAfterInstall;
+  OnStart:=Start;
+  OnStop:=Stop;
+end;
+
+function TBisService.GetServiceController: TServiceController;
+begin
+  Result:=FServiceController;
+end;
+
+procedure TBisService.Controller(CtrlCode: DWord);
+begin
+  inherited Controller(CtrlCode);
+end;
+
+procedure TBisService.DoAfterInstall(Sender: TService);
+begin
+  SetDescription;
+end;
+
+procedure TBisService.SetDescription;
+var
+  Svc: Integer;
+  Mgr: Integer;
+  Proc: TChangeServiceConfig2A;
+  Desc: TServiceDescriptionA;
+begin
+  if not GetChangeServiceConfig2A then exit;
+  Proc:=FChangeServiceConfig2A;
+  if Assigned(Proc) then begin
+    Mgr:=OpenSCManager(nil,nil,SC_MANAGER_ALL_ACCESS);
+    if Mgr=0 then RaiseLastOSError;
+    try
+      Svc:=OpenService(Mgr,PChar(Name),SERVICE_ALL_ACCESS);
+      if Svc=0 then RaiseLastOSError;
+      try
+        FillChar(Desc,SizeOf(Desc),0);
+        Desc.lpDescription:=PChar(FDescription);
+        if not Proc(Svc,SERVICE_CONFIG_DESCRIPTION,@Desc) then
+          FDescription:='';
+      finally
+        CloseServiceHandle(Svc);
+      end;
+    finally
+      CloseServiceHandle(Mgr);
+    end;
+  end;  
+end;
+
+function TBisService.GetChangeServiceConfig2A: Boolean;
+var
+  H: THandle;
+const
+  SChangeServiceConfig2='ChangeServiceConfig2A';
+begin
+  Result:=false;
+  FChangeServiceConfig2A:=nil;
+
+  If (Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion >= 5) then begin
+    H:=GetModuleHandle(advapi32);
+    if H<>0 then begin
+      FChangeServiceConfig2A:=GetProcAddress(H,SChangeServiceConfig2);
+    end;
+  end;
+  
+  if Assigned(FChangeServiceConfig2A) then
+    Result:=true;
+
+end;
+
+procedure TBisService.Start(Sender: TService; var Started: Boolean);
+begin
+  Started:=true;
+end;
+
+procedure TBisService.Stop(Sender: TService; var Stopped: Boolean);
+begin
+  Stopped:=true;
+end;
+
+function TBisService.GetNTDependencies: String;
+var
+  i, Len: Integer;
+  P: PChar;
+begin
+  Result := '';
+  Len := 0;
+  for i := 0 to Dependencies.Count - 1 do
+  begin
+    Inc(Len, Length(Dependencies[i].Name) + 1); // For null-terminator
+    if Dependencies[i].IsGroup then Inc(Len);
+  end;
+  if Len <> 0 then
+  begin
+    Inc(Len); // For final null-terminator;
+    SetLength(Result, Len);
+    P := @Result[1];
+    for i := 0 to Dependencies.Count - 1 do
+    begin
+      if Dependencies[i].IsGroup then
+      begin
+        P^ := SC_GROUP_IDENTIFIER;
+        Inc(P);
+      end;
+      P := StrECopy(P, PChar(Dependencies[i].Name));
+      Inc(P);
+    end;
+    P^ := #0;
+  end;
+end;
+
+function TBisService.GetNTServiceType: Integer;
+const
+  NTServiceType: array[TServiceType] of Integer = ( SERVICE_WIN32_OWN_PROCESS,
+    SERVICE_KERNEL_DRIVER, SERVICE_FILE_SYSTEM_DRIVER);
+begin
+  Result := NTServiceType[ServiceType];
+  if (ServiceType = stWin32) and Interactive then
+    Result := Result or SERVICE_INTERACTIVE_PROCESS;
+  if (ServiceType = stWin32) and (BisSvcMgr.Application.ServiceCount > 1) then
+    Result := (Result xor SERVICE_WIN32_OWN_PROCESS) or SERVICE_WIN32_SHARE_PROCESS;
+end;
+
+function TBisService.GetNTStartType: Integer;
+const
+  NTStartType: array[TStartType] of Integer = (SERVICE_BOOT_START,
+    SERVICE_SYSTEM_START, SERVICE_AUTO_START, SERVICE_DEMAND_START,
+    SERVICE_DISABLED);
+begin
+  Result := NTStartType[StartType];
+  if (StartType in [stBoot, stSystem]) and (ServiceType <> stDevice) then
+    Result := SERVICE_AUTO_START;
+end;
+
+function TBisService.GetNTErrorSeverity: Integer;
+const
+  NTErrorSeverity: array[TErrorSeverity] of Integer = (SERVICE_ERROR_IGNORE,
+    SERVICE_ERROR_NORMAL, SERVICE_ERROR_SEVERE, SERVICE_ERROR_CRITICAL);
+begin
+  Result := NTErrorSeverity[ErrorSeverity];
+end;
+
+{ THackServiceApplication }
+
+type
+  THackServiceApplication=class(TServiceApplication)
+  private
+    FInstallServicePath: String;
+  protected
+    procedure RegisterServices(Install, Silent: Boolean);
+
+    property InstallServicePath: String read FInstallServicePath write FInstallServicePath;
+  end;
+
+procedure THackServiceApplication.RegisterServices(Install, Silent: Boolean);
+
+  procedure InstallService(Service: TBisService; SvcMgr: Integer);
+  var
+    TmpTagID, Svc: Integer;
+    PTag, PSSN: Pointer;
+    Path: string;
+  begin
+    Path := FInstallServicePath;
+    with TBisService(Service) do
+    begin
+      if Assigned(BeforeInstall) then BeforeInstall(Service);
+      TmpTagID := TagID;
+      if TmpTagID > 0 then PTag := @TmpTagID else PTag := nil;
+      if ServiceStartName = '' then
+        PSSN := nil else
+        PSSN := PChar(ServiceStartName);
+      Svc := CreateService(SvcMgr, PChar(Name), PChar(DisplayName),
+        SERVICE_ALL_ACCESS, GetNTServiceType, GetNTStartType, GetNTErrorSeverity,
+        PChar(Path), PChar(LoadGroup), PTag, PChar(GetNTDependencies),
+        PSSN, PChar(Password));
+      TagID := TmpTagID;
+      if Svc = 0 then
+        RaiseLastOSError;
+      try
+        try
+          if Assigned(AfterInstall) then AfterInstall(Service);
+        except
+          on E: Exception do
+          begin
+            DeleteService(Svc);
+            raise;
+          end;
+        end;
+      finally
+        CloseServiceHandle(Svc);
+      end;
+    end;
+  end;
+
+  procedure UninstallService(Service: TBisService; SvcMgr: Integer);
+  var
+    Svc: Integer;
+  begin
+    with TBisService(Service) do
+    begin
+      if Assigned(BeforeUninstall) then BeforeUninstall(Service);
+      Svc := OpenService(SvcMgr, PChar(Name), SERVICE_ALL_ACCESS);
+      if Svc = 0 then RaiseLastOSError;
+      try
+        if not DeleteService(Svc) then RaiseLastOSError;
+      finally
+        CloseServiceHandle(Svc);
+      end;
+      if Assigned(AfterUninstall) then AfterUninstall(Service);
+    end;
+  end;
+
+var
+  SvcMgr: Integer;
+  i: Integer;
+  Success: Boolean;
+  Msg: string;
+begin
+  Success := True;
+  SvcMgr := OpenSCManager(nil, nil, SC_MANAGER_ALL_ACCESS);
+  if SvcMgr = 0 then RaiseLastOSError;
+  try
+    for i := 0 to ComponentCount - 1 do
+      if Components[i] is TBisService then
+      try
+        if Install then
+          InstallService(TBisService(Components[i]), SvcMgr) else
+          UninstallService(TBisService(Components[i]), SvcMgr)
+      except
+        on E: Exception do
+        begin
+          Success := False;
+          if Install then
+            Msg := SServiceInstallFailed else
+            Msg := SServiceUninstallFailed;
+          with TBisService(Components[i]) do
+            MessageDlg(Format(Msg, [DisplayName, E.Message]), mtError, [mbOK],0);
+        end;
+      end;
+    if Success and not Silent then
+      if Install then
+        MessageDlg(SServiceInstallOK, mtInformation, [mbOk], 0) else
+        MessageDlg(SServiceUninstallOK, mtInformation, [mbOk], 0);
+  finally
+    CloseServiceHandle(SvcMgr);
+  end;
+end;
+
+{ TBisServiceApplication }
+
+var
+  ListServices: TObjectList;
+
+procedure ServiceControllerProc(CtrlCode: DWord); stdcall;
+var
+  i: Integer;
+begin
+  for i:=0 to ListServices.Count - 1 do
+    TBisService(ListServices.Items[i]).Controller(CtrlCode);
+end;
+
+constructor TBisServiceApplication.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  if Assigned(BisSvcMgr.Application) then begin
+    FOldApplication:=BisSvcMgr.Application;
+  end;
+  BisSvcMgr.Application:=THackServiceApplication.Create(nil);
+  FService:=TBisService.CreateNew(BisSvcMgr.Application,0);
+  FService.AllowPause:=false;
+  FService.ServiceController:=ServiceControllerProc;
+  FService.Interactive:=true;
+  FService.OnStop:=ServiceStop;
+  ListServices.Add(FService)
+end;
+
+destructor TBisServiceApplication.Destroy; 
+begin
+  ListServices.Remove(FService);
+  FService.Free;
+  BisSvcMgr.Application.Free;
+  BisSvcMgr.Application:=nil;
+  if Assigned(FOldApplication) then
+    BisSvcMgr.Application:=FOldApplication;
+  inherited Destroy;
+end;
+
+procedure TBisServiceApplication.Init;
+var
+  Param: TBisCmdParam;
+  V: TBisValue;
+  S: String;
+  Str: TStringList;
+const
+  NoneValid: set of char = ['/','\','?','*','<','>',':','|','.',',','+',' '];
+begin
+  inherited Init;
+  FService.Name:=ObjectName;
+  FService.DisplayName:=Title;
+  FService.Description:=Description;
+  FService.Dependencies.Clear;
+  if Assigned(CmdLine) and Assigned(Core) then begin
+    CmdLine.Params.Delete(SCmdParamInstall);
+    CmdLine.Params.Delete(SCmdParamUninstall);
+    Param:=CmdLine.Params.Find(SCmdParamService);
+    if Assigned(Param) and (Param.Values.Count>0) then begin
+      V:=Param.Values.Find(SParamName);
+      if Assigned(V) then begin
+        S:=V.AsString;
+        S:=ReplaceText(S,SVariableName,ObjectName);
+        S:=ReplaceText(S,SVariableTitle,Title);
+        S:=ReplaceText(S,SVariableVersion,Version);
+        S:=RemoveChars(S,NoneValid);
+        V.Value:=S;
+        FService.Name:=S;
+      end;
+      V:=Param.Values.Find(SParamDisplay);
+      if Assigned(V) then begin
+        S:=V.AsString;
+        S:=ReplaceText(S,SVariableName,ObjectName);
+        S:=ReplaceText(S,SVariableTitle,Title);
+        S:=ReplaceText(S,SVariableVersion,Version);
+        V.Value:=S;
+        FService.DisplayName:=S;
+        if Core.Action in [saInstall,saUninstall] then
+          Param.Values.Remove(V); 
+      end;
+      V:=Param.Values.Find(SParamDependencies);
+      if Assigned(V) then begin
+        Str:=TStringList.Create;
+        try
+
+        finally
+          Str.Free;
+        end;
+        S:=V.AsString;
+        S:=ReplaceText(S,SVariableName,ObjectName);
+        S:=ReplaceText(S,SVariableTitle,Title);
+        S:=ReplaceText(S,SVariableVersion,Version);
+        V.Value:=S;
+        
+        FService.DisplayName:=S;
+        if Core.Action in [saInstall,saUninstall] then
+          Param.Values.Remove(V);
+      end;
+    end;
+    if Core.Action=saInstall then begin
+      S:=CmdLine.Text;
+      THackServiceApplication(BisSvcMgr.Application).InstallServicePath:=S;
+    end;
+  end;
+end;
+
+procedure TBisServiceApplication.Run;
+begin
+  inherited Run;
+  BisSvcMgr.Application.Run;
+end;
+
+procedure TBisServiceApplication.ServiceStop(Sender: TService; var Stopped: Boolean);
+begin
+  DoExit(emDefault);
+end;
+
+procedure TBisServiceApplication.Install;
+begin
+  THackServiceApplication(BisSvcMgr.Application).RegisterServices(true,true);
+end;
+
+procedure TBisServiceApplication.Uninstall;
+begin
+  THackServiceApplication(BisSvcMgr.Application).RegisterServices(false,true);
+end;
+
+procedure TBisServiceApplication.Terminate; 
+begin
+  Forms.Application.Terminate;
+end;
+
+initialization
+  ListServices:=TObjectList.Create(false);
+
+finalization
+  ListServices.Free;
+
+end.

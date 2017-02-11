@@ -1,0 +1,131 @@
+unit BisParamEditFloat;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisParamEdit, BisControls;
+
+type
+
+  TBisParamEditFloat=class(TBisParamEdit)
+ private
+    FEditFloat: TEditFloat;
+    property Edit;
+  protected
+    procedure SetValue(const AValue: Variant); override;
+    function GetValue: Variant; override;
+    procedure SetAlignment(const Value: TAlignment); override;
+    function GetAlignment: TAlignment; override;
+    function GetSize: Integer; override;
+    procedure SetSize(const Value: Integer); override;
+    function GetPrecision: Integer; override;
+    procedure SetPrecision(const Value: Integer); override;
+  public
+    constructor Create; override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+    property EditFloat: TEditFloat read FEditFloat;
+  end;
+
+
+implementation
+
+uses Variants, SysUtils,
+     BisUtils;
+
+{ TBisParamEditFloat }
+
+constructor TBisParamEditFloat.Create; 
+begin
+  inherited Create;
+  DataType:=ftFloat;
+end;
+
+procedure TBisParamEditFloat.LinkControls(Parent: TWinControl);
+var
+  AEdit: TEdit; 
+begin
+  inherited LinkControls(Parent);
+  if Assigned(Edit) then begin
+    AEdit:=Edit;
+    FEditFloat:=ReplaceEditToEditFloat(AEdit);
+    FEditFloat.Alignment:=taRightJustify;
+    FEditFloat.DisplayFormat:=ParamFormat;
+    Edit:=TEdit(FEditFloat);
+    if Assigned(LabelEdit) then
+      LabelEdit.FocusControls.Add(FEditFloat);
+  end;
+end;
+
+procedure TBisParamEditFloat.SetValue(const AValue: Variant);
+begin
+  if not VarSameValue(Value,AValue) then begin
+    if Assigned(FEditFloat) then begin
+      FEditFloat.OnChange:=nil;
+      try
+        FEditFloat.Text:=VarToStrDef(AValue,'');
+      finally
+        FEditFloat.OnChange:=EditChange;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamEditFloat.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FEditFloat) then
+    Result:=iff(not Empty,FEditFloat.Value,Result);
+end;
+
+function TBisParamEditFloat.GetAlignment: TAlignment;
+begin
+  Result:=inherited GetAlignment;
+  if Assigned(FEditFloat) then
+    Result:=FEditFloat.Alignment;
+end;
+
+procedure TBisParamEditFloat.SetAlignment(const Value: TAlignment);
+begin
+  if Alignment<>Value then begin
+    if Assigned(FEditFloat) then begin
+      FEditFloat.Alignment:=Value;
+    end;
+    inherited SetAlignment(Value);
+  end;
+end;
+
+function TBisParamEditFloat.GetPrecision: Integer;
+begin
+  Result:=inherited GetPrecision;
+  if Assigned(FEditFloat) then
+    Result:=FEditFloat.MaxLength;
+end;
+
+procedure TBisParamEditFloat.SetPrecision(const Value: Integer);
+begin
+  if Precision<>Value then
+    if Assigned(FEditFloat) then
+      FEditFloat.MaxLength:=Value
+    else
+      inherited SetPrecision(Value);
+end;
+
+function TBisParamEditFloat.GetSize: Integer;
+begin
+  Result:=inherited GetSize;
+  if Assigned(FEditFloat) then
+    Result:=FEditFloat.Decimals;
+end;
+
+procedure TBisParamEditFloat.SetSize(const Value: Integer);
+begin
+  if Size<>Value then
+    if Assigned(FEditFloat) then
+      FEditFloat.Decimals:=Value
+    else
+      inherited SetSize(Value);
+end;
+
+end.

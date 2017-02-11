@@ -1,0 +1,15 @@
+procedure SelectFile;
+var
+  SL: TStringList;
+  i: Integer;
+begin
+  SL := FileList('C:\*', False, False, False);
+  i := SelectStringDialog('Select a file', SL, 0);
+  if i >= 0 then
+    PrintLn('Your selected file: ' + SL.Strings(i))
+  else
+    PrintLn('Selection aborted');
+  SL.Free;
+end;
+
+SelectFile;

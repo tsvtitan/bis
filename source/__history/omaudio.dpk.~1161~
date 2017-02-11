@@ -1,0 +1,52 @@
+package omaudio;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  omnet,
+  rtl;
+
+contains
+  BisAudioCodec in 'omaudio.bpl\BisAudioCodec.pas',
+  WaveRecorders in 'omaudio.bpl\WaveAudio\WaveRecorders.pas',
+  WavePlayers in 'omaudio.bpl\WaveAudio\WavePlayers.pas',
+  WaveMixer in 'omaudio.bpl\WaveAudio\WaveMixer.pas',
+  WaveAcmDrivers in 'omaudio.bpl\WaveAudio\WaveAcmDrivers.pas',
+  WaveAcm in 'omaudio.bpl\WaveAudio\WaveAcm.pas',
+  BisAudioWave in 'omaudio.bpl\BisAudioWave.pas',
+  WaveStorage in 'omaudio.bpl\WaveAudio\WaveStorage.pas',
+  WaveIO in 'omaudio.bpl\WaveAudio\WaveIO.pas',
+  WaveUtils in 'omaudio.bpl\WaveAudio\WaveUtils.pas',
+  WaveIn in 'omaudio.bpl\WaveAudio\WaveIn.pas',
+  WaveOut in 'omaudio.bpl\WaveAudio\WaveOut.pas',
+  BisAudioDtmf in 'omaudio.bpl\BisAudioDtmf.pas',
+  BisRtpAcmDrivers in 'omaudio.bpl\BisRtpAcmDrivers.pas',
+  BisAudioTextPhrases in 'omaudio.bpl\BisAudioTextPhrases.pas',
+  BisAudioUtils in 'omaudio.bpl\BisAudioUtils.pas',
+  BisAudioSpectrum in 'omaudio.bpl\BisAudioSpectrum.pas',
+  fftspec in 'omaudio.bpl\FftSpec\fftspec.pas';
+
+end.

@@ -1,0 +1,35 @@
+inherited BisFotomResultFrame: TBisFotomResultFrame
+  Width = 499
+  Height = 240
+  ExplicitWidth = 499
+  ExplicitHeight = 240
+  inherited PanelData: TPanel
+    Width = 499
+    Height = 210
+    ExplicitTop = 96
+    ExplicitHeight = 144
+    inherited GridPattern: TDBGrid
+      Width = 493
+      Height = 204
+    end
+  end
+  inherited ControlBar: TControlBar
+    Width = 499
+    inherited LabelCounter: TLabel
+      Left = 374
+      Width = 50
+      ExplicitLeft = 374
+      ExplicitWidth = 50
+    end
+    inherited ToolBarNavigate: TToolBar
+      Width = 96
+      ExplicitWidth = 96
+    end
+  end
+  inherited ActionList: TActionList
+    object ActionSend: TAction
+      Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
+      Hint = #1054#1090#1087#1088#1072#1074#1080#1090#1100' '#1085#1072' '#1089#1072#1081#1090
+    end
+  end
+end

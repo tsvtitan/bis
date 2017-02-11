@@ -1,0 +1,124 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{e801eeea-de83-4d78-a6cf-22fc13306764}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="cmx.dproj" />
+    <Projects Include="cmxibase.dproj" />
+    <Projects Include="core.dproj" />
+    <Projects Include="imdesign.dproj" />
+    <Projects Include="imimport.dproj" />
+    <Projects Include="imloto.dproj" />
+    <Projects Include="loto.dproj" />
+    <Projects Include="objects.dproj" />
+    <Projects Include="omcom.dproj" />
+    <Projects Include="rpmfast.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+<BorlandProject xmlns=""><Default.Personality></Default.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="loto">
+    <MSBuild Projects="loto.dproj" Targets="" />
+  </Target>
+  <Target Name="loto:Clean">
+    <MSBuild Projects="loto.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="loto:Make">
+    <MSBuild Projects="loto.dproj" Targets="Make" />
+  </Target>
+  <Target Name="objects">
+    <MSBuild Projects="objects.dproj" Targets="" />
+  </Target>
+  <Target Name="objects:Clean">
+    <MSBuild Projects="objects.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="objects:Make">
+    <MSBuild Projects="objects.dproj" Targets="Make" />
+  </Target>
+  <Target Name="core">
+    <MSBuild Projects="core.dproj" Targets="" />
+  </Target>
+  <Target Name="core:Clean">
+    <MSBuild Projects="core.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="core:Make">
+    <MSBuild Projects="core.dproj" Targets="Make" />
+  </Target>
+  <Target Name="rpmfast">
+    <MSBuild Projects="rpmfast.dproj" Targets="" />
+  </Target>
+  <Target Name="rpmfast:Clean">
+    <MSBuild Projects="rpmfast.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="rpmfast:Make">
+    <MSBuild Projects="rpmfast.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omcom">
+    <MSBuild Projects="omcom.dproj" Targets="" />
+  </Target>
+  <Target Name="omcom:Clean">
+    <MSBuild Projects="omcom.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omcom:Make">
+    <MSBuild Projects="omcom.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmx">
+    <MSBuild Projects="cmx.dproj" Targets="" />
+  </Target>
+  <Target Name="cmx:Clean">
+    <MSBuild Projects="cmx.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmx:Make">
+    <MSBuild Projects="cmx.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmxibase">
+    <MSBuild Projects="cmxibase.dproj" Targets="" />
+  </Target>
+  <Target Name="cmxibase:Clean">
+    <MSBuild Projects="cmxibase.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmxibase:Make">
+    <MSBuild Projects="cmxibase.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imloto">
+    <MSBuild Projects="imloto.dproj" Targets="" />
+  </Target>
+  <Target Name="imloto:Clean">
+    <MSBuild Projects="imloto.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imloto:Make">
+    <MSBuild Projects="imloto.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imdesign">
+    <MSBuild Projects="imdesign.dproj" Targets="" />
+  </Target>
+  <Target Name="imdesign:Clean">
+    <MSBuild Projects="imdesign.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imdesign:Make">
+    <MSBuild Projects="imdesign.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imimport">
+    <MSBuild Projects="imimport.dproj" Targets="" />
+  </Target>
+  <Target Name="imimport:Clean">
+    <MSBuild Projects="imimport.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imimport:Make">
+    <MSBuild Projects="imimport.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="loto;objects;core;rpmfast;omcom;cmx;cmxibase;imloto;imdesign;imimport" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="loto:Clean;objects:Clean;core:Clean;rpmfast:Clean;omcom:Clean;cmx:Clean;cmxibase:Clean;imloto:Clean;imdesign:Clean;imimport:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="loto:Make;objects:Make;core:Make;rpmfast:Make;omcom:Make;cmx:Make;cmxibase:Make;imloto:Make;imdesign:Make;imimport:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

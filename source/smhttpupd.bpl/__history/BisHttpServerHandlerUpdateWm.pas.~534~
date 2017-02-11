@@ -1,0 +1,323 @@
+unit BisHttpServerHandlerUpdateWm;
+
+interface
+
+uses
+  SysUtils, Classes, HTTPApp, DB, Contnrs,
+  BisHttpServerHandlers, BisUpdateTypes;
+
+type
+  TBisHttpServerHandlerUpdateWebModuleFormat=(mfRaw,mfXml);
+
+  TBisHttpServerHandlerUpdateWebModule = class(TWebModule)
+    procedure BisHttpServerHandlerUpdateWebModuleXmlAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure BisHttpServerHandlerUpdateWebModuleDefaultAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+  private
+    FHandler: TBisHttpServerHandler;
+    FDirectory: String;
+
+    procedure GetList(List: TBisUpdateList);
+    procedure GetFiles(List: TBisUpdateList);
+    function Execute(Request: TWebRequest; Response: TWebResponse;
+                     StreamFormat: TBisHttpServerHandlerUpdateWebModuleFormat): Boolean;
+  public
+    property Directory: String read FDirectory write FDirectory;
+
+    property Handler: TBisHttpServerHandler read FHandler write FHandler;
+  end;
+
+var
+  BisHttpServerHandlerUpdateWebModule: TBisHttpServerHandlerUpdateWebModule;
+
+implementation
+
+{$R *.dfm}
+
+uses Windows, Variants,
+     AlXmlDoc,
+     BisConsts, BisUtils, BisFileDirs, BisModuleInfo, BisBase64,
+     BisHttpServerHandlerUpdateConsts;
+
+{ TBisHttpServerHandlerUpdateWebModule }
+
+procedure TBisHttpServerHandlerUpdateWebModule.GetList(List: TBisUpdateList);
+var
+  i: Integer;
+  FileDirs: TBisFileDirs;
+  FileDir: TBisFileDir;
+  Item: TBisUpdateItem;
+  AName: String;
+  ADir: String;
+  MI: TBisModuleInfo;
+begin
+  if Assigned(List) then begin
+    if DirectoryExists(FDirectory) then begin
+      FileDirs:=TBisFileDirs.Create;
+      try
+        FileDirs.Refresh(FDirectory,false);
+        for i:=0 to FileDirs.Count-1 do begin
+          FileDir:=FileDirs.Items[i];
+          if not FileDir.IsDir then begin
+            AName:=ExtractFileName(FileDir.Name);
+            ADir:=ExtractFileDir(FileDir.Name);
+            Item:=List.AddItem(AName);
+            Item.Dir:=Copy(ADir,Length(FDirectory)+1,Length(ADir));
+            MI:=TBisModuleInfo.Create(FileDir.Name);
+            try
+              Item.Version:=MI.FileVersion;
+              Item.Size:=MI.FileSize;
+              Item.Hash:=MI.FileHash;
+            finally
+              MI.Free;
+            end;
+          end;
+        end;
+      finally
+        FileDirs.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisHttpServerHandlerUpdateWebModule.GetFiles(List: TBisUpdateList);
+var
+  i: Integer;
+  Item: TBisUpdateItem;
+  AName: String;
+begin
+  if Assigned(List) then begin
+    if DirectoryExists(FDirectory) then begin
+      for i:=List.Count-1 downto 0 do begin
+        Item:=List.Items[i];
+        AName:=FDirectory+Item.Dir+PathDelim+Item.Name;
+        if Item.Need and FileExists(AName) then begin
+          Item.Stream.LoadFromFile(AName);
+        end else
+          List.Remove(Item);
+      end;
+    end;
+  end;
+end;
+
+function TBisHttpServerHandlerUpdateWebModule.Execute(Request: TWebRequest; Response: TWebResponse;
+                                                      StreamFormat: TBisHttpServerHandlerUpdateWebModuleFormat): Boolean;
+var
+  List: TBisUpdateList;
+
+  function ReadRawStream(Stream: TMemoryStream; var Method: TBisUpdateMethod): Boolean;
+  var
+    Reader: TReader;
+    ASize: Int64;
+    ListStream: TMemoryStream;
+  begin
+    Result:=false;
+    if Stream.Size>0 then begin
+      ListStream:=TMemoryStream.Create;
+      try
+
+        Reader:=TReader.Create(Stream,ReaderBufferSize);
+        try
+          Reader.ReadString;
+          Method:=TBisUpdateMethod(Reader.ReadInteger);
+          ASize:=Reader.ReadInt64;
+        finally
+          Reader.Free;
+        end;
+
+        if ASize>0 then begin
+          ListStream.CopyFrom(Stream,ASize);
+          ListStream.Position:=0;
+        end;
+
+        if ListStream.Size>0 then
+          List.LoadFromStream(ListStream,sfRaw);
+
+        Result:=true;  
+      finally
+        ListStream.Free;
+      end;
+    end;
+  end;
+
+  procedure WriteRawStream(Stream: TStream; Success: Boolean; Error: String; WithList: Boolean);
+  var
+    ListStream: TMemoryStream;
+    Writer: TWriter;
+  begin
+    ListStream:=TMemoryStream.Create;
+    try
+      if WithList then begin
+        List.SaveToStream(ListStream,sfRaw);
+        ListStream.Position:=0;
+      end;
+
+      Writer:=TWriter.Create(Stream,WriterBufferSize);
+      try
+        Writer.WriteString(GetUniqueID);
+        Writer.WriteBoolean(Success);
+        Writer.WriteString(Error);
+        Writer.WriteInteger(ListStream.Size);
+      finally
+        Writer.Free;
+      end;
+
+      if ListStream.Size>0 then begin
+        Stream.CopyFrom(ListStream,ListStream.Size);
+        Stream.Position:=0;
+      end;
+
+    finally
+      ListStream.Free;
+    end;
+  end;
+
+  function ReadXmlStream(Stream: TMemoryStream; var Method: TBisUpdateMethod): Boolean;
+  var
+    Xml: TALXMLDocument;
+    i,j: Integer;
+    Node,Data: TALXMLNode;
+    S: String;
+    ListStream: TMemoryStream;
+  begin
+    Result:=false;
+    if Stream.Size>0 then begin
+      Xml:=TALXMLDocument.Create(nil);
+      try
+        Xml.LoadFromStream(Stream);
+        for i:=0 to Xml.ChildNodes.Count-1 do begin
+          Node:=Xml.ChildNodes[i];
+          if AnsiSameText(Node.NodeName,'data') then begin
+            Data:=Node;
+            for j:=0 to Data.ChildNodes.Count-1 do begin
+              Node:=Data.ChildNodes[j];
+              if AnsiSameText(Node.NodeName,'rnd') then ;
+              if AnsiSameText(Node.NodeName,'method') then begin
+                S:=VarToStrDef(Node.NodeValue,'');
+                Method:=TBisUpdateMethod(StrToIntDef(S,0));
+              end;
+              if AnsiSameText(Node.NodeName,'list') then begin
+                ListStream:=TMemoryStream.Create;
+                try
+                  Node.SaveToStream(ListStream);
+                  ListStream.Position:=0;
+                  List.LoadFromStream(ListStream,sfXml);
+                finally
+                  ListStream.Free;
+                end;
+              end;
+            end;
+          end;
+        end;
+        Result:=Xml.ChildNodes.Count>0;
+      finally
+        Xml.Free;
+      end;
+    end;
+  end;
+
+  procedure WriteXmlStream(Stream: TStream; Success: Boolean; Error: String; WithList: Boolean);
+  var
+    Xml: TALXMLDocument;
+    Data: TALXMLNode;
+    ListStream: TMemoryStream;
+  begin
+    Xml:=TALXMLDocument.Create(nil);
+    try
+      Xml.Active:=true;
+      Xml.Version:='1.0';
+      Xml.Encoding:='windows-1251';
+      Xml.StandAlone:='yes';
+      Data:=Xml.AddChild('data');
+      Data.AddChild('rnd').NodeValue:=GetUniqueID;
+      Data.AddChild('success').NodeValue:=Integer(Success);
+      Data.AddChild('error').NodeValue:=Error;
+      if WithList then begin
+        ListStream:=TMemoryStream.Create;
+        try
+          List.SaveToStream(ListStream,sfXml);
+          ListStream.Position:=0;
+          Data.AddChild('list').LoadFromStream(ListStream);
+        finally
+          ListStream.Free;
+        end;
+      end;
+      Xml.SaveToStream(Stream);
+//      Xml.SaveToFile('c:\3.xml');
+      Stream.Position:=0;
+    finally
+      Xml.Free;
+    end;
+  end;
+
+var
+  RequestStream: TMemoryStream;
+  Method: TBisUpdateMethod;
+  Flag: Boolean;
+  Success: Boolean;
+  Error: String;
+  WithList: Boolean;
+begin
+  Result:=false;
+  if Assigned(FHandler) then begin
+    RequestStream:=TMemoryStream.Create;
+    List:=TBisUpdateList.Create;
+    try
+      RequestStream.WriteBuffer(Pointer(Request.Content)^,Length(Request.Content));
+      RequestStream.Position:=0;
+
+      Flag:=false;
+      case StreamFormat of
+        mfRaw: Flag:=ReadRawStream(RequestStream,Method);
+        mfXml: Flag:=ReadXmlStream(RequestStream,Method);
+      end;
+      if Flag then begin
+
+        Success:=false;
+        try
+          case Method of
+            umConnect: ;
+            umDisconnect: ;
+            umGetList: GetList(List);
+            umGetFiles: GetFiles(List);
+          end;
+          Success:=true;
+        except
+          On E: Exception do
+            Error:=E.Message;
+        end;
+
+        if Assigned(Response.ContentStream) then begin
+          WithList:=Method in [umGetList,umGetFiles];
+          case StreamFormat of
+            mfRaw: WriteRawStream(Response.ContentStream,Success,Error,WithList);
+            mfXml: WriteXmlStream(Response.ContentStream,Success,Error,WithList);
+          end;
+          Result:=true;
+        end;
+        
+      end;
+    finally
+      List.Free;
+      RequestStream.Free;
+    end;
+  end;
+end;
+
+procedure TBisHttpServerHandlerUpdateWebModule.BisHttpServerHandlerUpdateWebModuleDefaultAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Handled:=Execute(Request,Response,mfRaw);
+end;
+
+procedure TBisHttpServerHandlerUpdateWebModule.BisHttpServerHandlerUpdateWebModuleXmlAction(
+  Sender: TObject; Request: TWebRequest; Response: TWebResponse;
+  var Handled: Boolean);
+begin
+  Handled:=Execute(Request,Response,mfXml);
+end;
+
+
+
+end.

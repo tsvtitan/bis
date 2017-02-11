@@ -1,0 +1,1624 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 000163F0H .text                   CODE
+ 0002:00418000 000003E4H .itext                  ICODE
+ 0003:00419000 00000050H .data                   DATA
+ 0004:0041A000 000000B0H .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 0000013E C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000140 000001C3 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:00000304 000000AE C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:000003B4 00000054 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:00000408 00000006 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:00000410 0000002E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:00000440 000000AE C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:000004F0 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:000004F8 0000000E C=CODE     S=.text    G=(none)   M=BisObject ACBP=A9
+ 0001:00000508 0000002E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000538 00000036 C=CODE     S=.text    G=(none)   M=BisCoreObjects ACBP=A9
+ 0001:00000570 00000006 C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000578 00000006 C=CODE     S=.text    G=(none)   M=BisDialogs ACBP=A9
+ 0001:00000580 0000014E C=CODE     S=.text    G=(none)   M=BisFm    ACBP=A9
+ 0001:000006D0 00000006 C=CODE     S=.text    G=(none)   M=DECUtil  ACBP=A9
+ 0001:000006D8 00000006 C=CODE     S=.text    G=(none)   M=Hash     ACBP=A9
+ 0001:000006E0 00000006 C=CODE     S=.text    G=(none)   M=Cipher   ACBP=A9
+ 0001:000006E8 00000006 C=CODE     S=.text    G=(none)   M=Cipher1  ACBP=A9
+ 0001:000006F0 00000076 C=CODE     S=.text    G=(none)   M=BisParams ACBP=A9
+ 0001:00000768 00000006 C=CODE     S=.text    G=(none)   M=Grids    ACBP=A9
+ 0001:00000770 00000016 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000788 00000016 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:000007A0 0000000E C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:000007B0 00000006 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:000007B8 00000006 C=CODE     S=.text    G=(none)   M=Themes   ACBP=A9
+ 0001:000007C0 000001E6 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:000009A8 00000006 C=CODE     S=.text    G=(none)   M=UxTheme  ACBP=A9
+ 0001:000009B0 00000006 C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:000009B8 00000006 C=CODE     S=.text    G=(none)   M=DwmApi   ACBP=A9
+ 0001:000009C0 00000156 C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000B18 00000006 C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000B20 00000016 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000B38 0000000E C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:00000B48 00000006 C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000B50 00000006 C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000B58 00000006 C=CODE     S=.text    G=(none)   M=GraphUtil ACBP=A9
+ 0001:00000B60 00000006 C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000B68 00000006 C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000B70 00000016 C=CODE     S=.text    G=(none)   M=DBGrids  ACBP=A9
+ 0001:00000B88 0000007E C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:00000C08 00000006 C=CODE     S=.text    G=(none)   M=WideStrings ACBP=A9
+ 0001:00000C10 00000006 C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:00000C18 00000006 C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:00000C20 0000001E C=CODE     S=.text    G=(none)   M=DateUtils ACBP=A9
+ 0001:00000C40 0000000E C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:00000C50 00000006 C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00000C58 000000C6 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00000D20 00000006 C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00000D28 00000006 C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00000D30 00000006 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00000D38 00000006 C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00000D40 00000006 C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00000D48 00000006 C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00000D50 00000006 C=CODE     S=.text    G=(none)   M=rxToolEdit ACBP=A9
+ 0001:00000D58 00000006 C=CODE     S=.text    G=(none)   M=rxDateUtil ACBP=A9
+ 0001:00000D60 00000006 C=CODE     S=.text    G=(none)   M=RXCtrls  ACBP=A9
+ 0001:00000D68 00000006 C=CODE     S=.text    G=(none)   M=RxHook   ACBP=A9
+ 0001:00000D70 00000006 C=CODE     S=.text    G=(none)   M=RXConst  ACBP=A9
+ 0001:00000D78 00000006 C=CODE     S=.text    G=(none)   M=rxVclutils ACBP=A9
+ 0001:00000D80 00000006 C=CODE     S=.text    G=(none)   M=RXProps  ACBP=A9
+ 0001:00000D88 00000006 C=CODE     S=.text    G=(none)   M=rxAppUtils ACBP=A9
+ 0001:00000D90 00000006 C=CODE     S=.text    G=(none)   M=RxPrgrss ACBP=A9
+ 0001:00000D98 00000006 C=CODE     S=.text    G=(none)   M=rxCurrEdit ACBP=A9
+ 0001:00000DA0 00000006 C=CODE     S=.text    G=(none)   M=ThemedDBGrid ACBP=A9
+ 0001:00000DA8 00000006 C=CODE     S=.text    G=(none)   M=RxRichEd ACBP=A9
+ 0001:00000DB0 00000006 C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:00000DB8 00000016 C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00000DD0 00000036 C=CODE     S=.text    G=(none)   M=BisUtils ACBP=A9
+ 0001:00000E08 0000003E C=CODE     S=.text    G=(none)   M=BisParam ACBP=A9
+ 0001:00000E48 00000016 C=CODE     S=.text    G=(none)   M=BisFilterGroups ACBP=A9
+ 0001:00000E60 0000003E C=CODE     S=.text    G=(none)   M=BisFrm   ACBP=A9
+ 0001:00000EA0 00000006 C=CODE     S=.text    G=(none)   M=GIFImage ACBP=A9
+ 0001:00000EA8 00000006 C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:00000EB0 00000006 C=CODE     S=.text    G=(none)   M=BisValues ACBP=A9
+ 0001:00000EB8 00000006 C=CODE     S=.text    G=(none)   M=BisOrders ACBP=A9
+ 0001:00000EC0 00000026 C=CODE     S=.text    G=(none)   M=BisCore  ACBP=A9
+ 0001:00000EE8 0000003E C=CODE     S=.text    G=(none)   M=BisIfaces ACBP=A9
+ 0001:00000F28 00000006 C=CODE     S=.text    G=(none)   M=BisModules ACBP=A9
+ 0001:00000F30 00000046 C=CODE     S=.text    G=(none)   M=BisDataSet ACBP=A9
+ 0001:00000F78 00000026 C=CODE     S=.text    G=(none)   M=BisFieldNames ACBP=A9
+ 0001:00000FA0 00000006 C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:00000FA8 00000006 C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:00000FB0 00000006 C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00000FB8 00000006 C=CODE     S=.text    G=(none)   M=kbmMemTable ACBP=A9
+ 0001:00000FC0 00000006 C=CODE     S=.text    G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0001:00000FC8 00000006 C=CODE     S=.text    G=(none)   M=ActnMan  ACBP=A9
+ 0001:00000FD0 00000006 C=CODE     S=.text    G=(none)   M=ActnMenus ACBP=A9
+ 0001:00000FD8 00000006 C=CODE     S=.text    G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0001:00000FE0 00000006 C=CODE     S=.text    G=(none)   M=BisProvider ACBP=A9
+ 0001:00000FE8 00000006 C=CODE     S=.text    G=(none)   M=BisProgressEvents ACBP=A9
+ 0001:00000FF0 0000007E C=CODE     S=.text    G=(none)   M=BisDataFm ACBP=A9
+ 0001:00001070 000000CE C=CODE     S=.text    G=(none)   M=BisDataEditFm ACBP=A9
+ 0001:00001140 0000016E C=CODE     S=.text    G=(none)   M=BisDataFrm ACBP=A9
+ 0001:000012B0 00000006 C=CODE     S=.text    G=(none)   M=SynEditHighlighter ACBP=A9
+ 0001:000012B8 00000006 C=CODE     S=.text    G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0001:000012C0 00000006 C=CODE     S=.text    G=(none)   M=SynRegExpr ACBP=A9
+ 0001:000012C8 00000006 C=CODE     S=.text    G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0001:000012D0 00000006 C=CODE     S=.text    G=(none)   M=SynEdit  ACBP=A9
+ 0001:000012D8 00000006 C=CODE     S=.text    G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0001:000012E0 00000006 C=CODE     S=.text    G=(none)   M=SynTextDrawer ACBP=A9
+ 0001:000012E8 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_Routines ACBP=A9
+ 0001:000012F0 00000006 C=CODE     S=.text    G=(none)   M=MSI_Processes ACBP=A9
+ 0001:000012F8 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0001:00001300 00000006 C=CODE     S=.text    G=(none)   M=MSI_Devices ACBP=A9
+ 0001:00001308 00000006 C=CODE     S=.text    G=(none)   M=MSI_CPU  ACBP=A9
+ 0001:00001310 00000006 C=CODE     S=.text    G=(none)   M=JclDebug ACBP=A9
+ 0001:00001318 00000006 C=CODE     S=.text    G=(none)   M=JclSysInfo ACBP=A9
+ 0001:00001320 00000006 C=CODE     S=.text    G=(none)   M=JclStrings ACBP=A9
+ 0001:00001328 00000006 C=CODE     S=.text    G=(none)   M=JclSysUtils ACBP=A9
+ 0001:00001330 00000006 C=CODE     S=.text    G=(none)   M=JclWideStrings ACBP=A9
+ 0001:00001338 00000006 C=CODE     S=.text    G=(none)   M=JclShell ACBP=A9
+ 0001:00001340 00000006 C=CODE     S=.text    G=(none)   M=JclRegistry ACBP=A9
+ 0001:00001348 00000006 C=CODE     S=.text    G=(none)   M=JclHookExcept ACBP=A9
+ 0001:00001350 00000006 C=CODE     S=.text    G=(none)   M=BisCoreThreads ACBP=A9
+ 0001:00001358 00000006 C=CODE     S=.text    G=(none)   M=AsyncCalls ACBP=A9
+ 0001:00001360 00000006 C=CODE     S=.text    G=(none)   M=BisServiceApplication ACBP=A9
+ 0001:00001368 00000006 C=CODE     S=.text    G=(none)   M=BisSvcMgr ACBP=A9
+ 0001:00001370 00000006 C=CODE     S=.text    G=(none)   M=BisCryptUtils ACBP=A9
+ 0001:00001378 00000006 C=CODE     S=.text    G=(none)   M=SvcMgr   ACBP=A9
+ 0001:00001380 0000003E C=CODE     S=.text    G=(none)   M=BisMessConsts ACBP=A9
+ 0001:000013C0 00000006 C=CODE     S=.text    G=(none)   M=AppEvnts ACBP=A9
+ 0001:000013C8 0000003E C=CODE     S=.text    G=(none)   M=BisMainFm ACBP=A9
+ 0001:00001408 000000AE C=CODE     S=.text    G=(none)   M=BisDataGridFrm ACBP=A9
+ 0001:000014B8 00000006 C=CODE     S=.text    G=(none)   M=VirtualDBTreeEx ACBP=A9
+ 0001:000014C0 0000000E C=CODE     S=.text    G=(none)   M=VirtualTrees ACBP=A9
+ 0001:000014D0 00000006 C=CODE     S=.text    G=(none)   M=VTAccessibilityFactory ACBP=A9
+ 0001:000014D8 00000016 C=CODE     S=.text    G=(none)   M=BisDataGridFm ACBP=A9
+ 0001:000014F0 00000F62 C=CODE     S=.text    G=(none)   M=BisMessDataCodeMessageEditFm ACBP=A9
+ 0001:00002454 0000059A C=CODE     S=.text    G=(none)   M=BisMessDataCodeMessagesFm ACBP=A9
+ 0001:000029F0 00002262 C=CODE     S=.text    G=(none)   M=BisMessDataAccountEditFm ACBP=A9
+ 0001:00004C54 00000746 C=CODE     S=.text    G=(none)   M=BisMessDataAccountsFm ACBP=A9
+ 0001:0000539C 000010D2 C=CODE     S=.text    G=(none)   M=BisMessDataInMessageEditFm ACBP=A9
+ 0001:00006470 00000006 C=CODE     S=.text    G=(none)   M=BisPeriodFm ACBP=A9
+ 0001:00006478 00000A12 C=CODE     S=.text    G=(none)   M=BisMessDataInMessageFilterFm ACBP=A9
+ 0001:00006E8C 00000B76 C=CODE     S=.text    G=(none)   M=BisMessDataInMessagesFm ACBP=A9
+ 0001:00007A04 00000DC2 C=CODE     S=.text    G=(none)   M=BisMessDataPatternMessageEditFm ACBP=A9
+ 0001:000087C8 0000052E C=CODE     S=.text    G=(none)   M=BisMessDataPatternMessagesFm ACBP=A9
+ 0001:00008CF8 00001BF6 C=CODE     S=.text    G=(none)   M=BisMessDataOutMessageEditFm ACBP=A9
+ 0001:0000A8F0 0000102A C=CODE     S=.text    G=(none)   M=BisMessDataOutMessageFilterFm ACBP=A9
+ 0001:0000B91C 00000016 C=CODE     S=.text    G=(none)   M=BisDataTreeFm ACBP=A9
+ 0001:0000B934 0000001E C=CODE     S=.text    G=(none)   M=BisDataTreeFrm ACBP=A9
+ 0001:0000B954 000012EA C=CODE     S=.text    G=(none)   M=BisMessDataRolesAndAccountsFm ACBP=A9
+ 0001:0000CC40 000026CA C=CODE     S=.text    G=(none)   M=BisMessDataOutMessageInsertExFm ACBP=A9
+ 0001:0000F30C 00000096 C=CODE     S=.text    G=(none)   M=BisExecuteFm ACBP=A9
+ 0001:0000F3A4 00000036 C=CODE     S=.text    G=(none)   M=ALXmlDoc ACBP=A9
+ 0001:0000F3DC 00000006 C=CODE     S=.text    G=(none)   M=ALfcnString ACBP=A9
+ 0001:0000F3E4 00000006 C=CODE     S=.text    G=(none)   M=ALCPUID  ACBP=A9
+ 0001:0000F3EC 00000006 C=CODE     S=.text    G=(none)   M=ALFcnHTML ACBP=A9
+ 0001:0000F3F4 000032DE C=CODE     S=.text    G=(none)   M=BisMessDataOutMessagesImportFm ACBP=A9
+ 0001:000126D4 00000A72 C=CODE     S=.text    G=(none)   M=BisMessDataOutMessagesFrm ACBP=A9
+ 0001:00013148 00000406 C=CODE     S=.text    G=(none)   M=BisMessDataOutMessagesFm ACBP=A9
+ 0001:00013550 00000BE6 C=CODE     S=.text    G=(none)   M=BisMessDataRoleEditFm ACBP=A9
+ 0001:00014138 000005FE C=CODE     S=.text    G=(none)   M=BisMessDataRolesFm ACBP=A9
+ 0001:00014738 00000FE6 C=CODE     S=.text    G=(none)   M=BisMessMainFm ACBP=A9
+ 0001:00015720 000000DE C=CODE     S=.text    G=(none)   M=BisMess  ACBP=A9
+ 0001:00015800 00000BEF C=CODE     S=.text    G=(none)   M=.immess  ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:00000010 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=IniFiles ACBP=A9
+ 0002:0000004C 00000006 C=ICODE    S=.itext   G=(none)   M=BisFm    ACBP=A9
+ 0002:00000054 00000006 C=ICODE    S=.itext   G=(none)   M=DECUtil  ACBP=A9
+ 0002:0000005C 00000006 C=ICODE    S=.itext   G=(none)   M=Hash     ACBP=A9
+ 0002:00000064 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher   ACBP=A9
+ 0002:0000006C 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher1  ACBP=A9
+ 0002:00000074 00000006 C=ICODE    S=.itext   G=(none)   M=Menus    ACBP=A9
+ 0002:0000007C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnList ACBP=A9
+ 0002:00000084 00000006 C=ICODE    S=.itext   G=(none)   M=Graphics ACBP=A9
+ 0002:0000008C 00000006 C=ICODE    S=.itext   G=(none)   M=Registry ACBP=A9
+ 0002:00000094 00000006 C=ICODE    S=.itext   G=(none)   M=Themes   ACBP=A9
+ 0002:0000009C 00000006 C=ICODE    S=.itext   G=(none)   M=Controls ACBP=A9
+ 0002:000000A4 00000006 C=ICODE    S=.itext   G=(none)   M=UxTheme  ACBP=A9
+ 0002:000000AC 00000006 C=ICODE    S=.itext   G=(none)   M=MultiMon ACBP=A9
+ 0002:000000B4 00000006 C=ICODE    S=.itext   G=(none)   M=DwmApi   ACBP=A9
+ 0002:000000BC 00000006 C=ICODE    S=.itext   G=(none)   M=Forms    ACBP=A9
+ 0002:000000C4 00000006 C=ICODE    S=.itext   G=(none)   M=HelpIntfs ACBP=A9
+ 0002:000000CC 00000006 C=ICODE    S=.itext   G=(none)   M=Dialogs  ACBP=A9
+ 0002:000000D4 00000006 C=ICODE    S=.itext   G=(none)   M=Printers ACBP=A9
+ 0002:000000DC 00000006 C=ICODE    S=.itext   G=(none)   M=ExtCtrls ACBP=A9
+ 0002:000000E4 00000006 C=ICODE    S=.itext   G=(none)   M=GraphUtil ACBP=A9
+ 0002:000000EC 00000006 C=ICODE    S=.itext   G=(none)   M=Clipbrd  ACBP=A9
+ 0002:000000F4 00000006 C=ICODE    S=.itext   G=(none)   M=FlatSB   ACBP=A9
+ 0002:000000FC 00000006 C=ICODE    S=.itext   G=(none)   M=DB       ACBP=A9
+ 0002:00000104 00000006 C=ICODE    S=.itext   G=(none)   M=WideStrings ACBP=A9
+ 0002:0000010C 00000006 C=ICODE    S=.itext   G=(none)   M=FMTBcd   ACBP=A9
+ 0002:00000114 00000006 C=ICODE    S=.itext   G=(none)   M=SqlTimSt ACBP=A9
+ 0002:0000011C 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:00000124 00000006 C=ICODE    S=.itext   G=(none)   M=DBCtrls  ACBP=A9
+ 0002:0000012C 00000006 C=ICODE    S=.itext   G=(none)   M=ComCtrls ACBP=A9
+ 0002:00000134 00000006 C=ICODE    S=.itext   G=(none)   M=ExtActns ACBP=A9
+ 0002:0000013C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtDlgs  ACBP=A9
+ 0002:00000144 00000006 C=ICODE    S=.itext   G=(none)   M=Buttons  ACBP=A9
+ 0002:0000014C 00000006 C=ICODE    S=.itext   G=(none)   M=Mapi     ACBP=A9
+ 0002:00000154 00000006 C=ICODE    S=.itext   G=(none)   M=DBPWDlg  ACBP=A9
+ 0002:0000015C 00000006 C=ICODE    S=.itext   G=(none)   M=DBLogDlg ACBP=A9
+ 0002:00000164 00000006 C=ICODE    S=.itext   G=(none)   M=rxToolEdit ACBP=A9
+ 0002:0000016C 00000006 C=ICODE    S=.itext   G=(none)   M=rxDateUtil ACBP=A9
+ 0002:00000174 00000006 C=ICODE    S=.itext   G=(none)   M=RXCtrls  ACBP=A9
+ 0002:0000017C 00000006 C=ICODE    S=.itext   G=(none)   M=RxHook   ACBP=A9
+ 0002:00000184 00000006 C=ICODE    S=.itext   G=(none)   M=RXConst  ACBP=A9
+ 0002:0000018C 00000006 C=ICODE    S=.itext   G=(none)   M=rxVclutils ACBP=A9
+ 0002:00000194 00000006 C=ICODE    S=.itext   G=(none)   M=RXProps  ACBP=A9
+ 0002:0000019C 00000006 C=ICODE    S=.itext   G=(none)   M=rxAppUtils ACBP=A9
+ 0002:000001A4 00000006 C=ICODE    S=.itext   G=(none)   M=RxPrgrss ACBP=A9
+ 0002:000001AC 00000006 C=ICODE    S=.itext   G=(none)   M=rxCurrEdit ACBP=A9
+ 0002:000001B4 00000006 C=ICODE    S=.itext   G=(none)   M=ThemedDBGrid ACBP=A9
+ 0002:000001BC 00000006 C=ICODE    S=.itext   G=(none)   M=RxRichEd ACBP=A9
+ 0002:000001C4 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtnrs ACBP=A9
+ 0002:000001CC 00000006 C=ICODE    S=.itext   G=(none)   M=CheckLst ACBP=A9
+ 0002:000001D4 00000006 C=ICODE    S=.itext   G=(none)   M=BisUtils ACBP=A9
+ 0002:000001DC 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImage ACBP=A9
+ 0002:000001E4 00000006 C=ICODE    S=.itext   G=(none)   M=jpeg     ACBP=A9
+ 0002:000001EC 00000006 C=ICODE    S=.itext   G=(none)   M=BisCore  ACBP=A9
+ 0002:000001F4 00000006 C=ICODE    S=.itext   G=(none)   M=OleServer ACBP=A9
+ 0002:000001FC 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtrls ACBP=A9
+ 0002:00000204 00000006 C=ICODE    S=.itext   G=(none)   M=AxCtrls  ACBP=A9
+ 0002:0000020C 00000006 C=ICODE    S=.itext   G=(none)   M=kbmMemTable ACBP=A9
+ 0002:00000214 00000006 C=ICODE    S=.itext   G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0002:0000021C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMan  ACBP=A9
+ 0002:00000224 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMenus ACBP=A9
+ 0002:0000022C 00000006 C=ICODE    S=.itext   G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0002:00000234 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditHighlighter ACBP=A9
+ 0002:0000023C 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0002:00000244 00000006 C=ICODE    S=.itext   G=(none)   M=SynRegExpr ACBP=A9
+ 0002:0000024C 00000006 C=ICODE    S=.itext   G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0002:00000254 00000006 C=ICODE    S=.itext   G=(none)   M=SynEdit  ACBP=A9
+ 0002:0000025C 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0002:00000264 00000006 C=ICODE    S=.itext   G=(none)   M=SynTextDrawer ACBP=A9
+ 0002:0000026C 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_Routines ACBP=A9
+ 0002:00000274 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Processes ACBP=A9
+ 0002:0000027C 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0002:00000284 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Devices ACBP=A9
+ 0002:0000028C 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_CPU  ACBP=A9
+ 0002:00000294 00000006 C=ICODE    S=.itext   G=(none)   M=JclDebug ACBP=A9
+ 0002:0000029C 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysInfo ACBP=A9
+ 0002:000002A4 00000006 C=ICODE    S=.itext   G=(none)   M=JclStrings ACBP=A9
+ 0002:000002AC 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysUtils ACBP=A9
+ 0002:000002B4 00000006 C=ICODE    S=.itext   G=(none)   M=JclWideStrings ACBP=A9
+ 0002:000002BC 00000006 C=ICODE    S=.itext   G=(none)   M=JclShell ACBP=A9
+ 0002:000002C4 00000006 C=ICODE    S=.itext   G=(none)   M=JclRegistry ACBP=A9
+ 0002:000002CC 00000006 C=ICODE    S=.itext   G=(none)   M=JclHookExcept ACBP=A9
+ 0002:000002D4 00000006 C=ICODE    S=.itext   G=(none)   M=BisCoreThreads ACBP=A9
+ 0002:000002DC 00000006 C=ICODE    S=.itext   G=(none)   M=AsyncCalls ACBP=A9
+ 0002:000002E4 00000006 C=ICODE    S=.itext   G=(none)   M=BisServiceApplication ACBP=A9
+ 0002:000002EC 00000006 C=ICODE    S=.itext   G=(none)   M=BisSvcMgr ACBP=A9
+ 0002:000002F4 00000006 C=ICODE    S=.itext   G=(none)   M=BisCryptUtils ACBP=A9
+ 0002:000002FC 00000006 C=ICODE    S=.itext   G=(none)   M=SvcMgr   ACBP=A9
+ 0002:00000304 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessConsts ACBP=A9
+ 0002:0000030C 00000006 C=ICODE    S=.itext   G=(none)   M=AppEvnts ACBP=A9
+ 0002:00000314 00000006 C=ICODE    S=.itext   G=(none)   M=VirtualTrees ACBP=A9
+ 0002:0000031C 00000006 C=ICODE    S=.itext   G=(none)   M=VTAccessibilityFactory ACBP=A9
+ 0002:00000324 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataCodeMessageEditFm ACBP=A9
+ 0002:0000032C 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataCodeMessagesFm ACBP=A9
+ 0002:00000334 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataAccountEditFm ACBP=A9
+ 0002:0000033C 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataAccountsFm ACBP=A9
+ 0002:00000344 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataInMessageEditFm ACBP=A9
+ 0002:0000034C 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataInMessageFilterFm ACBP=A9
+ 0002:00000354 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataInMessagesFm ACBP=A9
+ 0002:0000035C 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataPatternMessageEditFm ACBP=A9
+ 0002:00000364 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataPatternMessagesFm ACBP=A9
+ 0002:0000036C 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataOutMessageEditFm ACBP=A9
+ 0002:00000374 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataOutMessageFilterFm ACBP=A9
+ 0002:0000037C 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataRolesAndAccountsFm ACBP=A9
+ 0002:00000384 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataOutMessageInsertExFm ACBP=A9
+ 0002:0000038C 00000006 C=ICODE    S=.itext   G=(none)   M=ALfcnString ACBP=A9
+ 0002:00000394 00000006 C=ICODE    S=.itext   G=(none)   M=ALCPUID  ACBP=A9
+ 0002:0000039C 00000006 C=ICODE    S=.itext   G=(none)   M=ALFcnHTML ACBP=A9
+ 0002:000003A4 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataOutMessagesImportFm ACBP=A9
+ 0002:000003AC 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataOutMessagesFrm ACBP=A9
+ 0002:000003B4 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataOutMessagesFm ACBP=A9
+ 0002:000003BC 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataRoleEditFm ACBP=A9
+ 0002:000003C4 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessDataRolesFm ACBP=A9
+ 0002:000003CC 00000008 C=ICODE    S=.itext   G=(none)   M=BisMessMainFm ACBP=A9
+ 0002:000003D4 00000008 C=ICODE    S=.itext   G=(none)   M=BisMess  ACBP=A9
+ 0002:000003DC 00000005 C=ICODE    S=.itext   G=(none)   M=.immess  ACBP=A9
+ 0003:00000000 0000002C C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0003:0000002C 00000001 C=DATA     S=.data    G=DGROUP   M=BisMessConsts ACBP=A9
+ 0004:00000000 0000000C C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:0000000C 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000014 00000004 C=BSS      S=.bss     G=DGROUP   M=BisMessConsts ACBP=A9
+ 0004:00000018 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataCodeMessageEditFm ACBP=A9
+ 0004:00000020 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataCodeMessagesFm ACBP=A9
+ 0004:00000028 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataAccountEditFm ACBP=A9
+ 0004:00000030 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataAccountsFm ACBP=A9
+ 0004:00000038 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataInMessageEditFm ACBP=A9
+ 0004:00000040 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataInMessageFilterFm ACBP=A9
+ 0004:00000048 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataInMessagesFm ACBP=A9
+ 0004:00000050 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataPatternMessageEditFm ACBP=A9
+ 0004:00000058 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataPatternMessagesFm ACBP=A9
+ 0004:00000060 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataOutMessageEditFm ACBP=A9
+ 0004:00000068 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataOutMessageFilterFm ACBP=A9
+ 0004:00000070 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataRolesAndAccountsFm ACBP=A9
+ 0004:00000078 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataOutMessageInsertExFm ACBP=A9
+ 0004:00000080 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataOutMessagesImportFm ACBP=A9
+ 0004:00000088 00000004 C=BSS      S=.bss     G=DGROUP   M=BisMessDataOutMessagesFrm ACBP=A9
+ 0004:0000008C 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataOutMessagesFm ACBP=A9
+ 0004:00000094 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataRoleEditFm ACBP=A9
+ 0004:0000009C 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessDataRolesFm ACBP=A9
+ 0004:000000A4 00000008 C=BSS      S=.bss     G=DGROUP   M=BisMessMainFm ACBP=A9
+ 0004:000000AC 00000004 C=BSS      S=.bss     G=DGROUP   M=BisMess  ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:000003DC       .immess..immess
+ 0001:000163D0       .immess.@GetPackageInfoTable
+ 0001:000163D8       .immess.@PackageLoad
+ 0001:000163E4       .immess.@PackageUnload
+ 0004:000000AC       BisMess..1
+ 0002:000003D4       BisMess.BisMess
+ 0001:000157D0       BisMess.Finalization
+ 0001:00015720       BisMess.InitIfaceModule
+ 0004:00000014       BisMessConsts..1
+ 0002:00000304       BisMessConsts.BisMessConsts
+ 0001:00001390       BisMessConsts.Finalization
+ 0003:0000002C       BisMessConsts.IsMainModule
+ 0004:0000002C       BisMessDataAccountEditFm..6
+ 0001:00003394       BisMessDataAccountEditFm..TBisMessDataAccountDeleteFormIface
+ 0001:000029F0       BisMessDataAccountEditFm..TBisMessDataAccountEditForm
+ 0001:00002F54       BisMessDataAccountEditFm..TBisMessDataAccountEditFormIface
+ 0001:000030BC       BisMessDataAccountEditFm..TBisMessDataAccountInsertFormIface
+ 0001:00003228       BisMessDataAccountEditFm..TBisMessDataAccountUpdateFormIface
+ 0001:00003500       BisMessDataAccountEditFm..TBisRoleInfo
+ 0002:00000334       BisMessDataAccountEditFm.BisMessDataAccountEditFm
+ 0004:00000028       BisMessDataAccountEditFm.BisMessDataAccountEditForm
+ 0001:00004C24       BisMessDataAccountEditFm.Finalization
+ 0001:00003B14       BisMessDataAccountEditFm.TBisMessDataAccountDeleteFormIface.Create
+ 0001:00003BE0       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.BeforeShow
+ 0001:00003D30       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.ButtonPhotoClick
+ 0001:00003D78       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.ChangeParam
+ 0001:00004190       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.ChangesExists
+ 0001:000041B0       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.CheckListBoxRolesClickCheck
+ 0001:00003B70       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.Create
+ 0001:000041C0       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.DeleteAccountRoles
+ 0001:00004B88       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.Execute
+ 0001:000043A8       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.InsertAccountRoles
+ 0001:000049E4       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.MenuItemClearPhotoClick
+ 0001:00004A18       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.MenuItemLoadPhotoClick
+ 0001:00004AA0       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.MenuItemSavePhotoClick
+ 0001:00004B28       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.PopupActionBarPhotoPopup
+ 0001:00004558       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.RefreshAccountRoles
+ 0001:0000478C       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.RefreshRoles
+ 0001:0000356C       BisMessDataAccountEditFm.TBisMessDataAccountEditFormIface.Create
+ 0001:00003A5C       BisMessDataAccountEditFm.TBisMessDataAccountInsertFormIface.Create
+ 0001:00003AB8       BisMessDataAccountEditFm.TBisMessDataAccountUpdateFormIface.Create
+ 0004:00000034       BisMessDataAccountsFm..3
+ 0001:00004C54       BisMessDataAccountsFm..TBisMessDataAccountsForm
+ 0001:00004E60       BisMessDataAccountsFm..TBisMessDataAccountsFormIface
+ 0004:00000030       BisMessDataAccountsFm.BiMessDataAccountsForm
+ 0002:0000033C       BisMessDataAccountsFm.BisMessDataAccountsFm
+ 0001:0000536C       BisMessDataAccountsFm.Finalization
+ 0001:00004FC8       BisMessDataAccountsFm.TBisMessDataAccountsFormIface.Create
+ 0004:0000001C       BisMessDataCodeMessageEditFm..7
+ 0001:00001E10       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageDeleteFormIface
+ 0001:000014F0       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageEditForm
+ 0001:00001834       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageEditFormIface
+ 0001:000019A8       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageFilterFormIface
+ 0001:00001B20       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageInsertFormIface
+ 0001:00001C98       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageUpdateFormIface
+ 0002:00000324       BisMessDataCodeMessageEditFm.BisMessDataCodeMessageEditFm
+ 0004:00000018       BisMessDataCodeMessageEditFm.BisMessDataCodeMessageEditForm
+ 0001:00002424       BisMessDataCodeMessageEditFm.Finalization
+ 0001:00002398       BisMessDataCodeMessageEditFm.TBisMessDataCodeMessageDeleteFormIface.Create
+ 0001:00001F88       BisMessDataCodeMessageEditFm.TBisMessDataCodeMessageEditFormIface.Create
+ 0001:0000221C       BisMessDataCodeMessageEditFm.TBisMessDataCodeMessageFilterFormIface.Create
+ 0001:00002280       BisMessDataCodeMessageEditFm.TBisMessDataCodeMessageInsertFormIface.Create
+ 0001:0000230C       BisMessDataCodeMessageEditFm.TBisMessDataCodeMessageUpdateFormIface.Create
+ 0004:00000024       BisMessDataCodeMessagesFm..3
+ 0001:00002454       BisMessDataCodeMessagesFm..TBisMessDataCodeMessagesForm
+ 0001:0000266C       BisMessDataCodeMessagesFm..TBisMessDataCodeMessagesFormIface
+ 0002:0000032C       BisMessDataCodeMessagesFm.BisMessDataCodeMessagesFm
+ 0004:00000020       BisMessDataCodeMessagesFm.BisMessDataCodeMessagesForm
+ 0001:000029C0       BisMessDataCodeMessagesFm.Finalization
+ 0001:000027E0       BisMessDataCodeMessagesFm.TBisMessDataCodeMessagesFormIface.Create
+ 0004:0000003C       BisMessDataInMessageEditFm..6
+ 0001:00005BC8       BisMessDataInMessageEditFm..TBisMessDataInMessageDeleteFormIface
+ 0001:0000539C       BisMessDataInMessageEditFm..TBisMessDataInMessageEditForm
+ 0001:00005774       BisMessDataInMessageEditFm..TBisMessDataInMessageEditFormIface
+ 0001:000058E0       BisMessDataInMessageEditFm..TBisMessDataInMessageInsertFormIface
+ 0001:00005A54       BisMessDataInMessageEditFm..TBisMessDataInMessageUpdateFormIface
+ 0002:00000344       BisMessDataInMessageEditFm.BisMessDataInMessageEditFm
+ 0004:00000038       BisMessDataInMessageEditFm.BisMessDataInMessageEditForm
+ 0001:00006440       BisMessDataInMessageEditFm.Finalization
+ 0001:00005D3C       BisMessDataInMessageEditFm.GetTypeMessageByIndex
+ 0001:00006308       BisMessDataInMessageEditFm.TBisMessDataInMessageDeleteFormIface.Create
+ 0001:00006438       BisMessDataInMessageEditFm.TBisMessDataInMessageEditForm.BeforeShow
+ 0001:00006398       BisMessDataInMessageEditFm.TBisMessDataInMessageEditForm.Create
+ 0001:00005D6C       BisMessDataInMessageEditFm.TBisMessDataInMessageEditFormIface.Create
+ 0001:000061E8       BisMessDataInMessageEditFm.TBisMessDataInMessageInsertFormIface.Create
+ 0001:00006278       BisMessDataInMessageEditFm.TBisMessDataInMessageUpdateFormIface.Create
+ 0004:00000044       BisMessDataInMessageFilterFm..3
+ 0001:00006478       BisMessDataInMessageFilterFm..TBisMessDataInMessageFilterForm
+ 0001:000067CC       BisMessDataInMessageFilterFm..TBisMessDataInMessageFilterFormIface
+ 0002:0000034C       BisMessDataInMessageFilterFm.BisMessDataInMessageFilterFm
+ 0004:00000040       BisMessDataInMessageFilterFm.BisMessDataInMessageFilterForm
+ 0001:00006E5C       BisMessDataInMessageFilterFm.Finalization
+ 0001:00006B78       BisMessDataInMessageFilterFm.TBisMessDataInMessageFilterForm.ButtonDateInClick
+ 0001:00006CE8       BisMessDataInMessageFilterFm.TBisMessDataInMessageFilterForm.ButtonSendToClick
+ 0001:00006940       BisMessDataInMessageFilterFm.TBisMessDataInMessageFilterFormIface.Create
+ 0004:0000004C       BisMessDataInMessagesFm..4
+ 0001:00007198       BisMessDataInMessagesFm..TBisMessDataInMessagesForm
+ 0001:000073A8       BisMessDataInMessagesFm..TBisMessDataInMessagesFormIface
+ 0001:00006E8C       BisMessDataInMessagesFm..TBisMessDataInMessagesFrame
+ 0002:00000354       BisMessDataInMessagesFm.BisMessDataInMessagesFm
+ 0004:00000048       BisMessDataInMessagesFm.BisMessDataInMessagesForm
+ 0001:000079D4       BisMessDataInMessagesFm.Finalization
+ 0001:0000796C       BisMessDataInMessagesFm.TBisMessDataInMessagesForm.Create
+ 0001:000079A4       BisMessDataInMessagesFm.TBisMessDataInMessagesForm.Destroy
+ 0001:000079CC       BisMessDataInMessagesFm.TBisMessDataInMessagesForm.GetDataFrameClass
+ 0001:00007920       BisMessDataInMessagesFm.TBisMessDataInMessagesFormIface.Create
+ 0001:00007514       BisMessDataInMessagesFm.TBisMessDataInMessagesFrame.Create
+ 0001:000078F0       BisMessDataInMessagesFm.TBisMessDataInMessagesFrame.Init
+ 0004:00000064       BisMessDataOutMessageEditFm..6
+ 0001:000096D4       BisMessDataOutMessageEditFm..TBisMessDataOutMessageDeleteFormIface
+ 0001:00008CF8       BisMessDataOutMessageEditFm..TBisMessDataOutMessageEditForm
+ 0001:0000927C       BisMessDataOutMessageEditFm..TBisMessDataOutMessageEditFormIface
+ 0001:000093EC       BisMessDataOutMessageEditFm..TBisMessDataOutMessageInsertFormIface
+ 0001:00009560       BisMessDataOutMessageEditFm..TBisMessDataOutMessageUpdateFormIface
+ 0002:0000036C       BisMessDataOutMessageEditFm.BisMessDataOutMessageEditFm
+ 0004:00000060       BisMessDataOutMessageEditFm.BisMessDataOutMessageEditForm
+ 0001:0000A8C0       BisMessDataOutMessageEditFm.Finalization
+ 0001:00009848       BisMessDataOutMessageEditFm.GetTypeMessageByIndex
+ 0001:0000A11C       BisMessDataOutMessageEditFm.TBisMessDataOutMessageDeleteFormIface.Create
+ 0001:0000A3EC       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.BeforeShow
+ 0001:0000A65C       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.ButtonPatternClick
+ 0001:0000A79C       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.ChangeParam
+ 0001:0000A1AC       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.Create
+ 0001:0000A2B0       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.Init
+ 0001:0000A378       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.MemoTextChange
+ 0001:00009878       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditFormIface.Create
+ 0001:00009F94       BisMessDataOutMessageEditFm.TBisMessDataOutMessageInsertFormIface.Create
+ 0001:0000A088       BisMessDataOutMessageEditFm.TBisMessDataOutMessageUpdateFormIface.Create
+ 0004:0000006C       BisMessDataOutMessageFilterFm..3
+ 0001:0000A8F0       BisMessDataOutMessageFilterFm..TBisMessDataOutMessageFilterForm
+ 0001:0000AD64       BisMessDataOutMessageFilterFm..TBisMessDataOutMessageFilterFormIface
+ 0002:00000374       BisMessDataOutMessageFilterFm.BisMessDataOutMessageFilterFm
+ 0004:00000068       BisMessDataOutMessageFilterFm.BisMessDataOutMessageFilterForm
+ 0001:0000B8EC       BisMessDataOutMessageFilterFm.Finalization
+ 0001:0000B778       BisMessDataOutMessageFilterFm.TBisMessDataOutMessageFilterForm.ButtonCreateToClick
+ 0001:0000B31C       BisMessDataOutMessageFilterFm.TBisMessDataOutMessageFilterForm.ButtonDateBeginClick
+ 0001:0000B490       BisMessDataOutMessageFilterFm.TBisMessDataOutMessageFilterForm.ButtonDateEndClick
+ 0001:0000B604       BisMessDataOutMessageFilterFm.TBisMessDataOutMessageFilterForm.ButtonDateOutClick
+ 0001:0000AEDC       BisMessDataOutMessageFilterFm.TBisMessDataOutMessageFilterFormIface.Create
+ 0004:0000007C       BisMessDataOutMessageInsertExFm..4
+ 0001:0000CCFC       BisMessDataOutMessageInsertExFm..TBisMessDataOutMessageInsertExForm
+ 0001:0000D2FC       BisMessDataOutMessageInsertExFm..TBisMessDataOutMessageInsertExFormIface
+ 0001:0000CC40       BisMessDataOutMessageInsertExFm..TBisMessRecipientInfo
+ 0002:00000384       BisMessDataOutMessageInsertExFm.BisMessDataOutMessageInsertExFm
+ 0004:00000078       BisMessDataOutMessageInsertExFm.BisMessDataOutMessageInsertExForm
+ 0001:0000F2DC       BisMessDataOutMessageInsertExFm.Finalization
+ 0001:0000E138       BisMessDataOutMessageInsertExFm.RefreshPackageParams
+ 0001:0000DDF4       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.BeforeShow
+ 0001:0000ED7C       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.ButtonPatternClick
+ 0001:0000EEBC       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.ButtonRecipientsAddClick
+ 0001:0000F214       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.ButtonRecipientsDelClick
+ 0001:0000E064       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.ChangesExists
+ 0001:0000E090       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.CheckParams
+ 0001:0000DB70       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.Create
+ 0001:0000DC80       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.Destroy
+ 0001:0000EACC       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.Execute
+ 0001:0000DCB8       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.Init
+ 0001:0000ED4C       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.ListBoxRecipientsKeyDown
+ 0001:0000DD80       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.MemoTextChange
+ 0001:0000D478       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExFormIface.Create
+ 0004:00000090       BisMessDataOutMessagesFm..3
+ 0001:00013148       BisMessDataOutMessagesFm..TBisMessDataOutMessagesForm
+ 0001:0001335C       BisMessDataOutMessagesFm..TBisMessDataOutMessagesFormIface
+ 0002:000003B4       BisMessDataOutMessagesFm.BisMessDataOutMessagesFm
+ 0004:0000008C       BisMessDataOutMessagesFm.BisMessDataOutMessagesForm
+ 0001:00013520       BisMessDataOutMessagesFm.Finalization
+ 0001:00013518       BisMessDataOutMessagesFm.TBisMessDataOutMessagesForm.GetDataFrameClass
+ 0001:000134CC       BisMessDataOutMessagesFm.TBisMessDataOutMessagesFormIface.Create
+ 0004:00000088       BisMessDataOutMessagesFrm..2
+ 0001:000126D4       BisMessDataOutMessagesFrm..TBisMessDataOutMessagesFrame
+ 0002:000003AC       BisMessDataOutMessagesFrm.BisMessDataOutMessagesFrm
+ 0001:00013118       BisMessDataOutMessagesFrm.Finalization
+ 0001:00013068       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.ActionImportExecute
+ 0001:00013070       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.ActionImportUpdate
+ 0001:0001308C       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.CanImport
+ 0001:00012A6C       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.Create
+ 0001:00012F90       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.GridPaintText
+ 0001:00013098       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.Import
+ 0001:00012F60       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.Init
+ 0004:00000084       BisMessDataOutMessagesImportFm..3
+ 0001:0000F3F4       BisMessDataOutMessagesImportFm..TBisMessDataOutMessagesImportForm
+ 0001:0000F9D0       BisMessDataOutMessagesImportFm..TBisMessDataOutMessagesImportFormIface
+ 0002:000003A4       BisMessDataOutMessagesImportFm.BisMessDataOutMessagesImportFm
+ 0004:00000080       BisMessDataOutMessagesImportFm.BisMessDataOutMessagesImportForm
+ 0001:000126A4       BisMessDataOutMessagesImportFm.Finalization
+ 0001:00012070       BisMessDataOutMessagesImportFm.Import
+ 0001:0001018C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.ActionLoadExecute
+ 0001:00010194       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.ActionLoadUpdate
+ 0001:0001020C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.AfterProcess
+ 0001:000104CC       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.AlignColumnsWidth
+ 0001:000101BC       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.BeforeProcess
+ 0001:000105B8       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.ButtonAccountClick
+ 0001:00010754       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.ButtonRecountClick
+ 0001:000101B0       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.CanLoad
+ 0001:00011BC4       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.CanStart
+ 0001:0001026C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.CheckBoxDateEndClick
+ 0001:00010390       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.CheckBoxOffsetClick
+ 0001:00011C14       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.CheckFields
+ 0001:0000FB84       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.Create
+ 0001:0000FEF4       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.Destroy
+ 0001:00011FAC       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.DoTerminate
+ 0001:00010160       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.FormResize
+ 0001:00011EF0       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.GetAllCount
+ 0001:0001075C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.GetMessageCount
+ 0001:00011A3C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.Load
+ 0001:00010834       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.LoadFromTxtDelim
+ 0001:00010C20       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.LoadFromXls
+ 0001:000113E4       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.LoadFromXml
+ 0001:00010778       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.PrepareContact
+ 0001:0000FF1C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.RecountDateBegin
+ 0001:00011E28       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.Start
+ 0001:00011FF4       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.SyncError
+ 0001:0001204C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.SyncProgress
+ 0001:0001254C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.ThreadExecute
+ 0001:00010464       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.UpdateLabelCount
+ 0001:0000FB44       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportFormIface.Create
+ 0004:00000054       BisMessDataPatternMessageEditFm..7
+ 0001:000082A8       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageDeleteFormIface
+ 0001:00007A04       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageEditForm
+ 0001:00007CAC       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageEditFormIface
+ 0001:00007E28       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageFilterFormIface
+ 0001:00007FA8       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageInsertFormIface
+ 0001:00008128       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageUpdateFormIface
+ 0002:0000035C       BisMessDataPatternMessageEditFm.BisMessDataPatternMessageEditFm
+ 0004:00000050       BisMessDataPatternMessageEditFm.BisMessDataPatternMessageEditForm
+ 0001:00008798       BisMessDataPatternMessageEditFm.Finalization
+ 0001:00008704       BisMessDataPatternMessageEditFm.TBisMessDataPatternMessageDeleteFormIface.Create
+ 0001:00008428       BisMessDataPatternMessageEditFm.TBisMessDataPatternMessageEditFormIface.Create
+ 0001:00008574       BisMessDataPatternMessageEditFm.TBisMessDataPatternMessageFilterFormIface.Create
+ 0001:000085DC       BisMessDataPatternMessageEditFm.TBisMessDataPatternMessageInsertFormIface.Create
+ 0001:00008670       BisMessDataPatternMessageEditFm.TBisMessDataPatternMessageUpdateFormIface.Create
+ 0004:0000005C       BisMessDataPatternMessagesFm..3
+ 0001:000087C8       BisMessDataPatternMessagesFm..TBisMessDataPatternMessagesForm
+ 0001:000089E8       BisMessDataPatternMessagesFm..TBisMessDataPatternMessagesFormIface
+ 0002:00000364       BisMessDataPatternMessagesFm.BisMessDataPatternMessagesFm
+ 0004:00000058       BisMessDataPatternMessagesFm.BisMessDataPatternMessagesForm
+ 0001:00008CC8       BisMessDataPatternMessagesFm.Finalization
+ 0001:00008B64       BisMessDataPatternMessagesFm.TBisMessDataPatternMessagesFormIface.Create
+ 0004:00000098       BisMessDataRoleEditFm..6
+ 0001:00013C10       BisMessDataRoleEditFm..TBisMessDataRoleDeleteFormIface
+ 0001:00013550       BisMessDataRoleEditFm..TBisMessDataRoleEditForm
+ 0001:000137F0       BisMessDataRoleEditFm..TBisMessDataRoleEditFormIface
+ 0001:00013950       BisMessDataRoleEditFm..TBisMessDataRoleInsertFormIface
+ 0001:00013AB0       BisMessDataRoleEditFm..TBisMessDataRoleUpdateFormIface
+ 0002:000003BC       BisMessDataRoleEditFm.BisMessDataRoleEditFm
+ 0004:00000094       BisMessDataRoleEditFm.BisMessDataRoleEditForm
+ 0001:00014108       BisMessDataRoleEditFm.Finalization
+ 0001:000140AC       BisMessDataRoleEditFm.TBisMessDataRoleDeleteFormIface.Create
+ 0001:00013D70       BisMessDataRoleEditFm.TBisMessDataRoleEditFormIface.Create
+ 0001:00013FF4       BisMessDataRoleEditFm.TBisMessDataRoleInsertFormIface.Create
+ 0001:00014050       BisMessDataRoleEditFm.TBisMessDataRoleUpdateFormIface.Create
+ 0004:00000074       BisMessDataRolesAndAccountsFm..4
+ 0001:0000BC48       BisMessDataRolesAndAccountsFm..TBisMessDataRolesAndAccountsForm
+ 0001:0000BE6C       BisMessDataRolesAndAccountsFm..TBisMessDataRolesAndAccountsFormIface
+ 0001:0000B954       BisMessDataRolesAndAccountsFm..TBisMessDataRolesAndAccountsFrame
+ 0002:0000037C       BisMessDataRolesAndAccountsFm.BisMessDataRolesAndAccountsFm
+ 0004:00000070       BisMessDataRolesAndAccountsFm.BisMessDataRolesAndAccountsForm
+ 0001:0000CC10       BisMessDataRolesAndAccountsFm.Finalization
+ 0001:0000CBD0       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsForm.Create
+ 0001:0000CC08       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsForm.GetDataFrameClass
+ 0001:0000CB84       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFormIface.Create
+ 0001:0000BFEC       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFrame.Create
+ 0001:0000C1B4       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFrame.FillProvider
+ 0001:0000CB58       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFrame.Init
+ 0001:0000CB60       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFrame.OpenRecords
+ 0001:0000CB80       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFrame.TreeClick
+ 0004:000000A0       BisMessDataRolesFm..3
+ 0001:00014138       BisMessDataRolesFm..TBisMessDataRolesForm
+ 0001:0001433C       BisMessDataRolesFm..TBisMessDataRolesFormIface
+ 0002:000003C4       BisMessDataRolesFm.BisMessDataRolesFm
+ 0004:0000009C       BisMessDataRolesFm.BisMessDataRolesForm
+ 0001:00014708       BisMessDataRolesFm.Finalization
+ 0001:000146D0       BisMessDataRolesFm.TBisMessDataRolesForm.Create
+ 0001:00014498       BisMessDataRolesFm.TBisMessDataRolesFormIface.Create
+ 0004:000000A8       BisMessMainFm..6
+ 0001:00014AB8       BisMessMainFm..TBisMessMainForm
+ 0001:00014D98       BisMessMainFm..TBisMessMainFormIface
+ 0001:000148A4       BisMessMainFm..TBisMessTabSheet
+ 0001:00014A14       BisMessMainFm..TBisMessTabSheets
+ 0001:00014738       BisMessMainFm..TStatusBar
+ 0002:000003CC       BisMessMainFm.BisMessMainFm
+ 0004:000000A4       BisMessMainFm.BisMessMainForm
+ 0001:000156F0       BisMessMainFm.Finalization
+ 0001:000154BC       BisMessMainFm.TBisMessMainForm.ApplicationEventsHint
+ 0001:000156E4       BisMessMainFm.TBisMessMainForm.ButtonAboutClick
+ 0001:00015194       BisMessMainFm.TBisMessMainForm.Create
+ 0001:00015410       BisMessMainFm.TBisMessMainForm.Destroy
+ 0001:000154B4       BisMessMainFm.TBisMessMainForm.FormShow
+ 0001:0001549C       BisMessMainFm.TBisMessMainForm.Init
+ 0001:00015580       BisMessMainFm.TBisMessMainForm.InternalProgress
+ 0001:000154E8       BisMessMainFm.TBisMessMainForm.PageControlChange
+ 0001:00015678       BisMessMainFm.TBisMessMainForm.RePositionProgressBar
+ 0001:000156DC       BisMessMainFm.TBisMessMainForm.StatusBarResize
+ 0001:00015154       BisMessMainFm.TBisMessMainFormIface.Create
+ 0001:00014F24       BisMessMainFm.TBisMessTabSheet.Activate
+ 0001:00014F3C       BisMessMainFm.TBisMessTabSheet.Init
+ 0001:00014F54       BisMessMainFm.TBisMessTabSheet.Reposition
+ 0001:00014F68       BisMessMainFm.TBisMessTabSheet.Resize
+ 0001:00014F8C       BisMessMainFm.TBisMessTabSheets.CreateTabSheet
+ 0001:000150F0       BisMessMainFm.TBisMessTabSheets.GetItem
+ 0001:00015104       BisMessMainFm.TBisMessTabSheets.Init
+ 0001:0001512C       BisMessMainFm.TBisMessTabSheets.Reposition
+ 0001:00014EDC       BisMessMainFm.TStatusBar.Create
+ 0001:00000288       SysInit.@InitPkg
+ 0001:000002EC       SysInit.@PackageLoad
+ 0001:000002F8       SysInit.@PackageUnload
+ 0001:00000178       SysInit.AllocTlsBuffer
+ 0001:00000234       SysInit.ExitProcessTLS
+ 0001:000001FC       SysInit.ExitThreadTLS
+ 0001:00000140       SysInit.FreeLibrary
+ 0001:00000184       SysInit.GetTlsSize
+ 0004:00000004       SysInit.HInstance
+ 0001:00000258       SysInit.InitializeModule
+ 0001:000001D0       SysInit.InitProcessTLS
+ 0001:0000018C       SysInit.InitThreadTLS
+ 0001:00000148       SysInit.LocalAlloc
+ 0001:00000150       SysInit.LocalFree
+ 0003:00000004       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0001:00000158       SysInit.TlsAlloc
+ 0004:00000008       SysInit.tlsBuffer
+ 0001:00000160       SysInit.TlsFree
+ 0001:00000168       SysInit.TlsGetValue
+ 0003:00000000       SysInit.TlsIndex
+ 0005:00000000       SysInit.TlsLast
+ 0003:0000001C       SysInit.TlsProc
+ 0001:00000170       SysInit.TlsSetValue
+ 0001:00000264       SysInit.UninitializeModule
+ 0004:0000000C       Windows..3
+ 0001:000003C4       Windows.Finalization
+ 0001:000003B4       Windows.FreeLibrary
+ 0001:000003BC       Windows.GetSystemMetrics
+ 0004:00000010       Windows.HtmlHelpModule
+ 0002:00000010       Windows.Windows
+
+
+  Address             Publics by Value
+
+ 0001:00000140       SysInit.FreeLibrary
+ 0001:00000148       SysInit.LocalAlloc
+ 0001:00000150       SysInit.LocalFree
+ 0001:00000158       SysInit.TlsAlloc
+ 0001:00000160       SysInit.TlsFree
+ 0001:00000168       SysInit.TlsGetValue
+ 0001:00000170       SysInit.TlsSetValue
+ 0001:00000178       SysInit.AllocTlsBuffer
+ 0001:00000184       SysInit.GetTlsSize
+ 0001:0000018C       SysInit.InitThreadTLS
+ 0001:000001D0       SysInit.InitProcessTLS
+ 0001:000001FC       SysInit.ExitThreadTLS
+ 0001:00000234       SysInit.ExitProcessTLS
+ 0001:00000258       SysInit.InitializeModule
+ 0001:00000264       SysInit.UninitializeModule
+ 0001:00000288       SysInit.@InitPkg
+ 0001:000002EC       SysInit.@PackageLoad
+ 0001:000002F8       SysInit.@PackageUnload
+ 0001:000003B4       Windows.FreeLibrary
+ 0001:000003BC       Windows.GetSystemMetrics
+ 0001:000003C4       Windows.Finalization
+ 0001:00001390       BisMessConsts.Finalization
+ 0001:000014F0       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageEditForm
+ 0001:00001834       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageEditFormIface
+ 0001:000019A8       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageFilterFormIface
+ 0001:00001B20       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageInsertFormIface
+ 0001:00001C98       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageUpdateFormIface
+ 0001:00001E10       BisMessDataCodeMessageEditFm..TBisMessDataCodeMessageDeleteFormIface
+ 0001:00001F88       BisMessDataCodeMessageEditFm.TBisMessDataCodeMessageEditFormIface.Create
+ 0001:0000221C       BisMessDataCodeMessageEditFm.TBisMessDataCodeMessageFilterFormIface.Create
+ 0001:00002280       BisMessDataCodeMessageEditFm.TBisMessDataCodeMessageInsertFormIface.Create
+ 0001:0000230C       BisMessDataCodeMessageEditFm.TBisMessDataCodeMessageUpdateFormIface.Create
+ 0001:00002398       BisMessDataCodeMessageEditFm.TBisMessDataCodeMessageDeleteFormIface.Create
+ 0001:00002424       BisMessDataCodeMessageEditFm.Finalization
+ 0001:00002454       BisMessDataCodeMessagesFm..TBisMessDataCodeMessagesForm
+ 0001:0000266C       BisMessDataCodeMessagesFm..TBisMessDataCodeMessagesFormIface
+ 0001:000027E0       BisMessDataCodeMessagesFm.TBisMessDataCodeMessagesFormIface.Create
+ 0001:000029C0       BisMessDataCodeMessagesFm.Finalization
+ 0001:000029F0       BisMessDataAccountEditFm..TBisMessDataAccountEditForm
+ 0001:00002F54       BisMessDataAccountEditFm..TBisMessDataAccountEditFormIface
+ 0001:000030BC       BisMessDataAccountEditFm..TBisMessDataAccountInsertFormIface
+ 0001:00003228       BisMessDataAccountEditFm..TBisMessDataAccountUpdateFormIface
+ 0001:00003394       BisMessDataAccountEditFm..TBisMessDataAccountDeleteFormIface
+ 0001:00003500       BisMessDataAccountEditFm..TBisRoleInfo
+ 0001:0000356C       BisMessDataAccountEditFm.TBisMessDataAccountEditFormIface.Create
+ 0001:00003A5C       BisMessDataAccountEditFm.TBisMessDataAccountInsertFormIface.Create
+ 0001:00003AB8       BisMessDataAccountEditFm.TBisMessDataAccountUpdateFormIface.Create
+ 0001:00003B14       BisMessDataAccountEditFm.TBisMessDataAccountDeleteFormIface.Create
+ 0001:00003B70       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.Create
+ 0001:00003BE0       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.BeforeShow
+ 0001:00003D30       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.ButtonPhotoClick
+ 0001:00003D78       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.ChangeParam
+ 0001:00004190       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.ChangesExists
+ 0001:000041B0       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.CheckListBoxRolesClickCheck
+ 0001:000041C0       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.DeleteAccountRoles
+ 0001:000043A8       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.InsertAccountRoles
+ 0001:00004558       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.RefreshAccountRoles
+ 0001:0000478C       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.RefreshRoles
+ 0001:000049E4       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.MenuItemClearPhotoClick
+ 0001:00004A18       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.MenuItemLoadPhotoClick
+ 0001:00004AA0       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.MenuItemSavePhotoClick
+ 0001:00004B28       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.PopupActionBarPhotoPopup
+ 0001:00004B88       BisMessDataAccountEditFm.TBisMessDataAccountEditForm.Execute
+ 0001:00004C24       BisMessDataAccountEditFm.Finalization
+ 0001:00004C54       BisMessDataAccountsFm..TBisMessDataAccountsForm
+ 0001:00004E60       BisMessDataAccountsFm..TBisMessDataAccountsFormIface
+ 0001:00004FC8       BisMessDataAccountsFm.TBisMessDataAccountsFormIface.Create
+ 0001:0000536C       BisMessDataAccountsFm.Finalization
+ 0001:0000539C       BisMessDataInMessageEditFm..TBisMessDataInMessageEditForm
+ 0001:00005774       BisMessDataInMessageEditFm..TBisMessDataInMessageEditFormIface
+ 0001:000058E0       BisMessDataInMessageEditFm..TBisMessDataInMessageInsertFormIface
+ 0001:00005A54       BisMessDataInMessageEditFm..TBisMessDataInMessageUpdateFormIface
+ 0001:00005BC8       BisMessDataInMessageEditFm..TBisMessDataInMessageDeleteFormIface
+ 0001:00005D3C       BisMessDataInMessageEditFm.GetTypeMessageByIndex
+ 0001:00005D6C       BisMessDataInMessageEditFm.TBisMessDataInMessageEditFormIface.Create
+ 0001:000061E8       BisMessDataInMessageEditFm.TBisMessDataInMessageInsertFormIface.Create
+ 0001:00006278       BisMessDataInMessageEditFm.TBisMessDataInMessageUpdateFormIface.Create
+ 0001:00006308       BisMessDataInMessageEditFm.TBisMessDataInMessageDeleteFormIface.Create
+ 0001:00006398       BisMessDataInMessageEditFm.TBisMessDataInMessageEditForm.Create
+ 0001:00006438       BisMessDataInMessageEditFm.TBisMessDataInMessageEditForm.BeforeShow
+ 0001:00006440       BisMessDataInMessageEditFm.Finalization
+ 0001:00006478       BisMessDataInMessageFilterFm..TBisMessDataInMessageFilterForm
+ 0001:000067CC       BisMessDataInMessageFilterFm..TBisMessDataInMessageFilterFormIface
+ 0001:00006940       BisMessDataInMessageFilterFm.TBisMessDataInMessageFilterFormIface.Create
+ 0001:00006B78       BisMessDataInMessageFilterFm.TBisMessDataInMessageFilterForm.ButtonDateInClick
+ 0001:00006CE8       BisMessDataInMessageFilterFm.TBisMessDataInMessageFilterForm.ButtonSendToClick
+ 0001:00006E5C       BisMessDataInMessageFilterFm.Finalization
+ 0001:00006E8C       BisMessDataInMessagesFm..TBisMessDataInMessagesFrame
+ 0001:00007198       BisMessDataInMessagesFm..TBisMessDataInMessagesForm
+ 0001:000073A8       BisMessDataInMessagesFm..TBisMessDataInMessagesFormIface
+ 0001:00007514       BisMessDataInMessagesFm.TBisMessDataInMessagesFrame.Create
+ 0001:000078F0       BisMessDataInMessagesFm.TBisMessDataInMessagesFrame.Init
+ 0001:00007920       BisMessDataInMessagesFm.TBisMessDataInMessagesFormIface.Create
+ 0001:0000796C       BisMessDataInMessagesFm.TBisMessDataInMessagesForm.Create
+ 0001:000079A4       BisMessDataInMessagesFm.TBisMessDataInMessagesForm.Destroy
+ 0001:000079CC       BisMessDataInMessagesFm.TBisMessDataInMessagesForm.GetDataFrameClass
+ 0001:000079D4       BisMessDataInMessagesFm.Finalization
+ 0001:00007A04       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageEditForm
+ 0001:00007CAC       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageEditFormIface
+ 0001:00007E28       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageFilterFormIface
+ 0001:00007FA8       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageInsertFormIface
+ 0001:00008128       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageUpdateFormIface
+ 0001:000082A8       BisMessDataPatternMessageEditFm..TBisMessDataPatternMessageDeleteFormIface
+ 0001:00008428       BisMessDataPatternMessageEditFm.TBisMessDataPatternMessageEditFormIface.Create
+ 0001:00008574       BisMessDataPatternMessageEditFm.TBisMessDataPatternMessageFilterFormIface.Create
+ 0001:000085DC       BisMessDataPatternMessageEditFm.TBisMessDataPatternMessageInsertFormIface.Create
+ 0001:00008670       BisMessDataPatternMessageEditFm.TBisMessDataPatternMessageUpdateFormIface.Create
+ 0001:00008704       BisMessDataPatternMessageEditFm.TBisMessDataPatternMessageDeleteFormIface.Create
+ 0001:00008798       BisMessDataPatternMessageEditFm.Finalization
+ 0001:000087C8       BisMessDataPatternMessagesFm..TBisMessDataPatternMessagesForm
+ 0001:000089E8       BisMessDataPatternMessagesFm..TBisMessDataPatternMessagesFormIface
+ 0001:00008B64       BisMessDataPatternMessagesFm.TBisMessDataPatternMessagesFormIface.Create
+ 0001:00008CC8       BisMessDataPatternMessagesFm.Finalization
+ 0001:00008CF8       BisMessDataOutMessageEditFm..TBisMessDataOutMessageEditForm
+ 0001:0000927C       BisMessDataOutMessageEditFm..TBisMessDataOutMessageEditFormIface
+ 0001:000093EC       BisMessDataOutMessageEditFm..TBisMessDataOutMessageInsertFormIface
+ 0001:00009560       BisMessDataOutMessageEditFm..TBisMessDataOutMessageUpdateFormIface
+ 0001:000096D4       BisMessDataOutMessageEditFm..TBisMessDataOutMessageDeleteFormIface
+ 0001:00009848       BisMessDataOutMessageEditFm.GetTypeMessageByIndex
+ 0001:00009878       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditFormIface.Create
+ 0001:00009F94       BisMessDataOutMessageEditFm.TBisMessDataOutMessageInsertFormIface.Create
+ 0001:0000A088       BisMessDataOutMessageEditFm.TBisMessDataOutMessageUpdateFormIface.Create
+ 0001:0000A11C       BisMessDataOutMessageEditFm.TBisMessDataOutMessageDeleteFormIface.Create
+ 0001:0000A1AC       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.Create
+ 0001:0000A2B0       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.Init
+ 0001:0000A378       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.MemoTextChange
+ 0001:0000A3EC       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.BeforeShow
+ 0001:0000A65C       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.ButtonPatternClick
+ 0001:0000A79C       BisMessDataOutMessageEditFm.TBisMessDataOutMessageEditForm.ChangeParam
+ 0001:0000A8C0       BisMessDataOutMessageEditFm.Finalization
+ 0001:0000A8F0       BisMessDataOutMessageFilterFm..TBisMessDataOutMessageFilterForm
+ 0001:0000AD64       BisMessDataOutMessageFilterFm..TBisMessDataOutMessageFilterFormIface
+ 0001:0000AEDC       BisMessDataOutMessageFilterFm.TBisMessDataOutMessageFilterFormIface.Create
+ 0001:0000B31C       BisMessDataOutMessageFilterFm.TBisMessDataOutMessageFilterForm.ButtonDateBeginClick
+ 0001:0000B490       BisMessDataOutMessageFilterFm.TBisMessDataOutMessageFilterForm.ButtonDateEndClick
+ 0001:0000B604       BisMessDataOutMessageFilterFm.TBisMessDataOutMessageFilterForm.ButtonDateOutClick
+ 0001:0000B778       BisMessDataOutMessageFilterFm.TBisMessDataOutMessageFilterForm.ButtonCreateToClick
+ 0001:0000B8EC       BisMessDataOutMessageFilterFm.Finalization
+ 0001:0000B954       BisMessDataRolesAndAccountsFm..TBisMessDataRolesAndAccountsFrame
+ 0001:0000BC48       BisMessDataRolesAndAccountsFm..TBisMessDataRolesAndAccountsForm
+ 0001:0000BE6C       BisMessDataRolesAndAccountsFm..TBisMessDataRolesAndAccountsFormIface
+ 0001:0000BFEC       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFrame.Create
+ 0001:0000C1B4       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFrame.FillProvider
+ 0001:0000CB58       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFrame.Init
+ 0001:0000CB60       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFrame.OpenRecords
+ 0001:0000CB80       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFrame.TreeClick
+ 0001:0000CB84       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsFormIface.Create
+ 0001:0000CBD0       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsForm.Create
+ 0001:0000CC08       BisMessDataRolesAndAccountsFm.TBisMessDataRolesAndAccountsForm.GetDataFrameClass
+ 0001:0000CC10       BisMessDataRolesAndAccountsFm.Finalization
+ 0001:0000CC40       BisMessDataOutMessageInsertExFm..TBisMessRecipientInfo
+ 0001:0000CCFC       BisMessDataOutMessageInsertExFm..TBisMessDataOutMessageInsertExForm
+ 0001:0000D2FC       BisMessDataOutMessageInsertExFm..TBisMessDataOutMessageInsertExFormIface
+ 0001:0000D478       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExFormIface.Create
+ 0001:0000DB70       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.Create
+ 0001:0000DC80       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.Destroy
+ 0001:0000DCB8       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.Init
+ 0001:0000DD80       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.MemoTextChange
+ 0001:0000DDF4       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.BeforeShow
+ 0001:0000E064       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.ChangesExists
+ 0001:0000E090       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.CheckParams
+ 0001:0000E138       BisMessDataOutMessageInsertExFm.RefreshPackageParams
+ 0001:0000EACC       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.Execute
+ 0001:0000ED4C       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.ListBoxRecipientsKeyDown
+ 0001:0000ED7C       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.ButtonPatternClick
+ 0001:0000EEBC       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.ButtonRecipientsAddClick
+ 0001:0000F214       BisMessDataOutMessageInsertExFm.TBisMessDataOutMessageInsertExForm.ButtonRecipientsDelClick
+ 0001:0000F2DC       BisMessDataOutMessageInsertExFm.Finalization
+ 0001:0000F3F4       BisMessDataOutMessagesImportFm..TBisMessDataOutMessagesImportForm
+ 0001:0000F9D0       BisMessDataOutMessagesImportFm..TBisMessDataOutMessagesImportFormIface
+ 0001:0000FB44       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportFormIface.Create
+ 0001:0000FB84       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.Create
+ 0001:0000FEF4       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.Destroy
+ 0001:0000FF1C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.RecountDateBegin
+ 0001:00010160       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.FormResize
+ 0001:0001018C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.ActionLoadExecute
+ 0001:00010194       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.ActionLoadUpdate
+ 0001:000101B0       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.CanLoad
+ 0001:000101BC       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.BeforeProcess
+ 0001:0001020C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.AfterProcess
+ 0001:0001026C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.CheckBoxDateEndClick
+ 0001:00010390       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.CheckBoxOffsetClick
+ 0001:00010464       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.UpdateLabelCount
+ 0001:000104CC       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.AlignColumnsWidth
+ 0001:000105B8       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.ButtonAccountClick
+ 0001:00010754       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.ButtonRecountClick
+ 0001:0001075C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.GetMessageCount
+ 0001:00010778       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.PrepareContact
+ 0001:00010834       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.LoadFromTxtDelim
+ 0001:00010C20       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.LoadFromXls
+ 0001:000113E4       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.LoadFromXml
+ 0001:00011A3C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.Load
+ 0001:00011BC4       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.CanStart
+ 0001:00011C14       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.CheckFields
+ 0001:00011E28       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.Start
+ 0001:00011EF0       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.GetAllCount
+ 0001:00011FAC       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.DoTerminate
+ 0001:00011FF4       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.SyncError
+ 0001:0001204C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.SyncProgress
+ 0001:00012070       BisMessDataOutMessagesImportFm.Import
+ 0001:0001254C       BisMessDataOutMessagesImportFm.TBisMessDataOutMessagesImportForm.ThreadExecute
+ 0001:000126A4       BisMessDataOutMessagesImportFm.Finalization
+ 0001:000126D4       BisMessDataOutMessagesFrm..TBisMessDataOutMessagesFrame
+ 0001:00012A6C       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.Create
+ 0001:00012F60       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.Init
+ 0001:00012F90       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.GridPaintText
+ 0001:00013068       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.ActionImportExecute
+ 0001:00013070       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.ActionImportUpdate
+ 0001:0001308C       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.CanImport
+ 0001:00013098       BisMessDataOutMessagesFrm.TBisMessDataOutMessagesFrame.Import
+ 0001:00013118       BisMessDataOutMessagesFrm.Finalization
+ 0001:00013148       BisMessDataOutMessagesFm..TBisMessDataOutMessagesForm
+ 0001:0001335C       BisMessDataOutMessagesFm..TBisMessDataOutMessagesFormIface
+ 0001:000134CC       BisMessDataOutMessagesFm.TBisMessDataOutMessagesFormIface.Create
+ 0001:00013518       BisMessDataOutMessagesFm.TBisMessDataOutMessagesForm.GetDataFrameClass
+ 0001:00013520       BisMessDataOutMessagesFm.Finalization
+ 0001:00013550       BisMessDataRoleEditFm..TBisMessDataRoleEditForm
+ 0001:000137F0       BisMessDataRoleEditFm..TBisMessDataRoleEditFormIface
+ 0001:00013950       BisMessDataRoleEditFm..TBisMessDataRoleInsertFormIface
+ 0001:00013AB0       BisMessDataRoleEditFm..TBisMessDataRoleUpdateFormIface
+ 0001:00013C10       BisMessDataRoleEditFm..TBisMessDataRoleDeleteFormIface
+ 0001:00013D70       BisMessDataRoleEditFm.TBisMessDataRoleEditFormIface.Create
+ 0001:00013FF4       BisMessDataRoleEditFm.TBisMessDataRoleInsertFormIface.Create
+ 0001:00014050       BisMessDataRoleEditFm.TBisMessDataRoleUpdateFormIface.Create
+ 0001:000140AC       BisMessDataRoleEditFm.TBisMessDataRoleDeleteFormIface.Create
+ 0001:00014108       BisMessDataRoleEditFm.Finalization
+ 0001:00014138       BisMessDataRolesFm..TBisMessDataRolesForm
+ 0001:0001433C       BisMessDataRolesFm..TBisMessDataRolesFormIface
+ 0001:00014498       BisMessDataRolesFm.TBisMessDataRolesFormIface.Create
+ 0001:000146D0       BisMessDataRolesFm.TBisMessDataRolesForm.Create
+ 0001:00014708       BisMessDataRolesFm.Finalization
+ 0001:00014738       BisMessMainFm..TStatusBar
+ 0001:000148A4       BisMessMainFm..TBisMessTabSheet
+ 0001:00014A14       BisMessMainFm..TBisMessTabSheets
+ 0001:00014AB8       BisMessMainFm..TBisMessMainForm
+ 0001:00014D98       BisMessMainFm..TBisMessMainFormIface
+ 0001:00014EDC       BisMessMainFm.TStatusBar.Create
+ 0001:00014F24       BisMessMainFm.TBisMessTabSheet.Activate
+ 0001:00014F3C       BisMessMainFm.TBisMessTabSheet.Init
+ 0001:00014F54       BisMessMainFm.TBisMessTabSheet.Reposition
+ 0001:00014F68       BisMessMainFm.TBisMessTabSheet.Resize
+ 0001:00014F8C       BisMessMainFm.TBisMessTabSheets.CreateTabSheet
+ 0001:000150F0       BisMessMainFm.TBisMessTabSheets.GetItem
+ 0001:00015104       BisMessMainFm.TBisMessTabSheets.Init
+ 0001:0001512C       BisMessMainFm.TBisMessTabSheets.Reposition
+ 0001:00015154       BisMessMainFm.TBisMessMainFormIface.Create
+ 0001:00015194       BisMessMainFm.TBisMessMainForm.Create
+ 0001:00015410       BisMessMainFm.TBisMessMainForm.Destroy
+ 0001:0001549C       BisMessMainFm.TBisMessMainForm.Init
+ 0001:000154B4       BisMessMainFm.TBisMessMainForm.FormShow
+ 0001:000154BC       BisMessMainFm.TBisMessMainForm.ApplicationEventsHint
+ 0001:000154E8       BisMessMainFm.TBisMessMainForm.PageControlChange
+ 0001:00015580       BisMessMainFm.TBisMessMainForm.InternalProgress
+ 0001:00015678       BisMessMainFm.TBisMessMainForm.RePositionProgressBar
+ 0001:000156DC       BisMessMainFm.TBisMessMainForm.StatusBarResize
+ 0001:000156E4       BisMessMainFm.TBisMessMainForm.ButtonAboutClick
+ 0001:000156F0       BisMessMainFm.Finalization
+ 0001:00015720       BisMess.InitIfaceModule
+ 0001:000157D0       BisMess.Finalization
+ 0001:000163D0       .immess.@GetPackageInfoTable
+ 0001:000163D8       .immess.@PackageLoad
+ 0001:000163E4       .immess.@PackageUnload
+ 0002:00000010       Windows.Windows
+ 0002:00000304       BisMessConsts.BisMessConsts
+ 0002:00000324       BisMessDataCodeMessageEditFm.BisMessDataCodeMessageEditFm
+ 0002:0000032C       BisMessDataCodeMessagesFm.BisMessDataCodeMessagesFm
+ 0002:00000334       BisMessDataAccountEditFm.BisMessDataAccountEditFm
+ 0002:0000033C       BisMessDataAccountsFm.BisMessDataAccountsFm
+ 0002:00000344       BisMessDataInMessageEditFm.BisMessDataInMessageEditFm
+ 0002:0000034C       BisMessDataInMessageFilterFm.BisMessDataInMessageFilterFm
+ 0002:00000354       BisMessDataInMessagesFm.BisMessDataInMessagesFm
+ 0002:0000035C       BisMessDataPatternMessageEditFm.BisMessDataPatternMessageEditFm
+ 0002:00000364       BisMessDataPatternMessagesFm.BisMessDataPatternMessagesFm
+ 0002:0000036C       BisMessDataOutMessageEditFm.BisMessDataOutMessageEditFm
+ 0002:00000374       BisMessDataOutMessageFilterFm.BisMessDataOutMessageFilterFm
+ 0002:0000037C       BisMessDataRolesAndAccountsFm.BisMessDataRolesAndAccountsFm
+ 0002:00000384       BisMessDataOutMessageInsertExFm.BisMessDataOutMessageInsertExFm
+ 0002:000003A4       BisMessDataOutMessagesImportFm.BisMessDataOutMessagesImportFm
+ 0002:000003AC       BisMessDataOutMessagesFrm.BisMessDataOutMessagesFrm
+ 0002:000003B4       BisMessDataOutMessagesFm.BisMessDataOutMessagesFm
+ 0002:000003BC       BisMessDataRoleEditFm.BisMessDataRoleEditFm
+ 0002:000003C4       BisMessDataRolesFm.BisMessDataRolesFm
+ 0002:000003CC       BisMessMainFm.BisMessMainFm
+ 0002:000003D4       BisMess.BisMess
+ 0002:000003DC       .immess..immess
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.Module
+ 0003:0000001C       SysInit.TlsProc
+ 0003:0000002C       BisMessConsts.IsMainModule
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       SysInit.tlsBuffer
+ 0004:0000000C       Windows..3
+ 0004:00000010       Windows.HtmlHelpModule
+ 0004:00000014       BisMessConsts..1
+ 0004:00000018       BisMessDataCodeMessageEditFm.BisMessDataCodeMessageEditForm
+ 0004:0000001C       BisMessDataCodeMessageEditFm..7
+ 0004:00000020       BisMessDataCodeMessagesFm.BisMessDataCodeMessagesForm
+ 0004:00000024       BisMessDataCodeMessagesFm..3
+ 0004:00000028       BisMessDataAccountEditFm.BisMessDataAccountEditForm
+ 0004:0000002C       BisMessDataAccountEditFm..6
+ 0004:00000030       BisMessDataAccountsFm.BiMessDataAccountsForm
+ 0004:00000034       BisMessDataAccountsFm..3
+ 0004:00000038       BisMessDataInMessageEditFm.BisMessDataInMessageEditForm
+ 0004:0000003C       BisMessDataInMessageEditFm..6
+ 0004:00000040       BisMessDataInMessageFilterFm.BisMessDataInMessageFilterForm
+ 0004:00000044       BisMessDataInMessageFilterFm..3
+ 0004:00000048       BisMessDataInMessagesFm.BisMessDataInMessagesForm
+ 0004:0000004C       BisMessDataInMessagesFm..4
+ 0004:00000050       BisMessDataPatternMessageEditFm.BisMessDataPatternMessageEditForm
+ 0004:00000054       BisMessDataPatternMessageEditFm..7
+ 0004:00000058       BisMessDataPatternMessagesFm.BisMessDataPatternMessagesForm
+ 0004:0000005C       BisMessDataPatternMessagesFm..3
+ 0004:00000060       BisMessDataOutMessageEditFm.BisMessDataOutMessageEditForm
+ 0004:00000064       BisMessDataOutMessageEditFm..6
+ 0004:00000068       BisMessDataOutMessageFilterFm.BisMessDataOutMessageFilterForm
+ 0004:0000006C       BisMessDataOutMessageFilterFm..3
+ 0004:00000070       BisMessDataRolesAndAccountsFm.BisMessDataRolesAndAccountsForm
+ 0004:00000074       BisMessDataRolesAndAccountsFm..4
+ 0004:00000078       BisMessDataOutMessageInsertExFm.BisMessDataOutMessageInsertExForm
+ 0004:0000007C       BisMessDataOutMessageInsertExFm..4
+ 0004:00000080       BisMessDataOutMessagesImportFm.BisMessDataOutMessagesImportForm
+ 0004:00000084       BisMessDataOutMessagesImportFm..3
+ 0004:00000088       BisMessDataOutMessagesFrm..2
+ 0004:0000008C       BisMessDataOutMessagesFm.BisMessDataOutMessagesForm
+ 0004:00000090       BisMessDataOutMessagesFm..3
+ 0004:00000094       BisMessDataRoleEditFm.BisMessDataRoleEditForm
+ 0004:00000098       BisMessDataRoleEditFm..6
+ 0004:0000009C       BisMessDataRolesFm.BisMessDataRolesForm
+ 0004:000000A0       BisMessDataRolesFm..3
+ 0004:000000A4       BisMessMainFm.BisMessMainForm
+ 0004:000000A8       BisMessMainFm..6
+ 0004:000000AC       BisMess..1
+ 0005:00000000       SysInit.TlsLast
+
+
+Line numbers for IpRtrMib(objects.bpl\IPHlpApi\Pas\IpRtrMib.pas) segment .text
+
+  1062 0001:00000000
+
+Line numbers for IpExport(objects.bpl\IPHlpApi\Pas\IpExport.pas) segment .text
+
+   343 0001:00000000
+
+Line numbers for IpTypes(objects.bpl\IPHlpApi\Pas\IpTypes.pas) segment .text
+
+   228 0001:00000000
+
+Line numbers for IpHlpApi(objects.bpl\IPHlpApi\Pas\IpHlpApi.pas) segment .text
+
+   752 0001:00000000
+
+Line numbers for MiTeC_ToolHelp32(MiTeC_ToolHelp32.pas) segment .text
+
+   438 0001:00000000
+
+Line numbers for BisMessConsts(immess.bpl\BisMessConsts.pas) segment .itext
+
+    14 0002:00000304
+
+Line numbers for BisMessDataCodeMessageEditFm(immess.bpl\BisMessDataCodeMessageEditFm.pas) segment .text
+
+    64 0001:00001F88    65 0001:00001F9B    66 0001:00001FA4    67 0001:00001FAC
+    68 0001:00001FB2    69 0001:00001FCA    70 0001:00001FE4    71 0001:00001FFC
+    72 0001:00002016    73 0001:00002030    74 0001:00002048    76 0001:00002059
+    81 0001:0000221C    82 0001:0000222E    83 0001:00002237    84 0001:00002244
+    89 0001:00002280    90 0001:00002292    91 0001:0000229B    92 0001:000022AB
+    93 0001:000022B8    98 0001:0000230C    99 0001:0000231E   100 0001:00002327
+   101 0001:00002337   102 0001:00002344   107 0001:00002398   108 0001:000023AA
+   109 0001:000023B3   110 0001:000023C3   111 0001:000023D0
+
+Line numbers for BisMessDataCodeMessageEditFm(immess.bpl\BisMessDataCodeMessageEditFm.pas) segment .itext
+
+   113 0002:00000324
+
+Line numbers for BisMessDataCodeMessagesFm(immess.bpl\BisMessDataCodeMessagesFm.pas) segment .text
+
+    35 0001:000027E0    36 0001:000027F7    37 0001:00002800    38 0001:00002808
+    39 0001:00002813    40 0001:00002820    41 0001:0000282B    42 0001:00002836
+    44 0001:0000283D    45 0001:0000284D    46 0001:00002853    47 0001:0000285F
+    48 0001:0000286B    49 0001:00002877    50 0001:00002883    51 0001:00002896
+    52 0001:000028AC    54 0001:000028BF    55 0001:000028D1
+
+Line numbers for BisMessDataCodeMessagesFm(immess.bpl\BisMessDataCodeMessagesFm.pas) segment .itext
+
+    57 0002:0000032C
+
+Line numbers for BisMessDataAccountEditFm(immess.bpl\BisMessDataAccountEditFm.pas) segment .text
+
+   100 0001:0000356C   101 0001:000035A4   102 0001:000035B0   103 0001:000035B8
+   104 0001:000035BE   105 0001:000035CC   107 0001:000035D6   108 0001:000035FA
+   109 0001:0000361E   110 0001:0000362C   111 0001:0000363A   112 0001:00003661
+   113 0001:0000366F   114 0001:0000367D   115 0001:00003690   116 0001:000036AA
+   117 0001:000036C4   118 0001:000036DE   119 0001:000036F6   120 0001:00003710
+   121 0001:0000372A   123 0001:00003753   128 0001:00003A5C   129 0001:00003A6E
+   130 0001:00003A77   131 0001:00003A87   136 0001:00003AB8   137 0001:00003ACA
+   138 0001:00003AD3   139 0001:00003AE3   144 0001:00003B14   145 0001:00003B26
+   146 0001:00003B2F   147 0001:00003B3F   152 0001:00003B70   153 0001:00003B87
+   154 0001:00003B90   155 0001:00003B97   156 0001:00003BA4   157 0001:00003BB6
+   158 0001:00003BBD   161 0001:00003BE0   162 0001:00003C01   163 0001:00003C08
+   164 0001:00003C1F   165 0001:00003C70   166 0001:00003C84   167 0001:00003C9C
+   168 0001:00003CA7   169 0001:00003CB3   172 0001:00003CE0   173 0001:00003CE7
+   174 0001:00003CEE   179 0001:00003D30   180 0001:00003D37   181 0001:00003D60
+   182 0001:00003D72   189 0001:00003D78   190 0001:00003D9E   191 0001:00003DA9
+   192 0001:00003DD1   193 0001:00003DE2   194 0001:00003DF0   195 0001:00003E02
+   196 0001:00003E15   197 0001:00003E43   198 0001:00003E4B   199 0001:00003E63
+   200 0001:00003E80   204 0001:00003EB7   208 0001:00003EC7   212 0001:00003F19
+   213 0001:00003F2A   214 0001:00003F3B   215 0001:00003F4C   216 0001:00003F5E
+   217 0001:00003F76   218 0001:00003F7E   219 0001:00003F89   220 0001:00003FA0
+   221 0001:00003FAB   222 0001:00003FF5   223 0001:00004000   224 0001:00004045
+   225 0001:00004061   229 0001:00004069   232 0001:00004190   233 0001:00004193
+   234 0001:000041AD   239 0001:000041B0   240 0001:000041B7   241 0001:000041BC
+   249 0001:000041C0   250 0001:000041DE   251 0001:000041F8   252 0001:0000420F
+   253 0001:00004220   254 0001:0000422E   255 0001:00004240   256 0001:0000424A
+   257 0001:00004253   258 0001:0000426B   259 0001:0000427B   260 0001:00004287
+   263 0001:0000429B   264 0001:000042BB   265 0001:000042D1   266 0001:000042EE
+   267 0001:000042F6   263 0001:000042F9   269 0001:00004309   272 0001:00004319
+   280 0001:000043A8   281 0001:000043C6   282 0001:000043E0   283 0001:000043F7
+   284 0001:00004408   285 0001:00004416   286 0001:00004428   287 0001:00004432
+   288 0001:0000443B   289 0001:00004449   291 0001:0000446B   292 0001:00004486
+   293 0001:00004497   294 0001:000044AD   295 0001:000044CD   297 0001:000044D5
+   291 0001:000044D6   299 0001:000044E6   302 0001:000044F6   311 0001:00004558
+   312 0001:0000457B   313 0001:00004598   314 0001:000045AF   315 0001:000045C3
+   316 0001:000045D4   317 0001:000045E2   318 0001:000045F4   319 0001:00004607
+   320 0001:00004634   321 0001:0000463C   322 0001:0000464C   324 0001:00004656
+   325 0001:0000466B   326 0001:00004689   327 0001:000046A1   328 0001:000046B0
+   330 0001:000046C2   325 0001:000046C3   331 0001:000046C6   323 0001:000046CE
+   335 0001:000046EB   336 0001:000046F3   339 0001:0000470F   345 0001:0000478C
+   346 0001:000047AE   347 0001:000047C2   348 0001:000047D6   349 0001:000047E7
+   350 0001:000047F5   351 0001:00004807   352 0001:00004810   353 0001:0000481C
+   355 0001:00004828   356 0001:0000485A   357 0001:0000486F   358 0001:00004877
+   359 0001:00004883   361 0001:0000488D   362 0001:0000489B   363 0001:000048BB
+   364 0001:000048E9   360 0001:000048F1   368 0001:0000490A   369 0001:00004912
+   371 0001:0000492E   375 0001:000049E4   376 0001:000049E7   377 0001:00004A04
+   381 0001:00004A18   382 0001:00004A2E   383 0001:00004A3D   384 0001:00004A6D
+   388 0001:00004AA0   389 0001:00004AB6   390 0001:00004AC5   391 0001:00004AF5
+   397 0001:00004B28   398 0001:00004B2C   399 0001:00004B46   400 0001:00004B5D
+   401 0001:00004B72   406 0001:00004B88   407 0001:00004B8F   408 0001:00004B9E
+   409 0001:00004BAE   410 0001:00004BBC   411 0001:00004BC7   412 0001:00004BCE
+   413 0001:00004BD5   414 0001:00004BE0   415 0001:00004BE7   416 0001:00004BF2
+   418 0001:00004C06   420 0001:00004C1E
+
+Line numbers for BisMessDataAccountEditFm(immess.bpl\BisMessDataAccountEditFm.pas) segment .itext
+
+   423 0002:00000334
+
+Line numbers for BisMessDataAccountsFm(immess.bpl\BisMessDataAccountsFm.pas) segment .text
+
+    35 0001:00004FC8    36 0001:00004FF4    37 0001:00004FFD    38 0001:00005005
+    39 0001:00005010    40 0001:0000501D    41 0001:00005028    42 0001:00005033
+    44 0001:0000503A    45 0001:0000504A    46 0001:00005050    47 0001:0000505C
+    48 0001:00005068    49 0001:00005074    50 0001:00005080    51 0001:0000508C
+    52 0001:00005098    53 0001:000050A4    54 0001:000050B0    55 0001:000050BC
+    56 0001:000050C8    57 0001:000050D4    58 0001:000050E0    59 0001:000050F3
+    60 0001:00005106    61 0001:00005119    62 0001:0000512C    64 0001:0000513F
+    65 0001:0000516B    66 0001:0000517D
+
+Line numbers for BisMessDataAccountsFm(immess.bpl\BisMessDataAccountsFm.pas) segment .itext
+
+    68 0002:0000033C
+
+Line numbers for BisMessDataInMessageEditFm(immess.bpl\BisMessDataInMessageEditFm.pas) segment .text
+
+    70 0001:00005D3C    71 0001:00005D42    72 0001:00005D49    73 0001:00005D4E
+    76 0001:00005D5A    82 0001:00005D6C    83 0001:00005D92    84 0001:00005D9B
+    85 0001:00005DA3    86 0001:00005DA9    87 0001:00005DC1    88 0001:00005DD9
+    89 0001:00005DE3    92 0001:00005E19    95 0001:00005E58    97 0001:00005E86
+    98 0001:00005EA0    99 0001:00005EB8   100 0001:00005ED5   102 0001:00005EF2
+   107 0001:000061E8   108 0001:000061FA   109 0001:00006203   110 0001:00006213
+   111 0001:00006220   116 0001:00006278   117 0001:0000628A   118 0001:00006293
+   119 0001:000062A3   120 0001:000062B0   125 0001:00006308   126 0001:0000631A
+   127 0001:00006323   128 0001:00006333   129 0001:00006340   136 0001:00006398
+   137 0001:000063BE   139 0001:000063C7   140 0001:000063D5   141 0001:000063D7
+   140 0001:000063F6   143 0001:000063FB   147 0001:00006438   148 0001:0000643D
+
+Line numbers for BisMessDataInMessageEditFm(immess.bpl\BisMessDataInMessageEditFm.pas) segment .itext
+
+   150 0002:00000344
+
+Line numbers for BisMessDataInMessageFilterFm(immess.bpl\BisMessDataInMessageFilterFm.pas) segment .text
+
+    47 0001:00006940    48 0001:00006958    49 0001:00006961    50 0001:00006969
+    51 0001:0000696F    52 0001:00006973    53 0001:00006988    54 0001:00006996
+    55 0001:000069A3    57 0001:000069AA    58 0001:000069C9    59 0001:000069D0
+    61 0001:000069E0    62 0001:000069FF    63 0001:00006A06    66 0001:00006A16
+    67 0001:00006A23    74 0001:00006B78    75 0001:00006B98    76 0001:00006BA9
+    77 0001:00006BB7    78 0001:00006BBB    79 0001:00006BE8    80 0001:00006C18
+    81 0001:00006C2E    82 0001:00006C5B    85 0001:00006C98    87 0001:00006CA8
+    94 0001:00006CE8    95 0001:00006D08    96 0001:00006D19    97 0001:00006D27
+    98 0001:00006D2B    99 0001:00006D58   100 0001:00006D88   101 0001:00006D9E
+   102 0001:00006DCB   105 0001:00006E08   107 0001:00006E18
+
+Line numbers for BisMessDataInMessageFilterFm(immess.bpl\BisMessDataInMessageFilterFm.pas) segment .itext
+
+   109 0002:0000034C
+
+Line numbers for BisMessDataInMessagesFm(immess.bpl\BisMessDataInMessagesFm.pas) segment .text
+
+    55 0001:00007514    56 0001:0000754A    58 0001:00007553    59 0001:0000755E
+    60 0001:0000756B    61 0001:00007576    62 0001:00007581    63 0001:00007587
+    64 0001:00007597    65 0001:0000759D    66 0001:000075A9    67 0001:000075B5
+    68 0001:000075C1    69 0001:000075CD    70 0001:000075D9    71 0001:000075E5
+    72 0001:000075F8    73 0001:0000760E    74 0001:00007621    76 0001:00007634
+    79 0001:00007646    81 0001:0000765F    82 0001:0000766F    84 0001:0000767F
+    86 0001:00007694    87 0001:000076A3    88 0001:000076C9    90 0001:00007700
+    93 0001:00007709    95 0001:0000771E    98 0001:00007751   101 0001:000078F0
+   102 0001:000078F3   103 0001:000078FA   104 0001:0000790B   105 0001:0000791C
+   110 0001:00007920   111 0001:00007932   112 0001:0000793B   113 0001:00007943
+   115 0001:0000794A   116 0001:00007951   121 0001:0000796C   122 0001:0000797E
+   124 0001:00007987   127 0001:000079A4   129 0001:000079AF   130 0001:000079BB
+   134 0001:000079CC   135 0001:000079D1
+
+Line numbers for BisMessDataInMessagesFm(immess.bpl\BisMessDataInMessagesFm.pas) segment .itext
+
+   137 0002:00000354
+
+Line numbers for BisMessDataPatternMessageEditFm(immess.bpl\BisMessDataPatternMessageEditFm.pas) segment .text
+
+    57 0001:00008428    58 0001:0000843F    59 0001:00008448    60 0001:00008450
+    61 0001:00008456    62 0001:0000846E    63 0001:00008488    65 0001:000084A0
+    70 0001:00008574    71 0001:00008586    72 0001:0000858F    73 0001:0000859C
+    78 0001:000085DC    79 0001:000085EE    80 0001:000085F7    81 0001:00008607
+    82 0001:00008614    87 0001:00008670    88 0001:00008682    89 0001:0000868B
+    90 0001:0000869B    91 0001:000086A8    96 0001:00008704    97 0001:00008716
+    98 0001:0000871F    99 0001:0000872F   100 0001:0000873C
+
+Line numbers for BisMessDataPatternMessageEditFm(immess.bpl\BisMessDataPatternMessageEditFm.pas) segment .itext
+
+   102 0002:0000035C
+
+Line numbers for BisMessDataPatternMessagesFm(immess.bpl\BisMessDataPatternMessagesFm.pas) segment .text
+
+    31 0001:00008B64    32 0001:00008B7B    33 0001:00008B84    34 0001:00008B8C
+    35 0001:00008B97    36 0001:00008BA4    37 0001:00008BAF    38 0001:00008BBA
+    40 0001:00008BC1    41 0001:00008BD1    42 0001:00008BD7    43 0001:00008BE3
+    44 0001:00008BF9    46 0001:00008C0F    47 0001:00008C21
+
+Line numbers for BisMessDataPatternMessagesFm(immess.bpl\BisMessDataPatternMessagesFm.pas) segment .itext
+
+    49 0002:00000364
+
+Line numbers for BisMessDataOutMessageEditFm(immess.bpl\BisMessDataOutMessageEditFm.pas) segment .text
+
+    90 0001:00009848    91 0001:0000984E    92 0001:00009855    93 0001:0000985A
+    96 0001:00009866   102 0001:00009878   103 0001:000098AF   104 0001:000098BB
+   105 0001:000098C3   106 0001:000098C9   107 0001:000098E1   108 0001:000098EF
+   109 0001:0000991D   110 0001:00009935   111 0001:0000993F   114 0001:00009975
+   117 0001:000099B4   118 0001:000099CE   119 0001:000099E6   120 0001:000099FE
+   121 0001:00009A1B   122 0001:00009A38   123 0001:00009A55   124 0001:00009A5F
+   127 0001:00009A9E   130 0001:00009AE8   132 0001:00009B13   137 0001:00009F94
+   138 0001:00009FA6   139 0001:00009FAF   140 0001:00009FB6   141 0001:00009FC6
+   142 0001:00009FD6   143 0001:00009FE3   144 0001:00009FF3   149 0001:0000A088
+   150 0001:0000A09A   151 0001:0000A0A3   152 0001:0000A0B3   153 0001:0000A0C0
+   158 0001:0000A11C   159 0001:0000A12E   160 0001:0000A137   161 0001:0000A147
+   162 0001:0000A154   169 0001:0000A1AC   170 0001:0000A1D2   172 0001:0000A1DB
+   173 0001:0000A1E9   174 0001:0000A1EB   173 0001:0000A20A   176 0001:0000A20F
+   177 0001:0000A21F   178 0001:0000A22F   180 0001:0000A23F   185 0001:0000A2B0
+   186 0001:0000A2BA   187 0001:0000A2C2   188 0001:0000A2D6   189 0001:0000A2E4
+   190 0001:0000A303   191 0001:0000A325   193 0001:0000A354   195 0001:0000A370
+   198 0001:0000A378   199 0001:0000A390   200 0001:0000A3C2   205 0001:0000A3EC
+   206 0001:0000A40D   207 0001:0000A414   208 0001:0000A423   209 0001:0000A43C
+   210 0001:0000A449   211 0001:0000A455   212 0001:0000A479   213 0001:0000A4A0
+   214 0001:0000A4C3   215 0001:0000A4F5   216 0001:0000A527   219 0001:0000A54A
+   220 0001:0000A566   221 0001:0000A57E   222 0001:0000A585   223 0001:0000A58E
+   229 0001:0000A65C   230 0001:0000A679   231 0001:0000A68A   232 0001:0000A69B
+   233 0001:0000A6A9   235 0001:0000A6B1   236 0001:0000A6C5   237 0001:0000A6DD
+   238 0001:0000A714   242 0001:0000A72A   243 0001:0000A732   245 0001:0000A742
+   251 0001:0000A79C   252 0001:0000A7A2   253 0001:0000A7AB   254 0001:0000A7CF
+   255 0001:0000A7DA   256 0001:0000A7F4   257 0001:0000A7FF   258 0001:0000A817
+   259 0001:0000A821   264 0001:0000A853
+
+Line numbers for BisMessDataOutMessageEditFm(immess.bpl\BisMessDataOutMessageEditFm.pas) segment .itext
+
+   267 0002:0000036C
+
+Line numbers for BisMessDataOutMessageFilterFm(immess.bpl\BisMessDataOutMessageFilterFm.pas) segment .text
+
+    58 0001:0000AEDC    59 0001:0000AEF4    60 0001:0000AEFD    61 0001:0000AF05
+    62 0001:0000AF0B    63 0001:0000AF0F    64 0001:0000AF24    65 0001:0000AF39
+    66 0001:0000AF4E    67 0001:0000AF5E    68 0001:0000AF6B    70 0001:0000AF7B
+    71 0001:0000AF89    72 0001:0000AF96    74 0001:0000AF9D    75 0001:0000AFBC
+    76 0001:0000AFC3    78 0001:0000AFD3    79 0001:0000AFF2    80 0001:0000AFF9
+    82 0001:0000B009    83 0001:0000B028    84 0001:0000B02F    86 0001:0000B03F
+    87 0001:0000B05E    88 0001:0000B065    91 0001:0000B075    92 0001:0000B082
+    99 0001:0000B31C   100 0001:0000B33C   101 0001:0000B34D   102 0001:0000B35B
+   103 0001:0000B35F   104 0001:0000B38C   105 0001:0000B3BC   106 0001:0000B3D2
+   107 0001:0000B3FF   110 0001:0000B43C   112 0001:0000B44C   119 0001:0000B490
+   120 0001:0000B4B0   121 0001:0000B4C1   122 0001:0000B4CF   123 0001:0000B4D3
+   124 0001:0000B500   125 0001:0000B530   126 0001:0000B546   127 0001:0000B573
+   130 0001:0000B5B0   132 0001:0000B5C0   139 0001:0000B604   140 0001:0000B624
+   141 0001:0000B635   142 0001:0000B643   143 0001:0000B647   144 0001:0000B674
+   145 0001:0000B6A4   146 0001:0000B6BA   147 0001:0000B6E7   150 0001:0000B724
+   152 0001:0000B734   159 0001:0000B778   160 0001:0000B798   161 0001:0000B7A9
+   162 0001:0000B7B7   163 0001:0000B7BB   164 0001:0000B7E8   165 0001:0000B818
+   166 0001:0000B82E   167 0001:0000B85B   170 0001:0000B898   172 0001:0000B8A8
+
+Line numbers for BisMessDataOutMessageFilterFm(immess.bpl\BisMessDataOutMessageFilterFm.pas) segment .itext
+
+   174 0002:00000374
+
+Line numbers for BisMessDataRolesAndAccountsFm(immess.bpl\BisMessDataRolesAndAccountsFm.pas) segment .text
+
+    50 0001:0000BFEC    51 0001:0000C003    53 0001:0000C00C    54 0001:0000C015
+    55 0001:0000C027    56 0001:0000C039    57 0001:0000C04B    60 0001:0000C05D
+    61 0001:0000C069    62 0001:0000C075    63 0001:0000C081    64 0001:0000C08D
+    66 0001:0000C0A3    68 0001:0000C0B0    69 0001:0000C0BD    70 0001:0000C0CA
+    71 0001:0000C0D7    72 0001:0000C0E4    74 0001:0000C0F1    76 0001:0000C101
+    77 0001:0000C118    86 0001:0000C1B4    87 0001:0000C1D6    88 0001:0000C1E7
+    89 0001:0000C1F8    90 0001:0000C209    91 0001:0000C217    92 0001:0000C229
+    93 0001:0000C232    94 0001:0000C23E    96 0001:0000C24A    97 0001:0000C27C
+    99 0001:0000C291   100 0001:0000C2A3   101 0001:0000C2AC   102 0001:0000C2B8
+   104 0001:0000C2C4   105 0001:0000C2CD   106 0001:0000C2F5   108 0001:0000C320
+   110 0001:0000C335   111 0001:0000C347   112 0001:0000C350   113 0001:0000C35C
+   114 0001:0000C368   117 0001:0000C374   118 0001:0000C37C   119 0001:0000C384
+   120 0001:0000C38C   121 0001:0000C3BC   122 0001:0000C3CE   123 0001:0000C3DC
+   124 0001:0000C3EA   127 0001:0000C3F7   128 0001:0000C40C   130 0001:0000C41F
+   131 0001:0000C42D   132 0001:0000C44B   133 0001:0000C469   134 0001:0000C491
+   135 0001:0000C4CC   137 0001:0000C4DD   138 0001:0000C53B   139 0001:0000C548
+   142 0001:0000C555   143 0001:0000C593   144 0001:0000C5A1   145 0001:0000C5E0
+   146 0001:0000C61B   147 0001:0000C639   148 0001:0000C674   151 0001:0000C685
+   140 0001:0000C68D   154 0001:0000C69D   125 0001:0000C6A5   157 0001:0000C6B5
+   159 0001:0000C6CE   160 0001:0000C6DC   161 0001:0000C6FA   162 0001:0000C728
+   163 0001:0000C756   164 0001:0000C78D   166 0001:0000C79E   167 0001:0000C7AB
+   169 0001:0000C7B8   172 0001:0000C7C5   174 0001:0000C803   175 0001:0000C811
+   176 0001:0000C850   177 0001:0000C88B   178 0001:0000C8A9   179 0001:0000C8E4
+   183 0001:0000C8F5   170 0001:0000C8FD   186 0001:0000C90D   188 0001:0000C928
+   192 0001:0000C94D   193 0001:0000C955   194 0001:0000C95D   196 0001:0000C96D
+   200 0001:0000CB58   201 0001:0000CB5D   204 0001:0000CB60   205 0001:0000CB63
+   206 0001:0000CB6A   207 0001:0000CB71   208 0001:0000CB7B   212 0001:0000CB80
+   217 0001:0000CB84   218 0001:0000CB96   219 0001:0000CB9F   220 0001:0000CBA7
+   222 0001:0000CBAE   223 0001:0000CBB5   228 0001:0000CBD0   229 0001:0000CBE2
+   230 0001:0000CBEB   234 0001:0000CC08   235 0001:0000CC0D
+
+Line numbers for BisMessDataRolesAndAccountsFm(immess.bpl\BisMessDataRolesAndAccountsFm.pas) segment .itext
+
+   237 0002:0000037C
+
+Line numbers for BisMessDataOutMessageInsertExFm(immess.bpl\BisMessDataOutMessageInsertExFm.pas) segment .text
+
+    92 0001:0000D478    93 0001:0000D4AD    94 0001:0000D4B9    95 0001:0000D4C1
+    96 0001:0000D4C8    97 0001:0000D4D8    98 0001:0000D4E8    99 0001:0000D4F5
+   100 0001:0000D505   101 0001:0000D50B   102 0001:0000D523   103 0001:0000D531
+   104 0001:0000D53F   105 0001:0000D54D   106 0001:0000D55B   107 0001:0000D589
+   108 0001:0000D5A1   109 0001:0000D5B9   110 0001:0000D5D1   111 0001:0000D5EE
+   112 0001:0000D60B   113 0001:0000D628   114 0001:0000D632   117 0001:0000D671
+   120 0001:0000D6BB   122 0001:0000D6E6   129 0001:0000DB70   130 0001:0000DB96
+   132 0001:0000DB9F   133 0001:0000DBAD   134 0001:0000DBAF   133 0001:0000DBCE
+   136 0001:0000DBD3   138 0001:0000DBE0   139 0001:0000DBF0   140 0001:0000DC00
+   141 0001:0000DC10   144 0001:0000DC80   145 0001:0000DC8B   146 0001:0000DC9C
+   147 0001:0000DCA8   152 0001:0000DCB8   153 0001:0000DCC2   154 0001:0000DCCA
+   155 0001:0000DCDE   156 0001:0000DCEC   157 0001:0000DD0B   158 0001:0000DD2D
+   160 0001:0000DD5C   162 0001:0000DD78   165 0001:0000DD80   166 0001:0000DD98
+   167 0001:0000DDCA   172 0001:0000DDF4   173 0001:0000DE15   174 0001:0000DE1C
+   175 0001:0000DE2B   176 0001:0000DE44   177 0001:0000DE51   178 0001:0000DE5D
+   179 0001:0000DE81   180 0001:0000DEA8   181 0001:0000DECB   182 0001:0000DEFD
+   183 0001:0000DF2F   186 0001:0000DF52   187 0001:0000DF6E   188 0001:0000DF86
+   189 0001:0000DF8D   190 0001:0000DF96   193 0001:0000E064   194 0001:0000E067
+   195 0001:0000E08D   198 0001:0000E090   199 0001:0000E0B0   200 0001:0000E0B9
+   201 0001:0000E0BD   202 0001:0000E0D0   203 0001:0000E0D4   205 0001:0000E10A
+   220 0001:0000E138   221 0001:0000E159   222 0001:0000E15D   223 0001:0000E16E
+   224 0001:0000E17E   225 0001:0000E18C   226 0001:0000E196   227 0001:0000E1A8
+   228 0001:0000E1B1   229 0001:0000E1BD   230 0001:0000E1C9   231 0001:0000E1D5
+   233 0001:0000E1E1   234 0001:0000E213   236 0001:0000E226   237 0001:0000E22D
+   238 0001:0000E23D   239 0001:0000E24D   240 0001:0000E25D   241 0001:0000E261
+   242 0001:0000E284   243 0001:0000E2A0   244 0001:0000E2A6   246 0001:0000E2C2
+   247 0001:0000E2DC   249 0001:0000E2E0   241 0001:0000E2E3   251 0001:0000E2E6
+   253 0001:0000E2EC   255 0001:0000E2F3   256 0001:0000E309   258 0001:0000E312
+   259 0001:0000E340   257 0001:0000E347   264 0001:0000E350   265 0001:0000E352
+   266 0001:0000E35A   267 0001:0000E37A   269 0001:0000E387   270 0001:0000E38F
+   271 0001:0000E3B7   275 0001:0000E3CC   276 0001:0000E3DC   277 0001:0000E3E4
+   278 0001:0000E421   279 0001:0000E45E   280 0001:0000E484   281 0001:0000E486
+   283 0001:0000E48F   285 0001:0000E4A8   286 0001:0000E4D3   287 0001:0000E517
+   288 0001:0000E54A   289 0001:0000E57D   290 0001:0000E593   291 0001:0000E5D7
+   292 0001:0000E61B   293 0001:0000E65F   294 0001:0000E6A3   295 0001:0000E6E7
+   296 0001:0000E72B   297 0001:0000E76F   298 0001:0000E7B3   299 0001:0000E7F7
+   303 0001:0000E83B   268 0001:0000E843   308 0001:0000E860   310 0001:0000E870
+   318 0001:0000EACC   319 0001:0000EAEF   320 0001:0000EAFE   321 0001:0000EB0E
+   322 0001:0000EB1C   323 0001:0000EB30   324 0001:0000EB3F   325 0001:0000EB4D
+   326 0001:0000EB73   327 0001:0000EB99   328 0001:0000EBB3   329 0001:0000EBCB
+   330 0001:0000EBD9   331 0001:0000EBED   332 0001:0000EC07   333 0001:0000EC14
+   334 0001:0000EC38   335 0001:0000EC3C   336 0001:0000EC47   338 0001:0000EC5E
+   340 0001:0000EC75   331 0001:0000EC78   341 0001:0000EC7D   342 0001:0000EC94
+   344 0001:0000ECB6   346 0001:0000ECD4   326 0001:0000ECD7   348 0001:0000ECE0
+   352 0001:0000ECFB   354 0001:0000ED13   357 0001:0000ED4C   358 0001:0000ED55
+   359 0001:0000ED5B   360 0001:0000ED64   361 0001:0000ED6A   362 0001:0000ED73
+   368 0001:0000ED7C   369 0001:0000ED99   370 0001:0000EDAA   371 0001:0000EDBB
+   372 0001:0000EDC9   374 0001:0000EDD1   375 0001:0000EDE5   376 0001:0000EDFD
+   377 0001:0000EE34   381 0001:0000EE4A   382 0001:0000EE52   384 0001:0000EE62
+   392 0001:0000EEBC   393 0001:0000EEDD   394 0001:0000EEEE   395 0001:0000EEFC
+   396 0001:0000EF0A   397 0001:0000EF1B   398 0001:0000EF29   399 0001:0000EF31
+   400 0001:0000EF49   401 0001:0000EF69   403 0001:0000EF76   404 0001:0000EF8B
+   405 0001:0000EFA2   406 0001:0000EFB0   407 0001:0000EFD0   408 0001:0000EFF0
+   410 0001:0000F006   402 0001:0000F00E   412 0001:0000F01E   416 0001:0000F032
+   419 0001:0000F042   420 0001:0000F07D   421 0001:0000F09D   423 0001:0000F0AA
+   424 0001:0000F0BF   425 0001:0000F0D6   426 0001:0000F0E4   427 0001:0000F104
+   428 0001:0000F124   430 0001:0000F13A   422 0001:0000F142   432 0001:0000F152
+   437 0001:0000F166   439 0001:0000F176   445 0001:0000F214   446 0001:0000F21C
+   447 0001:0000F230   448 0001:0000F23E   449 0001:0000F25A   450 0001:0000F26E
+   451 0001:0000F284   452 0001:0000F289   454 0001:0000F29F   448 0001:0000F2A0
+   455 0001:0000F2A5   457 0001:0000F2BA   459 0001:0000F2D6
+
+Line numbers for BisMessDataOutMessageInsertExFm(immess.bpl\BisMessDataOutMessageInsertExFm.pas) segment .itext
+
+   461 0002:00000384
+
+Line numbers for BisMessDataOutMessagesImportFm(immess.bpl\BisMessDataOutMessagesImportFm.pas) segment .text
+
+   112 0001:0000FB44   113 0001:0000FB56   114 0001:0000FB5F   115 0001:0000FB67
+   120 0001:0000FB84   121 0001:0000FBB4   122 0001:0000FBBD   124 0001:0000FBC4
+   125 0001:0000FBDA   126 0001:0000FBDD   127 0001:0000FBEF   128 0001:0000FC01
+   129 0001:0000FC16   130 0001:0000FC28   131 0001:0000FC3A   133 0001:0000FC4C
+   134 0001:0000FC59   135 0001:0000FC6B   138 0001:0000FC95   139 0001:0000FCAB
+   141 0001:0000FCB8   143 0001:0000FCC9   144 0001:0000FCD9   145 0001:0000FCE6
+   146 0001:0000FCEE   148 0001:0000FCF7   150 0001:0000FD0D   151 0001:0000FD2B
+   152 0001:0000FD48   153 0001:0000FD65   155 0001:0000FD82   156 0001:0000FD8B
+   158 0001:0000FD94   159 0001:0000FDA4   160 0001:0000FDB4   163 0001:0000FEF4
+   164 0001:0000FEFF   165 0001:0000FF0B   172 0001:0000FF1C   173 0001:0000FF43
+   174 0001:0000FF52   175 0001:0000FF62   176 0001:0000FF72   177 0001:0000FF82
+   178 0001:0000FF94   179 0001:0000FFA2   180 0001:0000FFA7   181 0001:0000FFC8
+   182 0001:00010007   184 0001:0001001A   185 0001:00010021   186 0001:0001004C
+   187 0001:00010061   188 0001:00010084   189 0001:00010095   190 0001:000100A5
+   191 0001:000100B6   192 0001:000100B7   183 0001:000100C5   195 0001:000100E8
+   196 0001:000100F8   197 0001:00010108   199 0001:00010120   202 0001:00010160
+   203 0001:00010163   204 0001:00010170   205 0001:0001017D   206 0001:0001018A
+   210 0001:0001018C   211 0001:00010191   214 0001:00010194   215 0001:00010197
+   216 0001:000101AB   220 0001:000101B0   221 0001:000101B9   224 0001:000101BC
+   225 0001:000101BF   226 0001:000101CC   227 0001:000101D9   228 0001:000101E4
+   229 0001:000101F1   230 0001:000101FE   231 0001:00010208   234 0001:0001020C
+   235 0001:0001020F   236 0001:0001021C   237 0001:00010229   238 0001:00010236
+   239 0001:00010241   240 0001:0001024C   241 0001:00010255   242 0001:0001025E
+   243 0001:00010268   246 0001:0001026C   247 0001:0001028D   248 0001:000102A8
+   249 0001:000102F7   250 0001:00010312   251 0001:00010361   254 0001:00010390
+   255 0001:000103B1   256 0001:000103CC   257 0001:0001041B   258 0001:00010436
+   261 0001:00010464   262 0001:0001047A   263 0001:00010480   264 0001:0001049C
+   265 0001:000104AA   273 0001:000104CC   274 0001:000104D5   275 0001:000104DA
+   276 0001:000104EF   277 0001:000104FE   278 0001:00010509   279 0001:00010513
+   275 0001:00010514   280 0001:00010517   282 0001:00010547   283 0001:0001055C
+   284 0001:0001056B   285 0001:0001057C   286 0001:00010599   288 0001:000105AB
+   282 0001:000105AC   289 0001:000105AF   296 0001:000105B8   297 0001:000105D7
+   298 0001:000105DC   299 0001:000105E7   300 0001:00010603   301 0001:0001060B
+   302 0001:00010615   303 0001:00010626   304 0001:00010634   305 0001:00010646
+   306 0001:00010659   307 0001:0001066D   308 0001:00010690   311 0001:000106C0
+   312 0001:000106C8   315 0001:000106D8   319 0001:00010754   320 0001:00010759
+   323 0001:0001075C   324 0001:0001075E   325 0001:00010763   327 0001:00010769
+   328 0001:00010774   334 0001:00010778   335 0001:0001079D   336 0001:000107A7
+   337 0001:000107AF   338 0001:000107B3   339 0001:000107C9   340 0001:000107D5
+   342 0001:000107FF   353 0001:00010834   354 0001:00010880   355 0001:0001088F
+   356 0001:0001089E   357 0001:000108AC   358 0001:000108B7   359 0001:000108BF
+   360 0001:000108C8   361 0001:00010901   362 0001:00010916   363 0001:00010932
+   364 0001:0001093A   365 0001:00010956   366 0001:00010965   367 0001:00010969
+   368 0001:00010980   369 0001:00010998   370 0001:0001099C   371 0001:000109A4
+   372 0001:000109AA   373 0001:000109B5   374 0001:000109D1   377 0001:000109FB
+   378 0001:00010A06   379 0001:00010A21   367 0001:00010A22   380 0001:00010A2B
+   381 0001:00010A35   382 0001:00010A57   383 0001:00010A71   384 0001:00010A7C
+   385 0001:00010A96   386 0001:00010ABE   387 0001:00010AD0   388 0001:00010AF0
+   389 0001:00010AFE   392 0001:00010B07   393 0001:00010B16   394 0001:00010B24
+   362 0001:00010B27   396 0001:00010B3D   397 0001:00010B45   399 0001:00010B55
+   418 0001:00010C20   419 0001:00010C4D   420 0001:00010C6B   421 0001:00010C79
+   422 0001:00010C89   423 0001:00010C8E   424 0001:00010C90   425 0001:00010CC2
+   426 0001:00010D05   427 0001:00010D48   428 0001:00010D6E   429 0001:00010D7E
+   430 0001:00010DBF   432 0001:00010DFF   433 0001:00010E0E   434 0001:00010E4F
+   435 0001:00010E8F   437 0001:00010E9A   438 0001:00010EAD   439 0001:00010F3D
+   440 0001:00010F63   441 0001:00010F6E   442 0001:00010F76   443 0001:00010F7F
+   444 0001:00010FBE   445 0001:00010FCC   446 0001:00010FE4   447 0001:00010FE8
+   448 0001:00010FED   449 0001:00011015   450 0001:00011033   451 0001:00011038
+   452 0001:00011040   453 0001:00011046   454 0001:00011051   455 0001:0001106C
+   458 0001:0001109C   459 0001:000110A7   460 0001:000110C2   447 0001:000110C3
+   461 0001:000110CC   462 0001:000110D6   463 0001:000110FE   464 0001:00011118
+   465 0001:00011123   466 0001:0001113D   467 0001:0001116B   468 0001:0001117D
+   469 0001:0001119D   470 0001:000111AB   472 0001:000111B4   473 0001:000111C2
+   474 0001:000111D0   445 0001:000111D3   478 0001:000111EC   479 0001:000111F8
+   480 0001:0001120B   483 0001:0001121B   495 0001:000113E4   496 0001:00011411
+   497 0001:00011422   498 0001:00011430   499 0001:0001143B   500 0001:0001145C
+   501 0001:0001147D   502 0001:0001149C   503 0001:0001149F   504 0001:000114C7
+   505 0001:000114E2   506 0001:00011503   507 0001:00011524   508 0001:0001153F
+   509 0001:0001155F   511 0001:0001157F   512 0001:000115A4   513 0001:000115AC
+   514 0001:000115B5   515 0001:000115CE   516 0001:0001160D   517 0001:0001162D
+   518 0001:00011653   519 0001:00011684   520 0001:000116B5   521 0001:000116BF
+   522 0001:000116CA   523 0001:000116E6   524 0001:00011716   525 0001:00011731
+   526 0001:0001173B   527 0001:00011755   528 0001:00011760   529 0001:0001177A
+   530 0001:000117A8   531 0001:000117BA   532 0001:000117DA   533 0001:000117E8
+   535 0001:000117F1   536 0001:00011800   537 0001:0001180E   516 0001:00011811
+   539 0001:0001181A   505 0001:0001181D   542 0001:00011826   499 0001:00011829
+   544 0001:0001183F   546 0001:0001184F   549 0001:00011A3C   550 0001:00011A58
+   551 0001:00011A68   552 0001:00011A7E   553 0001:00011AA0   554 0001:00011AA8
+   555 0001:00011AB2   556 0001:00011AC0   557 0001:00011ADF   558 0001:00011AFD
+   559 0001:00011B20   560 0001:00011B43   563 0001:00011B6C   564 0001:00011B76
+   568 0001:00011B86   571 0001:00011BC4   572 0001:00011BC7   575 0001:00011C10
+   581 0001:00011C14   582 0001:00011C40   583 0001:00011C42   584 0001:00011C61
+   585 0001:00011C97   586 0001:00011C99   588 0001:00011C9E   589 0001:00011CB4
+   590 0001:00011CED   591 0001:00011D26   592 0001:00011D34   593 0001:00011D3A
+   594 0001:00011D58   595 0001:00011D71   597 0001:00011D7F   598 0001:00011D85
+   599 0001:00011DBB   603 0001:00011DBD   606 0001:00011E28   607 0001:00011E2F
+   608 0001:00011E52   609 0001:00011E64   610 0001:00011E72   611 0001:00011E80
+   613 0001:00011EA4   615 0001:00011EBC   616 0001:00011EDD   617 0001:00011EE5
+   619 0001:00011EED   622 0001:00011EF0   623 0001:00011EFA   624 0001:00011F08
+   625 0001:00011F16   626 0001:00011F1B   628 0001:00011F2B   629 0001:00011F3F
+   627 0001:00011F4D   632 0001:00011F6C   634 0001:00011F82   637 0001:00011FAC
+   638 0001:00011FAF   639 0001:00011FB6   640 0001:00011FC1   641 0001:00011FD2
+   642 0001:00011FDF   643 0001:00011FE8   644 0001:00011FEF   647 0001:00011FF4
+   648 0001:0001200A   649 0001:0001201E   650 0001:0001202B   653 0001:0001204C
+   654 0001:0001204F   655 0001:00012060   656 0001:0001206E   663 0001:00012070
+   664 0001:00012096   665 0001:000120A7   666 0001:000120B5   667 0001:000120BF
+   668 0001:000120D1   669 0001:000120DA   670 0001:00012105   671 0001:00012120
+   672 0001:00012140   673 0001:0001216D   674 0001:0001219F   675 0001:000121BF
+   676 0001:000121E3   677 0001:00012215   678 0001:0001223B   679 0001:00012275
+   680 0001:0001229B   681 0001:000122D3   682 0001:000122F9   683 0001:0001230D
+   685 0001:00012372   686 0001:0001237A   688 0001:00012394   690 0001:000123A4
+   695 0001:0001254C   696 0001:0001255B   697 0001:0001255F   698 0001:0001256D
+   699 0001:00012599   700 0001:000125A7   701 0001:000125B4   702 0001:000125BF
+   704 0001:000125CF   706 0001:000125D8   707 0001:000125DA   708 0001:000125E5
+   709 0001:000125F3   711 0001:000125F7   712 0001:000125FB   713 0001:00012604
+   714 0001:00012615   715 0001:00012619   703 0001:00012627   718 0001:00012654
+   719 0001:00012656   720 0001:00012666   725 0001:00012689   727 0001:0001269B
+
+Line numbers for BisMessDataOutMessagesImportFm(immess.bpl\BisMessDataOutMessagesImportFm.pas) segment .itext
+
+   729 0002:000003A4
+
+Line numbers for BisMessDataOutMessagesFrm(immess.bpl\BisMessDataOutMessagesFrm.pas) segment .text
+
+    50 0001:00012A6C    51 0001:00012AA2    53 0001:00012AAB    54 0001:00012AB6
+    55 0001:00012AC7    56 0001:00012AD8    57 0001:00012AE3    58 0001:00012AEE
+    59 0001:00012AF4    60 0001:00012B04    61 0001:00012B0A    62 0001:00012B16
+    63 0001:00012B22    64 0001:00012B2E    65 0001:00012B3A    66 0001:00012B46
+    67 0001:00012B52    68 0001:00012B5E    69 0001:00012B6A    70 0001:00012B76
+    71 0001:00012B82    72 0001:00012B8E    73 0001:00012BA1    74 0001:00012BB7
+    75 0001:00012BCA    76 0001:00012BDD    78 0001:00012BF4    81 0001:00012C06
+    83 0001:00012C1F    84 0001:00012C2F    86 0001:00012C3F    88 0001:00012C54
+    89 0001:00012C63    90 0001:00012C89    92 0001:00012CC0    95 0001:00012CC9
+    97 0001:00012CDE   100 0001:00012D11   102 0001:00012D27   105 0001:00012F60
+   106 0001:00012F63   107 0001:00012F6A   108 0001:00012F7B   109 0001:00012F8C
+   119 0001:00012F90   120 0001:00012FA1   121 0001:00012FB1   122 0001:00012FC0
+   123 0001:00012FD3   124 0001:00012FE1   125 0001:00013012   126 0001:00013021
+   127 0001:0001302F   128 0001:0001303F   132 0001:0001304F   136 0001:00013068
+   137 0001:0001306D   140 0001:00013070   141 0001:00013073   142 0001:00013087
+   146 0001:0001308C   147 0001:00013094   152 0001:00013098   153 0001:0001309F
+   154 0001:000130AA   155 0001:000130BB   156 0001:000130C9   157 0001:000130D1
+   158 0001:000130E0   159 0001:000130EB   161 0001:00013102   164 0001:00013112
+
+Line numbers for BisMessDataOutMessagesFrm(immess.bpl\BisMessDataOutMessagesFrm.pas) segment .itext
+
+   167 0002:000003AC
+
+Line numbers for BisMessDataOutMessagesFm(immess.bpl\BisMessDataOutMessagesFm.pas) segment .text
+
+    33 0001:000134CC    34 0001:000134DE    35 0001:000134E7    36 0001:000134EF
+    37 0001:000134F6    38 0001:000134FD    44 0001:00013518    45 0001:0001351D
+
+Line numbers for BisMessDataOutMessagesFm(immess.bpl\BisMessDataOutMessagesFm.pas) segment .itext
+
+    49 0002:000003B4
+
+Line numbers for BisMessDataRoleEditFm(immess.bpl\BisMessDataRoleEditFm.pas) segment .text
+
+    54 0001:00013D70    55 0001:00013DA8    56 0001:00013DB4    57 0001:00013DBC
+    58 0001:00013DC2    59 0001:00013DDA    60 0001:00013E01    61 0001:00013E25
+    62 0001:00013E52    63 0001:00013E76    64 0001:00013E90    66 0001:00013EA8
+    71 0001:00013FF4    72 0001:00014006    73 0001:0001400F    74 0001:0001401F
+    79 0001:00014050    80 0001:00014062    81 0001:0001406B    82 0001:0001407B
+    87 0001:000140AC    88 0001:000140BE    89 0001:000140C7    90 0001:000140D7
+
+Line numbers for BisMessDataRoleEditFm(immess.bpl\BisMessDataRoleEditFm.pas) segment .itext
+
+    92 0002:000003BC
+
+Line numbers for BisMessDataRolesFm(immess.bpl\BisMessDataRolesFm.pas) segment .text
+
+    35 0001:00014498    36 0001:000144C6    37 0001:000144CF    38 0001:000144D7
+    39 0001:000144E2    40 0001:000144EF    41 0001:000144FA    42 0001:00014505
+    44 0001:0001450C    45 0001:0001451C    46 0001:00014522    47 0001:0001452E
+    48 0001:0001453A    49 0001:00014546    50 0001:00014552    51 0001:0001455E
+    52 0001:00014574    54 0001:0001458A    55 0001:000145B9    56 0001:000145CB
+    61 0001:000146D0    62 0001:000146E2    63 0001:000146EB
+
+Line numbers for BisMessDataRolesFm(immess.bpl\BisMessDataRolesFm.pas) segment .itext
+
+    65 0002:000003C4
+
+Line numbers for BisMessMainFm(immess.bpl\BisMessMainFm.pas) segment .text
+
+    91 0001:00014EDC    92 0001:00014EEE    93 0001:00014EF7    94 0001:00014F03
+    99 0001:00014F24   100 0001:00014F25   101 0001:00014F2F   102 0001:00014F39
+   105 0001:00014F3C   106 0001:00014F3D   107 0001:00014F47   109 0001:00014F51
+   113 0001:00014F54   114 0001:00014F5E   116 0001:00014F65   119 0001:00014F68
+   120 0001:00014F6C   121 0001:00014F73   122 0001:00014F7D   124 0001:00014F87
+   132 0001:00014F8C   133 0001:00014FBA   134 0001:00014FBF   135 0001:00014FC7
+   136 0001:00014FDB   137 0001:00014FE5   138 0001:00014FEF   139 0001:00015015
+   140 0001:00015023   141 0001:00015027   142 0001:00015030   143 0001:00015039
+   145 0001:00015040   146 0001:0001504D   147 0001:0001505A   148 0001:00015067
+   149 0001:0001506D   150 0001:0001507A   151 0001:00015087   156 0001:00015094
+   157 0001:0001509A   158 0001:0001509D   160 0001:000150A6   163 0001:000150F0
+   164 0001:000150F6   165 0001:000150FF   170 0001:00015104   171 0001:00015109
+   172 0001:00015114   173 0001:00015122   171 0001:00015123   174 0001:00015126
+   179 0001:0001512C   180 0001:00015131   181 0001:0001513C   182 0001:0001514A
+   180 0001:0001514B   183 0001:0001514E   188 0001:00015154   189 0001:00015166
+   190 0001:0001516F   191 0001:00015177   196 0001:00015194   197 0001:000151AB
+   198 0001:000151B4   199 0001:000151BB   201 0001:000151C2   202 0001:000151E0
+   204 0001:000151F1   205 0001:00015205   207 0001:0001520E   208 0001:00015224
+   209 0001:0001522B   210 0001:00015232   212 0001:0001524A   213 0001:00015260
+   214 0001:00015267   215 0001:0001526E   217 0001:00015286   218 0001:0001529C
+   219 0001:000152A3   220 0001:000152AA   222 0001:000152C2   223 0001:000152D8
+   224 0001:000152DF   225 0001:000152E6   227 0001:000152FE   228 0001:00015314
+   229 0001:0001531B   230 0001:00015322   232 0001:0001533A   233 0001:00015350
+   234 0001:00015357   235 0001:0001535E   237 0001:00015376   238 0001:00015380
+   241 0001:00015410   242 0001:0001541B   243 0001:00015426   244 0001:00015431
+   245 0001:0001543C   246 0001:00015447   247 0001:00015452   248 0001:0001545D
+   249 0001:00015468   250 0001:00015480   251 0001:0001548C   254 0001:0001549C
+   255 0001:0001549F   256 0001:000154A6   257 0001:000154B1   261 0001:000154B4
+   262 0001:000154BB   265 0001:000154BC   266 0001:000154BF   267 0001:000154E5
+   273 0001:000154E8   274 0001:000154F1   275 0001:000154FF   276 0001:0001550C
+   277 0001:00015538   278 0001:00015542   279 0001:00015547   280 0001:00015556
+   281 0001:0001555D   282 0001:00015568   286 0001:0001556F   289 0001:00015575
+   292 0001:00015580   293 0001:000155AE   294 0001:000155C0   295 0001:000155FF
+   296 0001:0001560C   297 0001:0001561A   298 0001:00015627   299 0001:0001562E
+   300 0001:0001563C   302 0001:00015646   305 0001:00015678   306 0001:0001567B
+   307 0001:00015687   308 0001:00015691   309 0001:000156B3   310 0001:000156C3
+   312 0001:000156DA   316 0001:000156DC   317 0001:000156E1   321 0001:000156E4
+   322 0001:000156EC
+
+Line numbers for BisMessMainFm(immess.bpl\BisMessMainFm.pas) segment .itext
+
+   325 0002:000003CC
+
+Line numbers for BisMess(immess.bpl\BisMess.pas) segment .text
+
+    22 0001:00015720    23 0001:00015727    26 0001:00015743    27 0001:0001574D
+    39 0001:0001575B    40 0001:00015769    41 0001:00015777    42 0001:00015785
+    43 0001:00015793    44 0001:000157A1    46 0001:000157AF    47 0001:000157BD
+    50 0001:000157CB
+
+Line numbers for BisMess(immess.bpl\BisMess.pas) segment .itext
+
+    52 0002:000003D4
+
+Line numbers for .immess(immess.dpk) segment .itext
+
+    56 0002:000003DC
+
+Bound resource files
+
+BisMessDataCodeMessageEditFm.dfm
+BisMessDataCodeMessagesFm.dfm
+BisMessDataAccountEditFm.dfm
+BisMessDataAccountsFm.dfm
+BisMessDataInMessageEditFm.dfm
+BisMessDataInMessageFilterFm.dfm
+BisMessDataInMessagesFm.dfm
+BisMessDataPatternMessageEditFm.dfm
+BisMessDataPatternMessagesFm.dfm
+BisMessDataOutMessageEditFm.dfm
+BisMessDataOutMessageFilterFm.dfm
+BisMessDataRolesAndAccountsFm.dfm
+BisMessDataOutMessageInsertExFm.dfm
+BisMessDataOutMessagesImportFm.dfm
+BisMessDataOutMessagesFrm.dfm
+BisMessDataOutMessagesFm.dfm
+BisMessDataRoleEditFm.dfm
+BisMessDataRolesFm.dfm
+BisMessMainFm.dfm
+immess.res
+immess.drf
+
+
+Program entry point at 0002:000003DC

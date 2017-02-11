@@ -1,0 +1,69 @@
+unit BisDesign;
+
+interface
+
+uses BisIfaceModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisCore, BisDesignConsts,
+     BisDesignMainFm, BisDesignDataFirmTypesFm, BisDesignDataFirmsFm, BisDesignDataAccountsFm,
+     BisDesignDataRolesFm, BisDesignDataRolesAndAccountsFm, BisDesignDataApplicationsFm,
+     BisDesignDataInterfacesFm, BisDesignDataAccountRolesFm, BisDesignDataProfilesFm,
+     BisDesignDataSessionsFm, BisDesignDataPermissionsFm, BisDesignDataApplicationInterfacesFm,
+     BisDesignDataMenusFm, BisDesignDataReportsFm, BisDesignDataScriptsFm,
+     BisDesignJournalActionsFm, BisDesignDataDocumentsFm, BisDesignDataConstsFm,
+     BisDesignDataLocksFm, BisDesignDataLocalitiesFm, BisDesignDataStreetsFm,
+     BisDesignDataTasksFm, BisDesignDataExchangesFm, 
+
+     BisDesignDataFirmEditFm,
+
+     BisDesignExchangeFm, BisDesignDataAlarmsFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  IsMainModule:=Core.IfaceModules.IsFirstModule(AModule);
+  with AModule.Ifaces do begin
+
+    if IsMainModule then
+      AddClass(TBisDesignMainFormIface);
+
+    AddClass(TBisDesignDataFirmTypesFormIface);
+    AddClass(TBisDesignDataLocalitiesFormIface);
+    AddClass(TBisDesignDataStreetsFormIface);
+    AddClass(TBisDesignDataFirmsFormIface);
+    AddClass(TBisDesignDataAccountsFormIface);
+    AddClass(TBisDesignDataRolesFormIface);
+    AddClass(TBisDesignDataApplicationsFormIface);
+    AddClass(TBisDesignDataInterfacesFormIface);
+    AddClass(TBisDesignDataAccountRolesFormIface);
+    AddClass(TBisDesignDataProfilesFormIface);
+    AddClass(TBisDesignDataSessionsFormIface);
+    AddClass(TBisDesignDataPermissionsFormIface);
+    AddClass(TBisDesignDataApplicationInterfacesFormIface);
+    AddClass(TBisDesignDataRolesAndAccountsFormIface);
+    AddClass(TBisDesignDataMenusFormIface);
+//    AddClass(TBisDesignDataScriptsFormIface);
+//    AddClass(TBisDesignDataReportsFormIface);
+//    AddClass(TBisDesignDataDocumentsFormIface);
+    AddClass(TBisDesignDataConstsFormIface);
+    AddClass(TBisDesignDataLocksFormIface);
+    AddClass(TBisDesignDataTasksFormIface);
+    AddClass(TBisDesignDataExchangesFormIface);
+
+    AddClass(TBisDesignJournalActionsFormIface);
+
+    AddClass(TBisDesignDataFirmInsertFormIface);
+
+    AddClass(TBisDesignExchangeFormIface);
+    AddClass(TBisDesignDataAlarmsFormIface);
+  end;
+end;
+
+end.

@@ -1,0 +1,877 @@
+unit BisCoreThreads;
+
+interface
+
+uses Classes, SyncObjs,
+     BisConfig, BisMenus, BisDataSet, BisTasks, BisProfile, BisAlarmsFm;
+
+procedure CoreCheckThread;
+procedure CoreUpdateThread(Params: TBisConfig);
+function CoreGetServerDateThread: TDateTime;
+procedure CoreSaveProfileThread(Profile: TBisProfile);
+procedure CoreLoadMenusThread(Menus: TBisMenus);
+procedure CoreLoadTasksThread(Tasks: TBisTasks);
+procedure CoreSaveTaskThread(Task: TBisTask);
+procedure CoreLoadAlarmsThread(Alarms: TBisAlarms);
+procedure CoreLoadDocumentThread(DocumentId: Variant; Stream: TStream);
+procedure CoreLoadReportThread(ReportId: Variant; Stream: TStream);
+procedure CoreLoadScriptThread(ScriptId: Variant; Stream: TStream);
+procedure CoreExecuteThread(DataSet: TBisDataSet);
+procedure CoreGetRecordsThread(DataSet: TBisDataSet);
+procedure CoreCancelThread(DataSet: TBisDataSet);
+
+implementation
+
+uses Windows, SysUtils, DB, Variants,
+     AsyncCalls,
+     BisCore, BisLogger, BisProvider, BisUtils,
+     BisParams, BisConsts, BisThreads;
+
+type
+  TBisThreadResult=(trSuccess,trError,trNeedLogin);
+
+  TBisThreadReturn=class(TObject)
+  public
+    var Error: String;
+    var Result: TBisThreadResult;
+    var ServerDate: Variant;
+  end;
+
+  TBisCoreThread=class(TBisThread)
+  private
+    FReturn: TBisThreadReturn;
+  protected
+    procedure DoExecute; override;
+    procedure Work; virtual;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    function CanExecute: Boolean; virtual;
+
+    property Return: TBisThreadReturn read FReturn write FReturn;
+  end;
+
+  TBisCheckThread=class(TBisCoreThread)
+  protected
+    procedure Work; override;
+  end;
+
+  TBisUpdateThread=class(TBisCheckThread)
+  private
+    FParams: TBisConfig;
+  protected
+    procedure Work; override;
+  public
+    property Params: TBisConfig read FParams write FParams;
+  end;
+
+  TBisGetServerDateThread=class(TBisCheckThread)
+  protected
+    procedure Work; override;
+  end;
+
+  TBisSaveProfileThread=class(TBisCheckThread)
+  private
+    FProfile: TBisProfile;
+  protected
+    procedure Work; override;
+  public
+    property Profile: TBisProfile read FProfile write FProfile;
+  end;
+
+  TBisLoadMenusThread=class(TBisCheckThread)
+  private
+    FMenus: TBisMenus;
+  protected
+    procedure Work; override;
+  public
+    property Menus: TBisMenus read FMenus write FMenus;
+  end;
+
+  TBisLoadTasksThread=class(TBisCheckThread)
+  private
+    FTasks: TBisTasks;
+  protected
+    procedure Work; override;
+  public
+    property Tasks: TBisTasks read FTasks write FTasks;
+  end;
+
+  TBisSaveTaskThread=class(TBisCheckThread)
+  private
+    FTask: TBisTask;
+  protected
+    procedure Work; override;
+  public
+    property Task: TBisTask read FTask write FTask;
+  end;
+
+  TBisLoadAlarmsThread=class(TBisCheckThread)
+  private
+    FAlarms: TBisAlarms;
+  protected
+    procedure Work; override;
+  public
+    property Alarms: TBisAlarms read FAlarms write FAlarms;
+  end;
+
+  TBisLoadDocumentThread=class(TBisCheckThread)
+  private
+    FDocumentId: Variant;
+    FStream: TStream;
+  protected
+    procedure Work; override;
+  public
+    property DocumentId: Variant read FDocumentId write FDocumentId;
+    property Stream: TStream read FStream write FStream;
+  end;
+
+  TBisLoadReportThread=class(TBisCheckThread)
+  private
+    FReportId: Variant;
+    FStream: TStream;
+  protected
+    procedure Work; override;
+  public
+    property ReportId: Variant read FReportId write FReportId;
+    property Stream: TStream read FStream write FStream;
+  end;
+
+  TBisLoadScriptThread=class(TBisCheckThread)
+  private
+    FScriptId: String;
+    FStream: TStream;
+  protected
+    procedure Work; override;
+  public
+    property ScriptId: String read FScriptId write FScriptId;
+    property Stream: TStream read FStream write FStream;
+  end;
+
+  TBisExecuteThread=class(TBisCheckThread)
+  private
+    FDataSet: TBisDataSet;
+  protected
+    procedure Work; override;
+  public
+
+    property DataSet: TBisDataSet read FDataSet write FDataSet;
+  end;
+
+  TBisGetRecordsThread=class(TBisCheckThread)
+  private
+    FDataSet: TBisDataSet;
+  protected
+    procedure Work; override;
+  public
+    property DataSet: TBisDataSet read FDataSet write FDataSet;
+  end;
+
+  TBisCancelThread=class(TBisCheckThread)
+  private
+    FDataSetCheckSum: String;
+  protected
+    procedure Work; override;
+  public
+    property DataSetCheckSum: String read FDataSetCheckSum write FDataSetCheckSum;
+  end;
+
+var
+  FLock: TCriticalSection;
+    
+procedure CoreLogout;
+begin
+  Core.LoginIface.Logout;
+end;
+
+function CoreLogin: Boolean;
+begin
+  Result:=false;
+  if not Core.LoginIface.Logged and
+     not Core.LoginIface.InLogin then begin
+    Core.LoginIface.LoginDelayed:=true;
+    Result:=Core.LoginIface.Login;
+    if Result then
+      Core.LoginIface.LoginDelayed:=false;
+  end;
+end;
+
+function CoreTryLogin: Boolean;
+begin
+  Result:=false;
+  if Assigned(FLock) then begin
+    FLock.Enter;
+    try
+      if Assigned(Core) and Assigned(Core.LoginIface) then begin
+        Result:=Core.LoginIface.Logged;
+        if not Result and not Core.LoginIface.InLogin then begin
+          if not IsMainThread then begin
+            EnterMainThread;
+            try
+              if IsMainThread then begin
+                CoreLogout;
+                Result:=CoreLogin;
+              end;
+            finally
+              LeaveMainThread;
+            end;
+          end else begin
+            CoreLogout;
+            Result:=CoreLogin;
+          end;
+        end;
+      end;
+    finally
+      FLock.Leave;
+    end;
+  end;
+end;
+
+{ TBisCoreThread }
+
+constructor TBisCoreThread.Create;
+begin
+  inherited Create;
+  FreeOnTerminate:=false;
+end;
+
+destructor TBisCoreThread.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TBisCoreThread.CanExecute: Boolean;
+begin
+  Result:=Assigned(Core) and Assigned(Core.Logger) and
+          Assigned(Core.LoginIface) and Assigned(Core.LoginIface.Connection) and
+          Assigned(FReturn);
+end;
+
+procedure TBisCoreThread.Work;
+begin
+  //
+end;
+
+procedure TBisCoreThread.DoExecute;
+begin
+  if CanExecute then begin
+    FReturn.Error:='';
+    try
+      Work;
+    except
+      On E: Exception do begin
+        FReturn.Error:=E.Message;
+        FReturn.Result:=trError;
+      end;
+    end;
+  end else
+    FReturn.Result:=trNeedLogin;
+end;
+
+{ TBisCheckThread }
+
+procedure TBisCheckThread.Work;
+var
+  ADate: TDateTime;
+  T: TDateTime;
+begin
+  if Core.LoginIface.Enabled and not Core.NoLogin then begin
+    if Core.LoginIface.Logged then begin
+      try
+        Return.ServerDate:=Null;
+        ADate:=NullDate;
+        T:=Now;
+        if Core.LoginIface.Connection.Check(Core.LoginIface.SessionId,ADate) then begin
+          ADate:=ADate-(Now-T)/2;
+          Core.ServerDate:=ADate;
+          Return.ServerDate:=ADate;
+          Return.Result:=trSuccess;
+        end else begin
+          Core.LoginIface.Logged:=false;
+          Return.Result:=trNeedLogin;
+        end;
+      except
+        On E: Exception do begin
+          Core.Logger.Write(E.Message,ltError);
+          Return.Result:=trError;
+        end;
+      end;
+    end else
+      Return.Result:=trNeedLogin;
+  end;
+end;
+
+{ TBisUpdateThread }
+
+procedure TBisUpdateThread.Work;
+begin
+  inherited Work;
+  if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged then begin
+    Core.LoginIface.Connection.Update(Core.LoginIface.SessionId,FParams);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisGetServerDateThread }
+
+procedure TBisGetServerDateThread.Work;
+begin
+  inherited Work;
+end;
+
+{ TBisSaveProfileThread }
+
+procedure TBisSaveProfileThread.Work;
+begin
+  inherited Work;
+  if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged and Assigned(FProfile) then begin
+    Core.LoginIface.Connection.SaveProfile(Core.LoginIface.SessionId,FProfile);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisLoadMenusThread }
+
+procedure TBisLoadMenusThread.Work;
+begin
+  inherited Work;
+  if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged and Assigned(FMenus) then begin
+    Core.LoginIface.Connection.LoadMenus(Core.LoginIface.SessionId,FMenus);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisLoadTasksThread }
+
+procedure TBisLoadTasksThread.Work;
+begin
+  inherited Work;
+  if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged and Assigned(FTasks) then begin
+    Core.LoginIface.Connection.LoadTasks(Core.LoginIface.SessionId,FTasks);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisSaveTaskThread }
+
+procedure TBisSaveTaskThread.Work;
+begin
+  inherited Work;
+  if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged and Assigned(FTask) then begin
+    Core.LoginIface.Connection.SaveTask(Core.LoginIface.SessionId,FTask);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisLoadAlarmsThread }
+
+procedure TBisLoadAlarmsThread.Work;
+begin
+  inherited Work;
+  if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged and Assigned(FAlarms) then begin
+    Core.LoginIface.Connection.LoadAlarms(Core.LoginIface.SessionId,FAlarms);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisLoadDocumentThread }
+
+procedure TBisLoadDocumentThread.Work;
+begin
+  inherited Work;
+  if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged and Assigned(FStream) then begin
+    Core.LoginIface.Connection.LoadDocument(Core.LoginIface.SessionId,FDocumentId,FStream);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisLoadReportThread }
+
+procedure TBisLoadReportThread.Work;
+begin
+  inherited Work;
+  if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged and Assigned(FStream) then begin
+    Core.LoginIface.Connection.LoadReport(Core.LoginIface.SessionId,FReportId,FStream);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisLoadScriptThread }
+
+procedure TBisLoadScriptThread.Work;
+begin
+  inherited Work;
+  if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged and Assigned(FStream) then begin
+    Core.LoginIface.Connection.LoadScript(Core.LoginIface.SessionId,FScriptId,FStream);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisExecuteThread }
+
+procedure TBisExecuteThread.Work;
+var
+  Provider: TBisProvider;
+begin
+  Provider:=nil;
+  if Assigned(FDataSet) and Assigned(Core.ProviderModules) then
+    Provider:=Core.ProviderModules.FindProvider(FDataSet.ProviderName);
+
+  if not Assigned(Provider) then begin
+
+    inherited Work;
+
+    if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged then begin
+      Core.LoginIface.Connection.Execute(Core.LoginIface.SessionId,FDataSet);
+      Return.Result:=trSuccess;
+    end;
+  end else begin
+    Provider.Handle(FDataSet);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisGetRecordsThread }
+
+procedure TBisGetRecordsThread.Work;
+var
+  Provider: TBisProvider;
+begin
+  Provider:=nil;
+  if Assigned(FDataSet) and Assigned(Core.ProviderModules) then
+    Provider:=Core.ProviderModules.FindProvider(FDataSet.ProviderName);
+
+  if not Assigned(Provider) then begin
+
+    inherited Work;
+
+    if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged then begin
+      Core.LoginIface.Connection.GetRecords(Core.LoginIface.SessionId,FDataSet);
+      Return.Result:=trSuccess;
+    end;
+  end else begin
+    Provider.Handle(DataSet);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+{ TBisCancelThread }
+
+procedure TBisCancelThread.Work;
+begin
+  inherited Work;
+  if (Return.Result<>trNeedLogin) and Core.LoginIface.Logged then begin
+    Core.LoginIface.Connection.Cancel(Core.LoginIface.SessionId,FDataSetCheckSum);
+    Return.Result:=trSuccess;
+  end;
+end;
+
+procedure CoreCheckThread;
+var
+  Thread: TBisCheckThread;
+  Return: TBisThreadReturn;
+begin
+  Return:=TBisThreadReturn.Create;
+  try
+    Thread:=TBisCheckThread.Create;
+    Thread.Return:=Return;
+    Thread.Start(true);
+    Thread.Free;
+    case Return.Result of
+      trSuccess: ;
+      trError: raise Exception.Create(Return.Error);
+      trNeedLogin: begin
+        if CoreTryLogin then
+          CoreCheckThread;
+      end;
+    end;
+  finally
+    Return.Free;
+  end;
+end;
+
+procedure CoreUpdateThread(Params: TBisConfig);
+var
+  Thread: TBisUpdateThread;
+  Return: TBisThreadReturn;
+begin
+  Return:=TBisThreadReturn.Create;
+  try
+    Thread:=TBisUpdateThread.Create;
+    Thread.Return:=Return;
+    Thread.Params:=Params;
+    Thread.Start(true);
+    Thread.Free;
+    case Return.Result of
+      trSuccess: ;
+      trError: raise Exception.Create(Return.Error);
+      trNeedLogin: begin
+        if CoreTryLogin then
+          CoreUpdateThread(Params);
+      end;
+    end;
+  finally
+    Return.Free;
+  end;
+end;
+
+function CoreGetServerDateThread: TDateTime;
+var
+  Thread: TBisGetServerDateThread;
+  Return: TBisThreadReturn;
+begin
+  Result:=Now;
+  Return:=TBisThreadReturn.Create;
+  try
+    Thread:=TBisGetServerDateThread.Create;
+    Thread.Return:=Return;
+    Thread.Start(true);
+    Thread.Free;
+    case Return.Result of
+      trSuccess: Result:=VarToDateTimeDef(Return.ServerDate,Result);
+      trError: raise Exception.Create(Return.Error);
+      trNeedLogin: begin
+        if CoreTryLogin then
+          Result:=CoreGetServerDateThread;
+      end;
+    end;
+  finally
+    Return.Free;
+  end;
+end;
+
+procedure CoreSaveProfileThread(Profile: TBisProfile);
+var
+  Thread: TBisSaveProfileThread;
+  Return: TBisThreadReturn;
+begin
+  if Assigned(Profile) then begin
+    Return:=TBisThreadReturn.Create;
+    try
+      Thread:=TBisSaveProfileThread.Create;
+      Thread.Return:=Return;
+      Thread.Profile:=Profile;
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: ;
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreSaveProfileThread(Profile);
+        end;
+      end;
+    finally
+      Return.Free;
+    end;
+  end;
+end;
+
+procedure CoreLoadMenusThread(Menus: TBisMenus);
+var
+  Thread: TBisLoadMenusThread;
+  Return: TBisThreadReturn;
+begin
+  if Assigned(Menus) then begin
+    Return:=TBisThreadReturn.Create;
+    try
+      Thread:=TBisLoadMenusThread.Create;
+      Thread.Return:=Return;
+      Thread.Menus:=Menus;
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: ;
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreLoadMenusThread(Menus);
+        end;
+      end;
+    finally
+      Return.Free;
+    end;
+  end;
+end;
+
+procedure CoreLoadTasksThread(Tasks: TBisTasks);
+var
+  Thread: TBisLoadTasksThread;
+  Return: TBisThreadReturn;
+begin
+  if Assigned(Tasks) then begin
+    Return:=TBisThreadReturn.Create;
+    try
+      Thread:=TBisLoadTasksThread.Create;
+      Thread.Return:=Return;
+      Thread.Tasks:=Tasks;
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: ;
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreLoadTasksThread(Tasks);
+        end;
+      end;
+    finally
+      Return.Free;
+    end;
+  end;
+end;
+
+procedure CoreSaveTaskThread(Task: TBisTask);
+var
+  Thread: TBisSaveTaskThread;
+  Return: TBisThreadReturn;
+begin
+  if Assigned(Task) then begin
+    Return:=TBisThreadReturn.Create;
+    try
+      Thread:=TBisSaveTaskThread.Create;
+      Thread.Return:=Return;
+      Thread.Task:=Task;
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: ;
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreSaveTaskThread(Task);
+        end;
+      end;
+    finally
+      Return.Free;
+    end;
+  end;
+end;
+
+procedure CoreLoadAlarmsThread(Alarms: TBisAlarms);
+var
+  Thread: TBisLoadAlarmsThread;
+  Return: TBisThreadReturn;
+begin
+  if Assigned(Alarms) then begin
+    Return:=TBisThreadReturn.Create;
+    try
+      Thread:=TBisLoadAlarmsThread.Create;
+      Thread.Return:=Return;
+      Thread.Alarms:=Alarms;
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: ;
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreLoadAlarmsThread(Alarms);
+        end;
+      end;
+    finally
+      Return.Free;
+    end;
+  end;
+end;
+
+procedure CoreLoadDocumentThread(DocumentId: Variant; Stream: TStream);
+var
+  Thread: TBisLoadDocumentThread;
+  Return: TBisThreadReturn;
+begin
+  if Assigned(Stream) then begin
+    Return:=TBisThreadReturn.Create;
+    try
+      Thread:=TBisLoadDocumentThread.Create;
+      Thread.Return:=Return;
+      Thread.DocumentId:=DocumentId;
+      Thread.Stream:=Stream;
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: ;
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreLoadDocumentThread(DocumentId,Stream);
+        end;
+      end;
+    finally
+      Return.Free;
+    end;
+  end;
+end;
+
+procedure CoreLoadReportThread(ReportId: Variant; Stream: TStream);
+var
+  Thread: TBisLoadReportThread;
+  Return: TBisThreadReturn;
+begin
+  if Assigned(Stream) then begin
+    Return:=TBisThreadReturn.Create;
+    try
+      Thread:=TBisLoadReportThread.Create;
+      Thread.Return:=Return;
+      Thread.ReportId:=ReportId;
+      Thread.Stream:=Stream;
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: ;
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreLoadReportThread(ReportId,Stream);
+        end;
+      end;
+    finally
+      Return.Free;
+    end;
+  end;
+end;
+
+procedure CoreLoadScriptThread(ScriptId: Variant; Stream: TStream);
+var
+  Thread: TBisLoadScriptThread;
+  Return: TBisThreadReturn;
+begin
+  if Assigned(Stream) then begin
+    Return:=TBisThreadReturn.Create;
+    try
+      Thread:=TBisLoadScriptThread.Create;
+      Thread.Return:=Return;
+      Thread.ScriptId:=ScriptId;
+      Thread.Stream:=Stream;
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: ;
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreLoadScriptThread(ScriptId,Stream);
+        end;
+      end;
+    finally
+      Return.Free;
+    end;
+  end;
+end;
+
+procedure CoreExecuteThread(DataSet: TBisDataSet);
+var
+  Thread: TBisExecuteThread;
+  NewDataSet: TBisDataSet;
+  Return: TBisThreadReturn;
+  FlagNew: Boolean;
+begin
+  if Assigned(DataSet) then begin
+    FlagNew:=IsMainThread;
+    Return:=TBisThreadReturn.Create;
+    if FlagNew then
+      NewDataSet:=TBisDataSet.Create(nil)
+    else
+      NewDataSet:=DataSet;
+    try
+      Thread:=TBisExecuteThread.Create;
+      Thread.Return:=Return;
+      Thread.DataSet:=NewDataSet;
+      if FlagNew then
+        NewDataSet.SetExecuteFrom(DataSet);
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: begin
+          if FlagNew then
+            DataSet.GetExecuteFrom(NewDataSet);
+        end;
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreExecuteThread(DataSet);
+        end;
+      end;
+    finally
+      if FlagNew then
+        NewDataSet.Free;
+      Return.Free;
+    end;
+  end;
+end;
+
+procedure CoreGetRecordsThread(DataSet: TBisDataSet);
+var
+  Thread: TBisGetRecordsThread;
+  NewDataSet: TBisDataSet;
+  Return: TBisThreadReturn;
+  FlagNew: Boolean;
+begin
+  if Assigned(DataSet) then begin
+    FlagNew:=IsMainThread;
+    Return:=TBisThreadReturn.Create;
+    if FlagNew then
+      NewDataSet:=TBisDataSet.Create(nil)
+    else
+      NewDataSet:=DataSet;
+    try
+      Thread:=TBisGetRecordsThread.Create;
+      Thread.Return:=Return;
+      Thread.DataSet:=NewDataSet;
+      if FlagNew then
+        NewDataSet.SetGetRecordsFrom(DataSet);
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: begin
+          if FlagNew then
+            DataSet.GetGetRecordsFrom(NewDataSet);
+        end;
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreGetRecordsThread(DataSet);
+        end;
+      end;
+    finally
+      if FlagNew then
+        NewDataSet.Free;
+      Return.Free;
+    end;
+  end;
+end;
+
+procedure CoreCancelThread(DataSet: TBisDataSet);
+var
+  Thread: TBisCancelThread;
+  Return: TBisThreadReturn;
+begin
+  if Assigned(DataSet) then begin
+    Return:=TBisThreadReturn.Create;
+    try
+      Thread:=TBisCancelThread.Create;
+      Thread.Return:=Return;
+      Thread.DataSetCheckSum:=DataSet.CheckSum;
+      Thread.Start(true);
+      Thread.Free;
+      case Return.Result of
+        trSuccess: ; 
+        trError: raise Exception.Create(Return.Error);
+        trNeedLogin: begin
+          if CoreTryLogin then
+            CoreCancelThread(DataSet);
+        end;
+      end;
+    finally
+      Return.Free;
+    end;
+  end;
+end;
+
+initialization
+  FLock:=TCriticalSection.Create;
+
+finalization
+  FreeAndNilEx(FLock);
+
+end.

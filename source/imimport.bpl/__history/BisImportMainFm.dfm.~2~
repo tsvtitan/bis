@@ -1,0 +1,17 @@
+inherited BisImportMainForm: TBisImportMainForm
+  Caption = 'BisImportMainForm'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited ControlBar: TControlBar
+    inherited ToolBarExport: TToolBar
+      inherited ToolButtonSeparator: TToolButton
+        Visible = False
+      end
+    end
+  end
+  inherited ActionList: TActionList
+    inherited ActionLoad: TAction
+      Visible = False
+    end
+  end
+end

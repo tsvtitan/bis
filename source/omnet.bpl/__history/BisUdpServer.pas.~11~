@@ -1,0 +1,20 @@
+unit BisUdpServer;
+
+interface
+
+uses IdUdpServer;
+
+type
+  TBisUdpServer=class(TIdUDPServer)
+  end;
+
+implementation
+
+uses IdStack,
+     BisExceptNotifier;
+
+initialization
+  //ExceptNotifierIgnores.Add(EIdSocketError);
+  
+
+end.

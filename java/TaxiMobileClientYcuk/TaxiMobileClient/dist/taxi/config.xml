@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<data>
+  <sms name="сообщение" url="sms://+79504248277" text="%TEXT" message="Сообщение отправлено. Ожидайте ответа" waiturl="sms://:55555" />
+  <http name="запрос" url="http://ataxi24.ru/mobile" message="Запрос принят без ответа" keepurl="socket://ataxi24.ru:55555" />
+  <call name="вызов" url="tel:%PHONE" message="Вызов сделан. Ожидайте ответа" />
+  <login name="Логин" value="" />
+  <response name="Ответ" />
+  <mode name="Тип" />
+  <ok name="ОК" />
+  <cancel name="Отмена" />
+  <back name="Назад" />
+  <process name="Выполнение..." />
+  <connection name="Соединение" /> 
+  <keep name="Постоянно" /> 
+  <message name="Сообщение" />
+  <wait name="Ожидать" />
+  <exit name="Выход" />
+  <commands>
+    <code name="Код" desc="Отправить код" /> 
+    <list name="Заказ" desc="Запросы, связанные с выполнением заказа">
+      <item name="1.Подтверждение" text="1" phone="" />
+      <item name="2.Выходят" text="2" />
+      <item name="3.Посадка" text="3" />
+      <item name="4.Расчет" text="4" />
+      <item name="5.Отказ от заказа" text="5" />
+      <item name="6.Отказ клиента" text="6" enabled="0" />
+      <item name="7.Не полный расчет" text="7" enabled="0" />
+      <item name="8.Смена маршрута" text="8" />
+      <item name="9.Заблудился" text="9" />
+			<item name="17.Помощь диспетчера" text="17" />
+      <item name="0.Проишествие" desc="Чрезвычайное проишествие" text="0" />
+    </list>
+    <list name="Запросы" desc="Другие запросы" >
+      <item name="10.Баланс" text="10" />
+      <item name="11.Стоянки" text="11" />
+      <item name="12.Снятие со стоянки" text="12" />
+      <item name="13.Закрытие смены" text="13" />
+      <item name="14.Очередь" text="14" />
+      <item name="15.Свободные заказы" text="15" />
+      <item name="16.Логины" text="16" mode="6" />
+    </list>
+    <list name="Стоянки" desc="Постановка на стоянку" >
+      <item name="20.Северо-Западный" text="20" />
+      <item name="21.ГорДК" text="21" />
+      <item name="22.Красная площадь" text="22" />
+      <item name="23.Речной вокзал" text="23" />
+      <item name="24.Взлётка" text="24" />
+      <item name="25.Северный" text="25" />
+      <item name="26.Зелёная роща" text="26" />
+      <item name="27.Солнечный" text="27" />
+      <item name="28.Станция Енисей" text="28" />
+      <item name="29.Предмостная" text="29" />
+      <item name="30.Первомайский" text="30" />
+      <item name="31.Торговый центр" text="31" />
+      <item name="32.Спутник" text="32" />
+      <item name="33.КрасТЭЦ" text="33" />
+      <item name="34.Черёмушки" text="34" />
+			<item name="35.Космос" text="35" />
+			<item name="36.Пашенный" text="36" />
+			<item name="37.Студгородок" text="37" />
+    </list>
+    <responses name="Ответы" /> 
+    <setup name="Настройка" />
+    <update name="Обновление" url="http://ataxi24.ru/files/taxi.jar" /> 
+  </commands>
+</data>

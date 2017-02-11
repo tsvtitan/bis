@@ -1,0 +1,33 @@
+unit BisUpdateFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls;
+
+type
+  TBisUpdateForm = class(TForm)
+    ProgressBar: TProgressBar;
+    LabelStatus: TLabel;
+    ButtonBreak: TButton;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BisUpdateForm: TBisUpdateForm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TBisUpdateForm.FormCreate(Sender: TObject);
+begin
+  ShowMessage(ParamStr(0)+'-'+ParamStr(1)+'-'+ParamStr(2));
+end;
+
+end.

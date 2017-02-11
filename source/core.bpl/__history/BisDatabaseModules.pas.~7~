@@ -1,0 +1,137 @@
+unit BisDatabaseModules;
+
+interface
+
+uses
+     BisObject, BisModules, BisDatabases;
+
+type
+  TBisDatabaseModule=class;
+
+  TBisDatabaseModuleInitProc=procedure (AModule: TBisDatabaseModule); stdcall;
+
+  TBisDatabaseModule=class(TBisModule)
+  private
+    FInitProc: TBisDatabaseModuleInitProc;
+    FDatabases: TBisDatabases;
+  protected
+    procedure DoInitProc(AModule: TBisModule); override;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    procedure InitByParent(AObject: TBisObject); override;
+    procedure Unload; override;
+
+    procedure ConnectDatabases;
+
+    property Databases: TBisDatabases read FDatabases;
+  end;
+
+  TBisDatabaseModules=class(TBisModules)
+  private
+    function GetItems(Index: Integer): TBisDatabaseModule;
+    function GetFirstConnecting: TBisDatabaseModule;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    procedure ConnectDatabases;
+
+    property Items[Index: Integer]: TBisDatabaseModule read GetItems;
+    property FirstConnecting: TBisDatabaseModule read GetFirstConnecting;
+  end;
+
+implementation
+
+uses Windows, SysUtils,
+     BisCoreConsts, BisLogger,
+     BisLoggerIntf;
+
+{ TBisDatabaseModule }
+
+constructor TBisDatabaseModule.Create;
+begin
+  inherited Create;
+  FDatabases:=TBisDatabases.Create;
+end;
+
+destructor TBisDatabaseModule.Destroy;
+begin
+  FDatabases.Free;
+  inherited Destroy;
+end;
+
+procedure TBisDatabaseModule.InitByParent(AObject: TBisObject); 
+begin
+  inherited InitByParent(AObject);
+  FDatabases.InitByParent(AObject);
+end;
+
+procedure TBisDatabaseModule.DoInitProc(AModule: TBisModule);
+begin
+  @FInitProc:=GetProcAddress(Module,PChar(SInitDatabaseModule));
+  if Assigned(@FInitProc) then begin
+    try
+      FInitProc(Self);
+      FDatabases.InitByParent(Self);
+      LoggerWrite(Format(SInitSuccess,[FileName]));
+    except
+      On E: Exception do begin
+        LoggerWrite(Format(SInitFailed,[FileName,E.Message]),ltError);
+      end;
+    end;
+  end else begin
+    LoggerWrite(Format(SInitProcNotFound,[FileName]),ltError);
+  end;
+end;
+
+procedure TBisDatabaseModule.Unload; 
+begin
+  FDatabases.Clear;
+  inherited Unload;
+end;
+
+procedure TBisDatabaseModule.ConnectDatabases;
+begin
+  LoggerWrite(SConnectDatabasesBegin);
+  try
+    FDatabases.Connect;
+    LoggerWrite(SConnectDatabasesSuccess);
+  except
+    on E: Exception do begin
+      LoggerWrite(Format(SConnectDatabasesFailed,[E.Message]),ltError);    
+    end;
+  end;
+end;
+
+{ TBisDatabaseModules }
+
+function TBisDatabaseModules.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisDatabaseModule;
+end;
+
+function TBisDatabaseModules.GetItems(Index: Integer): TBisDatabaseModule;
+begin
+  Result:=TBisDatabaseModule(inherited Items[Index]);
+end;
+
+procedure TBisDatabaseModules.ConnectDatabases;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do
+    Items[i].ConnectDatabases;
+end;
+
+function TBisDatabaseModules.GetFirstConnecting: TBisDatabaseModule;
+var
+  i: Integer;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+
+
+  end;
+end;
+
+end.

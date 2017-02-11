@@ -1,0 +1,662 @@
+unit BisDataEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisFm, ComCtrls, StdCtrls, ExtCtrls, Contnrs, ImgList,
+  BisProvider, BisParams, BisParam, BisFieldNames, BisSizeGrip, BisFilterGroups,
+  BisDataSet, BisControls;
+
+type
+  TBisDataEditFormIface=class;
+  TBisDataEditForm=class;
+
+  TBisDataEditMode=TBisParamEditMode;
+
+
+  TBisDataEditFormExecuteEvent=procedure (AForm: TBisDataEditForm) of object;
+  TBisDataEditFormGetRefreshFilterGroupsEvent=function (AForm: TBisDataEditForm): TBisFilterGroups of object;
+
+  TBisDataEditForm = class(TBisForm)
+    PanelButton: TPanel;
+    ButtonOk: TButton;
+    ButtonCancel: TButton;
+    PanelControls: TPanel;
+    ImageList: TImageList;
+    procedure ButtonCancelClick(Sender: TObject);
+    procedure ButtonOkClick(Sender: TObject);
+  private
+    FProvider: TBisProvider;
+    FSCloseQuestion: String;
+    FSNeedControlValue: String;
+    FStopChanges: Boolean;
+    FCloseWithChecking: Boolean;
+    FMode: TBisDataEditMode;
+    FOldParamsChange: TBisParamChangeEvent;
+    FOnAfterExecute: TBisDataEditFormExecuteEvent;
+    FSelectedFieldName: TBisFieldName;
+    FOldActiveControl: TWinControl;
+    FParentProviderName: String;
+    FChangesExists: Boolean;
+    FSMessageSuccess: String;
+    FSizeGrip: TBisSizeGrip;
+    FOnGetRefreshFilterGroups: TBisDataEditFormGetRefreshFilterGroupsEvent;
+    FRequestLargeData: Boolean;
+    FSLargeData: String;
+
+    procedure ParamsKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    function CheckLargeData(Request: Boolean): Boolean;
+    
+  protected
+    procedure DoClose(var Action: TCloseAction); override;
+    procedure DoAfterExecute; virtual;
+    procedure CMDialogKey(var Message: TCMDialogKey); message CM_DIALOGKEY;
+    function GetActiveControl: TWinControl; virtual;
+    procedure SetMode(const Value: TBisDataEditMode); virtual;
+    function DoGetRefreshFilterGroups: TBisFilterGroups; virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure EnableControls(AEnabled: Boolean); override;
+    procedure BeforeShow; override;
+    procedure ChangeParam(Param: TBisParam); virtual;
+    function FindParamComponent(Param: TBisParam; ComponentName: String): TComponent; virtual;
+    function ChangesExists: Boolean; virtual;
+    function CheckParams: Boolean; virtual;
+    procedure ShowParam(Param: TBisParam); virtual;
+    function CheckParam(Param: TBisParam): Boolean; virtual;
+    function SaveChanges: Boolean; virtual;
+    procedure Execute; virtual;
+    procedure RefreshParams; virtual;
+
+    procedure UpdateButtonState;
+
+    property Provider: TBisProvider read FProvider;
+    property Mode: TBisDataEditMode read FMode write SetMode;
+    property SelectedFieldName: TBisFieldName read FSelectedFieldName write FSelectedFieldName;
+    property ParentProviderName: String read FParentProviderName write FParentProviderName;
+    property SMessageSuccess: String read FSMessageSuccess write FSMessageSuccess;
+    property RequestLargeData: Boolean read FRequestLargeData write FRequestLargeData; 
+
+    property OnAfterExecute: TBisDataEditFormExecuteEvent read FOnAfterExecute write FOnAfterExecute;
+    property OnGetRefreshFilterGroups: TBisDataEditFormGetRefreshFilterGroupsEvent read FOnGetRefreshFilterGroups write FOnGetRefreshFilterGroups; 
+  published
+
+    property SCloseQuestion: String read FSCloseQuestion write FSCloseQuestion;
+    property SNeedControlValue: String read FSNeedControlValue write FSNeedControlValue;
+    property SLargeData: String read FSLargeData write FSLargeData;
+  end;
+
+  TBisDataEditFormIface=class(TBisFormIface)
+  private
+    FParentDataSet: TBisDataSet;
+    FProviderName: String;
+    FParams: TBisParams;
+    FMode: TBisDataEditMode;
+    FOnAfterExecute: TBisDataEditFormExecuteEvent;
+    FSCaptionInsert: String;
+    FSCaptionUpdate: String;
+    FSCaptionDuplicate: String;
+    FSCaptionDelete: String;
+    FSCaptionView: String;
+    FAsModal: Boolean;
+    FSCaptionFilter: String;
+    FSelectedFieldName: TBisFieldName;
+    FParentProviderName: String;
+    FChangesExists: Boolean;
+    FSMessageSuccess: String;
+    FOnGetRefreshFilterGroups: TBisDataEditFormGetRefreshFilterGroupsEvent;
+    function GetLastForm: TBisDataEditForm;
+    procedure SetMode(const Value: TBisDataEditMode);
+  protected
+    class function GetFormClass: TBisFormClass; override;
+    function CreateForm: TBisForm; override;
+    procedure FreeForm(AForm: TBisForm); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure Execute; virtual;
+
+    property ParentDataSet: TBisDataSet read FParentDataSet write FParentDataSet;
+    property Params: TBisParams read FParams;
+    property LastForm: TBisDataEditForm read GetLastForm;
+    property Mode: TBisDataEditMode read FMode write SetMode;
+    property AsModal: Boolean read FAsModal write FAsModal;
+    property SelectedFieldName: TBisFieldName read FSelectedFieldName write FSelectedFieldName;
+    property ParentProviderName: String read FParentProviderName write FParentProviderName;
+    property ChangesExists: Boolean read FChangesExists write FChangesExists;
+
+    property OnAfterExecute: TBisDataEditFormExecuteEvent read FOnAfterExecute write FOnAfterExecute;
+    property OnGetRefreshFilterGroups: TBisDataEditFormGetRefreshFilterGroupsEvent read FOnGetRefreshFilterGroups write FOnGetRefreshFilterGroups;
+
+  published
+    property ProviderName: String read FProviderName write FProviderName;
+    property SCaptionInsert: String read FSCaptionInsert write FSCaptionInsert;
+    property SCaptionDuplicate: String read FSCaptionDuplicate write FSCaptionDuplicate;
+    property SCaptionUpdate: String read FSCaptionUpdate write FSCaptionUpdate;
+    property SCaptionDelete: String read FSCaptionDelete write FScaptionDelete;
+    property SCaptionFilter: String read FSCaptionFilter write FSCaptionFilter;
+    property SCaptionView: String read FSCaptionView write FSCaptionView;
+    property SMessageSuccess: String read FSMessageSuccess write FSMessageSuccess;
+  end;
+
+  TBisDataEditFormIfaceClass=class of TBisDataEditFormIface;
+
+  TBisDataEditFormIfaceClasses=class(TClassList)
+  private
+    function GetItem(Index: Integer): TBisDataEditFormIfaceClass;
+    function GetFirstItem: TBisDataEditFormIfaceClass;
+  public
+    procedure InsertToFirst(Value: TBisDataEditFormIfaceClass);
+    procedure CopyFrom(Source: TBisDataEditFormIfaceClasses; WithClear: Boolean=true);
+
+    property Items[Index: Integer]: TBisDataEditFormIfaceClass read GetItem;
+    property FirstItem: TBisDataEditFormIfaceClass read GetFirstItem;
+  end;
+
+var
+  BisDataEditForm: TBisDataEditForm;
+
+implementation
+
+{$R *.dfm}
+
+uses StrUtils,
+     BisDialogs, BisUtils, BisCore, BisCoreUtils;
+
+{ TBisDataEditFormIface }
+
+constructor TBisDataEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  OnlyOneForm:=false;
+  ChangeFormCaption:=true;
+  FParams:=TBisParams.Create;
+
+  FSCaptionInsert:='Создать';
+  FSCaptionDuplicate:='Дублировать';
+  FSCaptionUpdate:='Изменить';
+  FSCaptionDelete:='Удалить';
+  FSCaptionFilter:='Фильтр';
+  FSCaptionView:='Просмотр';
+end;
+
+destructor TBisDataEditFormIface.Destroy;
+begin
+  FParams.Free;
+  inherited Destroy;
+end;
+
+function TBisDataEditFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(LastForm) then begin
+    LastForm.Provider.ProviderName:=FProviderName;
+    LastForm.Provider.Params.CopyFrom(FParams,FParams.Count>0);
+    LastForm.Provider.ParentDataSet:=FParentDataSet;
+
+    LastForm.Mode:=FMode;
+    LastForm.SelectedFieldName:=FSelectedFieldName;
+    LastForm.ParentProviderName:=FParentProviderName;
+    LastForm.SMessageSuccess:=FSMessageSuccess;
+    LastForm.FChangesExists:=FChangesExists;
+    LastForm.ButtonOk.Caption:=GetFirstWord(Caption);
+    LastForm.OnAfterExecute:=FOnAfterExecute;
+    LastForm.OnGetRefreshFilterGroups:=FOnGetRefreshFilterGroups;
+  end;
+end;
+
+procedure TBisDataEditFormIface.FreeForm(AForm: TBisForm);
+begin
+  if Assigned(AForm) then begin
+    //
+  end;
+  inherited FreeForm(AForm);
+end;
+
+class function TBisDataEditFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisDataEditForm;
+end;
+
+function TBisDataEditFormIface.GetLastForm: TBisDataEditForm;
+begin
+  Result:=TBisDataEditForm(inherited LastForm);
+end;
+
+procedure TBisDataEditFormIface.Init;
+begin
+  inherited Init;
+  TranslateParams(FParams,ClassType);
+end;
+
+procedure TBisDataEditFormIface.SetMode(const Value: TBisDataEditMode);
+begin
+  FMode := Value;
+  if Trim(Caption)='' then begin
+    case FMode of
+      emInsert: Caption:=FSCaptionInsert;
+      emDuplicate: Caption:=FSCaptionDuplicate;
+      emUpdate: Caption:=FSCaptionUpdate;
+      emDelete: Caption:=FSCaptionDelete;
+      emFilter: Caption:=FSCaptionFilter;
+      emView: Caption:=FSCaptionView;
+    end;
+  end;
+end;
+
+procedure TBisDataEditFormIface.Execute;
+begin
+  if FAsModal then begin
+    ShowModal;
+  end else begin
+    if Core.EditIfaceAsModal then
+      ShowModal
+    else
+      Show;
+  end;
+end;
+
+{ TBisDataEditFormIfaceClasses }
+
+procedure TBisDataEditFormIfaceClasses.CopyFrom(Source: TBisDataEditFormIfaceClasses; WithClear: Boolean);
+begin
+  if WithClear then
+    Clear;
+  Assign(Source);
+end;
+
+function TBisDataEditFormIfaceClasses.GetFirstItem: TBisDataEditFormIfaceClass;
+begin
+  Result:=nil;
+  if Count>0 then
+    Result:=Items[0];
+end;
+
+function TBisDataEditFormIfaceClasses.GetItem(Index: Integer): TBisDataEditFormIfaceClass;
+begin
+  Result:=TBisDataEditFormIfaceClass(inherited Items[Index]);
+end;
+
+procedure TBisDataEditFormIfaceClasses.InsertToFirst(Value: TBisDataEditFormIfaceClass);
+begin
+  Insert(0,Value);
+end;
+
+{ TBisDataEditForm }
+
+constructor TBisDataEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  SizesStored:=true;
+  TranslateClass:=TBisDataEditForm;
+
+  FSizeGrip:=TBisSizeGrip.Create(Self);
+  FSizeGrip.Parent:=PanelButton;
+
+  FChangesExists:=false;
+  FProvider:=TBisProvider.Create(Self);
+  FProvider.WithWaitCursor:=false;
+  FProvider.StopException:=false;
+  
+  FCloseWithChecking:=true;
+  FOldActiveControl:=ActiveControl;
+
+  FSCloseQuestion:='Сохранить изменения?';
+  FSNeedControlValue:='Необходимо ввести значение в поле: %s.';
+  FSLargeData:='Данных может быть слишком много. Продолжим?';
+end;
+
+destructor TBisDataEditForm.Destroy;
+begin
+  FreeAndNilEx(FSizeGrip);
+  FProvider.Free;
+  inherited Destroy;
+end;
+
+procedure TBisDataEditForm.DoClose(var Action: TCloseAction);
+begin
+  if FCloseWithChecking and not (FMode in [emView,emFilter,emDelete]) and ChangesExists then begin
+    case ShowQuestionCancel(FSCloseQuestion,mbCancel) of
+      mrYes: begin
+        if CheckParams then begin
+          if SaveChanges then begin
+            Action:=caFree;
+            inherited DoClose(Action);
+          end else begin
+            Action:=caNone;
+            exit;
+          end;
+        end else begin
+          Action:=caNone;
+          exit;
+        end;
+      end;
+      mrNo: begin
+        Action:=caFree;
+        inherited DoClose(Action);
+      end;
+      mrCancel: Action:=caNone;
+    end;
+  end else begin
+    Action:=caFree;
+    inherited DoClose(Action);
+  end;
+end;
+
+procedure TBisDataEditForm.Init;
+begin
+  inherited Init;
+  TranslateParams(Provider.Params,ClassType);
+  Provider.Params.OnFindComponent:=FindParamComponent;
+  Provider.Params.LinkControls(Self);
+  FOldParamsChange:=Provider.Params.OnChange;
+  Provider.Params.OnChange:=ChangeParam;
+  Provider.Params.OnKeyDown:=ParamsKeyDown;
+end;
+
+function TBisDataEditForm.DoGetRefreshFilterGroups: TBisFilterGroups;
+begin
+  Result:=nil;
+  if Assigned(FOnGetRefreshFilterGroups) then
+    Result:=FOnGetRefreshFilterGroups(Self);
+end;
+
+procedure TBisDataEditForm.RefreshParams;
+var
+  P: TBisProvider;
+begin
+  if Assigned(FProvider.ParentDataSet) then begin
+    FProvider.Params.RefreshByDataSet(FProvider.ParentDataSet,
+                                      FMode in [emDuplicate,emUpdate,emDelete,emView],
+                                      FMode in [emDuplicate]);
+  end else begin
+    if Trim(FParentProviderName)<>'' then begin
+      P:=TBisProvider.Create(nil);
+      try
+        P.ProviderName:=FParentProviderName;
+        if FMode in [emInsert] then
+          P.FetchCount:=0
+        else begin
+          P.FilterGroups.CopyFrom(DoGetRefreshFilterGroups);
+        end;  
+        P.Open;
+        FProvider.Params.RefreshByDataSet(P,
+                                          FMode in [emDuplicate,emUpdate,emDelete,emView],
+                                          FMode in [emDuplicate]);
+      finally
+        P.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisDataEditForm.BeforeShow;
+var
+  AControl: TWinControl;
+begin
+  inherited BeforeShow;
+
+  FProvider.Params.Enabled:=FMode<>emDelete;
+  ButtonOk.Visible:=(FMode<>emView);
+  if FMode in [emInsert,emDuplicate,emUpdate,emDelete,emView] then
+    RefreshParams;
+
+  FProvider.Params.ApplyMode(FMode);
+
+  UpdateButtonState;
+
+  AControl:=GetActiveControl;
+  if Assigned(AControl) and AControl.CanFocus then
+    ActiveControl:=GetActiveControl;
+//  BorderStyle:=iff(AsModal,bsDialog,bsSizeable);
+end;
+
+function TBisDataEditForm.GetActiveControl: TWinControl;
+var
+  Param: TBisParam;
+begin
+  Result:=FOldActiveControl;
+  if Assigned(FSelectedFieldName)  then begin
+    Param:=Provider.Params.Find(FSelectedFieldName.FieldName);
+    if Assigned(Param) and Param.Enabled and Param.Visible then begin
+      Result:=Param.Control;
+    end;
+  end;
+end;
+
+procedure TBisDataEditForm.ButtonCancelClick(Sender: TObject);
+begin
+  FCloseWithChecking:=true;
+  Close;
+end;
+
+function TBisDataEditForm.ChangesExists: Boolean;
+var
+  i: Integer;
+  Param: TBisParam;
+begin
+  Result:=FChangesExists;
+  if not FStopChanges then
+    with Provider.Params do begin
+      for i:=0 to Count-1 do begin
+        Param:=Items[i];
+        if Param.Changed then begin
+          Param.ParamName:=Param.ParamName;
+          Result:=true;
+          exit;
+        end;
+      end;
+    end;
+end;
+
+procedure TBisDataEditForm.ShowParam(Param: TBisParam);
+var
+  Control: TWinControl;
+  Prior: TWinControl;
+begin
+  if Assigned(Param) then begin
+    Control:=Param.Control;
+    if Assigned(Control) and Assigned(Control.Parent) then begin
+      Prior:=FindNextControl(Control,false,true,false);
+      if Assigned(Prior) then
+        SelectNext(Prior,true,true);
+    end;
+  end;
+end;
+
+function TBisDataEditForm.CheckLargeData(Request: Boolean): Boolean;
+begin
+  Result:=true;
+  if Request then
+    Result:=ShowWarningQuestion(FSLargeData,mbNo)=mrYes;
+end;
+
+function TBisDataEditForm.CheckParam(Param: TBisParam): Boolean;
+begin
+  Result:=true;
+  if Assigned(Param) and Param.Required and Param.Empty then begin
+    if Param.Visible and Param.Enabled then begin
+      ShowError(Format(FSNeedControlValue,[Param.Caption]));
+      ShowParam(Param);
+      Result:=false;
+    end;
+  end;
+end;
+
+function TBisDataEditForm.CheckParams: Boolean;
+var
+  i: Integer;
+  Param: TBisParam;
+begin
+  Result:=true;
+  with Provider.Params do begin
+    for i:=0 to Count-1 do begin
+      Param:=Items[i];
+      Result:=CheckParam(Param);
+      if not Result then
+        exit;
+    end;
+  end;
+end;
+
+procedure TBisDataEditForm.CMDialogKey(var Message: TCMDialogKey);
+begin
+  with Message do
+    if  ((CharCode = VK_RETURN) or (CharCode = VK_ESCAPE)) and
+      (KeyDataToShiftState(Message.KeyData) = [])  then  begin
+      if CharCode=VK_RETURN then begin
+        if ButtonOk.Enabled then begin
+          ButtonOk.Click;
+          Result:=1;
+        end;
+      end;
+      if CharCode=VK_ESCAPE then begin
+        if ButtonCancel.Enabled then begin
+          ButtonCancel.Click;
+          Result:=1;
+        end;
+      end;
+    end else
+      inherited;
+end;
+
+procedure TBisDataEditForm.ButtonOkClick(Sender: TObject);
+var
+  Flag: Boolean;
+begin
+  FCloseWithChecking:=false;
+  if (FMode<>emView) then begin
+    Flag:=true;
+    if FMode in [emInsert,emDuplicate,emUpdate] then
+      Flag:=CheckParams and ChangesExists;
+    if (Mode=emFilter) then
+      Flag:=(not ChangesExists and CheckLargeData(FRequestLargeData)) or ChangesExists;
+    if Flag then begin
+      if SaveChanges then begin
+        if fsModal in FormState then
+          ModalResult:=mrOk
+        else
+          Close;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisDataEditForm.EnableControls(AEnabled: Boolean);
+begin
+  EnableControl(PanelControls,AEnabled);
+end;
+
+procedure TBisDataEditForm.Execute;
+begin
+  case FMode of
+    emInsert, emDuplicate: begin
+      FProvider.Execute;
+      if FProvider.Success then
+        FProvider.InsertIntoParent;
+    end;
+    emUpdate: begin
+      FProvider.Execute;
+      if FProvider.Success then
+        FProvider.UpdateIntoParent;
+    end;
+    emDelete: begin
+      FProvider.Execute;
+      if FProvider.Success then
+        FProvider.DeleteFromParent;
+    end;
+    emFilter: begin
+    end;
+  end;
+end;
+
+function TBisDataEditForm.FindParamComponent(Param: TBisParam; ComponentName: String): TComponent;
+begin
+  Result:=Self.FindComponent(ComponentName);
+end;
+
+procedure TBisDataEditForm.DoAfterExecute;
+begin
+  if Assigned(FOnAfterExecute) then
+    FOnAfterExecute(Self);
+end;
+
+function TBisDataEditForm.SaveChanges: Boolean;
+var
+  OldCursor: TCursor;
+  S: String;
+begin
+  Result:=false;
+  try
+    OldCursor:=Screen.Cursor;
+    Screen.Cursor:=crHourGlass;
+    EnableControls(false);
+    ButtonOk.Enabled:=false;
+    try
+      Update;
+      Execute;
+      DoAfterExecute;
+      if FProvider.Success and not Assigned(FProvider.ParentDataSet) then begin
+        S:=FProvider.Params.PrepareMessage(FSMessageSuccess);
+        if Trim(S)<>'' then
+          ShowInfo(S);
+      end;
+      Result:=true;
+    finally
+      ButtonOk.Enabled:=not Result;
+      if not (FMode in [emDelete]) then
+        EnableControls(not Result);
+      Screen.Cursor:=OldCursor;
+    end;
+  except
+    On E: Exception do begin
+      ShowError(E.Message);
+    end;
+  end;
+end;
+
+procedure TBisDataEditForm.SetMode(const Value: TBisDataEditMode);
+var
+  ImageIndex: Integer;
+  NewIcon: TIcon;
+begin
+  FMode:=Value;
+  ImageIndex:=Integer(FMode);
+  if (ImageIndex<ImageList.Count) then begin
+    NewIcon:=TIcon.Create;
+    try
+      ImageList.GetIcon(ImageIndex,NewIcon);
+      if not NewIcon.Empty then begin
+        Icon.Assign(NewIcon);
+      end else begin
+        Icon.Assign(nil);
+      end;
+    finally
+      NewIcon.Free;
+    end;
+  end;
+end;
+
+procedure TBisDataEditForm.UpdateButtonState;
+begin
+  ButtonOk.Enabled:=ChangesExists or (FMode in [emDelete,emFilter]);
+end;
+
+procedure TBisDataEditForm.ChangeParam(Param: TBisParam);
+begin
+  UpdateButtonState;
+  if Assigned(FOldParamsChange) then
+    FOldParamsChange(Param);
+end;
+
+procedure TBisDataEditForm.ParamsKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Key=VK_ESCAPE then
+    ButtonCancel.Click;
+end;
+
+end.

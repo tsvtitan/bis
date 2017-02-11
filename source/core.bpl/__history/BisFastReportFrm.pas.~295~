@@ -1,0 +1,487 @@
+unit BisFastReportFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, ComCtrls, ToolWin,
+  ExtCtrls, StdCtrls,
+  frxClass, frxPreview,
+  BisReportFrm, BisFastReportClasses;
+
+
+type
+
+  TBisFastReportFrame = class(TBisReportFrame)
+    ActionUp: TAction;
+    ActionDown: TAction;
+    ActionPopup: TAction;
+    PopupExport: TPopupActionBar;
+    MenuItemExport: TMenuItem;
+    ToolBarScale: TToolBar;
+    PanelScale: TPanel;
+    ComboBoxScale: TComboBox;
+    procedure FrameMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+    procedure ActionUpExecute(Sender: TObject);
+    procedure ActionUpUpdate(Sender: TObject);
+    procedure ActionDownExecute(Sender: TObject);
+    procedure ActionDownUpdate(Sender: TObject);
+    procedure ActionPopupExecute(Sender: TObject);
+    procedure ActionExportUpdate(Sender: TObject);
+    procedure ComboBoxScaleChange(Sender: TObject);
+  private
+    FPreview: TBisFastReportPreview;
+    FReport: TBisFastReport;
+    FPrepared: Boolean;
+    FLoaded: Boolean;
+    FSWholePage: String;
+    FSByWidth: String;
+    procedure PreviewPageChanged(Sender: TfrxPreview; PageNo: Integer);
+    procedure ReportProgressStart(Sender: TfrxReport; ProgressType: TfrxProgressType; Progress: Integer);
+    procedure ReportProgressStop(Sender: TfrxReport; ProgressType: TfrxProgressType; Progress: Integer);
+    procedure ReportProgress(Sender: TfrxReport; ProgressType: TfrxProgressType; Progress: Integer);
+    procedure ReportGetValue(const VarName: String; var Value: Variant);
+    procedure RefreshScales;
+    procedure RefreshExportMenus(Menus: TMenuItem);
+    procedure MenuExportClick(Sender: TObject);
+  protected
+    procedure SetPageNum(PageNum: Integer); override;
+    function GetPageNum: Integer; override;
+    function GetPageCount: Integer; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure OpenReport; override;
+    procedure LoadFromStream(Stream: TStream); override;
+    function ReportExists: Boolean; override;
+    function ReportLoaded: Boolean; override;
+    function ReportPrepared: Boolean; override;
+    function CanExportReport: Boolean; override;
+    procedure ExportReport; override;
+    function CanEditPage: Boolean; override;
+    procedure EditPage; override;
+    function CanPrintReport: Boolean; override;
+    procedure PrintReport; override;
+    function CanFindText: Boolean; override;
+    procedure FindText; override;
+    function CanPropertyPage: Boolean; override;
+    procedure PropertyPage; override;
+    function CanFirstPage: Boolean; override;
+    procedure FirstPage; override;
+    function CanPriorPage: Boolean; override;
+    procedure PriorPage; override;
+    function CanNextPage: Boolean; override;
+    procedure NextPage; override;
+    function CanLastPage: Boolean; override;
+    procedure LastPage; override;
+    function PageExists(PageNum: Integer): Boolean; override;
+  published
+    property SWholePage: String read FSWholePage write FSWholePage;
+    property SByWidth: String read FSByWidth write FSByWidth;
+  end;
+
+var
+  BisFastReportFrame: TBisFastReportFrame;
+
+implementation
+
+{$R *.dfm}
+
+uses frxDsgnIntf, frxUtils,
+     BisConsts, BisCore;
+
+{ TBisFastReportFrame }
+
+constructor TBisFastReportFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FPreview:=TBisFastReportPreview.Create(Self);
+  FPreview.Parent:=PanelReport;
+  FPreview.Align:=alClient;
+  FPreview.ZoomMode:=zmPageWidth;
+  FPreview.PopupMenu:=Popup;
+  FPreview.OnPageChanged:=PreviewPageChanged;
+  FPreview.OnGetIniFile:=PreviewGetIniFile;
+  FPreview.TabStop:=true;
+  FPreview.TabOrder:=0;
+
+  ComboBoxScale.TabOrder:=1;
+  EditPageNum.TabOrder:=2;
+
+  FReport:=TBisFastReport.Create(Self);
+  FReport.Preview:=FPreview;
+  FReport.EngineOptions.UseFileCache:=false;
+  FReport.OnProgressStart:=ReportProgressStart;
+  FReport.OnProgressStop:=ReportProgressStop;
+  FReport.OnProgress:=ReportProgress;
+  FReport.OnGetValue:=ReportGetValue;
+
+  FSWholePage:='целиком';
+  FSByWidth:='по ширине';
+  
+  RefreshExportMenus(PopupExport.Items);
+  RefreshExportMenus(MenuItemExport);
+  RefreshScales;
+end;
+
+destructor TBisFastReportFrame.Destroy;
+begin
+  FReport.Free;
+  FPreview.Free;
+  inherited Destroy;
+end;
+
+procedure TBisFastReportFrame.RefreshScales;
+begin
+  ComboBoxScale.Clear;
+  with ComboBoxScale.Items do begin
+    Add('25%');
+    Add('50%');
+    Add('75%');
+    Add('100%');
+    Add('150%');
+    Add('200%');
+    Add(FSWholePage);
+    Add(FSByWidth);
+  end;
+  ComboBoxScale.ItemIndex:=7;
+end;
+
+procedure TBisFastReportFrame.ComboBoxScaleChange(Sender: TObject);
+var
+  s: String;
+  Mode: TfrxZoomMode;
+begin
+  if ReportExists and ReportLoaded and FPrepared and
+     (ComboBoxScale.ItemIndex<>-1) then begin
+    Mode:=zmDefault;
+    case ComboBoxScale.ItemIndex of
+      0..5: Mode:=zmDefault;
+      6: Mode:=zmWholePage;
+      7: Mode:=zmPageWidth;
+    end;
+    case Mode of
+      zmDefault: begin
+        s:=ComboBoxScale.Items[ComboBoxScale.ItemIndex];
+        if Pos('%', s) <> 0 then
+          s[Pos('%', s)] := ' ';
+        while Pos(' ', s) <> 0 do
+          System.Delete(s, Pos(' ', s), 1);
+
+        if s <> '' then
+          FPreview.Zoom := frxStrToFloat(s) / 100;
+      end;
+    else
+      FPreview.ZoomMode:=Mode;
+    end;
+    FPreview.SetFocus;
+  end;
+end;
+procedure TBisFastReportFrame.RefreshExportMenus(Menus: TMenuItem);
+var
+  i: Integer;
+  Menu: TMenuItem;
+  Item: TfrxExportFilterItem;
+begin
+  Menus.Clear;
+  for i:=0 to frxExportFilters.Count-1 do begin
+    Item:=frxExportFilters.Items[i];
+    Menu:=TMenuItem.Create(Menus);
+    Menu.Caption:=Item.Filter.GetDescription;
+    Menu.Hint:=Menu.Caption;
+    Menu.RadioItem:=true;
+    Menu.Checked:=i=0;
+    Menu.OnClick:=MenuExportClick;
+    Menus.Add(Menu);
+  end;
+end;
+
+procedure TBisFastReportFrame.MenuExportClick(Sender: TObject);
+var
+  Item: TfrxExportFilterItem;
+begin
+  if Sender is TMenuItem then begin
+    with TMenuItem(Sender) do begin
+      Checked:=true; 
+      if Parent<>PopupExport.Items then
+        PopupExport.Items[MenuIndex].Checked:=true
+      else MenuItemExport.Items[MenuIndex].Checked:=true;
+      if MenuIndex in [0..frxExportFilters.Count-1] then begin
+        Item:=frxExportFilters.Items[MenuIndex];
+        FPreview.Export(Item.Filter);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisFastReportFrame.PreviewPageChanged(Sender: TfrxPreview; PageNo: Integer);
+begin
+end;
+
+function TBisFastReportFrame.ReportExists: Boolean;
+begin
+  Result:=inherited ReportExists;
+end;
+
+procedure TBisFastReportFrame.ReportGetValue(const VarName: String; var Value: Variant);
+begin
+  DoGetParamValue(VarName,Value);
+end;
+
+function TBisFastReportFrame.ReportLoaded: Boolean;
+begin
+  Result:=FLoaded;
+end;
+
+function TBisFastReportFrame.ReportPrepared: Boolean;
+begin
+  Result:=FPrepared;
+end;
+
+procedure TBisFastReportFrame.ReportProgress(Sender: TfrxReport; ProgressType: TfrxProgressType; Progress: Integer);
+var
+  Breaked: Boolean;
+begin
+  If ProgressType<>ptRunning then
+    Core.Progress(0,FPreview.PageCount,Progress,Breaked);
+end;
+
+procedure TBisFastReportFrame.ReportProgressStart(Sender: TfrxReport; ProgressType: TfrxProgressType; Progress: Integer);
+var
+  Breaked: Boolean;
+begin
+  If ProgressType<>ptRunning then
+    Core.Progress(0,FPreview.PageCount,Progress,Breaked);
+end;
+
+procedure TBisFastReportFrame.ReportProgressStop(Sender: TfrxReport;  ProgressType: TfrxProgressType; Progress: Integer);
+var
+  Breaked: Boolean;
+begin
+  If ProgressType<>ptRunning then
+    Core.Progress(0,FPreview.PageCount,Progress,Breaked);
+end;
+
+procedure TBisFastReportFrame.LoadFromStream(Stream: TStream);
+begin
+  FLoaded:=false;
+  if Assigned(Stream) and (Stream.Size>0) then begin
+    FReport.LoadFromStream(Stream);
+    if not FPrepared then begin
+      FPreview.PreviewPages.Clear;
+      FPreview.UpdatePages;
+      FPrepared:=FReport.PrepareReport(true)
+    end else begin
+      FPreview.RefreshReport;
+    end;
+    FLoaded:=true;
+  end;
+end;
+
+procedure TBisFastReportFrame.OpenReport;
+begin
+  inherited OpenReport;
+end;
+
+procedure TBisFastReportFrame.ActionDownExecute(Sender: TObject);
+begin
+  if not ComboBoxScale.Focused then
+    FPreview.MouseWheelScroll(-1)
+  else begin
+    if (ComboBoxScale.ItemIndex+1)<=(ComboBoxScale.Items.Count-1) then
+      ComboBoxScale.ItemIndex:=ComboBoxScale.ItemIndex+1;
+    ComboBoxScaleChange(ComboBoxScale);
+  end;
+
+end;
+
+procedure TBisFastReportFrame.ActionDownUpdate(Sender: TObject);
+begin
+  ActionDown.Enabled:=ReportExists and ReportLoaded and FPrepared;
+end;
+
+procedure TBisFastReportFrame.ActionExportUpdate(Sender: TObject);
+begin
+  inherited;
+  MenuItemExport.Enabled:=CanExportReport;
+  ComboBoxScale.Enabled:=MenuItemExport.Enabled;
+  EditPageNum.Enabled:=MenuItemExport.Enabled;
+end;
+
+procedure TBisFastReportFrame.ActionPopupExecute(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  Pt:=FPreview.ClientToScreen(Point(FPreview.Left,FPreview.Top));
+  Popup.Popup(Pt.X,Pt.Y);
+end;
+
+procedure TBisFastReportFrame.ActionUpExecute(Sender: TObject);
+begin
+  if not ComboBoxScale.Focused then
+    FPreview.MouseWheelScroll(1)
+  else begin
+    if (ComboBoxScale.ItemIndex-1)>=0 then
+      ComboBoxScale.ItemIndex:=ComboBoxScale.ItemIndex-1;
+    ComboBoxScaleChange(ComboBoxScale);
+  end;
+end;
+
+procedure TBisFastReportFrame.ActionUpUpdate(Sender: TObject);
+begin
+  ActionUp.Enabled:=ReportExists and ReportLoaded and FPrepared;
+end;
+
+function TBisFastReportFrame.CanEditPage: Boolean;
+begin
+  Result:=inherited CanEditPage and FPrepared;
+end;
+
+procedure TBisFastReportFrame.EditPage;
+begin
+  inherited EditPage;
+  if CanEditPage then
+    FPreview.Edit;
+end;
+
+function TBisFastReportFrame.CanPrintReport: Boolean;
+begin
+  Result:=inherited CanPrintReport and FPrepared;
+end;
+
+procedure TBisFastReportFrame.PrintReport;
+begin
+  inherited PrintReport;
+  if CanPrintReport then
+    FPreview.Print;
+end;
+
+function TBisFastReportFrame.CanFindText: Boolean;
+begin
+  Result:=inherited CanFindText and FPrepared;
+end;
+
+procedure TBisFastReportFrame.FindText;
+begin
+  inherited FindText;
+  if CanFindText then
+    FPreview.Find;
+end;
+
+function TBisFastReportFrame.CanPropertyPage: Boolean;
+begin
+  Result:=inherited CanPropertyPage and FPrepared;
+end;
+
+procedure TBisFastReportFrame.PropertyPage;
+begin
+  inherited PropertyPage;
+  if CanPropertyPage then
+    FPreview.PageSetupDlg;
+end;
+
+function TBisFastReportFrame.CanFirstPage: Boolean;
+begin
+  Result:=inherited CanFirstPage and FPrepared and
+          (FPreview.PageNo>1);
+end;
+
+procedure TBisFastReportFrame.FirstPage;
+begin
+  if CanFirstPage then
+    FPreview.First;
+  inherited FirstPage;
+end;
+
+function TBisFastReportFrame.CanPriorPage: Boolean;
+begin
+  Result:=inherited CanPriorPage and FPrepared and
+          (FPreview.PageNo>1);
+end;
+
+procedure TBisFastReportFrame.PriorPage;
+begin
+  if CanPriorPage then
+    FPreview.Prior;
+  inherited PriorPage;
+end;
+
+function TBisFastReportFrame.CanLastPage: Boolean;
+begin
+  Result:=inherited CanLastPage and (FPreview.PageNo<FPreview.PageCount);
+end;
+
+procedure TBisFastReportFrame.LastPage;
+begin
+  if CanLastPage then
+    FPreview.Last;
+  inherited LastPage;
+end;
+
+function TBisFastReportFrame.CanNextPage: Boolean;
+begin
+  Result:=inherited CanNextPage and (FPreview.PageNo<FPreview.PageCount);
+end;
+
+procedure TBisFastReportFrame.NextPage;
+begin
+  if CanNextPage then
+    FPreview.Next;
+  inherited NextPage;
+end;
+
+procedure TBisFastReportFrame.FrameMouseWheel(Sender: TObject;
+  Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
+  var Handled: Boolean);
+begin
+  FPreview.MouseWheelScroll(WheelDelta, False, ssCtrl in Shift);
+end;
+
+function TBisFastReportFrame.CanExportReport: Boolean;
+begin
+  Result:=inherited CanExportReport and FPrepared;
+end;
+
+procedure TBisFastReportFrame.ExportReport;
+var
+  Item: TMenuItem;
+  i: Integer;
+begin
+  if CanExportReport then begin
+    Item:=nil;
+    for i:=0 to PopupExport.Items.Count-1 do begin
+      if PopupExport.Items[i].Checked then begin
+        Item:=PopupExport.Items[i];
+        break;
+      end;
+    end;
+    if Assigned(Item) then begin
+      MenuExportClick(Item);
+    end;
+  end;
+end;
+
+function TBisFastReportFrame.PageExists(PageNum: Integer): Boolean;
+begin
+  Result:=FPreview.PageCount>=PageNum;
+end;
+
+procedure TBisFastReportFrame.SetPageNum(PageNum: Integer);
+begin
+  if PageExists(PageNum) then
+    FPreview.PageNo:=PageNum;
+end;
+
+function TBisFastReportFrame.GetPageCount: Integer;
+begin
+  Result:=FPreview.PageCount;
+end;
+
+function TBisFastReportFrame.GetPageNum: Integer;
+begin
+  Result:=FPreview.PageNo;
+end;
+
+
+end.

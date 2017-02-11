@@ -1,0 +1,538 @@
+inherited BisKrieltImportExcelForm: TBisKrieltImportExcelForm
+  Left = 364
+  Top = 200
+  Caption = #1048#1084#1087#1086#1088#1090' '#1086#1073#1098#1103#1074#1083#1077#1085#1080#1081
+  ClientHeight = 473
+  ClientWidth = 732
+  Constraints.MinHeight = 500
+  Constraints.MinWidth = 740
+  OldCreateOrder = True
+  OnResize = FormResize
+  ExplicitWidth = 740
+  ExplicitHeight = 507
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelGeneral: TPanel
+    Left = 0
+    Top = 0
+    Width = 732
+    Height = 265
+    Align = alTop
+    BevelOuter = bvNone
+    Constraints.MinHeight = 210
+    TabOrder = 0
+    object PanelGeneralLeft: TPanel
+      Left = 0
+      Top = 0
+      Width = 299
+      Height = 265
+      Align = alLeft
+      BevelOuter = bvNone
+      BorderWidth = 5
+      TabOrder = 0
+      object GroupBoxGeneralLeft: TGroupBox
+        Left = 5
+        Top = 5
+        Width = 289
+        Height = 255
+        Align = alClient
+        Caption = ' '#1054#1073#1097#1080#1077' '#1076#1072#1085#1085#1099#1077' '
+        TabOrder = 0
+        DesignSize = (
+          289
+          255)
+        object LabelAccount: TLabel
+          Left = 9
+          Top = 20
+          Width = 84
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1059#1095#1077#1090#1085#1072#1103' '#1079#1072#1087#1080#1089#1100':'
+          FocusControl = EditAccount
+        end
+        object LabelView: TLabel
+          Left = 18
+          Top = 47
+          Width = 75
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1042#1080#1076' '#1086#1073#1098#1077#1082#1090#1086#1074':'
+          FocusControl = EditView
+        end
+        object LabelType: TLabel
+          Left = 19
+          Top = 74
+          Width = 74
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1058#1080#1087' '#1086#1073#1098#1077#1082#1090#1086#1074':'
+          FocusControl = EditType
+        end
+        object LabelOperation: TLabel
+          Left = 39
+          Top = 101
+          Width = 54
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1054#1087#1077#1088#1072#1094#1080#1103':'
+          FocusControl = EditOperation
+        end
+        object LabelDateBegin: TLabel
+          Left = 24
+          Top = 129
+          Width = 69
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1044#1072#1090#1072' '#1085#1072#1095#1072#1083#1072':'
+          FocusControl = DateTimePickerDateBegin
+        end
+        object LabelNext: TLabel
+          Left = 51
+          Top = 156
+          Width = 42
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1055#1077#1088#1080#1086#1076':'
+          FocusControl = ComboBoxNext
+        end
+        object LabelPublishing: TLabel
+          Left = 46
+          Top = 180
+          Width = 47
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1048#1079#1076#1072#1085#1080#1103':'
+          FocusControl = ComboBoxNext
+        end
+        object EditAccount: TEdit
+          Left = 99
+          Top = 17
+          Width = 153
+          Height = 21
+          Color = 15000804
+          MaxLength = 100
+          ReadOnly = True
+          TabOrder = 0
+        end
+        object ButtonAccount: TButton
+          Left = 258
+          Top = 17
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1091#1095#1077#1090#1085#1091#1102' '#1079#1072#1087#1080#1089#1100
+          Caption = '...'
+          TabOrder = 1
+          OnClick = ButtonAccountClick
+        end
+        object EditView: TEdit
+          Left = 99
+          Top = 44
+          Width = 153
+          Height = 21
+          Color = 15000804
+          MaxLength = 100
+          ReadOnly = True
+          TabOrder = 2
+        end
+        object ButtonView: TButton
+          Left = 258
+          Top = 44
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1080#1076' '#1086#1073#1098#1077#1082#1090#1072
+          Caption = '...'
+          TabOrder = 3
+          OnClick = ButtonViewClick
+        end
+        object EditType: TEdit
+          Left = 99
+          Top = 71
+          Width = 153
+          Height = 21
+          Color = 15000804
+          MaxLength = 100
+          ReadOnly = True
+          TabOrder = 4
+        end
+        object ButtonType: TButton
+          Left = 258
+          Top = 71
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1090#1080#1087
+          Caption = '...'
+          TabOrder = 5
+          OnClick = ButtonTypeClick
+        end
+        object EditOperation: TEdit
+          Left = 99
+          Top = 98
+          Width = 153
+          Height = 21
+          Color = 15000804
+          MaxLength = 100
+          ReadOnly = True
+          TabOrder = 6
+        end
+        object ButtonOperation: TButton
+          Left = 258
+          Top = 98
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1086#1087#1077#1088#1072#1094#1080#1102
+          Caption = '...'
+          TabOrder = 7
+          OnClick = ButtonOperationClick
+        end
+        object DateTimePickerTimeBegin: TDateTimePicker
+          Left = 201
+          Top = 125
+          Width = 78
+          Height = 22
+          Date = 39467.616504444440000000
+          Time = 39467.616504444440000000
+          Kind = dtkTime
+          TabOrder = 8
+        end
+        object DateTimePickerDateBegin: TDateTimePicker
+          Left = 99
+          Top = 125
+          Width = 96
+          Height = 22
+          Date = 39467.616504444440000000
+          Time = 39467.616504444440000000
+          TabOrder = 9
+        end
+        object ComboBoxNext: TComboBox
+          Left = 99
+          Top = 153
+          Width = 95
+          Height = 21
+          Style = csDropDownList
+          ItemHeight = 13
+          ItemIndex = 6
+          TabOrder = 10
+          Text = '1 '#1085#1077#1076#1077#1083#1103
+          Items.Strings = (
+            '1 '#1076#1077#1085#1100
+            '2 '#1076#1085#1103
+            '3 '#1076#1085#1103
+            '4 '#1076#1085#1103
+            '5 '#1076#1085#1077#1081
+            '6 '#1076#1085#1077#1081
+            '1 '#1085#1077#1076#1077#1083#1103
+            '2 '#1085#1077#1076#1077#1083#1080
+            '3 '#1085#1077#1076#1077#1083#1080
+            '1 '#1084#1077#1089#1103#1094)
+        end
+        object CheckBoxTimer: TCheckBox
+          Left = 231
+          Top = 155
+          Width = 48
+          Height = 17
+          Caption = #1040#1074#1090#1086
+          Checked = True
+          State = cbChecked
+          TabOrder = 12
+          OnClick = CheckBoxTimerClick
+        end
+        object ButtonIssue: TButton
+          Left = 200
+          Top = 153
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1099#1087#1091#1089#1082
+          Caption = '...'
+          TabOrder = 11
+          OnClick = ButtonIssueClick
+        end
+        object CheckListBoxPublishing: TCheckListBox
+          Left = 99
+          Top = 180
+          Width = 180
+          Height = 62
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          ItemHeight = 13
+          TabOrder = 13
+          OnDblClick = CheckListBoxPublishingDblClick
+        end
+      end
+    end
+    object PanelGeneralClient: TPanel
+      Left = 299
+      Top = 0
+      Width = 433
+      Height = 265
+      Align = alClient
+      BevelOuter = bvNone
+      BorderWidth = 5
+      TabOrder = 1
+      object GroupBoxPresentation: TGroupBox
+        Left = 5
+        Top = 5
+        Width = 423
+        Height = 255
+        Align = alClient
+        Caption = ' '#1055#1088#1077#1076#1089#1090#1072#1074#1083#1077#1085#1080#1077' '
+        TabOrder = 0
+        DesignSize = (
+          423
+          255)
+        object EditPresentation: TEdit
+          Left = 12
+          Top = 17
+          Width = 327
+          Height = 21
+          Color = 15000804
+          MaxLength = 100
+          ReadOnly = True
+          TabOrder = 0
+        end
+        object ButtonPresentation: TButton
+          Left = 345
+          Top = 16
+          Width = 23
+          Height = 22
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1088#1077#1076#1089#1090#1072#1074#1083#1077#1085#1080#1077
+          Caption = '...'
+          TabOrder = 1
+          OnClick = ButtonPresentationClick
+        end
+        object GridPresentation: TDBGrid
+          Left = 12
+          Top = 44
+          Width = 398
+          Height = 201
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          DataSource = DataSourcePresentation
+          Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgCancelOnExit]
+          TabOrder = 2
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnCellClick = GridPresentationCellClick
+          OnColEnter = GridPresentationColEnter
+          OnColExit = GridPresentationColExit
+          OnDrawColumnCell = GridPresentationDrawColumnCell
+          OnEditButtonClick = GridPresentationEditButtonClick
+          OnKeyDown = GridPresentationKeyDown
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              ReadOnly = True
+              Title.Caption = #1050#1086#1083#1086#1085#1082#1072
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DESCRIPTION'
+              ReadOnly = True
+              Title.Caption = #1054#1087#1080#1089#1072#1085#1080#1077
+              Width = 130
+              Visible = True
+            end
+            item
+              ButtonStyle = cbsEllipsis
+              Expanded = False
+              FieldName = 'VALUE_DEFAULT'
+              Title.Caption = #1047#1085#1072#1095#1077#1085#1080#1077' '#1087#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
+              Width = 130
+              Visible = True
+            end
+            item
+              Expanded = False
+              ReadOnly = True
+              Width = 20
+              Visible = True
+            end>
+        end
+      end
+    end
+  end
+  object PanelPreview: TPanel
+    Left = 0
+    Top = 265
+    Width = 732
+    Height = 189
+    Align = alClient
+    BevelOuter = bvNone
+    BorderWidth = 5
+    Constraints.MinHeight = 150
+    TabOrder = 1
+    object GroupBoxPreview: TGroupBox
+      Left = 5
+      Top = 5
+      Width = 722
+      Height = 179
+      Align = alClient
+      Caption = ' '#1055#1088#1077#1076#1074#1072#1088#1080#1090#1077#1083#1100#1085#1099#1081' '#1087#1088#1086#1089#1084#1086#1090#1088' '
+      TabOrder = 0
+      object PanelPreviewBottom: TPanel
+        Left = 2
+        Top = 145
+        Width = 718
+        Height = 32
+        Align = alBottom
+        BevelOuter = bvNone
+        TabOrder = 1
+        DesignSize = (
+          718
+          32)
+        object LabelCount: TLabel
+          Left = 326
+          Top = 6
+          Width = 84
+          Height = 13
+          Anchors = [akLeft, akBottom]
+          Caption = #1042#1089#1077#1075#1086' '#1079#1072#1087#1080#1089#1077#1081': 0'
+        end
+        object ButtonImport: TButton
+          Left = 532
+          Top = 1
+          Width = 100
+          Height = 25
+          Anchors = [akRight, akBottom]
+          Caption = #1048#1084#1087#1086#1088#1090#1080#1088#1086#1074#1072#1090#1100
+          Enabled = False
+          TabOrder = 1
+          OnClick = ButtonImportClick
+        end
+        object Navigator: TDBNavigator
+          Left = 86
+          Top = 1
+          Width = 234
+          Height = 25
+          DataSource = DataSourcePreview
+          VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbEdit, nbPost, nbCancel]
+          Anchors = [akLeft, akBottom]
+          Hints.Strings = (
+            #1055#1077#1088#1074#1072#1103' '#1079#1072#1087#1080#1089#1100
+            #1055#1088#1077#1076#1099#1076#1091#1097#1072#1103' '#1079#1072#1087#1080#1089#1100
+            #1057#1083#1077#1076#1091#1102#1097#1072#1103' '#1079#1072#1087#1080#1089#1100
+            #1055#1086#1089#1083#1077#1076#1085#1103#1103' '#1079#1072#1087#1080#1089#1100
+            #1042#1089#1090#1072#1074#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+            #1059#1076#1072#1083#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+            #1056#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1090#1100' '#1079#1072#1087#1080#1089#1100
+            #1055#1088#1080#1084#1077#1085#1080#1090#1100' '#1080#1079#1084#1077#1085#1077#1085#1080#1103
+            #1054#1090#1084#1077#1085#1080#1090#1100' '#1080#1079#1084#1077#1085#1077#1085#1080#1103
+            #1054#1073#1085#1086#1074#1080#1090#1100' '#1076#1072#1085#1085#1099#1077)
+          ConfirmDelete = False
+          TabOrder = 0
+        end
+        object ButtonCancel: TButton
+          Left = 638
+          Top = 1
+          Width = 75
+          Height = 25
+          Anchors = [akRight, akBottom]
+          Caption = #1054#1090#1084#1077#1085#1072
+          TabOrder = 2
+          OnClick = ButtonCancelClick
+        end
+        object ButtonLoad: TButton
+          Left = 5
+          Top = 1
+          Width = 75
+          Height = 25
+          Anchors = [akLeft, akBottom]
+          Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
+          Enabled = False
+          TabOrder = 3
+          OnClick = ButtonLoadClick
+        end
+      end
+      object PanelGridPreview: TPanel
+        Left = 2
+        Top = 15
+        Width = 718
+        Height = 130
+        Align = alClient
+        BevelOuter = bvNone
+        BorderWidth = 5
+        TabOrder = 0
+        object GridPreview: TDBGrid
+          Left = 5
+          Top = 5
+          Width = 708
+          Height = 120
+          Align = alClient
+          DataSource = DataSourcePreview
+          Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgConfirmDelete, dgCancelOnExit]
+          PopupMenu = PopupActionBarPreview
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnDrawColumnCell = GridPreviewDrawColumnCell
+          OnEditButtonClick = GridPreviewEditButtonClick
+        end
+      end
+    end
+  end
+  object StatusBar: TStatusBar
+    Left = 0
+    Top = 454
+    Width = 732
+    Height = 19
+    Panels = <>
+  end
+  object OpenDialogExcel: TOpenDialog
+    DefaultExt = '*.xls'
+    Filter = #1060#1072#1081#1083#1099' Excel (*.xls)|*.xls|'#1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|*.*'
+    Options = [ofEnableSizing]
+    Left = 55
+    Top = 321
+  end
+  object PopupActionBarPreview: TPopupActionBar
+    OnPopup = PopupActionBarPreviewPopup
+    Left = 327
+    Top = 313
+    object MenuItemRefresh: TMenuItem
+      Caption = #1054#1073#1085#1086#1074#1080#1090#1100
+      ShortCut = 116
+      OnClick = MenuItemRefreshClick
+    end
+    object N3: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemAddVariant: TMenuItem
+      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1074#1072#1088#1080#1072#1085#1090
+      ShortCut = 114
+      OnClick = MenuItemAddVariantClick
+    end
+    object N4: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemDelete: TMenuItem
+      Caption = #1059#1076#1072#1083#1080#1090#1100
+      ShortCut = 16430
+      OnClick = MenuItemDeleteClick
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemClear: TMenuItem
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+      OnClick = MenuItemClearClick
+    end
+  end
+  object DataSourcePreview: TDataSource
+    Left = 167
+    Top = 329
+  end
+  object DataSourcePresentation: TDataSource
+    Left = 382
+    Top = 117
+  end
+  object Timer: TTimer
+    OnTimer = TimerTimer
+    Left = 127
+    Top = 41
+  end
+end

@@ -1,0 +1,267 @@
+unit BisDesignDataRolesAndAccountsFm;
+
+interface
+                                                                                                
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList, DB,
+  VirtualTrees, 
+  BisFm, BisDataFrm, BisFieldNames, BisDataTreeFm, BisDataTreeFrm, BisDataGridFm;
+
+type
+  TBisDesignDataRolesAndAccountsFrame=class(TBisDataTreeFrame)
+  private
+    FSWithOutRole: String;
+    procedure TreeClick(Sender: TObject);
+    procedure FillProvider;
+    function GetNewUserName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure OpenRecords; override;
+    procedure Init; override;
+
+//    property SWithOutRole: String read FSWithOutRole write FSWithOutRole;
+  end;
+
+  TBisDesignDataRolesAndAccountsForm = class(TBisDataTreeForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDesignDataRolesAndAccountsFormIface=class(TBisDataTreeFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDesignDataRolesAndAccountsForm: TBisDesignDataRolesAndAccountsForm;
+
+implementation
+
+uses BisFilterGroups, BisOrders, BisProvider, BisUtils, BisDialogs;
+
+{$R *.dfm}
+
+{ TBisDesignDataRolesAndAccountsFrame }
+
+constructor TBisDesignDataRolesAndAccountsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  with Provider do begin
+    ProviderName:='S_ROLES_ACCOUNTS';
+    with FieldNames do begin
+      AddKey('ACCOUNT_ID');
+      AddParentKey('PARENT_ID');
+      AddInvisible('NAME');
+      AddInvisible('SURNAME');
+      AddInvisible('PATRONYMIC');
+      AddInvisible('USER_NAME');
+      AddInvisible('PHONE');
+      AddCalculate('NEW_USER_NAME','Наименование',GetNewUserName,ftString,400,300);
+    end;
+  end;
+
+  ActionView.Visible:=false;
+  ActionInsert.Visible:=false;
+  ActionDuplicate.Visible:=false;
+  ActionUpdate.Visible:=false;
+  ActionDelete.Visible:=false;
+
+//  FSWithOutRole:='Роль не определена';
+
+  Tree.OnClick:=TreeClick;
+end;
+
+procedure TBisDesignDataRolesAndAccountsFrame.FillProvider;
+var
+  P1: TBisProvider;
+  P2: TBisProvider;
+  P3: TBisProvider;
+  RoleId: Variant;
+  ParentId: Variant;
+begin
+  P1:=TBisProvider.Create(nil);
+  P2:=TBisProvider.Create(nil);
+  P3:=TBisProvider.Create(nil);
+  try
+    P1.ProviderName:='S_ACCOUNTS';
+    with P1.FieldNames do begin
+      AddInvisible('ACCOUNT_ID');
+      AddInvisible('USER_NAME');
+    end;
+    P1.FilterGroups.Add.Filters.Add('IS_ROLE',fcEqual,1);
+    P1.Orders.Add('USER_NAME');
+
+    P2.ProviderName:='S_ACCOUNTS';
+    with P2.FieldNames do begin
+      AddInvisible('ACCOUNT_ID');
+      AddInvisible('USER_NAME');
+      AddInvisible('NAME');
+      AddInvisible('SURNAME');
+      AddInvisible('PATRONYMIC');
+    end;
+    with P2.FilterGroups do begin
+      Add.Filters.Add('IS_ROLE',fcEqual,0);
+      Add.Filters.Add('LOCKED',fcNotEqual,1);
+    end;
+    P2.Orders.Add('USER_NAME');
+
+    P3.ProviderName:='S_ACCOUNT_ROLES';
+    with P3.FieldNames do begin
+      AddInvisible('ROLE_ID');
+      AddInvisible('ACCOUNT_ID');
+      AddInvisible('USER_NAME');
+    end;
+
+    P1.Open;
+    P2.Open;
+    P3.Open;
+    if P1.Active and P2.Active and P3.Active then begin
+      Provider.BeginUpdate;
+      try
+        Provider.EmptyTable;
+        P1.First;
+        while not P1.Eof do begin
+
+          RoleId:=P1.FieldByName('ACCOUNT_ID').Value;
+          ParentId:=GetUniqueID;
+
+          Provider.Append;
+          Provider.FieldByName('ID').Value:=ParentId;
+          Provider.FieldByName('ACCOUNT_ID').Value:=RoleId;
+          Provider.FieldByName('PARENT_ID').Value:=Null;
+          Provider.FieldByName('USER_NAME').Value:=P1.FieldByName('USER_NAME').Value;
+          Provider.Post;
+
+          P3.Filter:=FormatEx('ROLE_ID=%s',[QuotedStr(VarToStrDef(RoleId,''))]);
+          P3.Filtered:=true;
+          P3.First;
+          while not P3.Eof do begin
+
+            if P2.Locate('ACCOUNT_ID',P3.FieldByName('ACCOUNT_ID').Value,[loCaseInsensitive]) then begin
+              Provider.Append;
+              Provider.FieldByName('ID').Value:=GetUniqueID;
+              Provider.FieldByName('ACCOUNT_ID').Value:=P3.FieldByName('ACCOUNT_ID').Value;
+              Provider.FieldByName('PARENT_ID').Value:=ParentId;
+              Provider.FieldByName('USER_NAME').Value:=P3.FieldByName('USER_NAME').Value;
+              Provider.FieldByName('NAME').Value:=P2.FieldByName('NAME').Value;
+              Provider.FieldByName('SURNAME').Value:=P2.FieldByName('SURNAME').Value;
+              Provider.FieldByName('PATRONYMIC').Value:=P2.FieldByName('PATRONYMIC').Value;
+              Provider.Post;
+            end;
+
+            P3.Next;
+          end;
+
+          P1.Next;
+        end;
+
+        ParentId:=GetUniqueID;
+
+        Provider.Append;
+        Provider.FieldByName('ID').Value:=ParentId;
+        Provider.FieldByName('ACCOUNT_ID').Value:=Null;
+        Provider.FieldByName('PARENT_ID').Value:=Null;
+        Provider.FieldByName('USER_NAME').Value:=FSWithOutRole;
+        Provider.Post;
+
+        P3.Filter:='';
+        P3.Filtered:=false;
+
+        P2.First;
+        while not P2.Eof do begin
+
+          if not P3.Locate('ACCOUNT_ID',P2.FieldByName('ACCOUNT_ID').Value,[loCaseInsensitive]) then begin
+
+            Provider.Append;
+            Provider.FieldByName('ID').Value:=GetUniqueID;
+            Provider.FieldByName('ACCOUNT_ID').Value:=P2.FieldByName('ACCOUNT_ID').Value;
+            Provider.FieldByName('PARENT_ID').Value:=ParentId;
+            Provider.FieldByName('USER_NAME').Value:=P2.FieldByName('USER_NAME').Value;
+            Provider.FieldByName('NAME').Value:=P2.FieldByName('NAME').Value;
+            Provider.FieldByName('SURNAME').Value:=P2.FieldByName('SURNAME').Value;
+            Provider.FieldByName('PATRONYMIC').Value:=P2.FieldByName('PATRONYMIC').Value;
+            Provider.Post;
+
+          end;
+
+          P2.Next;
+        end;
+
+        Provider.First;
+      finally
+        Provider.EndUpdate;
+      end;
+    end;
+  finally
+    P3.Free;
+    P2.Free;
+    P1.Free;
+  end;
+end;
+
+function TBisDesignDataRolesAndAccountsFrame.GetNewUserName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S1, S2, S3, S4: String;
+begin
+  Result:=Null;
+  if DataSet.Active then begin
+    if VarIsNull(DataSet.FieldByName('PARENT_ID').Value) then begin
+      Result:=DataSet.FieldByName('USER_NAME').Value;
+    end else begin
+      S1:=DataSet.FieldByName('USER_NAME').AsString;
+      S2:=DataSet.FieldByName('SURNAME').AsString;
+      S3:=DataSet.FieldByName('NAME').AsString;
+      S4:=DataSet.FieldByName('PATRONYMIC').AsString;
+      Result:=FormatEx('%s - %s %s %s',[S1,S2,S3,S4]);
+    end;
+  end;
+end;
+
+procedure TBisDesignDataRolesAndAccountsFrame.Init;
+begin
+  inherited Init;
+end;
+
+procedure TBisDesignDataRolesAndAccountsFrame.OpenRecords;
+begin
+//  Tree.DataSource:=nil;
+  try
+    inherited OpenRecords;
+   /// FillProvider;
+//    DoUpdateCounters;
+  finally
+//    Tree.DataSource:=DataSource;
+  end;
+end;
+
+procedure TBisDesignDataRolesAndAccountsFrame.TreeClick(Sender: TObject);
+begin
+end;
+
+{ TBisDesignDataAccountsFormIface }
+
+constructor TBisDesignDataRolesAndAccountsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDesignDataRolesAndAccountsForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+end;
+
+{ TBisDesignDataRolesAndAccountsForm }
+
+constructor TBisDesignDataRolesAndAccountsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+class function TBisDesignDataRolesAndAccountsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisDesignDataRolesAndAccountsFrame;
+end;
+
+end.

@@ -1,0 +1,59 @@
+unit BisCallcHbookAgreementsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  StdCtrls, ExtCtrls, ComCtrls, ActnList,
+  Dialogs, BisDataTreeFm, BisDataGridFm;
+
+type
+  TBisCallcHbookAgreementsForm = class(TBisDataTreeForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookAgreementsFormIface=class(TBisDataTreeFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookAgreementsForm: TBisCallcHbookAgreementsForm;
+
+implementation
+
+uses BisCallcHbookAgreementEditFm;
+
+{$R *.dfm}
+
+{ TBisCallcHbookAgreementsFormIface }
+
+constructor TBisCallcHbookAgreementsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookAgreementsForm;
+  InsertClasses.Add(TBisDesignHbookAgreementInsertFormIface);
+  InsertClasses.Add(TBisDesignHbookAgreementInsertChildFormIface);
+  UpdateClass:=TBisCallcHbookAgreementUpdateFormIface;
+  DeleteClass:=TBisCallcHbookAgreementDeleteFormIface;
+  Permissions.Enabled:=true;
+  Available:=true;
+  ProviderName:='S_AGREEMENTS';
+  with FieldNames do begin
+    AddKey('AGREEMENT_ID');
+    AddParentKey('PARENT_ID');
+    AddInvisible('FIRM_ID');
+    AddInvisible('VARIANT_ID');
+    AddInvisible('VARIANT_NAME');
+    Add('NUM','Номер',120);
+    Add('FIRM_SMALL_NAME','Организация',200);
+    Add('DATE_BEGIN','Дата начала',75);
+    Add('DATE_END','Дата окончания',75);
+    Add('PARENT_NUM','Родитель',80);
+  end;
+end;
+
+end.

@@ -1,0 +1,42 @@
+inherited BisTaxiPhoneCodecForm: TBisTaxiPhoneCodecForm
+  Left = 0
+  Top = 0
+  Caption = #1050#1086#1076#1077#1082#1080
+  ClientHeight = 259
+  ClientWidth = 481
+  ExplicitWidth = 487
+  ExplicitHeight = 291
+  PixelsPerInch = 96
+  TextHeight = 13
+  object LabelDriver: TLabel [0]
+    Left = 32
+    Top = 24
+    Width = 48
+    Height = 13
+    Alignment = taRightJustify
+    Caption = #1044#1088#1072#1081#1074#1077#1088':'
+  end
+  inherited PanelButton: TPanel
+    Top = 224
+    Width = 481
+    ExplicitTop = 306
+    ExplicitWidth = 643
+    inherited ButtonOk: TButton
+      Left = 314
+      ExplicitLeft = 476
+    end
+    inherited ButtonCancel: TButton
+      Left = 396
+      ExplicitLeft = 558
+    end
+  end
+  object ComboBoxDrivers: TComboBox
+    Left = 96
+    Top = 21
+    Width = 345
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 1
+  end
+end

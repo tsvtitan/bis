@@ -1,0 +1,568 @@
+/* Создание таблицы билетов */
+
+CREATE TABLE /*PREFIX*/TICKETS
+(
+  TICKET_ID VARCHAR(32) NOT NULL,
+  TIRAGE_ID VARCHAR(32) NOT NULL,
+  NUM VARCHAR(8) NOT NULL,
+  SERIES VARCHAR(5) NOT NULL,
+
+  F1_01 VARCHAR(2),
+  F1_02 VARCHAR(2),
+  F1_03 VARCHAR(2),
+  F1_04 VARCHAR(2),
+  F1_05 VARCHAR(2),
+  F1_06 VARCHAR(2),
+  F1_07 VARCHAR(2),
+  F1_08 VARCHAR(2),
+  F1_09 VARCHAR(2),
+
+  F2_01 VARCHAR(2),
+  F2_02 VARCHAR(2),
+  F2_03 VARCHAR(2),
+  F2_04 VARCHAR(2),
+  F2_05 VARCHAR(2),
+  F2_06 VARCHAR(2),
+  F2_07 VARCHAR(2),
+  F2_08 VARCHAR(2),
+  F2_09 VARCHAR(2),
+
+  F3_01 VARCHAR(2),
+  F3_02 VARCHAR(2),
+  F3_03 VARCHAR(2),
+  F3_04 VARCHAR(2),
+  F3_05 VARCHAR(2),
+  F3_06 VARCHAR(2),
+  F3_07 VARCHAR(2),
+  F3_08 VARCHAR(2),
+  F3_09 VARCHAR(2),
+
+  F4_01 VARCHAR(2),
+  F4_02 VARCHAR(2),
+  F4_03 VARCHAR(2),
+  F4_04 VARCHAR(2),
+  F4_05 VARCHAR(2),
+  F4_06 VARCHAR(2),
+  F4_07 VARCHAR(2),
+  F4_08 VARCHAR(2),
+  F4_09 VARCHAR(2),
+
+  NOT_USED INTEGER NOT NULL,
+  SURNAME VARCHAR(100),
+  NAME VARCHAR(100),
+  PATRONYMIC VARCHAR(100),
+  ADDRESS VARCHAR(250),
+  PHONE VARCHAR(100),
+  PRIMARY KEY (TICKET_ID),
+  FOREIGN KEY (TIRAGE_ID) REFERENCES /*PREFIX*/TIRAGES (TIRAGE_ID)
+)
+
+--
+
+/* Создание индекса на номер билета */
+
+CREATE INDEX TICKETS_NUM_IDX ON TICKETS (NUM)
+
+--
+
+/* Создание индекса на номер билета */
+
+CREATE INDEX TICKETS_SERIES_IDX ON TICKETS (SERIES)
+
+--
+
+/* Создание индекса на статус */
+
+CREATE INDEX TICKETS_NOT_USED_IDX ON TICKETS (NOT_USED)
+
+--
+
+/* Создание индекса на F1_01 */
+
+CREATE INDEX TICKETS_F1_01_IDX ON TICKETS (F1_01)
+
+--
+
+/* Создание индекса на F1_02 */
+
+CREATE INDEX TICKETS_F1_02_IDX ON TICKETS (F1_02)
+
+--
+
+/* Создание индекса на F1_03 */
+
+CREATE INDEX TICKETS_F1_03_IDX ON TICKETS (F1_03)
+
+--
+
+/* Создание индекса на F1_04 */
+
+CREATE INDEX TICKETS_F1_04_IDX ON TICKETS (F1_04)
+
+--
+
+/* Создание индекса на F1_05 */
+
+CREATE INDEX TICKETS_F1_05_IDX ON TICKETS (F1_05)
+
+--
+
+/* Создание индекса на F1_06 */
+
+CREATE INDEX TICKETS_F1_06_IDX ON TICKETS (F1_06)
+
+--
+
+/* Создание индекса на F1_07 */
+
+CREATE INDEX TICKETS_F1_07_IDX ON TICKETS (F1_07)
+
+--
+
+/* Создание индекса на F1_08 */
+
+CREATE INDEX TICKETS_F1_08_IDX ON TICKETS (F1_08)
+
+--
+
+/* Создание индекса на F1_09 */
+
+CREATE INDEX TICKETS_F1_09_IDX ON TICKETS (F1_09)
+
+--
+
+/* Создание индекса на F2_01 */
+
+CREATE INDEX TICKETS_F2_01_IDX ON TICKETS (F2_01)
+
+--
+
+/* Создание индекса на F2_02 */
+
+CREATE INDEX TICKETS_F2_02_IDX ON TICKETS (F2_02)
+
+--
+
+/* Создание индекса на F2_03 */
+
+CREATE INDEX TICKETS_F2_03_IDX ON TICKETS (F2_03)
+
+--
+
+/* Создание индекса на F2_04 */
+
+CREATE INDEX TICKETS_F2_04_IDX ON TICKETS (F2_04)
+
+--
+
+/* Создание индекса на F2_05 */
+
+CREATE INDEX TICKETS_F2_05_IDX ON TICKETS (F2_05)
+
+--
+
+/* Создание индекса на F2_06 */
+
+CREATE INDEX TICKETS_F2_06_IDX ON TICKETS (F2_06)
+
+--
+
+/* Создание индекса на F2_07 */
+
+CREATE INDEX TICKETS_F2_07_IDX ON TICKETS (F2_07)
+
+--
+
+/* Создание индекса на F2_08 */
+
+CREATE INDEX TICKETS_F2_08_IDX ON TICKETS (F2_08)
+
+--
+
+/* Создание индекса на F2_09 */
+
+CREATE INDEX TICKETS_F2_09_IDX ON TICKETS (F2_09)
+
+--
+
+/* Создание индекса на F3_01 */
+
+CREATE INDEX TICKETS_F3_01_IDX ON TICKETS (F3_01)
+
+--
+
+/* Создание индекса на F3_02 */
+
+CREATE INDEX TICKETS_F3_02_IDX ON TICKETS (F3_02)
+
+--
+
+/* Создание индекса на F3_03 */
+
+CREATE INDEX TICKETS_F3_03_IDX ON TICKETS (F3_03)
+
+--
+
+/* Создание индекса на F3_04 */
+
+CREATE INDEX TICKETS_F3_04_IDX ON TICKETS (F3_04)
+
+--
+
+/* Создание индекса на F3_05 */
+
+CREATE INDEX TICKETS_F3_05_IDX ON TICKETS (F3_05)
+
+--
+
+/* Создание индекса на F3_06 */
+
+CREATE INDEX TICKETS_F3_06_IDX ON TICKETS (F3_06)
+
+--
+
+/* Создание индекса на F3_07 */
+
+CREATE INDEX TICKETS_F3_07_IDX ON TICKETS (F3_07)
+
+--
+
+/* Создание индекса на F3_08 */
+
+CREATE INDEX TICKETS_F3_08_IDX ON TICKETS (F3_08)
+
+--
+
+/* Создание индекса на F3_09 */
+
+CREATE INDEX TICKETS_F3_09_IDX ON TICKETS (F3_09)
+
+--
+
+/* Создание индекса на F4_01 */
+
+CREATE INDEX TICKETS_F4_01_IDX ON TICKETS (F4_01)
+
+--
+
+/* Создание индекса на F4_02 */
+
+CREATE INDEX TICKETS_F4_02_IDX ON TICKETS (F4_02)
+
+--
+
+/* Создание индекса на F4_03 */
+
+CREATE INDEX TICKETS_F4_03_IDX ON TICKETS (F4_03)
+
+--
+
+/* Создание индекса на F4_04 */
+
+CREATE INDEX TICKETS_F4_04_IDX ON TICKETS (F4_04)
+
+--
+
+/* Создание индекса на F4_05 */
+
+CREATE INDEX TICKETS_F4_05_IDX ON TICKETS (F4_05)
+
+--
+
+/* Создание индекса на F4_06 */
+
+CREATE INDEX TICKETS_F4_06_IDX ON TICKETS (F4_06)
+
+--
+
+/* Создание индекса на F4_07 */
+
+CREATE INDEX TICKETS_F4_07_IDX ON TICKETS (F4_07)
+
+--
+
+/* Создание индекса на F4_08 */
+
+CREATE INDEX TICKETS_F4_08_IDX ON TICKETS (F4_08)
+
+--
+
+/* Создание индекса на F4_09 */
+
+CREATE INDEX TICKETS_F4_09_IDX ON TICKETS (F4_09)
+
+--
+
+/* Создание просмотра таблицы билетов */
+
+CREATE VIEW /*PREFIX*/S_TICKETS
+(
+  TICKET_ID,
+  TIRAGE_ID,
+  NUM,
+  SERIES,
+
+  F1_01,
+  F1_02,
+  F1_03,
+  F1_04,
+  F1_05,
+  F1_06,
+  F1_07,
+  F1_08,
+  F1_09,
+
+  F2_01,
+  F2_02,
+  F2_03,
+  F2_04,
+  F2_05,
+  F2_06,
+  F2_07,
+  F2_08,
+  F2_09,
+
+  F3_01,
+  F3_02,
+  F3_03,
+  F3_04,
+  F3_05,
+  F3_06,
+  F3_07,
+  F3_08,
+  F3_09,
+
+  F4_01,
+  F4_02,
+  F4_03,
+  F4_04,
+  F4_05,
+  F4_06,
+  F4_07,
+  F4_08,
+  F4_09,
+
+  NOT_USED,
+  SURNAME,
+  NAME,
+  PATRONYMIC,
+  ADDRESS,
+  PHONE,
+  TIRAGE_NUM
+)
+AS
+  SELECT T.*,
+         TR.NUM AS TIRAGE_NUM
+    FROM /*PREFIX*/TICKETS T
+    JOIN /*PREFIX*/TIRAGES TR ON TR.TIRAGE_ID=T.TIRAGE_ID
+
+--
+
+/* Создание процедуры добавления билета */
+
+CREATE PROCEDURE /*PREFIX*/I_TICKET
+(
+  TICKET_ID VARCHAR(32),
+  TIRAGE_ID VARCHAR(32),
+  NUM VARCHAR(8),
+  SERIES VARCHAR(5),
+
+  F1_01 VARCHAR(2),
+  F1_02 VARCHAR(2),
+  F1_03 VARCHAR(2),
+  F1_04 VARCHAR(2),
+  F1_05 VARCHAR(2),
+  F1_06 VARCHAR(2),
+  F1_07 VARCHAR(2),
+  F1_08 VARCHAR(2),
+  F1_09 VARCHAR(2),
+
+  F2_01 VARCHAR(2),
+  F2_02 VARCHAR(2),
+  F2_03 VARCHAR(2),
+  F2_04 VARCHAR(2),
+  F2_05 VARCHAR(2),
+  F2_06 VARCHAR(2),
+  F2_07 VARCHAR(2),
+  F2_08 VARCHAR(2),
+  F2_09 VARCHAR(2),
+
+  F3_01 VARCHAR(2),
+  F3_02 VARCHAR(2),
+  F3_03 VARCHAR(2),
+  F3_04 VARCHAR(2),
+  F3_05 VARCHAR(2),
+  F3_06 VARCHAR(2),
+  F3_07 VARCHAR(2),
+  F3_08 VARCHAR(2),
+  F3_09 VARCHAR(2),
+
+  F4_01 VARCHAR(2),
+  F4_02 VARCHAR(2),
+  F4_03 VARCHAR(2),
+  F4_04 VARCHAR(2),
+  F4_05 VARCHAR(2),
+  F4_06 VARCHAR(2),
+  F4_07 VARCHAR(2),
+  F4_08 VARCHAR(2),
+  F4_09 VARCHAR(2),
+
+  NOT_USED INTEGER,
+  SURNAME VARCHAR(100),
+  NAME VARCHAR(100),
+  PATRONYMIC VARCHAR(100),
+  ADDRESS VARCHAR(250),
+  PHONE VARCHAR(100)
+)
+AS
+BEGIN
+  INSERT INTO /*PREFIX*/TICKETS (TICKET_ID,TIRAGE_ID,NUM,SERIES,
+                                 F1_01,F1_02,F1_03,F1_04,F1_05,F1_06,F1_07,F1_08,F1_09,
+                                 F2_01,F2_02,F2_03,F2_04,F2_05,F2_06,F2_07,F2_08,F2_09,
+                                 F3_01,F3_02,F3_03,F3_04,F3_05,F3_06,F3_07,F3_08,F3_09,
+                                 F4_01,F4_02,F4_03,F4_04,F4_05,F4_06,F4_07,F4_08,F4_09,
+                                 NOT_USED,SURNAME,NAME,PATRONYMIC,ADDRESS,PHONE)
+       VALUES (:TICKET_ID,:TIRAGE_ID,:NUM,:SERIES,
+               :F1_01,:F1_02,:F1_03,:F1_04,:F1_05,:F1_06,:F1_07,:F1_08,:F1_09,
+               :F2_01,:F2_02,:F2_03,:F2_04,:F2_05,:F2_06,:F2_07,:F2_08,:F2_09,
+               :F3_01,:F3_02,:F3_03,:F3_04,:F3_05,:F3_06,:F3_07,:F3_08,:F3_09,
+               :F4_01,:F4_02,:F4_03,:F4_04,:F4_05,:F4_06,:F4_07,:F4_08,:F4_09,
+               :NOT_USED,:SURNAME,:NAME,:PATRONYMIC,:ADDRESS,:PHONE);
+END;
+
+--
+
+/* Создание процедуры изменения билета */
+
+CREATE PROCEDURE /*PREFIX*/U_TICKET
+(
+  TICKET_ID VARCHAR(32),
+  TIRAGE_ID VARCHAR(32),
+  NUM VARCHAR(8),
+  SERIES VARCHAR(5),
+
+  F1_01 VARCHAR(2),
+  F1_02 VARCHAR(2),
+  F1_03 VARCHAR(2),
+  F1_04 VARCHAR(2),
+  F1_05 VARCHAR(2),
+  F1_06 VARCHAR(2),
+  F1_07 VARCHAR(2),
+  F1_08 VARCHAR(2),
+  F1_09 VARCHAR(2),
+
+  F2_01 VARCHAR(2),
+  F2_02 VARCHAR(2),
+  F2_03 VARCHAR(2),
+  F2_04 VARCHAR(2),
+  F2_05 VARCHAR(2),
+  F2_06 VARCHAR(2),
+  F2_07 VARCHAR(2),
+  F2_08 VARCHAR(2),
+  F2_09 VARCHAR(2),
+
+  F3_01 VARCHAR(2),
+  F3_02 VARCHAR(2),
+  F3_03 VARCHAR(2),
+  F3_04 VARCHAR(2),
+  F3_05 VARCHAR(2),
+  F3_06 VARCHAR(2),
+  F3_07 VARCHAR(2),
+  F3_08 VARCHAR(2),
+  F3_09 VARCHAR(2),
+
+  F4_01 VARCHAR(2),
+  F4_02 VARCHAR(2),
+  F4_03 VARCHAR(2),
+  F4_04 VARCHAR(2),
+  F4_05 VARCHAR(2),
+  F4_06 VARCHAR(2),
+  F4_07 VARCHAR(2),
+  F4_08 VARCHAR(2),
+  F4_09 VARCHAR(2),
+
+  NOT_USED INTEGER,
+  SURNAME VARCHAR(100),
+  NAME VARCHAR(100),
+  PATRONYMIC VARCHAR(100),
+  ADDRESS VARCHAR(250),
+  PHONE VARCHAR(100),
+  OLD_TICKET_ID VARCHAR(32)
+)
+AS
+BEGIN
+  UPDATE /*PREFIX*/TICKETS
+     SET TICKET_ID=:TICKET_ID,
+         TIRAGE_ID=:TIRAGE_ID,
+         NUM=:NUM,
+         SERIES=:SERIES,
+
+         F1_01=:F1_01,
+         F1_02=:F1_02,
+         F1_03=:F1_03,
+         F1_04=:F1_04,
+         F1_05=:F1_05,
+         F1_06=:F1_06,
+         F1_07=:F1_07,
+         F1_08=:F1_08,
+         F1_09=:F1_09,
+
+         F2_01=:F2_01,
+         F2_02=:F2_02,
+         F2_03=:F2_03,
+         F2_04=:F2_04,
+         F2_05=:F2_05,
+         F2_06=:F2_06,
+         F2_07=:F2_07,
+         F2_08=:F2_08,
+         F2_09=:F2_09,
+
+         F3_01=:F3_01,
+         F3_02=:F3_02,
+         F3_03=:F3_03,
+         F3_04=:F3_04,
+         F3_05=:F3_05,
+         F3_06=:F3_06,
+         F3_07=:F3_07,
+         F3_08=:F3_08,
+         F3_09=:F3_09,
+
+         F4_01=:F4_01,
+         F4_02=:F4_02,
+         F4_03=:F4_03,
+         F4_04=:F4_04,
+         F4_05=:F4_05,
+         F4_06=:F4_06,
+         F4_07=:F4_07,
+         F4_08=:F4_08,
+         F4_09=:F4_09,
+
+         NOT_USED=:NOT_USED,
+         SURNAME=:SURNAME,
+         NAME=:NAME,
+         PATRONYMIC=:PATRONYMIC,
+         ADDRESS=:ADDRESS,
+         PHONE=:PHONE
+
+   WHERE TICKET_ID=:OLD_TICKET_ID;
+END;
+
+--
+
+/* Создание процедуры удаления билета */
+
+CREATE PROCEDURE /*PREFIX*/D_TICKET
+(
+  OLD_TICKET_ID VARCHAR(32)
+)
+AS
+BEGIN
+  DELETE FROM /*PREFIX*/TICKETS
+        WHERE TICKET_ID=:OLD_TICKET_ID;
+END;
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

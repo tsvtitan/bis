@@ -1,0 +1,540 @@
+unit BisBallDistrTicketsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, Mask, Menus, ActnPopup,
+  BisFm, BisSizeGrip, BisControls;
+
+type
+  TBisBallDistrTicketsForm = class(TBisForm)
+    PanelControls: TPanel;
+    EditTirage: TEdit;
+    GroupBoxAction: TGroupBox;
+    RadioButtonDistr: TRadioButton;
+    RadioButtonReturn: TRadioButton;
+    ButtonTirage: TButton;
+    LabelTirage: TLabel;
+    ProgressBar: TProgressBar;
+    LabelCounter: TLabel;
+    ButtonAction: TButton;
+    GroupBoxStatistics: TGroupBox;
+    LabelTicketCount: TLabel;
+    LabelTicketManageCount: TLabel;
+    LabelTicketUsedCount: TLabel;
+    LabelTicketNotUsedCount: TLabel;
+    LabelTicketCounter: TLabel;
+    LabelTicketManageCounter: TLabel;
+    LabelTicketNotUsedCounter: TLabel;
+    LabelTicketUsedCounter: TLabel;
+    LabelDealer: TLabel;
+    EditDealer: TEdit;
+    ButtonDealer: TButton;
+    LabelTicketUsedCountByDealer: TLabel;
+    LabelTicketNotUsedCountByDealer: TLabel;
+    LabelTicketNotUsedCounterByDealer: TLabel;
+    LabelTicketUsedCounterByDealer: TLabel;
+    LabelTicketCountByDealer: TLabel;
+    LabelTicketCounterByDealer: TLabel;
+    GroupBoxRanges: TGroupBox;
+    LabelFrom: TLabel;
+    MaskEditFrom: TMaskEdit;
+    MaskEditTo: TMaskEdit;
+    ListBoxRanges: TListBox;
+    ButtonAddRange: TButton;
+    ButtonDelRange: TButton;
+    ButtonClearRanges: TButton;
+    LabelPaymentType: TLabel;
+    EditPaymentType: TEdit;
+    PopupActionBarRanges: TPopupActionBar;
+    MenuItemAddRange: TMenuItem;
+    MenuItemDelRange: TMenuItem;
+    MenuItemClearRanges: TMenuItem;
+    CheckBoxTo: TCheckBox;
+    procedure ButtonActionClick(Sender: TObject);
+    procedure ButtonTirageClick(Sender: TObject);
+    procedure ButtonDealerClick(Sender: TObject);
+    procedure ButtonAddRangeClick(Sender: TObject);
+    procedure ButtonDelRangeClick(Sender: TObject);
+    procedure ButtonClearRangesClick(Sender: TObject);
+    procedure ListBoxRangesClick(Sender: TObject);
+    procedure CheckBoxToClick(Sender: TObject);
+    procedure RadioButtonDistrClick(Sender: TObject);
+  private
+    FTirageId: Variant;
+    FDealerId: Variant;
+    FDealerPaymentType: Integer;
+    FSizeGrip: TBisSizeGrip;
+    FProcessCounter: Integer;
+    function CheckFields: Boolean;
+    procedure SetTirageStatistics;
+    procedure SetDealerStatistics;
+    procedure ProcessAction;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure EnableControls(AEnabled: Boolean); override;
+
+  end;
+
+  TBisBallDistrTicketsFormIface=class(TBisFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisBallDistrTicketsForm: TBisBallDistrTicketsForm;
+
+implementation
+
+uses BisDialogs, BisUtils, BisConsts, BisLogger, BisProvider, BisFilterGroups, BisCore,
+     BisBallDataTiragesFm, BisBallDataDealersFm;
+
+{$R *.dfm}
+
+type
+  TBisBallDistrRange=class(TObject)
+  private
+    FRangeFrom: String;
+    FRangeTo: String;
+    function RangeParse(S: String; First: Boolean): Integer;
+  public
+    function RangeCaption: String;
+    function RangeFromValue: Integer;
+    function RangeToValue: Integer;
+  end;
+
+{ TBisBallDistrRange }
+
+function TBisBallDistrRange.RangeCaption: String;
+var
+  AFrom: Integer;
+  ATo: Integer;
+begin
+  Result:='';
+  if Trim(FRangeFrom)<>'' then
+    Result:=FRangeFrom;
+  if Trim(FRangeTo)<>'' then
+    Result:=Result+'  -  '+FRangeTo;
+
+  AFrom:=RangeFromValue;
+  ATo:=RangeToValue;
+  if (AFrom<>-1) and (ATo<>-1) then begin
+    Result:=FormatEx('%s [%d]',[Result,ATo-AFrom+1]);
+  end;
+end;
+
+function TBisBallDistrRange.RangeParse(S: String; First: Boolean): Integer;
+var
+  S1: String;
+  S2: String;
+  Ret: Integer;
+begin
+  Result:=-1;
+  if First then
+    S2:='0'
+  else S2:='9';
+  S1:=StringReplace(S,'*',S2,[rfReplaceAll, rfIgnoreCase]);
+  if TryStrToInt(S1,Ret) then
+    Result:=Ret;  
+end;
+
+function TBisBallDistrRange.RangeFromValue: Integer;
+begin
+  Result:=RangeParse(FRangeFrom,true);
+end;
+
+function TBisBallDistrRange.RangeToValue: Integer;
+begin
+  Result:=iff(Trim(FRangeTo)<>'',RangeParse(FRangeTo,false),RangeParse(FRangeFrom,false));
+end;
+
+
+{ TBisBallDistrTicketsFormIface }
+
+constructor TBisBallDistrTicketsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisBallDistrTicketsForm;
+  Permissions.Enabled:=true;
+  OnlyOneForm:=true;
+  ShowType:=stMdiChild;
+end;
+
+{ TBisBallTicketImportForm }
+
+constructor TBisBallDistrTicketsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  CloseMode:=cmFree;
+  SizesStored:=true;
+
+  EditTirage.Color:=ColorControlReadOnly;
+  EditDealer.Color:=ColorControlReadOnly;
+  EditPaymentType.Color:=ColorControlReadOnly;
+
+  FSizeGrip:=TBisSizeGrip.Create(nil);
+  FSizeGrip.Parent:=PanelControls;
+
+  ClearStrings(ListBoxRanges.Items);
+
+  FTirageId:=Null;
+  FDealerId:=Null;
+end;
+
+destructor TBisBallDistrTicketsForm.Destroy;
+begin
+  ClearStrings(ListBoxRanges.Items);
+  FSizeGrip.Free;
+  inherited Destroy;
+end;
+
+procedure TBisBallDistrTicketsForm.EnableControls(AEnabled: Boolean);
+begin
+  inherited EnableControls(AEnabled);
+  Enabled:=true;
+  ProgressBar.Enabled:=true;
+  LabelCounter.Enabled:=true;
+  Update;
+end;
+
+procedure TBisBallDistrTicketsForm.ListBoxRangesClick(Sender: TObject);
+var
+  Obj: TBisBallDistrRange;
+  Index: Integer;
+begin
+  Index:=ListBoxRanges.ItemIndex;
+  if Index<>-1 then begin
+    Obj:=TBisBallDistrRange(ListBoxRanges.Items.Objects[Index]);
+    if Assigned(Obj) then begin
+      MaskEditFrom.EditText:=Obj.FRangeFrom;
+      CheckBoxTo.Checked:=Trim(Obj.FRangeTo)<>'';
+      CheckBoxToClick(nil);
+      if CheckBoxTo.Checked then begin
+        MaskEditTo.EditText:=Obj.FRangeTo;
+      end else begin
+        MaskEditTo.Clear;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisBallDistrTicketsForm.RadioButtonDistrClick(Sender: TObject);
+begin
+  if RadioButtonDistr.Checked then
+    ButtonAction.Caption:=GetFirstWord(RadioButtonDistr.Caption)
+  else
+    ButtonAction.Caption:=GetFirstWord(RadioButtonReturn.Caption);
+end;
+
+procedure TBisBallDistrTicketsForm.ButtonAddRangeClick(Sender: TObject);
+var
+  Obj: TBisBallDistrRange;
+  Index: Integer;
+  S: String;
+begin
+  Obj:=TBisBallDistrRange.Create;
+  Obj.FRangeFrom:=MaskEditFrom.EditText;
+  if CheckBoxTo.Checked then
+    Obj.FRangeTo:=MaskEditTo.EditText;
+  S:=Obj.RangeCaption;
+  Index:=ListBoxRanges.Items.IndexOf(S);
+  if Index=-1 then
+    ListBoxRanges.Items.AddObject(S,Obj)
+  else
+    Obj.Free;
+end;
+
+procedure TBisBallDistrTicketsForm.ButtonClearRangesClick(Sender: TObject);
+begin
+  ClearStrings(ListBoxRanges.Items);
+end;
+
+procedure TBisBallDistrTicketsForm.ButtonDealerClick(Sender: TObject);
+var
+  Iface: TBisBallDataDealersFormIface;
+  P: TBisProvider;
+begin
+  Iface:=TBisBallDataDealersFormIface.Create(nil);
+  P:=TBisProvider.Create(nil);
+  try
+    Iface.Init;
+    Iface.LocateFields:='DEALER_ID';
+    Iface.LocateValues:=FDealerId;
+    if Iface.SelectInto(P) then begin
+      if P.Active then begin
+        FDealerId:=P.FieldByName('DEALER_ID').Value;
+        EditDealer.Text:=FormatEx('%s',[P.FieldByName('SMALL_NAME').AsString]);
+        FDealerPaymentType:=P.FieldByName('PAYMENT_TYPE').AsInteger;
+        EditPaymentType.Text:=P.FieldByName('PAYMENT_TYPE_NAME').AsString;
+        SetDealerStatistics;
+      end;
+    end;
+  finally
+    P.Free;
+    Iface.Free;
+  end;
+end;
+
+procedure TBisBallDistrTicketsForm.ButtonDelRangeClick(Sender: TObject);
+var
+  Obj: TBisBallDistrRange;
+  Index: Integer;
+begin
+  Index:=ListBoxRanges.ItemIndex;
+  if Index<>-1 then begin
+    Obj:=TBisBallDistrRange(ListBoxRanges.Items.Objects[Index]);
+    if Assigned(Obj) then begin
+      ListBoxRanges.Items.Delete(Index);
+      Obj.Free;
+    end;
+  end;
+end;
+
+procedure TBisBallDistrTicketsForm.ButtonActionClick(Sender: TObject);
+begin
+  ProcessAction;
+end;
+
+procedure TBisBallDistrTicketsForm.ButtonTirageClick(Sender: TObject);
+var
+  Iface: TBisBallDataTiragesFormIface;
+  P: TBisProvider;
+begin
+  Iface:=TBisBallDataTiragesFormIface.Create(nil);
+  P:=TBisProvider.Create(nil);
+  try
+    Iface.Init;
+    Iface.FilterGroups.Add.Filters.Add('PREPARATION_DATE',fcIsNull,Null);
+    Iface.LocateFields:='TIRAGE_ID';
+    Iface.LocateValues:=FTirageId;
+    if Iface.SelectInto(P) then begin
+      if P.Active then begin
+        FTirageId:=P.FieldByName('TIRAGE_ID').Value;
+        EditTirage.Text:=FormatEx('%s от %s',
+                                  [P.FieldByName('NUM').AsString,
+                                   P.FieldByName('EXECUTION_DATE').AsString]);
+        SetTirageStatistics;
+        SetDealerStatistics;
+      end;
+    end;
+  finally
+    P.Free;
+    Iface.Free;
+  end;
+end;
+
+procedure TBisBallDistrTicketsForm.CheckBoxToClick(Sender: TObject);
+begin
+  MaskEditTo.Enabled:=CheckBoxTo.Checked;
+  if MaskEditTo.Enabled and MaskEditTo.CanFocus then
+    MaskEditTo.SetFocus;
+end;
+
+procedure TBisBallDistrTicketsForm.SetDealerStatistics;
+var
+  P: TBisProvider;
+  AllCount: Integer;
+  UsedCount: Integer;
+  NotUsedCount: Integer;
+begin
+  if not VarIsNull(FTirageId) and not VarIsNull(FDealerId) then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=false;
+      P.ProviderName:='GET_DEALER_STATISTICS';
+      with P.Params do begin
+        AddInvisible('TIRAGE_ID').Value:=FTirageId;
+        AddInvisible('DEALER_ID').Value:=FDealerId;
+        AddInvisible('ALL_COUNT',ptOutput);
+        AddInvisible('USED_COUNT',ptOutput);
+        AddInvisible('NOT_USED_COUNT',ptOutput);
+      end;
+      P.Execute;
+      if P.Success then begin
+        AllCount:=P.Params.ParamByName('ALL_COUNT').AsInteger;
+        UsedCount:=P.Params.ParamByName('USED_COUNT').AsInteger;
+        NotUsedCount:=P.Params.ParamByName('NOT_USED_COUNT').AsInteger;
+
+        LabelTicketCounterByDealer.Caption:=IntToStr(AllCount);
+        LabelTicketUsedCounterByDealer.Caption:=IntToStr(UsedCount);
+        LabelTicketNotUsedCounterByDealer.Caption:=IntToStr(NotUsedCount);
+      end;
+    finally
+      P.Free;
+    end;
+  end else begin
+    LabelTicketCounterByDealer.Caption:=IntToStr(0);
+    LabelTicketUsedCounterByDealer.Caption:=IntToStr(0);
+    LabelTicketNotUsedCounterByDealer.Caption:=IntToStr(0);
+  end;
+end;
+
+procedure TBisBallDistrTicketsForm.SetTirageStatistics;
+var
+  P: TBisProvider;
+  AllCount: Integer;
+  UsedCount: Integer;
+  NotUsedCount: Integer;
+begin
+  if not VarIsNull(FTirageId) then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=false;
+      P.ProviderName:='GET_LOTTERY_STATISTICS';
+      with P.Params do begin
+        AddInvisible('TIRAGE_ID').Value:=FTirageId;
+        AddInvisible('ALL_COUNT',ptOutput);
+        AddInvisible('USED_COUNT',ptOutput);
+        AddInvisible('NOT_USED_COUNT',ptOutput);
+      end;
+      P.Execute;
+      if P.Success then begin
+        AllCount:=P.Params.ParamByName('ALL_COUNT').AsInteger;
+        UsedCount:=P.Params.ParamByName('USED_COUNT').AsInteger;
+        NotUsedCount:=P.Params.ParamByName('NOT_USED_COUNT').AsInteger;
+
+        LabelTicketCounter.Caption:=IntToStr(AllCount);
+        LabelTicketUsedCounter.Caption:=IntToStr(UsedCount);
+        LabelTicketNotUsedCounter.Caption:=IntToStr(NotUsedCount);
+      end;
+    finally
+      P.Free;
+    end;
+  end else begin
+    LabelTicketCounter.Caption:=IntToStr(0);
+    LabelTicketUsedCounter.Caption:=IntToStr(0);
+    LabelTicketNotUsedCounter.Caption:=IntToStr(0);
+  end;
+end;
+
+function TBisBallDistrTicketsForm.CheckFields: Boolean;
+begin
+  Result:=false;
+
+  if (Trim(EditTirage.Text)='') or VarIsNull(FTirageId) then begin
+    ShowError('Выберите тираж.');
+    EditTirage.SetFocus;
+    exit;
+  end;
+
+  if (Trim(EditDealer.Text)='') or VarIsNull(FDealerId) then begin
+    ShowError('Выберите дилера.');
+    EditDealer.SetFocus;
+    exit;
+  end;
+
+  Result:=true;
+end;
+
+procedure TBisBallDistrTicketsForm.ProcessAction;
+
+  procedure SetTicketStatus(TicketNum: String);
+  var
+    P: TBisProvider;
+  begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=false;
+      P.ProviderName:='SET_TICKET_STATUS_BY_NUM';
+      with P.Params do begin
+        AddInvisible('TIRAGE_ID').Value:=FTirageId;
+        AddInvisible('DEALER_ID').Value:=iff(RadioButtonReturn.Checked,Null,FDealerId);
+        AddInvisible('TICKET_NUM').Value:=TicketNum;
+        AddInvisible('USED').Value:=Integer(RadioButtonDistr.Checked);
+      end;
+      P.Execute;
+    finally
+      P.Free;
+    end;
+  end;
+
+  procedure FillTickets(List: TStringList);
+  var
+    i,j: Integer;
+    Obj: TBisBallDistrRange;
+    AFrom: Integer;
+    ATo: Integer;
+    S: String;
+  begin
+    List.BeginUpdate;
+    try
+      for i:=0 to ListBoxRanges.Items.Count-1 do begin
+        Obj:=TBisBallDistrRange(ListBoxRanges.Items.Objects[i]);
+        if Assigned(Obj) then begin
+          AFrom:=Obj.RangeFromValue;
+          ATo:=Obj.RangeToValue;
+          if (AFrom<>-1) and (ATo<>-1) then begin
+            for j:=AFrom to ATo do begin
+              S:=FormatFloat('00000000',j);
+              List.AddObject(S,Obj);
+            end;
+          end;
+        end;
+      end;
+    finally
+      List.EndUpdate;
+    end;
+  end;
+
+var
+  OldCursor: TCursor;
+  Tickets: TStringList;
+  i: Integer;
+  Num: String;
+  Flag: Boolean;
+begin
+  if CheckFields then begin
+    try
+
+      EnableControls(false);
+      OldCursor:=Screen.Cursor;
+      Tickets:=TStringList.Create;
+      ProgressBar.Position:=0;
+      Flag:=false;
+      try
+        Screen.Cursor:=crHourGlass;
+        FProcessCounter:=0;
+        FillTickets(Tickets);
+        ProgressBar.Max:=Tickets.Count;
+        Flag:=ShowQuestion(FormatEx('Будет обработано %d билетов. Продолжить?',[ProgressBar.Max]),mbNo)=mrYes;
+        if Flag then begin
+          for i:=0 to Tickets.Count-1 do begin
+            Num:=Tickets[i];
+            SetTicketStatus(Num);
+            LabelCounter.Caption:=Format('Обработано %d из %d',[i+1,ProgressBar.Max]);
+            LabelCounter.Update;
+            ProgressBar.Position:=i+1;
+            ProgressBar.Update;
+            Application.ProcessMessages;
+          end;
+        end;  
+      finally
+        if Flag then begin
+          FProcessCounter:=FProcessCounter+Tickets.Count;
+          LabelTicketManageCounter.Caption:=IntToStr(FProcessCounter);
+        end;  
+        ProgressBar.Position:=0;
+        Tickets.Free;
+        Screen.Cursor:=OldCursor;
+        EnableControls(true);
+      end;
+
+      if Flag then begin
+        SetTirageStatistics;
+        SetDealerStatistics;
+
+        ShowInfo(FormatEx('Обработано %d билетов.',[ProgressBar.Max]));
+      end;  
+    except
+      On E: Exception do begin
+        LoggerWrite(E.Message,ltError);
+        ShowError(E.Message);
+      end;
+    end;
+  end;
+end;
+
+
+end.

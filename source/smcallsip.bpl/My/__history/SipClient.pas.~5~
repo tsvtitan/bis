@@ -1,0 +1,669 @@
+unit SipClient;
+
+interface
+
+type
+  TBisSipClient=class;
+  
+  TBisSipClientEvent=procedure (Sender: TBisSipClient) of object;
+  TBisSipClientAcceptEvent=function (Sender: TBisSipClient; Session: TBisSipSession; Message: TBisSipMessage): Boolean of object;
+  TBisSipClientSessionEvent=procedure (Sender: TBisSipClient; Session: TBisSipSession) of object;
+  TBisSipClientSessionTimeoutEvent=procedure (Sender: TBisSipClient; Session: TBisSipSession; var TryRegister: Boolean) of object;
+  TBisSipClientAliveEvent=function (Sender: TBisSipClient; Session: TBisSipSession): Boolean of object;
+  TBisSipClientMessageTimeoutEvent=procedure (Sender: TBisSipClient; Message: TBisSipMessage; var TryRegister: Boolean) of object;
+  TBisSipClientSessionContentEvent=procedure (Sender: TBisSipClient; Session: TBisSipSession; Content: String) of object;
+
+  TBisSipClient=class(TBisSipReceiver)
+  private
+    FScheme, FProtocol: String;
+    FRemoteHost: String;
+    FRemotePort: Integer;
+    FRemoteIP: String;
+    FLocalIP: String;
+    FLocalPort: Integer;
+    FUserName: String;
+    FPassword: String;
+    FExpires: Integer;
+    FQ: String;
+    FUserAgent: String;
+    FSequence: Integer;
+    FTransport: TBisSipTransport;
+    FRequests: TBisSipRequests;
+    FMaxForwards: Integer;
+    FOnRegister: TBisSipClientEvent;
+    FRegistered: Boolean;
+    FWaitRetryCount: Cardinal;
+    FUseRport: Boolean;
+    FKeepAliveQuery: String;
+    FSessionIdleTimeOut: Integer;
+    FSessionAlive: Integer;
+    FUseTrasnportNameInUri: Boolean;
+    FUsePortInUri: Boolean;
+    FUseGlobalSequence: Boolean;
+
+    FLastRequest: TBisSipRequest;
+    FWaits: TBisSipMessageWaitThreads;
+    FSessions: TBisSipSessions;
+    FKeepAlive: Integer;
+    FUseReceived: Boolean;
+    FReceived: String;
+//    FTimers: TBisSipTimerThreads;
+
+    FSExpiresTimer: String;
+    FSAliveTimer: String;
+
+    FOnSessionRing: TBisSipClientSessionEvent;
+    FOnSessionProgress: TBisSipClientSessionEvent;
+    FOnSessionCreate: TBisSipClientSessionEvent;
+    FOnSessionDestroy: TBisSipClientSessionEvent;
+    FOnSessionConfirm: TBisSipClientSessionEvent;
+    FOnSessionTerminate: TBisSipClientSessionEvent;
+    FOnSessionAccept: TBisSipClientAcceptEvent;
+    FOnSessionAlive: TBisSipClientAliveEvent;
+    FOnMessageTimeout: TBisSipClientMessageTimeoutEvent;
+    FOnSessionTimeout: TBisSipClientSessionTimeoutEvent;
+    FOnSessionContent: TBisSipClientSessionContentEvent;
+
+    procedure SendRequest(Request: TBisSipRequest; WithWait: Boolean=true);
+    procedure SendResponse(Response: TBisSipResponse; WithWait: Boolean=false);
+    procedure SetTransport(const Value: TBisSipTransport);
+    procedure WaitsTimeOut(Thread: TBisWaitThread);
+    procedure AddReceiver(Receiver: TBisSipReceiver);
+    procedure RemoveReceiver(Receiver: TBisSipReceiver);
+    procedure RemoveWaits(Session: TBisSipSession);
+    function GetTransportName: String;
+//    procedure RegisterTimer(Sender: TBisSipTimerThread);
+//    procedure KeepAliveTimer(Sender: TBisSipTimerThread);
+//    procedure SessionTimer(Sender: TBisSipTimerThread);
+    procedure FirstRegister(Request: TBisSipRequest=nil);
+    function GetUri: String;
+    function GetWaitTimeOut: Cardinal;
+    procedure SetWaitTimeOut(const Value: Cardinal);
+  protected
+    function ReceiveRequest(Request: TBisSipRequest): Boolean; override;
+    function ReceiveResponse(Response: TBisSipResponse): Boolean; override;
+    procedure DoRegister; virtual;
+    procedure DoMessageTimeout(Message: TBisSipMessage; var TryRegister: Boolean); virtual;
+    procedure DoSessionCreate(Session: TBisSipSession); virtual;
+    procedure DoSessionDestroy(Session: TBisSipSession); virtual;
+    function DoSessionAccept(Session: TBisSipSession; Message: TBisSipMessage): Boolean; virtual;
+    procedure DoSessionRing(Session: TBisSipSession); virtual;
+    procedure DoSessionProgress(Session: TBisSipSession); virtual;
+    procedure DoSessionConfirm(Session: TBisSipSession); virtual;
+    procedure DoSessionTerminate(Session: TBisSipSession); virtual;
+    function DoSessionAlive(Session: TBisSipSession): Boolean; virtual;
+    procedure DoSessionTimeout(Session: TBisSipSession; var TryRegister: Boolean); virtual;
+    procedure DoSessionContent(Session: TBisSipSession; Content: String); virtual;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    function NextSequence: String;
+
+    procedure Register(Active: Boolean; Initial: Boolean=false);
+    function UriTransportName: String;
+    function UriLocalPort: String;
+    function UriRemotePort: String;
+    function CheckUri(Uri: String): Boolean;
+
+    property Sessions: TBisSipSessions read FSessions;
+    property Registered: Boolean read FRegistered;
+    property Uri: String read GetUri;
+    property TransportName: String read GetTransportName;
+
+    property Transport: TBisSipTransport read FTransport write SetTransport;
+    property Scheme: String read FScheme write FScheme;
+    property Protocol: String read FProtocol write FProtocol;
+    property RemoteHost: String read FRemoteHost write FRemoteHost;
+    property RemoteIP: String read FRemoteIP write FRemoteIP;
+    property RemotePort: Integer read FRemotePort write FRemotePort;
+    property LocalIP: String read FLocalIP write FLocalIP;
+    property LocalPort: Integer read FLocalPort write FLocalPort;
+    property UserName: String read FUserName write FUserName;
+    property Password: String read FPassword write FPassword;
+    property Expires: Integer read FExpires write FExpires;
+    property UserAgent: String read FUserAgent write FUserAgent;
+    property MaxForwards: Integer read FMaxForwards write FMaxForwards;
+    property KeepAlive: Integer read FKeepAlive write FKeepAlive;
+    property KeepAliveQuery: String read FKeepAliveQuery write FKeepAliveQuery;
+    property UseReceived: Boolean read FUseReceived write FUseReceived;
+    property UseRport: Boolean read FUseRport write FUseRport;
+    property UseTrasnportNameInUri: Boolean read FUseTrasnportNameInUri write FUseTrasnportNameInUri;
+    property UsePortInUri: Boolean read FUsePortInUri write FUsePortInUri;
+    property UseGlobalSequence: Boolean read FUseGlobalSequence write FUseGlobalSequence;
+    property WaitRetryCount: Cardinal read FWaitRetryCount write FWaitRetryCount;
+    property WaitTimeOut: Cardinal read GetWaitTimeOut write SetWaitTimeOut;
+    property SessionAlive: Integer read FSessionAlive write FSessionAlive;
+    property SessionIdleTimeOut: Integer read FSessionIdleTimeOut write FSessionIdleTimeOut;
+
+    property OnRegister: TBisSipClientEvent read FOnRegister write FOnRegister;
+    property OnMessageTimeout: TBisSipClientMessageTimeoutEvent read FOnMessageTimeout write FOnMessageTimeout;
+    property OnSessionCreate: TBisSipClientSessionEvent read FOnSessionCreate write FOnSessionCreate;
+    property OnSessionDestroy: TBisSipClientSessionEvent read FOnSessionDestroy write FOnSessionDestroy; 
+    property OnSessionAccept: TBisSipClientAcceptEvent read FOnSessionAccept write FOnSessionAccept; 
+    property OnSessionRing: TBisSipClientSessionEvent read FOnSessionRing write FOnSessionRing;
+    property OnSessionProgress: TBisSipClientSessionEvent read FOnSessionProgress write FOnSessionProgress;
+    property OnSessionConfirm: TBisSipClientSessionEvent read FOnSessionConfirm write FOnSessionConfirm;
+    property OnSessionTerminate: TBisSipClientSessionEvent read FOnSessionTerminate write FOnSessionTerminate;
+    property OnSessionAlive: TBisSipClientAliveEvent read FOnSessionAlive write FOnSessionAlive;
+    property OnSessionTimeout: TBisSipClientSessionTimeoutEvent read FOnSessionTimeout write FOnSessionTimeout; 
+    property OnSessionContent: TBisSipClientSessionContentEvent read FOnSessionContent write FOnSessionContent; 
+
+  end;
+
+
+implementation
+
+{ TBisSipClient }
+
+constructor TBisSipClient.Create;
+begin
+  inherited Create;
+  FScheme:=DefaultScheme;
+  FProtocol:=DefaultProtocol;
+
+  FWaits:=TBisSipMessageWaitThreads.Create;
+  FWaits.FOnTimeOut:=WaitsTimeOut;
+  FWaits.FTimeOut:=3000;
+
+//  FTimers:=TBisSipTimerThreads.Create;}
+
+  FRequests:=TBisSipRequests.Create;
+
+  FSessions:=TBisSipSessions.Create(Self);
+
+  FLastRequest:=nil;
+
+  FExpires:=3600;
+  FQ:='0.9';
+  FMaxForwards:=70;
+  FSequence:=0;
+  FKeepAlive:=30000;
+  FKeepAliveQuery:=#13#10#13#10;
+  FWaitRetryCount:=5;
+  FSessionIdleTimeOut:=60000;
+//FSessionAlive:=1000;
+  FSessionAlive:=0;
+  FUseGlobalSequence:=false;
+
+  FSExpiresTimer:='SipExpiresTimer';
+  FSAliveTimer:='SipAliveTimer';
+
+end;
+
+destructor TBisSipClient.Destroy;
+begin
+  RemoveReceiver(Self);
+  if Assigned(FLastRequest) then begin
+    FLastRequest.Free;
+    FLastRequest:=nil;
+  end;
+  FSessions.Free;
+  FRequests.Free;
+//  FTimers.Free;
+  FWaits.Free;
+  inherited Destroy;
+end;
+
+procedure TBisSipClient.AddReceiver(Receiver: TBisSipReceiver);
+begin
+  if Assigned(FTransport) then
+    FTransport.Receivers.Add(Receiver);
+end;
+
+procedure TBisSipClient.RemoveReceiver(Receiver: TBisSipReceiver);
+begin
+  if Assigned(FTransport) then
+    FTransport.Receivers.Remove(Receiver);
+end;
+
+procedure TBisSipClient.RemoveWaits(Session: TBisSipSession);
+var
+  i,x: Integer;
+  Request: TBisSipRequest;
+  Response: TBisSipResponse;
+begin
+  if Assigned(Session) then begin
+    for i:=Session.FRequests.Count-1 downto 0 do begin
+      Request:=Session.FRequests.Items[i];
+      for x:=Request.FResponses.Count-1 downto 0 do begin
+        Response:=Request.FResponses.Items[x];
+        FWaits.LockRemoveBy(Response);
+      end;
+      FWaits.LockRemoveBy(Request);
+    end;
+  end;
+end;
+
+function TBisSipClient.GetUri: String;
+begin
+  Result:=Format('%s%s%s%s%s',[iff(FScheme<>'',FScheme+':',''),
+                               iff(FUserName<>'',FUserName+'@',''),
+                               iff(FLocalIP<>'',FLocalIP,''),
+                               iff(FUsePortInUri and (FLocalPort<>0),':'+IntToStr(FLocalPort),''),
+                               iff(FUseTrasnportNameInUri and (TransportName<>''),';transport='+TransportName,'')]);
+  Result:=Trim(Result);
+end;
+
+function TBisSipClient.GetWaitTimeOut: Cardinal;
+begin
+  Result:=FWaits.FTimeOut;
+end;
+
+function TBisSipClient.CheckUri(Uri: String): Boolean;
+var
+  S1,S2,S3,S4,S5: String;
+begin
+  Result:=false;
+  if Uri<>'' then begin
+    if ParseUri(Uri,S1,S2,S3,S4,S5) then begin
+      Result:=AnsiSameText(FScheme,S1);
+      if Result and (S2<>'') then begin
+        Result:=AnsiSameText(FUserName,S2);
+        if Result and (S3<>'') then
+          Result:=AnsiSameText(FLocalIP,S3) or AnsiSameText(FReceived,S3);
+      end;
+    end;
+  end;
+end;
+
+function TBisSipClient.DoSessionAccept(Session: TBisSipSession; Message: TBisSipMessage): Boolean;
+begin
+  Result:=true;
+  if Assigned(FOnSessionAccept) then
+    Result:=FOnSessionAccept(Self,Session,Message);
+end;
+
+function TBisSipClient.DoSessionAlive(Session: TBisSipSession): Boolean;
+begin
+  Result:=false;
+  if Assigned(FOnSessionAlive) then
+    Result:=FOnSessionAlive(Self,Session);
+end;
+
+procedure TBisSipClient.DoSessionCreate(Session: TBisSipSession);
+begin
+  if Assigned(FOnSessionCreate) then
+    FOnSessionCreate(Self,Session);
+end;
+
+procedure TBisSipClient.DoSessionDestroy(Session: TBisSipSession);
+begin
+  if Assigned(FOnSessionDestroy) then
+    FOnSessionDestroy(Self,Session);
+end;
+
+procedure TBisSipClient.DoSessionContent(Session: TBisSipSession; Content: String);
+begin
+  if Assigned(FOnSessionContent) then
+    FOnSessionContent(Self,Session,Content);
+end;
+
+procedure TBisSipClient.DoSessionProgress(Session: TBisSipSession);
+begin
+  if Assigned(FOnSessionProgress) then
+    FOnSessionProgress(Self,Session);
+end;
+
+procedure TBisSipClient.DoSessionRing(Session: TBisSipSession);
+begin
+  if Assigned(FOnSessionRing) then
+    FOnSessionRing(Self,Session);
+end;
+
+procedure TBisSipClient.DoSessionTerminate(Session: TBisSipSession);
+begin
+  if Assigned(FOnSessionTerminate) then
+    FOnSessionTerminate(Self,Session);
+end;
+
+procedure TBisSipClient.DoSessionTimeout(Session: TBisSipSession; var TryRegister: Boolean);
+begin
+  if Assigned(FOnSessionTimeout) then
+    FOnSessionTimeout(Self,Session,TryRegister);
+end;
+
+procedure TBisSipClient.DoSessionConfirm(Session: TBisSipSession);
+begin
+  if Assigned(FOnSessionConfirm) then
+    FOnSessionConfirm(Self,Session);
+end;
+
+procedure TBisSipClient.DoRegister;
+begin
+  if Assigned(FOnRegister) then
+    FOnRegister(Self);
+end;
+
+procedure TBisSipClient.DoMessageTimeOut(Message: TBisSipMessage; var TryRegister: Boolean);
+begin
+  if Assigned(FOnMessageTimeout) then
+    FOnMessageTimeout(Self,Message,TryRegister);  
+end;
+
+function TBisSipClient.GetTransportName: String;
+begin
+  Result:='';
+  if Assigned(FTransport) then
+    Result:=FTransport.Name;
+end;
+
+function TBisSipClient.NextSequence: String;
+begin
+  Inc(FSequence);
+  Result:=IntToStr(FSequence);
+end;
+
+procedure TBisSipClient.SetTransport(const Value: TBisSipTransport);
+begin
+  RemoveReceiver(Self);
+  FTransport:=Value;
+  RemoveReceiver(Self);
+  AddReceiver(Self);
+end;
+
+procedure TBisSipClient.SetWaitTimeOut(const Value: Cardinal);
+begin
+
+end;
+
+function TBisSipClient.UriLocalPort: String;
+begin
+  Result:='';
+  if FUsePortInUri then
+    Result:=IntToStr(FLocalPort);
+end;
+
+function TBisSipClient.UriRemotePort: String;
+begin
+  Result:='';
+  if FUsePortInUri then
+    Result:=IntToStr(FRemotePort);
+end;
+
+function TBisSipClient.UriTransportName: String;
+begin
+  Result:='';
+  if FUseTrasnportNameInUri then
+    Result:=GetTransportName;
+end;
+
+procedure TBisSipClient.WaitsTimeOut(Thread: TBisWaitThread);
+var
+  Wait: TBisSipMessageWaitThread;
+  Session: TBisSipSession;
+  TryRegister: Boolean;
+begin
+  if Assigned(Thread) and (Thread is TBisSipMessageWaitThread) then begin
+    Wait:=TBisSipMessageWaitThread(Thread);
+    if Assigned(Wait.FMessage) and Assigned(FTransport) then begin
+      if Wait.Counter<FWaitRetryCount then begin
+        if FTransport.Send(FRemoteIP,FRemotePort,Wait.FMessage.AsString) then
+          Wait.Reset;
+      end else begin
+        TryRegister:=true;
+        Session:=FSessions.FindByMessage(Wait.FMessage);
+        if Assigned(Session) then
+          DoSessionTimeout(Session,TryRegister)
+        else
+          DoMessageTimeOut(Wait.FMessage,TryRegister);
+        if TryRegister then begin
+          if Wait.FMessage is TBisSipRequest then
+            FirstRegister(TBisSipRequest(Wait.FMessage))
+          else
+            FirstRegister(nil);
+        end; 
+      end;
+    end;
+  end;
+end;
+
+procedure TBisSipClient.SendRequest(Request: TBisSipRequest; WithWait: Boolean=true);
+begin
+  if Assigned(Request) then begin
+    if Assigned(FTransport) then begin
+      if FTransport.Send(FRemoteIP,FRemotePort,Request.AsString) and (FWaitRetryCount>0) and WithWait then
+        FWaits.LockAdd(Request).Start;
+    end;
+  end;
+end;
+
+procedure TBisSipClient.SendResponse(Response: TBisSipResponse; WithWait: Boolean=false);
+begin
+  if Assigned(Response) then begin
+    if Assigned(FTransport) then begin
+      if FTransport.Send(FRemoteIP,FRemotePort,Response.AsString) and (FWaitRetryCount>0) and WithWait then
+        FWaits.LockAdd(Response).Start;
+    end;
+  end;
+end;
+
+function TBisSipClient.ReceiveRequest(Request: TBisSipRequest): Boolean;
+begin
+  Result:=inherited ReceiveRequest(Request);
+end;
+
+function TBisSipClient.ReceiveResponse(Response: TBisSipResponse): Boolean;
+
+  procedure ProcessUnauthorized(Request: TBisSipRequest);
+  var
+    ResponseVia: TBisSipVia;
+    Via: TBisSipVia;
+    Contact: TBisSipContact;
+    NewRequest: TBisSipRequest;
+    Authorization: TBisSipAuthorization;
+    WWWAuthenticate: TBisSipWWWAuthenticate;
+  begin
+    Contact:=TBisSipContact(Request.Headers.Find(TBisSipContact));
+    if Assigned(Contact) and not Contact.Empty then begin
+
+      ResponseVia:=TBisSipVia(Response.Headers.Find(TBisSipVia));
+      if Assigned(ResponseVia) then begin
+        FReceived:=ResponseVia.FReceived;
+        if FUseReceived and (Trim(FReceived)<>'') then begin
+          Contact.FHost:=FReceived;
+          FLocalIP:=FReceived;
+        end;
+        if FUseRport and (Trim(ResponseVia.FRport)<>'') then begin
+          FLocalPort:=StrToIntDef(ResponseVia.FRport,FLocalPort);
+        end;
+      end;
+
+      NewRequest:=TBisSipRequest.Create(rdOutgoing,Request.RequestType,Request);
+      NewRequest.CSeqNum:=NextSequence;
+
+      Via:=TBisSipVia(NewRequest.Headers.Find(TBisSipVia));
+      if Assigned(Via) then
+        Via.FHost:=FLocalIP;
+
+      Authorization:=TBisSipAuthorization(NewRequest.Headers.Find(TBisSipAuthorization));
+      if not Assigned(Authorization) then
+        Authorization:=NewRequest.Headers.AddAuthorization(FUserName,FPassword,Request.Name,Request.Uri);
+
+      if Assigned(Authorization) then begin
+        WWWAuthenticate:=TBisSipWWWAuthenticate(Response.Headers.Find(TBisSipWWWAuthenticate));
+        if Assigned(WWWAuthenticate) then
+          Authorization.CopyFrom(WWWAuthenticate)
+        else begin
+          // find Proxy Authenticate
+        end;
+      end;
+
+      FRequests.Add(NewRequest);
+      SendRequest(NewRequest);
+    end;
+  end;
+
+  procedure SendLastRequest;
+  var
+    NewRequest: TBisSipRequest;
+  begin
+    if Assigned(FLastRequest) then begin
+
+      NewRequest:=TBisSipRequest.Create(rdOutgoing,FLastRequest.RequestType,FLastRequest);
+      NewRequest.CSeqNum:=NextSequence;
+
+      FRequests.Add(NewRequest);
+      SendRequest(FLastRequest);
+    end;
+  end;
+  
+var
+  Request: TBisSipRequest;
+begin
+  Result:=inherited ReceiveResponse(Response);
+  if Assigned(Response) then begin
+    Request:=FRequests.GetRequest(Response);
+    if Assigned(Request) and (Request.RequestType=rtREGISTER) then begin
+      FWaits.LockRemoveBy(Request);
+      Result:=StrToIntDef(Response.CSeqNum,0)>=FSequence;
+      if Result then begin
+        Request.Responses.Add(Response);
+        case Response.ResponseKind of
+          rkUnauthorized: begin
+            if FRegistered then begin
+              FRegistered:=false;
+              DoRegister;
+//              FTimers.RemoveBy(KeepAliveTimer);
+            end;
+            ProcessUnauthorized(Request);
+          end;
+          rkOK: begin
+            if not FRegistered then begin
+              FRegistered:=true;
+              DoRegister;
+              SendLastRequest;
+//              FTimers.RemoveBy(KeepAliveTimer);
+//              FTimers.AddMilliSeconds(FSAliveTimer,FKeepAlive,KeepAliveTimer);
+            end;
+          end;
+          rkForbidden: begin
+           // Register(true);
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisSipClient.FirstRegister(Request: TBisSipRequest=nil);
+begin
+  if Assigned(FLastRequest) then begin
+    FLastRequest.Free;
+    FLastRequest:=nil;
+  end;
+  if Assigned(Request) and (Request.RequestType<>rtREGISTER) and (Request.Direction=rdOutgoing) then begin
+    FLastRequest:=TBisSipRequest.Create(rdOutgoing,Request.RequestType,Request);
+  end;
+  FRegistered:=false;
+  DoRegister;
+  Register(true);
+end;
+
+{procedure TBisSipClient.RegisterTimer(Sender: TBisSipTimerThread);
+begin
+  FirstRegister;
+end;}
+
+{procedure TBisSipClient.KeepAliveTimer(Sender: TBisSipTimerThread);
+begin
+  if FRegistered then begin
+    if Assigned(FTransport) then begin
+      if not FTransport.Send(FRemoteIP,FRemotePort,FKeepAliveQuery) then begin
+//        FTimers.Remove(Sender);
+        FirstRegister;
+      end;
+    end;
+  end;
+end;}
+
+{procedure TBisSipClient.SessionTimer(Sender: TBisSipTimerThread);
+var
+  i: Integer;
+  Item: TBisSipSession;
+begin
+  for i:=FSessions.Count-1 downto 0 do begin
+    Item:=FSessions.Items[i];
+    if Item.FIdleTimeOut>=FSessionIdleTimeOut then begin
+      if not DoSessionAlive(Item) then begin
+        if FRegistered then begin
+          case Item.FState of
+            ssReady: ;
+            ssWaiting,ssConfirming: Item.RequestCancel;
+            ssRinging,ssProgressing: begin
+              case Item.Direction of
+                sdIncoming: Item.ResponseInviteBusyHere;
+                sdOutgoing: Item.RequestCancel;
+              end;
+            end;
+            ssProcessing: Item.RequestBye;
+            ssBreaking: begin
+              Item.FState:=ssDestroying;
+              DoSessionTerminate(Item);
+              Item.FReadyForDestroy:=true;
+            end;
+            ssDestroying: Item.FReadyForDestroy:=true;
+          end;
+          if Item.FReadyForDestroy then
+            FSessions.Remove(Item);
+        end else begin
+          Item.FState:=ssDestroying;
+          DoSessionTerminate(Item);
+          FSessions.Remove(Item);
+        end;
+      end else
+        Item.FIdleTimeOut:=0;
+    end;
+    Inc(Item.FIdleTimeOut,FSessionAlive);
+  end;
+end;}
+
+procedure TBisSipClient.Register(Active: Boolean; Initial: Boolean=false);
+var
+  Request: TBisSipRequest;
+begin
+  if Initial then begin
+    FSequence:=0;
+  end;
+//  FTimers.RemoveBy(RegisterTimer);
+  if Assigned(FTransport) then begin
+    Request:=TBisSipRequest.Create(rdOutgoing,TBisSipRequest.RequestTypeToName(rtREGISTER),
+                                   FScheme,'',FRemoteHost,'',FProtocol,UriTransportName);
+    if Active then begin
+//      FTimers.AddSeconds(FSExpiresTimer,FExpires,RegisterTimer);
+      with Request do begin
+        with Headers do begin
+          AddVia(FProtocol,Self.FTransport.Name,FLocalIP,IntToStr(FLocalPort),GetBranch,'','');
+          AddFrom('',FScheme,FUserName,FRemoteHost,UriRemotePort,GetTag,'','',UriTransportName); //???
+          AddTo('',FScheme,FUserName,FRemoteHost,UriRemotePort,'','','',UriTransportName);//???
+          AddCallID(FID);
+          AddCSeq(NextSequence,Request.Name);
+          AddContact('',FScheme,FUserName,FLocalIP,UriLocalPort,'',IntToStr(FExpires),FQ,'','',UriTransportName); //???
+          AddUserAgent(FUserAgent);
+          AddAllow([atINVITE,atACK,atBYE,atCANCEL]);
+          AddMaxForwards(IntToStr(FMaxForwards));
+          AddExpires(IntToStr(FExpires));
+          AddContentLength(IntToStr(Body.Length));
+        end;
+      end;
+    end else begin
+      with Request do begin
+        with Headers do begin
+          AddVia(FProtocol,Self.FTransport.Name,FLocalIP,IntToStr(FLocalPort),GetBranch,'','');
+          AddFrom('',FScheme,FUserName,FRemoteHost,UriRemotePort,GetTag,'','',UriTransportName); //???
+          AddTo('',FScheme,FUserName,FRemoteHost,UriRemotePort,'','','',UriTransportName); //???
+          AddCallID(FID);
+          AddCSeq(NextSequence,Request.Name);
+          AddContact;
+          AddAllow([atINVITE,atACK,atBYE,atCANCEL]);
+          AddMaxForwards(IntToStr(FMaxForwards));
+          AddExpires('0');
+          AddContentLength(IntToStr(Body.Length));
+        end;
+      end;
+    end;
+    FRequests.Add(Request);
+    SendRequest(Request);
+  end;
+end;
+
+end.

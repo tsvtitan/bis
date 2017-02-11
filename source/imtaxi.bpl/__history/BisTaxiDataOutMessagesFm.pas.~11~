@@ -1,0 +1,59 @@
+unit BisTaxiDataOutMessagesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList, DB,
+  BisFm, BisDataFrm, BisDataGridFm, BisDataEditFm,
+  BisMessDataOutMessagesFm, BisMessDataOutMessagesFrm;                                                                       
+
+type
+  TBisTaxiDataOutMessagesFrame=class(TBisMessDataOutMessagesFrame)
+  private
+    FOrderId: Variant;
+  protected
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property OrderId: Variant read FOrderId write FOrderId;
+  end;
+
+  TBisTaxiDataOutMessagesForm = class(TBisMessDataOutMessagesForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataOutMessagesFormIface=class(TBisMessDataOutMessagesFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataOutMessagesForm: TBisTaxiDataOutMessagesForm;
+
+implementation
+
+uses BisTaxiDataOutMessagesFrm;
+
+{$R *.dfm}
+
+{ TBisTaxiDataOutMessagesFormIface }
+
+constructor TBisTaxiDataOutMessagesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataOutMessagesForm;
+end;
+
+{ TBisTaxiDataOutMessagesForm }
+
+class function TBisTaxiDataOutMessagesForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataOutMessagesFrame;
+end;
+
+
+
+end.

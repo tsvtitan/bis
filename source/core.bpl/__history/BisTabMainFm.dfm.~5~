@@ -1,0 +1,49 @@
+inherited BisTabMainForm: TBisTabMainForm
+  Left = 0
+  Top = 0
+  ClientHeight = 341
+  ClientWidth = 643
+  Font.Name = 'Tahoma'
+  ExplicitWidth = 651
+  ExplicitHeight = 375
+  PixelsPerInch = 96
+  TextHeight = 13
+  object StatusBar: TStatusBar [0]
+    Left = 0
+    Top = 322
+    Width = 643
+    Height = 19
+    Panels = <
+      item
+        Width = 250
+      end
+      item
+        Width = 300
+      end
+      item
+        Width = 100
+      end
+      item
+        Width = 100
+      end>
+    ExplicitLeft = -129
+    ExplicitWidth = 772
+  end
+  inherited TrayIcon: TTrayIcon
+    Left = 48
+    Top = 96
+  end
+  inherited ImageList: TImageList
+    Left = 96
+    Top = 96
+  end
+  inherited PopupActionBar: TPopupActionBar
+    Left = 160
+    Top = 96
+  end
+  object ApplicationEvents: TApplicationEvents
+    OnHint = ApplicationEventsHint
+    Left = 224
+    Top = 96
+  end
+end

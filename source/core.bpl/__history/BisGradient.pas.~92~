@@ -1,0 +1,420 @@
+unit BisGradient;
+
+interface
+
+uses  Windows, Classes, controls, Graphics, stdctrls;
+
+type
+
+  TBisGradientStyle = (gsHorizontal, gsVertical, gsRectangle,
+                       gsVertCenter, gsHorizCenter,gsLeftTop,gsRightTop,
+                       gsLeftTopRightBottom,gsRightTopLeftBottom);
+
+   TBisGradient=class(TGraphicControl)
+   private
+    FEndColor: TColor;
+    FStyle: TBisGradientStyle;
+    FBeginColor: TColor;
+    procedure SetStyle(const Value: TBisGradientStyle);
+    procedure SetEndColor(const Value: TColor);
+    procedure SetBeginColor(const Value: TColor);
+   public
+     constructor Create(AOwner: TComponent); override;
+     procedure Paint; override;
+   published
+
+     property Align;
+     property BeginColor: TColor read FBeginColor write SetBeginColor;
+     property EndColor: TColor read FEndColor write SetEndColor;
+     property Style: TBisGradientStyle read FStyle write SetStyle;
+   end;
+
+procedure DrawGradient(Canvas: TCanvas; Width,Height: Integer; Style: TBisGradientStyle; BeginColor, EndColor: TColor);
+
+implementation
+
+procedure SwareGradientDrawArea(Canvas:TCanvas ; _Type,Left,Top,Right,Bottom:integer; BeginColor,EndColor:TColor);
+var
+	frect , frect2 : TRect ;
+		i , loopcount , halfloopcount : Integer;
+	fr,fg,fb,dr,dg,db ,cr,cg,cb:Integer ;
+	Temppoints:array[0..255] of TPoint ;
+	frgn : HRGN ;
+	bm : TBitMap ;
+begin
+			bm := TBitMap.Create ;
+			bm.Width := Right - Left ;
+			bm.Height := Bottom-Top ;
+	fr := (BeginColor and $000000FF) ;
+	fg := ((BeginColor shr 8) and $000000ff) ;
+	fb := ((BeginColor shr 16) and $000000ff) ;
+	dr := ((EndColor and $000000ff) - fr) ;
+	dg := (((EndColor shr 8) and $000000ff) - fg) ;
+	db := (((EndColor shr 16) and $000000ff) - fb) ;
+	if (_Type>10) then _Type:=2 ;
+	if (_Type<0) then _Type:=2 ;
+	case (_Type) of
+		0:              // Hor
+		begin
+			frect.Top := Top ;
+			frect.Bottom := Bottom ;
+			frect.Left := Left ;
+			frect.Right := Right ;
+			Canvas.Brush.Color := BeginColor ;
+			Canvas.FillRect(frect) ;
+		end;
+		1:              // Hor
+		begin
+			frect.Top := Top ;
+			frect.Bottom := Bottom ;
+			for i:=0 to 255 do
+			begin
+				frect.Left := (Left+i*(Right - Left)div 255) ;
+				frect.Right := Left+(i+1)*(Right - Left)div 255 ;
+				cr := (fr+i*dr div 255) ;
+				cg := (fg+i*dg div 255) ;
+				cb := (fb+i*db div 255) ;
+				Canvas.Brush.Color := TColor(RGB(cr,cg,cb)) ;
+				Canvas.FillRect(frect) ;
+			end;
+		end;
+		2:
+		begin
+			frect.left := Left ;
+			frect.right := Right ;
+			for i:=0 to 255 do
+			begin
+				frect.top := Top+i*(Bottom - Top) div 255 ;
+				frect.bottom := Top+(i+1)*(Bottom - Top) div 255 ;
+				cr := (fr+i*dr div 255) ;
+				cg := (fg+i*dg div 255) ;
+				cb := (fb+i*db div 255) ;
+				Canvas.Brush.Color := TColor(RGB(cr,cg,cb)) ;
+				Canvas.FillRect(frect) ;
+			end;
+		end;
+		3:
+		begin
+			loopcount := abs(Bottom-Top) ;
+			if ((Right - Left)>(Bottom-Top)) then loopcount:=abs(Right - Left) ;
+			halfloopcount:= loopcount div 2 ;
+			for i:=0 to halfloopcount do
+			begin
+				cr := (fr+i*dr div halfloopcount) ;
+				cg := (fg+i*dg div halfloopcount) ;
+				cb := (fb+i*db div halfloopcount) ;
+				frect.Top := Top+i*(Bottom - Top) div loopcount ;
+				frect.Bottom := Bottom-i*(Bottom - Top) div loopcount ;
+				frect.Left := Left+i*(Right - Left) div loopcount ;
+				frect.Right := Right-i*(Right - Left) div loopcount ;
+				Canvas.Brush.Color := TColor(RGB(cr,cg,cb)) ;
+				Canvas.FrameRect(frect) ;
+			end;
+			Canvas.FillRect(frect) ;
+		end;
+		4:
+		begin
+			frect.left := Left ;
+			frect.right := Right ;
+			frect2 := frect ;
+            for i:=0 to 254 do
+			begin
+				frect.top := Top+i*(Bottom - Top) div 510 ;
+				frect.bottom := Top+(i+1)*(Bottom - Top) div 510 ;
+				cr := (fr+i*dr div 255) ;
+				cg := (fg+i*dg div 255) ;
+                cb := (fb+i*db div 255) ;
+            	Canvas.Brush.Color := TColor(RGB(cr,cg,cb)) ;
+                Canvas.FillRect(frect) ;
+                frect2.top := Bottom - (i)*(Bottom - Top) div 510 ;
+				frect2.bottom := Bottom - (i+1)*(Bottom - Top) div 510 ;
+				Canvas.FillRect(frect2) ;
+			end;
+            frect2.top := frect.bottom ;
+			Canvas.FillRect(frect2) ;
+        end;
+		5:
+        begin
+			frect.top := Top ;
+			frect.bottom := Bottom ;
+			frect2 := frect ;
+			for i:=0 to 254 do
+            begin
+				frect.left := Left+i*(Right - Left) div 510 ;
+                frect.right := Left+(i+1)*(Right - Left) div 510 ;
+                cr := (fr+i*dr div 255) ;
+				cg := (fg+i*dg div 255) ;
+				cb := (fb+i*db div 255) ;
+				Canvas.Brush.Color := TColor(RGB(cr,cg,cb)) ;
+				Canvas.FillRect(frect) ;
+                frect2.left := Right-i*(Right - Left) div 510 ;
+				frect2.right := Right-(i+1)*(Right - Left) div 510 ;
+                Canvas.FillRect(frect2) ;
+			end;
+			frect2.left := frect.right ;
+			Canvas.FillRect(frect2) ;
+		end;
+		6:
+		begin
+			Canvas.Pen.Width := 1 ;
+			halfloopcount:=128 ;
+			loopcount:= halfloopcount*2 ;
+			bm.Canvas.Brush.Style := bsSolid ;
+			for i:=0 to loopcount do
+			begin
+				cr := (fr+i*dr div loopcount) ;
+				cg := (fg+i*dg div loopcount) ;
+				cb := (fb+i*db div loopcount) ;
+				bm.Canvas.Brush.Color := TColor(RGB(cr,cg,cb)) ;
+				if (i<halfloopcount) then
+				begin
+					Temppoints[0].x:= 0 ; Temppoints[0].y:= i*(Bottom-Top) div halfloopcount;
+					Temppoints[1].x:= 0 ; Temppoints[1].y:= (i+1)*(Bottom-Top) div halfloopcount;
+					Temppoints[3].x:= i*(Right-Left) div halfloopcount;  Temppoints[3].y:= 0;
+					Temppoints[2].x:= (i+1)*(Right-Left) div halfloopcount;     Temppoints[2].y:= 0;
+					frgn:=CreatePolygonRgn(Temppoints,4,ALTERNATE);
+					PaintRgn(bm.Canvas.Handle, frgn) ;
+					DeleteObject(frgn) ;
+				end
+				else
+				begin
+					Temppoints[0].x:= (i-halfloopcount)*(Right - Left) div halfloopcount;  Temppoints[0].y:= Bottom-Top;
+					Temppoints[1].x:= (i+1-halfloopcount)*(Right - Left) div halfloopcount;  Temppoints[1].y:= Bottom-Top;
+					Temppoints[3].x:= Right - Left;  Temppoints[3].y:= (i-halfloopcount)*(Bottom-Top) div halfloopcount;
+					Temppoints[2].x:= Temppoints[3].x;     Temppoints[2].y:= (i+1-halfloopcount)*(Bottom-Top) div halfloopcount;
+					frgn:=CreatePolygonRgn(Temppoints,4,ALTERNATE);
+					PaintRgn(bm.Canvas.Handle, frgn) ;
+					DeleteObject(frgn) ;
+				end;
+			end;
+			Canvas.Draw(Left,Top , bm) ;
+		end;
+		7:
+		begin
+			Canvas.Pen.Width := 1 ;
+			halfloopcount:=128 ;
+			loopcount:= halfloopcount*2 ;
+			bm.Canvas.Brush.Style := bsSolid ;
+			for i:=0 to loopcount do
+			begin
+				cr := (fr+i*dr div loopcount) ;
+				cg := (fg+i*dg div loopcount) ;
+				cb := (fb+i*db div loopcount) ;
+				bm.Canvas.Brush.Color := TColor(RGB(cr,cg,cb)) ;
+				if (i<halfloopcount) then
+				begin
+					Temppoints[0].x:= Right-Left;  Temppoints[0].y:= i*(Bottom-Top) div halfloopcount;
+					Temppoints[1].x:= Right-Left;  Temppoints[1].y:= (i+1)*(Bottom-Top) div halfloopcount;
+					Temppoints[2].x:= Right-Left - (i+1)*(Right-Left) div halfloopcount;  Temppoints[2].y:= 0;
+					Temppoints[3].x:= Right-Left - i*(Right-Left) div halfloopcount;    Temppoints[3].y:= 0;
+					frgn:=CreatePolygonRgn(Temppoints,4,ALTERNATE);
+					PaintRgn(bm.Canvas.Handle, frgn) ;
+					DeleteObject(frgn) ;
+				end
+				else
+				begin
+					Temppoints[0].x:= Right-Left - (i-halfloopcount)*(Right-Left) div halfloopcount;  Temppoints[0].y:= Bottom-Top ;
+					Temppoints[1].x:= Right-Left - (i+1-halfloopcount)*(Right-Left) div halfloopcount;  Temppoints[1].y:= Bottom-Top ;
+					Temppoints[3].x:= 0;  Temppoints[3].y:= (i-halfloopcount)*(Bottom-Top) div halfloopcount;;
+					Temppoints[2].x:= 0;    Temppoints[2].y:= (i+1-halfloopcount)*(Bottom-Top) div halfloopcount;;
+					frgn:=CreatePolygonRgn(Temppoints,4,ALTERNATE);
+					PaintRgn(bm.Canvas.Handle, frgn) ;
+					DeleteObject(frgn) ;
+				end;
+			end;
+			Canvas.Draw(Left,Top , bm) ;
+		end;
+		8:
+		begin
+			Canvas.Pen.Width := 1 ;
+			loopcount:= 128 ;
+			bm.Canvas.Brush.Style := bsSolid ;
+			for i:=0 to loopcount do
+			begin
+				cr := (fr+i*dr div loopcount) ;
+				cg := (fg+i*dg div loopcount) ;
+				cb := (fb+i*db div loopcount) ;
+				bm.Canvas.Brush.Color := TColor(RGB(cr,cg,cb)) ;
+					Temppoints[0].x:= 0 ; Temppoints[0].y:= i*(Bottom-Top) div loopcount;
+					Temppoints[1].x:= 0 ; Temppoints[1].y:= (i+1)*(Bottom-Top) div loopcount;
+					Temppoints[3].x:= i*(Right-Left) div loopcount;  Temppoints[3].y:= 0;
+					Temppoints[2].x:= (i+1)*(Right-Left) div loopcount;     Temppoints[2].y:= 0;
+					frgn:=CreatePolygonRgn(Temppoints,4,ALTERNATE);
+					PaintRgn(bm.Canvas.Handle, frgn) ;
+					DeleteObject(frgn) ;
+
+					Temppoints[0].x:= Right-Left-i*(Right - Left) div loopcount;  Temppoints[0].y:= Bottom-Top;
+					Temppoints[1].x:= Right-Left-(i+1)*(Right - Left) div loopcount;  Temppoints[1].y:= Bottom-Top;
+					Temppoints[2].x:= Right - Left;  Temppoints[2].y:= Bottom-Top-(i+1)*(Bottom-Top) div loopcount;
+					Temppoints[3].x:= Temppoints[2].x;     Temppoints[3].y:= Bottom-Top-i*(Bottom-Top) div loopcount;
+					frgn:=CreatePolygonRgn(Temppoints,4,ALTERNATE);
+					PaintRgn(bm.Canvas.Handle, frgn) ;
+					DeleteObject(frgn) ;
+			end;
+			Canvas.Draw(Left,Top , bm) ;
+		end;
+		9:
+		begin
+			Canvas.Pen.Width := 1 ;
+			loopcount:= 128 ;
+			bm.Canvas.Brush.Style := bsSolid ;
+			for i:=0 to loopcount do
+			begin
+				cr := (fr+i*dr div loopcount) ;
+				cg := (fg+i*dg div loopcount) ;
+				cb := (fb+i*db div loopcount) ;
+				bm.Canvas.Brush.Color := TColor(RGB(cr,cg,cb)) ;
+					Temppoints[0].x:= Right-Left;  Temppoints[0].y:= i*(Bottom-Top) div loopcount;
+					Temppoints[1].x:= Right-Left;  Temppoints[1].y:= (i+1)*(Bottom-Top) div loopcount;
+					Temppoints[2].x:= Right-Left - (i+1)*(Right-Left) div loopcount;  Temppoints[2].y:= 0;
+					Temppoints[3].x:= Right-Left - i*(Right-Left) div loopcount;    Temppoints[3].y:= 0;
+					frgn:=CreatePolygonRgn(Temppoints,4,ALTERNATE);
+					PaintRgn(bm.Canvas.Handle, frgn) ;
+					DeleteObject(frgn) ;
+
+					Temppoints[0].x:= i*(Right-Left) div loopcount;  Temppoints[0].y:= Bottom-Top ;
+					Temppoints[1].x:= (i+1)*(Right-Left) div loopcount;  Temppoints[1].y:= Bottom-Top ;
+					Temppoints[2].x:= 0;  Temppoints[2].y:= Bottom-Top-(i+1)*(Bottom-Top) div loopcount;;
+					Temppoints[3].x:= 0;    Temppoints[3].y:= Bottom-Top-i*(Bottom-Top) div loopcount;;
+					frgn:=CreatePolygonRgn(Temppoints,4,ALTERNATE);
+					PaintRgn(bm.Canvas.Handle, frgn) ;
+					DeleteObject(frgn) ;
+			end;
+			Canvas.Draw(Left,Top , bm) ;
+		end;
+	end;
+			bm.Free ;
+end;
+
+procedure SwareGradientDrawRect(Canvas:TCanvas; _Type,Left,Top,Right,Bottom,width:Integer; BeginColor,EndColor:TColor) ;
+var
+	i ,j , x1 ,x2 , y1 , y2 : Integer;
+	fr,fg,fb,dr,dg,db ,cr,cg,cb : Integer;
+	Width2 : Integer;
+begin
+	if (_Type=0) then
+	begin
+		if (abs(Right-Left)<=(width)) then _Type := 1 ;
+		if (abs(Bottom-Top)<=(width)) then _Type := 1 ;
+	end;
+	if (Left>Right) then
+	begin
+		x1 := Right ;
+		x2 := Left ;
+	end
+	else
+	begin
+		x2 := Right ;
+		x1 := Left ;
+	end;
+	if (Top>Bottom) then
+	begin
+		y1 := Bottom ;
+		y2 := Top ;
+	end
+	else
+	begin
+		y2 := Bottom ;
+		y1 := Top ;
+	end;
+	Width2 := width div 2+1 ;
+	Canvas.Pen.Mode := pmCopy	;
+	if (_Type=0) then
+	begin
+		if (BeginColor = EndColor) then
+		begin
+			Canvas.Pen.Color := BeginColor ;
+			Canvas.Pen.Width := width ;
+			Canvas.Brush.Style := bsClear ;
+			Canvas.Rectangle(x1,y1,x2+1,y2+1);
+		end
+		else
+		begin
+			fr := (BeginColor and $000000FF) ;
+			fg := ((BeginColor shr 8) and $000000ff) ;
+			fb := ((BeginColor shr 16) and $000000ff) ;
+			dr := ((EndColor and $000000ff) - fr) ;
+			dg := (((EndColor shr 8) and $000000ff) - fg) ;
+			db := (((EndColor shr 16) and $000000ff) - fb) ;
+			Canvas.Pen.Width := 1 ;
+			Canvas.Brush.Style := bsSolid ;
+            x1:=x1+Width2;   y1:=y1+Width2;
+            x2:=x2-Width2;   y2:=y2-Width2;
+			for i:=0 to Width2 do
+			begin
+				cr := (fr+i*dr div Width2) ;
+				cg := (fg+i*dg div Width2) ;
+				cb := (fb+i*db div Width2) ;
+				j:=Width2-i ;
+				Canvas.Brush.Color := TColor(RGB(cr,cg,cb)) ;
+				Canvas.FrameRect(Rect(x1-j,y1-j,x2+j+1,y2+j+1));
+				Canvas.FrameRect(Rect(x1+j,y1+j,x2-j+1,y2-j+1));
+			end;
+		end ;
+		Canvas.Brush.Style := bsSolid ;
+	end
+	else
+    if _Type<10 then SwareGradientDrawArea(Canvas , _Type , x1 , y1 , x2+1 , y2+1 , BeginColor , EndColor)
+    else begin
+            SwareGradientDrawRect(Canvas , 0 , x1 , y1 , x2+1 , y2+1 , width , BeginColor,EndColor) ;
+            x1:=x1+Width2;   y1:=y1+Width2;
+            x2:=x2-Width2;   y2:=y2-Width2;
+            SwareGradientDrawArea(Canvas , 1 , x1+1 , y1+1 , x2 , y2 , BeginColor , BeginColor);
+         end;
+end;
+
+procedure DrawGradient(Canvas: TCanvas; Rect: TRect; Style: TBisGradientStyle; BeginColor, EndColor: TColor);
+begin
+
+  case Style of
+	   gsHorizontal: SwareGradientDrawRect(Canvas,1,Rect.Left,Rect.Top,Rect.Right,Rect.Bottom,0,BeginColor,EndColor) ;
+	   gsVertical  : SwareGradientDrawRect(Canvas,2,Rect.Left,Rect.Top,Rect.Right,Rect.Bottom,0,BeginColor,EndColor) ;
+	   gsRectangle : SwareGradientDrawRect(Canvas,3,Rect.Left,Rect.Top,Rect.Right,Rect.Bottom,0,BeginColor,EndColor) ;
+	   gsVertCenter: SwareGradientDrawRect(Canvas,4,Rect.Left,Rect.Top,Rect.Right,Rect.Bottom,0,BeginColor,EndColor) ;
+	   gsHorizCenter:SwareGradientDrawRect(Canvas,5,Rect.Left,Rect.Top,Rect.Right,Rect.Bottom,0,BeginColor,EndColor) ;
+	   gsLeftTop    :SwareGradientDrawRect(Canvas,6,Rect.Left,Rect.Top,Rect.Right,Rect.Bottom,0,BeginColor,EndColor) ;
+	   gsRightTop   :SwareGradientDrawRect(Canvas,7,Rect.Left,Rect.Top,Rect.Right,Rect.Bottom,0,BeginColor,EndColor) ;
+	   gsLeftTopRightBottom: SwareGradientDrawRect(Canvas,8,Rect.Left,Rect.Top,Rect.Right,Rect.Bottom,0,BeginColor,EndColor) ;
+	   gsRightTopLeftBottom: SwareGradientDrawRect(Canvas,9,Rect.Left,Rect.Top,Rect.Right,Rect.Bottom,0,BeginColor,EndColor) ;
+  end;
+
+end;
+
+{ TBisGradient }
+
+constructor TBisGradient.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ControlStyle := [csAcceptsControls, csCaptureMouse, csClickEvents,
+                   csSetCaption, csOpaque, csDoubleClicks, csReplicatable];
+  FStyle:=gsVertical;
+  FBeginColor:=clBlack;
+  FEndColor:=clWhite;
+  Width:=100;
+  Height:=75;
+end;
+
+procedure TBisGradient.Paint;
+begin
+  DrawGradient(Canvas,Width,Height,FStyle,FBeginColor,FEndColor);
+end;
+
+procedure TBisGradient.SetEndColor(const Value: TColor);
+begin
+  FEndColor := Value;
+  Invalidate;
+end;
+
+procedure TBisGradient.SetStyle(const Value: TBisGradientStyle);
+begin
+  FStyle := Value;
+  Invalidate;
+end;
+
+procedure TBisGradient.SetBeginColor(const Value: TColor);
+begin
+  FBeginColor := Value;
+  Invalidate;
+end;
+
+end.

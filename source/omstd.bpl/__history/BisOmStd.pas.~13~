@@ -1,0 +1,25 @@
+unit BisOmStd;
+
+interface
+
+uses BisObjectModules;
+
+procedure InitObjectModule(AModule: TBisObjectModule); stdcall;
+
+exports
+  InitObjectModule;
+
+implementation
+
+uses BisOmStdSystem, BisOmStdUtils, BisOmStdDialogs;
+
+procedure InitObjectModule(AModule: TBisObjectModule); stdcall;
+begin
+  with AModule.ScriptUnits do begin
+    AddClass(TBisSystemScriptUnit);
+    AddClass(TBisUtilsScriptUnit);
+    AddClass(TBisDialogsScriptUnit);
+  end;
+end;
+
+end.

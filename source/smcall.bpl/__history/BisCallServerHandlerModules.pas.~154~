@@ -1,0 +1,212 @@
+unit BisCallServerHandlerModules;
+
+interface
+
+uses Classes, Contnrs,
+     BisObject, BisModules, BisDataSet, BisCallServerHandlers;
+
+type
+
+  TBisCallServerHandlerModule=class;
+
+  TBisCallServerHandlerModuleInitProc=procedure (AModule: TBisCallServerHandlerModule); stdcall;
+
+  TBisCallServerHandlerModule=class(TBisModule)
+  private
+    FInitProc: TBisCallServerHandlerModuleInitProc;
+    FHandlers: TBisCallServerHandlers;
+    FTable: TBisDataSet;
+    FHandlerClass: TBisCallServerHandlerClass;
+    procedure RefreshHandlers;
+  protected
+    procedure DoInitProc(AModule: TBisModule); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Unload; override;
+    procedure Init; override;
+
+    property HandlerClass: TBisCallServerHandlerClass read FHandlerClass write FHandlerClass;
+
+    property Handlers: TBisCallServerHandlers read FHandlers;
+  end;
+
+  TBisCallServerHandlerModules=class(TBisModules)
+  private
+    function GetItem(Index: Integer): TBisCallServerHandlerModule;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+
+    procedure Connect;
+    procedure Disconnect;
+    procedure GetHandlers(Location: TBisCallServerHandlerLocation; OperatorId: Variant; Handlers: TObjectList);
+
+    property Items[Index: Integer]: TBisCallServerHandlerModule read GetItem; default;
+  end;
+
+  
+implementation
+
+uses Windows, SysUtils, DB,
+     BisUtils, BisLogger, BisConsts, BisCallServerConsts;
+
+{ TBisCallServerHandlerModule }
+
+constructor TBisCallServerHandlerModule.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FHandlers:=TBisCallServerHandlers.Create(Self);
+  FTable:=TBisDataSet.Create(nil);
+end;
+
+destructor TBisCallServerHandlerModule.Destroy;
+begin
+  FTable.Free;
+  FHandlers.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCallServerHandlerModule.Init;
+var
+  Stream: TMemoryStream;
+  AModules: TBisCallServerHandlerModules;
+  Field: TField;
+begin
+  inherited Init;
+  if Assigned(Owner) and (Owner is TBisCallServerHandlerModules) then begin
+    AModules:=TBisCallServerHandlerModules(Owner);
+//    FHandlers.OnInvite:=AModules.OnInvite;
+    FTable.Close;
+    if AModules.Table.Active and not AModules.Table.IsEmpty then begin
+      Field:=AModules.Table.FindField(SFieldHandlers);
+      if Assigned(Field) and Field.IsBlob then begin
+        Stream:=TMemoryStream.Create;
+        try
+          TBlobField(Field).SaveToStream(Stream);
+          Stream.Position:=0;
+          FTable.LoadFromStream(Stream);
+          FTable.Open;
+        finally
+          Stream.Free;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallServerHandlerModule.RefreshHandlers;
+var
+  AHandler: TBisCallServerHandler;
+  AEnabled: Boolean;
+  AObjectName: String;
+  Field: TField;
+  Stream: TMemoryStream;
+begin
+  if FTable.Active and not FTable.IsEmpty then begin
+    if Assigned(FHandlerClass) then begin
+      FHandlers.Clear;
+      FTable.First;
+      Field:=FTable.FindField(SFieldParams);
+      while not FTable.Eof do begin
+        AEnabled:=Boolean(FTable.FieldByName(SFieldEnabled).AsInteger);
+        if AEnabled then begin
+          AObjectName:=FTable.FieldByName(SFieldName).AsString+FHandlerClass.GetObjectName;
+          AHandler:=FHandlers.AddClass(FHandlerClass,AObjectName);
+          if Assigned(AHandler) then begin
+            AHandler.Description:=FTable.FieldByName(SFieldDescription).AsString;
+            AHandler.Enabled:=AEnabled;
+            if Assigned(Field) and Field.IsBlob then begin
+              
+              Stream:=TMemoryStream.Create;
+              try
+                TBlobField(Field).SaveToStream(Stream);
+                Stream.Position:=0;
+                AHandler.Params.LoadFromStream(Stream);
+                AHandler.Params.Open;
+              finally
+                Stream.Free;
+              end;
+            end;
+          end;
+        end;
+        FTable.Next;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallServerHandlerModule.DoInitProc(AModule: TBisModule);
+begin
+  @FInitProc:=GetProcAddress(Module,PChar(SInitCallServerHandlerModule));
+  if Assigned(@FInitProc) then begin
+    try
+      FInitProc(Self);
+      RefreshHandlers;
+      FHandlers.Init;
+      LoggerWrite(FormatEx(SInitSuccess,[FileName]));
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SInitFailed,[FileName,E.Message]),ltError);
+      end;
+    end;
+  end else begin
+    LoggerWrite(FormatEx(SInitProcNotFound,[FileName]),ltError);
+  end;
+end;
+
+procedure TBisCallServerHandlerModule.Unload;
+begin
+  FHandlers.Clear;
+  inherited Unload;
+end;
+
+{ TBisCallServerHandlerModules }
+
+function TBisCallServerHandlerModules.GetItem(Index: Integer): TBisCallServerHandlerModule;
+begin
+  Result:=TBisCallServerHandlerModule(inherited Items[Index]);
+end;
+
+function TBisCallServerHandlerModules.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisCallServerHandlerModule;
+end;
+
+procedure TBisCallServerHandlerModules.Connect;
+var
+  i: Integer;
+  Item: TBisCallServerHandlerModule;
+begin
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.Enabled then
+      Item.Handlers.Connect;
+  end;
+end;
+
+procedure TBisCallServerHandlerModules.Disconnect;
+var
+  i: Integer;
+  Item: TBisCallServerHandlerModule;
+begin
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.Enabled then
+      Item.Handlers.Disconnect;
+  end;
+end;
+
+procedure TBisCallServerHandlerModules.GetHandlers(Location: TBisCallServerHandlerLocation; OperatorId: Variant; Handlers: TObjectList);
+var
+  i: Integer;
+  Item: TBisCallServerHandlerModule;
+begin
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Item.Enabled then
+      Item.Handlers.GetHandlers(Location,OperatorId,Handlers);
+  end;
+end;
+
+end.

@@ -1,0 +1,87 @@
+unit BisCallcHbookPlanEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisCallcHbookPlanEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookActionEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookActionInsertFormIface=class(TBisCallcHbookActionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookActionUpdateFormIface=class(TBisCallcHbookActionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookActionDeleteFormIface=class(TBisCallcHbookActionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookPlanEditForm: TBisCallcHbookPlanEditForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisCallcHbookActionEditFormIface }
+
+constructor TBisCallcHbookActionEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookActionEditForm;
+  with Params do begin
+    AddKey('ACTION_ID').Older('OLD_ACTION_ID');
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription',false);
+    AddEditInteger('PERIOD','EditPeriod','LabelPeriod',true);
+  end;
+end;
+
+{ TBisCallcHbookActionInsertFormIface }
+
+constructor TBisCallcHbookActionInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_ACTION';
+end;
+
+{ TBisCallcHbookActionUpdateFormIface }
+
+constructor TBisCallcHbookActionUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_ACTION';
+end;
+
+{ TBisCallcHbookActionDeleteFormIface }
+
+constructor TBisCallcHbookActionDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_ACTION';
+end;
+
+end.

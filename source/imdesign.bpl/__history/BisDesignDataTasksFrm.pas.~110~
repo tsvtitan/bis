@@ -1,0 +1,185 @@
+unit BisDesignDataTasksFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin,
+  ExtCtrls, Grids, DBGrids, Contnrs, StdCtrls,
+  BisTasks,
+  BisDataGridFrm;
+
+type
+
+  TBisDesignDataTasksFrame = class(TBisDataGridFrame)
+    ToolBarRun: TToolBar;
+    ToolButtonTaskRun: TToolButton;
+    ActionTaskRun: TAction;
+    MenuItemTaskRun: TMenuItem;
+    N16: TMenuItem;
+    procedure ActionTaskRunExecute(Sender: TObject);
+    procedure ActionTaskRunUpdate(Sender: TObject);
+  private
+//    procedure TaskEnd(Sender: TObject);
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function CanTaskRun: Boolean;
+    procedure TaskRun;
+  end;
+
+implementation
+
+uses BisFilterGroups, BisDialogs,
+     BisDesignDataTaskEditFm;
+
+{$R *.dfm}
+
+{ TBisDesignDataReportsFrame }
+
+constructor TBisDesignDataTasksFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FilterClass:=TBisDesignDataTaskEditFormIface;
+  InsertClass:=TBisDesignDataTaskInsertFormIface;
+  UpdateClass:=TBisDesignDataTaskUpdateFormIface;
+  DeleteClass:=TBisDesignDataTaskDeleteFormIface;
+  with Provider do begin
+    ProviderName:='S_TASKS';
+    with FieldNames do begin
+      AddKey('TASK_ID');
+      AddInvisible('APPLICATION_ID');
+      AddInvisible('ACCOUNT_ID');
+      AddInvisible('INTERFACE_ID');
+      AddInvisible('DESCRIPTION');
+      AddInvisible('DATE_BEGIN');
+      AddInvisible('OFFSET');
+      AddInvisible('DATE_END');
+      AddInvisible('SCHEDULE');
+      AddInvisible('PRIORITY');
+      AddInvisible('PROC_NAME');
+      AddInvisible('COMMAND_STRING');
+      AddInvisible('REPEAT_ENABLED');
+      AddInvisible('REPEAT_TYPE');
+      AddInvisible('REPEAT_VALUE');
+      AddInvisible('REPEAT_COUNT');
+      AddInvisible('DAY_FREQUENCY');
+      AddInvisible('WEEK_FREQUENCY');
+      AddInvisible('MONDAY');
+      AddInvisible('TUESDAY');
+      AddInvisible('WEDNESDAY');
+      AddInvisible('THURSDAY');
+      AddInvisible('FRIDAY');
+      AddInvisible('SATURDAY');
+      AddInvisible('SUNDAY');
+      AddInvisible('MONTH_DAY');
+      AddInvisible('JANUARY');
+      AddInvisible('FEBRUARY');
+      AddInvisible('MARCH');
+      AddInvisible('APRIL');
+      AddInvisible('MAY');
+      AddInvisible('JUNE');
+      AddInvisible('JULY');
+      AddInvisible('AUGUST');
+      AddInvisible('SEPTEMBER');
+      AddInvisible('OCTOBER');
+      AddInvisible('NOVEMBER');
+      AddInvisible('DECEMBER');
+      AddInvisible('APPLICATION_NAME');
+      AddInvisible('USER_NAME');
+      AddInvisible('INTERFACE_NAME');
+      Add('NAME','Наименование',250);
+      Add('DATE_EXECUTE','Дата выполнения',115);
+      Add('RESULT_STRING','Результат выполнения',150);
+      AddCheckBox('ENABLED','Включен',30);
+    end;
+  end;
+
+  with CreateFilterMenuItem('Активные') do begin
+    FilterGroups.AddVisible.Filters.Add('ENABLED',fcEqual,1);
+    Checked:=true;
+  end;
+
+  with CreateFilterMenuItem('Заблокированные') do begin
+    FilterGroups.AddVisible.Filters.Add('ENABLED',fcEqual,0);
+  end;
+
+end;
+
+destructor TBisDesignDataTasksFrame.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TBisDesignDataTasksFrame.ActionTaskRunUpdate(Sender: TObject);
+begin
+  ActionTaskRun.Enabled:=CanTaskRun;
+end;
+
+procedure TBisDesignDataTasksFrame.ActionTaskRunExecute(Sender: TObject);
+begin
+  TaskRun;
+end;
+
+function TBisDesignDataTasksFrame.CanTaskRun: Boolean;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+end;
+
+{procedure TBisDesignDataTasksFrame.TaskEnd(Sender: TObject);
+var
+  B: TBookmark;
+begin
+  if Assigned(Sender) and (Sender is TBisTask) then begin
+    try
+      with TBisTask(Sender) do begin
+        B:=Provider.GetBookmark;
+        try
+          if Provider.Locate('TASK_ID',ID,[loCaseInsensitive]) then begin
+            Provider.Edit;
+            Provider.FieldByName('DATE_EXECUTE').Value:=DateExecute;
+            Provider.FieldByName('RESULT_STRING').Value:=ResultString;
+            Provider.Post;
+          end;
+        finally
+          if Assigned(B) and Provider.BookmarkValid(B) then
+            Provider.GotoBookmark(B);
+        end;
+      end;
+    finally
+    //  Sender.Free;
+    end;
+  end;
+end;}
+
+procedure TBisDesignDataTasksFrame.TaskRun;
+var
+  Task: TBisTask;
+  OldCursor: TCursor;
+begin
+  if CanTaskRun then begin
+    OldCursor:=Screen.Cursor;
+    Screen.Cursor:=crHourGlass;
+    Task:=TBisTask.Create(nil);
+    try
+      Task.ID:=Provider.FieldByName('TASK_ID').AsString;
+      Task.ObjectName:=Provider.FieldByName('NAME').AsString;
+      Task.Description:=Provider.FieldByName('DESCRIPTION').AsString;
+      Task.InterfaceID:=Provider.FieldByName('INTERFACE_ID').AsString;
+      Task.ProcName:=Provider.FieldByName('PROC_NAME').AsString;
+      Task.CommandString:=Provider.FieldByName('COMMAND_STRING').AsString;
+      Task.Enabled:=true;
+      Task.Priority:=tpNormal;
+      Task.Schedule:=tscOnce;
+//      Task.OnEnd:=TaskEnd;
+      Task.Reset;
+      Task.Start(true);
+    finally
+      Task.Free;
+      Screen.Cursor:=OldCursor;
+    end;
+  end;
+end;
+
+end.

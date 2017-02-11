@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Source file exported to file</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="SynEdit HTML exporter" />
+<style type="text/css">
+<!--
+body { color: #000000; background-color: #FFFFFF; }
+.pas1-assembler { }
+.pas1-character { }
+.pas1-comment { font-style: italic; }
+.pas1-float { }
+.pas1-hexadecimal { }
+.pas1-identifier { }
+.pas1-number { }
+.pas1-preprocessor { font-style: italic; }
+.pas1-reservedword { font-weight: bold; }
+.pas1-space { }
+.pas1-string { }
+.pas1-symbol { }
+-->
+</style>
+</head>
+<body>
+<pre>
+<code><span style="font: 10pt Courier New;"><span class="pas1-comment">{-------------------------------------------------------------------------------
+The contents of this file are subject to the Mozilla Public License
+Version 1.1 (the &quot;License&quot;); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+http://www.mozilla.org/MPL/
+
+Software distributed under the License is distributed on an &quot;AS IS&quot; basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+the specific language governing rights and limitations under the License.
+
+The Original Code is: frmExportMain.pas, released 2000-06-23.
+
+The Original Code is part of the ExportDemo project, written by Michael Hieke
+for the SynEdit component suite.
+All Rights Reserved.
+
+Contributors to the SynEdit project are listed in the Contributors.txt file.
+
+Alternatively, the contents of this file may be used under the terms of the
+GNU General Public License Version 2 or later (the &quot;GPL&quot;), in which case
+the provisions of the GPL are applicable instead of those above.
+If you wish to allow use of your version of this file only under the terms
+of the GPL and not to allow others to use your version of this file
+under the MPL, indicate your decision by deleting the provisions above and
+replace them with the notice and other provisions required by the GPL.
+If you do not delete the provisions above, a recipient may use your version
+of this file under either the MPL or the GPL.
+
+$Id: frmExportMain.pas,v 1.2 2000/11/22 08:37:05 mghie Exp $
+
+You may retrieve the latest version of this file at the SynEdit home page,
+located at http://SynEdit.SourceForge.net
+
+Known Issues:
+-------------------------------------------------------------------------------}
+
+</span><span class="pas1-reservedword">unit</span><span class="pas1-space"> frmExportMain;
+
+</span><span class="pas1-preprocessor">{$I SynEdit.inc}
+
+</span><span class="pas1-reservedword">interface
+
+uses
+</span><span class="pas1-space">  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  SynEdit, Menus, SynExportRTF, SynEditExport, SynExportHTML,
+  SynEditHighlighter, SynHighlighterPas, ComCtrls, SynHighlighterDfm,
+  SynHighlighterCpp;
+
+</span><span class="pas1-reservedword">type
+</span><span class="pas1-space">  TForm1 = </span><span class="pas1-reservedword">class</span><span class="pas1-symbol">(TForm)
+    menuMain: TMainMenu;
+    mFile: TMenuItem;
+    miFileOpen: TMenuItem;
+    N1: TMenuItem;
+    miFileExit: TMenuItem;
+    SynEdit1: TSynEdit;
+    dlgFileOpen: TOpenDialog;
+    dlgFileSaveAs: TSaveDialog;
+    mExport: TMenuItem;
+    miExportToFile: TMenuItem;
+    Statusbar: TStatusBar;
+    SynExporterHTML1: TSynExporterHTML;
+    SynExporterRTF1: TSynExporterRTF;
+    miExportAsHTML: TMenuItem;
+    miExportAsRTF: TMenuItem;
+    miExportAllFormats: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    miExportClipboardNative: TMenuItem;
+    miExportClipboardText: TMenuItem;
+    SynCppSyn1: TSynCppSyn;
+    SynDfmSyn1: TSynDfmSyn;
+    SynPasSyn1: TSynPasSyn;
+    </span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> FormCreate(Sender: TObject);
+    </span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> FormDestroy(Sender: TObject);
+    </span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> miFileOpenClick(Sender: TObject);
+    </span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> miFileExitClick(Sender: TObject);
+    </span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> miExportToFileClick(Sender: TObject);
+    </span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> mExportClick(Sender: TObject);
+    </span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> miExportAsClicked(Sender: TObject);
+    </span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> miExportClipboardNativeClick(Sender: TObject);
+    </span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> miExportClipboardTextClick(Sender: TObject);
+  </span><span class="pas1-reservedword">private
+</span><span class="pas1-space">    fExportAs: integer;
+    fHighlighters: TStringList;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">var
+</span><span class="pas1-space">  Form1: TForm1;
+
+</span><span class="pas1-reservedword">implementation
+
+</span><span class="pas1-preprocessor">{$R *.DFM}
+
+</span><span class="pas1-reservedword">uses
+</span><span class="pas1-space">  uHighlighterProcs, Clipbrd;
+
+</span><span class="pas1-comment">{ TForm1 }
+</span><span class="pas1-space">  
+</span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> TForm1.FormCreate(Sender: TObject);
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  fHighlighters := TStringList.Create;
+  fHighlighters.Sorted := TRUE;
+  GetHighlighters(Self, fHighlighters, FALSE);
+  dlgFileOpen.Filter := GetHighlightersFilter(fHighlighters) + 'All files|*.*|';
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> TForm1.FormDestroy(Sender: TObject);
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  fHighlighters.Free;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> TForm1.miFileOpenClick(Sender: TObject);
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  </span><span class="pas1-reservedword">if</span><span class="pas1-space"> dlgFileOpen.Execute </span><span class="pas1-reservedword">then</span><span class="pas1-space"> </span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">    SynEdit1.Lines.LoadFromFile(dlgFileOpen.FileName);
+    SynEdit1.Highlighter := GetHighlighterFromFileExt(fHighlighters,
+      ExtractFileExt(dlgFileOpen.FileName));
+    </span><span class="pas1-reservedword">if</span><span class="pas1-space"> Assigned(SynEdit1.Highlighter) </span><span class="pas1-reservedword">then
+</span><span class="pas1-space">      Statusbar.SimpleText := 'Using highlighter for ' +
+        SynEdit1.Highlighter.GetLanguageName
+    </span><span class="pas1-reservedword">else
+</span><span class="pas1-space">      Statusbar.SimpleText := 'No highlighter assigned';
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> TForm1.miFileExitClick(Sender: TObject);
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  Close;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> TForm1.mExportClick(Sender: TObject);
+</span><span class="pas1-reservedword">var
+</span><span class="pas1-space">  HasText, IsEnabled: boolean;
+  i: integer;
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  miExportAsHTML.Checked := fExportAs = 1;
+  miExportAsRTF.Checked := fExportAs = 2;
+  miExportAllFormats.Checked := fExportAs = 0;
+
+  HasText := FALSE;
+  </span><span class="pas1-reservedword">for</span><span class="pas1-space"> i := 0 </span><span class="pas1-reservedword">to</span><span class="pas1-space"> SynEdit1.Lines.Count - 1 </span><span class="pas1-reservedword">do
+</span><span class="pas1-space">    </span><span class="pas1-reservedword">if</span><span class="pas1-space"> SynEdit1.Lines[i] &lt;&gt; '' </span><span class="pas1-reservedword">then</span><span class="pas1-space"> </span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">      HasText := TRUE;
+      break;
+    </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+  IsEnabled := HasText </span><span class="pas1-reservedword">and</span><span class="pas1-space"> Assigned(SynEdit1.Highlighter);
+  miExportClipboardNative.Enabled := IsEnabled;
+  IsEnabled := IsEnabled </span><span class="pas1-reservedword">and</span><span class="pas1-space"> (fExportAs &gt; 0);
+  miExportToFile.Enabled := IsEnabled;
+  miExportClipboardText.Enabled := IsEnabled;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> TForm1.miExportToFileClick(Sender: TObject);
+</span><span class="pas1-reservedword">var
+</span><span class="pas1-space">  FileName: </span><span class="pas1-reservedword">string</span><span class="pas1-symbol">;
+  Exporter: TSynCustomExporter;
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  </span><span class="pas1-reservedword">case</span><span class="pas1-space"> fExportAs </span><span class="pas1-reservedword">of
+</span><span class="pas1-space">    1: dlgFileSaveAs.Filter := SynExporterHTML1.DefaultFilter;
+    2: dlgFileSaveAs.Filter := SynExporterRTF1.DefaultFilter;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+  </span><span class="pas1-reservedword">if</span><span class="pas1-space"> dlgFileSaveAs.Execute </span><span class="pas1-reservedword">then</span><span class="pas1-space"> </span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">    Exporter := </span><span class="pas1-reservedword">nil</span><span class="pas1-symbol">;
+    FileName := dlgFileSaveAs.FileName;
+    </span><span class="pas1-reservedword">case</span><span class="pas1-space"> fExportAs </span><span class="pas1-reservedword">of
+</span><span class="pas1-space">      1: </span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">           </span><span class="pas1-reservedword">if</span><span class="pas1-space"> ExtractFileExt(FileName) = '' </span><span class="pas1-reservedword">then
+</span><span class="pas1-space">             FileName := FileName + '.html';
+           Exporter := SynExporterHTML1;
+         </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+      2: </span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">           </span><span class="pas1-reservedword">if</span><span class="pas1-space"> ExtractFileExt(FileName) = '' </span><span class="pas1-reservedword">then
+</span><span class="pas1-space">             FileName := FileName + '.rtf';
+           Exporter := SynExporterRTF1;
+         </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+    </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+    </span><span class="pas1-reservedword">if</span><span class="pas1-space"> Assigned(Exporter) </span><span class="pas1-reservedword">then</span><span class="pas1-space"> </span><span class="pas1-reservedword">with</span><span class="pas1-space"> Exporter </span><span class="pas1-reservedword">do</span><span class="pas1-space"> </span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">      Title := 'Source file exported to file';
+      Highlighter := SynEdit1.Highlighter;
+      ExportAsText := TRUE;
+      ExportAll(SynEdit1.Lines);
+      SaveToFile(FileName);
+    </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> TForm1.miExportAsClicked(Sender: TObject);
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  </span><span class="pas1-reservedword">if</span><span class="pas1-space"> Sender = miExportAsHTML </span><span class="pas1-reservedword">then
+</span><span class="pas1-space">    fExportAs := 1
+  </span><span class="pas1-reservedword">else</span><span class="pas1-space"> </span><span class="pas1-reservedword">if</span><span class="pas1-space"> Sender = miExportAsRTF </span><span class="pas1-reservedword">then
+</span><span class="pas1-space">    fExportAs := 2
+  </span><span class="pas1-reservedword">else
+</span><span class="pas1-space">    fExportAs := 0;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> TForm1.miExportClipboardNativeClick(Sender: TObject);
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  Clipboard.Open;
+  </span><span class="pas1-reservedword">try
+</span><span class="pas1-space">    Clipboard.AsText := SynEdit1.Lines.Text;
+    </span><span class="pas1-comment">// HTML?
+</span><span class="pas1-space">    </span><span class="pas1-reservedword">if</span><span class="pas1-space"> fExportAs </span><span class="pas1-reservedword">in</span><span class="pas1-space"> [0, 1] </span><span class="pas1-reservedword">then</span><span class="pas1-space"> </span><span class="pas1-reservedword">with</span><span class="pas1-space"> SynExporterHTML1 </span><span class="pas1-reservedword">do</span><span class="pas1-space"> </span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">      Title := 'Source file exported to clipboard (native format)';
+      ExportAsText := FALSE;
+      Highlighter := SynEdit1.Highlighter;
+      ExportAll(SynEdit1.Lines);
+      CopyToClipboard;
+    </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+    </span><span class="pas1-comment">// RTF?
+</span><span class="pas1-space">    </span><span class="pas1-reservedword">if</span><span class="pas1-space"> fExportAs </span><span class="pas1-reservedword">in</span><span class="pas1-space"> [0, 2] </span><span class="pas1-reservedword">then</span><span class="pas1-space"> </span><span class="pas1-reservedword">with</span><span class="pas1-space"> SynExporterRTF1 </span><span class="pas1-reservedword">do</span><span class="pas1-space"> </span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">      Title := 'Source file exported to clipboard (native format)';
+      ExportAsText := FALSE;
+      Highlighter := SynEdit1.Highlighter;
+      ExportAll(SynEdit1.Lines);
+      CopyToClipboard;
+    </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+  </span><span class="pas1-reservedword">finally
+</span><span class="pas1-space">    Clipboard.Close;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">procedure</span><span class="pas1-space"> TForm1.miExportClipboardTextClick(Sender: TObject);
+</span><span class="pas1-reservedword">var
+</span><span class="pas1-space">  Exporter: TSynCustomExporter;
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  Exporter := </span><span class="pas1-reservedword">nil</span><span class="pas1-symbol">;
+  </span><span class="pas1-reservedword">case</span><span class="pas1-space"> fExportAs </span><span class="pas1-reservedword">of
+</span><span class="pas1-space">    1: Exporter := SynExporterHTML1;
+    2: Exporter := SynExporterRTF1;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+  </span><span class="pas1-reservedword">if</span><span class="pas1-space"> Assigned(Exporter) </span><span class="pas1-reservedword">then</span><span class="pas1-space"> </span><span class="pas1-reservedword">with</span><span class="pas1-space"> Exporter </span><span class="pas1-reservedword">do</span><span class="pas1-space"> </span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">    Title := 'Source file exported to clipboard (as text)';
+    ExportAsText := TRUE;
+    Highlighter := SynEdit1.Highlighter;
+    ExportAll(SynEdit1.Lines);
+    CopyToClipboard;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">.
+
+
+</span></span>
+</code></pre>
+</body>
+</html>

@@ -1,0 +1,87 @@
+unit BisDocproHbookDocsFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin,
+  StdCtrls, ExtCtrls, Grids, DBGrids,
+  BisDataGridFrm;
+
+type
+  TBisDocproHbookDocsFrame = class(TBisDataGridFrame)
+    ActionPlan: TAction;
+    N13: TMenuItem;
+    N15: TMenuItem;
+    procedure ActionPlanExecute(Sender: TObject);
+    procedure ActionPlanUpdate(Sender: TObject);
+  private
+    function ApplyPlan(PlanId, DocId: Variant): Boolean;
+  public
+    { Public declarations }
+  end;
+
+
+
+implementation
+
+{$R *.dfm}
+
+uses BisProvider, BisDocproHbookPlanViewsIface, BisFilterGroups, BisDialogs,
+     BisUtils;
+
+procedure TBisDocproHbookDocsFrame.ActionPlanExecute(Sender: TObject);
+var
+  AIface: TBisDocproHbookPlanViewsIface;
+  P: TBisProvider;
+  ViewId: Variant;
+  PlanName: String;
+begin
+  if Provider.Active and not Provider.IsEmpty then begin
+    ViewId:=Provider.FieldByName('VIEW_ID').Value;
+    P:=TBisProvider.Create(nil);
+    AIface:=TBisDocproHbookPlanViewsIface.Create(nil);
+    try
+      AIface.FilterGroups.Add.Filters.Add('VIEW_ID',fcEqual,ViewId);
+      if AIface.SelectInto(P) then begin
+        if P.Active and not P.IsEmpty then begin
+          PlanName:=P.FieldByName('PLAN_NAME').AsString;
+          if ShowQuestion(FormatEx('Применить план: %s?',[PlanName]))=mrYes then begin
+            if ApplyPlan(P.FieldByName('PLAN_ID').Value,Provider.FieldByName('DOC_ID').Value) then
+              ShowInfo(FormatEx('План: %s успешно применен.',[PlanName]));
+          end;
+        end;
+      end;
+    finally
+      AIface.Free;
+      P.Free;
+    end;
+  end;
+end;
+
+procedure TBisDocproHbookDocsFrame.ActionPlanUpdate(Sender: TObject);
+begin
+  ActionPlan.Enabled:=Provider.Active and not Provider.IsEmpty;
+end;
+
+function TBisDocproHbookDocsFrame.ApplyPlan(PlanId, DocId: Variant): Boolean;
+var
+  OldCursor: TCursor;
+  P: TBisProvider;
+begin
+  P:=TBisProvider.Create(nil);
+  try
+    Result:=false;
+    P.ProviderName:='APPLY_PLAN';
+    with P.Params do begin
+      AddInvisible('PLAN_ID').Value:=PlanId;
+      AddInvisible('DOC_ID').Value:=DocId;
+    end;
+    P.Execute;
+    Result:=P.Success;
+  finally
+    P.Free;
+  end;
+end;
+
+end.

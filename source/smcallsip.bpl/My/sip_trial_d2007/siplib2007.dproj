@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{37325137-3c55-47fa-bd4b-90cfb57aced1}</ProjectGuid>
+    <MainSource>siplib2007.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>c:\d2007\siplib2007.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DcuOutput>c:\d2007</DCC_DcuOutput>
+    <DCC_ObjOutput>c:\d2007</DCC_ObjOutput>
+    <DCC_HppOutput>c:\d2007</DCC_HppOutput>
+    <DCC_BplOutput>c:\d2007</DCC_BplOutput>
+    <DCC_UnitSearchPath>c:\d2007</DCC_UnitSearchPath>
+    <DCC_ResourcePath>c:\d2007</DCC_ResourcePath>
+    <DCC_ObjPath>c:\d2007</DCC_ObjPath>
+    <DCC_IncludePath>c:\d2007</DCC_IncludePath>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">True</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">False</Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName"></VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys></VersionInfoKeys><Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dcloffice2k100.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dclofficexp100.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+    </Excluded_Packages><Source><Source Name="MainSource">siplib2007.dpk</Source></Source></Delphi.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="siplib2007.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="account.pas" />
+    <DCCReference Include="accounts.pas" />
+    <DCCReference Include="acm.pas" />
+    <DCCReference Include="call.pas" />
+    <DCCReference Include="calls.pas" />
+    <DCCReference Include="codecgsm.pas" />
+    <DCCReference Include="codecpcm.pas" />
+    <DCCReference Include="codecs.pas" />
+    <DCCReference Include="codecspeex.pas" />
+    <DCCReference Include="conference.pas" />
+    <DCCReference Include="dtmf.pas" />
+    <DCCReference Include="guids.pas" />
+    <DCCReference Include="iputils.pas" />
+    <DCCReference Include="logmessage.pas" />
+    <DCCReference Include="md5.pas" />
+    <DCCReference Include="recorder.pas" />
+    <DCCReference Include="rtl.dcp" />
+    <DCCReference Include="rtp.pas" />
+    <DCCReference Include="sip.pas" />
+    <DCCReference Include="SipClient.dcr" />
+    <DCCReference Include="SipClient.dcr" />
+    <DCCReference Include="SipClient.pas" />
+    <DCCReference Include="sipints.pas" />
+    <DCCReference Include="sipmessage.pas" />
+    <DCCReference Include="siprequests.pas" />
+    <DCCReference Include="soundcard.pas" />
+    <DCCReference Include="soundi.pas" />
+    <DCCReference Include="soundin.pas" />
+    <DCCReference Include="soundinp.pas" />
+    <DCCReference Include="soundinpu.pas" />
+    <DCCReference Include="soundinput.pas" />
+    <DCCReference Include="soundp.pas" />
+    <DCCReference Include="soundpl.pas" />
+    <DCCReference Include="soundpla.pas" />
+    <DCCReference Include="soundplay.pas" />
+    <DCCReference Include="text2speech.pas" />
+    <DCCReference Include="udp.pas" />
+    <DCCReference Include="vcl.dcp" />
+    <DCCReference Include="wavfiles.pas" />
+    <DCCReference Include="WinSock2.pas" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,86 @@
+unit BisParamComboDataFrame;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisPopupEdit, BisControls;
+
+type
+
+  TBisParamComboDataFrame=class(TBisParam)
+  private
+    FComboEdit: TBisComboEdit;
+    FLabelComboBox: TLabel;
+    FComboEditName: String;
+    FLabelName: String;
+    FDataClass: TComponentClass;
+    FAlias: String;
+    FDataAlias: String;
+    FDataClassName: String;
+    FDataName: String;
+    
+  public
+    constructor Create; override;
+    procedure LinkControls(Parent: TWinControl); override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+
+    property ComboBoxName: String read FComboBoxName write FComboBoxName;
+    property LabelName: String read FLabelName write FLabelName;
+    property ComboBox: TComboBox read FComboBox;
+    property LabelComboBox: TLabel read FLabelComboBox;
+    property DataClass: TComponentClass read FDataClass write FDataClass;
+    property DataClassName: String read FDataClassName write FDataClassName;
+    property Alias: String read FAlias write FAlias;
+    property DataAlias: String read FDataAlias write FDataAlias;
+    property DataName: String read FDataName write FDataName;
+  end;
+
+implementation
+
+uses Variants, Graphics,
+     BisUtils, BisConsts;
+
+{ TBisParamComboDataFrame }
+
+constructor TBisParamComboDataFrame.Create;
+begin
+  inherited Create;
+
+end;
+
+procedure TBisParamComboDataFrame.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamComboDataFrame) then begin
+    DataClass:=TBisParamComboDataFrame(Source).DataClass;
+    DataClassName:=TBisParamComboDataFrame(Source).DataClassName;
+    Alias:=TBisParamComboDataFrame(Source).Alias;
+    DataAlias:=TBisParamComboDataFrame(Source).DataAlias;
+    DataName:=TBisParamComboDataFrame(Source).DataName;
+  end;
+end;
+
+procedure TBisParamComboDataFrame.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FComboBox:=TComboBox(DoFindComponent(FComboBoxName));
+    if Assigned(FComboBox) then begin
+{      FOldComboBoxChange:=FComboBox.OnChange;
+      FComboBox.OnChange:=ComboBoxChange;}
+      FComboBox.MaxLength:=inherited GetSize;
+      FComboBox.Color:=iff(FComboBox.Color=clBtnFace,ColorControlReadOnly,FComboBox.Color);
+      FLabelComboBox:=TLabel(DoFindComponent(FLabelName));
+      if Assigned(FLabelComboBox) then
+        FLabelComboBox.FocusControl:=FComboBox;
+    end;
+    Value:=TempValue;
+  end;
+  inherited LinkControls(Parent);
+  if Assigned(FComboBox) then begin
+  end;
+end;
+
+end.

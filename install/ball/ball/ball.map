@@ -1,0 +1,423 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 00002704H .text                   CODE
+ 0002:00404000 00000164H .itext                  ICODE
+ 0003:00405000 00000070H .data                   DATA
+ 0004:00406000 0000002CH .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 000001BE C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:000001C0 00000055 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:00000218 00000114 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:0000032C 0000009E C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:000003CC 00000026 C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:000003F4 00000006 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:000003FC 0000008E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:0000048C 00000006 C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000494 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:0000049C 00000026 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:000004C4 00000B7C C=CODE     S=.text    G=(none)   M=ComServ  ACBP=A9
+ 0001:00001040 000001AC C=CODE     S=.text    G=(none)   M=BisLoaderCmdLine ACBP=A9
+ 0001:000011EC 0000074A C=CODE     S=.text    G=(none)   M=BisLoaderResource ACBP=A9
+ 0001:00001938 000003A5 C=CODE     S=.text    G=(none)   M=BisUpdateMapFile ACBP=A9
+ 0001:00001CE0 000003BA C=CODE     S=.text    G=(none)   M=BisLoaderUpdate ACBP=A9
+ 0001:0000209C 00000560 C=CODE     S=.text    G=(none)   M=BisLoader ACBP=A9
+ 0001:000025FC 00000108 C=CODE     S=.text    G=(none)   M=ball     ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:0000001C 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:0000004C 000000B4 C=ICODE    S=.itext   G=(none)   M=ComServ  ACBP=A9
+ 0002:00000100 0000001B C=ICODE    S=.itext   G=(none)   M=BisLoader ACBP=A9
+ 0002:0000011C 00000048 C=ICODE    S=.itext   G=(none)   M=ball     ACBP=A9
+ 0003:00000000 0000001C C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0003:0000001C 00000008 C=DATA     S=.data    G=DGROUP   M=ComServ  ACBP=A9
+ 0003:00000024 00000004 C=DATA     S=.data    G=DGROUP   M=BisLoaderResource ACBP=A9
+ 0003:00000028 00000010 C=DATA     S=.data    G=DGROUP   M=BisLoader ACBP=A9
+ 0004:00000000 00000008 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:00000008 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000010 0000000C C=BSS      S=.bss     G=DGROUP   M=ComServ  ACBP=A9
+ 0004:0000001C 00000008 C=BSS      S=.bss     G=DGROUP   M=BisLoaderResource ACBP=A9
+ 0004:00000024 00000004 C=BSS      S=.bss     G=DGROUP   M=BisLoaderUpdate ACBP=A9
+ 0004:00000028 00000004 C=BSS      S=.bss     G=DGROUP   M=BisLoader ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:0000011C       ball.ball
+ 0001:000025FC       ball.Finalization
+ 0004:00000028       BisLoader..1
+ 0002:00000100       BisLoader.BisLoader
+ 0003:0000002C       BisLoader.CheckUpdate
+ 0003:00000028       BisLoader.ConfigFileName
+ 0001:0000209C       BisLoader.ExpandFileNameEx
+ 0003:00000034       BisLoader.FClassCore
+ 0003:00000030       BisLoader.FCmdLine
+ 0001:000025B8       BisLoader.Finalization
+ 0001:00002454       BisLoader.InitLoader
+ 0001:000023A0       BisLoader.LoadCore
+ 0001:00002120       BisLoader.PrepareFileName
+ 0001:000021B8       BisLoader.Update
+ 0001:00002274       BisLoader.UpdateInfo
+ 0001:00001040       BisLoaderCmdLine..TBisLoaderCmdLine
+ 0001:000011D8       BisLoaderCmdLine.TBisLoaderCmdLine.GetText
+ 0001:000010A0       BisLoaderCmdLine.TBisLoaderCmdLine.ParamExists
+ 0001:000010A8       BisLoaderCmdLine.TBisLoaderCmdLine.ValueByParam
+ 0001:00001240       BisLoaderResource.CreateFileMap
+ 0003:00000024       BisLoaderResource.FileMapView
+ 0001:00001620       BisLoaderResource.FindResource
+ 0001:000014B4       BisLoaderResource.FindResourcePlus
+ 0001:000011EC       BisLoaderResource.FreeFileMap
+ 0001:0000143C       BisLoaderResource.GetNameResource
+ 0001:00001340       BisLoaderResource.GetPointer
+ 0001:000016B4       BisLoaderResource.GetResourceMemory
+ 0001:00001418       BisLoaderResource.GetResourceNameFromId
+ 0004:0000001C       BisLoaderResource.HFile
+ 0004:00000020       BisLoaderResource.HFileMap
+ 0001:0000140C       BisLoaderResource.HighBitSet
+ 0001:00001404       BisLoaderResource.StripHighBit
+ 0001:000017C8       BisLoaderResource.UpdateResource
+ 0001:000013B8       BisLoaderResource.WideCharToStr
+ 0001:00001F3C       BisLoaderUpdate.CheckUpdateProcess
+ 0001:00001DB8       BisLoaderUpdate.CreateClassID
+ 0001:00001E54       BisLoaderUpdate.CreateUpdateProcess
+ 0004:00000024       BisLoaderUpdate.FProcessHandle
+ 0001:00001DEC       BisLoaderUpdate.GetUniqueID
+ 0001:00001CE0       BisLoaderUpdate.PrepareClassID
+ 0001:00001F58       BisLoaderUpdate.UpdateFiles
+ 0001:00001938       BisUpdateMapFile..TBisUpdateMapFile
+ 0001:00001A0C       BisUpdateMapFile.TBisUpdateMapFile.Create
+ 0001:00001AB8       BisUpdateMapFile.TBisUpdateMapFile.CreateMapFile
+ 0001:00001A4C       BisUpdateMapFile.TBisUpdateMapFile.Destroy
+ 0001:00001A78       BisUpdateMapFile.TBisUpdateMapFile.Exists
+ 0001:00001A8C       BisUpdateMapFile.TBisUpdateMapFile.FreeMapFile
+ 0001:00001B2C       BisUpdateMapFile.TBisUpdateMapFile.ReadUpdateType
+ 0001:00001B68       BisUpdateMapFile.TBisUpdateMapFile.WriteCommandLine
+ 0001:00001C24       BisUpdateMapFile.TBisUpdateMapFile.WriteMutexName
+ 0004:00000014       ComServ..2
+ 0001:000004C4       ComServ..TComServer
+ 0001:00000A18       ComServ.AutomationTerminateProc
+ 0002:0000004C       ComServ.ComServ
+ 0004:00000010       ComServ.ComServer
+ 0001:00000FF4       ComServ.Finalization
+ 0001:00000AD4       ComServ.FindSwitch
+ 0003:0000001C       ComServ.GetLongPathName
+ 0001:000006D4       ComServ.GetModuleFileName
+ 0001:00000758       ComServ.GetModuleName
+ 0001:000009A0       ComServ.GetTypeLibName
+ 0001:00000F7C       ComServ.InitComServer
+ 0001:000007B8       ComServ.LoadTypeLibrary
+ 0004:00000018       ComServ.OleAutHandle
+ 0001:0000081C       ComServ.RegisterTypeLibrary
+ 0003:00000020       ComServ.SaveInitProc
+ 0001:00000564       ComServ.ShortToLongFileName
+ 0001:00000C88       ComServ.TComServer.CountFactory
+ 0001:00000C0C       ComServ.TComServer.CountObject
+ 0001:00000B04       ComServ.TComServer.Create
+ 0001:00000BE0       ComServ.TComServer.Destroy
+ 0001:00000CA0       ComServ.TComServer.FactoryFree
+ 0001:00000CA8       ComServ.TComServer.FactoryRegisterClassObject
+ 0001:00000CB0       ComServ.TComServer.FactoryUpdateRegistry
+ 0001:00000CC8       ComServ.TComServer.GetHelpFileName
+ 0001:00000CDC       ComServ.TComServer.GetServerFileName
+ 0001:00000CE8       ComServ.TComServer.GetServerKey
+ 0001:00000D40       ComServ.TComServer.GetServerName
+ 0001:00000FD8       ComServ.TComServer.GetStartSuspended
+ 0001:00000D78       ComServ.TComServer.GetTypeLib
+ 0001:00000D94       ComServ.TComServer.Initialize
+ 0001:00000E30       ComServ.TComServer.LastReleased
+ 0001:00000E98       ComServ.TComServer.LoadTypeLib
+ 0001:00000FE0       ComServ.TComServer.SetHelpFileName
+ 0001:00000F04       ComServ.TComServer.UpdateRegistry
+ 0001:000008B8       ComServ.UnregisterTypeLibrary
+ 0001:000001D4       SysInit.@InitExe
+ 0001:000001C0       SysInit.GetModuleHandle
+ 0004:00000004       SysInit.HInstance
+ 0001:000001C8       SysInit.InitializeModule
+ 0003:00000004       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0003:00000000       SysInit.TlsIndex
+ 0004:00000008       Windows..3
+ 0001:00000218       Windows.CloseHandle
+ 0001:00000220       Windows.CreateFile
+ 0001:00000228       Windows.CreateFileMapping
+ 0001:00000238       Windows.CreateMutex
+ 0001:00000258       Windows.CreateProcess
+ 0001:000002E8       Windows.Finalization
+ 0001:00000260       Windows.FindClose
+ 0001:00000268       Windows.FindFirstFile
+ 0001:00000270       Windows.FreeLibrary
+ 0001:00000290       Windows.GetLastError
+ 0001:00000298       Windows.GetModuleFileName
+ 0001:000002A0       Windows.GetModuleHandle
+ 0001:000002A8       Windows.GetProcAddress
+ 0004:0000000C       Windows.HtmlHelpModule
+ 0001:00000278       Windows.InterlockedDecrement
+ 0001:00000280       Windows.InterlockedExchange
+ 0001:00000288       Windows.InterlockedIncrement
+ 0001:000002B0       Windows.IsBadCodePtr
+ 0001:000002B8       Windows.MapViewOfFile
+ 0001:000002D8       Windows.MessageBox
+ 0001:000002E0       Windows.PostThreadMessage
+ 0001:000002C0       Windows.UnmapViewOfFile
+ 0001:000002C8       Windows.WaitForSingleObject
+ 0001:000002D0       Windows.WideCharToMultiByte
+ 0002:00000008       Windows.Windows
+ 0001:00000230       Windows._CreateMutex
+
+
+  Address             Publics by Value
+
+ 0001:000001C0       SysInit.GetModuleHandle
+ 0001:000001C8       SysInit.InitializeModule
+ 0001:000001D4       SysInit.@InitExe
+ 0001:00000218       Windows.CloseHandle
+ 0001:00000220       Windows.CreateFile
+ 0001:00000228       Windows.CreateFileMapping
+ 0001:00000230       Windows._CreateMutex
+ 0001:00000238       Windows.CreateMutex
+ 0001:00000258       Windows.CreateProcess
+ 0001:00000260       Windows.FindClose
+ 0001:00000268       Windows.FindFirstFile
+ 0001:00000270       Windows.FreeLibrary
+ 0001:00000278       Windows.InterlockedDecrement
+ 0001:00000280       Windows.InterlockedExchange
+ 0001:00000288       Windows.InterlockedIncrement
+ 0001:00000290       Windows.GetLastError
+ 0001:00000298       Windows.GetModuleFileName
+ 0001:000002A0       Windows.GetModuleHandle
+ 0001:000002A8       Windows.GetProcAddress
+ 0001:000002B0       Windows.IsBadCodePtr
+ 0001:000002B8       Windows.MapViewOfFile
+ 0001:000002C0       Windows.UnmapViewOfFile
+ 0001:000002C8       Windows.WaitForSingleObject
+ 0001:000002D0       Windows.WideCharToMultiByte
+ 0001:000002D8       Windows.MessageBox
+ 0001:000002E0       Windows.PostThreadMessage
+ 0001:000002E8       Windows.Finalization
+ 0001:000004C4       ComServ..TComServer
+ 0001:00000564       ComServ.ShortToLongFileName
+ 0001:000006D4       ComServ.GetModuleFileName
+ 0001:00000758       ComServ.GetModuleName
+ 0001:000007B8       ComServ.LoadTypeLibrary
+ 0001:0000081C       ComServ.RegisterTypeLibrary
+ 0001:000008B8       ComServ.UnregisterTypeLibrary
+ 0001:000009A0       ComServ.GetTypeLibName
+ 0001:00000A18       ComServ.AutomationTerminateProc
+ 0001:00000AD4       ComServ.FindSwitch
+ 0001:00000B04       ComServ.TComServer.Create
+ 0001:00000BE0       ComServ.TComServer.Destroy
+ 0001:00000C0C       ComServ.TComServer.CountObject
+ 0001:00000C88       ComServ.TComServer.CountFactory
+ 0001:00000CA0       ComServ.TComServer.FactoryFree
+ 0001:00000CA8       ComServ.TComServer.FactoryRegisterClassObject
+ 0001:00000CB0       ComServ.TComServer.FactoryUpdateRegistry
+ 0001:00000CC8       ComServ.TComServer.GetHelpFileName
+ 0001:00000CDC       ComServ.TComServer.GetServerFileName
+ 0001:00000CE8       ComServ.TComServer.GetServerKey
+ 0001:00000D40       ComServ.TComServer.GetServerName
+ 0001:00000D78       ComServ.TComServer.GetTypeLib
+ 0001:00000D94       ComServ.TComServer.Initialize
+ 0001:00000E30       ComServ.TComServer.LastReleased
+ 0001:00000E98       ComServ.TComServer.LoadTypeLib
+ 0001:00000F04       ComServ.TComServer.UpdateRegistry
+ 0001:00000F7C       ComServ.InitComServer
+ 0001:00000FD8       ComServ.TComServer.GetStartSuspended
+ 0001:00000FE0       ComServ.TComServer.SetHelpFileName
+ 0001:00000FF4       ComServ.Finalization
+ 0001:00001040       BisLoaderCmdLine..TBisLoaderCmdLine
+ 0001:000010A0       BisLoaderCmdLine.TBisLoaderCmdLine.ParamExists
+ 0001:000010A8       BisLoaderCmdLine.TBisLoaderCmdLine.ValueByParam
+ 0001:000011D8       BisLoaderCmdLine.TBisLoaderCmdLine.GetText
+ 0001:000011EC       BisLoaderResource.FreeFileMap
+ 0001:00001240       BisLoaderResource.CreateFileMap
+ 0001:00001340       BisLoaderResource.GetPointer
+ 0001:000013B8       BisLoaderResource.WideCharToStr
+ 0001:00001404       BisLoaderResource.StripHighBit
+ 0001:0000140C       BisLoaderResource.HighBitSet
+ 0001:00001418       BisLoaderResource.GetResourceNameFromId
+ 0001:0000143C       BisLoaderResource.GetNameResource
+ 0001:000014B4       BisLoaderResource.FindResourcePlus
+ 0001:00001620       BisLoaderResource.FindResource
+ 0001:000016B4       BisLoaderResource.GetResourceMemory
+ 0001:000017C8       BisLoaderResource.UpdateResource
+ 0001:00001938       BisUpdateMapFile..TBisUpdateMapFile
+ 0001:00001A0C       BisUpdateMapFile.TBisUpdateMapFile.Create
+ 0001:00001A4C       BisUpdateMapFile.TBisUpdateMapFile.Destroy
+ 0001:00001A78       BisUpdateMapFile.TBisUpdateMapFile.Exists
+ 0001:00001A8C       BisUpdateMapFile.TBisUpdateMapFile.FreeMapFile
+ 0001:00001AB8       BisUpdateMapFile.TBisUpdateMapFile.CreateMapFile
+ 0001:00001B2C       BisUpdateMapFile.TBisUpdateMapFile.ReadUpdateType
+ 0001:00001B68       BisUpdateMapFile.TBisUpdateMapFile.WriteCommandLine
+ 0001:00001C24       BisUpdateMapFile.TBisUpdateMapFile.WriteMutexName
+ 0001:00001CE0       BisLoaderUpdate.PrepareClassID
+ 0001:00001DB8       BisLoaderUpdate.CreateClassID
+ 0001:00001DEC       BisLoaderUpdate.GetUniqueID
+ 0001:00001E54       BisLoaderUpdate.CreateUpdateProcess
+ 0001:00001F3C       BisLoaderUpdate.CheckUpdateProcess
+ 0001:00001F58       BisLoaderUpdate.UpdateFiles
+ 0001:0000209C       BisLoader.ExpandFileNameEx
+ 0001:00002120       BisLoader.PrepareFileName
+ 0001:000021B8       BisLoader.Update
+ 0001:00002274       BisLoader.UpdateInfo
+ 0001:000023A0       BisLoader.LoadCore
+ 0001:00002454       BisLoader.InitLoader
+ 0001:000025B8       BisLoader.Finalization
+ 0001:000025FC       ball.Finalization
+ 0002:00000008       Windows.Windows
+ 0002:0000004C       ComServ.ComServ
+ 0002:00000100       BisLoader.BisLoader
+ 0002:0000011C       ball.ball
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.Module
+ 0003:0000001C       ComServ.GetLongPathName
+ 0003:00000020       ComServ.SaveInitProc
+ 0003:00000024       BisLoaderResource.FileMapView
+ 0003:00000028       BisLoader.ConfigFileName
+ 0003:0000002C       BisLoader.CheckUpdate
+ 0003:00000030       BisLoader.FCmdLine
+ 0003:00000034       BisLoader.FClassCore
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       Windows..3
+ 0004:0000000C       Windows.HtmlHelpModule
+ 0004:00000010       ComServ.ComServer
+ 0004:00000014       ComServ..2
+ 0004:00000018       ComServ.OleAutHandle
+ 0004:0000001C       BisLoaderResource.HFile
+ 0004:00000020       BisLoaderResource.HFileMap
+ 0004:00000024       BisLoaderUpdate.FProcessHandle
+ 0004:00000028       BisLoader..1
+
+
+Line numbers for BisObjectIntf(core.bpl\BisObjectIntf.pas) segment .text
+
+    15 0001:00000000
+
+Line numbers for BisObject(core.bpl\BisObject.pas) segment .text
+
+    63 0001:00000000
+
+Line numbers for BisLoaderCmdLine(loader.exe\BisLoaderCmdLine.pas) segment .text
+
+    28 0001:000010A0    29 0001:000010A7    38 0001:000010A8    39 0001:000010CD
+    40 0001:000010CF    41 0001:000010DE    42 0001:000010E5    43 0001:000010F5
+    44 0001:000010FF    45 0001:0000111F    46 0001:00001144    49 0001:00001148
+    50 0001:0000114C    51 0001:00001155    52 0001:00001160    54 0001:00001162
+    57 0001:00001165    42 0001:00001166    58 0001:00001169    66 0001:000011D8
+    67 0001:000011DB    68 0001:000011EA    70 0001:0000121A
+
+Line numbers for BisLoaderResource(loader.exe\BisLoaderResource.pas) segment .text
+
+    54 0001:000011EC    55 0001:000011F5    56 0001:000011FE    57 0001:00001207
+    58 0001:00001212    59 0001:0000121D    60 0001:00001224    62 0001:0000122B
+    63 0001:00001236    65 0001:0000123D    68 0001:00001240    69 0001:0000125E
+    70 0001:00001260    71 0001:00001265    73 0001:0000128A    75 0001:00001297
+    76 0001:000012B1    77 0001:000012C3    80 0001:000012CE    81 0001:000012E9
+    82 0001:000012F2    83 0001:000012FD    84 0001:00001308    85 0001:0000130F
+    86 0001:00001316    89 0001:00001318    90 0001:0000131A    99 0001:00001340
+   100 0001:00001350   101 0001:00001358   102 0001:0000135F   103 0001:0000136A
+   104 0001:0000137A   105 0001:0000137E   107 0001:0000138E   108 0001:0000139B
+   109 0001:000013A4   102 0001:000013A6   112 0001:000013AB   115 0001:000013B8
+   116 0001:000013C1   117 0001:000013C8   118 0001:000013DD   119 0001:000013E6
+   120 0001:000013FE   124 0001:00001404   125 0001:00001409   129 0001:0000140C
+   130 0001:00001414   136 0001:00001418   137 0001:00001421   138 0001:0000142A
+   139 0001:00001437   144 0001:0000143C   145 0001:0000144C   146 0001:00001453
+   150 0001:00001457   154 0001:0000146D   155 0001:00001478   156 0001:00001483
+   158 0001:00001485   159 0001:0000149E   179 0001:000014B4   180 0001:000014CC
+   181 0001:000014D5   182 0001:000014D9   184 0001:000014E0   186 0001:000014FA
+   187 0001:0000150D   189 0001:00001517   190 0001:00001520   192 0001:0000152E
+   194 0001:0000153E   196 0001:00001542   197 0001:00001554   199 0001:00001558
+   202 0001:0000155A   203 0001:00001566   206 0001:00001599   207 0001:000015BB
+   209 0001:000015C9   210 0001:000015E5   211 0001:000015F3   214 0001:000015FD
+   219 0001:00001620   220 0001:00001647   221 0001:00001649   223 0001:0000164C
+   224 0001:00001655   225 0001:0000165E   226 0001:00001667   224 0001:0000166A
+   229 0001:0000166D   230 0001:00001676   231 0001:0000167F   232 0001:00001688
+   230 0001:0000168B   234 0001:0000168E   244 0001:000016B4   245 0001:000016E6
+   246 0001:000016F8   247 0001:00001704   248 0001:0000171C   249 0001:00001732
+   250 0001:00001748   251 0001:0000174E   252 0001:0000175F   253 0001:00001766
+   254 0001:00001777   255 0001:00001781   256 0001:00001785   258 0001:00001798
+   265 0001:000017C8   266 0001:00001808   267 0001:0000180C   268 0001:0000181A
+   269 0001:0000182A   270 0001:00001838   271 0001:0000183D   272 0001:00001842
+   273 0001:00001854   274 0001:0000185A   275 0001:0000186E   276 0001:0000187C
+   277 0001:00001896   278 0001:000018A2   279 0001:000018B0   282 0001:000018C1
+   286 0001:000018DE   290 0001:000018FA   291 0001:000018FF   294 0001:00001964
+
+Line numbers for BisUpdateMapFile(update.exe\BisUpdateMapFile.pas) segment .text
+
+    53 0001:00001A0C    54 0001:00001A1E    55 0001:00001A27    56 0001:00001A2C
+    57 0001:00001A31    60 0001:00001A4C    61 0001:00001A57    62 0001:00001A5E
+    63 0001:00001A6A    67 0001:00001A78    68 0001:00001A89    71 0001:00001A8C
+    72 0001:00001A8F    73 0001:00001A9A    74 0001:00001AA3    75 0001:00001AA8
+    76 0001:00001AB1    78 0001:00001AB6    81 0001:00001AB8    82 0001:00001AC0
+    84 0001:00001AC7    85 0001:00001AE4    88 0001:00001AF0    89 0001:00001B06
+    90 0001:00001B0A    91 0001:00001B13    92 0001:00001B18    95 0001:00001B1A
+    96 0001:00001B24   140 0001:00001B2C   141 0001:00001B36   142 0001:00001B38
+   143 0001:00001B43   144 0001:00001B52   146 0001:00001B5A   151 0001:00001B68
+   152 0001:00001B95   153 0001:00001BA0   154 0001:00001BB3   155 0001:00001BE4
+   157 0001:00001BF7   162 0001:00001C24   163 0001:00001C51   164 0001:00001C5C
+   165 0001:00001C6F   166 0001:00001C9D   168 0001:00001CB0   181 0001:00001CDD
+
+Line numbers for BisLoaderUpdate(loader.exe\BisLoaderUpdate.pas) segment .text
+
+    16 0001:00001CE0    17 0001:00001D07    18 0001:00001D90    24 0001:00001DB8
+    25 0001:00001DBE    26 0001:00001DC8    27 0001:00001DD3    28 0001:00001DDD
+    29 0001:00001DE6    34 0001:00001DEC    35 0001:00001E04    36 0001:00001E22
+    37 0001:00001E2C    44 0001:00001E54    45 0001:00001E84    47 0001:00001E93
+    48 0001:00001E9A    50 0001:00001EA0    51 0001:00001ECA    53 0001:00001EF4
+    54 0001:00001EF8    55 0001:00001F00    61 0001:00001F3C    62 0001:00001F4C
+    63 0001:00001F54    73 0001:00001F58    74 0001:00001F8B    75 0001:00001F8F
+    76 0001:00001FA0    77 0001:00001FAE    78 0001:00001FB6    79 0001:00001FC1
+    80 0001:00001FD1    81 0001:00001FDC    82 0001:00001FE4    83 0001:00001FF6
+    84 0001:00001FFB    85 0001:00002002    86 0001:0000200D    87 0001:0000201C
+    89 0001:00002022    90 0001:0000202C    91 0001:00002038    94 0001:00002044
+    95 0001:00002048    88 0001:0000204C   103 0001:0000205F   105 0001:0000206F
+   107 0001:000020C8
+
+Line numbers for BisCoreIntf(core.bpl\BisCoreIntf.pas) segment .text
+
+    38 0001:00000000
+
+Line numbers for BisLoader(loader.exe\BisLoader.pas) segment .text
+
+    36 0001:0000209C    37 0001:000020C1    38 0001:000020CB    39 0001:000020D8
+    40 0001:000020E3    41 0001:000020EF    42 0001:000020F9    45 0001:00002120
+    46 0001:00002152    47 0001:0000215C    48 0001:0000216D    50 0001:0000217D
+    51 0001:00002191    57 0001:000021B8    58 0001:000021CE    59 0001:000021D0
+    60 0001:000021D9    61 0001:000021EA    62 0001:000021EE    63 0001:000021FB
+    64 0001:00002207    67 0001:00002221    74 0001:00002274    75 0001:0000228C
+    76 0001:0000229E    77 0001:000022B0    78 0001:000022C2    79 0001:000022D3
+    80 0001:000022EF    81 0001:00002305    87 0001:000023A0    88 0001:000023B4
+    89 0001:000023B6    90 0001:000023C8    91 0001:000023D4    92 0001:000023DC
+    93 0001:000023E0    94 0001:000023EF    97 0001:000023F9   103 0001:00002454
+   104 0001:0000246D   105 0001:0000247A   106 0001:00002494   107 0001:000024A3
+   108 0001:000024B1   109 0001:000024C8   110 0001:000024D2   111 0001:000024E0
+   112 0001:000024E8   113 0001:000024F4   114 0001:00002502   115 0001:0000251D
+   116 0001:00002527   117 0001:00002531   118 0001:0000253B   121 0001:00002550
+   126 0001:0000256D   127 0001:00002575   130 0001:00002585   136 0001:000025B8
+   138 0001:000025DB
+
+Line numbers for BisLoader(loader.exe\BisLoader.pas) segment .itext
+
+   132 0002:00000100   133 0002:00000109   135 0002:0000011A
+
+Line numbers for ball(ball.dpr) segment .itext
+
+    17 0002:0000011C    19 0002:0000012C    20 0002:0000013B    21 0002:00000143
+    22 0002:00000148
+
+Bound resource files
+
+c:\program files\codegear\rad studio\5.0\lib\WindowsXP.res
+ball.res
+ball.drf
+
+
+Program entry point at 0002:0000011C

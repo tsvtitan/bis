@@ -1,0 +1,3123 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 0001AB28H .text                   CODE
+ 0002:0041C000 0000037CH .itext                  ICODE
+ 0003:0041D000 000002D0H .data                   DATA
+ 0004:0041E000 00000050H .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 00000216 C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000218 000001C3 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:000003DC 0000012E C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:0000050C 000001F8 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:00000704 00000006 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:0000070C 0000004E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:0000075C 00000006 C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000764 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:0000076C 0000000E C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:0000077C 0000003E C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:000007BC 00000906 C=CODE     S=.text    G=(none)   M=CPortTypes ACBP=A9
+ 0001:000010C4 0000016E C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00001234 000003B6 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:000015EC 00000006 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:000015F4 00000006 C=CODE     S=.text    G=(none)   M=Themes   ACBP=A9
+ 0001:000015FC 00000006 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00001604 00000006 C=CODE     S=.text    G=(none)   M=UxTheme  ACBP=A9
+ 0001:0000160C 00000006 C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00001614 00000006 C=CODE     S=.text    G=(none)   M=DwmApi   ACBP=A9
+ 0001:0000161C 0000014E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:0000176C 00000006 C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00001774 00000016 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:0000178C 0000010E C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:0000189C 00000006 C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:000018A4 00000056 C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:000018FC 00000006 C=CODE     S=.text    G=(none)   M=GraphUtil ACBP=A9
+ 0001:00001904 00000006 C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:0000190C 00000006 C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00001914 00000006 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:0000191C 0000168E C=CODE     S=.text    G=(none)   M=CPortEsc ACBP=A9
+ 0001:00002FAC 0000061A C=CODE     S=.text    G=(none)   M=CPortTrmSet ACBP=A9
+ 0001:000035C8 0000635C C=CODE     S=.text    G=(none)   M=CPortCtl ACBP=A9
+ 0001:00009924 000003BA C=CODE     S=.text    G=(none)   M=CPortSetup ACBP=A9
+ 0001:00009CE0 0000782F C=CODE     S=.text    G=(none)   M=CPort    ACBP=A9
+ 0001:00011510 00000046 C=CODE     S=.text    G=(none)   M=BisCoreObjects ACBP=A9
+ 0001:00011558 0000000E C=CODE     S=.text    G=(none)   M=BisObject ACBP=A9
+ 0001:00011568 00000006 C=CODE     S=.text    G=(none)   M=BisFm    ACBP=A9
+ 0001:00011570 00000006 C=CODE     S=.text    G=(none)   M=DECUtil  ACBP=A9
+ 0001:00011578 00000006 C=CODE     S=.text    G=(none)   M=Hash     ACBP=A9
+ 0001:00011580 00000006 C=CODE     S=.text    G=(none)   M=Cipher   ACBP=A9
+ 0001:00011588 00000006 C=CODE     S=.text    G=(none)   M=Cipher1  ACBP=A9
+ 0001:00011590 00000006 C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:00011598 00000006 C=CODE     S=.text    G=(none)   M=WideStrings ACBP=A9
+ 0001:000115A0 00000006 C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:000115A8 00000006 C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:000115B0 00000006 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:000115B8 00000006 C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:000115C0 00000006 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:000115C8 00000006 C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:000115D0 00000006 C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:000115D8 00000006 C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:000115E0 00000006 C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:000115E8 00000006 C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:000115F0 00000006 C=CODE     S=.text    G=(none)   M=rxToolEdit ACBP=A9
+ 0001:000115F8 00000006 C=CODE     S=.text    G=(none)   M=rxDateUtil ACBP=A9
+ 0001:00011600 00000006 C=CODE     S=.text    G=(none)   M=RXCtrls  ACBP=A9
+ 0001:00011608 00000006 C=CODE     S=.text    G=(none)   M=RxHook   ACBP=A9
+ 0001:00011610 00000006 C=CODE     S=.text    G=(none)   M=RXConst  ACBP=A9
+ 0001:00011618 00000006 C=CODE     S=.text    G=(none)   M=rxVclutils ACBP=A9
+ 0001:00011620 00000006 C=CODE     S=.text    G=(none)   M=RXProps  ACBP=A9
+ 0001:00011628 00000006 C=CODE     S=.text    G=(none)   M=rxAppUtils ACBP=A9
+ 0001:00011630 00000006 C=CODE     S=.text    G=(none)   M=RxPrgrss ACBP=A9
+ 0001:00011638 00000006 C=CODE     S=.text    G=(none)   M=rxCurrEdit ACBP=A9
+ 0001:00011640 00000006 C=CODE     S=.text    G=(none)   M=ThemedDBGrid ACBP=A9
+ 0001:00011648 00000006 C=CODE     S=.text    G=(none)   M=RxRichEd ACBP=A9
+ 0001:00011650 00000006 C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:00011658 00000006 C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00011660 0000000E C=CODE     S=.text    G=(none)   M=BisUtils ACBP=A9
+ 0001:00011670 00000006 C=CODE     S=.text    G=(none)   M=GIFImage ACBP=A9
+ 0001:00011678 00000006 C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:00011680 00000006 C=CODE     S=.text    G=(none)   M=BisCore  ACBP=A9
+ 0001:00011688 00000006 C=CODE     S=.text    G=(none)   M=kbmMemTable ACBP=A9
+ 0001:00011690 00000006 C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:00011698 00000006 C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:000116A0 00000006 C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:000116A8 00000006 C=CODE     S=.text    G=(none)   M=ActnMan  ACBP=A9
+ 0001:000116B0 00000006 C=CODE     S=.text    G=(none)   M=ActnMenus ACBP=A9
+ 0001:000116B8 00000006 C=CODE     S=.text    G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0001:000116C0 00000006 C=CODE     S=.text    G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0001:000116C8 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_Routines ACBP=A9
+ 0001:000116D0 00000006 C=CODE     S=.text    G=(none)   M=MSI_Processes ACBP=A9
+ 0001:000116D8 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0001:000116E0 00000006 C=CODE     S=.text    G=(none)   M=MSI_Devices ACBP=A9
+ 0001:000116E8 00000006 C=CODE     S=.text    G=(none)   M=MSI_CPU  ACBP=A9
+ 0001:000116F0 00000006 C=CODE     S=.text    G=(none)   M=JclDebug ACBP=A9
+ 0001:000116F8 00000006 C=CODE     S=.text    G=(none)   M=JclSysInfo ACBP=A9
+ 0001:00011700 00000006 C=CODE     S=.text    G=(none)   M=JclStrings ACBP=A9
+ 0001:00011708 00000006 C=CODE     S=.text    G=(none)   M=JclSysUtils ACBP=A9
+ 0001:00011710 00000006 C=CODE     S=.text    G=(none)   M=JclWideStrings ACBP=A9
+ 0001:00011718 00000006 C=CODE     S=.text    G=(none)   M=JclShell ACBP=A9
+ 0001:00011720 00000006 C=CODE     S=.text    G=(none)   M=JclRegistry ACBP=A9
+ 0001:00011728 00000006 C=CODE     S=.text    G=(none)   M=JclHookExcept ACBP=A9
+ 0001:00011730 00000006 C=CODE     S=.text    G=(none)   M=BisServiceApplication ACBP=A9
+ 0001:00011738 00000006 C=CODE     S=.text    G=(none)   M=BisSvcMgr ACBP=A9
+ 0001:00011740 00000006 C=CODE     S=.text    G=(none)   M=BisCryptUtils ACBP=A9
+ 0001:00011748 00000006 C=CODE     S=.text    G=(none)   M=SvcMgr   ACBP=A9
+ 0001:00011750 00000AFA C=CODE     S=.text    G=(none)   M=BisComPort ACBP=A9
+ 0001:0001224C 000002FE C=CODE     S=.text    G=(none)   M=BisBarcodeScanner ACBP=A9
+ 0001:0001254C 00000856 C=CODE     S=.text    G=(none)   M=XAsync   ACBP=A9
+ 0001:00012DA4 0000026E C=CODE     S=.text    G=(none)   M=XComErr  ACBP=A9
+ 0001:00013014 000070FC C=CODE     S=.text    G=(none)   M=XComDrv  ACBP=A9
+ 0001:0001A110 00000A17 C=CODE     S=.text    G=(none)   M=.omcom   ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:00000010 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=IniFiles ACBP=A9
+ 0002:0000004C 00000006 C=ICODE    S=.itext   G=(none)   M=Registry ACBP=A9
+ 0002:00000054 00000008 C=ICODE    S=.itext   G=(none)   M=CPortTypes ACBP=A9
+ 0002:0000005C 00000006 C=ICODE    S=.itext   G=(none)   M=Graphics ACBP=A9
+ 0002:00000064 00000006 C=ICODE    S=.itext   G=(none)   M=Controls ACBP=A9
+ 0002:0000006C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnList ACBP=A9
+ 0002:00000074 00000006 C=ICODE    S=.itext   G=(none)   M=Themes   ACBP=A9
+ 0002:0000007C 00000006 C=ICODE    S=.itext   G=(none)   M=Menus    ACBP=A9
+ 0002:00000084 00000006 C=ICODE    S=.itext   G=(none)   M=UxTheme  ACBP=A9
+ 0002:0000008C 00000006 C=ICODE    S=.itext   G=(none)   M=MultiMon ACBP=A9
+ 0002:00000094 00000006 C=ICODE    S=.itext   G=(none)   M=DwmApi   ACBP=A9
+ 0002:0000009C 00000006 C=ICODE    S=.itext   G=(none)   M=Forms    ACBP=A9
+ 0002:000000A4 00000006 C=ICODE    S=.itext   G=(none)   M=HelpIntfs ACBP=A9
+ 0002:000000AC 00000006 C=ICODE    S=.itext   G=(none)   M=Dialogs  ACBP=A9
+ 0002:000000B4 00000006 C=ICODE    S=.itext   G=(none)   M=Printers ACBP=A9
+ 0002:000000BC 00000006 C=ICODE    S=.itext   G=(none)   M=ExtCtrls ACBP=A9
+ 0002:000000C4 00000006 C=ICODE    S=.itext   G=(none)   M=GraphUtil ACBP=A9
+ 0002:000000CC 00000006 C=ICODE    S=.itext   G=(none)   M=Clipbrd  ACBP=A9
+ 0002:000000D4 00000006 C=ICODE    S=.itext   G=(none)   M=FlatSB   ACBP=A9
+ 0002:000000DC 00000006 C=ICODE    S=.itext   G=(none)   M=Buttons  ACBP=A9
+ 0002:000000E4 00000008 C=ICODE    S=.itext   G=(none)   M=CPortEsc ACBP=A9
+ 0002:000000EC 00000008 C=ICODE    S=.itext   G=(none)   M=CPortTrmSet ACBP=A9
+ 0002:000000F4 0000005C C=ICODE    S=.itext   G=(none)   M=CPortCtl ACBP=A9
+ 0002:00000150 00000008 C=ICODE    S=.itext   G=(none)   M=CPortSetup ACBP=A9
+ 0002:00000158 00000008 C=ICODE    S=.itext   G=(none)   M=CPort    ACBP=A9
+ 0002:00000160 00000006 C=ICODE    S=.itext   G=(none)   M=BisFm    ACBP=A9
+ 0002:00000168 00000006 C=ICODE    S=.itext   G=(none)   M=DECUtil  ACBP=A9
+ 0002:00000170 00000006 C=ICODE    S=.itext   G=(none)   M=Hash     ACBP=A9
+ 0002:00000178 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher   ACBP=A9
+ 0002:00000180 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher1  ACBP=A9
+ 0002:00000188 00000006 C=ICODE    S=.itext   G=(none)   M=DB       ACBP=A9
+ 0002:00000190 00000006 C=ICODE    S=.itext   G=(none)   M=WideStrings ACBP=A9
+ 0002:00000198 00000006 C=ICODE    S=.itext   G=(none)   M=FMTBcd   ACBP=A9
+ 0002:000001A0 00000006 C=ICODE    S=.itext   G=(none)   M=SqlTimSt ACBP=A9
+ 0002:000001A8 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:000001B0 00000006 C=ICODE    S=.itext   G=(none)   M=DBCtrls  ACBP=A9
+ 0002:000001B8 00000006 C=ICODE    S=.itext   G=(none)   M=ComCtrls ACBP=A9
+ 0002:000001C0 00000006 C=ICODE    S=.itext   G=(none)   M=ExtActns ACBP=A9
+ 0002:000001C8 00000006 C=ICODE    S=.itext   G=(none)   M=ExtDlgs  ACBP=A9
+ 0002:000001D0 00000006 C=ICODE    S=.itext   G=(none)   M=Mapi     ACBP=A9
+ 0002:000001D8 00000006 C=ICODE    S=.itext   G=(none)   M=DBPWDlg  ACBP=A9
+ 0002:000001E0 00000006 C=ICODE    S=.itext   G=(none)   M=DBLogDlg ACBP=A9
+ 0002:000001E8 00000006 C=ICODE    S=.itext   G=(none)   M=rxToolEdit ACBP=A9
+ 0002:000001F0 00000006 C=ICODE    S=.itext   G=(none)   M=rxDateUtil ACBP=A9
+ 0002:000001F8 00000006 C=ICODE    S=.itext   G=(none)   M=RXCtrls  ACBP=A9
+ 0002:00000200 00000006 C=ICODE    S=.itext   G=(none)   M=RxHook   ACBP=A9
+ 0002:00000208 00000006 C=ICODE    S=.itext   G=(none)   M=RXConst  ACBP=A9
+ 0002:00000210 00000006 C=ICODE    S=.itext   G=(none)   M=rxVclutils ACBP=A9
+ 0002:00000218 00000006 C=ICODE    S=.itext   G=(none)   M=RXProps  ACBP=A9
+ 0002:00000220 00000006 C=ICODE    S=.itext   G=(none)   M=rxAppUtils ACBP=A9
+ 0002:00000228 00000006 C=ICODE    S=.itext   G=(none)   M=RxPrgrss ACBP=A9
+ 0002:00000230 00000006 C=ICODE    S=.itext   G=(none)   M=rxCurrEdit ACBP=A9
+ 0002:00000238 00000006 C=ICODE    S=.itext   G=(none)   M=ThemedDBGrid ACBP=A9
+ 0002:00000240 00000006 C=ICODE    S=.itext   G=(none)   M=RxRichEd ACBP=A9
+ 0002:00000248 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtnrs ACBP=A9
+ 0002:00000250 00000006 C=ICODE    S=.itext   G=(none)   M=CheckLst ACBP=A9
+ 0002:00000258 00000006 C=ICODE    S=.itext   G=(none)   M=BisUtils ACBP=A9
+ 0002:00000260 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImage ACBP=A9
+ 0002:00000268 00000006 C=ICODE    S=.itext   G=(none)   M=jpeg     ACBP=A9
+ 0002:00000270 00000006 C=ICODE    S=.itext   G=(none)   M=BisCore  ACBP=A9
+ 0002:00000278 00000006 C=ICODE    S=.itext   G=(none)   M=kbmMemTable ACBP=A9
+ 0002:00000280 00000006 C=ICODE    S=.itext   G=(none)   M=OleServer ACBP=A9
+ 0002:00000288 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtrls ACBP=A9
+ 0002:00000290 00000006 C=ICODE    S=.itext   G=(none)   M=AxCtrls  ACBP=A9
+ 0002:00000298 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMan  ACBP=A9
+ 0002:000002A0 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMenus ACBP=A9
+ 0002:000002A8 00000006 C=ICODE    S=.itext   G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0002:000002B0 00000006 C=ICODE    S=.itext   G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0002:000002B8 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_Routines ACBP=A9
+ 0002:000002C0 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Processes ACBP=A9
+ 0002:000002C8 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0002:000002D0 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Devices ACBP=A9
+ 0002:000002D8 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_CPU  ACBP=A9
+ 0002:000002E0 00000006 C=ICODE    S=.itext   G=(none)   M=JclDebug ACBP=A9
+ 0002:000002E8 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysInfo ACBP=A9
+ 0002:000002F0 00000006 C=ICODE    S=.itext   G=(none)   M=JclStrings ACBP=A9
+ 0002:000002F8 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysUtils ACBP=A9
+ 0002:00000300 00000006 C=ICODE    S=.itext   G=(none)   M=JclWideStrings ACBP=A9
+ 0002:00000308 00000006 C=ICODE    S=.itext   G=(none)   M=JclShell ACBP=A9
+ 0002:00000310 00000006 C=ICODE    S=.itext   G=(none)   M=JclRegistry ACBP=A9
+ 0002:00000318 00000006 C=ICODE    S=.itext   G=(none)   M=JclHookExcept ACBP=A9
+ 0002:00000320 00000006 C=ICODE    S=.itext   G=(none)   M=BisServiceApplication ACBP=A9
+ 0002:00000328 00000006 C=ICODE    S=.itext   G=(none)   M=BisSvcMgr ACBP=A9
+ 0002:00000330 00000006 C=ICODE    S=.itext   G=(none)   M=BisCryptUtils ACBP=A9
+ 0002:00000338 00000006 C=ICODE    S=.itext   G=(none)   M=SvcMgr   ACBP=A9
+ 0002:00000340 00000008 C=ICODE    S=.itext   G=(none)   M=BisComPort ACBP=A9
+ 0002:00000348 00000008 C=ICODE    S=.itext   G=(none)   M=BisBarcodeScanner ACBP=A9
+ 0002:00000350 00000008 C=ICODE    S=.itext   G=(none)   M=XAsync   ACBP=A9
+ 0002:00000358 00000008 C=ICODE    S=.itext   G=(none)   M=XComErr  ACBP=A9
+ 0002:00000360 00000014 C=ICODE    S=.itext   G=(none)   M=XComDrv  ACBP=A9
+ 0002:00000374 00000005 C=ICODE    S=.itext   G=(none)   M=.omcom   ACBP=A9
+ 0003:00000000 0000002C C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0003:0000002C 00000040 C=DATA     S=.data    G=DGROUP   M=CPortCtl ACBP=A9
+ 0003:0000006C 00000168 C=DATA     S=.data    G=DGROUP   M=CPort    ACBP=A9
+ 0003:000001D4 000000B0 C=DATA     S=.data    G=DGROUP   M=XComDrv  ACBP=A9
+ 0004:00000000 0000000C C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:0000000C 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000014 00000004 C=BSS      S=.bss     G=DGROUP   M=CPortTypes ACBP=A9
+ 0004:00000018 00000004 C=BSS      S=.bss     G=DGROUP   M=CPortEsc ACBP=A9
+ 0004:0000001C 00000004 C=BSS      S=.bss     G=DGROUP   M=CPortTrmSet ACBP=A9
+ 0004:00000020 00000008 C=BSS      S=.bss     G=DGROUP   M=CPortCtl ACBP=A9
+ 0004:00000028 00000004 C=BSS      S=.bss     G=DGROUP   M=CPortSetup ACBP=A9
+ 0004:0000002C 00000004 C=BSS      S=.bss     G=DGROUP   M=CPort    ACBP=A9
+ 0004:00000030 00000004 C=BSS      S=.bss     G=DGROUP   M=BisComPort ACBP=A9
+ 0004:00000034 00000004 C=BSS      S=.bss     G=DGROUP   M=BisBarcodeScanner ACBP=A9
+ 0004:00000038 00000004 C=BSS      S=.bss     G=DGROUP   M=XAsync   ACBP=A9
+ 0004:0000003C 00000004 C=BSS      S=.bss     G=DGROUP   M=XComErr  ACBP=A9
+ 0004:00000040 00000010 C=BSS      S=.bss     G=DGROUP   M=XComDrv  ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:00000374       .omcom..omcom
+ 0001:0001AB08       .omcom.@GetPackageInfoTable
+ 0001:0001AB10       .omcom.@PackageLoad
+ 0001:0001AB1C       .omcom.@PackageUnload
+ 0004:00000034       BisBarcodeScanner..2
+ 0001:0001229C       BisBarcodeScanner..TBisBarcodeScanner
+ 0002:00000348       BisBarcodeScanner.BisBarcodeScanner
+ 0001:0001251C       BisBarcodeScanner.Finalization
+ 0001:00012444       BisBarcodeScanner.TBisBarcodeScanner.ComPortRxChar
+ 0001:00012504       BisBarcodeScanner.TBisBarcodeScanner.Connect
+ 0001:000123B0       BisBarcodeScanner.TBisBarcodeScanner.Create
+ 0001:000123FC       BisBarcodeScanner.TBisBarcodeScanner.Destroy
+ 0001:00012424       BisBarcodeScanner.TBisBarcodeScanner.DoBarcode
+ 0004:00000030       BisComPort..2
+ 0001:00011948       BisComPort..TBisComPort
+ 0002:00000340       BisComPort.BisComPort
+ 0001:0001221C       BisComPort.Finalization
+ 0001:00011F7C       BisComPort.TBisComPort.ComPortAfterClose
+ 0001:00011FE4       BisComPort.TBisComPort.ComPortAfterOpen
+ 0001:0001204C       BisComPort.TBisComPort.ComPortError
+ 0001:000120EC       BisComPort.TBisComPort.Connect
+ 0001:00011C18       BisComPort.TBisComPort.Create
+ 0001:00011F34       BisComPort.TBisComPort.Destroy
+ 0001:00012144       BisComPort.TBisComPort.Disconnect
+ 0001:00011F64       BisComPort.TBisComPort.DoStatus
+ 0001:000121C8       BisComPort.TBisComPort.GetBaudRate
+ 0001:0001219C       BisComPort.TBisComPort.GetConnected
+ 0001:000121D0       BisComPort.TBisComPort.GetDataBits
+ 0001:000121A4       BisComPort.TBisComPort.GetParityBits
+ 0001:000121B0       BisComPort.TBisComPort.GetPort
+ 0001:000121D8       BisComPort.TBisComPort.GetStopBits
+ 0001:000121E0       BisComPort.TBisComPort.SeTBisComPortBaudRate
+ 0001:000121EC       BisComPort.TBisComPort.SetDataBits
+ 0001:000121F8       BisComPort.TBisComPort.SetParityBits
+ 0001:00012204       BisComPort.TBisComPort.SetPort
+ 0001:00012210       BisComPort.TBisComPort.SetStopBits
+ 0004:0000002C       CPort..31
+ 0001:0000AD08       CPort..EComPort
+ 0001:0000AD80       CPort..EComPortExt
+ 0001:0000A284       CPort..TComBuffer
+ 0001:0000A9E0       CPort..TComDataPacket
+ 0001:00009F48       CPort..TComFlowControl
+ 0001:00009CE0       CPort..TComLink
+ 0001:0000A174       CPort..TComParity
+ 0001:0000A4A4       CPort..TComPort
+ 0001:0000AC70       CPort..TComStream
+ 0001:00009D58       CPort..TComThread
+ 0001:00009DDC       CPort..TComTimeouts
+ 0001:0000A354       CPort..TCustomComPort
+ 0003:00000154       CPort.BaudRateInts
+ 0003:00000114       CPort.BaudRateStrings
+ 0001:00011298       CPort.BaudRateToInt
+ 0001:0001127C       CPort.BaudRateToStr
+ 0001:0000D250       CPort.BoolToStr
+ 0003:0000008C       CPort.CBaudRate
+ 0003:000000EC       CPort.CControlDTR
+ 0003:000000DC       CPort.CControlRTS
+ 0003:000000CC       CPort.CDataBits
+ 0001:0000FC58       CPort.CheckLinks
+ 0001:0000ADFC       CPort.ComErrorMessage
+ 0003:0000006C       CPort.CParityBits
+ 0002:00000158       CPort.CPort
+ 0001:0000D580       CPort.CPortCharToStr
+ 0001:00010CF0       CPort.CportDoneAsync
+ 0001:00010CB0       CPort.CportInitAsync
+ 0001:0000CA84       CPort.CPortPrepareAsync
+ 0001:0000D4B8       CPort.CPortStrToChar
+ 0003:00000080       CPort.CStopBits
+ 0003:000001A0       CPort.DataBitsStrings
+ 0001:00011314       CPort.DataBitsToStr
+ 0001:00010488       CPort.DiscardPacketToPos
+ 0003:000000F8       CPort.DTRStrings
+ 0001:0000D324       CPort.DTRToStr
+ 0001:00010BA4       CPort.EComPort.Create
+ 0001:00010C74       CPort.EComPort.Create
+ 0001:00010AC0       CPort.EComPortExt.Create
+ 0001:000106A8       CPort.EndPacket
+ 0001:00010D20       CPort.EnumComPorts
+ 0001:0000CF4C       CPort.ErrorCode
+ 0001:0000B3D0       CPort.EventsToInt
+ 0001:00011448       CPort.Finalization
+ 0003:000001C4       CPort.FlowControlStrings
+ 0001:000113E0       CPort.FlowControlToStr
+ 0001:0001052C       CPort.FormPacket
+ 0001:0000C590       CPort.GetTOValue
+ 0001:0000B43C       CPort.IntToEvents
+ 0001:00010818       CPort.IsBufferTooLarge
+ 0003:000001B0       CPort.ParityBitsStrings
+ 0001:0001137C       CPort.ParityToStr
+ 0001:0000FC14       CPort.PerformRead
+ 0003:00000104       CPort.RTSStrings
+ 0001:0000D384       CPort.RTSToStr
+ 0001:0000F3F4       CPort.SetRegistry
+ 0001:000105BC       CPort.StartPacket
+ 0003:00000194       CPort.StopBitsStrings
+ 0001:000112C8       CPort.StopBitsToStr
+ 0001:00010ECC       CPort.StrToBaudRate
+ 0001:0000D28C       CPort.StrToBool
+ 0001:00010FE4       CPort.StrToDataBits
+ 0001:0000D42C       CPort.StrToDTR
+ 0001:000110FC       CPort.StrToFlowControl
+ 0001:00011070       CPort.StrToParity
+ 0001:0000D3A0       CPort.StrToRTS
+ 0001:00010F58       CPort.StrToStopBits
+ 0001:0000BDBC       CPort.TComBuffer.AssignTo
+ 0001:0000BD78       CPort.TComBuffer.Create
+ 0001:0000BDF0       CPort.TComBuffer.SetComPort
+ 0001:0000BDF4       CPort.TComBuffer.SetInputSize
+ 0001:0000BE28       CPort.TComBuffer.SetOutputSize
+ 0001:000102A8       CPort.TComDataPacket.AddData
+ 0001:0001036C       CPort.TComDataPacket.CheckIncludeStrings
+ 0001:00010210       CPort.TComDataPacket.Create
+ 0001:00010270       CPort.TComDataPacket.Destroy
+ 0001:0001033C       CPort.TComDataPacket.DoCustomStart
+ 0001:00010354       CPort.TComDataPacket.DoCustomStop
+ 0001:0001030C       CPort.TComDataPacket.DoDiscard
+ 0001:00010324       CPort.TComDataPacket.DoPacket
+ 0001:0001094C       CPort.TComDataPacket.EmptyBuffer
+ 0001:00010848       CPort.TComDataPacket.HandleBuffer
+ 0001:000102E0       CPort.TComDataPacket.Notification
+ 0001:000108E0       CPort.TComDataPacket.RxBuf
+ 0001:000109E0       CPort.TComDataPacket.SetCaseInsensitive
+ 0001:000109A8       CPort.TComDataPacket.SetComPort
+ 0001:000109F4       CPort.TComDataPacket.SetSize
+ 0001:00010A08       CPort.TComDataPacket.SetStartString
+ 0001:00010A34       CPort.TComDataPacket.SetStopString
+ 0001:00010464       CPort.TComDataPacket.Upper
+ 0001:000108BC       CPort.TComDataPacket.ValidStop
+ 0001:0000BA20       CPort.TComFlowControl.AssignTo
+ 0001:0000B9E0       CPort.TComFlowControl.Create
+ 0001:0000BBD4       CPort.TComFlowControl.GetFlowControl
+ 0001:0000BA90       CPort.TComFlowControl.SetComPort
+ 0001:0000BA94       CPort.TComFlowControl.SetControlDTR
+ 0001:0000BAB4       CPort.TComFlowControl.SetControlRTS
+ 0001:0000BB54       CPort.TComFlowControl.SetDSRSensitivity
+ 0001:0000BC2C       CPort.TComFlowControl.SetFlowControl
+ 0001:0000BAD4       CPort.TComFlowControl.SetOutCTSFlow
+ 0001:0000BAF4       CPort.TComFlowControl.SetOutDSRFlow
+ 0001:0000BB74       CPort.TComFlowControl.SetTxContinueOnXoff
+ 0001:0000BBB4       CPort.TComFlowControl.SetXoffChar
+ 0001:0000BB94       CPort.TComFlowControl.SetXonChar
+ 0001:0000BB14       CPort.TComFlowControl.SetXonXoffIn
+ 0001:0000BB34       CPort.TComFlowControl.SetXonXoffOut
+ 0001:0000BCB0       CPort.TComParity.AssignTo
+ 0001:0000BC74       CPort.TComParity.Create
+ 0001:0000BCF8       CPort.TComParity.SetBits
+ 0001:0000BD18       CPort.TComParity.SetCheck
+ 0001:0000BCF4       CPort.TComParity.SetComPort
+ 0001:0000BD38       CPort.TComParity.SetReplace
+ 0001:0000BD58       CPort.TComParity.SetReplaceChar
+ 0001:00010A60       CPort.TComStream.Create
+ 0001:00010A9C       CPort.TComStream.Read
+ 0001:00010ABC       CPort.TComStream.Seek
+ 0001:00010AAC       CPort.TComStream.Write
+ 0001:0000B540       CPort.TComThread.Create
+ 0001:0000B5C0       CPort.TComThread.Destroy
+ 0001:0000B6C8       CPort.TComThread.DispatchComMsg
+ 0001:0000B814       CPort.TComThread.DoEvents
+ 0001:0000B5EC       CPort.TComThread.Execute
+ 0001:0000B6F8       CPort.TComThread.SendEvents
+ 0001:0000B6B4       CPort.TComThread.Stop
+ 0001:0000B8F4       CPort.TComTimeouts.AssignTo
+ 0001:0000B8A8       CPort.TComTimeouts.Create
+ 0001:0000B93C       CPort.TComTimeouts.SetComPort
+ 0001:0000B940       CPort.TComTimeouts.SetReadInterval
+ 0001:0000B960       CPort.TComTimeouts.SetReadTotalC
+ 0001:0000B980       CPort.TComTimeouts.SetReadTotalM
+ 0001:0000B9A0       CPort.TComTimeouts.SetWriteTotalC
+ 0001:0000B9C0       CPort.TComTimeouts.SetWriteTotalM
+ 0001:0000D02C       CPort.TCustomComPort.AbortAllAsync
+ 0001:0000C63C       CPort.TCustomComPort.ApplyBuffer
+ 0001:0000C404       CPort.TCustomComPort.ApplyDCB
+ 0001:0000C59C       CPort.TCustomComPort.ApplyTimeouts
+ 0001:0000C2A8       CPort.TCustomComPort.BeginUpdate
+ 0001:0000FAC0       CPort.TCustomComPort.CallAfterClose
+ 0001:0000FAE0       CPort.TCustomComPort.CallAfterOpen
+ 0001:0000FB08       CPort.TCustomComPort.CallBeforeClose
+ 0001:0000FB24       CPort.TCustomComPort.CallBeforeOpen
+ 0001:0000FB30       CPort.TCustomComPort.CallBreak
+ 0001:0000FB3C       CPort.TCustomComPort.CallCTSChange
+ 0001:0000FB68       CPort.TCustomComPort.CallDSRChange
+ 0001:0000FBC0       CPort.TCustomComPort.CallError
+ 0001:0000FBEC       CPort.TCustomComPort.CallRing
+ 0001:0000FB94       CPort.TCustomComPort.CallRLSDChange
+ 0001:0000FC08       CPort.TCustomComPort.CallRx80Full
+ 0001:0000FD54       CPort.TCustomComPort.CallRxChar
+ 0001:0000FDA8       CPort.TCustomComPort.CallRxFlag
+ 0001:0000FDC4       CPort.TCustomComPort.CallTxEmpty
+ 0001:0000FA54       CPort.TCustomComPort.CheckSignals
+ 0001:0000C93C       CPort.TCustomComPort.ClearBuffer
+ 0001:0000C3B0       CPort.TCustomComPort.Close
+ 0001:0000BE5C       CPort.TCustomComPort.Create
+ 0001:0000BFD8       CPort.TCustomComPort.CreateHandle
+ 0001:0000BF84       CPort.TCustomComPort.Destroy
+ 0001:0000C0C4       CPort.TCustomComPort.DestroyHandle
+ 0001:0000F8D4       CPort.TCustomComPort.DoAfterClose
+ 0001:0000F8B4       CPort.TCustomComPort.DoAfterOpen
+ 0001:0000F874       CPort.TCustomComPort.DoBeforeClose
+ 0001:0000F894       CPort.TCustomComPort.DoBeforeOpen
+ 0001:0000F92C       CPort.TCustomComPort.DoBreak
+ 0001:0000F98C       CPort.TCustomComPort.DoCTSChange
+ 0001:0000F9AC       CPort.TCustomComPort.DoDSRChange
+ 0001:0000F9EC       CPort.TCustomComPort.DoError
+ 0001:0000F96C       CPort.TCustomComPort.DoRing
+ 0001:0000F9CC       CPort.TCustomComPort.DoRLSDChange
+ 0001:0000FA34       CPort.TCustomComPort.DoRx80Full
+ 0001:0000F90C       CPort.TCustomComPort.DoRxBuf
+ 0001:0000F8F4       CPort.TCustomComPort.DoRxChar
+ 0001:0000FA14       CPort.TCustomComPort.DoRxFlag
+ 0001:0000F94C       CPort.TCustomComPort.DoTxEmpty
+ 0001:0000C2AC       CPort.TCustomComPort.EndUpdate
+ 0001:0001019C       CPort.TCustomComPort.GetTriggersOnRxChar
+ 0001:0000FDEC       CPort.TCustomComPort.HasLink
+ 0001:0000C6B8       CPort.TCustomComPort.InputCount
+ 0001:0000D068       CPort.TCustomComPort.IsAsyncCompleted
+ 0001:0000C980       CPort.TCustomComPort.LastErrors
+ 0001:0000C0D4       CPort.TCustomComPort.Loaded
+ 0001:0000E39C       CPort.TCustomComPort.LoadIniFile
+ 0001:0000ECE8       CPort.TCustomComPort.LoadRegistry
+ 0001:0000F688       CPort.TCustomComPort.LoadSettings
+ 0001:0000FE88       CPort.TCustomComPort.NotifyLink
+ 0001:0000C2C4       CPort.TCustomComPort.Open
+ 0001:0000C704       CPort.TCustomComPort.OutputCount
+ 0001:0000CDF8       CPort.TCustomComPort.Read
+ 0001:0000CD48       CPort.TCustomComPort.ReadAsync
+ 0001:0000CED8       CPort.TCustomComPort.ReadStr
+ 0001:0000CE60       CPort.TCustomComPort.ReadStrAsync
+ 0001:0000F7E4       CPort.TCustomComPort.RegisterLink
+ 0001:0000FF1C       CPort.TCustomComPort.SendSignalToLink
+ 0001:00010038       CPort.TCustomComPort.SetBaudRate
+ 0001:0000C82C       CPort.TCustomComPort.SetBreak
+ 0001:000101F8       CPort.TCustomComPort.SetBuffer
+ 0001:00010010       CPort.TCustomComPort.SetConnected
+ 0001:00010050       CPort.TCustomComPort.SetCustomBaudRate
+ 0001:00010068       CPort.TCustomComPort.SetDataBits
+ 0001:00010080       CPort.TCustomComPort.SetDiscardNull
+ 0001:0000C870       CPort.TCustomComPort.SetDTR
+ 0001:00010098       CPort.TCustomComPort.SetEventChar
+ 0001:00010164       CPort.TCustomComPort.SetEventThreadPriority
+ 0001:000101B0       CPort.TCustomComPort.SetFlowControl
+ 0001:00011438       CPort.TCustomComPort.SetOverlapped
+ 0001:000101C8       CPort.TCustomComPort.SetParity
+ 0001:000100B0       CPort.TCustomComPort.SetPort
+ 0001:0000C8B4       CPort.TCustomComPort.SetRTS
+ 0001:000100F0       CPort.TCustomComPort.SetStopBits
+ 0001:00010108       CPort.TCustomComPort.SetSyncMethod
+ 0001:000101E0       CPort.TCustomComPort.SetTimeouts
+ 0001:00010140       CPort.TCustomComPort.SetTriggersOnRxChar
+ 0001:0000C690       CPort.TCustomComPort.SetupComPort
+ 0001:0000C8F8       CPort.TCustomComPort.SetXonXoff
+ 0001:0000D248       CPort.TCustomComPort.ShowSetupDialog
+ 0001:0000C748       CPort.TCustomComPort.Signals
+ 0001:0000C7E8       CPort.TCustomComPort.StateFlags
+ 0001:0000D5F4       CPort.TCustomComPort.StoreIniFile
+ 0001:0000DD04       CPort.TCustomComPort.StoreRegistry
+ 0001:0000F560       CPort.TCustomComPort.StoreSettings
+ 0001:0000D214       CPort.TCustomComPort.TransmitChar
+ 0001:0000FE28       CPort.TCustomComPort.TxNotifyLink
+ 0001:0000F82C       CPort.TCustomComPort.UnRegisterLink
+ 0001:0000CF6C       CPort.TCustomComPort.WaitForAsync
+ 0001:0000D0E0       CPort.TCustomComPort.WaitForEvent
+ 0001:0000C140       CPort.TCustomComPort.WindowMethod
+ 0001:000113FC       CPort.TCustomComPort.Write
+ 0001:0000CB38       CPort.TCustomComPort.WriteAsync
+ 0001:0000CC78       CPort.TCustomComPort.WriteStr
+ 0001:0000CC40       CPort.TCustomComPort.WriteStrAsync
+ 0001:0000CAC8       CPort.TCustomComPort._SyncRead
+ 0001:0000CAFC       CPort.TCustomComPort._SyncWrite
+ 0001:0000CBD8       CPort.TCustomComPort._WriteAsyncWrapper
+ 0001:0000CCC4       CPort.TCustomComPort._WriteStrWrapper
+ 0004:00000024       CPortCtl..9
+ 0001:000036CC       CPortCtl..TComComboBox
+ 0001:00004954       CPortCtl..TComLed
+ 0001:00003F64       CPortCtl..TComRadioGroup
+ 0001:00003638       CPortCtl..TComSelect
+ 0001:00004F14       CPortCtl..TComTermBuffer
+ 0001:000053AC       CPortCtl..TComTerminal
+ 0001:000051DC       CPortCtl..TCustomComTerminal
+ 0001:00004860       CPortCtl..TLedBitmap
+ 0001:0000849C       CPortCtl.AllOff
+ 0001:00009558       CPortCtl.AppendLineFeeds
+ 0003:00000064       CPortCtl.BorderStyles
+ 0004:00000020       CPortCtl.ComTerminalFont
+ 0002:000000F4       CPortCtl.CPortCtl
+ 0001:000098C0       CPortCtl.Finalization
+ 0001:00009608       CPortCtl.Force7BitData
+ 0001:00005E84       CPortCtl.Max
+ 0001:00005E7C       CPortCtl.Min
+ 0003:00000048       CPortCtl.OffBitmaps
+ 0003:0000002C       CPortCtl.OnBitmaps
+ 0001:0000891C       CPortCtl.ScrollBarVisible
+ 0001:000089B4       CPortCtl.SetHorzRange
+ 0001:0000898C       CPortCtl.SetRange
+ 0001:00008A18       CPortCtl.SetVertRange
+ 0001:00006488       CPortCtl.TComComboBox.ApplySettings
+ 0001:00006500       CPortCtl.TComComboBox.Change
+ 0001:000063F0       CPortCtl.TComComboBox.Create
+ 0001:00006458       CPortCtl.TComComboBox.Destroy
+ 0001:0000658C       CPortCtl.TComComboBox.GetAutoApply
+ 0001:00006580       CPortCtl.TComComboBox.GetComPort
+ 0001:00006664       CPortCtl.TComComboBox.GetComProperty
+ 0001:000065A4       CPortCtl.TComComboBox.GetText
+ 0001:000064B8       CPortCtl.TComComboBox.Notification
+ 0001:00006598       CPortCtl.TComComboBox.SetAutoApply
+ 0001:00006558       CPortCtl.TComComboBox.SetComPort
+ 0001:00006614       CPortCtl.TComComboBox.SetComProperty
+ 0001:000065E0       CPortCtl.TComComboBox.SetText
+ 0001:00006494       CPortCtl.TComComboBox.UpdateSettings
+ 0001:00006AD0       CPortCtl.TComLed.BitmapNeeded
+ 0001:0000704C       CPortCtl.TComLed.BitmapToDraw
+ 0001:00006C44       CPortCtl.TComLed.CalcBitmapPos
+ 0001:00006AA0       CPortCtl.TComLed.CMEnabledChanged
+ 0001:000068B0       CPortCtl.TComLed.Create
+ 0001:000069BC       CPortCtl.TComLed.Destroy
+ 0001:00006AB0       CPortCtl.TComLed.DoChange
+ 0001:00006A80       CPortCtl.TComLed.DoTimer
+ 0001:00006FCC       CPortCtl.TComLed.GetGlyph
+ 0001:00006D50       CPortCtl.TComLed.IsStateOn
+ 0001:00006A50       CPortCtl.TComLed.Notification
+ 0001:00006A18       CPortCtl.TComLed.Paint
+ 0001:00006D1C       CPortCtl.TComLed.RingDetect
+ 0001:00006BFC       CPortCtl.TComLed.SelectLedBitmap
+ 0001:00006E38       CPortCtl.TComLed.SetComPort
+ 0001:00006FE8       CPortCtl.TComLed.SetGlyph
+ 0001:00006E10       CPortCtl.TComLed.SetKind
+ 0001:00006EF8       CPortCtl.TComLed.SetLedSignal
+ 0001:00006EC0       CPortCtl.TComLed.SetState
+ 0001:00006DE0       CPortCtl.TComLed.SetStateInternal
+ 0001:00006CC0       CPortCtl.TComLed.SignalChange
+ 0001:00007040       CPortCtl.TComLed.StoredGlyph
+ 0001:00006708       CPortCtl.TComRadioGroup.ApplySettings
+ 0001:0000678C       CPortCtl.TComRadioGroup.Click
+ 0001:00006670       CPortCtl.TComRadioGroup.Create
+ 0001:000066D8       CPortCtl.TComRadioGroup.Destroy
+ 0001:00006840       CPortCtl.TComRadioGroup.GetAutoApply
+ 0001:00006834       CPortCtl.TComRadioGroup.GetComPort
+ 0001:000068A4       CPortCtl.TComRadioGroup.GetComProperty
+ 0001:0000673C       CPortCtl.TComRadioGroup.Notification
+ 0001:0000684C       CPortCtl.TComRadioGroup.SetAutoApply
+ 0001:0000680C       CPortCtl.TComRadioGroup.SetComPort
+ 0001:00006858       CPortCtl.TComRadioGroup.SetComProperty
+ 0001:00006714       CPortCtl.TComRadioGroup.UpdateSettings
+ 0001:00006180       CPortCtl.TComSelect.ApplySettings
+ 0001:000060F8       CPortCtl.TComSelect.Change
+ 0001:00005E8C       CPortCtl.TComSelect.SelectBaudRate
+ 0001:00005F04       CPortCtl.TComSelect.SelectDataBits
+ 0001:00006024       CPortCtl.TComSelect.SelectFlowControl
+ 0001:00005F64       CPortCtl.TComSelect.SelectParity
+ 0001:00005EEC       CPortCtl.TComSelect.SelectPort
+ 0001:00005FC4       CPortCtl.TComSelect.SelectStopBits
+ 0001:00006084       CPortCtl.TComSelect.SetComProperty
+ 0001:00006200       CPortCtl.TComSelect.UpdateSettings
+ 0001:00007508       CPortCtl.TComTermBuffer.ClearAllTabs
+ 0001:00007074       CPortCtl.TComTermBuffer.Create
+ 0001:000070B0       CPortCtl.TComTermBuffer.Destroy
+ 0001:00007318       CPortCtl.TComTermBuffer.EraseLine
+ 0001:00007390       CPortCtl.TComTermBuffer.EraseScreen
+ 0001:0000712C       CPortCtl.TComTermBuffer.GetChar
+ 0001:00007568       CPortCtl.TComTermBuffer.GetLastLine
+ 0001:0000751C       CPortCtl.TComTermBuffer.GetLineLength
+ 0001:000074C0       CPortCtl.TComTermBuffer.GetTab
+ 0001:00007424       CPortCtl.TComTermBuffer.Init
+ 0001:000074D0       CPortCtl.TComTermBuffer.NextTab
+ 0001:00007158       CPortCtl.TComTermBuffer.ScrollDown
+ 0001:00007240       CPortCtl.TComTermBuffer.ScrollUp
+ 0001:000070EC       CPortCtl.TComTermBuffer.SetChar
+ 0001:000074C8       CPortCtl.TComTermBuffer.SetTab
+ 0001:00008354       CPortCtl.TCustomComTerminal.AdvanceCaret
+ 0001:00009174       CPortCtl.TCustomComTerminal.CalculateMetrics
+ 0001:00007CB8       CPortCtl.TCustomComTerminal.CanAutoSize
+ 0001:00007728       CPortCtl.TCustomComTerminal.ClearScreen
+ 0001:00007BE0       CPortCtl.TCustomComTerminal.CMColorChanged
+ 0001:00007B04       CPortCtl.TCustomComTerminal.CMCtl3DChanged
+ 0001:00007B30       CPortCtl.TCustomComTerminal.CMFontChanged
+ 0001:0000759C       CPortCtl.TCustomComTerminal.Create
+ 0001:00009294       CPortCtl.TCustomComTerminal.CreateEscapeCodes
+ 0001:00007D58       CPortCtl.TCustomComTerminal.CreateParams
+ 0001:00008154       CPortCtl.TCustomComTerminal.CreateTerminalCaret
+ 0001:000076D8       CPortCtl.TCustomComTerminal.Destroy
+ 0001:000091D0       CPortCtl.TCustomComTerminal.DoChar
+ 0001:000091F0       CPortCtl.TCustomComTerminal.DoGetEscapeCodes
+ 0001:00009210       CPortCtl.TCustomComTerminal.DoStrRecieved
+ 0001:00009230       CPortCtl.TCustomComTerminal.DoUnhandledCode
+ 0001:00008220       CPortCtl.TCustomComTerminal.DrawChar
+ 0001:00009390       CPortCtl.TCustomComTerminal.GetCharAttr
+ 0001:000096E8       CPortCtl.TCustomComTerminal.GetConnected
+ 0001:00008B6C       CPortCtl.TCustomComTerminal.HideCaret
+ 0001:000094B0       CPortCtl.TCustomComTerminal.InitCaret
+ 0001:000086CC       CPortCtl.TCustomComTerminal.InvalidatePortion
+ 0001:00007DD0       CPortCtl.TCustomComTerminal.KeyDown
+ 0001:00007E9C       CPortCtl.TCustomComTerminal.KeyPress
+ 0001:00007EB8       CPortCtl.TCustomComTerminal.Loaded
+ 0001:0000794C       CPortCtl.TCustomComTerminal.LoadFromStream
+ 0001:00008768       CPortCtl.TCustomComTerminal.ModifyScrollBar
+ 0001:00007754       CPortCtl.TCustomComTerminal.MoveCaret
+ 0001:00007EDC       CPortCtl.TCustomComTerminal.Notification
+ 0001:00008068       CPortCtl.TCustomComTerminal.Paint
+ 0001:00007FCC       CPortCtl.TCustomComTerminal.PaintDesign
+ 0001:00007F0C       CPortCtl.TCustomComTerminal.PaintTerminal
+ 0001:000092F0       CPortCtl.TCustomComTerminal.PerformTest
+ 0001:000093EC       CPortCtl.TCustomComTerminal.PutChar
+ 0001:00008D98       CPortCtl.TCustomComTerminal.PutEscapeCode
+ 0001:00009508       CPortCtl.TCustomComTerminal.RestoreAttr
+ 0001:000094D8       CPortCtl.TCustomComTerminal.RestoreCaretPos
+ 0001:00009644       CPortCtl.TCustomComTerminal.RxBuf
+ 0001:00009530       CPortCtl.TCustomComTerminal.SaveAttr
+ 0001:000094EC       CPortCtl.TCustomComTerminal.SaveCaretPos
+ 0001:00007994       CPortCtl.TCustomComTerminal.SaveToStream
+ 0001:00007AA4       CPortCtl.TCustomComTerminal.SelectFont
+ 0001:00008BA4       CPortCtl.TCustomComTerminal.SendChar
+ 0001:00008C6C       CPortCtl.TCustomComTerminal.SendCode
+ 0001:00008D14       CPortCtl.TCustomComTerminal.SendCodeNoEcho
+ 0001:0000989C       CPortCtl.TCustomComTerminal.SetAltColor
+ 0001:000084E0       CPortCtl.TCustomComTerminal.SetAttributes
+ 0001:00009710       CPortCtl.TCustomComTerminal.SetBorderStyle
+ 0001:00009824       CPortCtl.TCustomComTerminal.SetCaret
+ 0001:00009738       CPortCtl.TCustomComTerminal.SetColumns
+ 0001:00009854       CPortCtl.TCustomComTerminal.SetComPort
+ 0001:000096FC       CPortCtl.TCustomComTerminal.SetConnected
+ 0001:000097F8       CPortCtl.TCustomComTerminal.SetEmulation
+ 0001:000085DC       CPortCtl.TCustomComTerminal.SetMode
+ 0001:00009798       CPortCtl.TCustomComTerminal.SetRows
+ 0001:00009724       CPortCtl.TCustomComTerminal.SetScrollBars
+ 0001:00009364       CPortCtl.TCustomComTerminal.SetTermAttrColors
+ 0001:00008B88       CPortCtl.TCustomComTerminal.ShowCaret
+ 0001:00007AFC       CPortCtl.TCustomComTerminal.ShowSetupDialog
+ 0001:000081C4       CPortCtl.TCustomComTerminal.StringReceived
+ 0001:0000889C       CPortCtl.TCustomComTerminal.UpdateScrollPos
+ 0001:00008A80       CPortCtl.TCustomComTerminal.UpdateScrollRange
+ 0001:00007BF8       CPortCtl.TCustomComTerminal.WMGetDlgCode
+ 0001:00007C90       CPortCtl.TCustomComTerminal.WMHScroll
+ 0001:00007C10       CPortCtl.TCustomComTerminal.WMKillFocus
+ 0001:00007C44       CPortCtl.TCustomComTerminal.WMLButtonDown
+ 0001:00007C30       CPortCtl.TCustomComTerminal.WMSetFocus
+ 0001:00007C7C       CPortCtl.TCustomComTerminal.WMSize
+ 0001:00007CA4       CPortCtl.TCustomComTerminal.WMVScroll
+ 0001:000077EC       CPortCtl.TCustomComTerminal.Write
+ 0001:0000793C       CPortCtl.TCustomComTerminal.WriteEscCode
+ 0001:00007838       CPortCtl.TCustomComTerminal.WriteStr
+ 0004:00000018       CPortEsc..4
+ 0001:00001B88       CPortEsc..TEscapeCodes
+ 0001:00001CB8       CPortEsc..TEscapeCodesVT100
+ 0001:00001C24       CPortEsc..TEscapeCodesVT52
+ 0001:00002C0C       CPortEsc.CodeDevice
+ 0001:00002B0C       CPortEsc.CodeEraseLine
+ 0001:00002A8C       CPortEsc.CodeEraseScreen
+ 0001:00002C9C       CPortEsc.CodeIdentify
+ 0001:00002B8C       CPortEsc.CodeTab
+ 0002:000000E4       CPortEsc.CPortEsc
+ 0001:00002F7C       CPortEsc.Finalization
+ 0001:000029D0       CPortEsc.ParseParams
+ 0001:00001D4C       CPortEsc.TEscapeCodes.Create
+ 0001:00001D90       CPortEsc.TEscapeCodes.Destroy
+ 0001:00001DC0       CPortEsc.TEscapeCodes.GetParam
+ 0001:000028F0       CPortEsc.TEscapeCodesVT100.DetectCode
+ 0001:00002D6C       CPortEsc.TEscapeCodesVT100.DetectExtCode
+ 0001:00002378       CPortEsc.TEscapeCodesVT100.EscCodeToStr
+ 0001:000022B8       CPortEsc.TEscapeCodesVT100.ProcessChar
+ 0001:00002124       CPortEsc.TEscapeCodesVT52.DetectCode
+ 0001:00001EF0       CPortEsc.TEscapeCodesVT52.EscCodeToStr
+ 0001:00001E54       CPortEsc.TEscapeCodesVT52.ProcessChar
+ 0004:00000028       CPortSetup..2
+ 0001:00009924       CPortSetup..TComSetupFrm
+ 0002:00000150       CPortSetup.CPortSetup
+ 0001:00009BA0       CPortSetup.EditComPort
+ 0001:00009CB0       CPortSetup.Finalization
+ 0001:00009CAC       CPortSetup.TComSetupFrm.FormCreate
+ 0004:0000001C       CPortTrmSet..2
+ 0001:00002FAC       CPortTrmSet..TComTrmSetForm
+ 0002:000000EC       CPortTrmSet.CPortTrmSet
+ 0001:00003280       CPortTrmSet.EditComTerminal
+ 0001:00003598       CPortTrmSet.Finalization
+ 0001:00003594       CPortTrmSet.TComTrmSetForm.FormCreate
+ 0004:00000014       CPortTypes..1
+ 0001:00000F0C       CPortTypes.ComErrorsToStr
+ 0002:00000054       CPortTypes.CPortTypes
+ 0001:00000E88       CPortTypes.e
+ 0001:00001094       CPortTypes.Finalization
+ 0001:00000360       SysInit.@InitPkg
+ 0001:000003C4       SysInit.@PackageLoad
+ 0001:000003D0       SysInit.@PackageUnload
+ 0001:00000250       SysInit.AllocTlsBuffer
+ 0001:0000030C       SysInit.ExitProcessTLS
+ 0001:000002D4       SysInit.ExitThreadTLS
+ 0001:00000218       SysInit.FreeLibrary
+ 0001:0000025C       SysInit.GetTlsSize
+ 0004:00000004       SysInit.HInstance
+ 0001:00000330       SysInit.InitializeModule
+ 0001:000002A8       SysInit.InitProcessTLS
+ 0001:00000264       SysInit.InitThreadTLS
+ 0001:00000220       SysInit.LocalAlloc
+ 0001:00000228       SysInit.LocalFree
+ 0003:00000004       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0001:00000230       SysInit.TlsAlloc
+ 0004:00000008       SysInit.tlsBuffer
+ 0001:00000238       SysInit.TlsFree
+ 0001:00000240       SysInit.TlsGetValue
+ 0003:00000000       SysInit.TlsIndex
+ 0005:00000000       SysInit.TlsLast
+ 0003:0000001C       SysInit.TlsProc
+ 0001:00000248       SysInit.TlsSetValue
+ 0001:0000033C       SysInit.UninitializeModule
+ 0004:0000000C       Windows..3
+ 0001:00000524       Windows.ClearCommError
+ 0001:0000052C       Windows.CloseHandle
+ 0001:00000624       Windows.CreateCaret
+ 0001:00000534       Windows.CreateEvent
+ 0001:0000053C       Windows.CreateFile
+ 0001:0000062C       Windows.DefWindowProc
+ 0001:00000634       Windows.DestroyCaret
+ 0001:00000544       Windows.EscapeCommFunction
+ 0001:000006C0       Windows.Finalization
+ 0001:0000054C       Windows.FreeLibrary
+ 0001:00000554       Windows.GetCommModemStatus
+ 0001:0000055C       Windows.GetCommProperties
+ 0001:00000564       Windows.GetCommState
+ 0001:0000056C       Windows.GetCommTimeouts
+ 0001:0000063C       Windows.GetDC
+ 0001:00000574       Windows.GetLastError
+ 0001:0000057C       Windows.GetOverlappedResult
+ 0001:00000644       Windows.GetScrollPos
+ 0001:0000064C       Windows.GetScrollRange
+ 0001:00000654       Windows.GetSystemMetrics
+ 0001:0000060C       Windows.GetTextMetrics
+ 0001:00000584       Windows.GetTickCount
+ 0001:0000058C       Windows.GetVersionEx
+ 0001:0000065C       Windows.HideCaret
+ 0004:00000010       Windows.HtmlHelpModule
+ 0001:00000664       Windows.InSendMessage
+ 0001:0000066C       Windows.InvalidateRect
+ 0001:000006B4       Windows.MakeLong
+ 0001:00000594       Windows.OutputDebugString
+ 0001:00000614       Windows.PatBlt
+ 0001:0000059C       Windows.PurgeComm
+ 0001:000005A4       Windows.QueryPerformanceCounter
+ 0001:000005AC       Windows.QueryPerformanceFrequency
+ 0001:000005B4       Windows.ReadFile
+ 0001:0000050C       Windows.RegCloseKey
+ 0001:00000514       Windows.RegEnumValue
+ 0001:0000051C       Windows.RegOpenKeyEx
+ 0001:00000674       Windows.ReleaseDC
+ 0001:0000067C       Windows.ReplyMessage
+ 0001:00000684       Windows.ScrollWindowEx
+ 0001:0000061C       Windows.SelectObject
+ 0001:0000068C       Windows.SendMessage
+ 0001:00000694       Windows.SetCaretPos
+ 0001:000005BC       Windows.SetCommMask
+ 0001:000005C4       Windows.SetCommState
+ 0001:000005CC       Windows.SetCommTimeouts
+ 0001:000005D4       Windows.SetEvent
+ 0001:0000069C       Windows.SetScrollPos
+ 0001:000006A4       Windows.SetScrollRange
+ 0001:000005DC       Windows.SetupComm
+ 0001:000006AC       Windows.ShowCaret
+ 0001:000005E4       Windows.TransmitCommChar
+ 0001:000005EC       Windows.WaitCommEvent
+ 0001:000005F4       Windows.WaitForMultipleObjects
+ 0001:000005FC       Windows.WaitForSingleObject
+ 0002:00000010       Windows.Windows
+ 0001:00000604       Windows.WriteFile
+ 0004:00000038       XAsync..2
+ 0001:000125DC       XAsync..EAsyncError
+ 0001:00012658       XAsync..TAsyncThread
+ 0001:00012D74       XAsync.Finalization
+ 0001:000127B8       XAsync.InitOverlapped
+ 0001:00012854       XAsync.InternalCheckHandle
+ 0001:0001294C       XAsync.InternalCloseAsync
+ 0001:000128B8       XAsync.InternalInitAsync
+ 0001:00012A4C       XAsync.InternalReadAsync
+ 0001:000129B0       XAsync.InternalReadStringAsync
+ 0001:000127DC       XAsync.InternalStartThread
+ 0001:00012B1C       XAsync.InternalWaitAsync
+ 0001:00012AB4       XAsync.InternalWriteAsync
+ 0001:00012838       XAsync.IsAsyncDone
+ 0001:000127F0       XAsync.IsHandleValid
+ 0001:00012CD8       XAsync.ReadComm
+ 0001:00012C5C       XAsync.ReadComm
+ 0001:00012D3C       XAsync.SetRXTime
+ 0001:000126C0       XAsync.TAsyncThread.Create
+ 0001:00012714       XAsync.TAsyncThread.DoAsyncProc
+ 0001:00012730       XAsync.TAsyncThread.Execute
+ 0001:00012B88       XAsync.WriteComm
+ 0001:00012BF8       XAsync.WriteComm
+ 0002:00000350       XAsync.XAsync
+ 0004:00000040       XComDrv..22
+ 0001:0001374C       XComDrv..TCommBuffers
+ 0001:00013648       XComDrv..TCommDataControl
+ 0001:00013878       XComDrv..TCommEventChars
+ 0001:00014E40       XComDrv..TCommEventThread
+ 0001:00013570       XComDrv..TCommPlugin
+ 0001:000139BC       XComDrv..TCommTimeoutsEx
+ 0001:00013BA0       XComDrv..TCustomComm
+ 0001:00014384       XComDrv..TCustomModem
+ 0001:00014080       XComDrv..TModemSettings
+ 0001:00013C7C       XComDrv..TXComm
+ 0001:0001448C       XComDrv..TXModem
+ 0001:0001805C       XComDrv.ATPos
+ 0001:00017C90       XComDrv.ATResultToME
+ 0001:00017C20       XComDrv.ATShortToLong
+ 0001:00014D08       XComDrv.BaudRateToStr
+ 0003:00000208       XComDrv.BaudRate_
+ 0001:00014A88       XComDrv.CharToDataBits
+ 0001:00014A24       XComDrv.ConvertErrorFmt
+ 0001:00014A84       XComDrv.DataBitsToChar
+ 0001:0001A08C       XComDrv.Finalization
+ 0001:00017E7C       XComDrv.FindRegAT
+ 0001:00014B98       XComDrv.FlowControlToStr
+ 0003:00000244       XComDrv.func_
+ 0003:0000025C       XComDrv.func_
+ 0003:0000024C       XComDrv.func_
+ 0003:00000254       XComDrv.func_
+ 0001:00018EC0       XComDrv.GetCommand
+ 0001:00014E20       XComDrv.GetCommState
+ 0001:00019060       XComDrv.GetData
+ 0001:00014A48       XComDrv.GetRXTimeout
+ 0001:0001A024       XComDrv.GetTickCount
+ 0001:00019104       XComDrv.HasResult
+ 0001:0001A060       XComDrv.InitExtendedTicks
+ 0001:00016B4C       XComDrv.intRead
+ 0001:00016A90       XComDrv.intSend
+ 0001:000181C0       XComDrv.IsConnectAT
+ 0001:00017F6C       XComDrv.IsRegAT
+ 0001:00015388       XComDrv.IsWinNT
+ 0004:00000044       XComDrv.I_ExtendedTicks
+ 0004:00000048       XComDrv.I_Freq
+ 0003:00000264       XComDrv.MRC_
+ 0001:00014C50       XComDrv.ParityToStr
+ 0001:0001797C       XComDrv.PluginLocked
+ 0001:00018218       XComDrv.RegToStr
+ 0001:00017D58       XComDrv.RemoveChar
+ 0001:00014E04       XComDrv.SetDCB
+ 0001:00014AFC       XComDrv.StopBitsToStr
+ 0001:00017D90       XComDrv.StripAT
+ 0001:00014D34       XComDrv.StrToBaudRate
+ 0001:00014BB0       XComDrv.StrToFlowControl
+ 0001:00014C68       XComDrv.StrToParity
+ 0001:00014B14       XComDrv.StrToStopBits
+ 0003:000001D4       XComDrv.STR_FLOWCONTROL
+ 0003:000001E8       XComDrv.STR_PARITY
+ 0003:000001FC       XComDrv.STR_STOPBITS
+ 0001:000154D0       XComDrv.TCommBuffers.AssignTo
+ 0001:00015334       XComDrv.TCommBuffers.Create
+ 0001:00015458       XComDrv.TCommBuffers.GetIOSize
+ 0001:000153D8       XComDrv.TCommBuffers.SetIOSize
+ 0001:000152CC       XComDrv.TCommDataControl.AssignTo
+ 0001:0001514C       XComDrv.TCommDataControl.Create
+ 0001:0001522C       XComDrv.TCommDataControl.GetDataBits
+ 0001:00015264       XComDrv.TCommDataControl.GetParity
+ 0001:00015298       XComDrv.TCommDataControl.GetStopBits
+ 0001:0001519C       XComDrv.TCommDataControl.SetDataBits
+ 0001:000151CC       XComDrv.TCommDataControl.SetParity
+ 0001:000151FC       XComDrv.TCommDataControl.SetStopBits
+ 0001:000156D4       XComDrv.TCommEventChars.AssignTo
+ 0001:00015548       XComDrv.TCommEventChars.Create
+ 0001:00015620       XComDrv.TCommEventChars.GetCommChar
+ 0001:00015598       XComDrv.TCommEventChars.SetCommChar
+ 0001:00014EAC       XComDrv.TCommEventThread.Create
+ 0001:00014F14       XComDrv.TCommEventThread.Destroy
+ 0001:0001500C       XComDrv.TCommEventThread.DoOnSignal
+ 0001:00014F4C       XComDrv.TCommEventThread.Execute
+ 0001:000150F0       XComDrv.TCommPlugin.CommValid
+ 0001:00015028       XComDrv.TCommPlugin.Create
+ 0001:00015080       XComDrv.TCommPlugin.Destroy
+ 0001:000150B0       XComDrv.TCommPlugin.HandleEvents
+ 0001:000150B4       XComDrv.TCommPlugin.Notification
+ 0001:000150C4       XComDrv.TCommPlugin.SetComm
+ 0001:000158F4       XComDrv.TCommTimeoutsEx.AssignTo
+ 0001:00015768       XComDrv.TCommTimeoutsEx.Create
+ 0001:0001584C       XComDrv.TCommTimeoutsEx.GetInterval
+ 0001:000157C4       XComDrv.TCommTimeoutsEx.SetInterval
+ 0001:00016098       XComDrv.TCustomComm.AddPlugin
+ 0001:000164F0       XComDrv.TCustomComm.BeginUpdate
+ 0001:000160D4       XComDrv.TCustomComm.ClearPlugins
+ 0001:00017600       XComDrv.TCustomComm.CloseAsync
+ 0001:000165F4       XComDrv.TCustomComm.CloseDevice
+ 0001:00015988       XComDrv.TCustomComm.Create
+ 0001:00015AA8       XComDrv.TCustomComm.Destroy
+ 0001:00016558       XComDrv.TCustomComm.EndUpdate
+ 0001:00015F54       XComDrv.TCustomComm.GetBaudRate
+ 0001:00015F98       XComDrv.TCustomComm.GetBaudValue
+ 0001:00016064       XComDrv.TCustomComm.GetCommOptions
+ 0001:00016800       XComDrv.TCustomComm.GetCommStatus
+ 0001:000169FC       XComDrv.TCustomComm.GetCount
+ 0001:00015FFC       XComDrv.TCustomComm.GetDTRSettings
+ 0001:000179D4       XComDrv.TCustomComm.GetLocked
+ 0001:00016890       XComDrv.TCustomComm.GetMaxBaud
+ 0001:00016688       XComDrv.TCustomComm.GetOpened
+ 0001:00016690       XComDrv.TCustomComm.GetPaused
+ 0001:000160B0       XComDrv.TCustomComm.GetPlugin
+ 0001:000160C8       XComDrv.TCustomComm.GetPluginCount
+ 0001:00015FC8       XComDrv.TCustomComm.GetRTSSettings
+ 0001:000167DC       XComDrv.TCustomComm.GetTotalReceived
+ 0001:00016030       XComDrv.TCustomComm.GetXOnXOffSettings
+ 0001:000170E0       XComDrv.TCustomComm.HandleEvents
+ 0001:00017570       XComDrv.TCustomComm.InitAsync
+ 0001:000174F8       XComDrv.TCustomComm.InternalAsyncProc
+ 0001:000163A8       XComDrv.TCustomComm.OpenDevice
+ 0001:000166E0       XComDrv.TCustomComm.PurgeIn
+ 0001:00016764       XComDrv.TCustomComm.PurgeOut
+ 0001:000177A4       XComDrv.TCustomComm.ReadAsync
+ 0001:00016F8C       XComDrv.TCustomComm.ReadByte
+ 0001:00016F7C       XComDrv.TCustomComm.ReadData
+ 0001:00016E08       XComDrv.TCustomComm.ReadDataEx
+ 0001:00016FF0       XComDrv.TCustomComm.ReadString
+ 0001:00016FAC       XComDrv.TCustomComm.ReadString
+ 0001:00017854       XComDrv.TCustomComm.ReadStringAsync
+ 0001:00017148       XComDrv.TCustomComm.ReceiveData
+ 0001:000160A4       XComDrv.TCustomComm.RemovePlugin
+ 0001:00017608       XComDrv.TCustomComm.SendAsync
+ 0001:00016DB8       XComDrv.TCustomComm.SendByte
+ 0001:00016DA8       XComDrv.TCustomComm.SendData
+ 0001:00016C08       XComDrv.TCustomComm.SendDataEx
+ 0001:00016DD8       XComDrv.TCustomComm.SendString
+ 0001:000176CC       XComDrv.TCustomComm.SendStringAsync
+ 0001:00015BCC       XComDrv.TCustomComm.SetBaudRate
+ 0001:00015C04       XComDrv.TCustomComm.SetBaudValue
+ 0001:00015B9C       XComDrv.TCustomComm.SetBuffers
+ 0001:00015EF0       XComDrv.TCustomComm.SetCommOptions
+ 0001:00015B8C       XComDrv.TCustomComm.SetDataControl
+ 0001:00015B28       XComDrv.TCustomComm.SetDeviceName
+ 0001:00015CAC       XComDrv.TCustomComm.SetDTRSettings
+ 0001:00015BAC       XComDrv.TCustomComm.SetEventChars
+ 0001:00015C34       XComDrv.TCustomComm.SetFlowControl
+ 0001:000166B0       XComDrv.TCustomComm.SetPaused
+ 0001:00015C6C       XComDrv.TCustomComm.SetRTSSettings
+ 0001:00015BBC       XComDrv.TCustomComm.SetTimeouts
+ 0001:00015D14       XComDrv.TCustomComm.SetXOnXOffSettings
+ 0001:00017168       XComDrv.TCustomComm.ToggleBreak
+ 0001:000171DC       XComDrv.TCustomComm.ToggleDTR
+ 0001:00017250       XComDrv.TCustomComm.ToggleRTS
+ 0001:000172C4       XComDrv.TCustomComm.ToggleXonXoff
+ 0001:00016290       XComDrv.TCustomComm.UpdateBuffers
+ 0001:000160F8       XComDrv.TCustomComm.UpdateDCB
+ 0001:00017038       XComDrv.TCustomComm.UpdateEvents
+ 0001:00015D54       XComDrv.TCustomComm.UpdateFlowSettings
+ 0001:00016314       XComDrv.TCustomComm.UpdateTimeouts
+ 0001:00017900       XComDrv.TCustomComm.WaitAsync
+ 0001:00017338       XComDrv.TCustomComm.WaitForString
+ 0001:00018318       XComDrv.TCustomModem.CloseDevice
+ 0001:00019A78       XComDrv.TCustomModem.Connect
+ 0001:00018274       XComDrv.TCustomModem.Create
+ 0001:000182BC       XComDrv.TCustomModem.Destroy
+ 0001:00019C4C       XComDrv.TCustomModem.Disconnect
+ 0001:000196A0       XComDrv.TCustomModem.DoChangeCmdState
+ 0001:00019544       XComDrv.TCustomModem.DoConnect
+ 0001:00019614       XComDrv.TCustomModem.DoConnecting
+ 0001:000195B0       XComDrv.TCustomModem.DoDisconnect
+ 0001:00019658       XComDrv.TCustomModem.DoDisconnecting
+ 0001:00018B98       XComDrv.TCustomModem.EnterCommandState
+ 0001:00018D28       XComDrv.TCustomModem.ExitCommandState
+ 0001:00019A54       XComDrv.TCustomModem.GetConnected
+ 0001:000183B4       XComDrv.TCustomModem.GetEnterCmd
+ 0001:00018D04       XComDrv.TCustomModem.GetInstalled
+ 0001:00019EE0       XComDrv.TCustomModem.GetLineStatus
+ 0001:00019FF8       XComDrv.TCustomModem.GetLocked
+ 0001:00019FC4       XComDrv.TCustomModem.GetModemState
+ 0001:000189CC       XComDrv.TCustomModem.GetRegisterValue
+ 0001:000193DC       XComDrv.TCustomModem.HandleAT
+ 0001:00019314       XComDrv.TCustomModem.HandleEvents
+ 0001:00018438       XComDrv.TCustomModem.InitCommand
+ 0001:00019774       XComDrv.TCustomModem.InitModem
+ 0001:00019E44       XComDrv.TCustomModem.LowerDTR
+ 0001:000182EC       XComDrv.TCustomModem.OpenDevice
+ 0001:00019204       XComDrv.TCustomModem.ReceiveData
+ 0001:000196C0       XComDrv.TCustomModem.ResetModem
+ 0001:00018614       XComDrv.TCustomModem.SendCommand
+ 0001:000183A0       XComDrv.TCustomModem.SetModemSettings
+ 0001:00018790       XComDrv.TCustomModem.SetRegisterValue
+ 0001:000198C0       XComDrv.TCustomModem.WaitForAT
+ 0001:00017A98       XComDrv.TModemSettings.AssignTo
+ 0001:00017A04       XComDrv.TModemSettings.Create
+ 0001:00017AFC       XComDrv.TModemSettings.SetSpeed
+ 0001:00018E7C       XComDrv.WaitRX
+ 0002:00000360       XComDrv.XComDrv
+ 0004:0000003C       XComErr..2
+ 0001:00012E34       XComErr..EDeviceError
+ 0001:00012EBC       XComErr.EDeviceError.CreateCode
+ 0001:00012FE4       XComErr.Finalization
+ 0002:00000358       XComErr.XComErr
+ 0001:00012F00       XComErr.XCommError
+ 0001:00012F20       XComErr.XCommWin32Error
+
+
+  Address             Publics by Value
+
+ 0001:00000218       SysInit.FreeLibrary
+ 0001:00000220       SysInit.LocalAlloc
+ 0001:00000228       SysInit.LocalFree
+ 0001:00000230       SysInit.TlsAlloc
+ 0001:00000238       SysInit.TlsFree
+ 0001:00000240       SysInit.TlsGetValue
+ 0001:00000248       SysInit.TlsSetValue
+ 0001:00000250       SysInit.AllocTlsBuffer
+ 0001:0000025C       SysInit.GetTlsSize
+ 0001:00000264       SysInit.InitThreadTLS
+ 0001:000002A8       SysInit.InitProcessTLS
+ 0001:000002D4       SysInit.ExitThreadTLS
+ 0001:0000030C       SysInit.ExitProcessTLS
+ 0001:00000330       SysInit.InitializeModule
+ 0001:0000033C       SysInit.UninitializeModule
+ 0001:00000360       SysInit.@InitPkg
+ 0001:000003C4       SysInit.@PackageLoad
+ 0001:000003D0       SysInit.@PackageUnload
+ 0001:0000050C       Windows.RegCloseKey
+ 0001:00000514       Windows.RegEnumValue
+ 0001:0000051C       Windows.RegOpenKeyEx
+ 0001:00000524       Windows.ClearCommError
+ 0001:0000052C       Windows.CloseHandle
+ 0001:00000534       Windows.CreateEvent
+ 0001:0000053C       Windows.CreateFile
+ 0001:00000544       Windows.EscapeCommFunction
+ 0001:0000054C       Windows.FreeLibrary
+ 0001:00000554       Windows.GetCommModemStatus
+ 0001:0000055C       Windows.GetCommProperties
+ 0001:00000564       Windows.GetCommState
+ 0001:0000056C       Windows.GetCommTimeouts
+ 0001:00000574       Windows.GetLastError
+ 0001:0000057C       Windows.GetOverlappedResult
+ 0001:00000584       Windows.GetTickCount
+ 0001:0000058C       Windows.GetVersionEx
+ 0001:00000594       Windows.OutputDebugString
+ 0001:0000059C       Windows.PurgeComm
+ 0001:000005A4       Windows.QueryPerformanceCounter
+ 0001:000005AC       Windows.QueryPerformanceFrequency
+ 0001:000005B4       Windows.ReadFile
+ 0001:000005BC       Windows.SetCommMask
+ 0001:000005C4       Windows.SetCommState
+ 0001:000005CC       Windows.SetCommTimeouts
+ 0001:000005D4       Windows.SetEvent
+ 0001:000005DC       Windows.SetupComm
+ 0001:000005E4       Windows.TransmitCommChar
+ 0001:000005EC       Windows.WaitCommEvent
+ 0001:000005F4       Windows.WaitForMultipleObjects
+ 0001:000005FC       Windows.WaitForSingleObject
+ 0001:00000604       Windows.WriteFile
+ 0001:0000060C       Windows.GetTextMetrics
+ 0001:00000614       Windows.PatBlt
+ 0001:0000061C       Windows.SelectObject
+ 0001:00000624       Windows.CreateCaret
+ 0001:0000062C       Windows.DefWindowProc
+ 0001:00000634       Windows.DestroyCaret
+ 0001:0000063C       Windows.GetDC
+ 0001:00000644       Windows.GetScrollPos
+ 0001:0000064C       Windows.GetScrollRange
+ 0001:00000654       Windows.GetSystemMetrics
+ 0001:0000065C       Windows.HideCaret
+ 0001:00000664       Windows.InSendMessage
+ 0001:0000066C       Windows.InvalidateRect
+ 0001:00000674       Windows.ReleaseDC
+ 0001:0000067C       Windows.ReplyMessage
+ 0001:00000684       Windows.ScrollWindowEx
+ 0001:0000068C       Windows.SendMessage
+ 0001:00000694       Windows.SetCaretPos
+ 0001:0000069C       Windows.SetScrollPos
+ 0001:000006A4       Windows.SetScrollRange
+ 0001:000006AC       Windows.ShowCaret
+ 0001:000006B4       Windows.MakeLong
+ 0001:000006C0       Windows.Finalization
+ 0001:00000E88       CPortTypes.e
+ 0001:00000F0C       CPortTypes.ComErrorsToStr
+ 0001:00001094       CPortTypes.Finalization
+ 0001:00001B88       CPortEsc..TEscapeCodes
+ 0001:00001C24       CPortEsc..TEscapeCodesVT52
+ 0001:00001CB8       CPortEsc..TEscapeCodesVT100
+ 0001:00001D4C       CPortEsc.TEscapeCodes.Create
+ 0001:00001D90       CPortEsc.TEscapeCodes.Destroy
+ 0001:00001DC0       CPortEsc.TEscapeCodes.GetParam
+ 0001:00001E54       CPortEsc.TEscapeCodesVT52.ProcessChar
+ 0001:00001EF0       CPortEsc.TEscapeCodesVT52.EscCodeToStr
+ 0001:00002124       CPortEsc.TEscapeCodesVT52.DetectCode
+ 0001:000022B8       CPortEsc.TEscapeCodesVT100.ProcessChar
+ 0001:00002378       CPortEsc.TEscapeCodesVT100.EscCodeToStr
+ 0001:000028F0       CPortEsc.TEscapeCodesVT100.DetectCode
+ 0001:000029D0       CPortEsc.ParseParams
+ 0001:00002A8C       CPortEsc.CodeEraseScreen
+ 0001:00002B0C       CPortEsc.CodeEraseLine
+ 0001:00002B8C       CPortEsc.CodeTab
+ 0001:00002C0C       CPortEsc.CodeDevice
+ 0001:00002C9C       CPortEsc.CodeIdentify
+ 0001:00002D6C       CPortEsc.TEscapeCodesVT100.DetectExtCode
+ 0001:00002F7C       CPortEsc.Finalization
+ 0001:00002FAC       CPortTrmSet..TComTrmSetForm
+ 0001:00003280       CPortTrmSet.EditComTerminal
+ 0001:00003594       CPortTrmSet.TComTrmSetForm.FormCreate
+ 0001:00003598       CPortTrmSet.Finalization
+ 0001:00003638       CPortCtl..TComSelect
+ 0001:000036CC       CPortCtl..TComComboBox
+ 0001:00003F64       CPortCtl..TComRadioGroup
+ 0001:00004860       CPortCtl..TLedBitmap
+ 0001:00004954       CPortCtl..TComLed
+ 0001:00004F14       CPortCtl..TComTermBuffer
+ 0001:000051DC       CPortCtl..TCustomComTerminal
+ 0001:000053AC       CPortCtl..TComTerminal
+ 0001:00005E7C       CPortCtl.Min
+ 0001:00005E84       CPortCtl.Max
+ 0001:00005E8C       CPortCtl.TComSelect.SelectBaudRate
+ 0001:00005EEC       CPortCtl.TComSelect.SelectPort
+ 0001:00005F04       CPortCtl.TComSelect.SelectDataBits
+ 0001:00005F64       CPortCtl.TComSelect.SelectParity
+ 0001:00005FC4       CPortCtl.TComSelect.SelectStopBits
+ 0001:00006024       CPortCtl.TComSelect.SelectFlowControl
+ 0001:00006084       CPortCtl.TComSelect.SetComProperty
+ 0001:000060F8       CPortCtl.TComSelect.Change
+ 0001:00006180       CPortCtl.TComSelect.ApplySettings
+ 0001:00006200       CPortCtl.TComSelect.UpdateSettings
+ 0001:000063F0       CPortCtl.TComComboBox.Create
+ 0001:00006458       CPortCtl.TComComboBox.Destroy
+ 0001:00006488       CPortCtl.TComComboBox.ApplySettings
+ 0001:00006494       CPortCtl.TComComboBox.UpdateSettings
+ 0001:000064B8       CPortCtl.TComComboBox.Notification
+ 0001:00006500       CPortCtl.TComComboBox.Change
+ 0001:00006558       CPortCtl.TComComboBox.SetComPort
+ 0001:00006580       CPortCtl.TComComboBox.GetComPort
+ 0001:0000658C       CPortCtl.TComComboBox.GetAutoApply
+ 0001:00006598       CPortCtl.TComComboBox.SetAutoApply
+ 0001:000065A4       CPortCtl.TComComboBox.GetText
+ 0001:000065E0       CPortCtl.TComComboBox.SetText
+ 0001:00006614       CPortCtl.TComComboBox.SetComProperty
+ 0001:00006664       CPortCtl.TComComboBox.GetComProperty
+ 0001:00006670       CPortCtl.TComRadioGroup.Create
+ 0001:000066D8       CPortCtl.TComRadioGroup.Destroy
+ 0001:00006708       CPortCtl.TComRadioGroup.ApplySettings
+ 0001:00006714       CPortCtl.TComRadioGroup.UpdateSettings
+ 0001:0000673C       CPortCtl.TComRadioGroup.Notification
+ 0001:0000678C       CPortCtl.TComRadioGroup.Click
+ 0001:0000680C       CPortCtl.TComRadioGroup.SetComPort
+ 0001:00006834       CPortCtl.TComRadioGroup.GetComPort
+ 0001:00006840       CPortCtl.TComRadioGroup.GetAutoApply
+ 0001:0000684C       CPortCtl.TComRadioGroup.SetAutoApply
+ 0001:00006858       CPortCtl.TComRadioGroup.SetComProperty
+ 0001:000068A4       CPortCtl.TComRadioGroup.GetComProperty
+ 0001:000068B0       CPortCtl.TComLed.Create
+ 0001:000069BC       CPortCtl.TComLed.Destroy
+ 0001:00006A18       CPortCtl.TComLed.Paint
+ 0001:00006A50       CPortCtl.TComLed.Notification
+ 0001:00006A80       CPortCtl.TComLed.DoTimer
+ 0001:00006AA0       CPortCtl.TComLed.CMEnabledChanged
+ 0001:00006AB0       CPortCtl.TComLed.DoChange
+ 0001:00006AD0       CPortCtl.TComLed.BitmapNeeded
+ 0001:00006BFC       CPortCtl.TComLed.SelectLedBitmap
+ 0001:00006C44       CPortCtl.TComLed.CalcBitmapPos
+ 0001:00006CC0       CPortCtl.TComLed.SignalChange
+ 0001:00006D1C       CPortCtl.TComLed.RingDetect
+ 0001:00006D50       CPortCtl.TComLed.IsStateOn
+ 0001:00006DE0       CPortCtl.TComLed.SetStateInternal
+ 0001:00006E10       CPortCtl.TComLed.SetKind
+ 0001:00006E38       CPortCtl.TComLed.SetComPort
+ 0001:00006EC0       CPortCtl.TComLed.SetState
+ 0001:00006EF8       CPortCtl.TComLed.SetLedSignal
+ 0001:00006FCC       CPortCtl.TComLed.GetGlyph
+ 0001:00006FE8       CPortCtl.TComLed.SetGlyph
+ 0001:00007040       CPortCtl.TComLed.StoredGlyph
+ 0001:0000704C       CPortCtl.TComLed.BitmapToDraw
+ 0001:00007074       CPortCtl.TComTermBuffer.Create
+ 0001:000070B0       CPortCtl.TComTermBuffer.Destroy
+ 0001:000070EC       CPortCtl.TComTermBuffer.SetChar
+ 0001:0000712C       CPortCtl.TComTermBuffer.GetChar
+ 0001:00007158       CPortCtl.TComTermBuffer.ScrollDown
+ 0001:00007240       CPortCtl.TComTermBuffer.ScrollUp
+ 0001:00007318       CPortCtl.TComTermBuffer.EraseLine
+ 0001:00007390       CPortCtl.TComTermBuffer.EraseScreen
+ 0001:00007424       CPortCtl.TComTermBuffer.Init
+ 0001:000074C0       CPortCtl.TComTermBuffer.GetTab
+ 0001:000074C8       CPortCtl.TComTermBuffer.SetTab
+ 0001:000074D0       CPortCtl.TComTermBuffer.NextTab
+ 0001:00007508       CPortCtl.TComTermBuffer.ClearAllTabs
+ 0001:0000751C       CPortCtl.TComTermBuffer.GetLineLength
+ 0001:00007568       CPortCtl.TComTermBuffer.GetLastLine
+ 0001:0000759C       CPortCtl.TCustomComTerminal.Create
+ 0001:000076D8       CPortCtl.TCustomComTerminal.Destroy
+ 0001:00007728       CPortCtl.TCustomComTerminal.ClearScreen
+ 0001:00007754       CPortCtl.TCustomComTerminal.MoveCaret
+ 0001:000077EC       CPortCtl.TCustomComTerminal.Write
+ 0001:00007838       CPortCtl.TCustomComTerminal.WriteStr
+ 0001:0000793C       CPortCtl.TCustomComTerminal.WriteEscCode
+ 0001:0000794C       CPortCtl.TCustomComTerminal.LoadFromStream
+ 0001:00007994       CPortCtl.TCustomComTerminal.SaveToStream
+ 0001:00007AA4       CPortCtl.TCustomComTerminal.SelectFont
+ 0001:00007AFC       CPortCtl.TCustomComTerminal.ShowSetupDialog
+ 0001:00007B04       CPortCtl.TCustomComTerminal.CMCtl3DChanged
+ 0001:00007B30       CPortCtl.TCustomComTerminal.CMFontChanged
+ 0001:00007BE0       CPortCtl.TCustomComTerminal.CMColorChanged
+ 0001:00007BF8       CPortCtl.TCustomComTerminal.WMGetDlgCode
+ 0001:00007C10       CPortCtl.TCustomComTerminal.WMKillFocus
+ 0001:00007C30       CPortCtl.TCustomComTerminal.WMSetFocus
+ 0001:00007C44       CPortCtl.TCustomComTerminal.WMLButtonDown
+ 0001:00007C7C       CPortCtl.TCustomComTerminal.WMSize
+ 0001:00007C90       CPortCtl.TCustomComTerminal.WMHScroll
+ 0001:00007CA4       CPortCtl.TCustomComTerminal.WMVScroll
+ 0001:00007CB8       CPortCtl.TCustomComTerminal.CanAutoSize
+ 0001:00007D58       CPortCtl.TCustomComTerminal.CreateParams
+ 0001:00007DD0       CPortCtl.TCustomComTerminal.KeyDown
+ 0001:00007E9C       CPortCtl.TCustomComTerminal.KeyPress
+ 0001:00007EB8       CPortCtl.TCustomComTerminal.Loaded
+ 0001:00007EDC       CPortCtl.TCustomComTerminal.Notification
+ 0001:00007F0C       CPortCtl.TCustomComTerminal.PaintTerminal
+ 0001:00007FCC       CPortCtl.TCustomComTerminal.PaintDesign
+ 0001:00008068       CPortCtl.TCustomComTerminal.Paint
+ 0001:00008154       CPortCtl.TCustomComTerminal.CreateTerminalCaret
+ 0001:000081C4       CPortCtl.TCustomComTerminal.StringReceived
+ 0001:00008220       CPortCtl.TCustomComTerminal.DrawChar
+ 0001:00008354       CPortCtl.TCustomComTerminal.AdvanceCaret
+ 0001:0000849C       CPortCtl.AllOff
+ 0001:000084E0       CPortCtl.TCustomComTerminal.SetAttributes
+ 0001:000085DC       CPortCtl.TCustomComTerminal.SetMode
+ 0001:000086CC       CPortCtl.TCustomComTerminal.InvalidatePortion
+ 0001:00008768       CPortCtl.TCustomComTerminal.ModifyScrollBar
+ 0001:0000889C       CPortCtl.TCustomComTerminal.UpdateScrollPos
+ 0001:0000891C       CPortCtl.ScrollBarVisible
+ 0001:0000898C       CPortCtl.SetRange
+ 0001:000089B4       CPortCtl.SetHorzRange
+ 0001:00008A18       CPortCtl.SetVertRange
+ 0001:00008A80       CPortCtl.TCustomComTerminal.UpdateScrollRange
+ 0001:00008B6C       CPortCtl.TCustomComTerminal.HideCaret
+ 0001:00008B88       CPortCtl.TCustomComTerminal.ShowCaret
+ 0001:00008BA4       CPortCtl.TCustomComTerminal.SendChar
+ 0001:00008C6C       CPortCtl.TCustomComTerminal.SendCode
+ 0001:00008D14       CPortCtl.TCustomComTerminal.SendCodeNoEcho
+ 0001:00008D98       CPortCtl.TCustomComTerminal.PutEscapeCode
+ 0001:00009174       CPortCtl.TCustomComTerminal.CalculateMetrics
+ 0001:000091D0       CPortCtl.TCustomComTerminal.DoChar
+ 0001:000091F0       CPortCtl.TCustomComTerminal.DoGetEscapeCodes
+ 0001:00009210       CPortCtl.TCustomComTerminal.DoStrRecieved
+ 0001:00009230       CPortCtl.TCustomComTerminal.DoUnhandledCode
+ 0001:00009294       CPortCtl.TCustomComTerminal.CreateEscapeCodes
+ 0001:000092F0       CPortCtl.TCustomComTerminal.PerformTest
+ 0001:00009364       CPortCtl.TCustomComTerminal.SetTermAttrColors
+ 0001:00009390       CPortCtl.TCustomComTerminal.GetCharAttr
+ 0001:000093EC       CPortCtl.TCustomComTerminal.PutChar
+ 0001:000094B0       CPortCtl.TCustomComTerminal.InitCaret
+ 0001:000094D8       CPortCtl.TCustomComTerminal.RestoreCaretPos
+ 0001:000094EC       CPortCtl.TCustomComTerminal.SaveCaretPos
+ 0001:00009508       CPortCtl.TCustomComTerminal.RestoreAttr
+ 0001:00009530       CPortCtl.TCustomComTerminal.SaveAttr
+ 0001:00009558       CPortCtl.AppendLineFeeds
+ 0001:00009608       CPortCtl.Force7BitData
+ 0001:00009644       CPortCtl.TCustomComTerminal.RxBuf
+ 0001:000096E8       CPortCtl.TCustomComTerminal.GetConnected
+ 0001:000096FC       CPortCtl.TCustomComTerminal.SetConnected
+ 0001:00009710       CPortCtl.TCustomComTerminal.SetBorderStyle
+ 0001:00009724       CPortCtl.TCustomComTerminal.SetScrollBars
+ 0001:00009738       CPortCtl.TCustomComTerminal.SetColumns
+ 0001:00009798       CPortCtl.TCustomComTerminal.SetRows
+ 0001:000097F8       CPortCtl.TCustomComTerminal.SetEmulation
+ 0001:00009824       CPortCtl.TCustomComTerminal.SetCaret
+ 0001:00009854       CPortCtl.TCustomComTerminal.SetComPort
+ 0001:0000989C       CPortCtl.TCustomComTerminal.SetAltColor
+ 0001:000098C0       CPortCtl.Finalization
+ 0001:00009924       CPortSetup..TComSetupFrm
+ 0001:00009BA0       CPortSetup.EditComPort
+ 0001:00009CAC       CPortSetup.TComSetupFrm.FormCreate
+ 0001:00009CB0       CPortSetup.Finalization
+ 0001:00009CE0       CPort..TComLink
+ 0001:00009D58       CPort..TComThread
+ 0001:00009DDC       CPort..TComTimeouts
+ 0001:00009F48       CPort..TComFlowControl
+ 0001:0000A174       CPort..TComParity
+ 0001:0000A284       CPort..TComBuffer
+ 0001:0000A354       CPort..TCustomComPort
+ 0001:0000A4A4       CPort..TComPort
+ 0001:0000A9E0       CPort..TComDataPacket
+ 0001:0000AC70       CPort..TComStream
+ 0001:0000AD08       CPort..EComPort
+ 0001:0000AD80       CPort..EComPortExt
+ 0001:0000ADFC       CPort.ComErrorMessage
+ 0001:0000B3D0       CPort.EventsToInt
+ 0001:0000B43C       CPort.IntToEvents
+ 0001:0000B540       CPort.TComThread.Create
+ 0001:0000B5C0       CPort.TComThread.Destroy
+ 0001:0000B5EC       CPort.TComThread.Execute
+ 0001:0000B6B4       CPort.TComThread.Stop
+ 0001:0000B6C8       CPort.TComThread.DispatchComMsg
+ 0001:0000B6F8       CPort.TComThread.SendEvents
+ 0001:0000B814       CPort.TComThread.DoEvents
+ 0001:0000B8A8       CPort.TComTimeouts.Create
+ 0001:0000B8F4       CPort.TComTimeouts.AssignTo
+ 0001:0000B93C       CPort.TComTimeouts.SetComPort
+ 0001:0000B940       CPort.TComTimeouts.SetReadInterval
+ 0001:0000B960       CPort.TComTimeouts.SetReadTotalC
+ 0001:0000B980       CPort.TComTimeouts.SetReadTotalM
+ 0001:0000B9A0       CPort.TComTimeouts.SetWriteTotalC
+ 0001:0000B9C0       CPort.TComTimeouts.SetWriteTotalM
+ 0001:0000B9E0       CPort.TComFlowControl.Create
+ 0001:0000BA20       CPort.TComFlowControl.AssignTo
+ 0001:0000BA90       CPort.TComFlowControl.SetComPort
+ 0001:0000BA94       CPort.TComFlowControl.SetControlDTR
+ 0001:0000BAB4       CPort.TComFlowControl.SetControlRTS
+ 0001:0000BAD4       CPort.TComFlowControl.SetOutCTSFlow
+ 0001:0000BAF4       CPort.TComFlowControl.SetOutDSRFlow
+ 0001:0000BB14       CPort.TComFlowControl.SetXonXoffIn
+ 0001:0000BB34       CPort.TComFlowControl.SetXonXoffOut
+ 0001:0000BB54       CPort.TComFlowControl.SetDSRSensitivity
+ 0001:0000BB74       CPort.TComFlowControl.SetTxContinueOnXoff
+ 0001:0000BB94       CPort.TComFlowControl.SetXonChar
+ 0001:0000BBB4       CPort.TComFlowControl.SetXoffChar
+ 0001:0000BBD4       CPort.TComFlowControl.GetFlowControl
+ 0001:0000BC2C       CPort.TComFlowControl.SetFlowControl
+ 0001:0000BC74       CPort.TComParity.Create
+ 0001:0000BCB0       CPort.TComParity.AssignTo
+ 0001:0000BCF4       CPort.TComParity.SetComPort
+ 0001:0000BCF8       CPort.TComParity.SetBits
+ 0001:0000BD18       CPort.TComParity.SetCheck
+ 0001:0000BD38       CPort.TComParity.SetReplace
+ 0001:0000BD58       CPort.TComParity.SetReplaceChar
+ 0001:0000BD78       CPort.TComBuffer.Create
+ 0001:0000BDBC       CPort.TComBuffer.AssignTo
+ 0001:0000BDF0       CPort.TComBuffer.SetComPort
+ 0001:0000BDF4       CPort.TComBuffer.SetInputSize
+ 0001:0000BE28       CPort.TComBuffer.SetOutputSize
+ 0001:0000BE5C       CPort.TCustomComPort.Create
+ 0001:0000BF84       CPort.TCustomComPort.Destroy
+ 0001:0000BFD8       CPort.TCustomComPort.CreateHandle
+ 0001:0000C0C4       CPort.TCustomComPort.DestroyHandle
+ 0001:0000C0D4       CPort.TCustomComPort.Loaded
+ 0001:0000C140       CPort.TCustomComPort.WindowMethod
+ 0001:0000C2A8       CPort.TCustomComPort.BeginUpdate
+ 0001:0000C2AC       CPort.TCustomComPort.EndUpdate
+ 0001:0000C2C4       CPort.TCustomComPort.Open
+ 0001:0000C3B0       CPort.TCustomComPort.Close
+ 0001:0000C404       CPort.TCustomComPort.ApplyDCB
+ 0001:0000C590       CPort.GetTOValue
+ 0001:0000C59C       CPort.TCustomComPort.ApplyTimeouts
+ 0001:0000C63C       CPort.TCustomComPort.ApplyBuffer
+ 0001:0000C690       CPort.TCustomComPort.SetupComPort
+ 0001:0000C6B8       CPort.TCustomComPort.InputCount
+ 0001:0000C704       CPort.TCustomComPort.OutputCount
+ 0001:0000C748       CPort.TCustomComPort.Signals
+ 0001:0000C7E8       CPort.TCustomComPort.StateFlags
+ 0001:0000C82C       CPort.TCustomComPort.SetBreak
+ 0001:0000C870       CPort.TCustomComPort.SetDTR
+ 0001:0000C8B4       CPort.TCustomComPort.SetRTS
+ 0001:0000C8F8       CPort.TCustomComPort.SetXonXoff
+ 0001:0000C93C       CPort.TCustomComPort.ClearBuffer
+ 0001:0000C980       CPort.TCustomComPort.LastErrors
+ 0001:0000CA84       CPort.CPortPrepareAsync
+ 0001:0000CAC8       CPort.TCustomComPort._SyncRead
+ 0001:0000CAFC       CPort.TCustomComPort._SyncWrite
+ 0001:0000CB38       CPort.TCustomComPort.WriteAsync
+ 0001:0000CBD8       CPort.TCustomComPort._WriteAsyncWrapper
+ 0001:0000CC40       CPort.TCustomComPort.WriteStrAsync
+ 0001:0000CC78       CPort.TCustomComPort.WriteStr
+ 0001:0000CCC4       CPort.TCustomComPort._WriteStrWrapper
+ 0001:0000CD48       CPort.TCustomComPort.ReadAsync
+ 0001:0000CDF8       CPort.TCustomComPort.Read
+ 0001:0000CE60       CPort.TCustomComPort.ReadStrAsync
+ 0001:0000CED8       CPort.TCustomComPort.ReadStr
+ 0001:0000CF4C       CPort.ErrorCode
+ 0001:0000CF6C       CPort.TCustomComPort.WaitForAsync
+ 0001:0000D02C       CPort.TCustomComPort.AbortAllAsync
+ 0001:0000D068       CPort.TCustomComPort.IsAsyncCompleted
+ 0001:0000D0E0       CPort.TCustomComPort.WaitForEvent
+ 0001:0000D214       CPort.TCustomComPort.TransmitChar
+ 0001:0000D248       CPort.TCustomComPort.ShowSetupDialog
+ 0001:0000D250       CPort.BoolToStr
+ 0001:0000D28C       CPort.StrToBool
+ 0001:0000D324       CPort.DTRToStr
+ 0001:0000D384       CPort.RTSToStr
+ 0001:0000D3A0       CPort.StrToRTS
+ 0001:0000D42C       CPort.StrToDTR
+ 0001:0000D4B8       CPort.CPortStrToChar
+ 0001:0000D580       CPort.CPortCharToStr
+ 0001:0000D5F4       CPort.TCustomComPort.StoreIniFile
+ 0001:0000DD04       CPort.TCustomComPort.StoreRegistry
+ 0001:0000E39C       CPort.TCustomComPort.LoadIniFile
+ 0001:0000ECE8       CPort.TCustomComPort.LoadRegistry
+ 0001:0000F3F4       CPort.SetRegistry
+ 0001:0000F560       CPort.TCustomComPort.StoreSettings
+ 0001:0000F688       CPort.TCustomComPort.LoadSettings
+ 0001:0000F7E4       CPort.TCustomComPort.RegisterLink
+ 0001:0000F82C       CPort.TCustomComPort.UnRegisterLink
+ 0001:0000F874       CPort.TCustomComPort.DoBeforeClose
+ 0001:0000F894       CPort.TCustomComPort.DoBeforeOpen
+ 0001:0000F8B4       CPort.TCustomComPort.DoAfterOpen
+ 0001:0000F8D4       CPort.TCustomComPort.DoAfterClose
+ 0001:0000F8F4       CPort.TCustomComPort.DoRxChar
+ 0001:0000F90C       CPort.TCustomComPort.DoRxBuf
+ 0001:0000F92C       CPort.TCustomComPort.DoBreak
+ 0001:0000F94C       CPort.TCustomComPort.DoTxEmpty
+ 0001:0000F96C       CPort.TCustomComPort.DoRing
+ 0001:0000F98C       CPort.TCustomComPort.DoCTSChange
+ 0001:0000F9AC       CPort.TCustomComPort.DoDSRChange
+ 0001:0000F9CC       CPort.TCustomComPort.DoRLSDChange
+ 0001:0000F9EC       CPort.TCustomComPort.DoError
+ 0001:0000FA14       CPort.TCustomComPort.DoRxFlag
+ 0001:0000FA34       CPort.TCustomComPort.DoRx80Full
+ 0001:0000FA54       CPort.TCustomComPort.CheckSignals
+ 0001:0000FAC0       CPort.TCustomComPort.CallAfterClose
+ 0001:0000FAE0       CPort.TCustomComPort.CallAfterOpen
+ 0001:0000FB08       CPort.TCustomComPort.CallBeforeClose
+ 0001:0000FB24       CPort.TCustomComPort.CallBeforeOpen
+ 0001:0000FB30       CPort.TCustomComPort.CallBreak
+ 0001:0000FB3C       CPort.TCustomComPort.CallCTSChange
+ 0001:0000FB68       CPort.TCustomComPort.CallDSRChange
+ 0001:0000FB94       CPort.TCustomComPort.CallRLSDChange
+ 0001:0000FBC0       CPort.TCustomComPort.CallError
+ 0001:0000FBEC       CPort.TCustomComPort.CallRing
+ 0001:0000FC08       CPort.TCustomComPort.CallRx80Full
+ 0001:0000FC14       CPort.PerformRead
+ 0001:0000FC58       CPort.CheckLinks
+ 0001:0000FD54       CPort.TCustomComPort.CallRxChar
+ 0001:0000FDA8       CPort.TCustomComPort.CallRxFlag
+ 0001:0000FDC4       CPort.TCustomComPort.CallTxEmpty
+ 0001:0000FDEC       CPort.TCustomComPort.HasLink
+ 0001:0000FE28       CPort.TCustomComPort.TxNotifyLink
+ 0001:0000FE88       CPort.TCustomComPort.NotifyLink
+ 0001:0000FF1C       CPort.TCustomComPort.SendSignalToLink
+ 0001:00010010       CPort.TCustomComPort.SetConnected
+ 0001:00010038       CPort.TCustomComPort.SetBaudRate
+ 0001:00010050       CPort.TCustomComPort.SetCustomBaudRate
+ 0001:00010068       CPort.TCustomComPort.SetDataBits
+ 0001:00010080       CPort.TCustomComPort.SetDiscardNull
+ 0001:00010098       CPort.TCustomComPort.SetEventChar
+ 0001:000100B0       CPort.TCustomComPort.SetPort
+ 0001:000100F0       CPort.TCustomComPort.SetStopBits
+ 0001:00010108       CPort.TCustomComPort.SetSyncMethod
+ 0001:00010140       CPort.TCustomComPort.SetTriggersOnRxChar
+ 0001:00010164       CPort.TCustomComPort.SetEventThreadPriority
+ 0001:0001019C       CPort.TCustomComPort.GetTriggersOnRxChar
+ 0001:000101B0       CPort.TCustomComPort.SetFlowControl
+ 0001:000101C8       CPort.TCustomComPort.SetParity
+ 0001:000101E0       CPort.TCustomComPort.SetTimeouts
+ 0001:000101F8       CPort.TCustomComPort.SetBuffer
+ 0001:00010210       CPort.TComDataPacket.Create
+ 0001:00010270       CPort.TComDataPacket.Destroy
+ 0001:000102A8       CPort.TComDataPacket.AddData
+ 0001:000102E0       CPort.TComDataPacket.Notification
+ 0001:0001030C       CPort.TComDataPacket.DoDiscard
+ 0001:00010324       CPort.TComDataPacket.DoPacket
+ 0001:0001033C       CPort.TComDataPacket.DoCustomStart
+ 0001:00010354       CPort.TComDataPacket.DoCustomStop
+ 0001:0001036C       CPort.TComDataPacket.CheckIncludeStrings
+ 0001:00010464       CPort.TComDataPacket.Upper
+ 0001:00010488       CPort.DiscardPacketToPos
+ 0001:0001052C       CPort.FormPacket
+ 0001:000105BC       CPort.StartPacket
+ 0001:000106A8       CPort.EndPacket
+ 0001:00010818       CPort.IsBufferTooLarge
+ 0001:00010848       CPort.TComDataPacket.HandleBuffer
+ 0001:000108BC       CPort.TComDataPacket.ValidStop
+ 0001:000108E0       CPort.TComDataPacket.RxBuf
+ 0001:0001094C       CPort.TComDataPacket.EmptyBuffer
+ 0001:000109A8       CPort.TComDataPacket.SetComPort
+ 0001:000109E0       CPort.TComDataPacket.SetCaseInsensitive
+ 0001:000109F4       CPort.TComDataPacket.SetSize
+ 0001:00010A08       CPort.TComDataPacket.SetStartString
+ 0001:00010A34       CPort.TComDataPacket.SetStopString
+ 0001:00010A60       CPort.TComStream.Create
+ 0001:00010A9C       CPort.TComStream.Read
+ 0001:00010AAC       CPort.TComStream.Write
+ 0001:00010ABC       CPort.TComStream.Seek
+ 0001:00010AC0       CPort.EComPortExt.Create
+ 0001:00010BA4       CPort.EComPort.Create
+ 0001:00010C74       CPort.EComPort.Create
+ 0001:00010CB0       CPort.CportInitAsync
+ 0001:00010CF0       CPort.CportDoneAsync
+ 0001:00010D20       CPort.EnumComPorts
+ 0001:00010ECC       CPort.StrToBaudRate
+ 0001:00010F58       CPort.StrToStopBits
+ 0001:00010FE4       CPort.StrToDataBits
+ 0001:00011070       CPort.StrToParity
+ 0001:000110FC       CPort.StrToFlowControl
+ 0001:0001127C       CPort.BaudRateToStr
+ 0001:00011298       CPort.BaudRateToInt
+ 0001:000112C8       CPort.StopBitsToStr
+ 0001:00011314       CPort.DataBitsToStr
+ 0001:0001137C       CPort.ParityToStr
+ 0001:000113E0       CPort.FlowControlToStr
+ 0001:000113FC       CPort.TCustomComPort.Write
+ 0001:00011438       CPort.TCustomComPort.SetOverlapped
+ 0001:00011448       CPort.Finalization
+ 0001:00011948       BisComPort..TBisComPort
+ 0001:00011C18       BisComPort.TBisComPort.Create
+ 0001:00011F34       BisComPort.TBisComPort.Destroy
+ 0001:00011F64       BisComPort.TBisComPort.DoStatus
+ 0001:00011F7C       BisComPort.TBisComPort.ComPortAfterClose
+ 0001:00011FE4       BisComPort.TBisComPort.ComPortAfterOpen
+ 0001:0001204C       BisComPort.TBisComPort.ComPortError
+ 0001:000120EC       BisComPort.TBisComPort.Connect
+ 0001:00012144       BisComPort.TBisComPort.Disconnect
+ 0001:0001219C       BisComPort.TBisComPort.GetConnected
+ 0001:000121A4       BisComPort.TBisComPort.GetParityBits
+ 0001:000121B0       BisComPort.TBisComPort.GetPort
+ 0001:000121C8       BisComPort.TBisComPort.GetBaudRate
+ 0001:000121D0       BisComPort.TBisComPort.GetDataBits
+ 0001:000121D8       BisComPort.TBisComPort.GetStopBits
+ 0001:000121E0       BisComPort.TBisComPort.SeTBisComPortBaudRate
+ 0001:000121EC       BisComPort.TBisComPort.SetDataBits
+ 0001:000121F8       BisComPort.TBisComPort.SetParityBits
+ 0001:00012204       BisComPort.TBisComPort.SetPort
+ 0001:00012210       BisComPort.TBisComPort.SetStopBits
+ 0001:0001221C       BisComPort.Finalization
+ 0001:0001229C       BisBarcodeScanner..TBisBarcodeScanner
+ 0001:000123B0       BisBarcodeScanner.TBisBarcodeScanner.Create
+ 0001:000123FC       BisBarcodeScanner.TBisBarcodeScanner.Destroy
+ 0001:00012424       BisBarcodeScanner.TBisBarcodeScanner.DoBarcode
+ 0001:00012444       BisBarcodeScanner.TBisBarcodeScanner.ComPortRxChar
+ 0001:00012504       BisBarcodeScanner.TBisBarcodeScanner.Connect
+ 0001:0001251C       BisBarcodeScanner.Finalization
+ 0001:000125DC       XAsync..EAsyncError
+ 0001:00012658       XAsync..TAsyncThread
+ 0001:000126C0       XAsync.TAsyncThread.Create
+ 0001:00012714       XAsync.TAsyncThread.DoAsyncProc
+ 0001:00012730       XAsync.TAsyncThread.Execute
+ 0001:000127B8       XAsync.InitOverlapped
+ 0001:000127DC       XAsync.InternalStartThread
+ 0001:000127F0       XAsync.IsHandleValid
+ 0001:00012838       XAsync.IsAsyncDone
+ 0001:00012854       XAsync.InternalCheckHandle
+ 0001:000128B8       XAsync.InternalInitAsync
+ 0001:0001294C       XAsync.InternalCloseAsync
+ 0001:000129B0       XAsync.InternalReadStringAsync
+ 0001:00012A4C       XAsync.InternalReadAsync
+ 0001:00012AB4       XAsync.InternalWriteAsync
+ 0001:00012B1C       XAsync.InternalWaitAsync
+ 0001:00012B88       XAsync.WriteComm
+ 0001:00012BF8       XAsync.WriteComm
+ 0001:00012C5C       XAsync.ReadComm
+ 0001:00012CD8       XAsync.ReadComm
+ 0001:00012D3C       XAsync.SetRXTime
+ 0001:00012D74       XAsync.Finalization
+ 0001:00012E34       XComErr..EDeviceError
+ 0001:00012EBC       XComErr.EDeviceError.CreateCode
+ 0001:00012F00       XComErr.XCommError
+ 0001:00012F20       XComErr.XCommWin32Error
+ 0001:00012FE4       XComErr.Finalization
+ 0001:00013570       XComDrv..TCommPlugin
+ 0001:00013648       XComDrv..TCommDataControl
+ 0001:0001374C       XComDrv..TCommBuffers
+ 0001:00013878       XComDrv..TCommEventChars
+ 0001:000139BC       XComDrv..TCommTimeoutsEx
+ 0001:00013BA0       XComDrv..TCustomComm
+ 0001:00013C7C       XComDrv..TXComm
+ 0001:00014080       XComDrv..TModemSettings
+ 0001:00014384       XComDrv..TCustomModem
+ 0001:0001448C       XComDrv..TXModem
+ 0001:00014A24       XComDrv.ConvertErrorFmt
+ 0001:00014A48       XComDrv.GetRXTimeout
+ 0001:00014A84       XComDrv.DataBitsToChar
+ 0001:00014A88       XComDrv.CharToDataBits
+ 0001:00014AFC       XComDrv.StopBitsToStr
+ 0001:00014B14       XComDrv.StrToStopBits
+ 0001:00014B98       XComDrv.FlowControlToStr
+ 0001:00014BB0       XComDrv.StrToFlowControl
+ 0001:00014C50       XComDrv.ParityToStr
+ 0001:00014C68       XComDrv.StrToParity
+ 0001:00014D08       XComDrv.BaudRateToStr
+ 0001:00014D34       XComDrv.StrToBaudRate
+ 0001:00014E04       XComDrv.SetDCB
+ 0001:00014E20       XComDrv.GetCommState
+ 0001:00014E40       XComDrv..TCommEventThread
+ 0001:00014EAC       XComDrv.TCommEventThread.Create
+ 0001:00014F14       XComDrv.TCommEventThread.Destroy
+ 0001:00014F4C       XComDrv.TCommEventThread.Execute
+ 0001:0001500C       XComDrv.TCommEventThread.DoOnSignal
+ 0001:00015028       XComDrv.TCommPlugin.Create
+ 0001:00015080       XComDrv.TCommPlugin.Destroy
+ 0001:000150B0       XComDrv.TCommPlugin.HandleEvents
+ 0001:000150B4       XComDrv.TCommPlugin.Notification
+ 0001:000150C4       XComDrv.TCommPlugin.SetComm
+ 0001:000150F0       XComDrv.TCommPlugin.CommValid
+ 0001:0001514C       XComDrv.TCommDataControl.Create
+ 0001:0001519C       XComDrv.TCommDataControl.SetDataBits
+ 0001:000151CC       XComDrv.TCommDataControl.SetParity
+ 0001:000151FC       XComDrv.TCommDataControl.SetStopBits
+ 0001:0001522C       XComDrv.TCommDataControl.GetDataBits
+ 0001:00015264       XComDrv.TCommDataControl.GetParity
+ 0001:00015298       XComDrv.TCommDataControl.GetStopBits
+ 0001:000152CC       XComDrv.TCommDataControl.AssignTo
+ 0001:00015334       XComDrv.TCommBuffers.Create
+ 0001:00015388       XComDrv.IsWinNT
+ 0001:000153D8       XComDrv.TCommBuffers.SetIOSize
+ 0001:00015458       XComDrv.TCommBuffers.GetIOSize
+ 0001:000154D0       XComDrv.TCommBuffers.AssignTo
+ 0001:00015548       XComDrv.TCommEventChars.Create
+ 0001:00015598       XComDrv.TCommEventChars.SetCommChar
+ 0001:00015620       XComDrv.TCommEventChars.GetCommChar
+ 0001:000156D4       XComDrv.TCommEventChars.AssignTo
+ 0001:00015768       XComDrv.TCommTimeoutsEx.Create
+ 0001:000157C4       XComDrv.TCommTimeoutsEx.SetInterval
+ 0001:0001584C       XComDrv.TCommTimeoutsEx.GetInterval
+ 0001:000158F4       XComDrv.TCommTimeoutsEx.AssignTo
+ 0001:00015988       XComDrv.TCustomComm.Create
+ 0001:00015AA8       XComDrv.TCustomComm.Destroy
+ 0001:00015B28       XComDrv.TCustomComm.SetDeviceName
+ 0001:00015B8C       XComDrv.TCustomComm.SetDataControl
+ 0001:00015B9C       XComDrv.TCustomComm.SetBuffers
+ 0001:00015BAC       XComDrv.TCustomComm.SetEventChars
+ 0001:00015BBC       XComDrv.TCustomComm.SetTimeouts
+ 0001:00015BCC       XComDrv.TCustomComm.SetBaudRate
+ 0001:00015C04       XComDrv.TCustomComm.SetBaudValue
+ 0001:00015C34       XComDrv.TCustomComm.SetFlowControl
+ 0001:00015C6C       XComDrv.TCustomComm.SetRTSSettings
+ 0001:00015CAC       XComDrv.TCustomComm.SetDTRSettings
+ 0001:00015D14       XComDrv.TCustomComm.SetXOnXOffSettings
+ 0001:00015D54       XComDrv.TCustomComm.UpdateFlowSettings
+ 0001:00015EF0       XComDrv.TCustomComm.SetCommOptions
+ 0001:00015F54       XComDrv.TCustomComm.GetBaudRate
+ 0001:00015F98       XComDrv.TCustomComm.GetBaudValue
+ 0001:00015FC8       XComDrv.TCustomComm.GetRTSSettings
+ 0001:00015FFC       XComDrv.TCustomComm.GetDTRSettings
+ 0001:00016030       XComDrv.TCustomComm.GetXOnXOffSettings
+ 0001:00016064       XComDrv.TCustomComm.GetCommOptions
+ 0001:00016098       XComDrv.TCustomComm.AddPlugin
+ 0001:000160A4       XComDrv.TCustomComm.RemovePlugin
+ 0001:000160B0       XComDrv.TCustomComm.GetPlugin
+ 0001:000160C8       XComDrv.TCustomComm.GetPluginCount
+ 0001:000160D4       XComDrv.TCustomComm.ClearPlugins
+ 0001:000160F8       XComDrv.TCustomComm.UpdateDCB
+ 0001:00016290       XComDrv.TCustomComm.UpdateBuffers
+ 0001:00016314       XComDrv.TCustomComm.UpdateTimeouts
+ 0001:000163A8       XComDrv.TCustomComm.OpenDevice
+ 0001:000164F0       XComDrv.TCustomComm.BeginUpdate
+ 0001:00016558       XComDrv.TCustomComm.EndUpdate
+ 0001:000165F4       XComDrv.TCustomComm.CloseDevice
+ 0001:00016688       XComDrv.TCustomComm.GetOpened
+ 0001:00016690       XComDrv.TCustomComm.GetPaused
+ 0001:000166B0       XComDrv.TCustomComm.SetPaused
+ 0001:000166E0       XComDrv.TCustomComm.PurgeIn
+ 0001:00016764       XComDrv.TCustomComm.PurgeOut
+ 0001:000167DC       XComDrv.TCustomComm.GetTotalReceived
+ 0001:00016800       XComDrv.TCustomComm.GetCommStatus
+ 0001:00016890       XComDrv.TCustomComm.GetMaxBaud
+ 0001:000169FC       XComDrv.TCustomComm.GetCount
+ 0001:00016A90       XComDrv.intSend
+ 0001:00016B4C       XComDrv.intRead
+ 0001:00016C08       XComDrv.TCustomComm.SendDataEx
+ 0001:00016DA8       XComDrv.TCustomComm.SendData
+ 0001:00016DB8       XComDrv.TCustomComm.SendByte
+ 0001:00016DD8       XComDrv.TCustomComm.SendString
+ 0001:00016E08       XComDrv.TCustomComm.ReadDataEx
+ 0001:00016F7C       XComDrv.TCustomComm.ReadData
+ 0001:00016F8C       XComDrv.TCustomComm.ReadByte
+ 0001:00016FAC       XComDrv.TCustomComm.ReadString
+ 0001:00016FF0       XComDrv.TCustomComm.ReadString
+ 0001:00017038       XComDrv.TCustomComm.UpdateEvents
+ 0001:000170E0       XComDrv.TCustomComm.HandleEvents
+ 0001:00017148       XComDrv.TCustomComm.ReceiveData
+ 0001:00017168       XComDrv.TCustomComm.ToggleBreak
+ 0001:000171DC       XComDrv.TCustomComm.ToggleDTR
+ 0001:00017250       XComDrv.TCustomComm.ToggleRTS
+ 0001:000172C4       XComDrv.TCustomComm.ToggleXonXoff
+ 0001:00017338       XComDrv.TCustomComm.WaitForString
+ 0001:000174F8       XComDrv.TCustomComm.InternalAsyncProc
+ 0001:00017570       XComDrv.TCustomComm.InitAsync
+ 0001:00017600       XComDrv.TCustomComm.CloseAsync
+ 0001:00017608       XComDrv.TCustomComm.SendAsync
+ 0001:000176CC       XComDrv.TCustomComm.SendStringAsync
+ 0001:000177A4       XComDrv.TCustomComm.ReadAsync
+ 0001:00017854       XComDrv.TCustomComm.ReadStringAsync
+ 0001:00017900       XComDrv.TCustomComm.WaitAsync
+ 0001:0001797C       XComDrv.PluginLocked
+ 0001:000179D4       XComDrv.TCustomComm.GetLocked
+ 0001:00017A04       XComDrv.TModemSettings.Create
+ 0001:00017A98       XComDrv.TModemSettings.AssignTo
+ 0001:00017AFC       XComDrv.TModemSettings.SetSpeed
+ 0001:00017C20       XComDrv.ATShortToLong
+ 0001:00017C90       XComDrv.ATResultToME
+ 0001:00017D58       XComDrv.RemoveChar
+ 0001:00017D90       XComDrv.StripAT
+ 0001:00017E7C       XComDrv.FindRegAT
+ 0001:00017F6C       XComDrv.IsRegAT
+ 0001:0001805C       XComDrv.ATPos
+ 0001:000181C0       XComDrv.IsConnectAT
+ 0001:00018218       XComDrv.RegToStr
+ 0001:00018274       XComDrv.TCustomModem.Create
+ 0001:000182BC       XComDrv.TCustomModem.Destroy
+ 0001:000182EC       XComDrv.TCustomModem.OpenDevice
+ 0001:00018318       XComDrv.TCustomModem.CloseDevice
+ 0001:000183A0       XComDrv.TCustomModem.SetModemSettings
+ 0001:000183B4       XComDrv.TCustomModem.GetEnterCmd
+ 0001:00018438       XComDrv.TCustomModem.InitCommand
+ 0001:00018614       XComDrv.TCustomModem.SendCommand
+ 0001:00018790       XComDrv.TCustomModem.SetRegisterValue
+ 0001:000189CC       XComDrv.TCustomModem.GetRegisterValue
+ 0001:00018B98       XComDrv.TCustomModem.EnterCommandState
+ 0001:00018D04       XComDrv.TCustomModem.GetInstalled
+ 0001:00018D28       XComDrv.TCustomModem.ExitCommandState
+ 0001:00018E7C       XComDrv.WaitRX
+ 0001:00018EC0       XComDrv.GetCommand
+ 0001:00019060       XComDrv.GetData
+ 0001:00019104       XComDrv.HasResult
+ 0001:00019204       XComDrv.TCustomModem.ReceiveData
+ 0001:00019314       XComDrv.TCustomModem.HandleEvents
+ 0001:000193DC       XComDrv.TCustomModem.HandleAT
+ 0001:00019544       XComDrv.TCustomModem.DoConnect
+ 0001:000195B0       XComDrv.TCustomModem.DoDisconnect
+ 0001:00019614       XComDrv.TCustomModem.DoConnecting
+ 0001:00019658       XComDrv.TCustomModem.DoDisconnecting
+ 0001:000196A0       XComDrv.TCustomModem.DoChangeCmdState
+ 0001:000196C0       XComDrv.TCustomModem.ResetModem
+ 0001:00019774       XComDrv.TCustomModem.InitModem
+ 0001:000198C0       XComDrv.TCustomModem.WaitForAT
+ 0001:00019A54       XComDrv.TCustomModem.GetConnected
+ 0001:00019A78       XComDrv.TCustomModem.Connect
+ 0001:00019C4C       XComDrv.TCustomModem.Disconnect
+ 0001:00019E44       XComDrv.TCustomModem.LowerDTR
+ 0001:00019EE0       XComDrv.TCustomModem.GetLineStatus
+ 0001:00019FC4       XComDrv.TCustomModem.GetModemState
+ 0001:00019FF8       XComDrv.TCustomModem.GetLocked
+ 0001:0001A024       XComDrv.GetTickCount
+ 0001:0001A060       XComDrv.InitExtendedTicks
+ 0001:0001A08C       XComDrv.Finalization
+ 0001:0001AB08       .omcom.@GetPackageInfoTable
+ 0001:0001AB10       .omcom.@PackageLoad
+ 0001:0001AB1C       .omcom.@PackageUnload
+ 0002:00000010       Windows.Windows
+ 0002:00000054       CPortTypes.CPortTypes
+ 0002:000000E4       CPortEsc.CPortEsc
+ 0002:000000EC       CPortTrmSet.CPortTrmSet
+ 0002:000000F4       CPortCtl.CPortCtl
+ 0002:00000150       CPortSetup.CPortSetup
+ 0002:00000158       CPort.CPort
+ 0002:00000340       BisComPort.BisComPort
+ 0002:00000348       BisBarcodeScanner.BisBarcodeScanner
+ 0002:00000350       XAsync.XAsync
+ 0002:00000358       XComErr.XComErr
+ 0002:00000360       XComDrv.XComDrv
+ 0002:00000374       .omcom..omcom
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.Module
+ 0003:0000001C       SysInit.TlsProc
+ 0003:0000002C       CPortCtl.OnBitmaps
+ 0003:00000048       CPortCtl.OffBitmaps
+ 0003:00000064       CPortCtl.BorderStyles
+ 0003:0000006C       CPort.CParityBits
+ 0003:00000080       CPort.CStopBits
+ 0003:0000008C       CPort.CBaudRate
+ 0003:000000CC       CPort.CDataBits
+ 0003:000000DC       CPort.CControlRTS
+ 0003:000000EC       CPort.CControlDTR
+ 0003:000000F8       CPort.DTRStrings
+ 0003:00000104       CPort.RTSStrings
+ 0003:00000114       CPort.BaudRateStrings
+ 0003:00000154       CPort.BaudRateInts
+ 0003:00000194       CPort.StopBitsStrings
+ 0003:000001A0       CPort.DataBitsStrings
+ 0003:000001B0       CPort.ParityBitsStrings
+ 0003:000001C4       CPort.FlowControlStrings
+ 0003:000001D4       XComDrv.STR_FLOWCONTROL
+ 0003:000001E8       XComDrv.STR_PARITY
+ 0003:000001FC       XComDrv.STR_STOPBITS
+ 0003:00000208       XComDrv.BaudRate_
+ 0003:00000244       XComDrv.func_
+ 0003:0000024C       XComDrv.func_
+ 0003:00000254       XComDrv.func_
+ 0003:0000025C       XComDrv.func_
+ 0003:00000264       XComDrv.MRC_
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       SysInit.tlsBuffer
+ 0004:0000000C       Windows..3
+ 0004:00000010       Windows.HtmlHelpModule
+ 0004:00000014       CPortTypes..1
+ 0004:00000018       CPortEsc..4
+ 0004:0000001C       CPortTrmSet..2
+ 0004:00000020       CPortCtl.ComTerminalFont
+ 0004:00000024       CPortCtl..9
+ 0004:00000028       CPortSetup..2
+ 0004:0000002C       CPort..31
+ 0004:00000030       BisComPort..2
+ 0004:00000034       BisBarcodeScanner..2
+ 0004:00000038       XAsync..2
+ 0004:0000003C       XComErr..2
+ 0004:00000040       XComDrv..22
+ 0004:00000044       XComDrv.I_ExtendedTicks
+ 0004:00000048       XComDrv.I_Freq
+ 0005:00000000       SysInit.TlsLast
+
+
+Line numbers for CPortTypes(CPortTypes.pas) segment .text
+
+    79 0001:00000E88    80 0001:00000EA5    81 0001:00000EB0    83 0001:00000EC0
+    84 0001:00000EE0    85 0001:00000F0C    86 0001:00000F18    87 0001:00000F20
+    88 0001:00000F32    89 0001:00000F44    90 0001:00000F56    91 0001:00000F68
+    92 0001:00000F7A    93 0001:00000F8C    94 0001:00000F9E    95 0001:00000FB0
+    96 0001:00000FB8    98 0001:00000FC7    99 0001:00000FE3
+
+Line numbers for CPortTypes(CPortTypes.pas) segment .itext
+
+   101 0002:00000054
+
+Line numbers for CPortEsc(CPortEsc.pas) segment .text
+
+    92 0001:00001D4C    93 0001:00001D5E    94 0001:00001D67    95 0001:00001D76
+    98 0001:00001D90    99 0001:00001D9B   100 0001:00001DA3   101 0001:00001DAF
+   104 0001:00001DC0   105 0001:00001DDA   106 0001:00001DE9   108 0001:00001DF0
+   109 0001:00001DFE   111 0001:00001E24   113 0001:00001E2E   123 0001:00001E54
+   124 0001:00001E74   125 0001:00001E76   127 0001:00001E7C   129 0001:00001E82
+   130 0001:00001E8A   133 0001:00001E90   134 0001:00001E97   138 0001:00001E9B
+   139 0001:00001EB2   140 0001:00001EBC   142 0001:00001EC0   143 0001:00001EC3
+   144 0001:00001EC7   147 0001:00001EC9   151 0001:00001EF0   152 0001:00001F11
+   153 0001:00001F7C   154 0001:00001F8D   155 0001:00001F9E   156 0001:00001FAF
+   157 0001:00001FC0   158 0001:00001FD1   159 0001:00001FE2   160 0001:00001FF3
+   161 0001:00002001   162 0001:0000200F   163 0001:0000201D   166 0001:0000206E
+   168 0001:00002075   172 0001:00002124   173 0001:0000214A   174 0001:0000214C
+   175 0001:000021C8   176 0001:000021CF   177 0001:000021D6   178 0001:000021DD
+   179 0001:000021E4   180 0001:000021EB   181 0001:000021F2   182 0001:000021F9
+   183 0001:00002200   185 0001:00002204   186 0001:0000220F   188 0001:00002213
+   189 0001:0000222F   192 0001:00002233   193 0001:00002240   196 0001:00002244
+   197 0001:00002246   198 0001:00002263   202 0001:00002280   212 0001:000022B8
+   213 0001:000022D8   214 0001:000022DA   216 0001:000022E0   218 0001:000022E6
+   219 0001:000022EE   222 0001:000022F4   223 0001:000022FB   227 0001:000022FF
+   228 0001:00002316   229 0001:00002318   230 0001:0000231E   233 0001:0000232A
+   234 0001:00002332   236 0001:00002338   237 0001:00002342   239 0001:00002346
+   240 0001:00002349   241 0001:0000234D   242 0001:00002351   245 0001:00002353
+   252 0001:00002378   253 0001:00002397   254 0001:0000243A   255 0001:0000244C
+   256 0001:00002479   257 0001:0000248B   258 0001:000024D0   259 0001:000024E2
+   260 0001:000024F4   261 0001:00002506   262 0001:00002518   263 0001:0000252A
+   264 0001:0000253C   265 0001:0000254E   266 0001:00002560   267 0001:00002572
+   268 0001:00002584   269 0001:00002596   270 0001:000025A8   271 0001:000025ED
+   272 0001:000025FF   273 0001:00002611   274 0001:00002623   275 0001:00002635
+   276 0001:00002647   277 0001:00002659   278 0001:0000266B   279 0001:0000267D
+   280 0001:0000268C   281 0001:0000269B   282 0001:000026AA   283 0001:000026B9
+   284 0001:000026C8   285 0001:000026D7   286 0001:000026E6   288 0001:000026F5
+   290 0001:000026FD   291 0001:00002708   295 0001:000028F0   296 0001:0000290E
+   297 0001:00002919   298 0001:00002941   299 0001:00002945   300 0001:00002949
+   301 0001:0000294D   302 0001:00002951   303 0001:00002955   305 0001:00002959
+   309 0001:0000295D   310 0001:0000295F   311 0001:0000296E   312 0001:00002970
+   313 0001:00002978   314 0001:00002991   315 0001:00002995   316 0001:00002999
+   317 0001:0000299D   320 0001:0000299F   332 0001:000029D0   333 0001:000029F4
+   334 0001:000029F9   337 0001:00002A03   339 0001:00002A16   340 0001:00002A24
+   343 0001:00002A2E   344 0001:00002A43   335 0001:00002A44   346 0001:00002A50
+   347 0001:00002A56   348 0001:00002A64   353 0001:00002A8C   354 0001:00002AA0
+   355 0001:00002AAF   358 0001:00002AB3   359 0001:00002AC3   360 0001:00002AD3
+   361 0001:00002AD7   363 0001:00002ADB   366 0001:00002ADD   367 0001:00002AE8
+   372 0001:00002B0C   373 0001:00002B20   374 0001:00002B2F   377 0001:00002B33
+   378 0001:00002B43   379 0001:00002B53   380 0001:00002B57   382 0001:00002B5B
+   385 0001:00002B5D   386 0001:00002B68   391 0001:00002B8C   392 0001:00002BA0
+   393 0001:00002BAF   396 0001:00002BB3   397 0001:00002BC3   398 0001:00002BD3
+   399 0001:00002BD7   401 0001:00002BDB   404 0001:00002BDD   405 0001:00002BE8
+   410 0001:00002C0C   411 0001:00002C20   412 0001:00002C2F   415 0001:00002C33
+   416 0001:00002C43   417 0001:00002C5B   418 0001:00002C5F   419 0001:00002C63
+   420 0001:00002C67   422 0001:00002C6B   425 0001:00002C6D   426 0001:00002C78
+   429 0001:00002C9C   430 0001:00002CB2   433 0001:00002CEE   435 0001:00002CF2
+   436 0001:00002D24   438 0001:00002D28   439 0001:00002D2A   441 0001:00002D6C
+   442 0001:00002D94   443 0001:00002D98   448 0001:00002DA8   451 0001:00002DBA
+   452 0001:00002DC9   453 0001:00002DD7   454 0001:00002DFF   455 0001:00002E99
+   456 0001:00002EA2   457 0001:00002EA8   458 0001:00002EAE   459 0001:00002EB4
+   460 0001:00002EBA   461 0001:00002EC0   462 0001:00002ECC   463 0001:00002ED8
+   464 0001:00002EE4   465 0001:00002EEA   466 0001:00002EF0   467 0001:00002EF6
+   468 0001:00002EFC   469 0001:00002F02   470 0001:00002F0E   471 0001:00002F1A
+   473 0001:00002F20   475 0001:00002F24   477 0001:00002F3C   479 0001:00002F4C
+
+Line numbers for CPortEsc(CPortEsc.pas) segment .itext
+
+   481 0002:000000E4
+
+Line numbers for CPortTrmSet(CPortTrmSet.pas) segment .text
+
+    60 0001:00003280    61 0001:0000329F    63 0001:000032B0    64 0001:000032CB
+    65 0001:000032E6    66 0001:00003301    67 0001:0000331C    68 0001:00003337
+    69 0001:00003352    70 0001:0000336D    71 0001:0000338F    72 0001:000033B1
+    73 0001:000033CC    75 0001:000033DE    76 0001:000033F8    77 0001:00003412
+    78 0001:0000342C    79 0001:00003446    80 0001:00003460    81 0001:0000347B
+    82 0001:00003496    83 0001:000034A4    85 0001:000034D6    87 0001:000034E8
+    88 0001:000034F6    90 0001:00003528    92 0001:0000353A    94 0001:00003554
+    96 0001:0000355C   107 0001:00003594
+
+Line numbers for CPortTrmSet(CPortTrmSet.pas) segment .itext
+
+   109 0002:000000EC
+
+Line numbers for CPortCtl(CPortCtl.pas) segment .text
+
+   617 0001:00005E7C   620 0001:00005E80   621 0001:00005E82   625 0001:00005E84
+   628 0001:00005E88   629 0001:00005E8A   639 0001:00005E8C   640 0001:00005EA3
+   641 0001:00005EAB   642 0001:00005EAD   641 0001:00005EC3   643 0001:00005EC8
+   647 0001:00005EEC   648 0001:00005EEF   649 0001:00005EF7   650 0001:00005EFF
+   656 0001:00005F04   657 0001:00005F1B   658 0001:00005F23   659 0001:00005F25
+   658 0001:00005F3B   660 0001:00005F40   666 0001:00005F64   667 0001:00005F7B
+   668 0001:00005F83   669 0001:00005F85   668 0001:00005F9B   670 0001:00005FA0
+   676 0001:00005FC4   677 0001:00005FDB   678 0001:00005FE3   679 0001:00005FE5
+   678 0001:00005FFB   680 0001:00006000   686 0001:00006024   687 0001:0000603B
+   688 0001:00006043   689 0001:00006045   688 0001:0000605B   690 0001:00006060
+   694 0001:00006084   695 0001:00006087   696 0001:0000608C   697 0001:000060B7
+   698 0001:000060C0   699 0001:000060C9   700 0001:000060D2   701 0001:000060DB
+   702 0001:000060E4   704 0001:000060ED   706 0001:000060F5   710 0001:000060F8
+   711 0001:000060FE   712 0001:0000612A   713 0001:00006136   714 0001:00006142
+   715 0001:0000614E   716 0001:0000615A   717 0001:00006166   719 0001:00006170
+   720 0001:00006176   721 0001:0000617D   726 0001:00006180   730 0001:00006187
+   731 0001:000061B3   732 0001:000061BE   733 0001:000061CA   734 0001:000061D6
+   735 0001:000061E2   736 0001:000061F1   740 0001:000061FE   744 0001:00006200
+   745 0001:00006225   746 0001:00006230   747 0001:00006232   750 0001:00006262
+   751 0001:0000626F   752 0001:00006278   756 0001:00006295   757 0001:000062AE
+   758 0001:000062B7   762 0001:000062D4   763 0001:000062ED   764 0001:000062F6
+   768 0001:00006313   769 0001:0000632C   770 0001:00006335   774 0001:0000634F
+   775 0001:0000636B   776 0001:00006370   780 0001:0000638A   781 0001:000063A7
+   782 0001:000063AC   785 0001:000063C4   793 0001:000063F0   794 0001:00006405
+   795 0001:00006417   796 0001:00006422   797 0001:00006431   798 0001:0000643D
+   802 0001:00006458   803 0001:00006463   804 0001:0000646F   805 0001:0000647A
+   810 0001:00006488   811 0001:00006493   817 0001:00006494   818 0001:00006498
+   819 0001:000064A5   820 0001:000064B2   825 0001:000064B8   826 0001:000064C1
+   827 0001:000064CC   829 0001:000064DC   830 0001:000064E1   831 0001:000064F0
+   833 0001:000064FC   837 0001:00006500   838 0001:00006516   839 0001:0000652E
+   840 0001:00006535   844 0001:00006558   845 0001:0000655B   847 0001:00006566
+   848 0001:0000656B   850 0001:0000656F   852 0001:00006576   855 0001:0000657D
+   859 0001:00006580   860 0001:00006589   864 0001:0000658C   865 0001:00006596
+   869 0001:00006598   870 0001:000065A1   873 0001:000065A4   874 0001:000065AA
+   875 0001:000065B7   877 0001:000065C1   878 0001:000065DA   881 0001:000065E0
+   882 0001:000065E6   883 0001:000065F6   884 0001:0000660F   890 0001:00006614
+   891 0001:00006618   892 0001:00006623   893 0001:00006632   896 0001:0000663E
+   897 0001:00006645   900 0001:00006654   901 0001:00006660   905 0001:00006664
+   906 0001:0000666E   914 0001:00006670   915 0001:00006685   916 0001:00006697
+   917 0001:000066A2   918 0001:000066B1   919 0001:000066BB   923 0001:000066D8
+   924 0001:000066E3   925 0001:000066EF   926 0001:000066FA   931 0001:00006708
+   932 0001:00006713   938 0001:00006714   939 0001:00006718   940 0001:00006725
+   941 0001:0000672F   942 0001:00006738   947 0001:0000673C   948 0001:00006745
+   949 0001:00006750   951 0001:00006760   952 0001:00006765   954 0001:00006774
+   955 0001:0000677D   958 0001:00006785   962 0001:0000678C   963 0001:000067A3
+   965 0001:000067B1   966 0001:000067B6   967 0001:000067D4   969 0001:000067E0
+   970 0001:000067E7   974 0001:0000680C   975 0001:0000680F   977 0001:0000681A
+   978 0001:0000681F   980 0001:00006823   982 0001:0000682A   985 0001:00006831
+   989 0001:00006834   990 0001:0000683D   994 0001:00006840   995 0001:0000684A
+   999 0001:0000684C  1000 0001:00006855  1006 0001:00006858  1007 0001:0000685C
+  1008 0001:00006867  1009 0001:00006876  1012 0001:00006882  1013 0001:00006889
+  1016 0001:00006895  1017 0001:0000689E  1021 0001:000068A4  1022 0001:000068AE
+  1030 0001:000068B0  1031 0001:000068C7  1032 0001:000068D0  1033 0001:000068DD
+  1034 0001:000068E9  1035 0001:000068F5  1036 0001:00006909  1037 0001:00006913
+  1038 0001:00006927  1039 0001:00006930  1040 0001:0000693D  1041 0001:00006951
+  1042 0001:0000695A  1043 0001:00006967  1044 0001:0000697D  1045 0001:00006986
+  1046 0001:00006997  1050 0001:000069BC  1051 0001:000069C7  1052 0001:000069D2
+  1053 0001:000069DD  1054 0001:000069E8  1055 0001:000069F1  1056 0001:000069FC
+  1057 0001:00006A08  1063 0001:00006A18  1065 0001:00006A1E  1067 0001:00006A25
+  1069 0001:00006A2E  1070 0001:00006A49  1075 0001:00006A50  1076 0001:00006A59
+  1077 0001:00006A64  1078 0001:00006A71  1079 0001:00006A7A  1083 0001:00006A80
+  1084 0001:00006A83  1085 0001:00006A90  1086 0001:00006A9E  1089 0001:00006AA0
+  1090 0001:00006AA3  1091 0001:00006AAD  1095 0001:00006AB0  1096 0001:00006AB1
+  1097 0001:00006ABB  1098 0001:00006ACD  1102 0001:00006AD0  1103 0001:00006AD3
+  1104 0001:00006AF1  1105 0001:00006AFF  1113 0001:00006BFC  1114 0001:00006C03
+  1116 0001:00006C08  1117 0001:00006C25  1119 0001:00006C3D  1125 0001:00006C44
+  1126 0001:00006C4E  1127 0001:00006C57  1128 0001:00006C87  1129 0001:00006CB9
+  1145 0001:00006CC0  1147 0001:00006CC3  1149 0001:00006CCE  1150 0001:00006CD2
+  1151 0001:00006CDF  1152 0001:00006CE8  1154 0001:00006CF6  1155 0001:00006D03
+  1156 0001:00006D13  1159 0001:00006D1A  1163 0001:00006D1C  1164 0001:00006D1F
+  1165 0001:00006D30  1166 0001:00006D3D  1167 0001:00006D46  1168 0001:00006D4D
+  1172 0001:00006D50  1173 0001:00006D53  1174 0001:00006D82  1175 0001:00006D94
+  1176 0001:00006DA6  1177 0001:00006DB8  1178 0001:00006DBC  1179 0001:00006DC0
+  1180 0001:00006DC4  1182 0001:00006DDC  1184 0001:00006DDE  1188 0001:00006DE0
+  1189 0001:00006DE8  1190 0001:00006DF2  1191 0001:00006DF8  1192 0001:00006E05
+  1193 0001:00006E0C  1197 0001:00006E10  1198 0001:00006E13  1200 0001:00006E1B
+  1201 0001:00006E23  1202 0001:00006E2C  1204 0001:00006E36  1208 0001:00006E38
+  1209 0001:00006E3E  1211 0001:00006E48  1212 0001:00006E4C  1213 0001:00006E57
+  1214 0001:00006E5F  1216 0001:00006E63  1217 0001:00006E6A  1218 0001:00006E7B
+  1220 0001:00006E93  1221 0001:00006E9E  1223 0001:00006EA9  1226 0001:00006EB4
+  1228 0001:00006EBD  1233 0001:00006EC0  1234 0001:00006EC9  1235 0001:00006EE1
+  1236 0001:00006EE6  1241 0001:00006EF8  1243 0001:00006F04  1244 0001:00006F0A
+  1245 0001:00006F18  1246 0001:00006F20  1247 0001:00006F28  1248 0001:00006F30
+  1249 0001:00006F38  1250 0001:00006F40  1251 0001:00006F48  1252 0001:00006F77
+  1253 0001:00006F83  1254 0001:00006F8F  1255 0001:00006F9B  1256 0001:00006FA7
+  1257 0001:00006FB3  1258 0001:00006FBF  1261 0001:00006FC9  1265 0001:00006FCC
+  1266 0001:00006FD5  1267 0001:00006FDC  1269 0001:00006FE3  1271 0001:00006FE5
+  1275 0001:00006FE8  1276 0001:00006FF1  1278 0001:00006FFA  1279 0001:00007003
+  1280 0001:0000700C  1281 0001:00007015  1282 0001:00007024  1284 0001:00007031
+  1286 0001:0000703B  1290 0001:00007040  1291 0001:0000704A  1297 0001:0000704C
+  1298 0001:0000704F  1299 0001:0000705A  1301 0001:0000705E  1302 0001:00007065
+  1303 0001:0000706F  1312 0001:00007074  1313 0001:00007089  1314 0001:00007092
+  1315 0001:00007095  1319 0001:000070B0  1320 0001:000070BB  1322 0001:000070C2
+  1323 0001:000070C7  1325 0001:000070CF  1326 0001:000070DB  1333 0001:000070EC
+  1334 0001:000070FF  1335 0001:0000710D  1339 0001:00007121  1345 0001:0000712C
+  1346 0001:00007130  1347 0001:0000713E  1351 0001:00007153  1359 0001:00007158
+  1360 0001:0000715F  1361 0001:00007175  1363 0001:0000717D  1364 0001:00007187
+  1366 0001:000071A2  1370 0001:000071AC  1371 0001:000071B1  1372 0001:000071D2
+  1373 0001:000071D8  1377 0001:000071F9  1378 0001:00007205  1381 0001:00007211
+  1383 0001:00007239  1391 0001:00007240  1392 0001:00007247  1393 0001:0000725F
+  1395 0001:00007265  1396 0001:0000726E  1400 0001:00007284  1401 0001:00007289
+  1402 0001:000072AA  1403 0001:000072B0  1407 0001:000072D1  1408 0001:000072DD
+  1411 0001:000072E9  1413 0001:0000730F  1420 0001:00007318  1422 0001:00007325
+  1423 0001:00007336  1425 0001:00007347  1428 0001:0000734F  1429 0001:0000735B
+  1432 0001:00007367  1433 0001:00007385  1440 0001:00007390  1442 0001:0000739D
+  1444 0001:000073C1  1446 0001:000073D3  1449 0001:000073DA  1450 0001:000073E6
+  1453 0001:000073F2  1454 0001:0000741A  1460 0001:00007424  1461 0001:00007429
+  1463 0001:00007430  1464 0001:00007435  1466 0001:0000743D  1467 0001:00007459
+  1468 0001:00007475  1469 0001:00007488  1470 0001:0000749A  1473 0001:000074A1
+  1474 0001:000074AC  1471 0001:000074AF  1476 0001:000074BA  1481 0001:000074C0
+  1482 0001:000074C7  1487 0001:000074C8  1488 0001:000074CE  1494 0001:000074D0
+  1495 0001:000074D4  1497 0001:000074D8  1500 0001:000074E5  1496 0001:000074E6
+  1501 0001:000074F1  1502 0001:000074FC  1504 0001:00007501  1505 0001:00007503
+  1510 0001:00007508  1511 0001:0000751B  1516 0001:0000751C  1517 0001:00007527
+  1518 0001:0000752C  1519 0001:0000753E  1520 0001:00007555  1518 0001:00007559
+  1521 0001:0000755C  1526 0001:00007568  1527 0001:0000756E  1528 0001:00007570
+  1529 0001:00007582  1530 0001:0000758F  1528 0001:00007592  1531 0001:00007595
+  1540 0001:0000759C  1541 0001:000075B5  1542 0001:000075BE  1543 0001:000075C7
+  1544 0001:000075D0  1545 0001:000075D9  1546 0001:000075E5  1547 0001:000075F1
+  1548 0001:000075FE  1549 0001:00007608  1550 0001:0000761C  1551 0001:00007626
+  1552 0001:0000762D  1553 0001:00007637  1554 0001:00007641  1555 0001:00007665
+  1556 0001:00007689  1557 0001:00007690  1558 0001:000076A4  1559 0001:000076B0
+  1560 0001:000076B9  1564 0001:000076D8  1565 0001:000076E3  1566 0001:000076EC
+  1567 0001:000076F7  1568 0001:00007702  1569 0001:0000770D  1570 0001:00007719
+  1574 0001:00007728  1575 0001:0000772B  1576 0001:00007736  1577 0001:00007747
+  1578 0001:00007751  1582 0001:00007754  1583 0001:00007755  1584 0001:0000775F
+  1586 0001:00007767  1587 0001:0000776C  1589 0001:00007778  1591 0001:0000777E
+  1592 0001:00007788  1594 0001:00007790  1595 0001:00007795  1597 0001:000077A1
+  1599 0001:000077A7  1600 0001:000077B0  1602 0001:000077E7  1608 0001:000077EC
+  1611 0001:00007802  1612 0001:0000780A  1613 0001:00007814  1620 0001:00007838
+  1621 0001:00007846  1622 0001:0000784E  1624 0001:0000785C  1626 0001:00007877
+  1627 0001:00007881  1629 0001:0000788E  1630 0001:00007896  1631 0001:0000789C
+  1632 0001:000078B1  1634 0001:000078B7  1635 0001:000078D3  1636 0001:000078EF
+  1640 0001:00007902  1641 0001:0000790C  1624 0001:0000790F  1643 0001:00007923
+  1645 0001:00007933  1653 0001:0000793C  1654 0001:00007945  1655 0001:0000794A
+  1662 0001:0000794C  1663 0001:00007955  1664 0001:0000795C  1666 0001:0000796A
+  1667 0001:00007978  1664 0001:00007983  1669 0001:00007986  1670 0001:0000798D
+  1678 0001:00007994  1679 0001:000079B6  1680 0001:000079C3  1681 0001:000079D4
+  1683 0001:000079E7  1684 0001:000079F7  1686 0001:000079FB  1688 0001:00007A08
+  1690 0001:00007A26  1691 0001:00007A2C  1692 0001:00007A30  1693 0001:00007A40
+  1686 0001:00007A43  1696 0001:00007A46  1697 0001:00007A4B  1698 0001:00007A67
+  1681 0001:00007A68  1699 0001:00007A71  1703 0001:00007AA4  1704 0001:00007AA8
+  1706 0001:00007ABE  1707 0001:00007ACD  1708 0001:00007AD7  1709 0001:00007AE2
+  1710 0001:00007AEC  1712 0001:00007AF3  1717 0001:00007AFC  1718 0001:00007B01
+  1721 0001:00007B04  1722 0001:00007B0A  1723 0001:00007B1D  1724 0001:00007B24
+  1725 0001:00007B2D  1729 0001:00007B30  1730 0001:00007B47  1731 0001:00007B4E
+  1732 0001:00007B5A  1733 0001:00007B65  1734 0001:00007B7D  1735 0001:00007B89
+  1737 0001:00007BA5  1739 0001:00007BB0  1740 0001:00007BB7  1743 0001:00007BE0
+  1744 0001:00007BE3  1745 0001:00007BEA  1746 0001:00007BF3  1751 0001:00007BF8
+  1753 0001:00007BFF  1754 0001:00007C08  1755 0001:00007C0C  1759 0001:00007C10
+  1761 0001:00007C16  1762 0001:00007C1B  1763 0001:00007C22  1764 0001:00007C2B
+  1768 0001:00007C30  1769 0001:00007C33  1771 0001:00007C3A  1772 0001:00007C41
+  1776 0001:00007C44  1778 0001:00007C4B  1779 0001:00007C63  1780 0001:00007C6D
+  1781 0001:00007C76  1785 0001:00007C7C  1786 0001:00007C7F  1787 0001:00007C86
+  1788 0001:00007C8D  1793 0001:00007C90  1794 0001:00007CA0  1799 0001:00007CA4
+  1800 0001:00007CB7  1808 0001:00007CB8  1809 0001:00007CC4  1810 0001:00007CC6
+  1812 0001:00007CD4  1813 0001:00007CE3  1815 0001:00007CEC  1816 0001:00007CF5
+  1818 0001:00007CFC  1819 0001:00007D01  1822 0001:00007D0C  1824 0001:00007D14
+  1825 0001:00007D25  1827 0001:00007D2E  1828 0001:00007D37  1830 0001:00007D3E
+  1831 0001:00007D43  1834 0001:00007D50  1841 0001:00007D58  1842 0001:00007D5E
+  1845 0001:00007D67  1846 0001:00007D78  1848 0001:00007D94  1849 0001:00007D9B
+  1851 0001:00007DA2  1852 0001:00007DAF  1853 0001:00007DB6  1854 0001:00007DC5
+  1856 0001:00007DCC  1862 0001:00007DD0  1863 0001:00007DDA  1864 0001:00007DE7
+  1865 0001:00007E0D  1866 0001:00007E11  1867 0001:00007E15  1868 0001:00007E19
+  1869 0001:00007E1D  1871 0001:00007E21  1873 0001:00007E23  1875 0001:00007E2C
+  1876 0001:00007E30  1877 0001:00007E39  1879 0001:00007E46  1882 0001:00007E53
+  1883 0001:00007E65  1884 0001:00007E72  1885 0001:00007E7F  1886 0001:00007E8C
+  1888 0001:00007E97  1892 0001:00007E9C  1893 0001:00007EA2  1894 0001:00007EAB
+  1895 0001:00007EB5  1898 0001:00007EB8  1899 0001:00007EBB  1900 0001:00007EC2
+  1901 0001:00007EC9  1902 0001:00007ECF  1903 0001:00007EDA  1907 0001:00007EDC
+  1908 0001:00007EE5  1909 0001:00007EF0  1910 0001:00007EFD  1911 0001:00007F06
+  1918 0001:00007F0C  1919 0001:00007F1F  1920 0001:00007F32  1921 0001:00007F36
+  1922 0001:00007F49  1923 0001:00007F4D  1925 0001:00007F61  1926 0001:00007F6F
+  1928 0001:00007F7C  1929 0001:00007F85  1930 0001:00007F9B  1931 0001:00007FA2
+  1932 0001:00007FB4  1926 0001:00007FB5  1933 0001:00007FB8  1923 0001:00007FBB
+  1934 0001:00007FC1  1937 0001:00007FCC  1938 0001:00007FCF  1939 0001:00007FE3
+  1940 0001:00007FF7  1941 0001:0000800F  1942 0001:00008023  1943 0001:0000804D
+  1948 0001:00008068  1949 0001:0000806E  1950 0001:0000807C  1951 0001:0000808D
+  1952 0001:00008093  1955 0001:0000809F  1957 0001:000080B2  1958 0001:000080D0
+  1959 0001:000080FA  1960 0001:00008119  1961 0001:00008143  1963 0001:0000814C
+  1967 0001:00008154  1968 0001:00008157  1969 0001:0000815F  1970 0001:0000816A
+  1972 0001:00008178  1973 0001:0000817C  1974 0001:00008192  1976 0001:0000819B
+  1977 0001:000081B8  1979 0001:000081BF  1983 0001:000081C4  1984 0001:000081E5
+  1985 0001:000081F3  1986 0001:000081FD  1993 0001:00008220  1994 0001:0000824E
+  1995 0001:0000825E  1996 0001:0000826A  1997 0001:00008275  1998 0001:00008286
+  1999 0001:0000828C  2001 0001:000082B2  2002 0001:000082D9  2003 0001:0000830A
+  2004 0001:0000831A  2005 0001:0000832A  2011 0001:00008354  2012 0001:00008357
+  2015 0001:00008382  2017 0001:00008390  2018 0001:0000839D  2020 0001:000083AB
+  2021 0001:000083B6  2024 0001:000083CD  2027 0001:000083E1  2029 0001:000083F3
+  2032 0001:00008407  2033 0001:00008415  2035 0001:00008422  2039 0001:00008434
+  2040 0001:0000843F  2042 0001:0000844C  2044 0001:0000845E  2047 0001:00008474
+  2048 0001:00008486  2049 0001:0000848A  2052 0001:00008499  2060 0001:0000849C
+  2061 0001:000084A5  2062 0001:000084B5  2063 0001:000084C2  2064 0001:000084CB
+  2065 0001:000084D4  2066 0001:000084DD  2068 0001:000084E0  2069 0001:000084EE
+  2070 0001:000084FA  2071 0001:00008501  2073 0001:00008518  2074 0001:0000852B
+  2075 0001:0000857E  2076 0001:00008587  2077 0001:00008593  2078 0001:0000859F
+  2079 0001:000085AB  2080 0001:000085B7  2081 0001:000085C3  2083 0001:000085CD
+  2071 0001:000085CE  2084 0001:000085D5  2089 0001:000085DC  2090 0001:000085FE
+  2092 0001:00008609  2093 0001:00008615  2094 0001:00008624  2095 0001:0000862A
+  2097 0001:00008633  2098 0001:0000863A  2099 0001:00008649  2100 0001:00008653
+  2101 0001:00008662  2102 0001:00008668  2104 0001:00008676  2105 0001:00008682
+  2111 0001:000086CC  2112 0001:000086DD  2113 0001:000086F7  2114 0001:00008713
+  2115 0001:0000872E  2116 0001:0000874A  2117 0001:0000875E  2124 0001:00008768
+  2125 0001:00008778  2129 0001:00008795  2130 0001:00008799  2132 0001:000087A4
+  2133 0001:000087AD  2134 0001:000087BD  2135 0001:000087C0  2136 0001:000087E7
+  2137 0001:000087EA  2138 0001:000087ED  2139 0001:000087FC  2141 0001:0000880B
+  2143 0001:0000880E  2144 0001:0000881F  2145 0001:0000882F  2147 0001:00008833
+  2148 0001:0000883C  2149 0001:00008848  2152 0001:0000884C  2153 0001:00008855
+  2154 0001:00008857  2157 0001:00008864  2158 0001:0000886D  2161 0001:00008879
+  2162 0001:00008892  2166 0001:0000889C  2167 0001:0000889F  2169 0001:000088AE
+  2170 0001:000088C4  2172 0001:000088DD  2174 0001:000088EA  2175 0001:00008900
+  2177 0001:00008919  2189 0001:0000891C  2190 0001:00008925  2191 0001:00008927
+  2195 0001:0000895F  2196 0001:0000897C  2198 0001:00008985  2201 0001:0000898C
+  2202 0001:00008995  2203 0001:000089AD  2210 0001:000089B4  2211 0001:000089B7
+  2213 0001:000089C6  2214 0001:000089DB  2215 0001:000089EB  2218 0001:000089FE
+  2219 0001:00008A06  2222 0001:00008A14  2228 0001:00008A18  2229 0001:00008A1B
+  2231 0001:00008A28  2232 0001:00008A3D  2233 0001:00008A4D  2236 0001:00008A63
+  2237 0001:00008A6B  2240 0001:00008A7C  2242 0001:00008A80  2243 0001:00008A89
+  2245 0001:00008A99  2246 0001:00008AA4  2247 0001:00008AAF  2248 0001:00008ABC
+  2249 0001:00008AC6  2250 0001:00008AD5  2252 0001:00008ADF  2253 0001:00008AEC
+  2254 0001:00008AF6  2255 0001:00008B04  2256 0001:00008B0B  2257 0001:00008B16
+  2258 0001:00008B1D  2260 0001:00008B2A  2261 0001:00008B35  2264 0001:00008B49
+  2267 0001:00008B5E  2268 0001:00008B66  2272 0001:00008B6C  2273 0001:00008B6F
+  2274 0001:00008B78  2275 0001:00008B85  2279 0001:00008B88  2280 0001:00008B8B
+  2281 0001:00008B94  2282 0001:00008BA1  2286 0001:00008BA4  2287 0001:00008BBE
+  2290 0001:00008BC7  2291 0001:00008BCE  2292 0001:00008BD7  2293 0001:00008BDE
+  2294 0001:00008BF5  2295 0001:00008BFC  2296 0001:00008C05  2300 0001:00008C0C
+  2302 0001:00008C1C  2304 0001:00008C30  2305 0001:00008C3E  2307 0001:00008C47
+  2311 0001:00008C6C  2312 0001:00008C90  2314 0001:00008CA9  2315 0001:00008CC9
+  2318 0001:00008CD2  2319 0001:00008CD9  2320 0001:00008CE7  2323 0001:00008CEE
+  2327 0001:00008D14  2328 0001:00008D38  2329 0001:00008D51  2330 0001:00008D71
+  2334 0001:00008D98  2335 0001:00008DBF  2336 0001:00008DC1  2337 0001:00008DC7
+  2339 0001:00008E6B  2340 0001:00008E94  2341 0001:00008EBD  2342 0001:00008EE6
+  2344 0001:00008F0F  2345 0001:00008F3D  2346 0001:00008F4B  2347 0001:00008F67
+  2348 0001:00008F83  2351 0001:00008FAE  2352 0001:00008FC4  2356 0001:00008FDB
+  2357 0001:00008FE3  2358 0001:00008FF0  2360 0001:00009001  2361 0001:00009019
+  2362 0001:00009031  2363 0001:00009041  2364 0001:00009050  2365 0001:00009061
+  2368 0001:00009072  2369 0001:0000907A  2370 0001:00009087  2372 0001:00009096
+  2373 0001:000090A2  2374 0001:000090AE  2375 0001:000090BE  2378 0001:000090CE
+  2379 0001:000090D6  2380 0001:000090EF  2381 0001:00009108  2383 0001:00009116
+  2384 0001:00009123  2386 0001:0000912E  2388 0001:00009130  2395 0001:00009174
+  2396 0001:0000917C  2397 0001:00009185  2398 0001:00009196  2399 0001:0000919D
+  2400 0001:000091A4  2401 0001:000091AC  2402 0001:000091B5  2404 0001:000091BF
+  2405 0001:000091C7  2409 0001:000091D0  2410 0001:000091D1  2411 0001:000091DB
+  2412 0001:000091ED  2417 0001:000091F0  2418 0001:000091F1  2419 0001:000091FB
+  2420 0001:0000920D  2424 0001:00009210  2425 0001:00009211  2426 0001:0000921B
+  2427 0001:0000922D  2432 0001:00009230  2433 0001:00009253  2434 0001:0000925D
+  2435 0001:00009271  2439 0001:00009294  2440 0001:00009298  2442 0001:0000929E
+  2443 0001:000092AB  2444 0001:000092BF  2447 0001:000092D3  2448 0001:000092DB
+  2451 0001:000092EC  2458 0001:000092F0  2461 0001:000092F9  2462 0001:000092FD
+  2463 0001:00009307  2464 0001:0000930E  2466 0001:00009313  2467 0001:00009325
+  2468 0001:00009334  2467 0001:00009349  2468 0001:0000934C  2466 0001:0000934D
+  2469 0001:00009352  2470 0001:0000935C  2473 0001:00009364  2474 0001:00009368
+  2475 0001:00009372  2476 0001:0000937C  2477 0001:00009382  2478 0001:00009388
+  2483 0001:00009390  2484 0001:00009399  2486 0001:000093A4  2487 0001:000093AD
+  2489 0001:000093B8  2490 0001:000093C1  2491 0001:000093CA  2493 0001:000093D5
+  2495 0001:000093DE  2496 0001:000093E8  2497 0001:000093EB  2503 0001:000093EC
+  2504 0001:000093F5  2505 0001:00009420  2506 0001:0000942B  2507 0001:00009436
+  2508 0001:00009441  2511 0001:0000944C  2512 0001:00009455  2513 0001:00009458
+  2514 0001:00009470  2516 0001:00009492  2519 0001:0000949B  2520 0001:000094A8
+  2524 0001:000094B0  2525 0001:000094B3  2526 0001:000094BA  2527 0001:000094CD
+  2528 0001:000094D4  2533 0001:000094D8  2534 0001:000094E9  2539 0001:000094EC
+  2540 0001:00009504  2545 0001:00009508  2546 0001:0000952C  2551 0001:00009530
+  2552 0001:00009554  2563 0001:00009558  2564 0001:00009575  2567 0001:0000957C
+  2568 0001:00009585  2569 0001:000095C7  2565 0001:000095C8  2571 0001:000095D3
+  2577 0001:00009608  2578 0001:00009614  2579 0001:00009626  2578 0001:0000963C
+  2580 0001:0000963F  2582 0001:00009644  2583 0001:00009661  2585 0001:00009669
+  2586 0001:0000966E  2590 0001:00009678  2591 0001:00009682  2597 0001:00009695
+  2598 0001:0000969E  2599 0001:000096A5  2600 0001:000096AE  2601 0001:000096B5
+  2602 0001:000096BF  2606 0001:000096E8  2607 0001:000096EA  2608 0001:000096F4
+  2609 0001:000096F8  2613 0001:000096FC  2614 0001:00009706  2615 0001:0000970D
+  2619 0001:00009710  2621 0001:00009718  2622 0001:0000971E  2624 0001:00009723
+  2628 0001:00009724  2630 0001:0000972C  2631 0001:00009732  2633 0001:00009737
+  2636 0001:00009738  2637 0001:0000973E  2639 0001:00009746  2641 0001:00009762
+  2643 0001:0000976D  2644 0001:00009774  2646 0001:00009780  2647 0001:0000978B
+  2650 0001:00009795  2653 0001:00009798  2654 0001:0000979E  2656 0001:000097A6
+  2658 0001:000097C2  2660 0001:000097CD  2661 0001:000097D4  2663 0001:000097E0
+  2664 0001:000097EB  2667 0001:000097F5  2670 0001:000097F8  2671 0001:000097FB
+  2673 0001:00009803  2674 0001:00009809  2676 0001:0000980F  2677 0001:0000981A
+  2680 0001:00009821  2683 0001:00009824  2684 0001:00009828  2686 0001:00009830
+  2687 0001:00009836  2689 0001:00009845  2690 0001:0000984A  2693 0001:00009851
+  2696 0001:00009854  2697 0001:0000985A  2699 0001:00009864  2700 0001:00009868
+  2701 0001:00009873  2702 0001:0000987B  2704 0001:0000987F  2705 0001:00009886
+  2708 0001:00009897  2711 0001:0000989C  2712 0001:0000989F  2714 0001:000098A7
+  2715 0001:000098AD  2716 0001:000098B3  2718 0001:000098BD  2728 0001:000098C0
+  2730 0001:000098E3
+
+Line numbers for CPortCtl(CPortCtl.pas) segment .itext
+
+  2720 0002:000000F4  2722 0002:000000FD  2723 0002:0000010E  2724 0002:0000011D
+  2725 0002:0000012C  2727 0002:0000013B
+
+Line numbers for CPortSetup(CPortSetup.pas) segment .text
+
+    60 0001:00009BA0    61 0001:00009BA4    63 0001:00009BB4    64 0001:00009BC1
+    65 0001:00009BCE    66 0001:00009BDB    67 0001:00009BE8    68 0001:00009BF5
+    69 0001:00009C02    70 0001:00009C0D    71 0001:00009C18    72 0001:00009C23
+    73 0001:00009C2E    74 0001:00009C39    75 0001:00009C44    77 0001:00009C51
+    78 0001:00009C58    79 0001:00009C63    80 0001:00009C6E    81 0001:00009C79
+    82 0001:00009C84    83 0001:00009C8F    84 0001:00009C9A    86 0001:00009CA1
+    88 0001:00009CA8   101 0001:00009CAC
+
+Line numbers for CPortSetup(CPortSetup.pas) segment .itext
+
+   103 0002:00000150
+
+Line numbers for CPort(omcom.bpl\cport\source\CPort.pas) segment .text
+
+   638 0001:0000ADFC   639 0001:0000AE15   640 0001:0000AE87   641 0001:0000AE98
+   642 0001:0000AEA9   643 0001:0000AEBA   644 0001:0000AECB   645 0001:0000AEDC
+   646 0001:0000AEED   647 0001:0000AEFE   648 0001:0000AF0F   649 0001:0000AF20
+   650 0001:0000AF31   651 0001:0000AF42   652 0001:0000AF53   653 0001:0000AF64
+   654 0001:0000AF75   655 0001:0000AF86   656 0001:0000AF94   657 0001:0000AFA2
+   658 0001:0000AFB0   659 0001:0000AFBE   660 0001:0000AFCC   661 0001:0000AFDA
+   662 0001:0000AFE8   664 0001:0000AFF6   666 0001:0000B00F   684 0001:0000B3D0
+   685 0001:0000B3D5   686 0001:0000B3D7   687 0001:0000B3DD   688 0001:0000B3E0
+   689 0001:0000B3E6   690 0001:0000B3E9   691 0001:0000B3EF   692 0001:0000B3F2
+   693 0001:0000B3F8   694 0001:0000B3FD   695 0001:0000B403   696 0001:0000B406
+   697 0001:0000B40C   698 0001:0000B40F   699 0001:0000B416   700 0001:0000B419
+   701 0001:0000B41F   702 0001:0000B424   703 0001:0000B42A   704 0001:0000B42D
+   705 0001:0000B434   706 0001:0000B439   709 0001:0000B43C   710 0001:0000B440
+   711 0001:0000B447   712 0001:0000B44F   713 0001:0000B45B   714 0001:0000B463
+   715 0001:0000B46F   716 0001:0000B477   717 0001:0000B483   718 0001:0000B48B
+   719 0001:0000B497   720 0001:0000B49F   721 0001:0000B4AB   722 0001:0000B4B3
+   723 0001:0000B4BF   724 0001:0000B4C7   725 0001:0000B4D3   726 0001:0000B4DB
+   727 0001:0000B4E7   728 0001:0000B4EF   729 0001:0000B4FB   730 0001:0000B503
+   731 0001:0000B50F   739 0001:0000B540   740 0001:0000B559   741 0001:0000B564
+   742 0001:0000B574   744 0001:0000B579   746 0001:0000B584   748 0001:0000B59A
+   749 0001:0000B5A1   753 0001:0000B5C0   754 0001:0000B5CB   755 0001:0000B5D2
+   756 0001:0000B5DE   764 0001:0000B5EC   766 0001:0000B5F8   767 0001:0000B606
+   768 0001:0000B618   769 0001:0000B61E   772 0001:0000B622   773 0001:0000B634
+   775 0001:0000B646   779 0001:0000B663   780 0001:0000B670   782 0001:0000B677
+   784 0001:0000B67C   785 0001:0000B68A   786 0001:0000B698   787 0001:0000B6A1
+   788 0001:0000B6AA   793 0001:0000B6B4   794 0001:0000B6BD   795 0001:0000B6C4
+   800 0001:0000B6C8   803 0001:0000B6DC   805 0001:0000B6E8   806 0001:0000B6EE
+   810 0001:0000B6F4   814 0001:0000B6F8   815 0001:0000B6FB   816 0001:0000B701
+   817 0001:0000B719   818 0001:0000B71F   819 0001:0000B734   820 0001:0000B73A
+   821 0001:0000B74F   822 0001:0000B755   823 0001:0000B76A   824 0001:0000B770
+   825 0001:0000B788   826 0001:0000B78E   827 0001:0000B7A3   828 0001:0000B7A9
+   829 0001:0000B7BE   830 0001:0000B7C4   831 0001:0000B7D9   832 0001:0000B7DF
+   833 0001:0000B7F4   834 0001:0000B7FA   835 0001:0000B812   839 0001:0000B814
+   840 0001:0000B817   841 0001:0000B81D   842 0001:0000B825   843 0001:0000B82B
+   844 0001:0000B833   845 0001:0000B839   846 0001:0000B841   847 0001:0000B847
+   848 0001:0000B84F   849 0001:0000B855   850 0001:0000B85D   851 0001:0000B863
+   852 0001:0000B86B   853 0001:0000B871   854 0001:0000B879   855 0001:0000B87F
+   856 0001:0000B887   857 0001:0000B88D   858 0001:0000B895   859 0001:0000B89B
+   860 0001:0000B8A3   868 0001:0000B8A8   869 0001:0000B8BA   870 0001:0000B8C3
+   871 0001:0000B8CA   872 0001:0000B8D1   873 0001:0000B8D8   877 0001:0000B8F4
+   878 0001:0000B8FA   882 0001:0000B90B   883 0001:0000B913   884 0001:0000B919
+   885 0001:0000B91F   886 0001:0000B925   890 0001:0000B92E   891 0001:0000B937
+   896 0001:0000B93C   897 0001:0000B93F   901 0001:0000B940   902 0001:0000B943
+   904 0001:0000B948   906 0001:0000B94B   907 0001:0000B952   909 0001:0000B95B
+   913 0001:0000B960   914 0001:0000B963   916 0001:0000B968   917 0001:0000B96B
+   918 0001:0000B972   920 0001:0000B97B   924 0001:0000B980   925 0001:0000B983
+   927 0001:0000B988   928 0001:0000B98B   929 0001:0000B992   931 0001:0000B99B
+   935 0001:0000B9A0   936 0001:0000B9A3   938 0001:0000B9A8   939 0001:0000B9AB
+   940 0001:0000B9B2   942 0001:0000B9BB   946 0001:0000B9C0   947 0001:0000B9C3
+   949 0001:0000B9C8   950 0001:0000B9CB   951 0001:0000B9D2   953 0001:0000B9DB
+   961 0001:0000B9E0   962 0001:0000B9F2   963 0001:0000B9FB   964 0001:0000B9FF
+   965 0001:0000BA03   969 0001:0000BA20   970 0001:0000BA26   974 0001:0000BA37
+   975 0001:0000BA40   976 0001:0000BA47   977 0001:0000BA4E   978 0001:0000BA55
+   979 0001:0000BA5C   980 0001:0000BA63   981 0001:0000BA6A   982 0001:0000BA71
+   983 0001:0000BA78   987 0001:0000BA82   988 0001:0000BA8B   993 0001:0000BA90
+   994 0001:0000BA93   998 0001:0000BA94   999 0001:0000BA97  1001 0001:0000BA9C
+  1002 0001:0000BA9F  1003 0001:0000BAA6  1005 0001:0000BAAF  1009 0001:0000BAB4
+  1010 0001:0000BAB7  1012 0001:0000BABC  1013 0001:0000BABF  1014 0001:0000BAC6
+  1016 0001:0000BACF  1020 0001:0000BAD4  1021 0001:0000BAD7  1023 0001:0000BADC
+  1024 0001:0000BADF  1025 0001:0000BAE6  1027 0001:0000BAEF  1031 0001:0000BAF4
+  1032 0001:0000BAF7  1034 0001:0000BAFC  1035 0001:0000BAFF  1036 0001:0000BB06
+  1038 0001:0000BB0F  1042 0001:0000BB14  1043 0001:0000BB17  1045 0001:0000BB1C
+  1046 0001:0000BB1F  1047 0001:0000BB26  1049 0001:0000BB2F  1053 0001:0000BB34
+  1054 0001:0000BB37  1056 0001:0000BB3C  1057 0001:0000BB3F  1058 0001:0000BB46
+  1060 0001:0000BB4F  1064 0001:0000BB54  1065 0001:0000BB57  1067 0001:0000BB5C
+  1068 0001:0000BB5F  1069 0001:0000BB66  1071 0001:0000BB6F  1075 0001:0000BB74
+  1076 0001:0000BB77  1078 0001:0000BB7C  1079 0001:0000BB7F  1080 0001:0000BB86
+  1082 0001:0000BB8F  1086 0001:0000BB94  1087 0001:0000BB97  1089 0001:0000BB9C
+  1090 0001:0000BB9F  1091 0001:0000BBA6  1093 0001:0000BBAF  1097 0001:0000BBB4
+  1098 0001:0000BBB7  1100 0001:0000BBBC  1101 0001:0000BBBF  1102 0001:0000BBC6
+  1104 0001:0000BBCF  1109 0001:0000BBD4  1112 0001:0000BBEC  1114 0001:0000BBEF
+  1117 0001:0000BC07  1119 0001:0000BC0B  1122 0001:0000BC23  1124 0001:0000BC27
+  1125 0001:0000BC29  1129 0001:0000BC2C  1130 0001:0000BC2F  1132 0001:0000BC34
+  1133 0001:0000BC38  1134 0001:0000BC3C  1135 0001:0000BC40  1136 0001:0000BC44
+  1139 0001:0000BC4D  1140 0001:0000BC51  1144 0001:0000BC57  1145 0001:0000BC5B
+  1149 0001:0000BC5F  1150 0001:0000BC66  1151 0001:0000BC6F  1159 0001:0000BC74
+  1160 0001:0000BC86  1161 0001:0000BC8F  1162 0001:0000BC93  1166 0001:0000BCB0
+  1167 0001:0000BCB6  1171 0001:0000BCC7  1172 0001:0000BCD0  1173 0001:0000BCD7
+  1174 0001:0000BCDE  1178 0001:0000BCE8  1179 0001:0000BCF1  1184 0001:0000BCF4
+  1185 0001:0000BCF7  1189 0001:0000BCF8  1190 0001:0000BCFB  1192 0001:0000BD00
+  1193 0001:0000BD03  1194 0001:0000BD0A  1196 0001:0000BD13  1200 0001:0000BD18
+  1201 0001:0000BD1B  1203 0001:0000BD20  1204 0001:0000BD23  1205 0001:0000BD2A
+  1207 0001:0000BD33  1211 0001:0000BD38  1212 0001:0000BD3B  1214 0001:0000BD40
+  1215 0001:0000BD43  1216 0001:0000BD4A  1218 0001:0000BD53  1222 0001:0000BD58
+  1223 0001:0000BD5B  1225 0001:0000BD60  1226 0001:0000BD63  1227 0001:0000BD6A
+  1229 0001:0000BD73  1237 0001:0000BD78  1238 0001:0000BD8A  1239 0001:0000BD93
+  1240 0001:0000BD9A  1241 0001:0000BDA1  1245 0001:0000BDBC  1246 0001:0000BDC2
+  1250 0001:0000BDD3  1251 0001:0000BDDB  1255 0001:0000BDE4  1256 0001:0000BDED
+  1261 0001:0000BDF0  1262 0001:0000BDF3  1266 0001:0000BDF4  1267 0001:0000BDF7
+  1269 0001:0000BDFC  1270 0001:0000BE01  1271 0001:0000BE10  1272 0001:0000BE13
+  1273 0001:0000BE1A  1275 0001:0000BE23  1279 0001:0000BE28  1280 0001:0000BE2B
+  1282 0001:0000BE30  1283 0001:0000BE35  1284 0001:0000BE44  1285 0001:0000BE47
+  1286 0001:0000BE4E  1288 0001:0000BE57  1296 0001:0000BE5C  1297 0001:0000BE73
+  1299 0001:0000BE7C  1301 0001:0000BE83  1302 0001:0000BE92  1303 0001:0000BEA1
+  1304 0001:0000BEA5  1305 0001:0000BEA9  1306 0001:0000BEAD  1307 0001:0000BEB4
+  1308 0001:0000BEC1  1309 0001:0000BEC5  1310 0001:0000BEC9  1312 0001:0000BED4
+  1313 0001:0000BEDB  1314 0001:0000BEE5  1315 0001:0000BEF6  1316 0001:0000BEFF
+  1317 0001:0000BF10  1318 0001:0000BF19  1319 0001:0000BF2A  1320 0001:0000BF33
+  1321 0001:0000BF44  1322 0001:0000BF4D  1326 0001:0000BF84  1327 0001:0000BF8F
+  1328 0001:0000BF96  1329 0001:0000BF9E  1330 0001:0000BFA6  1331 0001:0000BFAE
+  1332 0001:0000BFB6  1333 0001:0000BFC2  1334 0001:0000BFCA  1341 0001:0000BFD8
+  1342 0001:0000BFF2  1344 0001:0000C002  1345 0001:0000C00B  1347 0001:0000C012
+  1349 0001:0000C014  1358 0001:0000C035  1359 0001:0000C03A  1360 0001:0000C058
+  1362 0001:0000C074  1367 0001:0000C0C4  1368 0001:0000C0CC  1369 0001:0000C0D2
+  1372 0001:0000C0D4  1373 0001:0000C0DE  1375 0001:0000C0E6  1377 0001:0000C0F8
+  1378 0001:0000C0FF  1379 0001:0000C10D  1381 0001:0000C124  1384 0001:0000C138
+  1388 0001:0000C140  1390 0001:0000C14C  1391 0001:0000C15A  1392 0001:0000C168
+  1393 0001:0000C171  1394 0001:0000C178  1395 0001:0000C185  1396 0001:0000C201
+  1397 0001:0000C20B  1398 0001:0000C215  1399 0001:0000C21F  1400 0001:0000C229
+  1401 0001:0000C233  1402 0001:0000C23D  1403 0001:0000C247  1404 0001:0000C251
+  1405 0001:0000C25B  1408 0001:0000C272  1411 0001:0000C288  1412 0001:0000C2A0
+  1417 0001:0000C2A8  1418 0001:0000C2AB  1423 0001:0000C2AC  1425 0001:0000C2B2
+  1426 0001:0000C2B5  1427 0001:0000C2BB  1429 0001:0000C2C0  1433 0001:0000C2C4
+  1435 0001:0000C2CE  1437 0001:0000C2E8  1439 0001:0000C2F0  1440 0001:0000C2F8
+  1441 0001:0000C2FF  1443 0001:0000C30D  1446 0001:0000C324  1447 0001:0000C32C
+  1448 0001:0000C333  1451 0001:0000C33D  1452 0001:0000C34D  1455 0001:0000C356
+  1459 0001:0000C35F  1463 0001:0000C373  1464 0001:0000C37F  1465 0001:0000C394
+  1469 0001:0000C39B  1471 0001:0000C3A3  1475 0001:0000C3B0  1477 0001:0000C3B3
+  1479 0001:0000C3BF  1481 0001:0000C3C6  1483 0001:0000C3CD  1485 0001:0000C3D3
+  1486 0001:0000C3DB  1487 0001:0000C3DF  1491 0001:0000C3E5  1497 0001:0000C3ED
+  1498 0001:0000C3F4  1500 0001:0000C3F8  1502 0001:0000C3FF  1529 0001:0000C404
+  1531 0001:0000C40A  1534 0001:0000C432  1535 0001:0000C439  1536 0001:0000C44E
+  1537 0001:0000C453  1539 0001:0000C45B  1540 0001:0000C463  1541 0001:0000C469
+  1543 0001:0000C471  1545 0001:0000C474  1546 0001:0000C47C  1547 0001:0000C484
+  1548 0001:0000C48A  1549 0001:0000C48F  1550 0001:0000C495  1551 0001:0000C49A
+  1553 0001:0000C4B8  1554 0001:0000C4BE  1555 0001:0000C4C6  1556 0001:0000C4CC
+  1557 0001:0000C4D4  1558 0001:0000C4DA  1559 0001:0000C4DF  1560 0001:0000C4E5
+  1563 0001:0000C4ED  1564 0001:0000C500  1565 0001:0000C510  1566 0001:0000C516
+  1568 0001:0000C527  1569 0001:0000C52E  1571 0001:0000C53E  1573 0001:0000C544
+  1574 0001:0000C549  1576 0001:0000C54F  1577 0001:0000C557  1582 0001:0000C55F
+  1583 0001:0000C56D  1585 0001:0000C589  1594 0001:0000C590  1595 0001:0000C595
+  1598 0001:0000C598  1600 0001:0000C59C  1602 0001:0000C5A2  1605 0001:0000C5C2
+  1606 0001:0000C5D0  1607 0001:0000C5DF  1608 0001:0000C5EE  1609 0001:0000C5FD
+  1612 0001:0000C60C  1613 0001:0000C61A  1615 0001:0000C636  1619 0001:0000C63C
+  1621 0001:0000C640  1625 0001:0000C658  1626 0001:0000C670  1627 0001:0000C68C
+  1631 0001:0000C690  1632 0001:0000C694  1633 0001:0000C69F  1634 0001:0000C6AA
+  1635 0001:0000C6B5  1642 0001:0000C6B8  1643 0001:0000C6BE  1644 0001:0000C6C4
+  1645 0001:0000C6C6  1648 0001:0000C6C8  1649 0001:0000C6DF  1650 0001:0000C6FB
+  1651 0001:0000C6FF  1658 0001:0000C704  1659 0001:0000C70A  1660 0001:0000C721
+  1661 0001:0000C73D  1662 0001:0000C741  1668 0001:0000C748  1669 0001:0000C74D
+  1670 0001:0000C756  1671 0001:0000C764  1672 0001:0000C780  1674 0001:0000C787
+  1675 0001:0000C78D  1676 0001:0000C798  1677 0001:0000C79E  1678 0001:0000C7A9
+  1679 0001:0000C7AF  1680 0001:0000C7BA  1681 0001:0000C7C0  1682 0001:0000C7CB
+  1689 0001:0000C7E8  1690 0001:0000C7EE  1691 0001:0000C805  1692 0001:0000C821
+  1693 0001:0000C826  1699 0001:0000C82C  1700 0001:0000C830  1701 0001:0000C834
+  1703 0001:0000C83B  1705 0001:0000C840  1706 0001:0000C84E  1707 0001:0000C86A
+  1713 0001:0000C870  1714 0001:0000C874  1715 0001:0000C878  1717 0001:0000C87F
+  1719 0001:0000C884  1720 0001:0000C892  1721 0001:0000C8AE  1727 0001:0000C8B4
+  1728 0001:0000C8B8  1729 0001:0000C8BC  1731 0001:0000C8C3  1733 0001:0000C8C8
+  1734 0001:0000C8D6  1735 0001:0000C8F2  1741 0001:0000C8F8  1742 0001:0000C8FC
+  1743 0001:0000C900  1745 0001:0000C907  1747 0001:0000C90C  1748 0001:0000C91A
+  1749 0001:0000C936  1755 0001:0000C93C  1756 0001:0000C940  1757 0001:0000C942
+  1758 0001:0000C946  1759 0001:0000C94B  1760 0001:0000C94F  1762 0001:0000C952
+  1763 0001:0000C960  1764 0001:0000C97C  1771 0001:0000C980  1772 0001:0000C987
+  1773 0001:0000C99E  1774 0001:0000C9BA  1776 0001:0000C9C1  1777 0001:0000C9C7
+  1778 0001:0000C9D2  1779 0001:0000C9E1  1780 0001:0000C9EC  1781 0001:0000C9F2
+  1782 0001:0000C9FD  1783 0001:0000CA03  1784 0001:0000CA0E  1785 0001:0000CA15
+  1786 0001:0000CA20  1787 0001:0000CA26  1788 0001:0000CA31  1789 0001:0000CA38
+  1790 0001:0000CA43  1791 0001:0000CA4A  1792 0001:0000CA55  1797 0001:0000CA84
+  1798 0001:0000CA90  1800 0001:0000CA93  1801 0001:0000CA96  1802 0001:0000CA9D
+  1803 0001:0000CAA2  1804 0001:0000CAAE  1805 0001:0000CABA  1807 0001:0000CABD
+  1813 0001:0000CAC8  1814 0001:0000CAD1  1815 0001:0000CAD7  1816 0001:0000CADB
+  1817 0001:0000CADD  1819 0001:0000CADF  1820 0001:0000CAF5  1826 0001:0000CAFC
+  1827 0001:0000CB06  1828 0001:0000CB08  1830 0001:0000CB0E  1831 0001:0000CB26
+  1832 0001:0000CB2A  1833 0001:0000CB30  1842 0001:0000CB38  1843 0001:0000CB4B
+  1844 0001:0000CB50  1845 0001:0000CB66  1847 0001:0000CB75  1848 0001:0000CB93
+  1850 0001:0000CBA0  1851 0001:0000CBA5  1853 0001:0000CBC1  1854 0001:0000CBCC
+  1855 0001:0000CBCF  1866 0001:0000CBD8  1871 0001:0000CBE7  1872 0001:0000CBEF
+  1874 0001:0000CBFD  1875 0001:0000CC0C  1881 0001:0000CC26  1890 0001:0000CC36
+  1896 0001:0000CC40  1897 0001:0000CC49  1898 0001:0000CC54  1900 0001:0000CC70
+  1901 0001:0000CC72  1904 0001:0000CC78  1905 0001:0000CC7F  1906 0001:0000CC88
+  1908 0001:0000CC95  1909 0001:0000CC97  1910 0001:0000CCB4  1912 0001:0000CCBD
+  1918 0001:0000CCC4  1920 0001:0000CCD0  1922 0001:0000CCDA  1923 0001:0000CCE2
+  1924 0001:0000CCF0  1925 0001:0000CCFC  1927 0001:0000CD16  1929 0001:0000CD26
+  1938 0001:0000CD48  1939 0001:0000CD5B  1940 0001:0000CD60  1941 0001:0000CD76
+  1943 0001:0000CD7C  1945 0001:0000CD81  1948 0001:0000CDAE  1949 0001:0000CDB2
+  1950 0001:0000CDB9  1951 0001:0000CDC2  1953 0001:0000CDDB  1954 0001:0000CDE1
+  1955 0001:0000CDE7  1956 0001:0000CDE9  1960 0001:0000CDEB  1961 0001:0000CDEE
+  1967 0001:0000CDF8  1972 0001:0000CE07  1973 0001:0000CE0F  1974 0001:0000CE1D
+  1975 0001:0000CE2D  1977 0001:0000CE47  1979 0001:0000CE57  1985 0001:0000CE60
+  1986 0001:0000CE6F  1987 0001:0000CE73  1988 0001:0000CE7D  1989 0001:0000CE8B
+  1990 0001:0000CE9E  1992 0001:0000CEB7  1995 0001:0000CEC7  1996 0001:0000CECC
+  2002 0001:0000CED8  2007 0001:0000CEE7  2008 0001:0000CEEF  2009 0001:0000CEFD
+  2010 0001:0000CF0C  2011 0001:0000CF19  2013 0001:0000CF30  2015 0001:0000CF40
+  2019 0001:0000CF4C  2020 0001:0000CF4E  2021 0001:0000CF5A  2022 0001:0000CF62
+  2024 0001:0000CF67  2031 0001:0000CF6C  2032 0001:0000CF74  2033 0001:0000CF79
+  2039 0001:0000CF8F  2045 0001:0000CF9E  2048 0001:0000CFBF  2049 0001:0000CFC3
+  2051 0001:0000CFE5  2053 0001:0000CFEB  2057 0001:0000CFFE  2059 0001:0000D00B
+  2063 0001:0000D014  2071 0001:0000D022  2072 0001:0000D025  2076 0001:0000D02C
+  2077 0001:0000D02F  2078 0001:0000D038  2079 0001:0000D047  2080 0001:0000D063
+  2086 0001:0000D068  2087 0001:0000D070  2088 0001:0000D074  2090 0001:0000D08A
+  2091 0001:0000D0A1  2092 0001:0000D0A5  2093 0001:0000D0BD  2094 0001:0000D0D9
+  2105 0001:0000D0E0  2107 0001:0000D0F0  2108 0001:0000D0F6  2110 0001:0000D10C
+  2111 0001:0000D11B  2112 0001:0000D12D  2113 0001:0000D130  2115 0001:0000D134
+  2116 0001:0000D137  2119 0001:0000D13E  2121 0001:0000D143  2122 0001:0000D151
+  2124 0001:0000D166  2126 0001:0000D17D  2128 0001:0000D18D  2130 0001:0000D19D
+  2132 0001:0000D1B3  2135 0001:0000D1BE  2136 0001:0000D1C2  2138 0001:0000D1DE
+  2140 0001:0000D1F9  2142 0001:0000D20A  2146 0001:0000D214  2147 0001:0000D21A
+  2148 0001:0000D228  2149 0001:0000D244  2154 0001:0000D248  2155 0001:0000D24D
+  2159 0001:0000D250  2160 0001:0000D253  2161 0001:0000D257  2163 0001:0000D265
+  2164 0001:0000D271  2167 0001:0000D28C  2168 0001:0000D2A2  2169 0001:0000D2BB
+  2171 0001:0000D2BF  2172 0001:0000D2C1  2178 0001:0000D324  2179 0001:0000D32A
+  2180 0001:0000D33B  2186 0001:0000D384  2187 0001:0000D38A  2188 0001:0000D39B
+  2193 0001:0000D3A0  2194 0001:0000D3C3  2197 0001:0000D3C5  2199 0001:0000D3F4
+  2195 0001:0000D3F5  2201 0001:0000D3FA  2202 0001:0000D3FF  2205 0001:0000D401
+  2210 0001:0000D42C  2211 0001:0000D44F  2214 0001:0000D451  2216 0001:0000D480
+  2212 0001:0000D481  2218 0001:0000D486  2219 0001:0000D48B  2222 0001:0000D48D
+  2227 0001:0000D4B8  2228 0001:0000D4DF  2230 0001:0000D4EB  2232 0001:0000D4FE
+  2233 0001:0000D50C  2235 0001:0000D541  2237 0001:0000D548  2240 0001:0000D54A
+  2243 0001:0000D552  2244 0001:0000D554  2247 0001:0000D580  2248 0001:0000D599
+  2249 0001:0000D5A1  2251 0001:0000D5AC  2252 0001:0000D5C6  2256 0001:0000D5F4
+  2257 0001:0000D618  2259 0001:0000D622  2260 0001:0000D635  2261 0001:0000D654
+  2262 0001:0000D65A  2263 0001:0000D66D  2264 0001:0000D68C  2265 0001:0000D6AB
+  2266 0001:0000D6CD  2268 0001:0000D6F0  2270 0001:0000D6F6  2271 0001:0000D715
+  2273 0001:0000D734  2275 0001:0000D73A  2276 0001:0000D75C  2277 0001:0000D77E
+  2279 0001:0000D7A0  2281 0001:0000D7A6  2282 0001:0000D7BC  2284 0001:0000D7D2
+  2286 0001:0000D7D8  2287 0001:0000D7EE  2288 0001:0000D804  2289 0001:0000D81A
+  2290 0001:0000D830  2292 0001:0000D846  2294 0001:0000D850  2295 0001:0000D872
+  2296 0001:0000D894  2297 0001:0000D8B6  2298 0001:0000D8D8  2299 0001:0000D8FA
+  2300 0001:0000D91C  2301 0001:0000D93E  2302 0001:0000D960  2303 0001:0000D982
+  2305 0001:0000D9A4  2309 0001:0000DD04  2310 0001:0000DD27  2312 0001:0000DD31
+  2313 0001:0000DD40  2314 0001:0000DD5B  2315 0001:0000DD61  2316 0001:0000DD70
+  2317 0001:0000DD8B  2318 0001:0000DDA6  2319 0001:0000DDC4  2321 0001:0000DDE3
+  2323 0001:0000DDE9  2324 0001:0000DE04  2326 0001:0000DE1F  2328 0001:0000DE25
+  2329 0001:0000DE43  2330 0001:0000DE61  2332 0001:0000DE7F  2334 0001:0000DE85
+  2335 0001:0000DE97  2337 0001:0000DEA9  2339 0001:0000DEAF  2340 0001:0000DEC1
+  2341 0001:0000DED3  2342 0001:0000DEE5  2343 0001:0000DEF7  2345 0001:0000DF09
+  2347 0001:0000DF13  2348 0001:0000DF31  2349 0001:0000DF4F  2350 0001:0000DF6D
+  2351 0001:0000DF8B  2352 0001:0000DFA9  2353 0001:0000DFC7  2354 0001:0000DFE5
+  2355 0001:0000E003  2356 0001:0000E021  2358 0001:0000E03F  2362 0001:0000E39C
+  2363 0001:0000E3C1  2365 0001:0000E3CB  2366 0001:0000E3EB  2367 0001:0000E41E
+  2368 0001:0000E424  2369 0001:0000E441  2370 0001:0000E474  2371 0001:0000E4A7
+  2372 0001:0000E4DE  2375 0001:0000E516  2377 0001:0000E51C  2378 0001:0000E54F
+  2380 0001:0000E582  2382 0001:0000E58C  2383 0001:0000E5C3  2384 0001:0000E5FA
+  2386 0001:0000E631  2388 0001:0000E637  2389 0001:0000E657  2391 0001:0000E677
+  2393 0001:0000E681  2394 0001:0000E6A1  2395 0001:0000E6C1  2396 0001:0000E6E1
+  2397 0001:0000E701  2399 0001:0000E721  2401 0001:0000E72B  2402 0001:0000E762
+  2403 0001:0000E799  2404 0001:0000E7D0  2405 0001:0000E807  2406 0001:0000E83E
+  2407 0001:0000E87B  2408 0001:0000E8BE  2409 0001:0000E901  2410 0001:0000E944
+  2412 0001:0000E987  2416 0001:0000ECE8  2417 0001:0000ED0C  2419 0001:0000ED16
+  2420 0001:0000ED2F  2421 0001:0000ED4F  2422 0001:0000ED55  2423 0001:0000ED6A
+  2424 0001:0000ED8A  2425 0001:0000EDAA  2426 0001:0000EDCB  2428 0001:0000EDEC
+  2430 0001:0000EDF2  2431 0001:0000EE12  2433 0001:0000EE32  2435 0001:0000EE38
+  2436 0001:0000EE59  2437 0001:0000EE7A  2439 0001:0000EE9B  2441 0001:0000EEA1
+  2442 0001:0000EEB7  2444 0001:0000EECD  2446 0001:0000EED3  2447 0001:0000EEE9
+  2448 0001:0000EEFF  2449 0001:0000EF15  2450 0001:0000EF2B  2452 0001:0000EF41
+  2454 0001:0000EF4B  2455 0001:0000EF6C  2456 0001:0000EF8D  2457 0001:0000EFAE
+  2458 0001:0000EFCF  2459 0001:0000EFF0  2460 0001:0000F011  2461 0001:0000F032
+  2462 0001:0000F053  2463 0001:0000F074  2465 0001:0000F095  2472 0001:0000F3F4
+  2473 0001:0000F429  2474 0001:0000F438  2476 0001:0000F440  2477 0001:0000F454
+  2478 0001:0000F46E  2480 0001:0000F47C  2481 0001:0000F496  2482 0001:0000F4A2
+  2483 0001:0000F4BD  2484 0001:0000F4CF  2485 0001:0000F4DC  2486 0001:0000F4E7
+  2488 0001:0000F4F3  2495 0001:0000F560  2496 0001:0000F587  2497 0001:0000F595
+  2499 0001:0000F599  2500 0001:0000F5A8  2501 0001:0000F5B6  2502 0001:0000F5C7
+  2504 0001:0000F5DF  2508 0001:0000F5EF  2509 0001:0000F601  2510 0001:0000F60F
+  2512 0001:0000F627  2516 0001:0000F646  2518 0001:0000F664  2525 0001:0000F688
+  2526 0001:0000F6AF  2527 0001:0000F6B7  2528 0001:0000F6C5  2529 0001:0000F6D3
+  2531 0001:0000F6D7  2532 0001:0000F6E6  2533 0001:0000F6F4  2534 0001:0000F705
+  2536 0001:0000F71D  2540 0001:0000F72D  2541 0001:0000F73F  2542 0001:0000F74D
+  2544 0001:0000F765  2548 0001:0000F782  2551 0001:0000F7A1  2553 0001:0000F7BF
+  2557 0001:0000F7E4  2558 0001:0000F7EB  2559 0001:0000F7FA  2561 0001:0000F812
+  2562 0001:0000F81C  2563 0001:0000F826  2567 0001:0000F82C  2568 0001:0000F833
+  2569 0001:0000F842  2571 0001:0000F85A  2572 0001:0000F864  2573 0001:0000F86E
+  2578 0001:0000F874  2579 0001:0000F875  2580 0001:0000F87F  2581 0001:0000F88F
+  2584 0001:0000F894  2585 0001:0000F895  2586 0001:0000F89F  2587 0001:0000F8AF
+  2590 0001:0000F8B4  2591 0001:0000F8B5  2592 0001:0000F8BF  2593 0001:0000F8CF
+  2596 0001:0000F8D4  2597 0001:0000F8D5  2598 0001:0000F8DF  2599 0001:0000F8EF
+  2602 0001:0000F8F4  2603 0001:0000F8F5  2604 0001:0000F8FC  2605 0001:0000F908
+  2608 0001:0000F90C  2609 0001:0000F90D  2610 0001:0000F917  2611 0001:0000F92A
+  2614 0001:0000F92C  2615 0001:0000F92D  2616 0001:0000F937  2617 0001:0000F947
+  2620 0001:0000F94C  2621 0001:0000F94D  2622 0001:0000F957  2623 0001:0000F967
+  2626 0001:0000F96C  2627 0001:0000F96D  2628 0001:0000F977  2629 0001:0000F987
+  2632 0001:0000F98C  2633 0001:0000F98D  2634 0001:0000F997  2635 0001:0000F9A9
+  2638 0001:0000F9AC  2639 0001:0000F9AD  2640 0001:0000F9B7  2641 0001:0000F9C9
+  2644 0001:0000F9CC  2645 0001:0000F9CD  2646 0001:0000F9D7  2647 0001:0000F9E9
+  2650 0001:0000F9EC  2651 0001:0000F9F1  2652 0001:0000F9FB  2653 0001:0000FA0F
+  2656 0001:0000FA14  2657 0001:0000FA15  2658 0001:0000FA1F  2659 0001:0000FA2F
+  2662 0001:0000FA34  2663 0001:0000FA35  2664 0001:0000FA3F  2665 0001:0000FA4F
+  2670 0001:0000FA54  2671 0001:0000FA58  2673 0001:0000FA5C  2674 0001:0000FA63
+  2675 0001:0000FA6A  2678 0001:0000FA74  2679 0001:0000FA7F  2680 0001:0000FA8A
+  2681 0001:0000FA95  2682 0001:0000FAA2  2683 0001:0000FAAF  2685 0001:0000FABC
+  2690 0001:0000FAC0  2691 0001:0000FAC4  2692 0001:0000FACF  2693 0001:0000FADA
+  2696 0001:0000FAE0  2697 0001:0000FAE4  2698 0001:0000FAEF  2699 0001:0000FAFA
+  2700 0001:0000FB03  2703 0001:0000FB08  2705 0001:0000FB0C  2706 0001:0000FB15
+  2707 0001:0000FB20  2710 0001:0000FB24  2711 0001:0000FB25  2712 0001:0000FB2E
+  2715 0001:0000FB30  2716 0001:0000FB31  2717 0001:0000FB3A  2722 0001:0000FB3C
+  2723 0001:0000FB40  2725 0001:0000FB4C  2726 0001:0000FB57  2727 0001:0000FB64
+  2732 0001:0000FB68  2733 0001:0000FB6C  2735 0001:0000FB78  2736 0001:0000FB83
+  2737 0001:0000FB90  2742 0001:0000FB94  2743 0001:0000FB98  2745 0001:0000FBA4
+  2746 0001:0000FBAF  2747 0001:0000FBBC  2752 0001:0000FBC0  2753 0001:0000FBC4
+  2754 0001:0000FBCD  2755 0001:0000FBD8  2756 0001:0000FBE5  2759 0001:0000FBEC
+  2760 0001:0000FBF0  2761 0001:0000FBF9  2762 0001:0000FC04  2765 0001:0000FC08
+  2766 0001:0000FC09  2767 0001:0000FC12  2775 0001:0000FC14  2776 0001:0000FC1B
+  2777 0001:0000FC28  2779 0001:0000FC3B  2780 0001:0000FC52  2790 0001:0000FC58
+  2791 0001:0000FC60  2793 0001:0000FC65  2795 0001:0000FC85  2796 0001:0000FC89
+  2798 0001:0000FC97  2800 0001:0000FCB0  2801 0001:0000FCC3  2804 0001:0000FCCA
+  2808 0001:0000FCD0  2809 0001:0000FCD4  2812 0001:0000FCE1  2814 0001:0000FCF7
+  2798 0001:0000FCFA  2815 0001:0000FCFD  2817 0001:0000FD0F  2818 0001:0000FD13
+  2821 0001:0000FD2D  2823 0001:0000FD33  2825 0001:0000FD3B  2829 0001:0000FD4B
+  2831 0001:0000FD54  2832 0001:0000FD5E  2834 0001:0000FD67  2835 0001:0000FD72
+  2836 0001:0000FD78  2837 0001:0000FD84  2838 0001:0000FD8B  2839 0001:0000FD91
+  2840 0001:0000FDA0  2843 0001:0000FDA8  2844 0001:0000FDAC  2845 0001:0000FDB5
+  2846 0001:0000FDC0  2849 0001:0000FDC4  2850 0001:0000FDC8  2851 0001:0000FDD3
+  2852 0001:0000FDDC  2853 0001:0000FDE7  2860 0001:0000FDEC  2861 0001:0000FDF2
+  2863 0001:0000FDF4  2864 0001:0000FDFE  2866 0001:0000FE08  2867 0001:0000FE12
+  2868 0001:0000FE19  2869 0001:0000FE1B  2864 0001:0000FE1C  2870 0001:0000FE1F
+  2877 0001:0000FE28  2878 0001:0000FE37  2879 0001:0000FE41  2881 0001:0000FE51
+  2882 0001:0000FE5D  2883 0001:0000FE64  2884 0001:0000FE77  2879 0001:0000FE7B
+  2885 0001:0000FE7E  2893 0001:0000FE88  2894 0001:0000FE93  2895 0001:0000FE9D
+  2897 0001:0000FEA7  2898 0001:0000FEB1  2899 0001:0000FEBB  2900 0001:0000FECF
+  2901 0001:0000FEDF  2902 0001:0000FEEF  2904 0001:0000FEFD  2905 0001:0000FF05
+  2906 0001:0000FF0F  2895 0001:0000FF10  2907 0001:0000FF13  2915 0001:0000FF1C
+  2916 0001:0000FF2B  2918 0001:0000FF39  2920 0001:0000FF47  2921 0001:0000FF51
+  2922 0001:0000FF5B  2923 0001:0000FF8B  2924 0001:0000FF9B  2925 0001:0000FFAB
+  2926 0001:0000FFBB  2927 0001:0000FFCB  2928 0001:0000FFDB  2931 0001:0000FFE9
+  2932 0001:0000FFF1  2933 0001:00010000  2918 0001:00010001  2934 0001:00010008
+  2939 0001:00010010  2941 0001:0001001C  2942 0001:00010021  2943 0001:00010025
+  2945 0001:0001002C  2948 0001:00010032  2949 0001:00010035  2953 0001:00010038
+  2954 0001:0001003B  2956 0001:00010040  2958 0001:00010043  2960 0001:0001004E
+  2964 0001:00010050  2965 0001:00010053  2967 0001:00010058  2968 0001:0001005B
+  2970 0001:00010066  2974 0001:00010068  2975 0001:0001006B  2977 0001:00010070
+  2978 0001:00010073  2980 0001:0001007E  2984 0001:00010080  2985 0001:00010083
+  2987 0001:00010088  2988 0001:0001008B  2990 0001:00010096  2994 0001:00010098
+  2995 0001:0001009B  2997 0001:000100A0  2998 0001:000100A3  3000 0001:000100AE
+  3004 0001:000100B0  3007 0001:000100B6  3009 0001:000100C2  3010 0001:000100CC
+  3013 0001:000100DE  3014 0001:000100E5  3017 0001:000100EC  3021 0001:000100F0
+  3022 0001:000100F3  3024 0001:000100F8  3025 0001:000100FB  3027 0001:00010106
+  3031 0001:00010108  3032 0001:0001010B  3034 0001:00010110  3037 0001:00010122
+  3039 0001:0001013A  3041 0001:0001013D  3045 0001:00010140  3046 0001:00010143
+  3047 0001:00010149  3048 0001:0001015F  3049 0001:00010162  3053 0001:00010164
+  3054 0001:00010167  3056 0001:0001016C  3059 0001:0001017E  3061 0001:00010196
+  3063 0001:00010199  3068 0001:0001019C  3069 0001:000101AD  3073 0001:000101B0
+  3074 0001:000101B3  3075 0001:000101BB  3076 0001:000101C6  3080 0001:000101C8
+  3081 0001:000101CB  3082 0001:000101D3  3083 0001:000101DE  3087 0001:000101E0
+  3088 0001:000101E3  3089 0001:000101EB  3090 0001:000101F6  3094 0001:000101F8
+  3095 0001:000101FB  3096 0001:00010203  3097 0001:0001020E  3105 0001:00010210
+  3106 0001:00010227  3107 0001:00010230  3108 0001:00010241  3109 0001:0001024B
+  3110 0001:00010252  3114 0001:00010270  3115 0001:0001027B  3116 0001:00010284
+  3117 0001:0001028C  3118 0001:00010298  3122 0001:000102A8  3123 0001:000102AE
+  3125 0001:000102B9  3126 0001:000102C3  3129 0001:000102CD  3130 0001:000102DA
+  3135 0001:000102E0  3136 0001:000102E9  3137 0001:000102F4  3138 0001:000102FE
+  3139 0001:00010307  3143 0001:0001030C  3144 0001:0001030D  3145 0001:00010314
+  3146 0001:00010320  3150 0001:00010324  3151 0001:00010325  3152 0001:0001032C
+  3153 0001:00010338  3158 0001:0001033C  3159 0001:0001033D  3160 0001:00010344
+  3161 0001:00010351  3165 0001:00010354  3166 0001:00010355  3167 0001:0001035C
+  3168 0001:00010369  3174 0001:0001036C  3175 0001:0001038B  3177 0001:00010395
+  3178 0001:000103A0  3180 0001:000103AA  3181 0001:000103D3  3183 0001:000103EB
+  3184 0001:00010421  3185 0001:00010439  3189 0001:00010464  3190 0001:0001046A
+  3191 0001:00010470  3193 0001:0001047C  3194 0001:00010485  3202 0001:00010488
+  3203 0001:0001049F  3204 0001:000104A9  3206 0001:000104AE  3207 0001:000104C8
+  3208 0001:000104F5  3210 0001:00010507  3215 0001:0001052C  3216 0001:00010549
+  3217 0001:0001055E  3218 0001:0001057F  3219 0001:00010589  3220 0001:00010597
+  3225 0001:000105BC  3227 0001:000105D4  3228 0001:000105DB  3229 0001:000105F6
+  3230 0001:000105FC  3231 0001:00010609  3233 0001:0001060F  3235 0001:00010621
+  3236 0001:0001065F  3237 0001:00010665  3240 0001:00010674  3242 0001:0001067E
+  3247 0001:000106A8  3249 0001:000106C1  3250 0001:000106C8  3251 0001:000106E3
+  3254 0001:000106E9  3255 0001:000106EC  3258 0001:000106FB  3260 0001:00010705
+  3261 0001:00010715  3264 0001:00010729  3265 0001:00010733  3269 0001:00010741
+  3270 0001:00010751  3272 0001:000107B0  3275 0001:000107B6  3276 0001:000107CC
+  3280 0001:000107D6  3281 0001:000107E2  3282 0001:000107EE  3285 0001:00010818
+  3286 0001:0001081C  3287 0001:00010845  3289 0001:00010848  3290 0001:0001084F
+  3291 0001:0001085D  3292 0001:00010866  3293 0001:0001086D  3295 0001:00010876
+  3296 0001:0001087D  3297 0001:00010886  3300 0001:0001089B  3301 0001:000108A6
+  3303 0001:000108B6  3307 0001:000108BC  3308 0001:000108BF  3310 0001:000108DE
+  3317 0001:000108E0  3318 0001:000108FD  3319 0001:00010907  3321 0001:0001091A
+  3322 0001:00010924  3326 0001:0001094C  3327 0001:00010954  3329 0001:0001095D
+  3330 0001:0001096B  3332 0001:0001098A  3333 0001:00010995  3336 0001:000109A4
+  3340 0001:000109A8  3341 0001:000109AE  3343 0001:000109B5  3344 0001:000109B9
+  3345 0001:000109C1  3346 0001:000109C6  3348 0001:000109CA  3349 0001:000109D1
+  3352 0001:000109DC  3357 0001:000109E0  3359 0001:000109E5  3360 0001:000109E8
+  3361 0001:000109EE  3363 0001:000109F3  3368 0001:000109F4  3370 0001:000109F9
+  3371 0001:000109FC  3372 0001:00010A02  3374 0001:00010A07  3378 0001:00010A08
+  3379 0001:00010A0E  3381 0001:00010A1A  3382 0001:00010A24  3383 0001:00010A2A
+  3385 0001:00010A31  3389 0001:00010A34  3390 0001:00010A3A  3392 0001:00010A46
+  3393 0001:00010A50  3394 0001:00010A56  3396 0001:00010A5D  3404 0001:00010A60
+  3405 0001:00010A75  3406 0001:00010A7E  3407 0001:00010A81  3411 0001:00010A9C
+  3412 0001:00010A9D  3413 0001:00010AA7  3417 0001:00010AAC  3418 0001:00010AAD
+  3419 0001:00010AB5  3424 0001:00010ABC  3425 0001:00010ABE  3433 0001:00010AC0
+  3434 0001:00010AF8  3435 0001:00010AFB  3437 0001:00010B02  3438 0001:00010B35
+  3442 0001:00010BA4  3443 0001:00010BE1  3444 0001:00010BE4  3445 0001:00010C13
+  3448 0001:00010C74  3449 0001:00010C86  3450 0001:00010C8F  3451 0001:00010C93
+  3459 0001:00010CB0  3460 0001:00010CB3  3461 0001:00010CBF  3463 0001:00010CC3
+  3464 0001:00010CD1  3465 0001:00010CE1  3466 0001:00010CE6  3468 0001:00010CEB
+  3472 0001:00010CF0  3473 0001:00010CF4  3475 0001:00010CF6  3476 0001:00010CFF
+  3477 0001:00010D06  3479 0001:00010D0B  3480 0001:00010D17  3481 0001:00010D1B
+  3490 0001:00010D20  3491 0001:00010D41  3498 0001:00010D5D  3499 0001:00010D61
+  3501 0001:00010D7A  3502 0001:00010D89  3503 0001:00010D97  3505 0001:00010D99
+  3506 0001:00010DA0  3507 0001:00010DA7  3508 0001:00010DB2  3509 0001:00010DBD
+  3523 0001:00010DE9  3525 0001:00010DED  3526 0001:00010DF8  3527 0001:00010E03
+  3530 0001:00010E06  3531 0001:00010E0E  3533 0001:00010E27  3535 0001:00010E2F
+  3536 0001:00010E3A  3538 0001:00010E51  3539 0001:00010E5A  3542 0001:00010E6A
+  3548 0001:00010ECC  3549 0001:00010EEF  3552 0001:00010EF1  3554 0001:00010F20
+  3550 0001:00010F21  3556 0001:00010F26  3557 0001:00010F2B  3560 0001:00010F2D
+  3566 0001:00010F58  3567 0001:00010F7B  3570 0001:00010F7D  3572 0001:00010FAC
+  3568 0001:00010FAD  3574 0001:00010FB2  3575 0001:00010FB7  3578 0001:00010FB9
+  3584 0001:00010FE4  3585 0001:00011007  3588 0001:00011009  3590 0001:00011038
+  3586 0001:00011039  3592 0001:0001103E  3593 0001:00011043  3596 0001:00011045
+  3602 0001:00011070  3603 0001:00011093  3606 0001:00011095  3608 0001:000110C4
+  3604 0001:000110C5  3610 0001:000110CA  3611 0001:000110CF  3614 0001:000110D1
+  3620 0001:000110FC  3621 0001:0001111F  3624 0001:00011121  3626 0001:00011150
+  3622 0001:00011151  3628 0001:00011156  3629 0001:0001115B  3632 0001:0001115D
+  3640 0001:0001127C  3641 0001:00011282  3642 0001:00011293  3651 0001:00011298
+  3652 0001:000112A2  3659 0001:000112C8  3660 0001:000112CE  3661 0001:000112DF
+  3667 0001:00011314  3668 0001:0001131A  3669 0001:0001132B  3676 0001:0001137C
+  3677 0001:00011382  3678 0001:00011393  3685 0001:000113E0  3686 0001:000113E6
+  3687 0001:000113F7  3719 0001:000113FC  3720 0001:00011406  3721 0001:0001140F
+  3723 0001:0001141E  3724 0001:00011420  3725 0001:0001142F  3727 0001:00011431
+  3731 0001:00011438  3732 0001:0001143E  3733 0001:00011444
+
+Line numbers for CPort(omcom.bpl\cport\source\CPort.pas) segment .itext
+
+  3737 0002:00000158
+
+Line numbers for IpRtrMib(objects.bpl\IPHlpApi\Pas\IpRtrMib.pas) segment .text
+
+  1062 0001:00000000
+
+Line numbers for IpExport(objects.bpl\IPHlpApi\Pas\IpExport.pas) segment .text
+
+   343 0001:00000000
+
+Line numbers for IpTypes(objects.bpl\IPHlpApi\Pas\IpTypes.pas) segment .text
+
+   228 0001:00000000
+
+Line numbers for IpHlpApi(objects.bpl\IPHlpApi\Pas\IpHlpApi.pas) segment .text
+
+   752 0001:00000000
+
+Line numbers for MiTeC_ToolHelp32(MiTeC_ToolHelp32.pas) segment .text
+
+   438 0001:00000000
+
+Line numbers for BisComPort(omcom.bpl\BisComPort.pas) segment .text
+
+    84 0001:00011C18    85 0001:00011C2F    86 0001:00011C38    87 0001:00011C4B
+    88 0001:00011C54    89 0001:00011C5E    90 0001:00011C68    91 0001:00011C75
+    92 0001:00011C88    93 0001:00011C98    95 0001:00011CA8    96 0001:00011CB5
+    97 0001:00011CC2    98 0001:00011CCF    99 0001:00011CDC   100 0001:00011CE9
+   101 0001:00011CF6   102 0001:00011D03   103 0001:00011D10   104 0001:00011D1D
+   105 0001:00011D2A   108 0001:00011F34   109 0001:00011F3F   110 0001:00011F47
+   111 0001:00011F53   114 0001:00011F64   115 0001:00011F65   116 0001:00011F6C
+   117 0001:00011F78   120 0001:00011F7C   121 0001:00011F98   122 0001:00011FC0
+   125 0001:00011FE4   126 0001:00012000   127 0001:00012028   130 0001:0001204C
+   131 0001:00012053   132 0001:00012063   133 0001:00012069   134 0001:00012073
+   135 0001:00012079   136 0001:00012083   137 0001:00012089   138 0001:00012093
+   139 0001:00012099   140 0001:000120A3   141 0001:000120A9   142 0001:000120B3
+   143 0001:000120B9   144 0001:000120C3   145 0001:000120C9   146 0001:000120D3
+   147 0001:000120D9   148 0001:000120E3   151 0001:000120EC   152 0001:000120F6
+   153 0001:00012104   156 0001:0001212C   158 0001:0001213C   161 0001:00012144
+   162 0001:0001214E   163 0001:0001215C   166 0001:00012184   168 0001:00012194
+   172 0001:0001219C   173 0001:000121A3   177 0001:000121A4   178 0001:000121AE
+   181 0001:000121B0   182 0001:000121B6   183 0001:000121C3   187 0001:000121C8
+   188 0001:000121CF   192 0001:000121D0   193 0001:000121D7   197 0001:000121D8
+   198 0001:000121DF   202 0001:000121E0   203 0001:000121E8   207 0001:000121EC
+   208 0001:000121F4   212 0001:000121F8   213 0001:00012203   217 0001:00012204
+   218 0001:0001220C   222 0001:00012210   223 0001:00012218
+
+Line numbers for BisComPort(omcom.bpl\BisComPort.pas) segment .itext
+
+   225 0002:00000340
+
+Line numbers for BisBarcodeScanner(omcom.bpl\BisBarcodeScanner.pas) segment .text
+
+    34 0001:000123B0    35 0001:000123C2    36 0001:000123CB    37 0001:000123D8
+    38 0001:000123E2    41 0001:000123FC    42 0001:00012407    43 0001:00012413
+    46 0001:00012424    47 0001:00012425    48 0001:0001242F    49 0001:00012441
+    54 0001:00012444    55 0001:0001245E    56 0001:00012469    57 0001:0001248A
+    59 0001:0001249A    60 0001:000124C1    61 0001:000124CE    63 0001:000124D9
+    66 0001:00012504    67 0001:00012507    68 0001:0001250E    69 0001:00012519
+
+Line numbers for BisBarcodeScanner(omcom.bpl\BisBarcodeScanner.pas) segment .itext
+
+    72 0002:00000348
+
+Line numbers for XAsync(XAsync.pas) segment .text
+
+    76 0001:000126C0    77 0001:000126DA    78 0001:000126E5    79 0001:000126E9
+    80 0001:000126EE    81 0001:000126F2    84 0001:00012714    85 0001:00012715
+    86 0001:00012718    87 0001:0001272E    93 0001:00012730    94 0001:00012736
+    96 0001:00012739    97 0001:00012744    98 0001:0001275B    99 0001:0001275F
+   100 0001:00012765   102 0001:0001276B   103 0001:0001276E   105 0001:00012775
+   106 0001:0001277E   108 0001:00012785   109 0001:0001278B   110 0001:0001279A
+   112 0001:000127A1   113 0001:000127A5   115 0001:000127B3   119 0001:000127B8
+   120 0001:000127BB   121 0001:000127C9   122 0001:000127D9   127 0001:000127DC
+   128 0001:000127EA   129 0001:000127EF   132 0001:000127F0   133 0001:000127F6
+   134 0001:00012804   136 0001:00012829   138 0001:00012830   141 0001:00012838
+   142 0001:0001283B   143 0001:00012852   146 0001:00012854   147 0001:0001286A
+   148 0001:00012896   153 0001:000128B8   154 0001:000128C3   155 0001:000128D0
+   156 0001:000128DE   157 0001:000128E1   158 0001:000128E6   159 0001:000128F5
+   161 0001:000128F8   162 0001:000128FD   163 0001:00012902   164 0001:0001290A
+   165 0001:00012914   168 0001:0001292B   169 0001:00012933   171 0001:0001293D
+   175 0001:0001294C   176 0001:00012955   177 0001:0001295C   178 0001:0001295F
+   179 0001:0001296C   180 0001:00012972   181 0001:00012980   183 0001:00012995
+   185 0001:000129A5   192 0001:000129B0   193 0001:000129BD   194 0001:000129C4
+   195 0001:000129C6   197 0001:000129C8   198 0001:000129E1   199 0001:000129E5
+   200 0001:000129E8   201 0001:000129F0   202 0001:00012A07   204 0001:00012A14
+   205 0001:00012A1A   207 0001:00012A39   208 0001:00012A40   213 0001:00012A4C
+   214 0001:00012A5C   215 0001:00012A63   216 0001:00012A65   218 0001:00012A67
+   219 0001:00012A6A   220 0001:00012A74   221 0001:00012A8B   223 0001:00012AA0
+   224 0001:00012AA7   229 0001:00012AB4   230 0001:00012AC5   231 0001:00012ACC
+   232 0001:00012ACE   234 0001:00012AD0   235 0001:00012AE5   236 0001:00012AEF
+   238 0001:00012B07   239 0001:00012B0E   242 0001:00012B1C   243 0001:00012B24
+   244 0001:00012B2B   246 0001:00012B2D   247 0001:00012B34   250 0001:00012B3A
+   251 0001:00012B46   253 0001:00012B57   254 0001:00012B5F   255 0001:00012B61
+   248 0001:00012B63   259 0001:00012B69   260 0001:00012B6D   262 0001:00012B76
+   263 0001:00012B7D   269 0001:00012B88   270 0001:00012B92   271 0001:00012B95
+   272 0001:00012B9E   273 0001:00012BBE   274 0001:00012BCA   275 0001:00012BE0
+   276 0001:00012BE3   277 0001:00012BED   283 0001:00012BF8   284 0001:00012C05
+   285 0001:00012C08   286 0001:00012C11   287 0001:00012C23   288 0001:00012C2F
+   289 0001:00012C45   290 0001:00012C48   291 0001:00012C52   297 0001:00012C5C
+   298 0001:00012C66   299 0001:00012C69   300 0001:00012C74   301 0001:00012C7D
+   302 0001:00012C9D   303 0001:00012CA9   304 0001:00012CBF   305 0001:00012CC2
+   306 0001:00012CCC   312 0001:00012CD8   313 0001:00012CE5   314 0001:00012CE8
+   315 0001:00012CF1   316 0001:00012D03   317 0001:00012D0F   318 0001:00012D25
+   319 0001:00012D28   320 0001:00012D32   324 0001:00012D3C   325 0001:00012D49
+   326 0001:00012D4B   328 0001:00012D56   329 0001:00012D59   330 0001:00012D5D
+   332 0001:00012D6A
+
+Line numbers for XAsync(XAsync.pas) segment .itext
+
+   334 0002:00000350
+
+Line numbers for XComErr(XComErr.pas) segment .text
+
+    74 0001:00012EBC    75 0001:00012ED1    76 0001:00012EDA    77 0001:00012EE0
+    80 0001:00012F00    85 0001:00012F06    88 0001:00012F1A    97 0001:00012F20
+    98 0001:00012F43    99 0001:00012F4A   105 0001:00012F97
+
+Line numbers for XComErr(XComErr.pas) segment .itext
+
+   107 0002:00000358
+
+Line numbers for XComDrv(omcom.bpl\ouxcomm\source\XComDrv.pas) segment .text
+
+   596 0001:00014A24   597 0001:00014A2D   598 0001:00014A42   601 0001:00014A48
+   602 0001:00014A51   603 0001:00014A79   607 0001:00014A84   608 0001:00014A86
+   612 0001:00014A88   613 0001:00014AA5   614 0001:00014AAD   615 0001:00014AB5
+   616 0001:00014AD6   619 0001:00014AFC   620 0001:00014B02   621 0001:00014B10
+   624 0001:00014B14   625 0001:00014B32   626 0001:00014B39   625 0001:00014B48
+   627 0001:00014B4D   628 0001:00014B70   631 0001:00014B98   632 0001:00014B9E
+   633 0001:00014BAC   636 0001:00014BB0   637 0001:00014BCD   638 0001:00014BD4
+   637 0001:00014BFB   639 0001:00014C00   640 0001:00014C23   643 0001:00014C50
+   644 0001:00014C56   645 0001:00014C64   648 0001:00014C68   649 0001:00014C85
+   650 0001:00014C8C   649 0001:00014CB3   651 0001:00014CB8   652 0001:00014CDB
+   655 0001:00014D08   656 0001:00014D0E   657 0001:00014D13   658 0001:00014D28
+   659 0001:00014D2F   663 0001:00014D34   664 0001:00014D55   665 0001:00014D5C
+   664 0001:00014D7A   666 0001:00014D7F   667 0001:00014D84   668 0001:00014D88
+   669 0001:00014D8C   671 0001:00014D93   672 0001:00014D9E   673 0001:00014DA1
+   670 0001:00014DA3   674 0001:00014DB2   675 0001:00014DD9   679 0001:00014E04
+   680 0001:00014E07   681 0001:00014E15   682 0001:00014E1B   685 0001:00014E20
+   686 0001:00014E26   687 0001:00014E2D   688 0001:00014E3A   707 0001:00014EAC
+   708 0001:00014EC1   709 0001:00014ECC   710 0001:00014ECF   711 0001:00014EDF
+   712 0001:00014EF0   713 0001:00014EF7   716 0001:00014F14   717 0001:00014F1F
+   718 0001:00014F28   719 0001:00014F2F   720 0001:00014F3B   727 0001:00014F4C
+   728 0001:00014F53   729 0001:00014F63   730 0001:00014F76   731 0001:00014F7C
+   733 0001:00014F80   734 0001:00014F95   735 0001:00014FA5   737 0001:00014FA8
+   739 0001:00014FC4   740 0001:00014FCD   741 0001:00014FDC   745 0001:00014FE3
+   746 0001:00014FE5   747 0001:00014FF3   748 0001:00014FFD   749 0001:00015006
+   753 0001:0001500C   754 0001:00015018   755 0001:00015024   760 0001:00015028
+   761 0001:0001503A   762 0001:00015043   763 0001:00015048   764 0001:00015052
+   765 0001:0001505C   768 0001:00015080   769 0001:0001508B   770 0001:00015094
+   771 0001:000150A0   775 0001:000150B0   780 0001:000150B4   781 0001:000150C3
+   784 0001:000150C4   785 0001:000150CA   787 0001:000150D1   788 0001:000150DC
+   789 0001:000150E9   791 0001:000150EC   794 0001:000150F0   795 0001:00015104
+   796 0001:0001510B   797 0001:00015129   802 0001:0001514C   803 0001:00015161
+   804 0001:0001516A   805 0001:0001516D   806 0001:00015174   807 0001:00015179
+   808 0001:0001517E   811 0001:0001519C   812 0001:0001519F   814 0001:000151A4
+   815 0001:000151A7   816 0001:000151BF   818 0001:000151C7   821 0001:000151CC
+   822 0001:000151CF   824 0001:000151D4   825 0001:000151D7   826 0001:000151EF
+   828 0001:000151F7   831 0001:000151FC   832 0001:000151FF   834 0001:00015204
+   835 0001:00015207   836 0001:0001521F   838 0001:00015227   842 0001:0001522C
+   843 0001:00015232   844 0001:0001524F   846 0001:00015259   847 0001:0001525C
+   851 0001:00015264   852 0001:0001526A   853 0001:00015287   855 0001:0001528E
+   856 0001:00015291   860 0001:00015298   861 0001:0001529E   862 0001:000152BB
+   864 0001:000152C2   865 0001:000152C5   868 0001:000152CC   869 0001:000152D3
+   871 0001:000152E4   872 0001:000152F0   873 0001:000152FA   874 0001:00015304
+   875 0001:0001531C   877 0001:00015326   878 0001:0001532F   883 0001:00015334
+   884 0001:00015349   885 0001:00015352   886 0001:00015355   887 0001:0001535B
+   888 0001:00015361   889 0001:00015367   890 0001:0001536D   899 0001:00015388
+   900 0001:00015391   901 0001:0001539B   904 0001:000153D4   906 0001:000153D8
+   907 0001:000153E2   908 0001:000153EB   909 0001:000153F1   910 0001:000153F5
+   911 0001:000153FC   912 0001:00015407   913 0001:00015409   914 0001:00015412
+   916 0001:00015418   917 0001:0001541C   919 0001:00015420   921 0001:00015426
+   922 0001:0001542A   925 0001:0001542C   926 0001:00015448   927 0001:00015450
+   931 0001:00015458   932 0001:00015462   933 0001:00015466   934 0001:00015483
+   935 0001:0001548C   936 0001:00015493   937 0001:00015499   938 0001:000154A0
+   939 0001:000154A7   940 0001:000154AD   942 0001:000154B4   943 0001:000154BD
+   944 0001:000154C3   946 0001:000154C7   949 0001:000154D0   950 0001:000154D7
+   952 0001:000154E8   953 0001:000154F2   954 0001:000154FA   955 0001:00015507
+   956 0001:00015517   957 0001:0001552F   959 0001:00015539   960 0001:00015542
+   965 0001:00015548   966 0001:0001555D   967 0001:00015566   968 0001:00015569
+   969 0001:0001556D   970 0001:00015571   971 0001:00015575   972 0001:00015579
+   973 0001:0001557D   977 0001:00015598   978 0001:0001559C   979 0001:0001559E
+   980 0001:000155BE   982 0001:000155C3   983 0001:000155C6   985 0001:000155CA
+   987 0001:000155CF   988 0001:000155D2   990 0001:000155D6   992 0001:000155DB
+   993 0001:000155DE   995 0001:000155E2   997 0001:000155E7   998 0001:000155EA
+  1000 0001:000155EE  1002 0001:000155F3  1003 0001:000155F6  1006 0001:000155F8
+  1007 0001:00015614  1008 0001:0001561C  1012 0001:00015620  1013 0001:0001562A
+  1014 0001:0001562C  1015 0001:00015649  1016 0001:00015669  1017 0001:00015670
+  1018 0001:00015677  1019 0001:0001567E  1020 0001:00015685  1022 0001:0001568C
+  1023 0001:000156AC  1024 0001:000156B2  1025 0001:000156B8  1026 0001:000156BE
+  1027 0001:000156C4  1029 0001:000156C8  1032 0001:000156D4  1033 0001:000156DB
+  1035 0001:000156EC  1036 0001:000156FA  1037 0001:00015709  1038 0001:00015718
+  1039 0001:00015727  1040 0001:00015736  1041 0001:0001574E  1043 0001:00015758
+  1044 0001:00015761  1049 0001:00015768  1050 0001:0001577D  1051 0001:00015786
+  1052 0001:00015789  1053 0001:00015790  1054 0001:00015795  1055 0001:0001579C
+  1056 0001:000157A1  1057 0001:000157A8  1061 0001:000157C4  1062 0001:000157C8
+  1063 0001:000157CA  1064 0001:000157EA  1066 0001:000157EF  1067 0001:000157F2
+  1069 0001:000157F6  1071 0001:000157FB  1072 0001:000157FE  1074 0001:00015802
+  1076 0001:00015807  1077 0001:0001580A  1079 0001:0001580E  1081 0001:00015813
+  1082 0001:00015816  1084 0001:0001581A  1086 0001:0001581F  1087 0001:00015822
+  1090 0001:00015824  1091 0001:00015840  1092 0001:00015848  1096 0001:0001584C
+  1097 0001:00015856  1098 0001:00015858  1099 0001:00015875  1100 0001:00015895
+  1101 0001:0001589A  1102 0001:000158A0  1103 0001:000158A6  1104 0001:000158AC
+  1106 0001:000158B2  1107 0001:000158D2  1108 0001:000158D7  1109 0001:000158DC
+  1110 0001:000158E1  1111 0001:000158E6  1113 0001:000158E9  1116 0001:000158F4
+  1117 0001:000158FB  1119 0001:0001590C  1120 0001:0001591A  1121 0001:00015929
+  1122 0001:00015938  1123 0001:00015947  1124 0001:00015956  1125 0001:0001596E
+  1127 0001:00015978  1128 0001:00015981  1134 0001:00015988  1135 0001:0001599A
+  1136 0001:000159A3  1137 0001:000159AA  1138 0001:000159B7  1139 0001:000159BE
+  1140 0001:000159C5  1141 0001:000159CF  1142 0001:000159D4  1143 0001:000159E5
+  1144 0001:000159F6  1145 0001:00015A07  1146 0001:00015A18  1147 0001:00015A20
+  1148 0001:00015A28  1149 0001:00015A33  1150 0001:00015A3A  1151 0001:00015A44
+  1152 0001:00015A4E  1153 0001:00015A58  1154 0001:00015A5C  1155 0001:00015A6E
+  1156 0001:00015A76  1159 0001:00015AA8  1160 0001:00015AB3  1165 0001:00015ABE
+  1166 0001:00015AC9  1167 0001:00015AD2  1169 0001:00015AD9  1170 0001:00015AE1
+  1171 0001:00015AE9  1172 0001:00015AF1  1173 0001:00015AF9  1174 0001:00015B00
+  1175 0001:00015B0B  1176 0001:00015B17  1179 0001:00015B28  1180 0001:00015B48
+  1181 0001:00015B60  1182 0001:00015B6B  1186 0001:00015B8C  1187 0001:00015B93
+  1188 0001:00015B9A  1192 0001:00015B9C  1193 0001:00015BA3  1194 0001:00015BAA
+  1198 0001:00015BAC  1199 0001:00015BB3  1200 0001:00015BBA  1204 0001:00015BBC
+  1205 0001:00015BC3  1206 0001:00015BCA  1209 0001:00015BCC  1210 0001:00015BCF
+  1212 0001:00015BD4  1213 0001:00015BD7  1215 0001:00015BDC  1216 0001:00015BE6
+  1219 0001:00015C01  1222 0001:00015C04  1223 0001:00015C07  1225 0001:00015C12
+  1226 0001:00015C15  1228 0001:00015C30  1231 0001:00015C34  1232 0001:00015C37
+  1234 0001:00015C3C  1235 0001:00015C3F  1237 0001:00015C44  1238 0001:00015C4D
+  1241 0001:00015C68  1244 0001:00015C6C  1245 0001:00015C73  1247 0001:00015C85
+  1248 0001:00015C8C  1250 0001:00015CA7  1253 0001:00015CAC  1255 0001:00015CB3
+  1257 0001:00015CB9  1258 0001:00015CBD  1260 0001:00015CC1  1262 0001:00015CCD
+  1263 0001:00015CD3  1264 0001:00015CD9  1267 0001:00015CDD  1269 0001:00015CEF
+  1270 0001:00015CF6  1272 0001:00015D11  1275 0001:00015D14  1276 0001:00015D1B
+  1278 0001:00015D2D  1279 0001:00015D34  1281 0001:00015D4F  1284 0001:00015D54
+  1285 0001:00015D5A  1287 0001:00015D6F  1288 0001:00015D79  1289 0001:00015D83
+  1297 0001:00015D8D  1298 0001:00015D99  1299 0001:00015DA5  1302 0001:00015DB1
+  1303 0001:00015DBB  1306 0001:00015DC5  1307 0001:00015DCF  1309 0001:00015DD9
+  1310 0001:00015DDD  1313 0001:00015DE4  1315 0001:00015DF3  1316 0001:00015DFD
+  1317 0001:00015E09  1318 0001:00015E15  1319 0001:00015E21  1320 0001:00015E2B
+  1321 0001:00015E37  1322 0001:00015E43  1323 0001:00015E4F  1324 0001:00015E59
+  1325 0001:00015E65  1326 0001:00015E71  1327 0001:00015E77  1328 0001:00015E83
+  1329 0001:00015E8D  1330 0001:00015E99  1331 0001:00015EA5  1332 0001:00015EB1
+  1333 0001:00015EBD  1334 0001:00015EC9  1336 0001:00015ED5  1339 0001:00015EF0
+  1340 0001:00015EF7  1342 0001:00015F02  1343 0001:00015F08  1344 0001:00015F0E
+  1346 0001:00015F12  1348 0001:00015F21  1349 0001:00015F28  1350 0001:00015F3E
+  1352 0001:00015F4E  1358 0001:00015F54  1359 0001:00015F58  1361 0001:00015F69
+  1362 0001:00015F70  1363 0001:00015F79  1364 0001:00015F80  1366 0001:00015F84
+  1367 0001:00015F87  1368 0001:00015F89  1363 0001:00015F8D  1370 0001:00015F92
+  1371 0001:00015F95  1375 0001:00015F98  1376 0001:00015F9E  1377 0001:00015FB7
+  1378 0001:00015FBD  1379 0001:00015FC0  1380 0001:00015FC3  1384 0001:00015FC8
+  1385 0001:00015FCE  1386 0001:00015FE7  1387 0001:00015FF2  1388 0001:00015FF6
+  1392 0001:00015FFC  1393 0001:00016002  1394 0001:0001601B  1395 0001:00016026
+  1396 0001:0001602A  1400 0001:00016030  1401 0001:00016036  1402 0001:0001604F
+  1403 0001:0001605A  1404 0001:0001605E  1416 0001:00016064  1417 0001:0001606A
+  1418 0001:00016083  1419 0001:0001608E  1420 0001:00016092  1425 0001:00016098
+  1426 0001:000160A3  1430 0001:000160A4  1431 0001:000160AF  1434 0001:000160B0
+  1435 0001:000160B6  1436 0001:000160C3  1440 0001:000160C8  1441 0001:000160D1
+  1444 0001:000160D4  1446 0001:000160D9  1445 0001:000160E9  1447 0001:000160F5
+  1451 0001:000160F8  1452 0001:00016118  1454 0001:0001611F  1455 0001:00016126
+  1456 0001:0001612C  1457 0001:00016130  1458 0001:00016136  1459 0001:0001613A
+  1460 0001:00016140  1462 0001:00016144  1463 0001:0001614A  1464 0001:0001614E
+  1465 0001:00016154  1466 0001:0001615B  1467 0001:00016161  1469 0001:00016168
+  1470 0001:0001616E  1471 0001:00016175  1472 0001:0001617B  1474 0001:00016182
+  1475 0001:00016190  1476 0001:00016196  1477 0001:0001619E  1478 0001:000161AA
+  1479 0001:000161B0  1480 0001:000161B6  1481 0001:000161C0  1482 0001:000161CA
+  1483 0001:000161D4  1484 0001:000161DE  1486 0001:000161E8  1487 0001:000161EE
+  1488 0001:000161F2  1489 0001:000161F8  1490 0001:000161FC  1491 0001:00016202
+  1492 0001:00016209  1493 0001:0001620F  1494 0001:00016216  1495 0001:0001621C
+  1496 0001:00016223  1497 0001:00016229  1498 0001:00016230  1499 0001:00016236
+  1501 0001:0001623A  1502 0001:0001624C  1503 0001:0001626A  1506 0001:00016290
+  1507 0001:000162A7  1508 0001:000162B2  1509 0001:000162D0  1510 0001:000162EE
+  1514 0001:00016314  1515 0001:00016330  1517 0001:00016333  1518 0001:00016339
+  1519 0001:0001633F  1520 0001:00016345  1521 0001:0001634B  1523 0001:00016351
+  1524 0001:00016366  1525 0001:00016384  1528 0001:000163A8  1529 0001:000163C5
+  1530 0001:000163D1  1532 0001:000163D5  1533 0001:000163EF  1535 0001:000163F4
+  1536 0001:00016401  1537 0001:00016409  1538 0001:00016410  1546 0001:00016443
+  1547 0001:0001644C  1549 0001:00016450  1550 0001:00016487  1555 0001:00016489
+  1557 0001:0001649D  1558 0001:000164A4  1559 0001:000164AB  1560 0001:000164B2
+  1563 0001:000164F0  1564 0001:00016506  1565 0001:00016511  1566 0001:0001652D
+  1567 0001:00016534  1570 0001:00016558  1571 0001:0001656F  1572 0001:00016571
+  1573 0001:00016598  1575 0001:000165A1  1576 0001:000165A8  1578 0001:000165CF
+  1581 0001:000165F4  1582 0001:0001660A  1587 0001:00016615  1588 0001:00016620
+  1589 0001:00016629  1590 0001:00016630  1591 0001:00016638  1592 0001:00016640
+  1593 0001:0001664A  1594 0001:00016664  1606 0001:00016688  1607 0001:0001668F
+  1610 0001:00016690  1611 0001:00016693  1612 0001:000166AD  1615 0001:000166B0
+  1616 0001:000166B6  1618 0001:000166C1  1619 0001:000166CD  1621 0001:000166DC
+  1624 0001:000166E0  1625 0001:000166F7  1626 0001:000166F9  1628 0001:00016704
+  1629 0001:00016713  1630 0001:00016726  1631 0001:00016740  1634 0001:00016764
+  1635 0001:0001677B  1636 0001:0001677D  1637 0001:00016788  1638 0001:0001679B
+  1639 0001:000167B5  1642 0001:000167DC  1643 0001:000167DF  1644 0001:000167EA
+  1645 0001:000167FB  1646 0001:000167FD  1651 0001:00016800  1652 0001:0001681D
+  1654 0001:00016828  1655 0001:0001683D  1658 0001:00016843  1659 0001:0001684A
+  1661 0001:00016864  1665 0001:00016890  1666 0001:000168AD  1667 0001:000168AF
+  1669 0001:000168BE  1670 0001:000168CB  1671 0001:00016959  1672 0001:00016960
+  1673 0001:00016967  1674 0001:0001696E  1675 0001:00016975  1676 0001:0001697C
+  1677 0001:00016983  1678 0001:0001698A  1679 0001:00016991  1680 0001:00016998
+  1681 0001:0001699F  1682 0001:000169A6  1683 0001:000169AD  1684 0001:000169B4
+  1686 0001:000169BB  1687 0001:000169D5  1693 0001:000169FC  1694 0001:00016A1C
+  1695 0001:00016A1E  1697 0001:00016A29  1698 0001:00016A3A  1699 0001:00016A43
+  1700 0001:00016A48  1702 0001:00016A4D  1703 0001:00016A67  1709 0001:00016A90
+  1710 0001:00016AB2  1711 0001:00016AC1  1712 0001:00016AD1  1713 0001:00016AE1
+  1714 0001:00016AEC  1715 0001:00016B00  1716 0001:00016B1A  1717 0001:00016B23
+  1718 0001:00016B26  1724 0001:00016B4C  1725 0001:00016B6E  1726 0001:00016B7D
+  1727 0001:00016B8D  1728 0001:00016B9D  1729 0001:00016BA8  1730 0001:00016BBC
+  1731 0001:00016BD6  1732 0001:00016BDF  1733 0001:00016BE2  1738 0001:00016C08
+  1739 0001:00016C2E  1741 0001:00016C33  1743 0001:00016C3F  1744 0001:00016C59
+  1747 0001:00016C5E  1749 0001:00016C6A  1750 0001:00016C84  1753 0001:00016C89
+  1755 0001:00016C93  1756 0001:00016C96  1757 0001:00016C9E  1759 0001:00016CA8
+  1760 0001:00016CC1  1762 0001:00016CC9  1763 0001:00016CD1  1764 0001:00016CE3
+  1765 0001:00016CF2  1767 0001:00016CF6  1768 0001:00016CFF  1769 0001:00016D02
+  1770 0001:00016D05  1771 0001:00016D08  1772 0001:00016D12  1773 0001:00016D20
+  1775 0001:00016D4C  1780 0001:00016D5E  1757 0001:00016D6B  1782 0001:00016D75
+  1785 0001:00016DA8  1786 0001:00016DA9  1787 0001:00016DB6  1790 0001:00016DB8
+  1791 0001:00016DBF  1792 0001:00016DD3  1795 0001:00016DD8  1796 0001:00016DDE
+  1797 0001:00016E05  1802 0001:00016E08  1803 0001:00016E2E  1804 0001:00016E33
+  1806 0001:00016E3F  1807 0001:00016E59  1810 0001:00016E5E  1812 0001:00016E6A
+  1813 0001:00016E84  1816 0001:00016E89  1818 0001:00016E93  1819 0001:00016E96
+  1820 0001:00016E9E  1822 0001:00016EA8  1823 0001:00016EB4  1825 0001:00016EB8
+  1826 0001:00016EC0  1827 0001:00016ED2  1828 0001:00016EDB  1829 0001:00016EDE
+  1830 0001:00016EE1  1831 0001:00016EE4  1832 0001:00016EEE  1833 0001:00016EFC
+  1834 0001:00016F0A  1836 0001:00016F23  1840 0001:00016F35  1820 0001:00016F42
+  1842 0001:00016F4C  1845 0001:00016F7C  1846 0001:00016F7D  1847 0001:00016F8A
+  1850 0001:00016F8C  1851 0001:00016F92  1852 0001:00016FA6  1856 0001:00016FAC
+  1857 0001:00016FB2  1858 0001:00016FC4  1859 0001:00016FDF  1860 0001:00016FE8
+  1861 0001:00016FED  1864 0001:00016FF0  1865 0001:00016FF9  1866 0001:00017010
+  1868 0001:00017014  1869 0001:0001701D  1871 0001:00017034  1875 0001:00017038
+  1876 0001:00017043  1877 0001:00017058  1878 0001:00017069  1877 0001:0001708D
+  1879 0001:00017090  1880 0001:0001709F  1881 0001:000170B0  1880 0001:000170D4
+  1882 0001:000170D7  1885 0001:000170E0  1886 0001:000170E9  1887 0001:0001710B
+  1888 0001:0001712F  1889 0001:0001713F  1892 0001:00017148  1893 0001:00017149
+  1894 0001:00017165  1898 0001:00017168  1899 0001:00017181  1900 0001:0001718C
+  1901 0001:0001719F  1902 0001:000171B9  1906 0001:000171DC  1907 0001:000171F5
+  1908 0001:00017200  1909 0001:00017213  1910 0001:0001722D  1914 0001:00017250
+  1915 0001:00017269  1916 0001:00017274  1917 0001:00017287  1918 0001:000172A1
+  1922 0001:000172C4  1923 0001:000172DD  1924 0001:000172E8  1925 0001:000172FB
+  1926 0001:00017315  1934 0001:00017338  1935 0001:00017366  1936 0001:0001736D
+  1938 0001:00017379  1939 0001:00017393  1941 0001:00017398  1943 0001:000173A4
+  1944 0001:000173BE  1946 0001:000173C3  1947 0001:000173CD  1948 0001:000173D7
+  1949 0001:000173E5  1950 0001:000173ED  1951 0001:000173F4  1953 0001:000173F9
+  1955 0001:00017410  1956 0001:00017426  1957 0001:00017438  1959 0001:00017445
+  1960 0001:0001744B  1961 0001:0001744D  1956 0001:00017453  1962 0001:00017456
+  1963 0001:00017459  1965 0001:0001746D  1966 0001:00017472  1967 0001:00017485
+  1969 0001:000174B8  1971 0001:000174CA  1974 0001:000174F8  1975 0001:00017504
+  1977 0001:0001750C  1978 0001:00017515  1979 0001:0001752F  1981 0001:00017533
+  1982 0001:0001753C  1984 0001:0001754B  1985 0001:00017555  1986 0001:00017569
+  1989 0001:00017570  1990 0001:0001758A  1991 0001:0001758C  1992 0001:0001759E
+  1993 0001:000175A9  1995 0001:000175BD  1996 0001:000175D7  2000 0001:00017600
+  2001 0001:00017607  2004 0001:00017608  2005 0001:00017629  2006 0001:0001762B
+  2008 0001:00017636  2009 0001:00017641  2012 0001:0001765D  2013 0001:0001766E
+  2016 0001:0001767E  2017 0001:00017698  2020 0001:000176CC  2021 0001:000176ED
+  2022 0001:000176EF  2024 0001:000176FA  2025 0001:00017705  2026 0001:00017721
+  2028 0001:0001772C  2029 0001:0001774A  2032 0001:0001775A  2033 0001:00017774
+  2036 0001:000177A4  2037 0001:000177C5  2038 0001:000177C7  2040 0001:000177D2
+  2041 0001:000177DD  2043 0001:000177F9  2045 0001:0001780C  2046 0001:00017826
+  2049 0001:00017854  2050 0001:00017875  2051 0001:00017877  2053 0001:00017882
+  2054 0001:0001788D  2056 0001:000178A9  2058 0001:000178B9  2059 0001:000178D3
+  2062 0001:00017900  2063 0001:0001791A  2064 0001:0001791C  2065 0001:00017927
+  2067 0001:00017938  2068 0001:00017952  2073 0001:0001797C  2074 0001:00017982
+  2075 0001:0001798F  2077 0001:000179A4  2078 0001:000179B9  2079 0001:000179C4
+  2075 0001:000179C5  2080 0001:000179C8  2081 0001:000179D4  2082 0001:000179DC
+  2083 0001:000179E3  2084 0001:000179F8  2089 0001:00017A04  2090 0001:00017A16
+  2091 0001:00017A1F  2092 0001:00017A24  2093 0001:00017A2C  2094 0001:00017A33
+  2095 0001:00017A40  2096 0001:00017A4D  2097 0001:00017A54  2098 0001:00017A58
+  2101 0001:00017A98  2102 0001:00017A9F  2104 0001:00017AB0  2105 0001:00017ABD
+  2106 0001:00017AC8  2107 0001:00017ACE  2108 0001:00017AD4  2109 0001:00017ADF
+  2110 0001:00017AE5  2113 0001:00017AEE  2114 0001:00017AF7  2118 0001:00017AFC
+  2121 0001:00017B93  2123 0001:00017B96  2134 0001:00017C20  2135 0001:00017C26
+  2136 0001:00017C31  2137 0001:00017C38  2138 0001:00017C3C  2139 0001:00017C4B
+  2140 0001:00017C5B  2142 0001:00017C6B  2144 0001:00017C77  2149 0001:00017C90
+  2150 0001:00017CB0  2151 0001:00017CB3  2153 0001:00017CC5  2154 0001:00017CDB
+  2156 0001:00017CE3  2157 0001:00017CF2  2158 0001:00017CF9  2159 0001:00017CFF
+  2160 0001:00017D06  2162 0001:00017D13  2163 0001:00017D15  2164 0001:00017D17
+  2159 0001:00017D1B  2165 0001:00017D20  2169 0001:00017D58  2170 0001:00017D5F
+  2172 0001:00017D66  2173 0001:00017D6E  2175 0001:00017D7E  2171 0001:00017D7F
+  2176 0001:00017D8A  2180 0001:00017D90  2181 0001:00017D95  2182 0001:00017D97
+  2183 0001:00017DA0  2186 0001:00017DAA  2190 0001:00017DDA  2189 0001:00017DE8
+  2191 0001:00017E02  2192 0001:00017E10  2198 0001:00017E14  2196 0001:00017E22
+  2199 0001:00017E42  2200 0001:00017E50  2202 0001:00017E54  2204 0001:00017E63
+  2184 0001:00017E64  2206 0001:00017E73  2211 0001:00017E7C  2212 0001:00017E9A
+  2214 0001:00017EE4  2216 0001:00017EEE  2218 0001:00017EF6  2217 0001:00017EF8
+  2219 0001:00017F05  2222 0001:00017F2C  2223 0001:00017F6C  2224 0001:00017F94
+  2225 0001:00017F96  2226 0001:00017F9E  2228 0001:00017FB4  2229 0001:00017FC3
+  2231 0001:00017FC8  2232 0001:00017FFF  2233 0001:00018003  2235 0001:00018012
+  2236 0001:00018017  2239 0001:0001805C  2240 0001:00018090  2241 0001:00018092
+  2242 0001:0001809A  2244 0001:000180B5  2246 0001:000180DE  2247 0001:000180EC
+  2248 0001:000180FB  2249 0001:0001810D  2250 0001:00018120  2253 0001:00018125
+  2257 0001:0001816A  2258 0001:0001816B  2259 0001:00018184  2251 0001:00018186
+  2262 0001:0001818A  2266 0001:000181C0  2267 0001:000181C4  2268 0001:000181C6
+  2269 0001:000181E4  2270 0001:000181E6  2271 0001:000181F6  2272 0001:000181F8
+  2275 0001:00018218  2276 0001:00018227  2277 0001:00018241  2278 0001:0001825D
+  2283 0001:00018274  2284 0001:00018286  2285 0001:0001828F  2286 0001:000182A1
+  2289 0001:000182BC  2290 0001:000182C7  2291 0001:000182D3  2292 0001:000182DE
+  2295 0001:000182EC  2296 0001:000182EF  2297 0001:000182F6  2298 0001:000182FD
+  2299 0001:0001830A  2300 0001:00018311  2303 0001:00018318  2304 0001:0001832E
+  2306 0001:00018339  2307 0001:0001834B  2308 0001:0001835B  2309 0001:00018364
+  2310 0001:0001837E  2314 0001:000183A0  2315 0001:000183AA  2316 0001:000183B1
+  2319 0001:000183B4  2320 0001:000183BD  2321 0001:0001842F  2325 0001:00018438
+  2326 0001:00018463  2327 0001:00018467  2328 0001:0001848A  2329 0001:0001849A
+  2331 0001:000184A6  2332 0001:000184B5  2333 0001:000184C5  2334 0001:000184C9
+  2335 0001:000184FB  2336 0001:00018508  2337 0001:00018518  2338 0001:00018525
+  2339 0001:0001852F  2340 0001:00018539  2341 0001:00018547  2343 0001:00018562
+  2344 0001:0001856C  2346 0001:00018572  2347 0001:0001857E  2348 0001:00018590
+  2349 0001:0001859C  2352 0001:000185AB  2354 0001:000185BD  2357 0001:00018614
+  2358 0001:00018635  2359 0001:00018637  2360 0001:00018642  2361 0001:00018661
+  2363 0001:00018698  2364 0001:000186B7  2368 0001:0001874D  2371 0001:00018790
+  2372 0001:000187BB  2373 0001:000187BF  2375 0001:000187CB  2376 0001:000187E5
+  2377 0001:000187EA  2379 0001:000187F6  2380 0001:00018810  2382 0001:00018815
+  2383 0001:00018827  2384 0001:00018833  2385 0001:00018839  2387 0001:0001883D
+  2388 0001:00018847  2389 0001:00018851  2390 0001:0001885F  2393 0001:000188E8
+  2395 0001:000188FA  2396 0001:00018900  2397 0001:0001890E  2399 0001:0001891A
+  2400 0001:0001892C  2401 0001:0001893B  2403 0001:0001894D  2404 0001:00018955
+  2407 0001:00018961  2408 0001:00018970  2409 0001:0001897A  2413 0001:000189CC
+  2414 0001:00018A05  2415 0001:00018A09  2417 0001:00018A15  2418 0001:00018A2F
+  2419 0001:00018A34  2421 0001:00018A40  2422 0001:00018A5A  2424 0001:00018A5F
+  2425 0001:00018A69  2426 0001:00018A73  2427 0001:00018A81  2428 0001:00018ACB
+  2430 0001:00018AD1  2431 0001:00018ADE  2432 0001:00018B00  2434 0001:00018B06
+  2435 0001:00018B13  2437 0001:00018B1D  2439 0001:00018B34  2441 0001:00018B46
+  2444 0001:00018B98  2445 0001:00018BB6  2447 0001:00018BC2  2448 0001:00018BC4
+  2449 0001:00018BDE  2451 0001:00018BE3  2452 0001:00018BED  2453 0001:00018BF7
+  2454 0001:00018C05  2457 0001:00018C56  2459 0001:00018C7A  2460 0001:00018C8A
+  2463 0001:00018C9F  2465 0001:00018CB1  2466 0001:00018CBE  2467 0001:00018CC7
+  2470 0001:00018D04  2471 0001:00018D07  2472 0001:00018D23  2475 0001:00018D28
+  2476 0001:00018D45  2478 0001:00018D51  2479 0001:00018D55  2480 0001:00018D6F
+  2482 0001:00018D74  2484 0001:00018D98  2485 0001:00018DA2  2486 0001:00018DA6
+  2489 0001:00018DB0  2490 0001:00018DBA  2491 0001:00018DC8  2494 0001:00018E1A
+  2497 0001:00018E2C  2498 0001:00018E3B  2507 0001:00018E7C  2508 0001:00018E81
+  2509 0001:00018E88  2510 0001:00018E9F  2511 0001:00018EBB  2515 0001:00018EC0
+  2517 0001:00018EFA  2516 0001:00018F0B  2518 0001:00018F1C  2519 0001:00018F27
+  2520 0001:00018F76  2524 0001:00018F9E  2525 0001:00018FC2  2522 0001:00018FD3
+  2527 0001:00018FE1  2528 0001:0001900A  2529 0001:00019021  2533 0001:00019060
+  2535 0001:0001906D  2534 0001:0001907E  2537 0001:0001908C  2536 0001:000190A1
+  2538 0001:000190B6  2540 0001:000190B8  2541 0001:000190B9  2542 0001:000190C6
+  2544 0001:000190D3  2545 0001:000190E2  2547 0001:000190E3  2548 0001:000190E7
+  2549 0001:000190F4  2554 0001:00019104  2555 0001:00019120  2556 0001:00019122
+  2557 0001:0001912B  2559 0001:00019140  2560 0001:0001914B  2563 0001:0001914E
+  2564 0001:00019171  2561 0001:00019172  2566 0001:0001917F  2568 0001:00019183
+  2569 0001:00019194  2570 0001:0001919E  2572 0001:000191B8  2573 0001:000191C6
+  2574 0001:000191D0  2575 0001:000191DA  2579 0001:000191DC  2581 0001:00019204
+  2582 0001:0001922F  2584 0001:0001923F  2585 0001:00019249  2586 0001:00019254
+  2587 0001:0001925E  2588 0001:00019272  2589 0001:0001927C  2591 0001:00019287
+  2592 0001:00019294  2593 0001:0001929E  2594 0001:000192AF  2595 0001:000192C1
+  2596 0001:000192CD  2597 0001:000192E1  2600 0001:00019314  2601 0001:0001931C
+  2603 0001:00019334  2605 0001:0001933F  2606 0001:00019351  2607 0001:00019358
+  2608 0001:00019361  2610 0001:0001936A  2612 0001:00019373  2613 0001:0001937A
+  2614 0001:00019385  2616 0001:0001938C  2619 0001:00019393  2620 0001:000193C0
+  2621 0001:000193CE  2622 0001:000193D9  2625 0001:000193DC  2626 0001:00019411
+  2628 0001:0001941C  2630 0001:00019433  2631 0001:0001943A  2632 0001:00019443
+  2634 0001:00019460  2635 0001:00019467  2638 0001:0001946E  2639 0001:00019484
+  2640 0001:0001948B  2642 0001:000194A1  2643 0001:000194A8  2644 0001:000194B5
+  2646 0001:000194BC  2647 0001:000194D0  2648 0001:000194FF  2649 0001:00019506
+  2652 0001:00019544  2653 0001:0001954C  2654 0001:00019556  2655 0001:00019564
+  2657 0001:00019590  2659 0001:000195A8  2662 0001:000195B0  2663 0001:000195B8
+  2664 0001:000195C2  2665 0001:000195D0  2667 0001:000195FC  2669 0001:0001960E
+  2672 0001:00019614  2673 0001:0001961A  2674 0001:00019626  2676 0001:00019631
+  2677 0001:00019638  2679 0001:00019652  2682 0001:00019658  2683 0001:0001965B
+  2685 0001:00019666  2686 0001:0001967B  2687 0001:00019682  2689 0001:0001969A
+  2692 0001:000196A0  2693 0001:000196A1  2694 0001:000196BB  2697 0001:000196C0
+  2698 0001:000196DC  2699 0001:000196E6  2700 0001:000196F4  2702 0001:00019735
+  2704 0001:00019747  2707 0001:00019774  2708 0001:00019794  2709 0001:0001979E
+  2710 0001:000197AC  2711 0001:000197BB  2714 0001:0001980C  2715 0001:00019810
+  2718 0001:00019857  2720 0001:00019869  2724 0001:000198C0  2725 0001:000198E3
+  2726 0001:000198F5  2727 0001:000198FF  2728 0001:00019913  2730 0001:0001991E
+  2731 0001:00019938  2732 0001:0001993D  2736 0001:00019978  2737 0001:00019992
+  2739 0001:00019997  2740 0001:000199A6  2741 0001:000199B0  2743 0001:000199B7
+  2744 0001:000199C3  2746 0001:000199D2  2747 0001:00019A01  2748 0001:00019A14
+  2749 0001:00019A28  2752 0001:00019A54  2753 0001:00019A57  2754 0001:00019A73
+  2758 0001:00019A78  2759 0001:00019A99  2760 0001:00019A9D  2763 0001:00019AB8
+  2764 0001:00019AC5  2765 0001:00019ACF  2766 0001:00019ADE  2768 0001:00019AEB
+  2770 0001:00019AFB  2773 0001:00019B0A  2774 0001:00019B3C  2777 0001:00019B44
+  2778 0001:00019B50  2780 0001:00019B78  2782 0001:00019B83  2785 0001:00019B85
+  2786 0001:00019B8F  2787 0001:00019B9D  2788 0001:00019BB0  2790 0001:00019BD2
+  2792 0001:00019BE4  2795 0001:00019C4C  2796 0001:00019C6C  2798 0001:00019C78
+  2799 0001:00019C92  2801 0001:00019C97  2802 0001:00019CA3  2803 0001:00019CB4
+  2805 0001:00019CC0  2806 0001:00019CC8  2807 0001:00019CD2  2808 0001:00019CDC
+  2809 0001:00019CEA  2810 0001:00019CF7  2812 0001:00019D11  2813 0001:00019D1B
+  2815 0001:00019D2D  2816 0001:00019D3C  2818 0001:00019D5C  2819 0001:00019D64
+  2820 0001:00019D6E  2821 0001:00019D7C  2824 0001:00019DB8  2825 0001:00019DCC
+  2828 0001:00019DE3  2831 0001:00019DF5  2834 0001:00019E44  2835 0001:00019E5A
+  2837 0001:00019E65  2838 0001:00019E7F  2840 0001:00019E81  2842 0001:00019E8C
+  2843 0001:00019E9E  2844 0001:00019EAA  2845 0001:00019EB3  2847 0001:00019EBC
+  2851 0001:00019EE0  2852 0001:00019EFD  2853 0001:00019F04  2855 0001:00019F20
+  2856 0001:00019F31  2857 0001:00019F42  2858 0001:00019F53  2859 0001:00019F66
+  2860 0001:00019F71  2861 0001:00019F8B  2864 0001:00019FC4  2865 0001:00019FC8
+  2866 0001:00019FD3  2868 0001:00019FE2  2869 0001:00019FE9  2872 0001:00019FF8
+  2873 0001:00019FFC  2874 0001:0001A005  2875 0001:0001A019  2876 0001:0001A01C
+  2886 0001:0001A024  2887 0001:0001A027  2888 0001:0001A03A  2890 0001:0001A053
+  2891 0001:0001A058  2895 0001:0001A060  2896 0001:0001A063  2897 0001:0001A06F
+  2898 0001:0001A086  2904 0001:0001A08C
+
+Line numbers for XComDrv(omcom.bpl\ouxcomm\source\XComDrv.pas) segment .itext
+
+  2900 0002:00000360  2901 0002:00000369  2902 0002:00000373
+
+Line numbers for .omcom(omcom.dpk) segment .itext
+
+    39 0002:00000374
+
+Bound resource files
+
+U:\source\omcom.bpl\cport\source\CPortTrmSet.DFM
+U:\source\omcom.bpl\cport\source\CPortImg.res
+U:\source\omcom.bpl\cport\source\CPortSetup.DFM
+omcom.res
+omcom.drf
+
+
+Program entry point at 0002:00000374

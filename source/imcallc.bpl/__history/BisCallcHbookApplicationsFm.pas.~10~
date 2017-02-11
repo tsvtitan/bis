@@ -1,0 +1,50 @@
+unit BisCallcHbookApplicationsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBiCallcHbookApplicationsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookApplicationsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHbookApplicationsForm: TBiCallcHbookApplicationsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHbookApplicationEditFm;
+
+{ TBisCallcHbookApplicationsFormIface }
+
+constructor TBisCallcHbookApplicationsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBiCallcHbookApplicationsForm;
+  InsertClass:=TBisCallcHbookApplicationInsertFormIface;
+  UpdateClass:=TBisCallcHbookApplicationUpdateFormIface;
+  DeleteClass:=TBisCallcHbookApplicationDeleteFormIface;
+  ProviderName:='S_APPLICATIONS';
+  with FieldNames do begin
+    AddKey('APPLICATION_ID');
+    Add('NAME','Наименование',100);
+    Add('DESCRIPTION','Описание',150);
+    AddInvisible('LOCKED');
+  end;
+  Orders.Add('NAME');
+end;
+
+end.

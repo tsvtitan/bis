@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{f8ea43b8-9465-43f3-8b82-c20069e5ee6b}</ProjectGuid>
+    <MainSource>imcall.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\imcall.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+    <DCC_UnitSearchPath>U:\source\_dcp</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp</DCC_IncludePath>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_IMPLICIT_IMPORT>False</DCC_IMPLICIT_IMPORT>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_OutputDRCFile>True</DCC_OutputDRCFile>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="HostApplication">U:\bin\taxi.exe</Parameters><Parameters Name="RunParams">/config imtaxi2.ini /noupdate</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options><Package_Options Name="LibSuffix"></Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">2</VersionInfo><VersionInfo Name="MinorVer">1</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">6</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">Call interface module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">2.1.0.6</VersionInfoKeys><VersionInfoKeys Name="InternalName">imcall.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">imcall.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">2.1</VersionInfoKeys><VersionInfoKeys Name="Comments">Call interface module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">imcall.dpk</Source></Source><Excluded_Packages /><Language><Language Name="ProjectLang">$00000419</Language><Language Name="RootDir">U:\source\imdesign.bpl\</Language></Language>  
+    
+    
+    <Resource_DLL_Projects>
+      <Resource_DLL_Projects Name="Item0">Русский*$00000419*RUS*RUS</Resource_DLL_Projects>
+    </Resource_DLL_Projects>
+  </Delphi.Personality><ModelSupport>False</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="imcall.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="E:\Work\bis\source\core.dcp" />
+    <DCCReference Include="E:\Work\bis\source\imaudio.dcp" />
+    <DCCReference Include="E:\Work\bis\source\imdesign.dcp" />
+    <DCCReference Include="E:\Work\bis\source\omaudio.dcp" />
+    <DCCReference Include="E:\Work\bis\source\omnet.dcp" />
+    <DCCReference Include="imcall.bpl\BisCallConsts.pas" />
+    <DCCReference Include="imcall.bpl\BisCallDataCallEditFm.pas">
+      <Form>BisCallDataCallEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcall.bpl\BisCallDataCallFilterFm.pas">
+      <Form>BisCallDataCallFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcall.bpl\BisCallDataCallResultEditFm.pas">
+      <Form>BisCallDataCallResultEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcall.bpl\BisCallDataCallResultsFm.pas">
+      <Form>BisCallDataCallResultsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcall.bpl\BisCallDataCallsFm.pas">
+      <Form>BisCallDataCallsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcall.bpl\BisCallDataCallsFrm.pas">
+      <Form>BisCallDataCallsFrame</Form>
+      <DesignClass>T</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imcall.bpl\BisCallInit.pas" />
+    <DCCReference Include="imcall.bpl\BisCallPhoneFm.pas">
+      <Form>BisCallPhoneForm</Form>
+    </DCCReference>
+    <DCCReference Include="imcall.bpl\BisCallPhoneFrm.pas">
+      <Form>BisCallPhoneFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imcall.bpl\BisCallPhoneMessages.pas" />
+    <DCCReference Include="imcall.bpl\BisCallResultFm.pas">
+      <Form>BisCallResultForm</Form>
+    </DCCReference>
+  </ItemGroup>
+</Project>

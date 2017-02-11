@@ -1,0 +1,346 @@
+unit BisDesignDataPermissionEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ImgList,
+  BisFm, BisDataEditFm, BisControls, BisParam, BisParams, BisIfaces;
+
+type
+  TBisDesignDataPermissionEditForm = class(TBisDataEditForm)
+    LabelAccount: TLabel;
+    EditAccount: TEdit;
+    ButtonAccount: TButton;
+    LabelInterface: TLabel;
+    EditInterface: TEdit;
+    ButtonInterface: TButton;
+    LabelRightAccess: TLabel;
+    ComboBoxRightAccess: TComboBox;
+    LabelValue: TLabel;
+    ComboBoxValue: TComboBox;
+    CheckBoxRefresh: TCheckBox;
+  private
+    procedure GetIfacePermissions(Iface: TBisIface; Strings: TStrings);
+    procedure FillPermissions(InterfaceId: Variant; Strings: TStrings);
+  public
+    procedure ChangeParam(Param: TBisParam); override;
+    procedure Execute; override;
+    destructor Destroy; override;
+    function CanShow: Boolean; override;
+  end;
+
+  TBisDesignDataPermissionEditFormIface=class(TBisDataEditFormIface)
+  private
+    FChangeInterfaceId: Boolean;
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property ChangeInterfaceId: Boolean read FChangeInterfaceId write FChangeInterfaceId;
+  end;
+
+  TBisDesignDataPermissionInsertFormIface=class(TBisDesignDataPermissionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDesignDataPermissionUpdateFormIface=class(TBisDesignDataPermissionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDesignDataPermissionDeleteFormIface=class(TBisDesignDataPermissionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDesignDataPermissionEditForm: TBisDesignDataPermissionEditForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisUtils,
+     BisDesignDataRolesAndAccountsFm, BisDesignDataInterfacesFm,
+     BisProvider, BisCore, BisInterfaces, BisPermissions,
+     BisFilterGroups, BisIfaceModules, BisScriptModules, BisReportModules,
+     BisScriptIface, BisReportFm, BisDocumentFm, BisParamEditDataSelect;
+
+{ TBisDesignDataPermissionEditFormIface }
+
+constructor TBisDesignDataPermissionEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDesignDataPermissionEditForm;
+  with Params do begin
+    AddKey('PERMISSION_ID').Older('OLD_PERMISSION_ID');
+    AddEditDataSelect('ACCOUNT_ID','EditAccount','LabelAccount','ButtonAccount',
+                      TBisDesignDataRolesAndAccountsFormIface,'USER_NAME',true);
+    AddEditDataSelect('INTERFACE_ID','EditInterface','LabelInterface','ButtonInterface',
+                      TBisDesignDataInterfacesFormIface,'INTERFACE_NAME',true,false,'','NAME');
+    AddComboBoxTextIndex('RIGHT_ACCESS','ComboBoxRightAccess','LabelRightAccess',true);
+    AddComboBoxTextIndex('VALUE','ComboBoxValue','LabelValue',true);
+  end;
+end;
+
+function TBisDesignDataPermissionEditFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then begin
+    with TBisDesignDataPermissionEditForm(Result) do begin
+      if FChangeInterfaceId then
+        ChangeParam(Provider.Params.ParamByName('INTERFACE_ID'));
+    end;
+  end;
+end;
+
+{ TBisDesignDataPermissionInsertFormIface }
+
+constructor TBisDesignDataPermissionInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_PERMISSION';
+end;
+
+{ TBisDesignDataPermissionUpdateFormIface }
+
+constructor TBisDesignDataPermissionUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_PERMISSION';
+end;
+
+{ TBisDesignDataPermissionDeleteFormIface }
+
+constructor TBisDesignDataPermissionDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_PERMISSION';
+end;
+
+{ TBisDesignDataPermissionEditForm }
+
+destructor TBisDesignDataPermissionEditForm.Destroy;
+begin
+  ClearStrings(ComboBoxRightAccess.Items);
+  inherited Destroy;
+end;
+
+procedure TBisDesignDataPermissionEditForm.Execute;
+begin
+  inherited Execute;
+  if CheckBoxRefresh.Checked then begin
+    Core.RefreshPermissions;
+    Core.ReloadInterfaces;
+  end;
+end;
+
+function TBisDesignDataPermissionEditForm.CanShow: Boolean;
+var
+  Param: TBisParamEditDataSelect;
+begin
+  Result:=inherited CanShow;
+  if Result and (Mode in [emInsert]) then begin
+    Param:=TBisParamEditDataSelect(Provider.Params.ParamByName('ACCOUNT_ID'));
+    if Assigned(Param) then
+      Result:=Param.Select;
+  end;
+end;
+
+procedure TBisDesignDataPermissionEditForm.GetIfacePermissions(Iface: TBisIface; Strings: TStrings);
+var
+  i: Integer;
+  Perm: TBisPermission;
+  NewPerm: TBisPermission;
+begin
+  if Assigned(Iface) then begin
+    for i:=0 to Iface.Permissions.Count-1 do begin
+      Perm:=Iface.Permissions.Items[i];
+      NewPerm:=TBisPermission.Create(nil);
+      NewPerm.CopyFrom(Perm);
+      Strings.AddObject(NewPerm.ObjectName,NewPerm);
+    end;
+  end;
+end;
+
+procedure TBisDesignDataPermissionEditForm.FillPermissions(InterfaceId: Variant; Strings: TStrings);
+var
+  ModuleName: String;
+  ModuleInterface: String;
+
+  procedure FillInternal;
+  var
+    Module: TBisIfaceModule;
+    Iface: TBisIface;
+  begin
+    Module:=TBisIfaceModule(Core.IfaceModules.Find(ModuleName));
+    if Assigned(Module) and Module.Enabled then begin
+???      Iface:=TBisIface(Module.Ifaces.Find(ModuleInterface));
+      GetIfacePermissions(Iface,Strings);
+    end;
+  end;
+
+  procedure FillScript;
+  var
+    P: TBisProvider;
+    Engine: String;
+    Module: TBisScriptModule;
+    AClass: TBisScriptIfaceClass;
+    Iface: TBisIface;
+  begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=false;
+      P.ProviderName:='S_SCRIPTS';
+      with P.FieldNames do begin
+        AddInvisible('ENGINE');
+      end;
+      P.FilterGroups.Add.Filters.Add('SCRIPT_ID',fcEqual,InterfaceId);
+      P.Open;
+      if P.Active and not P.Empty then begin
+        Engine:=P.FieldByName('ENGINE').AsString;
+        Module:=TBisScriptModule(Core.ScriptModules.Find(Engine));
+        if Assigned(Module) and Module.Enabled then begin
+          AClass:=Module.ScriptClass;
+          if Assigned(AClass) then begin
+            Iface:=AClass.Create(nil);
+            try
+              Iface.Init;
+              GetIfacePermissions(Iface,Strings);
+            finally
+              Iface.Free;
+            end;
+          end;
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+
+  procedure FillReport;
+  var
+    P: TBisProvider;
+    Engine: String;
+    Module: TBisReportModule;
+    AClass: TBisReportFormIfaceClass;
+    Iface: TBisIface;
+  begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=false;
+      P.ProviderName:='S_REPORTS';
+      with P.FieldNames do begin
+        AddInvisible('ENGINE');
+      end;
+      P.FilterGroups.Add.Filters.Add('REPORT_ID',fcEqual,InterfaceId);
+      P.Open;
+      if P.Active and not P.Empty then begin
+        Engine:=P.FieldByName('ENGINE').AsString;
+        Module:=TBisReportModule(Core.ReportModules.Find(Engine));
+        if Assigned(Module) and Module.Enabled then begin
+          AClass:=Module.ReportClass;
+          if Assigned(AClass) then begin
+            Iface:=AClass.Create(nil);
+            try
+              Iface.Init;
+              GetIfacePermissions(Iface,Strings);
+            finally
+              Iface.Free;
+            end;
+          end;
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+
+  procedure FillDocument;
+  var
+    Iface: TBisIface;
+  begin
+    Iface:=TBisDocumentFormIface.Create(nil);
+    try
+      Iface.Init;
+      GetIfacePermissions(Iface,Strings);
+    finally
+      Iface.Free;
+    end;
+  end;
+
+var
+  P: TBisProvider;
+  InterfaceType: TBisInterfaceType;
+begin
+  if not VarIsNull(InterfaceId) then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=false;
+      P.ProviderName:='S_INTERFACES';
+      with P.FieldNames do begin
+        AddInvisible('INTERFACE_TYPE');
+        AddInvisible('MODULE_NAME');
+        AddInvisible('MODULE_INTERFACE');
+      end;
+      P.FilterGroups.Add.Filters.Add('INTERFACE_ID',fcEqual,InterfaceId);
+      P.Open;
+      if P.Active and not P.Empty then begin
+        InterfaceType:=TBisInterfaceType(P.FieldByName('INTERFACE_TYPE').AsInteger);
+        ModuleName:=P.FieldByName('MODULE_NAME').AsString;
+        ModuleInterface:=P.FieldByName('MODULE_INTERFACE').AsString;
+        case InterfaceType of
+          itInternal: FillInternal;
+          itScript: FillScript;
+          itReport: FillReport;
+          itDocument: FillDocument;
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+procedure TBisDesignDataPermissionEditForm.ChangeParam(Param: TBisParam);
+var
+  i: Integer;
+  AInterface: TBisInterface;
+  Iface: TBisIface;
+  Perm: TBisPermission;
+begin
+  inherited ChangeParam(Param);
+
+  if AnsiSameText(Param.ParamName,'INTERFACE_ID') then begin
+    ClearStrings(ComboBoxRightAccess.Items);
+    ComboBoxValue.Clear;
+    AInterface:=Core.Interfaces.FindById(Param.Value);
+    if Assigned(AInterface) then begin
+      Iface:=AInterface.Iface;
+      if Assigned(Iface) then
+        GetIfacePermissions(Iface,ComboBoxRightAccess.Items)
+      else
+        FillPermissions(Param.Value,ComboBoxRightAccess.Items);
+    end else
+      FillPermissions(Param.Value,ComboBoxRightAccess.Items);
+  end;
+
+  if AnsiSameText(Param.ParamName,'RIGHT_ACCESS') then begin
+    if ComboBoxRightAccess.ItemIndex<>-1 then begin
+      ComboBoxValue.Clear;
+      Perm:=TBisPermission(ComboBoxRightAccess.Items.Objects[ComboBoxRightAccess.ItemIndex]);
+      if Assigned(Perm) then begin
+        for i:=0 to Perm.Values.Count-1 do begin
+          ComboBoxValue.Items.Add(Perm.Values[i]);
+        end;
+      end;
+    end else
+      ComboBoxValue.Clear;
+  end;
+
+end;
+
+end.

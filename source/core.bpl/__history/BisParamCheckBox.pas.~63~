@@ -1,0 +1,112 @@
+unit BisParamCheckBox;
+
+interface
+
+uses Classes, StdCtrls, Controls, DB,
+     BisParam, BisControls;
+
+type
+  TBisParamCheckBox=class(TBisParam)
+  private
+    FCheckBoxName: String;
+    FCheckBox: TCheckBox;
+    FOldCheckBoxClick: TNotifyEvent;
+
+    procedure CheckBoxClick(Sender: TObject);
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetControl: TWinControl; override;
+    function GetCaption: String; override;
+
+    property CheckBox: TCheckBox read FCheckBox;
+  public
+    constructor Create; override;
+    procedure LinkControls(Parent: TWinControl); override;
+    procedure CopyFrom(Source: TBisParam); override;
+
+    property CheckBoxName: String read FCheckBoxName write FCheckBoxName;
+  end;
+
+implementation
+
+uses Variants,
+     BisUtils;
+
+{ TBisParamCheckBox }
+
+constructor TBisParamCheckBox.Create;
+begin
+  inherited Create;
+  DataType:=ftInteger;
+end;
+
+procedure TBisParamCheckBox.CopyFrom(Source: TBisParam);
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisParamCheckBox) then begin
+    CheckBoxName:=TBisParamCheckBox(Source).CheckBoxName;
+  end;
+end;
+
+procedure TBisParamCheckBox.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FCheckBox:=TCheckBox(Parent.FindComponent(FCheckBoxName));
+    if Assigned(FCheckBox) then begin
+      if VarIsNull(DefaultValue) then begin
+        DefaultValue:=Value;
+      end;
+      FOldCheckBoxClick:=FCheckBox.OnClick;
+      FCheckBox.OnClick:=CheckBoxClick;
+    end;
+  end;
+  inherited LinkControls(Parent);
+end;
+
+function TBisParamCheckBox.GetControl: TWinControl;
+begin
+  Result:=FCheckBox;
+end;
+
+function TBisParamCheckBox.GetCaption: String;
+begin
+  Result:=inherited GetCaption;
+  if Assigned(FCheckBox) then
+    Result:=FCheckBox.Caption;
+end;
+
+function TBisParamCheckBox.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FCheckBox) then
+    Result:=Integer(FCheckBox.Checked);
+end;
+
+procedure TBisParamCheckBox.SetValue(const AValue: Variant);
+begin
+  if Value<>AValue then begin
+    if Assigned(FCheckBox) then begin
+      FCheckBox.OnClick:=nil;
+      try
+        FCheckBox.Checked:=Boolean(VarToIntDef(AValue,0));
+      finally
+        FCheckBox.OnClick:=CheckBoxClick;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+procedure TBisParamCheckBox.CheckBoxClick(Sender: TObject);
+begin
+  DoChange(Self);
+  if Assigned(FOldCheckBoxClick) then
+    FOldCheckBoxClick(Sender);
+end;
+
+
+end.

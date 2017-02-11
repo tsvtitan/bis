@@ -1,0 +1,45 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>TIntegerHashtable Demonstration</title>
+</head>
+
+<body>
+<pre>
+<%
+var lst: TQueue = TQueue.Create;
+
+type
+ TString = class
+   Value: String;
+   constructor Create(V: String);
+ end;
+
+constructor TString.Create(V: String);
+begin
+  Value := V;
+end;
+
+lst.Push(TString.Create('Hello'));
+lst.Push(TString.Create('World'));
+lst.Push(TString.Create('Hallo'));
+lst.Push(TString.Create('Welt'));
+
+SendLn(lst.Count);
+
+var x: Integer;
+while lst.Count > 0 do
+begin
+  SendLn(TString(lst.Peek).Value);
+  SendLn(TString(lst.Pop).Value);
+end;
+
+SendLn('');
+
+%>
+</pre>
+</body>
+
+</html>

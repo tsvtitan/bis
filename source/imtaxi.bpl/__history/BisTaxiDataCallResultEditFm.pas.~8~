@@ -1,0 +1,108 @@
+unit BisTaxiDataCallResultEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ImgList,
+  BisDataEditFm, BisControls;
+
+type
+  TBisTaxiDataCallResultEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    CheckBoxVisible: TCheckBox;
+    LabelPriority: TLabel;
+    EditPriority: TEdit;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisTaxiDataCallResultEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCallResultFilterFormIface=class(TBisTaxiDataCallResultEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCallResultInsertFormIface=class(TBisTaxiDataCallResultEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCallResultUpdateFormIface=class(TBisTaxiDataCallResultEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCallResultDeleteFormIface=class(TBisTaxiDataCallResultEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataCallResultEditForm: TBisTaxiDataCallResultEditForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisTaxiDataCallResultEditFormIface }
+
+constructor TBisTaxiDataCallResultEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataCallResultEditForm;
+  with Params do begin
+    AddKey('CallResult_ID').Older('OLD_CallResult_ID');
+    AddEdit('NAME','EditName','LabelName',true);
+    AddCheckBox('ENABLED','CheckBoxEnabled');
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+    AddMemo('RANGES','MemoRanges','LabelRanges',true);
+    AddEditInteger('PRIORITY','EditPriority','LabelPriority');
+  end;
+end;
+
+{ TBisTaxiDataCallResultFilterFormIface }
+
+constructor TBisTaxiDataCallResultFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Фильтр результатов вызова';
+end;
+
+{ TBisTaxiDataCallResultInsertFormIface }
+
+constructor TBisTaxiDataCallResultInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_CALL_RESULT';
+  Caption:='Создать результат вызова';
+end;
+
+{ TBisTaxiDataCallResultUpdateFormIface }
+
+constructor TBisTaxiDataCallResultUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_CALL_RESULT';
+  Caption:='Изменить результат вызова';
+end;
+
+{ TBisTaxiDataCallResultDeleteFormIface }
+
+constructor TBisTaxiDataCallResultDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_CALL_RESULT';
+  Caption:='Удалить результат вызова';
+end;
+
+end.

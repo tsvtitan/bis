@@ -1,0 +1,52 @@
+unit BisMicrophone;
+
+interface
+
+uses Classes,
+     WaveRecorders,
+     BisCoreObjects;
+
+type
+  TBisLiveAudioRecorder=class(TLiveAudioRecorder)
+  end;
+
+  TBisMicrophone=class(TBisCoreObject)
+  private
+    FRecorder: TBisLiveAudioRecorder; 
+    function GetMute: Boolean;
+    procedure SetMute(const Value: Boolean);
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property Active: Boolean read GetMute write SetMute;
+  end;
+
+implementation
+
+{ TBisMicrophone }
+
+constructor TBisMicrophone.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FRecorder:=TBisLiveAudioRecorder.Create(nil);
+end;
+
+destructor TBisMicrophone.Destroy;
+begin
+  FRecorder.Active:=false;
+  FRecorder.Free;
+  inherited Destroy;
+end;
+
+function TBisMicrophone.GetMute: Boolean;
+begin
+  Result:=false;
+end;
+
+procedure TBisMicrophone.SetMute(const Value: Boolean);
+begin
+
+end;
+
+end.

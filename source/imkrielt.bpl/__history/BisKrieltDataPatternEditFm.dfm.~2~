@@ -1,0 +1,113 @@
+inherited BisKrieltDataPatternEditForm: TBisKrieltDataPatternEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisKrieltDataPatternEditForm'
+  ClientHeight = 274
+  ClientWidth = 326
+  ExplicitWidth = 334
+  ExplicitHeight = 308
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 236
+    Width = 326
+    ExplicitTop = 187
+    ExplicitWidth = 300
+    inherited ButtonOk: TButton
+      Left = 147
+      ExplicitLeft = 121
+    end
+    inherited ButtonCancel: TButton
+      Left = 243
+      ExplicitLeft = 217
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 326
+    Height = 236
+    ExplicitWidth = 300
+    ExplicitHeight = 187
+    object LabelExport: TLabel
+      Left = 37
+      Top = 15
+      Width = 46
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1069#1082#1089#1087#1086#1088#1090':'
+      FocusControl = EditExport
+    end
+    object LabelDesign: TLabel
+      Left = 15
+      Top = 42
+      Width = 68
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1092#1086#1088#1084#1083#1077#1085#1080#1077':'
+      FocusControl = ComboBoxDesign
+    end
+    object EditExport: TEdit
+      Left = 89
+      Top = 12
+      Width = 196
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 0
+      ExplicitWidth = 170
+    end
+    object ButtonExport: TButton
+      Left = 291
+      Top = 12
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1101#1082#1089#1087#1086#1088#1090
+      Anchors = [akTop, akRight]
+      Caption = '...'
+      TabOrder = 1
+      ExplicitLeft = 265
+    end
+    object PageControl: TPageControl
+      Left = 15
+      Top = 66
+      Width = 297
+      Height = 164
+      ActivePage = TabSheetRtf
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      TabOrder = 3
+      object TabSheetRtf: TTabSheet
+        Caption = 'RTF'
+        ExplicitWidth = 272
+        ExplicitHeight = 90
+        object MemoRtf: TMemo
+          AlignWithMargins = True
+          Left = 3
+          Top = 3
+          Width = 283
+          Height = 130
+          Align = alClient
+          ScrollBars = ssBoth
+          TabOrder = 0
+          WordWrap = False
+          ExplicitWidth = 586
+          ExplicitHeight = 180
+        end
+      end
+    end
+    object ComboBoxDesign: TComboBox
+      Left = 89
+      Top = 39
+      Width = 223
+      Height = 21
+      Style = csDropDownList
+      Anchors = [akLeft, akTop, akRight]
+      ItemHeight = 13
+      TabOrder = 2
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 128
+    Top = 16
+  end
+end

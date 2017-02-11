@@ -1,0 +1,86 @@
+unit BisParamPopupDataFrame;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisPopupEdit, BisControls;
+
+type
+
+  TBisParamPopupDataFrame=class(TBisParam)
+  private
+    FPopupEdit: TBisPopupEdit;
+    FLabelEdit: TLabel;
+    FEditName: String;
+    FLabelName: String;
+    FDataClass: TComponentClass;
+    FAlias: String;
+    FDataAlias: String;
+    FDataClassName: String;
+    FDataName: String;
+    
+  public
+    constructor Create; override;
+    procedure LinkControls(Parent: TWinControl); override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+
+    property EditName: String read FEditName write FEditName;
+    property LabelName: String read FLabelName write FLabelName;
+    property PopupEdit: TBisPopupEdit read FPopupEdit;
+    property LabelEdit: TLabel read FLabelEdit;
+    property DataClass: TComponentClass read FDataClass write FDataClass;
+    property DataClassName: String read FDataClassName write FDataClassName;
+    property Alias: String read FAlias write FAlias;
+    property DataAlias: String read FDataAlias write FDataAlias;
+    property DataName: String read FDataName write FDataName;
+  end;
+
+implementation
+
+uses Variants, Graphics,
+     BisUtils, BisConsts;
+
+{ TBisParamPopupDataFrame }
+
+constructor TBisParamPopupDataFrame.Create;
+begin
+  inherited Create;
+
+end;
+
+procedure TBisParamPopupDataFrame.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamPopupDataFrame) then begin
+    DataClass:=TBisParamPopupDataFrame(Source).DataClass;
+    DataClassName:=TBisParamPopupDataFrame(Source).DataClassName;
+    Alias:=TBisParamPopupDataFrame(Source).Alias;
+    DataAlias:=TBisParamPopupDataFrame(Source).DataAlias;
+    DataName:=TBisParamPopupDataFrame(Source).DataName;
+  end;
+end;
+
+procedure TBisParamPopupDataFrame.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FPopupEdit:=TBisPopupEdit(DoFindComponent(FEditName));
+    if Assigned(FPopupEdit) then begin
+{      FOldPopupEditChange:=FPopupEdit.OnChange;
+      FPopupEdit.OnChange:=PopupEditChange;}
+//      FPopupEdit.MaxLength:=inherited GetSize;
+//      FPopupEdit.Color:=iff(FPopupEdit.Color=clBtnFace,ColorControlReadOnly,FPopupEdit.Color);
+      FLabelEdit:=TLabel(DoFindComponent(FLabelName));
+      if Assigned(FLabelEdit) then
+        FLabelEdit.FocusControl:=FPopupEdit;
+    end;
+    Value:=TempValue;
+  end;
+  inherited LinkControls(Parent);
+  if Assigned(FPopupEdit) then begin
+  end;
+end;
+
+end.

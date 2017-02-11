@@ -1,0 +1,45 @@
+unit BisSecureTableEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisFm, BisDialogFm, BisUtilTableEditFrm;
+
+type
+  TBisSecureTableEditForm = class(TBisDialogForm)
+    PanelFrame: TPanel;
+  private
+    FTableEdit: TBisUtilTableEditFrame;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property TableEdit: TBisUtilTableEditFrame read FTableEdit;
+  end;
+
+var
+  BisSecureTableEditForm: TBisSecureTableEditForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisUtilTableEditForm }
+
+constructor TBisSecureTableEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FTableEdit:=TBisUtilTableEditFrame.Create(Self);
+  FTableEdit.Parent:=PanelFrame;
+  FTableEdit.Align:=alClient;
+end;
+
+destructor TBisSecureTableEditForm.Destroy;
+begin
+  FTableEdit.Free;
+  inherited Destroy;
+end;
+
+end.

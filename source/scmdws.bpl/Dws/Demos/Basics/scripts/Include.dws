@@ -1,0 +1,14 @@
+{
+Demo: Include
+
+}
+
+
+procedure Test(s: string);
+begin
+ Println(s);
+end;
+
+{$INCLUDE 'Tdws2Func.dws'}
+
+Test('Hello world!');

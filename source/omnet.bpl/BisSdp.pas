@@ -1,0 +1,1252 @@
+unit BisSdp;
+
+interface
+
+uses Classes, Contnrs,
+     BisRtp, BisLocks;
+
+type
+
+  TBisSdpDesc=class(TObject)
+  protected
+    class function GetName: String; virtual;
+    procedure Parse(const Body: String); virtual;
+    function AsString: String; virtual;
+    function NameEqual: String; virtual;
+    procedure CopyFrom(Source: TBisSdpDesc); virtual;
+  public
+    constructor Create; virtual;
+
+    property Name: String read GetName;
+  end;
+
+  TBisSdpDescClass=class of TBisSdpDesc;
+
+  TBisSdpSimple=class(TBisSdpDesc)
+  private
+    FValue: String;
+  public
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+    procedure CopyFrom(Source: TBisSdpDesc); override;
+  end;
+
+  TBisSdpVersion=class(TBisSdpSimple)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSdpOriginAddressType=(oatUnknown,oatIP4,oatIP6);
+
+  TBisSdpOrigin=class(TBisSdpDesc)
+  private
+    FUserName, FSessionId, FSessionVersion: String;
+    FNettype, FAddressType, FAddress: String;
+    function GetSessionId: Integer;
+    function GetSessionVersion: Integer;
+    function GetAddressType: TBisSdpOriginAddressType;
+  protected
+    class function GetName: String; override;
+  public
+    class function AddressNameToType(Name: String): TBisSdpOriginAddressType;
+    class function AddressTypeToName(&Type: TBisSdpOriginAddressType): String;
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+
+    property SessionId: Integer read GetSessionId;
+    property SessionVersion: Integer read GetSessionVersion;
+    property AddressType: TBisSdpOriginAddressType read GetAddressType;
+  end;
+
+  TBisSdpSession=class(TBisSdpSimple)
+  protected
+    class function GetName: String; override;
+  public
+    function AsString: String; override;
+  end;
+
+  TBisSdpConnectionAddressType=TBisSdpOriginAddressType;
+
+  TBisSdpConnection=class(TBisSdpDesc)
+  private
+    FNettype, FAddressType, FAddress, FTtl, FNumOfAddresses: String;
+    function GetAddressType: TBisSdpConnectionAddressType;
+  protected
+    class function GetName: String; override;
+  public
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+
+    property Address: String read FAddress;
+    property AddressType: TBisSdpConnectionAddressType read GetAddressType;
+  end;
+
+  TBisSdpBandwidth=class(TBisSdpDesc)
+  private
+    FType, FWidth: String;
+  protected
+    class function GetName: String; override;
+  public
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+  end;
+
+  TBisSdpTiming=class(TBisSdpDesc)
+  private
+    FStart, FStop: String;
+  protected
+    class function GetName: String; override;
+  public
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+  end;
+
+  TBisSdpMediaType=(mtUnknown,mtAudio,mtVideo,mtText,mtApplication,mtMessage);
+  TBisSdpMediaProtoType=(mptUnknown,mptUdp,mptRTPAVP,mptRTPSAVP);
+
+  TBisSdpMedia=class(TBisSdpDesc)
+  private
+    FMedia, FPort, FPorts, FProto: String;
+    FFormats: TStringList;
+    function GetPort: Integer;
+    function GetMediaType: TBisSdpMediaType;
+    function GetProtoType: TBisSdpMediaProtoType;
+  protected
+    class function GetName: String; override;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    class function MediaNameToType(Name: String): TBisSdpMediaType;
+    class function MediaTypeToName(&Type: TBisSdpMediaType): String;
+    class function ProtoNameToType(Name: String): TBisSdpMediaProtoType;
+    class function ProtoTypeToName(&Type: TBisSdpMediaProtoType): String;
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+
+    property Port: Integer read GetPort;
+    property MediaType: TBisSdpMediaType read GetMediaType;
+    property ProtoType: TBisSdpMediaProtoType read GetProtoType;
+    property Formats: TStringList read FFormats;
+  end;
+
+  TBisSdpAttr=class(TBisSdpSimple)
+  protected
+    class function GetName: String; override;
+    function NameEqual: String; override;
+    class function GetIdent: String; virtual;
+  public
+    property Ident: String read GetIdent;
+  end;
+
+  TBisSdpAttrClass=class of TBisSdpAttr;
+
+  TBisSdpModeAttrType=(matUnknown,matRecvonly,matSendrecv,matSendonly,matInactive);
+
+  TBisSdpModeAttr=class(TBisSdpAttr)
+  private
+    function GetModeType: TBisSdpModeAttrType;
+  protected
+    class function GetIdent: String; override;
+  public
+    class function TypeToName(&Type: TBisSdpModeAttrType): String;
+    class function NameToType(Name: String): TBisSdpModeAttrType;
+
+    property ModeType: TBisSdpModeAttrType read GetModeType;
+  end;
+
+  TBisSdpRtpmapAttrEncodingType=(retUnknown,retPCMU,retGSM,retG723,retDVI4,retLPC,retPCMA,retG722,
+                                 retL16,retQCELP,retCN,retMPA,retG728,retG729,
+                                 retTelephoneEvent,retRed,retTone);
+
+  TBisSdpRtpmapAttr=class(TBisSdpAttr)
+  private
+    FPayloadType, FEncoding, FClockrate: String;
+    function GetPayloadType: TBisRtpPacketPayloadType;
+    function GetClockrate: Integer;
+    function GetChannels: Word;
+    function GetBitsPerSample: Word;
+    function GetSamplesPerSec: LongWord;
+    function GetEncodingType: TBisSdpRtpmapAttrEncodingType;
+  protected
+    class function GetIdent: String; override;
+  public
+    class function PayloadTypeToName(PayloadType: TBisRtpPacketPayloadType): String;
+    class function PayloadTypeToEncodingType(PayloadType: TBisRtpPacketPayloadType): TBisSdpRtpmapAttrEncodingType;
+    class function EncodingNameToType(Encoding: String): TBisSdpRtpmapAttrEncodingType;
+    class function EncodingTypeToName(EncodingType: TBisSdpRtpmapAttrEncodingType): String;
+
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+    procedure CopyFrom(Source: TBisSdpDesc); override;
+
+    property PayloadType: TBisRtpPacketPayloadType read GetPayloadType;
+    property EncodingType: TBisSdpRtpmapAttrEncodingType read GetEncodingType;
+    property Clockrate: Integer read GetClockrate;
+    property SamplesPerSec: LongWord read GetSamplesPerSec;
+    property Channels: Word read GetChannels;
+    property BitsPerSample: Word read GetBitsPerSample;
+  end;
+
+  TBisSdpPtimeAttr=class(TBisSdpAttr)
+  private
+    function GetValue: Word;
+  protected
+    class function GetIdent: String; override;
+  public
+    property Value: Word read GetValue;
+  end;
+
+  TBisSdpFmtpAttr=class(TBisSdpAttr)
+  private
+    FFormat, FParameters: String;
+  protected
+    class function GetIdent: String; override;
+  public
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+  end;
+
+  TBisSdp=class(TBisLocks)
+  private
+    function GetItem(Index: Integer): TBisSdpDesc;
+  public
+    procedure GetDescs(AClass: TBisSdpDescClass; List: TBisSdp);
+    function Find(AClass: TBisSdpDescClass): TBisSdpDesc;
+    procedure Parse(const Body: String);
+    function AsString: String;
+
+    function Add(Desc: TBisSdpDesc): Boolean; reintroduce; overload;
+    function Add(AClass: TBisSdpDescClass): TBisSdpDesc; reintroduce; overload; 
+
+    function AddVersion(Value: String='0'): TBisSdpVersion;
+    function AddOrigin(UserName, SessionId, SessionVersion, Nettype, AddressType, Address: String): TBisSdpOrigin; overload;
+    function AddOrigin(SessionId, SessionVersion: LongWord; Addresstype: TBisSdpOriginAddressType; Address: String): TBisSdpOrigin; overload;
+    function AddSession(Value: String=''): TBisSdpSession;
+    function AddConnection(Nettype, AddressType, Address: String): TBisSdpConnection; overload;
+    function AddConnection(AddressType: TBisSdpConnectionAddressType; Address: String): TBisSdpConnection; overload;
+    function AddBandwidth(AType, Width: String): TBisSdpBandwidth;
+    function AddTiming(Start: String='0'; Stop: String='0'): TBisSdpTiming;
+    function AddMedia(Media, Port, Ports, Proto: String): TBisSdpMedia; overload;
+    function AddMedia(MediaType: TBisSdpMediaType; Port: Integer; ProtoType: TBisSdpMediaProtoType): TBisSdpMedia; overload;
+
+    function AddAttr(Value: String): TBisSdpAttr;
+    function AddModeAttr(ModeType: String): TBisSdpModeAttr; overload;
+    function AddModeAttr(ModeType: TBisSdpModeAttrType): TBisSdpModeAttr; overload;
+    function AddRtpmapAttr(PayloadType, Encoding, Clockrate: String): TBisSdpRtpmapAttr; overload;
+    function AddRtpmapAttr(PayloadType: TBisRtpPacketPayloadType; EncodingType: TBisSdpRtpmapAttrEncodingType;
+                           Clockrate: Integer): TBisSdpRtpmapAttr; overload;
+    function AddPtimeAttr(Value: String): TBisSdpPtimeAttr; overload;
+    function AddPtimeAttr(Value: Word): TBisSdpPtimeAttr; overload;
+    function AddFmtpAttr(Format, Parameters: String): TBisSdpFmtpAttr;
+
+    property Items[Index: Integer]: TBisSdpDesc read GetItem; default;
+  end;
+
+implementation
+
+uses Windows, SysUtils, TypInfo,
+     BisUtils;
+
+var
+  FDescClasses: TClassList=nil;
+  FAttrClasses: TClassList=nil; 
+
+function FindAttrClass(const AIdent: String): TBisSdpAttrClass;
+var
+  i: Integer;
+  AClass: TBisSdpAttrClass;
+  Temp: TStringList;
+begin
+  Result:=nil;
+  if Assigned(FAttrClasses) then begin
+    Temp:=TStringList.Create;
+    try
+      for i:=0 to FAttrClasses.Count-1 do begin
+        AClass:=TBisSdpAttrClass(FAttrClasses[i]);
+        Temp.Clear;
+        GetStringsByString(AClass.GetIdent,';',Temp);
+        if Temp.IndexOf(AIdent)<>-1 then begin
+          Result:=AClass;
+          exit;
+        end;
+      end;
+    finally
+      Temp.Free;
+    end;
+  end;
+end;
+
+function FindDescClass(const AName: String; var AValue: String): TBisSdpDescClass;
+var
+  i: Integer;
+  AClass: TBisSdpDescClass;
+  AIdent: String;
+begin
+  Result:=nil;
+  if Assigned(FDescClasses) then begin
+    for i:=0 to FDescClasses.Count-1 do begin
+      AClass:=TBisSdpDescClass(FDescClasses[i]);
+      if AnsiSameText(AClass.GetName,AName) then begin
+        Result:=AClass;
+        if IsClassParent(Result,TBisSdpAttr) then begin
+          if ParseName(AValue,':',AIdent,AValue) then begin
+            AClass:=FindAttrClass(AIdent);
+            if Assigned(AClass) then
+              Result:=AClass;
+          end;
+        end;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+{ TBisSdpDesc }
+
+function TBisSdpDesc.AsString: String;
+begin
+  Result:='';
+end;
+
+constructor TBisSdpDesc.Create;
+begin
+  inherited Create;
+end;
+
+class function TBisSdpDesc.GetName: String;
+begin
+  Result:='';
+end;
+
+procedure TBisSdpDesc.CopyFrom(Source: TBisSdpDesc);
+begin
+  //
+end;
+
+function TBisSdpDesc.NameEqual: String;
+begin
+  Result:=GetName;
+  Result:=iff(Result<>'',Result+'=','');
+end;
+
+procedure TBisSdpDesc.Parse(const Body: String);
+begin
+end;
+
+{ TBisSdpSimpleName }
+
+function TBisSdpSimple.AsString: String;
+begin
+  Result:=Format('%s%s',[NameEqual,
+                         iff(FValue<>'',FValue,'')]);
+  Result:=Trim(Result);
+end;
+
+procedure TBisSdpSimple.CopyFrom(Source: TBisSdpDesc);
+var
+  Simple: TBisSdpSimple;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisSdpSimple) then begin
+    Simple:=TBisSdpSimple(Source);
+
+    FValue:=Simple.FValue;
+  end;
+end;
+
+procedure TBisSdpSimple.Parse(const Body: String);
+begin
+  FValue:=Body;
+end;
+
+{ TBisSdpVersion }
+
+class function TBisSdpVersion.GetName: String;
+begin
+  Result:='v';
+end;
+
+{ TBisSdpOrigin }
+
+function TBisSdpOrigin.AsString: String;
+begin
+  Result:=Format('%s%s%s%s%s%s%s',[NameEqual,
+                                   iff(FUserName<>'',FUserName,'-'),
+                                   iff(FSessionId<>'',' '+FSessionId,''),
+                                   iff(FSessionVersion<>'',' '+FSessionVersion,''),
+                                   iff(FNettype<>'',' '+FNettype,''),
+                                   iff(FAddressType<>'',' '+FAddressType,''),
+                                   iff(FAddress<>'',' '+FAddress,'')]);
+  Result:=Trim(Result);
+end;
+
+class function TBisSdpOrigin.GetName: String;
+begin
+  Result:='o';
+end;
+
+function TBisSdpOrigin.GetSessionId: Integer;
+begin
+  TryStrToInt(FSessionId,Result);
+end;
+
+function TBisSdpOrigin.GetSessionVersion: Integer;
+begin
+  TryStrToInt(FSessionVersion,Result);
+end;
+
+class function TBisSdpOrigin.AddressNameToType(Name: String): TBisSdpOriginAddressType;
+begin
+  Result:=oatUnknown;
+  if AnsiSameText(Name,'IP4') then Result:=oatIP4;
+  if AnsiSameText(Name,'IP6') then Result:=oatIP6;
+end;
+
+class function TBisSdpOrigin.AddressTypeToName(&Type: TBisSdpOriginAddressType): String;
+begin
+  Result:='';
+  case &Type of
+    oatUnknown: ;
+    oatIP4: Result:='IP4';
+    oatIP6: Result:='IP6';
+  end;
+end;
+
+function TBisSdpOrigin.GetAddressType: TBisSdpOriginAddressType;
+begin
+  Result:=AddressNameToType(FAddressType);
+end;
+
+procedure TBisSdpOrigin.Parse(const Body: String);
+var
+  Strings: TStringList;
+begin
+  Strings:=TStringList.Create;
+  try
+    GetStringsByString(Body,' ',Strings);
+    if Strings.Count>0 then begin
+      FUserName:=Strings[0];
+      if Strings.Count>1 then begin
+        FSessionId:=Strings[1];
+        if Strings.Count>2 then begin
+          FSessionVersion:=Strings[2];
+          if Strings.Count>3 then begin
+            FNettype:=Strings[3];
+            if Strings.Count>4 then begin
+              FAddressType:=Strings[4];
+              if Strings.Count>5 then
+                FAddress:=Strings[5];
+            end;
+          end;
+        end;
+      end;
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+{ TBisSdpSession }
+
+function TBisSdpSession.AsString: String;
+begin
+  Result:=Format('%s%s',[NameEqual,
+                         iff(FValue<>'',FValue,'-')]);
+  Result:=Trim(Result);
+end;
+
+class function TBisSdpSession.GetName: String;
+begin
+  Result:='s';
+end;
+
+{ TBisSdpConnection }
+
+function TBisSdpConnection.AsString: String;
+begin
+  Result:=Format('%s%s%s%s%s%s',[NameEqual,
+                                 iff(FNettype<>'',FNettype,''),
+                                 iff(FAddressType<>'',' '+FAddressType,''),
+                                 iff(FAddress<>'',' '+FAddress,''),
+                                 iff(FTtl<>'','/'+FTtl,''),
+                                 iff(FNumOfAddresses<>'','/'+FNumOfAddresses,'')]);
+  Result:=Trim(Result);
+end;
+
+function TBisSdpConnection.GetAddressType: TBisSdpConnectionAddressType;
+begin
+  Result:=TBisSdpOrigin.AddressNameToType(FAddressType);
+end;
+
+class function TBisSdpConnection.GetName: String;
+begin
+  Result:='c';
+end;
+
+procedure TBisSdpConnection.Parse(const Body: String);
+
+  procedure ParseAddress(S: String);
+  var
+    Temp: TStringList;
+  begin
+    Temp:=TStringList.Create;
+    try
+      GetStringsByString(S,'/',Temp);
+      if Temp.Count>0 then begin
+        FAddress:=Temp[0];
+        if Temp.Count>1 then begin
+          FTtl:=Temp[1];
+          if Temp.Count>2 then
+            FNumOfAddresses:=Temp[2];
+        end;
+      end;
+    finally
+      Temp.Free;
+    end;
+  end;
+  
+var
+  Strings: TStringList;
+begin
+  Strings:=TStringList.Create;
+  try
+    GetStringsByString(Body,' ',Strings);
+    if Strings.Count>0 then begin
+      FNettype:=Strings[0];
+      if Strings.Count>1 then begin
+        FAddressType:=Strings[1];
+        if Strings.Count>2 then
+          ParseAddress(Strings[2]);
+      end;
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+{ TBisSdpBandwidth }
+
+function TBisSdpBandwidth.AsString: String;
+begin
+  Result:=Format('%s%s%s',[NameEqual,
+                           iff(FType<>'',FType,''),
+                           iff(FWidth<>'',':'+FWidth,'')]);
+  Result:=Trim(Result);
+end;
+
+class function TBisSdpBandwidth.GetName: String;
+begin
+  Result:='b';
+end;
+
+procedure TBisSdpBandwidth.Parse(const Body: String);
+var
+  Strings: TStringList;
+begin
+  Strings:=TStringList.Create;
+  try
+    GetStringsByString(Body,':',Strings);
+    if Strings.Count>0 then begin
+      FType:=Strings[0];
+      if Strings.Count>1 then
+        FWidth:=Strings[1];
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+{ TBisSdpTiming }
+
+function TBisSdpTiming.AsString: String;
+begin
+  Result:=Format('%s%s%s',[NameEqual,
+                           iff(FStart<>'',FStart,''),
+                           iff(FStop<>'',' '+FStop,'')]);
+  Result:=Trim(Result);
+end;
+
+class function TBisSdpTiming.GetName: String;
+begin
+  Result:='t';
+end;
+
+procedure TBisSdpTiming.Parse(const Body: String);
+var
+  Strings: TStringList;
+begin
+  Strings:=TStringList.Create;
+  try
+    GetStringsByString(Body,' ',Strings);
+    if Strings.Count>0 then begin
+      FStart:=Strings[0];
+      if Strings.Count>1 then
+        FStop:=Strings[1];
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+{ TBisSdpMedia }
+
+constructor TBisSdpMedia.Create;
+begin
+  inherited Create;
+  FFormats:=TStringList.Create;
+end;
+
+destructor TBisSdpMedia.Destroy;
+begin
+  FFormats.Free;
+  inherited Destroy;
+end;
+
+function TBisSdpMedia.AsString: String;
+
+  function GetFormat: String;
+  var
+    i: Integer;
+  begin
+    Result:='';
+    for i:=0 to FFormats.Count-1 do
+      Result:=Trim(iff(FFormats[i]<>'',Result+' '+FFormats[i],''));
+  end;
+
+var
+  AFormat: String;
+begin
+  AFormat:=GetFormat;
+  Result:=Format('%s%s%s%s%s',[NameEqual,
+                               iff(FMedia<>'',FMedia,''),
+                               iff(FPort<>'',' '+FPort,''),
+                               iff(FProto<>'',' '+FProto,''),
+                               iff(AFormat<>'',' '+AFormat,'')]);
+  Result:=Trim(Result);
+end;
+
+class function TBisSdpMedia.MediaNameToType(Name: String): TBisSdpMediaType;
+var
+  i: TBisSdpMediaType;
+  S: String;
+begin
+  Result:=mtUnknown;
+  for i:=mtUnknown to mtMessage do begin
+    S:=GetEnumName(TypeInfo(TBisSdpMediaType),Integer(i));
+    S:=Copy(S,3,Length(S));
+    S:=AnsiLowerCase(S);
+    if AnsiSameText(S,Name) then begin
+      Result:=i;
+      exit;
+    end;
+  end;
+end;
+
+class function TBisSdpMedia.MediaTypeToName(&Type: TBisSdpMediaType): String;
+begin
+  Result:='';
+  if &Type<>mtUnknown then begin
+    Result:=GetEnumName(TypeInfo(TBisSdpMediaType),Integer(&Type));
+    Result:=Copy(Result,3,Length(Result));
+    Result:=AnsiLowerCase(Result);
+  end;
+end;
+
+class function TBisSdpMedia.ProtoNameToType(Name: String): TBisSdpMediaProtoType;
+begin
+  Result:=mptUnknown;
+  if AnsiSameText(Name,'UDP') then Result:=mptUdp;
+  if AnsiSameText(Name,'RTP/AVP') then Result:=mptRTPAVP;
+  if AnsiSameText(Name,'RTP/SAVP') then Result:=mptRTPSAVP;
+end;
+
+class function TBisSdpMedia.ProtoTypeToName(&Type: TBisSdpMediaProtoType): String;
+begin
+  Result:='';
+  case &Type of
+    mptUnknown: ;
+    mptUdp: Result:='UDP';
+    mptRTPAVP: Result:='RTP/AVP';
+    mptRTPSAVP: Result:='RTP/SAVP';
+  end;
+end;
+
+function TBisSdpMedia.GetMediaType: TBisSdpMediaType;
+begin
+  Result:=MediaNameToType(FMedia);
+end;
+
+function TBisSdpMedia.GetProtoType: TBisSdpMediaProtoType;
+begin
+  Result:=ProtoNameToType(FProto);
+end;
+
+class function TBisSdpMedia.GetName: String;
+begin
+  Result:='m';
+end;
+
+function TBisSdpMedia.GetPort: Integer;
+begin
+  Result:=StrToIntDef(FPort,0);
+end;
+
+procedure TBisSdpMedia.Parse(const Body: String);
+var      
+  Strings: TStringList;
+  i: Integer;
+begin
+  Strings:=TStringList.Create;
+  try
+    GetStringsByString(Body,' ',Strings);
+    if Strings.Count>0 then begin
+      FMedia:=Strings[0];
+      if Strings.Count>1 then begin
+        ParseName(Strings[1],'/',FPort,FPorts);
+        if Strings.Count>2 then begin
+          FProto:=Strings[2];
+          if Strings.Count>3 then begin
+            FFormats.Clear;
+            for i:=3 to Strings.Count-1 do
+              FFormats.Add(Strings[i]);
+          end;
+        end;
+      end;
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+{ TBisSdpAttr }
+
+class function TBisSdpAttr.GetIdent: String;
+begin
+  Result:='';
+end;
+
+class function TBisSdpAttr.GetName: String;
+begin
+  Result:='a';
+end;
+
+function TBisSdpAttr.NameEqual: String;
+var
+  AIdent: String;
+begin
+  AIdent:=GetIdent;
+  Result:=inherited NameEqual;
+  Result:=Format('%s%s',[Result,
+                         iff(AIdent<>'',AIdent+':','')]);
+  Result:=Trim(Result);
+end;
+
+{ TBisSdpModeAttr }
+
+class function TBisSdpModeAttr.GetIdent: String;
+begin
+  Result:=Format('%s;%s;%s;%s',[TypeToName(matRecvonly),
+                                TypeToName(matSendrecv),
+                                TypeToName(matSendonly),
+                                TypeToName(matInactive)]);
+end;
+
+class function TBisSdpModeAttr.NameToType(Name: String): TBisSdpModeAttrType;
+var
+  i: TBisSdpModeAttrType;
+  S: String;
+begin
+  Result:=matUnknown;
+  for i:=matUnknown to matInactive do begin
+    S:=TypeToName(i);
+    if AnsiSameText(S,Name) then begin
+      Result:=i;
+      exit;
+    end;
+  end;
+end;
+
+class function TBisSdpModeAttr.TypeToName(&Type: TBisSdpModeAttrType): String;
+begin
+  Result:='';
+  if &Type<>matUnknown then begin
+    Result:=GetEnumName(TypeInfo(TBisSdpModeAttrType),Integer(&Type));
+    Result:=Copy(Result,4,Length(Result));
+    Result:=AnsiLowerCase(Result);
+  end;
+end;
+
+function TBisSdpModeAttr.GetModeType: TBisSdpModeAttrType;
+begin
+  Result:=NameToType(FValue);
+end;
+
+
+{ TBisSdpRtpmapAttr }
+
+function TBisSdpRtpmapAttr.AsString: String;
+begin
+  Result:=Format('%s%s%s%s',[NameEqual,
+                             iff(FPayloadType<>'',FPayloadType,''),
+                             iff(FEncoding<>'',' '+FEncoding,''),
+                             iff(FClockrate<>'','/'+FClockrate,'')]);
+  Result:=Trim(Result);
+end;
+
+procedure TBisSdpRtpmapAttr.CopyFrom(Source: TBisSdpDesc);
+var
+  RtpmapAttr: TBisSdpRtpmapAttr;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisSdpRtpmapAttr) then begin
+    RtpmapAttr:=TBisSdpRtpmapAttr(Source);
+
+    FPayloadType:=RtpmapAttr.FPayloadType;
+    FEncoding:=RtpmapAttr.FEncoding;
+    FClockrate:=RtpmapAttr.FClockrate;
+  end;
+end;
+
+function TBisSdpRtpmapAttr.GetBitsPerSample: Word;
+begin
+  Result:=0;
+  case PayloadType of
+    ptPCMU: Result:=8;
+    ptGSM: Result:=8;
+    ptPCMA: Result:=8;
+  end;
+end;
+
+function TBisSdpRtpmapAttr.GetChannels: Word;
+begin
+  Result:=0;
+  case PayloadType of
+    ptPCMU: Result:=1;
+    ptGSM: Result:=1;
+    ptPCMA: Result:=1;
+  end;
+end;
+
+function TBisSdpRtpmapAttr.GetClockrate: Integer;
+begin
+  TryStrToInt(FClockrate,Result);
+end;
+
+class function TBisSdpRtpmapAttr.EncodingTypeToName(EncodingType: TBisSdpRtpmapAttrEncodingType): String;
+begin
+  Result:='';
+  if EncodingType<>retUnknown then begin
+    if (EncodingType<=retG729) then begin
+      Result:=GetEnumName(TypeInfo(TBisSdpRtpmapAttrEncodingType),Integer(EncodingType));
+      Result:=Copy(Result,4,Length(Result));
+      Result:=AnsiUpperCase(Result);
+    end else if (EncodingType=retTelephoneEvent) then
+      Result:='telephone-event'
+    else begin
+      Result:=GetEnumName(TypeInfo(TBisSdpRtpmapAttrEncodingType),Integer(EncodingType));
+      Result:=Copy(Result,4,Length(Result));
+      Result:=AnsiLowerCase(Result);
+    end;
+  end;
+end;
+
+class function TBisSdpRtpmapAttr.EncodingNameToType(Encoding: String): TBisSdpRtpmapAttrEncodingType;
+var
+  i: TBisSdpRtpmapAttrEncodingType;
+  S: String;
+begin
+  Result:=retUnknown;
+  for i:=retPCMU to retTone do begin
+    S:=EncodingTypeToName(i);
+    if AnsiSameText(S,Encoding) then begin
+      Result:=i;
+      exit;
+    end;
+  end;
+end;
+
+class function TBisSdpRtpmapAttr.PayloadTypeToEncodingType(PayloadType: TBisRtpPacketPayloadType): TBisSdpRtpmapAttrEncodingType;
+begin
+  Result:=retUnknown;
+  case PayloadType of
+    ptPCMU: Result:=retPCMU;
+    ptGSM: Result:=retGSM;
+    ptG723: Result:=retG723;
+    ptDVI4r8000,ptDVI4r16000,ptDVI4r11025,ptDVI4r22050: Result:=retDVI4;
+    ptLPC: Result:=retLPC;
+    ptPCMA: Result:=retPCMA;
+    ptG722: Result:=retG722;
+    ptL16r44100c2,ptL16r44100c1: Result:=retL16;
+    ptQCELP: Result:=retQCELP;
+    ptCN: Result:=retCN;
+    ptMPA: Result:=retMPA;
+    ptG728: Result:=retG728;
+    ptG729: Result:=retG729;
+  end;
+end;
+
+class function TBisSdpRtpmapAttr.PayloadTypeToName(PayloadType: TBisRtpPacketPayloadType): String;
+begin
+  Result:=IntToStr(Integer(PayloadType)-1);
+end;
+
+function TBisSdpRtpmapAttr.GetEncodingType: TBisSdpRtpmapAttrEncodingType;
+begin
+  Result:=EncodingNameToType(FEncoding);
+end;
+
+function TBisSdpRtpmapAttr.GetSamplesPerSec: LongWord;
+begin
+  Result:=GetClockrate;
+end;
+
+class function TBisSdpRtpmapAttr.GetIdent: String;
+begin
+  Result:='rtpmap';
+end;
+
+function TBisSdpRtpmapAttr.GetPayloadType: TBisRtpPacketPayloadType;
+var
+  V: Integer;
+begin
+  Result:=ptUnknown;
+  if TryStrToInt(FPayloadType,V) then begin
+    Result:=TBisRtpPacketPayloadType(V+1);
+  end;
+end;
+
+procedure TBisSdpRtpmapAttr.Parse(const Body: String);
+var
+  Strings: TStringList;
+begin
+  Strings:=TStringList.Create;
+  try
+    GetStringsByString(Body,' ',Strings);
+    if Strings.Count>0 then begin
+      FPayloadType:=Strings[0];
+      if Strings.Count>1 then begin
+        ParseName(Strings[1],'/',FEncoding,FClockrate);
+      end;
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+{ TBisSdpPtimeAttr }
+
+class function TBisSdpPtimeAttr.GetIdent: String;
+begin
+  Result:='ptime';
+end;
+
+function TBisSdpPtimeAttr.GetValue: Word;
+var
+  I: Integer;
+begin
+  Result:=0;
+  if TryStrToInt(FValue,I) then
+    Result:=I;
+end;
+
+{ TBisSdpFmtpAttr }
+
+function TBisSdpFmtpAttr.AsString: String;
+begin
+  Result:=Format('%s%s%s',[NameEqual,
+                           iff(FFormat<>'',FFormat,''),
+                           iff(FParameters<>'',' '+FParameters,'')]);
+end;
+
+class function TBisSdpFmtpAttr.GetIdent: String;
+begin
+  Result:='fmtp';
+end;
+
+procedure TBisSdpFmtpAttr.Parse(const Body: String);
+begin
+  inherited;
+
+end;
+
+{ TBisSdp }
+
+function TBisSdp.GetItem(Index: Integer): TBisSdpDesc;
+begin
+  Result:=TBisSdpDesc(inherited Items[Index]);
+end;
+
+procedure TBisSdp.Parse(const Body: String);
+var
+  Strings: TStringList;
+  i: Integer;
+  AClass: TBisSdpDescClass;
+  AName,AValue: String;
+  Item: TBisSdpDesc;
+begin
+  Strings:=TStringList.Create;
+  try
+    Strings.Text:=Body;
+    for i:=0 to Strings.Count-1 do begin
+      if ParseName(Strings[i],'=',AName,AValue) then begin
+        AClass:=FindDescClass(AName,AValue);
+        if Assigned(AClass) then begin
+          Item:=Add(AClass);
+          if Assigned(Item) then
+            Item.Parse(AValue);
+        end;
+      end;
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+function TBisSdp.AsString: String;
+var
+  i: Integer;
+  Item: TBisSdpDesc;
+  Strings: TStringList;
+begin
+  Strings:=TStringList.Create;
+  try
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      Strings.Add(Item.AsString);
+    end;
+    Result:=Trim(Strings.Text);
+  finally
+    Strings.Free;
+  end;
+end;
+
+procedure TBisSdp.GetDescs(AClass: TBisSdpDescClass; List: TBisSdp);
+var
+  i: Integer;
+  Item: TBisSdpDesc;
+begin
+  if Assigned(AClass) and Assigned(List) then begin
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      if IsClassParent(Item.ClassType,AClass) then
+        List.Add(Item);
+    end;
+  end;
+end;
+
+function TBisSdp.Find(AClass: TBisSdpDescClass): TBisSdpDesc;
+var
+  Sdp: TBisSdp;
+begin
+  Result:=nil;
+  Sdp:=TBisSdp.Create;
+  try
+    Sdp.OwnsObjects:=false;
+    GetDescs(AClass,Sdp);
+    if Sdp.Count>0 then
+      Result:=Sdp.Items[Sdp.Count-1];
+  finally
+    Sdp.Free;
+  end;
+end;
+
+function TBisSdp.Add(Desc: TBisSdpDesc): Boolean;
+var
+  Item: TBisSdpDesc;
+begin
+  Result:=false;
+  if Assigned(Desc) then begin
+    if IsClassParent(Desc.ClassType,TBisSdpAttr) or
+       IsClassParent(Desc.ClassType,TBisSdpConnection) then begin
+      inherited Add(Desc);
+      Result:=true;
+    end else begin
+      Item:=Find(TBisSdpDescClass(Desc.ClassType));
+      if not Assigned(Item) then begin
+        inherited Add(Desc);
+        Result:=true;
+      end;
+    end;
+  end;
+end;
+
+function TBisSdp.Add(AClass: TBisSdpDescClass): TBisSdpDesc;
+begin
+  Result:=nil;
+  if Assigned(AClass) then begin
+    if IsClassParent(AClass,TBisSdpAttr) or
+       IsClassParent(AClass,TBisSdpConnection) then begin
+      Result:=AClass.Create;
+      inherited Add(Result);
+    end else begin
+      Result:=Find(AClass);
+      if not Assigned(Result) then begin
+        Result:=AClass.Create;
+        inherited Add(Result);
+      end;
+    end;
+  end;
+end;
+
+function TBisSdp.AddVersion(Value: String='0'): TBisSdpVersion;
+begin
+  Result:=TBisSdpVersion(Add(TBisSdpVersion));
+  if Assigned(Result) then
+    Result.FValue:=Value;
+end;
+
+function TBisSdp.AddOrigin(UserName, SessionId, SessionVersion, Nettype, AddressType, Address: String): TBisSdpOrigin;
+begin
+  Result:=TBisSdpOrigin(Add(TBisSdpOrigin));
+  if Assigned(Result) then begin
+    Result.FUserName:=UserName;
+    Result.FSessionId:=SessionId;
+    Result.FSessionVersion:=SessionVersion;
+    Result.FNettype:=Nettype;
+    Result.FAddressType:=AddressType;
+    Result.FAddress:=Address;
+  end;
+end;
+
+function TBisSdp.AddOrigin(SessionId, SessionVersion: LongWord; AddressType: TBisSdpOriginAddressType; Address: String): TBisSdpOrigin;
+begin
+  Result:=AddOrigin('',IntToStr(SessionId),IntToStr(SessionVersion),'IN',TBisSdpOrigin.AddressTypeToName(AddressType),Address);
+end;
+
+function TBisSdp.AddSession(Value: String=''): TBisSdpSession;
+begin
+  Result:=TBisSdpSession(Add(TBisSdpSession));
+  if Assigned(Result) then
+    Result.FValue:=Value;
+end;
+
+function TBisSdp.AddConnection(Nettype, AddressType, Address: String): TBisSdpConnection;
+begin
+  Result:=TBisSdpConnection(Add(TBisSdpConnection));
+  if Assigned(Result) then begin
+    Result.FNettype:=Nettype;
+    Result.FAddressType:=AddressType;
+    Result.FAddress:=Address;
+  end;
+end;
+
+function TBisSdp.AddConnection(AddressType: TBisSdpConnectionAddressType; Address: String): TBisSdpConnection;
+begin
+  Result:=AddConnection('IN',TBisSdpOrigin.AddressTypeToName(AddressType),Address);
+end;
+
+function TBisSdp.AddBandwidth(AType, Width: String): TBisSdpBandwidth;
+begin
+  Result:=TBisSdpBandwidth(Add(TBisSdpBandwidth));
+  if Assigned(Result) then begin
+    Result.FType:=AType;
+    Result.FWidth:=Width;
+  end;
+end;
+
+function TBisSdp.AddTiming(Start: String='0'; Stop: String='0'): TBisSdpTiming;
+begin
+  Result:=TBisSdpTiming(Add(TBisSdpTiming));
+  if Assigned(Result) then begin
+    Result.FStart:=Start;
+    Result.FStop:=Stop;
+  end;
+end;
+
+function TBisSdp.AddMedia(Media, Port, Ports, Proto: String): TBisSdpMedia;
+begin
+  Result:=TBisSdpMedia(Add(TBisSdpMedia));
+  if Assigned(Result) then begin
+    Result.FMedia:=Media;
+    Result.FPort:=Port;
+    Result.FPorts:=Ports;
+    Result.FProto:=Proto;
+  end;
+end;
+
+function TBisSdp.AddMedia(MediaType: TBisSdpMediaType; Port: Integer; ProtoType: TBisSdpMediaProtoType): TBisSdpMedia;
+begin
+  Result:=AddMedia(TBisSdpMedia.MediaTypeToName(MediaType),IntToStr(Port),'',TBisSdpMedia.ProtoTypeToName(ProtoType));
+end;
+
+function TBisSdp.AddAttr(Value: String): TBisSdpAttr;
+begin
+  Result:=TBisSdpAttr(Add(TBisSdpAttr));
+  if Assigned(Result) then
+    Result.FValue:=Value;
+end;
+
+function TBisSdp.AddModeAttr(ModeType: String): TBisSdpModeAttr;
+begin
+  Result:=TBisSdpModeAttr(AddAttr(ModeType));
+end;
+
+function TBisSdp.AddModeAttr(ModeType: TBisSdpModeAttrType): TBisSdpModeAttr;
+begin
+  Result:=AddModeAttr(TBisSdpModeAttr.TypeToName(ModeType));
+end;
+
+function TBisSdp.AddRtpmapAttr(PayloadType, Encoding, Clockrate: String): TBisSdpRtpmapAttr;
+begin
+  Result:=TBisSdpRtpmapAttr(Add(TBisSdpRtpmapAttr));
+  if Assigned(Result) then begin
+    Result.FPayloadType:=PayloadType;
+    Result.FEncoding:=Encoding;
+    Result.FClockrate:=Clockrate;
+  end;
+end;
+
+function TBisSdp.AddRtpmapAttr(PayloadType: TBisRtpPacketPayloadType; EncodingType: TBisSdpRtpmapAttrEncodingType;
+                               Clockrate: Integer): TBisSdpRtpmapAttr;
+begin
+  Result:=AddRtpmapAttr(TBisSdpRtpmapAttr.PayloadTypeToName(PayloadType),
+                        TBisSdpRtpmapAttr.EncodingTypeToName(EncodingType),IntToStr(Clockrate));
+end;
+
+function TBisSdp.AddPtimeAttr(Value: String): TBisSdpPtimeAttr;
+begin
+  Result:=TBisSdpPtimeAttr(Add(TBisSdpPtimeAttr));
+  if Assigned(Result) then
+    Result.FValue:=Value;
+end;
+
+function TBisSdp.AddPtimeAttr(Value: Word): TBisSdpPtimeAttr;
+begin
+  Result:=AddPtimeAttr(IntToStr(Value));
+end;
+
+function TBisSdp.AddFmtpAttr(Format, Parameters: String): TBisSdpFmtpAttr;
+begin
+  Result:=TBisSdpFmtpAttr(Add(TBisSdpFmtpAttr));
+  if Assigned(Result) then begin
+    Result.FFormat:=Format;
+    Result.FParameters:=Parameters;
+  end;
+end;
+
+initialization
+  FDescClasses:=TClassList.Create;
+  with FDescClasses do begin
+    Add(TBisSdpVersion);
+    Add(TBisSdpOrigin);
+    Add(TBisSdpSession);
+    Add(TBisSdpConnection);
+    Add(TBisSdpBandwidth);
+    Add(TBisSdpTiming);
+    Add(TBisSdpMedia);
+    Add(TBisSdpAttr);
+  end;
+
+  FAttrClasses:=TClassList.Create;
+  with FAttrClasses do begin
+    Add(TBisSdpModeAttr);
+    Add(TBisSdpRtpmapAttr);
+    Add(TBisSdpPtimeAttr);
+    Add(TBisSdpFmtpAttr);
+  end
+
+finalization
+  FAttrClasses.Free;
+  FDescClasses.Free;
+  
+end.

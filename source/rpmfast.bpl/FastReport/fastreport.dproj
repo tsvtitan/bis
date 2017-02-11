@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{aabb91a5-a9d1-47ac-8859-ef21869f3d9e}</ProjectGuid>
+    <MainSource>fastreport.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>E:\work\1bis\source\objects.bpl\FastReport\fastreport.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>E:\work\1bis\source\objects.bpl\FastReport</DCC_BplOutput>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">True</Package_Options><Package_Options Name="DesigntimeOnly">True</Package_Options><Package_Options Name="RuntimeOnly">False</Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName"></VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">fastreport.dpk</Source></Source></Delphi.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="fastreport.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\adortl.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\bdertl.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\dbexpress.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\dbrtl.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\DbxClientDriver.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\DbxCommonDriver.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\DbxDynalinkDriver.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\DbxReadOnlyMetaData.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\designide.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\dsnap.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\rtl.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\tee.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\teedb.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\vcl.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\vcldb.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\vcljpg.dcp" />
+    <DCCReference Include="E:\work\bis\source\rptfast.bpl\FastReport\vclx.dcp" />
+    <DCCReference Include="FastScript\fs_iadortti.pas" />
+    <DCCReference Include="FastScript\fs_ibasic.pas" />
+    <DCCReference Include="FastScript\fs_ibdertti.pas" />
+    <DCCReference Include="FastScript\fs_ichartrtti.pas" />
+    <DCCReference Include="FastScript\fs_iclassesrtti.pas" />
+    <DCCReference Include="FastScript\fs_iconst.pas" />
+    <DCCReference Include="FastScript\fs_icpp.pas" />
+    <DCCReference Include="FastScript\fs_idbctrlsrtti.pas" />
+    <DCCReference Include="FastScript\fs_idbrtti.pas" />
+    <DCCReference Include="FastScript\fs_idialogsrtti.pas" />
+    <DCCReference Include="FastScript\fs_idisp.pas" />
+    <DCCReference Include="FastScript\fs_ievents.pas" />
+    <DCCReference Include="FastScript\fs_iexpression.pas" />
+    <DCCReference Include="FastScript\fs_iextctrlsrtti.pas" />
+    <DCCReference Include="FastScript\fs_iformsrtti.pas" />
+    <DCCReference Include="FastScript\fs_igraphicsrtti.pas" />
+    <DCCReference Include="FastScript\fs_iibxrtti.pas" />
+    <DCCReference Include="FastScript\fs_iilparser.pas" />
+    <DCCReference Include="FastScript\fs_iinirtti.pas" />
+    <DCCReference Include="FastScript\fs_iinterpreter.pas" />
+    <DCCReference Include="FastScript\fs_ijs.pas" />
+    <DCCReference Include="FastScript\fs_iparser.pas" />
+    <DCCReference Include="FastScript\fs_ipascal.pas" />
+    <DCCReference Include="FastScript\fs_ireg.dcr" />
+    <DCCReference Include="FastScript\fs_ireg.dcr" />
+    <DCCReference Include="FastScript\fs_isysrtti.pas" />
+    <DCCReference Include="FastScript\fs_iteereg.pas" />
+    <DCCReference Include="FastScript\fs_itools.pas" />
+    <DCCReference Include="FastScript\fs_synmemo.pas" />
+    <DCCReference Include="FastScript\fs_tree.pas" />
+    <DCCReference Include="FastScript\fs_xml.pas" />
+    <DCCReference Include="Source\ADO\frxADOReg.dcr" />
+    <DCCReference Include="Source\ADO\frxADOReg.dcr" />
+    <DCCReference Include="Source\BDE\frxBDEComponents.pas" />
+    <DCCReference Include="Source\BDE\frxBDEEditor.pas" />
+    <DCCReference Include="Source\BDE\frxBDEReg.dcr" />
+    <DCCReference Include="Source\BDE\frxBDEReg.dcr" />
+    <DCCReference Include="Source\BDE\frxBDERTTI.pas" />
+    <DCCReference Include="Source\DBX\frxDBXComponents.pas" />
+    <DCCReference Include="Source\DBX\frxDBXEditor.pas" />
+    <DCCReference Include="Source\DBX\frxDBXReg.dcr" />
+    <DCCReference Include="Source\DBX\frxDBXReg.dcr" />
+    <DCCReference Include="Source\DBX\frxDBXRTTI.pas" />
+    <DCCReference Include="Source\FIB\frxFIBReg.dcr" />
+    <DCCReference Include="Source\FIB\frxFIBReg.dcr" />
+    <DCCReference Include="Source\frx2xto30.pas" />
+    <DCCReference Include="Source\frxAbout.pas" />
+    <DCCReference Include="Source\frxAggregate.pas" />
+    <DCCReference Include="Source\frxChart.pas" />
+    <DCCReference Include="Source\frxChartEditor.pas" />
+    <DCCReference Include="Source\frxChartHelpers.pas" />
+    <DCCReference Include="Source\frxChartRTTI.pas" />
+    <DCCReference Include="Source\frxChBox.pas" />
+    <DCCReference Include="Source\frxChBoxRTTI.pas" />
+    <DCCReference Include="Source\frxChm.pas" />
+    <DCCReference Include="Source\frxClass.pas" />
+    <DCCReference Include="Source\frxClassRTTI.pas" />
+    <DCCReference Include="Source\frxCodeUtils.pas" />
+    <DCCReference Include="Source\frxConnEditor.pas" />
+    <DCCReference Include="Source\frxConnWizard.pas" />
+    <DCCReference Include="Source\frxCross.pas" />
+    <DCCReference Include="Source\frxCrossEditor.pas" />
+    <DCCReference Include="Source\frxCrossRTTI.pas" />
+    <DCCReference Include="Source\frxCrypt.pas" />
+    <DCCReference Include="Source\frxCtrls.pas" />
+    <DCCReference Include="Source\frxCustomDB.pas" />
+    <DCCReference Include="Source\frxCustomDBEditor.pas" />
+    <DCCReference Include="Source\frxCustomDBRTTI.pas" />
+    <DCCReference Include="Source\frxCustomEditors.pas" />
+    <DCCReference Include="Source\frxDataTree.pas" />
+    <DCCReference Include="Source\frxDBSet.pas" />
+    <DCCReference Include="Source\frxDCtrl.pas" />
+    <DCCReference Include="Source\frxDCtrlRTTI.pas" />
+    <DCCReference Include="Source\frxDesgn.pas" />
+    <DCCReference Include="Source\frxDesgnCtrls.pas" />
+    <DCCReference Include="Source\frxDesgnEditors.pas" />
+    <DCCReference Include="Source\frxDesgnWorkspace.pas" />
+    <DCCReference Include="Source\frxDesgnWorkspace1.pas" />
+    <DCCReference Include="Source\frxDialogForm.pas" />
+    <DCCReference Include="Source\frxDMPClass.pas" />
+    <DCCReference Include="Source\frxDMPExport.pas" />
+    <DCCReference Include="Source\frxDock.pas" />
+    <DCCReference Include="Source\frxDsgnIntf.pas" />
+    <DCCReference Include="Source\frxEditAliases.pas" />
+    <DCCReference Include="Source\frxEditDataBand.pas" />
+    <DCCReference Include="Source\frxEditExpr.pas" />
+    <DCCReference Include="Source\frxEditFormat.pas" />
+    <DCCReference Include="Source\frxEditFrame.pas" />
+    <DCCReference Include="Source\frxEditGroup.pas" />
+    <DCCReference Include="Source\frxEditHighlight.pas" />
+    <DCCReference Include="Source\frxEditMD.pas" />
+    <DCCReference Include="Source\frxEditMemo.pas" />
+    <DCCReference Include="Source\frxEditOptions.pas" />
+    <DCCReference Include="Source\frxEditPage.pas" />
+    <DCCReference Include="Source\frxEditPicture.pas" />
+    <DCCReference Include="Source\frxEditQueryParams.pas" />
+    <DCCReference Include="Source\frxEditReport.pas" />
+    <DCCReference Include="Source\frxEditReportData.pas" />
+    <DCCReference Include="Source\frxEditSQL.pas" />
+    <DCCReference Include="Source\frxEditStrings.pas" />
+    <DCCReference Include="Source\frxEditStyle.pas" />
+    <DCCReference Include="Source\frxEditSysMemo.pas" />
+    <DCCReference Include="Source\frxEditTabOrder.pas" />
+    <DCCReference Include="Source\frxEditVar.pas" />
+    <DCCReference Include="Source\frxEngine.pas" />
+    <DCCReference Include="Source\frxEvaluateForm.pas" />
+    <DCCReference Include="Source\frxGradient.pas" />
+    <DCCReference Include="Source\frxGradientRTTI.pas" />
+    <DCCReference Include="Source\frxGraphicUtils.pas" />
+    <DCCReference Include="Source\frxGZip.pas" />
+    <DCCReference Include="Source\frxInheritError.pas" />
+    <DCCReference Include="Source\frxInsp.pas" />
+    <DCCReference Include="Source\frxNewItem.pas" />
+    <DCCReference Include="Source\frxOLE.pas" />
+    <DCCReference Include="Source\frxOLEEditor.pas" />
+    <DCCReference Include="Source\frxOLERTTI.pas" />
+    <DCCReference Include="Source\frxPassw.pas" />
+    <DCCReference Include="Source\frxPictureCache.pas" />
+    <DCCReference Include="Source\frxPopupForm.pas" />
+    <DCCReference Include="Source\frxPreview.pas" />
+    <DCCReference Include="Source\frxPreviewPages.pas" />
+    <DCCReference Include="Source\frxPreviewPageSettings.pas" />
+    <DCCReference Include="Source\frxPrintDialog.pas" />
+    <DCCReference Include="Source\frxPrinter.pas" />
+    <DCCReference Include="Source\frxProgress.pas" />
+    <DCCReference Include="Source\frxrcClass.pas" />
+    <DCCReference Include="Source\frxrcDesgn.pas" />
+    <DCCReference Include="Source\frxrcExports.pas" />
+    <DCCReference Include="Source\frxrcInsp.pas" />
+    <DCCReference Include="Source\frxReg.dcr" />
+    <DCCReference Include="Source\frxReg.dcr" />
+    <DCCReference Include="Source\frxReg.pas" />
+    <DCCReference Include="Source\frxReportTree.pas" />
+    <DCCReference Include="Source\frxRes.pas" />
+    <DCCReference Include="Source\frxRich.pas" />
+    <DCCReference Include="Source\frxRichEdit.pas" />
+    <DCCReference Include="Source\frxRichEditor.pas" />
+    <DCCReference Include="Source\frxRichRTTI.pas" />
+    <DCCReference Include="Source\frxSearchDialog.pas" />
+    <DCCReference Include="Source\frxStdWizard.pas" />
+    <DCCReference Include="Source\frxSynMemo.pas" />
+    <DCCReference Include="Source\frxUnicodeCtrls.pas" />
+    <DCCReference Include="Source\frxUnicodeUtils.pas" />
+    <DCCReference Include="Source\frxUtils.pas" />
+    <DCCReference Include="Source\frxVariables.pas" />
+    <DCCReference Include="Source\frxWatchForm.pas" />
+    <DCCReference Include="Source\frxXML.pas" />
+    <DCCReference Include="Source\frxXMLSerializer.pas" />
+    <DCCReference Include="Source\frxZLib.pas" />
+    <DCCReference Include="Source\IBX\frxIBXComponents.pas" />
+    <DCCReference Include="Source\IBX\frxIBXEditor.pas" />
+    <DCCReference Include="Source\IBX\frxIBXReg.dcr" />
+    <DCCReference Include="Source\IBX\frxIBXReg.dcr" />
+    <DCCReference Include="Source\IBX\frxIBXRTTI.pas" />
+    <DCCReference Include="Source\pngimage.pas" />
+    <DCCReference Include="Source\pnglang.pas" />
+    <DCCReference Include="Source\rc_AlgRef.pas" />
+    <DCCReference Include="Source\rc_ApiRef.pas" />
+    <DCCReference Include="Source\rc_Crypt.pas" />
+  </ItemGroup>
+</Project>

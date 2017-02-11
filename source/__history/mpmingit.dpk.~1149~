@@ -1,0 +1,40 @@
+package mpmingit;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  vcl,
+  rtl;
+
+contains
+  BisIngit in 'mpmingit.bpl\BisIngit.pas',
+  GWXLib_TLB in 'mpmingit.bpl\GWXLib_TLB.pas',
+  BisIngitMapFm in 'mpmingit.bpl\BisIngitMapFm.pas' {BisIngitMapForm},
+  BisIngitMapFrm in 'mpmingit.bpl\BisIngitMapFrm.pas' {BisIngitMapFrame: TFrame},
+  BisIngitMapGetRouteDistancePrv in 'mpmingit.bpl\BisIngitMapGetRouteDistancePrv.pas';
+
+end.

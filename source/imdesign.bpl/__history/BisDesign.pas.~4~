@@ -1,0 +1,94 @@
+unit BisDesign;
+
+interface
+
+uses BisIfaceModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisCore, BisDesignConsts,
+     BisDesignMainFm, BisDesignDataFirmTypesFm, BisDesignDataFirmsFm, BisDesignDataAccountsFm,
+     BisDesignDataRolesFm, BisDesignDataRolesAndAccountsFm, BisDesignDataApplicationsFm,
+     BisDesignDataInterfacesFm, BisDesignDataAccountRolesFm, BisDesignDataProfilesFm,
+     BisDesignDataSessionsFm, BisDesignDataPermissionsFm, BisDesignDataApplicationInterfacesFm,
+     BisDesignDataMenusFm, BisDesignDataReportsFm, BisDesignDataScriptsFm,
+     BisDesignJournalActionsFm, BisDesignDataDocumentsFm, BisDesignDataConstsFm,
+     BisDesignDataLocksFm, BisDesignDataLocalitiesFm, BisDesignDataStreetsFm,
+     BisDesignDataTasksFm, BisDesignDataExchangesFm, 
+
+     BisDesignDataFirmEditFm,
+
+     BisDesignExchangeFm, BisDesignDataAlarmsFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  IsMainModule:=Core.IfaceModules.IsFirstModule(AModule);
+  with AModule do begin
+
+    if IsMainModule then
+      Ifaces.AddClass(TBisDesignMainFormIface);
+
+{    Ifaces.AddClass(TBisDesignDataFirmTypesFormIface);
+    Ifaces.AddClass(TBisDesignDataLocalitiesFormIface);
+    Ifaces.AddClass(TBisDesignDataStreetsFormIface);
+    Ifaces.AddClass(TBisDesignDataFirmsFormIface);
+    Ifaces.AddClass(TBisDesignDataAccountsFormIface);
+    Ifaces.AddClass(TBisDesignDataRolesFormIface);
+    Ifaces.AddClass(TBisDesignDataApplicationsFormIface);
+    Ifaces.AddClass(TBisDesignDataInterfacesFormIface);
+    Ifaces.AddClass(TBisDesignDataAccountRolesFormIface);
+    Ifaces.AddClass(TBisDesignDataProfilesFormIface);
+    Ifaces.AddClass(TBisDesignDataSessionsFormIface);
+    Ifaces.AddClass(TBisDesignDataPermissionsFormIface);
+    Ifaces.AddClass(TBisDesignDataApplicationInterfacesFormIface);
+    Ifaces.AddClass(TBisDesignDataRolesAndAccountsFormIface);
+    Ifaces.AddClass(TBisDesignDataMenusFormIface);
+    Ifaces.AddClass(TBisDesignDataConstsFormIface);
+    Ifaces.AddClass(TBisDesignDataLocksFormIface);
+    Ifaces.AddClass(TBisDesignDataTasksFormIface);
+    Ifaces.AddClass(TBisDesignDataExchangesFormIface);
+
+    Ifaces.AddClass(TBisDesignJournalActionsFormIface);
+
+    Ifaces.AddClass(TBisDesignDataFirmInsertFormIface);
+
+    Ifaces.AddClass(TBisDesignExchangeFormIface);
+    Ifaces.AddClass(TBisDesignDataAlarmsFormIface);}
+
+    Classes.AddClass(TBisDesignDataFirmTypesFormIface);
+    Classes.AddClass(TBisDesignDataLocalitiesFormIface);
+    Classes.AddClass(TBisDesignDataStreetsFormIface);
+    Classes.AddClass(TBisDesignDataFirmsFormIface);
+    Classes.AddClass(TBisDesignDataAccountsFormIface);
+    Classes.AddClass(TBisDesignDataRolesFormIface);
+    Classes.AddClass(TBisDesignDataApplicationsFormIface);
+    Classes.AddClass(TBisDesignDataInterfacesFormIface);
+    Classes.AddClass(TBisDesignDataAccountRolesFormIface);
+    Classes.AddClass(TBisDesignDataProfilesFormIface);
+    Classes.AddClass(TBisDesignDataSessionsFormIface);
+    Classes.AddClass(TBisDesignDataPermissionsFormIface);
+    Classes.AddClass(TBisDesignDataApplicationInterfacesFormIface);
+    Classes.AddClass(TBisDesignDataRolesAndAccountsFormIface);
+    Classes.AddClass(TBisDesignDataMenusFormIface);
+    Classes.AddClass(TBisDesignDataConstsFormIface);
+    Classes.AddClass(TBisDesignDataLocksFormIface);
+    Classes.AddClass(TBisDesignDataTasksFormIface);
+    Classes.AddClass(TBisDesignDataExchangesFormIface);
+
+    Classes.AddClass(TBisDesignJournalActionsFormIface);
+
+    Classes.AddClass(TBisDesignDataFirmInsertFormIface);
+
+    Classes.AddClass(TBisDesignExchangeFormIface);
+    Classes.AddClass(TBisDesignDataAlarmsFormIface);
+
+  end;
+end;
+
+end.

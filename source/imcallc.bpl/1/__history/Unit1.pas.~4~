@@ -1,0 +1,26 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin,
+  StdCtrls, ExtCtrls, Grids, DBGrids,
+  BisDataGridFrm;
+
+type
+  TFrame1 = class(TBisDataGridFrame)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+uses SysUtils,
+     BisProvider, BisFilterGroups;
+
+{$R *.dfm}
+
+end.

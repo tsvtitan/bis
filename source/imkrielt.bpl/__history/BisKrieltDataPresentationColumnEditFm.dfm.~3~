@@ -1,0 +1,159 @@
+inherited BisKrieltDataPresentationColumnEditForm: TBisKrieltDataPresentationColumnEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisKrieltDataPresentationColumnEditForm'
+  ClientHeight = 220
+  ClientWidth = 317
+  ExplicitWidth = 325
+  ExplicitHeight = 254
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 182
+    Width = 317
+    ExplicitTop = 238
+    ExplicitWidth = 317
+    inherited ButtonOk: TButton
+      Left = 138
+      ExplicitLeft = 138
+    end
+    inherited ButtonCancel: TButton
+      Left = 235
+      ExplicitLeft = 235
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 317
+    Height = 182
+    ExplicitWidth = 317
+    ExplicitHeight = 238
+    object LabelPresentation: TLabel
+      Left = 14
+      Top = 13
+      Width = 83
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1088#1077#1076#1089#1090#1072#1074#1083#1077#1085#1080#1077':'
+      FocusControl = EditPresentation
+    end
+    object LabelColumn: TLabel
+      Left = 50
+      Top = 40
+      Width = 47
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1050#1086#1083#1086#1085#1082#1072':'
+      FocusControl = EditColumn
+    end
+    object LabelPriority: TLabel
+      Left = 49
+      Top = 67
+      Width = 48
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1086#1088#1103#1076#1086#1082':'
+      FocusControl = EditPriority
+    end
+    object LabelGroup: TLabel
+      Left = 185
+      Top = 67
+      Width = 40
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1043#1088#1091#1087#1087#1072':'
+      FocusControl = EditGroup
+    end
+    object LabelDefault: TLabel
+      Left = 20
+      Top = 94
+      Width = 77
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102':'
+      FocusControl = EditDefault
+    end
+    object EditPresentation: TEdit
+      Left = 103
+      Top = 10
+      Width = 176
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonPresentation: TButton
+      Left = 285
+      Top = 10
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1088#1077#1076#1089#1090#1072#1074#1083#1077#1085#1080#1077
+      Caption = '...'
+      TabOrder = 1
+    end
+    object EditColumn: TEdit
+      Left = 103
+      Top = 37
+      Width = 176
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object ButtonColumn: TButton
+      Left = 285
+      Top = 37
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1082#1086#1083#1086#1085#1082#1091
+      Caption = '...'
+      TabOrder = 3
+    end
+    object EditPriority: TEdit
+      Left = 103
+      Top = 64
+      Width = 73
+      Height = 21
+      TabOrder = 4
+    end
+    object EditGroup: TEdit
+      Left = 233
+      Top = 64
+      Width = 73
+      Height = 21
+      TabOrder = 5
+    end
+    object EditDefault: TEdit
+      Left = 103
+      Top = 91
+      Width = 203
+      Height = 21
+      TabOrder = 6
+    end
+    object CheckBoxVisible: TCheckBox
+      Left = 103
+      Top = 116
+      Width = 97
+      Height = 17
+      Hint = #1042#1080#1076#1080#1084#1086#1089#1090#1100' '#1082#1086#1083#1086#1085#1082#1080' '#1074' '#1101#1090#1086#1084' '#1087#1088#1077#1076#1089#1090#1072#1074#1083#1077#1085#1080#1080
+      Caption = #1042#1080#1076#1080#1084#1086#1089#1090#1100
+      TabOrder = 7
+    end
+    object CheckBoxUseDepend: TCheckBox
+      Left = 103
+      Top = 135
+      Width = 97
+      Height = 17
+      Caption = #1047#1072#1074#1080#1089#1080#1084#1086#1089#1090#1100
+      TabOrder = 8
+    end
+    object CheckBoxNotEmpty: TCheckBox
+      Left = 103
+      Top = 154
+      Width = 82
+      Height = 17
+      Hint = #1050#1086#1083#1086#1085#1082#1072' '#1073#1091#1076#1077#1090' '#1090#1088#1077#1073#1086#1074#1072#1090#1100' '#1085#1077' '#1087#1091#1089#1090#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077
+      Caption = #1053#1077' '#1087#1091#1089#1090#1072#1103
+      TabOrder = 9
+    end
+  end
+end

@@ -1,0 +1,510 @@
+unit BisCallServerScenarios;
+
+interface
+
+uses Classes,
+     BisDataSet, BisDataParams,
+     BisAudioWave;
+
+type
+
+  TBisCallServerScenarioCommands=class;
+
+  TBisCallServerScenarioCommandType=(sctMenu,sctCode,sctDial,sctReturn);
+  TBisCallServerScenarioCommandEnd=(sceNothing,sceHangup,sceStep);
+
+  TBisCallServerScenarioCommand=class(TBisDataValueParam)
+  private
+    FCommands: TBisCallServerScenarioCommands;
+    FCommandType: TBisCallServerScenarioCommandType;
+    FCommandEnd: TBisCallServerScenarioCommandEnd;
+    FBefore: String;
+    FAfter: String;
+    FTimeout: Cardinal;
+  protected
+    procedure SetDataSet(DataSet: TBisDataSet); override;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    procedure CopyFrom(Source: TBisDataParam); override;
+
+    property Commands: TBisCallServerScenarioCommands read FCommands;
+    property CommandType: TBisCallServerScenarioCommandType read FCommandType;
+    property CommandEnd: TBisCallServerScenarioCommandEnd read FCommandEnd;
+    property Before: String read FBefore;
+    property After: String read FAfter;
+    property Timeout: Cardinal read FTimeout;
+  end;
+
+  TBisCallServerScenarioCommands=class(TBisDataValueParams)
+  private
+    FWave: TBisAudioWave;
+    function GetItem(Index: Integer): TBisCallServerScenarioCommand;
+  protected
+    class function GetDataParamClass: TBisDataParamClass; override;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    procedure CopyFrom(Source: TBisDataParams); override;
+    function Find(const Name: String): TBisCallServerScenarioCommand; reintroduce;
+    function LockFind(const Name: String): TBisCallServerScenarioCommand;
+
+    property Items[Index: Integer]: TBisCallServerScenarioCommand read GetItem; default;
+    property Wave: TBisAudioWave read FWave;
+  end;
+
+  TBisCallServerScenarioStepType=(sstText,sstAudio,sstRepeat,sstHoldMusic);
+
+  TBisCallServerScenarioStep=class(TBisDataValueParam)
+  private
+    FStepType: TBisCallServerScenarioStepType;
+    FWave: TBisAudioWave;
+    FTimeout: Cardinal;
+  protected
+    procedure SetDataSet(DataSet: TBisDataSet); override;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    procedure CopyFrom(Source: TBisDataParam); override;
+
+    property StepType: TBisCallServerScenarioStepType read FStepType;
+    property Timeout: Cardinal read FTimeout;
+    property Wave: TBisAudioWave read FWave;
+  end;
+
+  TBisCallServerScenarioSteps=class(TBisDataValueParams)
+  private
+    function GetItem(Index: Integer): TBisCallServerScenarioStep;
+  protected
+    class function GetDataParamClass: TBisDataParamClass; override;
+  public
+    function Next(From: TBisCallServerScenarioStep): TBisCallServerScenarioStep;
+    function LockNext(From: TBisCallServerScenarioStep): TBisCallServerScenarioStep;
+    function First: TBisCallServerScenarioStep;
+    function LockFirst: TBisCallServerScenarioStep;
+    function Find(const Name: String): TBisCallServerScenarioStep; reintroduce;
+    function LockFind(const Name: String): TBisCallServerScenarioStep;
+
+    property Items[Index: Integer]: TBisCallServerScenarioStep read GetItem; default;
+  end;
+
+  TBisCallServerScenarioParams=class(TBisDataValueParams)
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+
+    function GetHoldMusic(Wave: TBisAudioWave): Boolean;
+    function CommandText: String;
+    function CommandTimeout: Cardinal;
+
+  end;
+
+  TBisCallServerScenario=class(TBisDataParam)
+  private
+    FSteps: TBisCallServerScenarioSteps;
+    FCommands: TBisCallServerScenarioCommands;
+    FParams: TBisCallServerScenarioParams;
+  protected
+    procedure SetDataSet(DataSet: TBisDataSet); override;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    procedure CopyFrom(Source: TBisDataParam); override;
+
+    property Steps: TBisCallServerScenarioSteps read FSteps;
+    property Commands: TBisCallServerScenarioCommands read FCommands;
+    property Params: TBisCallServerScenarioParams read FParams;
+  end;
+
+  TBisCallServerScenarios=class(TBisDataParams)
+  private
+    function GetItem(Index: Integer): TBisCallServerScenario;
+  protected
+    class function GetDataParamClass: TBisDataParamClass; override;
+  public
+    function FindDefault(const Name: String): TBisCallServerScenario;
+    property Items[Index: Integer]: TBisCallServerScenario read GetItem; default;
+  end;
+
+
+implementation
+
+uses DB,
+     BisConsts, BisCallServerConsts;
+
+{ TBisCallServerScenarioCommand }
+
+constructor TBisCallServerScenarioCommand.Create;
+begin
+  inherited Create;
+  FCommands:=TBisCallServerScenarioCommands.Create;
+  FTimeout:=0;
+end;
+
+destructor TBisCallServerScenarioCommand.Destroy;
+begin
+  FCommands.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCallServerScenarioCommand.SetDataSet(DataSet: TBisDataSet);
+var
+  Field: TField;
+begin
+  inherited SetDataSet(DataSet);
+
+  FCommandType:=sctMenu;
+  Field:=DataSet.FindField(SFieldType);
+  if Assigned(Field) then
+    FCommandType:=TBisCallServerScenarioCommandType(Field.AsInteger);
+
+  FCommandEnd:=sceNothing;
+  Field:=DataSet.FindField(SFieldType);
+  if Assigned(Field) then
+    FCommandEnd:=TBisCallServerScenarioCommandEnd(Field.AsInteger);
+
+  FTimeout:=0;
+  Field:=DataSet.FindField(SFieldTimeout);
+  if Assigned(Field) then
+    FTimeout:=Field.AsInteger;
+
+  FBefore:='';
+  Field:=DataSet.FindField(SFieldBefore);
+  if Assigned(Field) then
+    FBefore:=Field.AsString;
+
+  FAfter:='';
+  Field:=DataSet.FindField(SFieldAfter);
+  if Assigned(Field) then
+    FAfter:=Field.AsString;
+
+  FCommands.Clear;
+  if FCommandType=sctMenu then
+    FCommands.CopyFromDataSet(AsString);
+
+end;
+
+procedure TBisCallServerScenarioCommand.CopyFrom(Source: TBisDataParam);
+var
+  ASource: TBisCallServerScenarioCommand;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisCallServerScenarioCommand) then begin
+    ASource:=TBisCallServerScenarioCommand(Source);
+    FBefore:=ASource.Before;
+    FAfter:=ASource.After;
+    FTimeout:=ASource.Timeout;
+    FCommandType:=ASource.CommandType;
+    FCommandEnd:=ASource.CommandEnd;
+    FCommands.CopyFrom(ASource.Commands);
+  end;
+end;
+
+{ TBisCallServerScenarioCommands }
+
+constructor TBisCallServerScenarioCommands.Create;
+begin
+  inherited Create;
+  FWave:=TBisAudioWave.Create;
+end;
+
+destructor TBisCallServerScenarioCommands.Destroy;
+begin
+  FWave.Free;
+  inherited Destroy;
+end;
+
+class function TBisCallServerScenarioCommands.GetDataParamClass: TBisDataParamClass;
+begin
+  Result:=TBisCallServerScenarioCommand;
+end;
+
+function TBisCallServerScenarioCommands.GetItem(Index: Integer): TBisCallServerScenarioCommand;
+begin
+  Result:=TBisCallServerScenarioCommand(inherited Items[Index]);
+end;
+
+procedure TBisCallServerScenarioCommands.CopyFrom(Source: TBisDataParams);
+var
+  ASource: TBisCallServerScenarioCommands;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisCallServerScenarioCommands) then begin
+    ASource:=TBisCallServerScenarioCommands(Source);
+    FWave.Assign(ASource.Wave);
+  end;
+
+end;
+
+function TBisCallServerScenarioCommands.Find(const Name: String): TBisCallServerScenarioCommand;
+begin
+  Result:=TBisCallServerScenarioCommand(inherited Find(Name));
+end;
+
+function TBisCallServerScenarioCommands.LockFind(const Name: String): TBisCallServerScenarioCommand;
+begin
+  Lock;
+  try
+    Result:=Find(Name); 
+  finally
+    UnLock;
+  end;
+end;
+
+{ TBisCallServerScenarioStep }
+
+constructor TBisCallServerScenarioStep.Create;
+begin
+  inherited Create;
+  FWave:=TBisAudioWave.Create;
+  FTimeout:=0;
+end;
+
+destructor TBisCallServerScenarioStep.Destroy;
+begin
+  FWave.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCallServerScenarioStep.SetDataSet(DataSet: TBisDataSet);
+var
+  Field: TField;
+begin
+  inherited SetDataSet(DataSet);
+
+  FStepType:=sstText;
+  Field:=DataSet.FindField(SFieldType);
+  if Assigned(Field) then
+    FStepType:=TBisCallServerScenarioStepType(Field.AsInteger);
+
+  FTimeout:=0;
+  Field:=DataSet.FindField(SFieldTimeout);
+  if Assigned(Field) then
+    FTimeout:=Field.AsInteger;
+     
+end;
+
+procedure TBisCallServerScenarioStep.CopyFrom(Source: TBisDataParam);
+var
+  ASource: TBisCallServerScenarioStep;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisCallServerScenarioStep) then begin
+    ASource:=TBisCallServerScenarioStep(Source);
+    FStepType:=ASource.StepType;
+    FTimeout:=ASource.Timeout;
+  end;
+end;
+
+{ TBisCallServerScenarioSteps }
+
+class function TBisCallServerScenarioSteps.GetDataParamClass: TBisDataParamClass;
+begin
+  Result:=TBisCallServerScenarioStep;
+end;
+
+function TBisCallServerScenarioSteps.GetItem(Index: Integer): TBisCallServerScenarioStep;
+begin
+  Result:=TBisCallServerScenarioStep(inherited Items[Index]);
+end;
+
+function TBisCallServerScenarioSteps.Next(From: TBisCallServerScenarioStep): TBisCallServerScenarioStep;
+var
+  i: Integer;
+  Item: TBisCallServerScenarioStep;
+  AFrom: TBisCallServerScenarioStep;
+begin
+  Result:=nil;
+  AFrom:=From;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if Assigned(AFrom) then begin
+      if (Item=AFrom) then begin
+        if (i+1)<=(Count-1) then begin
+          Item:=Items[i+1];
+          if Item.Enabled then begin
+            Result:=Item;
+            exit;
+          end else
+            AFrom:=Item;
+        end;
+      end;
+    end else begin
+      if Item.Enabled then begin
+        Result:=Item;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+function TBisCallServerScenarioSteps.LockNext(From: TBisCallServerScenarioStep): TBisCallServerScenarioStep;
+begin
+  Lock;
+  try
+    Result:=Next(From); 
+  finally
+    UnLock;
+  end;
+end;
+
+function TBisCallServerScenarioSteps.First: TBisCallServerScenarioStep;
+begin
+  Result:=Next(nil);
+end;
+
+function TBisCallServerScenarioSteps.LockFirst: TBisCallServerScenarioStep;
+begin
+  Lock;
+  try
+    Result:=First;
+  finally
+    UnLock;
+  end;
+end;
+
+function TBisCallServerScenarioSteps.Find(const Name: String): TBisCallServerScenarioStep;
+begin
+  Result:=TBisCallServerScenarioStep(inherited Find(Name));
+end;
+
+function TBisCallServerScenarioSteps.LockFind(const Name: String): TBisCallServerScenarioStep;
+begin
+  Lock;
+  try
+    Result:=Find(Name);
+  finally
+    UnLock;
+  end;
+end;
+
+{ TBisCallServerScenarioParams }
+
+constructor TBisCallServerScenarioParams.Create;
+begin
+  inherited Create;
+end;
+
+destructor TBisCallServerScenarioParams.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TBisCallServerScenarioParams.GetHoldMusic(Wave: TBisAudioWave): Boolean;
+var
+  Param: TBisDataValueParam;
+  Stream: TMemoryStream;
+begin
+  Result:=false;
+  Param:=Find(SParamHoldMusic);
+  if Assigned(Param) and Assigned(Wave) then begin
+    Stream:=TMemoryStream.Create;
+    try
+      Param.SaveToStream(Stream);
+      Stream.Position:=0;
+      Wave.LoadFromStream(Stream);
+      Result:=true;
+    finally
+      Stream.Free;
+    end;
+  end;
+end;
+
+function TBisCallServerScenarioParams.CommandText: String;
+begin
+  Result:=AsString(SParamCommandText);
+end;
+
+function TBisCallServerScenarioParams.CommandTimeout: Cardinal;
+begin
+
+end;
+
+{ TBisCallServerScenario }
+
+constructor TBisCallServerScenario.Create;
+begin
+  inherited Create;
+  FSteps:=TBisCallServerScenarioSteps.Create;
+  FCommands:=TBisCallServerScenarioCommands.Create;
+  FParams:=TBisCallServerScenarioParams.Create;
+end;
+
+destructor TBisCallServerScenario.Destroy;
+begin
+  FParams.Free;
+  FCommands.Free;
+  FSteps.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCallServerScenario.SetDataSet(DataSet: TBisDataSet);
+var
+  Field: TField;
+begin
+  inherited SetDataSet(DataSet);
+
+  FSteps.Clear;
+  Field:=DataSet.FindField(SFieldSteps);
+  if Assigned(Field) then
+    FSteps.CopyFromDataSet(Field.AsString);
+
+  FCommands.Clear;
+  Field:=DataSet.FindField(SFieldCommands);
+  if Assigned(Field) then
+    FCommands.CopyFromDataSet(Field.AsString);
+
+  FParams.Clear;
+  Field:=DataSet.FindField(SFieldParams);
+  if Assigned(Field) then begin
+    FParams.CopyFromDataSet(Field.AsString);
+    FParams.Change;
+  end;
+
+end;
+
+procedure TBisCallServerScenario.CopyFrom(Source: TBisDataParam);
+var
+  ASource: TBisCallServerScenario;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisCallServerScenario) then begin
+    ASource:=TBisCallServerScenario(Source);
+    FSteps.CopyFrom(ASource.Steps);
+    FCommands.CopyFrom(ASource.Commands);
+    FParams.CopyFrom(ASource.Params);
+  end;
+end;
+
+
+{ TBisCallServerScenarios }
+
+function TBisCallServerScenarios.FindDefault(const Name: String): TBisCallServerScenario;
+var
+  i: Integer;
+  Item: TBisCallServerScenario;
+begin
+  Result:=TBisCallServerScenario(Find(Name));
+  if not Assigned(Result) then begin
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      if Item.Enabled then begin
+        Result:=Item;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+class function TBisCallServerScenarios.GetDataParamClass: TBisDataParamClass;
+begin
+  Result:=TBisCallServerScenario;
+end;
+
+function TBisCallServerScenarios.GetItem(Index: Integer): TBisCallServerScenario;
+begin
+  Result:=TBisCallServerScenario(inherited Items[Index])
+end;
+
+
+end.

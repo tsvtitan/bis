@@ -1,0 +1,40 @@
+inherited BisSecureTableEditForm: TBisSecureTableEditForm
+  Left = 547
+  Top = 315
+  BorderIcons = [biSystemMenu, biMaximize]
+  BorderStyle = bsSizeable
+  Caption = #1056#1077#1076#1072#1082#1090#1086#1088' '#1090#1072#1073#1083#1080#1094
+  ClientHeight = 423
+  ClientWidth = 542
+  Constraints.MinHeight = 450
+  Constraints.MinWidth = 550
+  ExplicitWidth = 550
+  ExplicitHeight = 457
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 388
+    Width = 542
+    TabOrder = 1
+    ExplicitTop = 388
+    ExplicitWidth = 542
+    inherited ButtonOk: TButton
+      Left = 380
+      ModalResult = 1
+      ExplicitLeft = 380
+    end
+    inherited ButtonCancel: TButton
+      Left = 461
+      ExplicitLeft = 461
+    end
+  end
+  object PanelFrame: TPanel
+    Left = 0
+    Top = 0
+    Width = 542
+    Height = 388
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+  end
+end

@@ -1,0 +1,58 @@
+unit BisServerHttpHandlerDefault;
+
+interface
+
+uses Classes,
+     HTTPApp,
+     BisServerHttpHandlerModules, BisServerHttpHandlers,
+     BisServerHttpHandlerDefaultWm;
+
+type
+
+  TBisServerHttpHandlerDefault=class(TBisServerHttpHandler)
+  private
+    FWebModule: TBisServerHttpHandlerDefaultWebModule;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean; override;
+
+  end;
+
+procedure InitServerHttpHandlerModule(AModule: TBisServerHttpHandlerModule); stdcall;
+
+exports
+  InitServerHttpHandlerModule;
+
+implementation
+
+procedure InitServerHttpHandlerModule(AModule: TBisServerHttpHandlerModule); stdcall;
+begin
+  AModule.HandlerClass:=TBisServerHttpHandlerDefault;
+end;
+
+{ TBisServerHttpHandlerDefault }
+
+constructor TBisServerHttpHandlerDefault.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FWebModule:=TBisServerHttpHandlerDefaultWebModule.Create(Self);
+end;
+
+destructor TBisServerHttpHandlerDefault.Destroy;
+begin
+  FWebModule.Free;
+  inherited Destroy;
+end;
+
+function TBisServerHttpHandlerDefault.HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean;
+begin
+
+  try
+//    Result:=FWebModule.
+  finally
+
+  end;
+end;
+
+end.

@@ -1,0 +1,536 @@
+unit BisKrieltReportsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisFm, BisIfaces, StdCtrls, ComCtrls, CheckLst, ExtCtrls;
+
+type
+  TBisKrieltReportsForm = class(TBisForm)
+    ReportParamsGroupBox: TGroupBox;
+    ActionLabel: TLabel;
+    RealtyTypeLabel: TLabel;
+    ReportLabel: TLabel;
+    ActionComboBox: TComboBox;
+    RealtyTypeComboBox: TComboBox;
+    ReportComboBox: TComboBox;
+    PeriodGroupBox: TGroupBox;
+    BeginDateTimePicker: TDateTimePicker;
+    EndDateTimePicker: TDateTimePicker;
+    PeriodBeginLabel: TLabel;
+    PeriodEndLabel: TLabel;
+    ExportProgressGroupBox: TGroupBox;
+    ExportProgressBar: TProgressBar;
+    AllRecordsLabel: TLabel;
+    ExportRecordsLabel: TLabel;
+    StartExportButton: TButton;
+    CloseExportButtonButton: TButton;
+    ListGroupBox: TGroupBox;
+    AddButton: TButton;
+    DeleteButton: TButton;
+    ClearButton: TButton;
+    ExportTimer: TTimer;
+    AllListBox: TListBox;
+    ButtonPeriod: TButton;
+    LabelPublishing: TLabel;
+    EditPublishing: TEdit;
+    ButtonPublishing: TButton;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActionComboBoxChange(Sender: TObject);
+    procedure RealtyTypeComboBoxChange(Sender: TObject);
+    procedure ReportComboBoxChange(Sender: TObject);
+    procedure StartExportButtonClick(Sender: TObject);
+    procedure CloseExportButtonButtonClick(Sender: TObject);
+    procedure ExportTimerTimer(Sender: TObject);
+    procedure AddButtonClick(Sender: TObject);
+    procedure ClearButtonClick(Sender: TObject);
+    procedure DeleteButtonClick(Sender: TObject);
+    procedure ButtonPublishingClick(Sender: TObject);
+    procedure ButtonPeriodClick(Sender: TObject);
+  private
+    FPublishingId: Variant;
+    FIssueId: Variant;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltReportsFormIface=class(TBisFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltReportsForm: TBisKrieltReportsForm;
+
+var
+  BisKrieltReportsIface: TBisIface=nil;
+
+implementation
+
+uses DateUtils,
+  BisInterfaces, BisKrieltReportsSellResidential,
+  BisKrieltReportsSellUnresidential, BisKrieltReportsBuy,
+  BisKrieltReportsDeliverResidential, BisKrieltReportsDeliverUnresidential,
+  BisKrieltReportsDeliverLand, BisKrieltReportsShootResidential,
+  BisKrieltReportsShootUnresidential, BisKrieltReportsShootLand,
+  BisKrieltReportsChange, BisKrieltReportsUtils,
+  BisCore, BisDataFm, BisProvider, BisUtils;
+
+{$R *.dfm}
+
+{ TBisKrieltReportsFormIface }
+
+constructor TBisKrieltReportsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltReportsForm;
+  Available:=true;
+  OnlyOneForm:=true;
+  Permissions.Enabled:=true;
+end;
+
+{ TBisKrieltReportsForm }
+
+procedure TBisKrieltReportsForm.AddButtonClick(Sender: TObject);
+begin
+  AllListBox.Items.Add(ActionComboBox.Text+'. '+RealtyTypeComboBox.Text+'. '+ReportComboBox.Text+'.');
+end;
+
+procedure TBisKrieltReportsForm.ButtonPeriodClick(Sender: TObject);
+var
+  AClass: TBisIfaceClass;
+  AIface: TBisDataFormIface;
+  P: TBisProvider;
+begin
+  AClass:=Core.FindIfaceClass('');
+  if Assigned(AClass) and IsClassParent(AClass,TBisDataFormIface) then begin
+    AIface:=TBisDataFormIfaceClass(AClass).Create(nil);
+    P:=TBisProvider.Create(nil);
+    try
+      AIface.LocateFields:='ISSUE_ID';
+      AIface.LocateValues:=FIssueId;
+      if AIface.SelectInto(P) then begin
+        FIssueId:=P.FieldByName('ISSUE_ID').Value;
+        BeginDateTimePicker.Date:=DateOf(P.FieldByName('DATE_BEGIN').AsDateTime);
+        EndDateTimePicker.Date:=DateOf(P.FieldByName('DATE_END').AsDateTime);
+      end;
+    finally
+      P.Free;
+      AIface.Free;
+    end;
+  end;
+end;
+
+procedure TBisKrieltReportsForm.ButtonPublishingClick(Sender: TObject);
+var
+  AClass: TBisIfaceClass;
+  AIface: TBisDataFormIface;
+  P: TBisProvider;
+begin
+  AClass:=Core.FindIfaceClass('');
+  if Assigned(AClass) and IsClassParent(AClass,TBisDataFormIface) then begin
+    AIface:=TBisDataFormIfaceClass(AClass).Create(nil);
+    P:=TBisProvider.Create(nil);
+    try
+      AIface.LocateFields:='PUBLISHING_ID';
+      AIface.LocateValues:=FPublishingId;
+      if AIface.SelectInto(P) then begin
+        FPublishingId:=P.FieldByName('PUBLISHING_ID').Value;
+        EditPublishing.Text:=P.FieldByName('NAME').AsString;
+      end;
+    finally
+      P.Free;
+      AIface.Free;
+    end;
+  end;
+end;
+
+procedure TBisKrieltReportsForm.ClearButtonClick(Sender: TObject);
+begin
+  AllListBox.Items.Clear;
+end;
+
+procedure TBisKrieltReportsForm.CloseExportButtonButtonClick(Sender: TObject);
+begin
+  inherited;
+  Close;
+end;
+
+constructor TBisKrieltReportsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  BeginDateTimePicker.Date:=Date;
+  EndDateTimePicker.Date:=Date;
+  FPublishingId:=Null;
+  FIssueId:=Null;
+end;
+
+procedure TBisKrieltReportsForm.DeleteButtonClick(Sender: TObject);
+begin
+  AllListBox.Items.Delete(AllListBox.ItemIndex);
+end;
+
+procedure TBisKrieltReportsForm.ExportTimerTimer(Sender: TObject);
+begin
+
+  if AllListBox.Items.Count=0 then begin
+    ClearButton.Enabled:=False;
+    StartExportButton.Enabled:=False;
+  end else begin
+    ClearButton.Enabled:=True;
+    StartExportButton.Enabled:=True;
+  end;
+
+  if AllListBox.ItemIndex=-1 Then
+    DeleteButton.Enabled:=False
+  else
+    DeleteButton.Enabled:=True;
+end;
+
+procedure TBisKrieltReportsForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+  Action:=caFree;
+end;
+
+procedure TBisKrieltReportsForm.ActionComboBoxChange(Sender: TObject);
+begin
+  if (ActionComboBox.Text='Продам') then Begin
+    RealtyTypeComboBox.Items.Clear;
+    ReportComboBox.Items.Clear;
+    RealtyTypeComboBox.Items.Add('Жилое');
+    RealtyTypeComboBox.Items.Add('Нежилое');
+  End;
+  if (ActionComboBox.Text='Куплю') then Begin
+    RealtyTypeComboBox.Items.Clear;
+    ReportComboBox.Items.Clear;
+    RealtyTypeComboBox.Items.Add('Долевое жилое');
+    RealtyTypeComboBox.Items.Add('Долевое нежилое');
+    RealtyTypeComboBox.Items.Add('Жилое');
+    RealtyTypeComboBox.Items.Add('Нежилое');
+    RealtyTypeComboBox.Items.Add('Землю');
+  End;
+  if (ActionComboBox.Text='Сдам в аренду') then Begin
+    RealtyTypeComboBox.Items.Clear;
+    ReportComboBox.Items.Clear;
+    RealtyTypeComboBox.Items.Add('Жилое');
+    RealtyTypeComboBox.Items.Add('Нежилое');
+    RealtyTypeComboBox.Items.Add('Землю');
+  End;
+  if (ActionComboBox.Text='Сниму в аренду') then Begin
+    RealtyTypeComboBox.Items.Clear;
+    ReportComboBox.Items.Clear;
+    RealtyTypeComboBox.Items.Add('Жилое');
+    RealtyTypeComboBox.Items.Add('Нежилое');
+    RealtyTypeComboBox.Items.Add('Землю');
+  End;
+  if (ActionComboBox.Text='Обменяю') then Begin
+    RealtyTypeComboBox.Items.Clear;
+    ReportComboBox.Items.Clear;
+    RealtyTypeComboBox.Items.Add('Долевое жилое');
+    RealtyTypeComboBox.Items.Add('Долевое нежилое');
+    RealtyTypeComboBox.Items.Add('Жилое');
+    RealtyTypeComboBox.Items.Add('Нежилое');
+    RealtyTypeComboBox.Items.Add('Землю');
+  End;
+  RealtyTypeComboBox.ItemIndex:=-1;
+  AddButton.Enabled:=False;
+end;
+
+procedure TBisKrieltReportsForm.RealtyTypeComboBoxChange(Sender: TObject);
+begin
+  if (ActionComboBox.Text='Продам') And (RealtyTypeComboBox.Text='Жилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('Квартиры в г. Красноярск');
+    ReportComboBox.Items.Add('Квартиры в других населенных пунктах');
+    ReportComboBox.Items.Add('Дома, коттеджи в г. Красноярск');
+    ReportComboBox.Items.Add('Дома, коттеджи в других населенных пунктах');
+    ReportComboBox.Items.Add('Таунхаусы в г. Красноярск');
+    ReportComboBox.Items.Add('Загородные дома');
+    ReportComboBox.Items.Add('Дачи');
+  end;
+  if (ActionComboBox.Text='Продам') And (RealtyTypeComboBox.Text='Нежилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('Офисы в г. Красноярск');
+    ReportComboBox.Items.Add('Офисы в других населенных пунктах');
+    ReportComboBox.Items.Add('Торговые помещения в г. Красноярск');
+    ReportComboBox.Items.Add('Торговые помещения в других населенных пунктах');
+    ReportComboBox.Items.Add('Склады, базы в г. Красноярск');
+    ReportComboBox.Items.Add('Склады, базы в других населенных пунктах');
+    ReportComboBox.Items.Add('Здания в г. Красноярск');
+    ReportComboBox.Items.Add('Здания в других населенных пунктах');
+    ReportComboBox.Items.Add('Рестораны, кафе в г. Красноярск');
+    ReportComboBox.Items.Add('Рестораны, кафе в других населенных пунктах');
+    ReportComboBox.Items.Add('Производства в г. Красноярск');
+    ReportComboBox.Items.Add('Производства в других населенных пунктах');
+    ReportComboBox.Items.Add('Гаражи в г. Красноярск');
+    ReportComboBox.Items.Add('Гаражи в других населенных пунктах');
+    ReportComboBox.Items.Add('Свободного назначения в г. Красноярск');
+    ReportComboBox.Items.Add('Свободного назначения в других населенных пунктах');
+  end;
+  if (ActionComboBox.Text='Куплю') And (RealtyTypeComboBox.Text='Долевое жилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('Долевое в г. Красноярск');
+    ReportComboBox.Items.Add('Долевое в других населенных пунктах');
+  end;
+  if (ActionComboBox.Text='Куплю') And (RealtyTypeComboBox.Text='Долевое нежилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('В г. Красноярск');
+    ReportComboBox.Items.Add('В других населенных пунктах');
+  end;
+  if (ActionComboBox.Text='Куплю') And (RealtyTypeComboBox.Text='Жилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('Квартиры в г. Красноярск');
+    ReportComboBox.Items.Add('Квартиры в других населенных пунктах');
+    ReportComboBox.Items.Add('Дома, коттеджи, таунхаусы в г. Красноярск');
+    ReportComboBox.Items.Add('Дома, коттеджи, таунхаусы в других населенных пунктах');
+    ReportComboBox.Items.Add('Загородные дома');
+    ReportComboBox.Items.Add('Дачи (в населенном пункте)');
+    ReportComboBox.Items.Add('Дачи (за населенным пунктом)');
+  end;
+  if (ActionComboBox.Text='Куплю') And (RealtyTypeComboBox.Text='Нежилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('В г. Красноярск');
+    ReportComboBox.Items.Add('В других населенных пунктах');
+  end;
+  if (ActionComboBox.Text='Куплю') And (RealtyTypeComboBox.Text='Землю') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('В г. Красноярск');
+    ReportComboBox.Items.Add('В других населенных пунктах');
+    ReportComboBox.Items.Add('За населенными пунктами');
+  end;
+  if (ActionComboBox.Text='Сдам в аренду') And (RealtyTypeComboBox.Text='Жилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('Квартиры в г. Красноярск');
+    ReportComboBox.Items.Add('Квартиры в других населенных пунктах');
+    ReportComboBox.Items.Add('Дома, коттеджи в г. Красноярск');
+    ReportComboBox.Items.Add('Дома, коттеджи в других населенных пунктах');
+    ReportComboBox.Items.Add('Таунхаусы в г. Красноярск');
+    ReportComboBox.Items.Add('Загородные дома, коттеджи');
+    ReportComboBox.Items.Add('Дачи');
+  end;
+  if (ActionComboBox.Text='Сдам в аренду') And (RealtyTypeComboBox.Text='Нежилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('Офисы в г. Красноярск');
+    ReportComboBox.Items.Add('Офисы в других населенных пунктах');
+    ReportComboBox.Items.Add('Торговые помещения в г. Красноярск');
+    ReportComboBox.Items.Add('Торговые помещения в других населенных пунктах');
+    ReportComboBox.Items.Add('Склады, базы в г. Красноярск');
+    ReportComboBox.Items.Add('Склады, базы в других населенных пунктах');
+    ReportComboBox.Items.Add('Здания в г. Красноярск');
+    ReportComboBox.Items.Add('Здания в других населенных пунктах');
+    ReportComboBox.Items.Add('Рестораны, кафе в г. Красноярск');
+    ReportComboBox.Items.Add('Рестораны, кафе в других населенных пунктах');
+    ReportComboBox.Items.Add('Производства в г. Красноярск');
+    ReportComboBox.Items.Add('Производства в других населенных пунктах');
+    ReportComboBox.Items.Add('Гаражи, боксы в г. Красноярск');
+    ReportComboBox.Items.Add('Гаражи, боксы в других населенных пунктах');
+    ReportComboBox.Items.Add('Свободного назначения в г. Красноярск');
+    ReportComboBox.Items.Add('Свободного назначения в других населенных пунктах');
+  end;
+  if (ActionComboBox.Text='Сдам в аренду') And (RealtyTypeComboBox.Text='Землю') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('Земля в г. Красноярск');
+    ReportComboBox.Items.Add('Земля в других населенных пунктах');
+    ReportComboBox.Items.Add('Земля за населенными пунктами');
+  end;
+  if (ActionComboBox.Text='Сниму в аренду') And (RealtyTypeComboBox.Text='Жилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('Квартиры в г. Красноярск');
+    ReportComboBox.Items.Add('Квартиры в других населенных пунктах');
+    ReportComboBox.Items.Add('Дома, коттеджи, таунхаусы в г. Красноярск');
+    ReportComboBox.Items.Add('Дома, коттеджи, таунхаусы в других населенных пунктах');
+    ReportComboBox.Items.Add('Загородные дома');
+    ReportComboBox.Items.Add('Дачи (в населенном пункте)');
+    ReportComboBox.Items.Add('Дачи (за населенным пунктом)');
+  end;
+  if (ActionComboBox.Text='Сниму в аренду') And (RealtyTypeComboBox.Text='Нежилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('В г. Красноярск');
+    ReportComboBox.Items.Add('В других населенных пунктах');
+  end;
+  if (ActionComboBox.Text='Сниму в аренду') And (RealtyTypeComboBox.Text='Землю') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('В г. Красноярск');
+    ReportComboBox.Items.Add('В других населенных пунктах');
+    ReportComboBox.Items.Add('За населенными пунктами');
+  end;
+  if (ActionComboBox.Text='Обменяю') And (RealtyTypeComboBox.Text='Долевое жилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('Долевое в г. Красноярск');
+    ReportComboBox.Items.Add('Долевое в других населенных пунктах');
+  end;
+  if (ActionComboBox.Text='Обменяю') And (RealtyTypeComboBox.Text='Долевое нежилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('В г. Красноярск');
+    ReportComboBox.Items.Add('В других населенных пунктах');
+  end;
+  if (ActionComboBox.Text='Обменяю') And (RealtyTypeComboBox.Text='Жилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('Квартиры в г. Красноярск');
+    ReportComboBox.Items.Add('Квартиры в других населенных пунктах');
+    ReportComboBox.Items.Add('Дома, коттеджи, таунхаусы в г. Красноярск');
+    ReportComboBox.Items.Add('Дома, коттеджи, таунхаусы в других населенных пунктах');
+    ReportComboBox.Items.Add('Загородные дома');
+    ReportComboBox.Items.Add('Дачи (в населенном пункте)');
+    ReportComboBox.Items.Add('Дачи (за населенным пунктом)');
+  end;
+  if (ActionComboBox.Text='Обменяю') And (RealtyTypeComboBox.Text='Нежилое') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('В г. Красноярск');
+    ReportComboBox.Items.Add('В других населенных пунктах');
+  end;
+  if (ActionComboBox.Text='Обменяю') And (RealtyTypeComboBox.Text='Землю') then begin
+    ReportComboBox.Items.Clear;
+    ReportComboBox.Items.Add('В г. Красноярск');
+    ReportComboBox.Items.Add('В других населенных пунктах');
+    ReportComboBox.Items.Add('За населенными пунктами');
+  end;
+  ReportComboBox.ItemIndex:=-1;
+  AddButton.Enabled:=False;
+end;
+
+procedure TBisKrieltReportsForm.ReportComboBoxChange(Sender: TObject);
+begin
+  if (ReportComboBox.Text<>'') then
+    AddButton.Enabled:=True
+  else
+    AddButton.Enabled:=False;
+end;
+
+procedure TBisKrieltReportsForm.StartExportButtonClick(Sender: TObject);
+var DateBegin, DateEnd: TDate;
+  I: Integer;
+begin
+  DateBegin:=BeginDateTimePicker.Date;
+  DateEnd:=EndDateTimePicker.Date;
+
+  If (DateBegin<=DateEnd) Then Begin
+
+    for I:=0 to AllListBox.Items.Count-1 do begin
+
+      SetFormExportInProgress(Self);
+
+      if (AllListBox.Items.Strings[I]='Продам. Жилое. Квартиры в г. Красноярск.') then ExportSellApartmentsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Жилое. Квартиры в других населенных пунктах.') then ExportSellApartmentsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Жилое. Дома, коттеджи в г. Красноярск.') then ExportSellHousesCottagesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Жилое. Дома, коттеджи в других населенных пунктах.') then ExportSellHousesCottagesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Жилое. Таунхаусы в г. Красноярск.') then ExportSellTownHousesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Жилое. Загородные дома.') then ExportSellOutsideHouses(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Жилое. Дачи.') then ExportSellDatchas(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Офисы в г. Красноярск.') Then ExportSellOfficesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Офисы в других населенных пунктах.') Then ExportSellOfficesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Торговые помещения в г. Красноярск.') Then ExportSellTradePremisesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Торговые помещения в других населенных пунктах.') Then ExportSellTradePremisesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Склады, базы в г. Красноярск.') Then ExportSellBasesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Склады, базы в других населенных пунктах.') Then ExportSellBasesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Здания в г. Красноярск.') Then ExportSellBuildingsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Здания в других населенных пунктах.') Then ExportSellBuildingsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Рестораны, кафе в г. Красноярск.') Then ExportSellRestaurantsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Рестораны, кафе в других населенных пунктах.') Then ExportSellRestaurantsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Производства в г. Красноярск.') Then ExportSellProductionsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Производства в других населенных пунктах.') Then ExportSellProductionsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Гаражи в г. Красноярск.') Then ExportSellGaragesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Гаражи в других населенных пунктах.') Then ExportSellGaragesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Свободного назначения в г. Красноярск.') Then ExportSellFreePurposeKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Продам. Нежилое. Свободного назначения в других населенных пунктах.') Then ExportSellFreePurposeOthers(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Куплю. Долевое жилое. Долевое в г. Красноярск.') Then ExportBuyShareResidentialKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Долевое жилое. Долевое в других населенных пунктах.') Then ExportBuyShareResidentialOthers(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Куплю. Долевое нежилое. В г. Красноярск.') Then ExportBuyShareUnresidentialKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Долевое нежилое. В других населенных пунктах.') Then ExportBuyShareUnresidentialOthers(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Куплю. Жилое. Квартиры в г. Красноярск.') Then ExportBuyApartmentsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Жилое. Квартиры в других населенных пунктах.') Then ExportBuyApartmentsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Жилое. Дома, коттеджи, таунхаусы в г. Красноярск.') Then ExportBuyHousesCottagesTownHousesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Жилое. Дома, коттеджи, таунхаусы в других населенных пунктах.') Then ExportBuyHousesCottagesTownHousesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Жилое. Загородные дома.') Then ExportBuyOutsideHouses(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Жилое. Дачи (в населенном пункте).') Then ExportBuyDatchasInPoint(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Жилое. Дачи (за населенным пунктом).') Then ExportBuyDatchasOutPoint(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Куплю. Нежилое. В г. Красноярск.') Then ExportBuyUnresidentialKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Нежилое. В других населенных пунктах.') Then ExportBuyUnresidentialOthers(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Куплю. Землю. В г. Красноярск.') Then ExportBuyLandKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Землю. В других населенных пунктах.') Then ExportBuyLandOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Куплю. Землю. За населенными пунктами.') Then ExportBuyLandOutPoint(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Жилое. Квартиры в г. Красноярск.') Then ExportDeliverApartmentsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Жилое. Квартиры в других населенных пунктах.') Then ExportDeliverApartmentsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Жилое. Дома, коттеджи в г. Красноярск.') Then ExportDeliverHousesCottagesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Жилое. Дома, коттеджи в других населенных пунктах.') Then ExportDeliverHousesCottagesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Жилое. Таунхаусы в г. Красноярск.') Then ExportDeliverTownHousesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Жилое. Загородные дома, коттеджи.') Then ExportDeliverOutsideHousesCottages(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Жилое. Дачи.') Then ExportDeliverDatchas(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Офисы в г. Красноярск.') Then ExportDeliverOfficesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Офисы в других населенных пунктах.') Then ExportDeliverOfficesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Торговые помещения в г. Красноярск.') Then ExportDeliverTradePremisesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Торговые помещения в других населенных пунктах.') Then ExportDeliverTradePremisesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Склады, базы в г. Красноярск.') Then ExportDeliverBasesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Склады, базы в других населенных пунктах.') Then ExportDeliverBasesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Здания в г. Красноярск.') Then ExportDeliverBuildingsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Здания в других населенных пунктах.') Then ExportDeliverBuildingsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Рестораны, кафе в г. Красноярск.') Then ExportDeliverRestaurantsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Рестораны, кафе в других населенных пунктах.') Then ExportDeliverRestaurantsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Производства в г. Красноярск.') Then ExportDeliverProductionsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Производства в других населенных пунктах.') Then ExportDeliverProductionsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Гаражи, боксы в г. Красноярск.') Then ExportDeliverGaragesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Гаражи, боксы в других населенных пунктах.') Then ExportDeliverGaragesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Свободного назначения в г. Красноярск.') Then ExportDeliverFreePurposeKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Нежилое. Свободного назначения в других населенных пунктах.') Then ExportDeliverFreePurposeOthers(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Землю. Земля в г. Красноярск.') Then ExportDeliverLandKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Землю. Земля в других населенных пунктах.') Then ExportDeliverLandOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сдам в аренду. Землю. Земля за населенными пунктами.') Then ExportDeliverLandOutPoint(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Жилое. Квартиры в г. Красноярск.') Then ExportShootApartmentsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Жилое. Квартиры в других населенных пунктах.') Then ExportShootApartmentsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Жилое. Дома, коттеджи, таунхаусы в г. Красноярск.') Then ExportShootHousesCottagesTownHousesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Жилое. Дома, коттеджи, таунхаусы в других населенных пунктах.') Then ExportShootHousesCottagesTownHousesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Жилое. Загородные дома.') Then ExportShootOutsideHouses(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Жилое. Дачи (в населенном пункте).') Then ExportShootDatchasInPoint(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Жилое. Дачи (за населенным пунктом).') Then ExportShootDatchasOutPoint(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Нежилое. В г. Красноярск.') Then ExportShootUnresidentialKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Нежилое. В других населенных пунктах.') Then ExportShootUnresidentialOthers(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Землю. В г. Красноярск.') Then ExportShootLandKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Землю. В других населенных пунктах.') Then ExportShootLandOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Сниму в аренду. Землю. За населенными пунктами.') Then ExportShootLandOutPoint(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Обменяю. Долевое жилое. Долевое в г. Красноярск.') Then ExportChangeShareResidentialKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Долевое жилое. Долевое в других населенных пунктах.') Then ExportChangeShareResidentialOthers(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Обменяю. Долевое нежилое. В г. Красноярск.') Then ExportChangeShareUnresidentialKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Долевое нежилое. В других населенных пунктах.') Then ExportChangeShareUnresidentialOthers(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Обменяю. Жилое. Квартиры в г. Красноярск.') Then ExportChangeApartmentsKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Жилое. Квартиры в других населенных пунктах.') Then ExportChangeApartmentsOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Жилое. Дома, коттеджи, таунхаусы в г. Красноярск.') Then ExportChangeHousesCottagesTownHousesKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Жилое. Дома, коттеджи, таунхаусы в других населенных пунктах.') Then ExportChangeHousesCottagesTownHousesOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Жилое. Загородные дома.') Then ExportChangeOutsideHouses(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Жилое. Дачи (в населенном пункте).') Then ExportChangeDatchasInPoint(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Жилое. Дачи (за населенным пунктом).') Then ExportChangeDatchasOutPoint(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Обменяю. Нежилое. В г. Красноярск.') Then ExportChangeUnresidentialKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Нежилое. В других населенных пунктах.') Then ExportChangeUnresidentialOthers(Self, DateBegin, DateEnd);
+
+      if (AllListBox.Items.Strings[I]='Обменяю. Землю. В г. Красноярск.') Then ExportChangeLandKrs(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Землю. В других населенных пунктах.') Then ExportChangeLandOthers(Self, DateBegin, DateEnd);
+      if (AllListBox.Items.Strings[I]='Обменяю. Землю. За населенными пунктами.') Then ExportChangeLandOutPoint(Self, DateBegin, DateEnd);
+
+    end;
+
+    SetDefaultForm(Self);
+    
+  End Else
+    ShowMessage('Дата начала периода больше даты окончания!');
+
+end;
+
+end.

@@ -1,0 +1,21 @@
+unit BisFotom;
+
+interface
+
+uses BisModules, BisIfaceModules;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisCanonMainFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  MainIface:=AModule.Ifaces.AddClass(TBisCanonMainFormIface);
+end;
+
+end.

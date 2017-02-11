@@ -1,0 +1,49 @@
+unit BisRegEmailFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisFm, BisControls, BisSizeGrip;
+
+type
+  TBisRegEmailForm = class(TBisForm)
+    GroupBoxDesc: TGroupBox;
+    MemoDesc: TMemo;
+    LabelFrom: TLabel;
+    EditFrom: TEdit;
+    LabelTo: TLabel;
+    EditTo: TEdit;
+    GroupBoxBody: TGroupBox;
+    LabelSubject: TLabel;
+    EditSubject: TEdit;
+  private
+    FSizeGrip: TBisSizeGrip;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
+var
+  BisRegEmailForm: TBisRegEmailForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisRegEmailForm }
+
+constructor TBisRegEmailForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+end;
+
+destructor TBisRegEmailForm.Destroy;
+begin
+
+  inherited Destroy;
+end;
+
+end.

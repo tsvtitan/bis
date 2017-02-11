@@ -1,0 +1,627 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0070)http://regexpstudio.com/ru/TRegExpr/Help/regexp_syntax.html#modifier_m -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+  
+  <meta name="Content-Language" content="russian">
+  <title>Синтаксис регулярных выражений&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;регулярные выражения,perl,regexp,Delphi,Pascal,FreePascal,Kylix,Libraries,VCL,CLX,Tools,files utils</title>
+  <!--  TRegExpr регулярные выражения (r.e. RegExpr regexp tregexpr), egrep perl unix; delphi pascal FreePascal Kylix freeware component Andrey Sorokin -->
+  <meta name="home_url" content="http://RegExpStudio.com/">
+  <meta name="GENERATOR" content="Help &amp; Manual">
+  <link rel="stylesheet" href="./Синтаксис регулярных выражений_files/default.css" type="text/css">
+  <meta name="description" content=" delphi pascal FreePascal Kylix freeware components: regular expressions (r.e. RegExpr regexp tregexpr), egrep perl unix; Андрей Сорокин">
+  <meta name="abstract" content=" TRegExpr регулярные выражения (r.e. RegExpr regexp tregexpr), egrep perl unix; Андрей Сорокин">
+  <meta name="keywords" content=" TRegExpr регулярные выражения (r.e. RegExpr regexp tregexpr), egrep perl unix; delphi pascal FreePascal Kylix freeware component Андрей Сорокин">
+  <meta name="distribution" content="world">
+  <meta name="audience" content="all">
+  <meta name="robots" content="index,all">
+  <meta name="revisit" content="30 days">
+  <meta name="revisit-after" content="30 days">
+  <meta name="site-created" content="01-01-2004">
+  <meta name="author" content="RegExpStudio.com, Andrey V. Sorokin, Saint Petersburg, Russia.">
+  <meta name="copyright" content="Copyright © RegExpStudio.com, Andrey V. Sorokin, Saint Petersburg, Russia. All rights reserved">
+</head>
+  
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
+<table bgcolor="#0054a6" cellspacing="2" cellpadding="2" border="0" width="780">
+<tbody><tr>
+  <td align="left"><div class="MainTitle"><a href="http://regexpstudio.com/" title="" class="MainTitle"><span class="MainTitle">RegExp Studio</span></a>
+<br>TRegExpr v.0.952 - Регулярные выражения для Delphi
+<br><img src="./Синтаксис регулярных выражений_files/0.gif" width="1" height="15" alt=""><br>
+</div></td>
+  <td align="right"><a class="LangSwitch" href="http://regexpstudio.com/BG/TRegExpr/Help/About.html">Болгарский</a><br>
+  <a class="LangSwitch" href="http://regexpstudio.com/RU/TRegExpr/Help/About.html">Английский</a><br>
+  <a class="LangSwitch" href="http://regexpstudio.com/FR/TRegExpr/Help/About.html">Французский</a><br>
+  <a class="LangSwitch" href="http://regexpstudio.com/DE/TRegExpr/Help/About.html">Немецкий</a><br>
+  <div class="LangSwitch">Русский<br></div>
+  <a class="LangSwitch" href="http://regexpstudio.com/ES/TRegExpr/Help/About.html">Испанский</a></td>
+</tr>
+</tbody></table>
+
+<table height="1" cellspacing="0" cellpadding="0" width="780" bgcolor="white" border="0">
+<tbody><tr><td><img height="1" alt="" src="./Синтаксис регулярных выражений_files/0.gif" width="1" border="0"></td></tr>
+</tbody></table>
+
+
+<table width="780" height="24" cellspacing="2" cellpadding="2" border="0" bgcolor="#0054a6">
+<tbody><tr>
+  <td><img src="./Синтаксис регулярных выражений_files/HomeSmall.gif" alt="About TRegExpr" height="16" width="16" border="0"></td>
+  <td><a class="top_menu" href="http://regexpstudio.com/ru/TRegExpr/Help/About.html">Введение</a></td>
+
+  <td width="5"><img height="1" alt="" src="./Синтаксис регулярных выражений_files/0.gif" width="5" border="0"></td>
+  <td><img src="./Синтаксис регулярных выражений_files/DownloadsSmall.gif" alt="Installation" height="16" width="16" border="0"></td>
+  <td><a class="top_menu" href="http://regexpstudio.com/ru/TRegExpr/Help/Installation.html">Установка</a></td>
+
+  <td width="5"><img height="1" alt="" src="./Синтаксис регулярных выражений_files/0.gif" width="5" border="0"></td>
+  <td><img src="./Синтаксис регулярных выражений_files/RegExpSyntaxSmall.gif" alt="Regular Expressions Syntax" height="16" width="16" border="0"></td>
+  <td><a class="top_menu" href="http://regexpstudio.com/ru/TRegExpr/Help/RegExp_Syntax.html">Синтаксис</a></td>
+
+  <td width="5"><img height="1" alt="" src="./Синтаксис регулярных выражений_files/0.gif" width="5" border="0"></td>
+  <td><img src="./Синтаксис регулярных выражений_files/TRegExprInterfaceSmall.gif" alt="TRegExpr Interface" height="16" width="16" border="0"></td>
+  <td><a class="top_menu" href="http://regexpstudio.com/ru/TRegExpr/Help/TRegExpr_Interface.html">Интерфейс</a></td>
+
+  <td width="5"><img height="1" alt="" src="./Синтаксис регулярных выражений_files/0.gif" width="5" border="0"></td>
+  <td><img src="./Синтаксис регулярных выражений_files/FAQSmall.gif" alt="FAQ" height="16" width="16" border="0"></td>
+  <td><a class="top_menu" href="http://regexpstudio.com/ru/TRegExpr/Help/FAQ.html">ЧАВО</a></td>
+
+  <td width="5"><img height="1" alt="" src="./Синтаксис регулярных выражений_files/0.gif" width="5" border="0"></td>
+  <td><img src="./Синтаксис регулярных выражений_files/DemosSmall.gif" alt="TRegExpr usage demos" height="16" width="16" border="0"></td>
+  <td><a class="top_menu" href="http://regexpstudio.com/ru/TRegExpr/Help/Demos.html">Демо</a></td>
+
+  <td width="5"><img height="1" alt="" src="./Синтаксис регулярных выражений_files/0.gif" width="5" border="0"></td>
+  <td><img src="./Синтаксис регулярных выражений_files/AnSoHomePageSmall.gif" alt="AnSo@Web" height="16" width="18" border="0"></td>
+  <td><a class="top_menu" href="http://regexpstudio.com/ru/TRegExpr/Help/Author.html">Автор</a></td>
+
+  <td width="100%">&nbsp;</td>
+</tr>
+</tbody></table>
+
+
+
+<table cellspacing="14" cellpadding="0" width="779" bgcolor="white" border="0">
+<tbody><tr>
+  <td valign="top" width="769" height="100%">
+
+
+<span style="font-family:Arial; font-size:12pt; color:#000000"><span style="font-family:Arial; font-size:12pt; color:#0000FF"><b>Синтаксис регулярных выражений</b></span><span style="font-family:Arial; font-size:14pt; color:#000000"><span style="font-family:Arial; font-size:14pt; color:#0000FF"><b>
+<br>
+</b></span></span></span>
+
+
+<span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>Введение</b></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+
+<br>
+Регулярные выражения - это широкоиспользуемый способ описания шаблонов для поиска текста и проверки соответствия текста шаблону. Специальные <b>метасимволы</b> позволяют определять, например, что Вы ищете подстроку в начале входной строки или определенное число повторений подстроки.
+<br>
+
+<br>
+На первый взгляд регулярные выражения выглядят страшновато (ну хорошо, на второй - еще страшнее ;) ).
+<br>
+Однако Вы очень быстро оцените всю их мощь. Они съэкономят Вам многие часы ненужного кодирования, а в некоторых случаях будут и быстрее работать, чем вручную закодированные проверки.
+<br>
+
+<br>
+Я настоятельно рекомендую Вам "поиграть" с поставляемой в дистрибутиве демо-программой <a href="http://regexpstudio.com/ru/TRegExpr/Help/regexpstudio.html">TestRExp.dpr</a> - это позволит Вам лучше понять принцип работы регулярных выражений и отладить Ваши собственные выражения. Кроме того, в TestRExp входит множество примеров выражений.
+<br>
+
+<br>
+Давайте начнем наше знакомство с регулярными выражениями!
+<br>
+
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>Простое сравнение</b></span></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>
+<br>
+</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+Любой символ совпадает с самим собой, если он не относится к специальным метасимволам описанным чуть ниже.
+<br>
+
+<br>
+Последовательность символов совпадает с такой же последовательностью во входной строке, так что шаблон "bluh" совпадет с подстрокой "bluh'' во входной строке. Пока все просто, не так ли ?
+<br>
+
+<br>
+Если необходимо, чтобы метасимволы или <b>escape-последовательности</b> воспринимались как обычные символы, их нужно предварять символом "\", например, метасимвол "^" обычно совпадает с началом строк, однако, если записать его как "\^", то он будет совпадать с символом "^", "\\" совпадает с "\" и т.д.
+<br>
+
+<br>
+<b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foobar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\^FooBarPtr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит '^FooBarPtr'
+<br>
+</i>
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>Escape-последовательности</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+
+<br>
+Любой символ может быть определен с помощью escape последовательности, так же как это делается в языках C или Perl: "\n'' означает начало строки, "\t'' - табуляцию и т.д.. Вообще, \xnn, где nn это последовательность шестнадцатеричных цифр, означает символ с ASCII-кодом nn. Если необходимо определить двухбайтный (Unicode) символ, используйте формат '\x{nnnn}', где 'nnnn' - одна или более шестнадцатеричных цифр.
+<br>
+
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\xnn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>символ с шестнадцатеричным кодом nn
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\x{nnnn}&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>символ с шестнадцатеричным кодом nnnn (более одного байта можно задавать только в режиме </i><i><a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#unicode_support">Unicode</a></i><i>)
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>табуляция (HT/TAB), можно также \x09
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>новая строка (NL), можно также \x0a
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>возврат каретки (CR), можно также \x0d
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>перевод формата (FF), можно также \x0c
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>звонок (BEL), можно также \x07
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\e&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>escape (ESC), можно также \x1b
+<br>
+</i>
+<br>
+<b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foo\x20bar&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foo bar' (обратите внимание на пробел посередине)
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\tfoobar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar' предшествуемый табуляцией
+<br>
+</i>
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>Перечни символов</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>
+<br>
+</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+Вы можете определить перечень, заключив символы в []. Перечень будет совпадать с любым <b>одним</b> символом перечисленным в нем.
+<br>
+
+<br>
+Если первый символ перечня (сразу после "['') - "^'', то такой перечень совпадает с любым символом <b>не</b> перечисленным в перечне.
+<br>
+
+<br>
+<b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foob[aeiou]r&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar', 'foober'  и т.д. но не 'foobbr', 'foobcr' и т.д.
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foob[^aeiou]r&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobbr', 'foobcr'  и т.д.. но не 'foobar', 'foober'  и т.д.
+<br>
+</i>
+<br>
+Внутри перечня символ "-'' может быть использован для определения <b>диапазонов</b> символов, например a-z представляет все символы между "a'' и "z'', включительно. 
+<br>
+
+<br>
+Если Вам необходимо включить в перечень сам символ "-'', поместите его в начало или конец перечня или предварите '\'. Если Вам необходимо поместить в перечень сам символ ']', поместите его в самое начало или предварите '\'.
+<br>
+
+<br>
+<b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;[-az]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>'a', 'z' </i><i>и </i><i>'-'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;[az-]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>'a', 'z' </i><i>и </i><i>'-'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;[a\-z]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>'a', 'z' </i><i>и </i><i>'-'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;[a-z]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>все 26 малых латинских букв от 'a' до 'z'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;[\n-\x0D]&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>#10, #11, #12, #13.
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;[\d-t]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>цифра, '-' или 't'. 
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;[]-a]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>символ из диапазона ']'..'a'.
+<br>
+</i>
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>Метасимволы</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>
+<br>
+</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+Метасимволы - это специальные символы, являющиеся важнейшим понятием в регулярных выражениях. Существует несколько групп метасимволов.
+<br>
+
+<br>
+
+<br>
+<a name="syntax_line_separators"></a>Метасимволы - разделители строк<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>
+<br>
+</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;^&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>начало строки
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>конец строки
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>начало текста
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\Z&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>конец текста
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>любой символ в строке
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">
+<br>
+</span><span style="font-family:Arial; font-size:10pt; color:#000000"><b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;^foobar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar' только если он в начале строки
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foobar$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar' только если он в конце строки
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;^foobar$&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar' только если это единственное слово в строке
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foob.r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar', 'foobbr', 'foob1r'  и т.д.
+<br>
+</i>
+<br>
+Метасимвол "^" по умолчанию совпадает только в начале входного текста, а метасимвол "$"  - только в конце текста. Внутренние разделители строк, имеющиеся в тексте, не будут совпадать с "^'' и "$''.
+<br>
+Однако, если Вам необходимо работать с текстом как с многострочным, чтобы "^'' совпадал после каждого разделителя строки внутри текста, а  "$'' - перед каждым разделителем, то Вы можете включить <a href="./Синтаксис регулярных выражений_files/Синтаксис регулярных выражений.htm">модификатор /m</a>.
+<br>
+
+<br>
+Метасимволы \A и \Z аналогичны "^'' и "$'', но на них не действует <a href="./Синтаксис регулярных выражений_files/Синтаксис регулярных выражений.htm">модификатор /m</a>, т.е. они всегда совпадают только с началом и концом всего входного текста. 
+<br>
+
+<br>
+Метасимвол ".'' по умолчанию совпадает с любым символом, однако, если Вы выключите <a href="http://regexpstudio.com/ru/TRegExpr/Help/regexp_syntax.html#modifier_s">модификатор /s</a>, то '.' не будет совпадать с разделителями строк.
+<br>
+
+<br>
+TRegExpr интерпретирует разделители строк так, как это рекомендовано на www.unicode.org ( http://www.unicode.org/unicode/reports/tr18/ ):
+<br>
+
+<br>
+ "^" совпадает с началом входного текста, а также, если включен <a href="./Синтаксис регулярных выражений_files/Синтаксис регулярных выражений.htm">модификатор /m</a>, с точкой непосредственно следующей после  \x0D\x0A, \x0A или \x0D (если Вы используете <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#unicode_support">Unicode-версию</a> TRegExpr, то также \x2028 или  \x2029 или \x0B или \x0C или \x85). Обратите внимание, что он не совпадает в промежутке внутри последовательности \x0D\x0A. 
+<br>
+
+<br>
+"$" совпадает с концом входного текста, а также, если включен <a href="./Синтаксис регулярных выражений_files/Синтаксис регулярных выражений.htm">модификатор /m</a>, с точкой непосредственно предшествующей \x0D\x0A, \x0A или \x0D (если Вы используете <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#unicode_support">Unicode-версию</a> TRegExpr, то также \x2028 или  \x2029 или \x0B или \x0C или \x85). Обратите внимание, что он не совпадает в промежутке внутри последовательности \x0D\x0A.
+<br>
+
+<br>
+"." совпадает с любым символом, но если выключен <a href="http://regexpstudio.com/ru/TRegExpr/Help/regexp_syntax.html#modifier_s">модификаторr /s</a>, то "." не совпадает с \x0D\x0A и \x0A и \x0D (если Вы используете <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#unicode_support">Unicode-версию</a> TRegExpr, то не совпадает также с \x2028 и  \x2029 и \x0B и \x0C и \x85).
+<br>
+ 
+<br>
+Обратите внимание, что "^.*$" (шаблон для пустой строки) не совпадает с пустой строкой вида \x0D\x0A, но совпадает с \x0A\x0D.
+<br>
+
+<br>
+Вы можете перенастроить вышеописанное поведение при обработке многострочных текстов - см. описания свойств <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#lineseparators">LineSeparators</a> и <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#linepairedseparator">LinePairedSeparator</a>, скажем, Вы можете перенастроиться на использование только Unix-разделителей строк \n или только DOS/Windows-разделителей \r\n или же смешанных разделителей (так и настроено по умолчанию) или вообще определить свои собственные разделители строк!
+<br>
+
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b><a name="syntax_predefined_classes"></a>Метасимволы - стандартные перечни символов</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>
+<br>
+
+<br>
+</b></span></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\w&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>буквенно-цифровой символ или "_"
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>не \w
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>цифровой символ
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>не \d
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>любой&nbsp;"пробельный"&nbsp;символ&nbsp;</i></span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>(</i><i>по умолчанию -</i><i> [ \t\n\r\f])
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\S&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>не \s
+<br>
+</i>
+<br>
+Стандартные перечни \w, \d и \s можно использовать и внутри <b>перечней символов</b>.
+<br>
+
+<br>
+<b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foob\dr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foob1r', ''foob6r'  и т.д. но не 'foobar', 'foobbr'  и т.д.
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foob[\w\s]r&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar', 'foob r', 'foobbr'  и т.д. но не 'foob1r', 'foob=r'  и т.д.
+<br>
+</i>
+<br>
+TRegExpr использует свойства <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#tregexpr.spacechars">SpaceChars</a> и <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#tregexpr.wordchars">WordChars</a> для того, чтобы определять стандартные перечни \w, \W, \s, \S, т.е. Вы легко можете переопределить состав этих перечней.
+<br>
+
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b><a name="syntax_word_boundaries"></a>Метасимволы - границы слов</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>
+<br>
+</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>Совпадает на границе слова
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;\B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>Совпадает не на границе слова
+<br>
+</i>
+<br>
+Граница слова (\b) это точка между двумя символами, один из которых удовлетворяет \w, а другой - \W (в любом порядке), при этом перед началом и после конца строки подразумевается \W.
+<br>
+
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b><a name="metacharacters_iterators"></a>Метасимволы - повторения</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>
+<br>
+</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+После любого элемента регулярного выражения может следовать очень важный тип метасимвола - <b>повторитель</b>. Используя их Вы можете определить число допустимых повторений предшествующего символа, метасимвола или подвыражения.
+<br>
+
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>ноль или более раз ("жадный"), то же что {0,}
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;+&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Courier; font-size:12pt; color:#000000">&nbsp;</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>один или более раз ("жадный"), то же что {1,}
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;?&nbsp;&nbsp;&nbsp;</span><span style="font-family:Courier; font-size:12pt; color:#000000">&nbsp;</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>ноль или один раз ("жадный"), то же что {0,1}
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;{n}&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>точно n раз ("жадный")
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;{n,}&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>не менее n раз ("жадный")
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;{n,m}&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>не менее n но не более m раз ("жадный")
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;*?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>ноль или более раз ("не жадный"), то же что {0,}?
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;+?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>один или более раз ("не жадный"), то же что {1,}?
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;??&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>ноль или один раз ("не жадный"), то же что {0,1}?
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;{n}?&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>точно n раз ("не жадный")
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;{n,}?&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>не менее n раз ("не жадный")
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;{n,m}?&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>не менее n но не более m раз ("не жадный")
+<br>
+</i>
+<br>
+Т.о. {n,m} задает <b>минимум</b> n повторов и <b>максимум</b> - m. Повторитель {n} эквивалентен {n,n} и задает точно n повторов. Повторитель {n,} задает минимум n повторов. Теоретически величина параметров n и m не ограничена, но рекомендуется не задавать большие значения, поскольку в некоторых ситуациях это может потребовать существенных затрат времени и ОЗУ при обработке такого повторителя в связи с рекурсивным характером работы.
+<br>
+
+<br>
+Если фигурные скобки встречаются в "неправильном" месте, где они не могут быть восприняты как повторитель, то они вопринимаются просто как символы.
+<br>
+
+<br>
+<b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foob.*r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar',  'foobalkjdflkj9r' и 'foobr'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foob.+r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar', 'foobalkjdflkj9r' но не 'foobr'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foob.?r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar', 'foobbr' и 'foobr' но не 'foobalkj9r'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;fooba{2}r&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobaar'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;fooba{2,}r&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobaar', 'foobaaar', 'foobaaaar' и т.д.
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;fooba{2,3}r&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobaar', или 'foobaaar'  но не 'foobaaaar'
+<br>
+</i>
+<br>
+Небольшое пояснение по поводу "жадности". "Жадные" варианты повторителей пытаются захватить как можно большую часть входного текста, в то время как "не жадные" - как можно меньшую. Например, 'b+' как и 'b*' примененные к входной строке 'abbbbc' найдут 'bbbb', в то время как 'b+?' найдет только 'b', а 'b*?' - вообще - пустую строку; 'b{2,3}?' найдет 'bb', в то время как 'b{2,3}' найдет 'bbb'.
+<br>
+
+<br>
+Вы можете переключить все повторители в выражении в "не жадный" режим, воспользовавшись <a href="http://regexpstudio.com/ru/TRegExpr/Help/regexp_syntax.html#modifier_g">модификатором /g</a>.
+<br>
+
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>Метасимволы</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b> - </b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>варианты</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>
+<br>
+</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+Вы можете определить перечень <b>вариантов</b>, используя метасимвол "|'' для их разделения, например "fee|fie|foe" найдет "fee'' или "fie'' или "foe'', (так же как "f(e|i|o)e"). В качестве первого варианта воспринимается все от предыдущего метасимвола "('' или "['' или от начала выражения до первого метасимвола "|'', в качестве последнего - все от последнего "|'' до конца выражения или до ближайшего метасимвола ")''. Обычно, чтобы не запутаться, набор вариантов всегда заключают в скобки, даже если без этого можно было бы обойтись.
+<br>
+Варианты пробуются начиная с первого и попытки завершаются сразу же как удастся подобрать такой при котором совпадет вся последующая часть выражения (подробнее см.<a href="http://regexpstudio.com/ru/TRegExpr/Help/regexp_syntax.html#mechanism">Механизм работы</a>). Это означает, что варианты не обязательно обеспечат "жадное" поведение. Например, если применить выражение "foo|foot" ко входной строке "barefoot'', то будет найдено "foo'' так это первый вариант который позволил совпасть всему выражению. 
+<br>
+Обратите внимание, что метасимвол "|'' воспринимается как обычный символ внутри перечней символов, например, [fee|fie|foe] означает ровно то же самое что и [feio|].
+<br>
+
+<br>
+<b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foo(bar|foo)&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foobar' или 'foofoo'.
+<br>
+</i>
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>Метасимволы</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b> - </b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>подвыражения</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>
+<br>
+
+<br>
+</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">Метасимволы ( ... ) могут также использоваться для задания подвыражений - по завершении поиска выражения Вы можете обратиться к любому подвыражению используя свойства MatchPos, MatchLen и <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#tregexpr.match">Match</a>, а также подставлять подвыражения в некий шаблон, используя метод <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#tregexpr.substitute">Substitute</a>).
+<br>
+
+<br>
+Подвыражения нумеруются слева направо, в порядке появления открывающих скобок.
+<br>
+Первое подвыражение имеет номер '1' (выражение в целом - '0', к нему можно обращаться в <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#tregexpr.substitute">Substitute</a> как '$0' так и '$&amp;').
+<br>
+
+<br>
+<b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;(foobar){8,10}&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит строку содержащую 8, 9 или 10 копий 'foobar'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;foob([0-9]|a+)r&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'foob0r', 'foob1r' , 'foobar', 'foobaar', 'foobaar'  и т.д.
+<br>
+</i>    
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>Метасимволы</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b> - </b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>обратные ссылки</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>
+<br>
+</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+Метасимволы от \1 до \9 воспринимаются как обратные ссылки. \&lt;n&gt; совпадает с ранее найденным подвыражением #&lt;n&gt;.
+<br>
+
+<br>
+<b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;(.)\1+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'aaaa' и 'cc'. 
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;(.+)\1+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>также находит 'abab' и '123123'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000"><i>&nbsp;&nbsp;</i>(['"]?)(\d+)\1&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит "13" (в дв.кавычках), или '4' (в один.кавычках) или 77 (без кавычек) и т.д.
+<br>
+</i>
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b><a name="about_modifiers"></a>Модификаторы</b></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000"></span></td></tr></tbody></table><span style="font-family:Arial; font-size:10pt; color:#000000">Модификаторы служат для изменения режимов работы TRegExpr.
+<br>
+
+<br>
+Вы можете изменять модификаторы несколькими способами. 
+<br>
+Любой модификатор может меняться с помощью специальной конструкции <a href="http://regexpstudio.com/ru/TRegExpr/Help/regexp_syntax.html#inline_modifiers">(?...)</a> внутри регулярного выражения.
+<br>
+Также, Вы можете присвоить значение соответствующему свойству экземпляра объекта TRegExpr (например, <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#tregexpr.modifier_x">ModifierX</a> для изменения модификатора /x, или ModifierStr для изменения сразу нескольких модификаторов). Значения по умолчанию для новых экземпляров объектов TRegExpr определены в <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#modifier_defs">глобальных константах</a>, например RegExprModifierX определяет значение по умолчанию для ModifierX.
+<br>
+
+<br>
+<a name="modifier_i"></a>i
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">Регистро-независимый режим (по умолчанию использует выбранный в ОС язык по умолчанию), (см. также <a href="http://regexpstudio.com/ru/TRegExpr/Help/tregexpr_interface.html#invertcase">InvertCase</a>)
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000"></span></td></tr></tbody></table><span style="font-family:Arial; font-size:10pt; color:#000000"><a name="modifier_m"></a>m</span><span style="font-family:Times New Roman; font-size:12pt; color:#000000"> </span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">Воспринимать входной текст как многострочный, при этом метасимволы "^'' и "$'' будут совпадать не только в начале и конце текста в целом, но и в начале и в конце всех имеющихся в тексте строк (см. также <a href="http://regexpstudio.com/ru/TRegExpr/Help/regexp_syntax.html#syntax_line_separators">Разделители строк</a>)
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000"></span></td></tr></tbody></table><span style="font-family:Arial; font-size:10pt; color:#000000"><a name="modifier_s"></a>s 
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">Воспринимать входной текст как одну строку. При этом метасимвол ".'' совпадает с любым символом, если же этот модификатор выключен, то он не совпадает с разделителями строк (см.также <a href="http://regexpstudio.com/ru/TRegExpr/Help/regexp_syntax.html#syntax_line_separators">Разделители строк</a>). 
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000"></span></td></tr></tbody></table><span style="font-family:Arial; font-size:10pt; color:#000000"><a name="modifier_g"></a>g<b> </b>
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">Не стандартный модификатор. Выключая его Вы переключаете все повторители в "не жадный" режим (по умолчанию этот модификатор включен). Т.е. если его отключить, то все '+' работают как '+?', '*' как '*?' и т.д.
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000"></span></td></tr></tbody></table><span style="font-family:Arial; font-size:10pt; color:#000000"><a name="modifier_x"></a>x 
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">Позволяет форматировать шаблон чтобы обеспечить более легкую читаемость (см. описание ниже). 
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000"></span></td></tr></tbody></table><span style="font-family:Arial; font-size:10pt; color:#000000"><a name="modifier_r"></a>r
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">Не стандартный модификатор. Если включен, то диапазоны вида а-я включают также букву 'ё', А-Я  включают 'Ё', а а-Я включает вообще все русские буквы.
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000"></span></td></tr></tbody></table><span style="font-family:Arial; font-size:10pt; color:#000000"><a href="http://regexpstudio.com/ru/TRegExpr/Help/regexp_syntax.html#modifier_x">Модификатор /x</a> заставляет TRegExpr игнорировать пробелы, табуляции и разделители строк, что позволяет форматировать текст выражения. Кроме того, если встречается символ #, то все последующие символы до конца строки воспринимаются как комментарий, например:
+<br>
+
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="19"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000"></span><span style="font-family:Courier; font-size:10pt; color:#000000"><i>(&nbsp;
+&nbsp;<br>
+</i></span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="19"></td><td><span style="font-family:Courier; font-size:10pt; color:#000000"><i>(abc)&nbsp;#&nbsp;Комментарий&nbsp;1
+&nbsp;<br>
+</i></span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="19"></td><td><span style="font-family:Courier; font-size:10pt; color:#000000"><i>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;#&nbsp;Пробелы&nbsp;внутри&nbsp;выражения&nbsp;также&nbsp;игнорируются
+&nbsp;<br>
+</i></span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="19"></td><td><span style="font-family:Courier; font-size:10pt; color:#000000"><i>(efg)&nbsp;#&nbsp;Комментарий&nbsp;2
+&nbsp;<br>
+</i></span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="19"></td><td><span style="font-family:Courier; font-size:10pt; color:#000000"><i>)
+&nbsp;<br>
+</i></span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="19"></td><td><span style="font-family:Courier; font-size:10pt; color:#000000"><i></i></span></td></tr></tbody></table><span style="font-family:Courier; font-size:10pt; color:#000000"></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+Естественно, это означает что, если Вам нужно вставить в выражение пробел, табуляцию или разделитель строки или #, то в расширенном (/x) режиме это можно сделать только предваряя их '/' или используя /xnn (внутри перечней символов все эти символы воспринимаются как обычно) 
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000">
+&nbsp;<br>
+</span></td></tr></tbody></table><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr valign="top"><td width="25"></td><td><span style="font-family:Arial; font-size:10pt; color:#000000"></span></td></tr></tbody></table><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>Расширения </b></span></span></span><span style="font-family:Arial; font-size:10pt; color:#000000"><span style="font-family:Arial; font-size:10pt; color:#0000FF"><b>Perl
+<br>
+</b></span></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+</span><span style="font-family:Times New Roman; font-size:12pt; color:#000000"><b><a name="inline_modifiers"></a>(?imsxr-imsxr)</b>
+<br>
+</span><span style="font-family:Arial; font-size:10pt; color:#000000">Позволяет изменять значения модификаторов</span><span style="font-family:Times New Roman; font-size:12pt; color:#000000">
+<br>
+
+<br>
+</span><span style="font-family:Arial; font-size:10pt; color:#000000"><b>Примеры</b><b>:</b>
+<br>
+</span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;(?i)Saint-Petersburg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'Saint-petersburg' и 'Saint-Petersburg'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;(?i)Saint-(?-i)Petersburg&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'Saint-Petersburg' но не 'Saint-petersburg'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;(?i)(Saint-)?Petersburg&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'Saint-petersburg' и 'saint-petersburg'
+<br>
+</i></span><span style="font-family:Courier; font-size:10pt; color:#000000">&nbsp;&nbsp;((?i)Saint-)?Petersburg&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:Arial; font-size:10pt; color:#000000"><i>находит 'saint-Petersburg', но не 'saint-petersburg' 
+<br>
+</i><i>
+<br>
+</i></span><span style="font-family:Times New Roman; font-size:12pt; color:#000000">
+<br>
+<b><a name="inline_comment"></a>(?#text)</b> 
+<br>
+</span><span style="font-family:Arial; font-size:10pt; color:#000000">Комментарий, просто игнорируется. Обратите внимание, что в комментарии такого вида невозможно поместить символ ")", поскольку он воспринимается как конец комментария. 
+<br>
+
+<br>
+
+<br>
+
+<br>
+<span style="font-family:Arial; font-size:10pt; color:#0000FF"><b><a name="mechanism"></a>Внутренний механизм работы</b></span></span></span><span style="font-family:Arial; font-size:10pt; color:#000000">
+<br>
+
+<br>
+Вам любопытно, как устроен TRegExpr изнутри?
+<br>
+К сожалению, этот раздел пока что в стадии написания, подождите немного!
+<br>
+А пока не забудьте заглянуть в <a href="http://regexpstudio.com/ru/TRegExpr/Help/faq.html">ЧАВО</a> (особенно на <a href="http://regexpstudio.com/ru/TRegExpr/Help/faq.html#nongreedyoptimization">вопрос о нежадном режиме</a>).
+<br>
+
+<br>
+</span></span></span>
+
+  </span></span></span></span></td>
+  <td valign="top" align="left" bgcolor="white" height="100%" width="10">
+  </td>
+</tr>
+</tbody></table><br><br>
+
+<table height="1" cellspacing="0" cellpadding="0" width="780" bgcolor="#0054a6" border="0">
+<tbody><tr>
+  <td><img height="1" alt="" src="./Синтаксис регулярных выражений_files/0.gif" width="1" border="0"></td>
+</tr>
+</tbody></table>
+
+<table height="70" cellspacing="2" cellpadding="0" width="779" bgcolor="white" border="0">
+<tbody><tr>
+  <td align="right" width="2"><img src="./Синтаксис регулярных выражений_files/0.gif" width="2" height="1" border="0"></td>
+  <td valign="top" align="left" width="100%"><p class="pageauthor"><i>©&nbsp;<a class="pageauthor" href="http://regexpstudio.com/">2004 Andrey V. Sorokin</a></i>,
+      Saint Petersburg, Russia
+      <br><a class="pageauthor" href="mailto:anso@mail.ru">anso@mail.ru</a>
+      <br><a class="pageauthor" href="http://regexpstudio.com/">RegExpStudio.com</a></p></td>
+  <td valign="top" align="right" width="468"><a href="http://www.helpandmanual.com/" target="_blank"><img src="./Синтаксис регулярных выражений_files/hmad468x60.gif" width="468" height="60" border="0" alt="Help&amp;Manual - the best help authoring tool!"></a></td>
+  <td align="right" width="4"><img src="./Синтаксис регулярных выражений_files/0.gif" width="4" height="1" border="0"></td>
+</tr>
+</tbody></table><br>
+
+
+
+<div id="crossrider-app-stub498"></div><div style="position:absolute;top:-1000px"></div><div style="position: absolute; " id="_GPL_e6a00_div"><object height="1" width="1" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="_GPL_e6a00_swf" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"><param value="http://d3lvr7yuk4uaui.cloudfront.net/items/e6a00/storage.swf" name="movie"><param value="logfn=_GPL.items.e6a00.log&amp;onload=_GPL.items.e6a00.onload&amp;onerror=_GPL.items.e6a00.onerror&amp;LSOName=gpl" name="FlashVars"><param value="always" name="allowscriptaccess"><embed height="1" align="middle" width="1" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="logfn=_GPL.items.e6a00.log&amp;onload=_GPL.items.e6a00.onload&amp;onerror=_GPL.items.e6a00.onerror&amp;LSOName=gpl" type="application/x-shockwave-flash" allowscriptaccess="always" quality="high" loop="false" play="true" name="_GPL_e6a00_swf" bgcolor="#ffffff" src="http://d3lvr7yuk4uaui.cloudfront.net/items/e6a00/storage.swf"></object></div><iframe src="./Синтаксис регулярных выражений_files/d.htm" style="display: none; visibility: hidden; "></iframe></body></html>

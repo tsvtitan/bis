@@ -1,0 +1,15 @@
+{
+ Tdws2Unit.Classes Demo
+}
+var q: TQuery;
+
+q := TQuery.Create('DBDEMOS', 'select * from customer');
+
+q.First;
+while not q.Eof do
+begin
+  Print(q.FieldByName('CustNo').AsInteger);
+  Print(', ');
+  PrintLn(q.FieldByName('Company').AsString);
+  q.Next;
+end;

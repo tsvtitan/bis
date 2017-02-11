@@ -1,0 +1,449 @@
+unit BisCallPhoneFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ImgList, StdCtrls, Buttons, Menus, ActnPopup,
+  BisFm, BisFrm, BisGradient;
+
+type
+  TBisCallPhoneFrame=class;
+
+  TBisCallPhoneFrameGetCallIdEvent=function (Frame: TBisCallPhoneFrame): Variant of object;
+
+  TBisCallPhoneFrame = class(TBisFrame)
+    ImageList: TImageList;
+    TimerTime: TTimer;
+    LabelName: TLabel;
+    LabelGroup: TLabel;
+    LabelDescription: TLabel;
+    ImageDirection: TImage;
+    LabelTime: TLabel;
+    ImageClose: TImage;
+    PopupActionBar: TPopupActionBar;
+    MenuItemClose: TMenuItem;
+    MenuItemHold: TMenuItem;
+    MenuItemSelect: TMenuItem;
+    MenuItemTransfer: TMenuItem;
+    MenuItemConnect: TMenuItem;
+    LabelNum: TLabel;
+    ShapeNum: TShape;
+    TimerFlashing: TTimer;
+    LabelLineName: TLabel;
+    ImagePhone: TImage;
+    LabelNameDescription: TLabel;
+    procedure ImageCloseClick(Sender: TObject);
+    procedure TimerTimeTimer(Sender: TObject);
+    procedure FrameClick(Sender: TObject);
+    procedure MenuItemCloseClick(Sender: TObject);
+    procedure MenuItemHoldClick(Sender: TObject);
+    procedure PopupActionBarPopup(Sender: TObject);
+    procedure MenuItemSelectClick(Sender: TObject);
+    procedure TimerFlashingTimer(Sender: TObject);
+    procedure FrameResize(Sender: TObject);
+  private
+    FGradient: TBisGradient;
+    FIncoming: Boolean;
+    FOnClose: TNotifyEvent;
+    FStartTime: TDateTime;
+    FActive: Boolean;
+    FOnSelect: TNotifyEvent;
+    FOnHold: TNotifyEvent;
+    FCallResultId: Variant;
+    FNum: Integer;
+    FFlashing: Boolean;
+    FLastFlash: Boolean;
+    FTimer: Boolean;
+    FFinished: Boolean;
+    FInQueryCallResultId: Boolean;
+    FOnGetCallId: TBisCallPhoneFrameGetCallIdEvent;
+    FCallResultQueried: Boolean;
+    procedure SetIncoming(const Value: Boolean);
+    procedure SetCallName(const Value: String);
+    function GetCallName: String;
+    function GetCallDescription: String;
+    procedure SetCallDescription(const Value: String);
+    function GetCallGroup: String;
+    procedure SetCallGroup(const Value: String);
+    procedure SetActive(const Value: Boolean);
+    procedure Select;
+    procedure Close;
+    procedure Hold;
+    procedure SetNum(const Value: Integer);
+    procedure SetFlashing(const Value: Boolean);
+    procedure SetTimer(const Value: Boolean);
+    procedure SetFinished(const Value: Boolean);
+    function GetCallId: Variant;
+    function GetCallNameDescription: String;
+    procedure SetCallNameDescription(const Value: String);
+    function GetCallLineName: String;
+    procedure SetCallLineName(const Value: String);
+    procedure ResizeControls;
+  protected
+    procedure SetParent(AParent: TWinControl); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure AutoHeight;
+    procedure Disable;
+    function QueryCallResultId: Boolean;
+
+    property CallName: String read GetCallName write SetCallName;
+    property CallGroup: String read GetCallGroup write SetCallGroup;
+    property CallDescription: String read GetCallDescription write SetCallDescription;
+    property CallNameDescription: String read GetCallNameDescription write SetCallNameDescription;
+    property CallLineName: String read GetCallLineName write SetCallLineName;
+
+    property StartTime: TDateTime read FStartTime write FStartTime;
+
+    property Flashing: Boolean read FFlashing write SetFlashing;
+    property Incoming: Boolean read FIncoming write SetIncoming;
+    property Active: Boolean read FActive Write SetActive;
+    property Timer: Boolean read FTimer write SetTimer;
+    property Finished: Boolean read FFinished write SetFinished;
+
+    property Num: Integer read FNum write SetNum;
+
+    property OnClose: TNotifyEvent read FOnClose write FOnClose;
+    property OnSelect: TNotifyEvent read FOnSelect write FOnSelect;
+    property OnHold: TNotifyEvent read FOnHold write FOnHold;
+    property OnGetCallId: TBisCallPhoneFrameGetCallIdEvent read FOnGetCallId write FOnGetCallId;
+
+    property CallResultId: Variant read FCallResultId;
+    property CallId: Variant read GetCallId;
+    property InQueryCallResultId: Boolean read FInQueryCallResultId;
+    property CallResultQueried: Boolean read FCallResultQueried;
+  end;
+
+  TBisCallPhoneFrameClass=class of TBisCallPhoneFrame;
+
+implementation
+
+uses DateUtils,
+     BisUtils,
+     BisCore,
+     BisCallResultFm;
+
+{$R *.dfm}
+
+const
+  Delta=5;
+
+{ TBisCallPhoneFrame }
+
+constructor TBisCallPhoneFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FGradient:=TBisGradient.Create(nil);
+  FGradient.Parent:=Self;
+  FGradient.Align:=alClient;
+  FGradient.BeginColor:=clWhite;
+  FGradient.EndColor:=clSilver;
+  FGradient.OnClick:=OnClick;
+  FGradient.PopupMenu:=PopupMenu;
+
+  CallName:='';
+  CallGroup:='';
+  CallDescription:='';
+  CallNameDescription:='';
+  CallLineName:='';
+
+  FStartTime:=Now;
+  FCallResultId:=Null;
+end;
+
+destructor TBisCallPhoneFrame.Destroy;
+begin
+  FGradient.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCallPhoneFrame.Disable;
+begin
+  LabelNum.Enabled:=false;
+  ShapeNum.Enabled:=false;
+  ImageDirection.Enabled:=false;
+  LabelTime.Font.Color:=clWindowText;
+  FGradient.EndColor:=clSilver;
+  TimerFlashing.Enabled:=false;
+  TimerTime.Enabled:=false;
+  LabelTime.Enabled:=false;
+  ImagePhone.Enabled:=false;
+  LabelName.Enabled:=false;
+  LabelNameDescription.Enabled:=false;
+  LabelLineName.Enabled:=false;
+  LabelDescription.Enabled:=false;
+  LabelGroup.Enabled:=false;
+  ImageClose.Enabled:=true;
+end;
+
+procedure TBisCallPhoneFrame.SetNum(const Value: Integer);
+begin
+  FNum := Value;
+  LabelNum.Caption:=FormatFloat('#00000',FNum);
+end;
+
+procedure TBisCallPhoneFrame.SetParent(AParent: TWinControl);
+begin
+  inherited SetParent(AParent);
+  if Assigned(AParent) and AParent.HandleAllocated then
+    FGradient.SendToBack;
+end;
+
+procedure TBisCallPhoneFrame.SetTimer(const Value: Boolean);
+begin
+  FTimer:=Value;
+  TimerTime.Enabled:=Value;
+end;
+
+procedure TBisCallPhoneFrame.SetIncoming(const Value: Boolean);
+var
+  Bmp: TBitmap;
+begin
+  FIncoming := Value;
+  Bmp:=TBitmap.Create;
+  try
+    if FIncoming then begin
+      if ImageList.GetBitmap(0,Bmp) then
+        ImageDirection.Picture.Assign(Bmp);
+    end else begin
+      if ImageList.GetBitmap(1,Bmp) then
+        ImageDirection.Picture.Assign(Bmp);
+    end;
+  finally
+    Bmp.Free;
+  end;
+end;
+
+procedure TBisCallPhoneFrame.SetCallGroup(const Value: String);
+begin
+  LabelGroup.Caption:=Value;
+  LabelGroup.Visible:=Trim(LabelGroup.Caption)<>'';
+end;
+
+procedure TBisCallPhoneFrame.SetCallLineName(const Value: String);
+begin
+  LabelLineName.Caption:=Value;
+  LabelLineName.Visible:=Trim(LabelLineName.Caption)<>'';
+end;
+
+procedure TBisCallPhoneFrame.SetFinished(const Value: Boolean);
+begin
+  FFinished:=Value;
+  if Finished then begin
+    SetActive(false);
+    Disable;
+  end;
+end;
+
+procedure TBisCallPhoneFrame.SetFlashing(const Value: Boolean);
+begin
+  SetActive(false);
+  FFlashing:=Value;
+  TimerFlashing.Enabled:=FFlashing;
+  if FFlashing then begin
+    FStartTime:=Now;
+    TimerTime.Enabled:=true;
+    LabelTime.Font.Color:=clRed;
+  end;
+end;
+
+procedure TBisCallPhoneFrame.SetActive(const Value: Boolean);
+begin
+  FFlashing:=false;
+  TimerFlashing.Enabled:=false;
+  FActive:=Value;
+  if FActive then begin
+    LabelTime.Font.Color:=clGreen;
+    FGradient.EndColor:=$00AAFF;
+  end else begin
+    LabelTime.Font.Color:=clWindowText;
+    FGradient.EndColor:=clSilver;
+  end;
+end;
+
+procedure TBisCallPhoneFrame.AutoHeight;
+begin
+  if LabelDescription.Visible then begin
+    Height:=40;
+  end else begin
+    Height:=20;
+  end;
+end;
+
+procedure TBisCallPhoneFrame.TimerFlashingTimer(Sender: TObject);
+begin
+  FLastFlash:=not FLastFlash;
+  if FLastFlash then begin
+    FGradient.EndColor:=$00AAFF;
+  end else begin
+    FGradient.EndColor:=clSilver;
+  end;
+end;
+
+procedure TBisCallPhoneFrame.TimerTimeTimer(Sender: TObject);
+begin
+  LabelTime.Caption:=FormatDateTime('nn:ss',Now-FStartTime);
+end;
+
+function TBisCallPhoneFrame.GetCallName: String;
+begin
+  Result:=LabelName.Caption;
+end;
+
+function TBisCallPhoneFrame.GetCallNameDescription: String;
+begin
+  Result:=LabelNameDescription.Hint;
+end;
+
+procedure TBisCallPhoneFrame.Hold;
+begin
+  if not Finished then begin
+    if Assigned(FOnHold) then
+      FOnHold(Self);
+  end;
+end;
+
+procedure TBisCallPhoneFrame.Select;
+begin
+  if not Finished then begin
+    if Assigned(FOnSelect) then
+      FOnSelect(Self);
+  end;
+end;
+
+function TBisCallPhoneFrame.QueryCallResultId: Boolean;
+var
+  Form: TBisCallResultForm;
+begin
+  Result:=false;
+  Form:=TBisCallResultForm.Create(nil);
+  FInQueryCallResultId:=true;
+  try
+    Form.Init;
+    if Form.RadioGroupCallResults.Items.Count>0 then begin
+      Form.Num:=LabelNum.Caption;
+      if Form.ShowModal=mrOk then begin
+        FCallResultId:=Form.CallResultId;
+        FCallResultQueried:=true;
+        Result:=true;
+      end;
+    end;
+  finally
+    FInQueryCallResultId:=false;
+    Form.Free;
+  end;
+end;
+
+procedure TBisCallPhoneFrame.ResizeControls;
+begin
+  LabelName.Left:=ImagePhone.Left+ImagePhone.Width+Delta;
+  LabelNameDescription.Left:=LabelName.Left+LabelName.Width+Delta*2;
+  LabelNameDescription.Width:=LabelLineName.Left-Delta*2-LabelNameDescription.Left;
+  LabelDescription.Left:=Delta;
+  LabelGroup.Left:=LabelDescription.Left+LabelDescription.Width+Delta*2;
+  LabelGroup.Width:=ClientWidth-LabelGroup.Left-Delta;
+end;
+
+procedure TBisCallPhoneFrame.Close;
+begin
+  if FIncoming and not FFlashing then begin
+    if QueryCallResultId then
+      if Assigned(FOnClose) then
+        FOnClose(Self);
+  end else begin
+    if Assigned(FOnClose) then
+      FOnClose(Self);
+  end;
+end;
+
+procedure TBisCallPhoneFrame.FrameClick(Sender: TObject);
+begin
+  Select;
+end;
+
+procedure TBisCallPhoneFrame.FrameResize(Sender: TObject);
+begin
+  ResizeControls;
+end;
+
+procedure TBisCallPhoneFrame.ImageCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TBisCallPhoneFrame.MenuItemCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TBisCallPhoneFrame.MenuItemHoldClick(Sender: TObject);
+begin
+  Hold;
+end;
+
+procedure TBisCallPhoneFrame.MenuItemSelectClick(Sender: TObject);
+begin
+  Select;
+end;
+
+procedure TBisCallPhoneFrame.PopupActionBarPopup(Sender: TObject);
+begin
+  if Incoming then
+    MenuItemSelect.Enabled:=not Active and TimerTime.Enabled
+  else
+    MenuItemSelect.Enabled:=not Flashing and not Active and TimerTime.Enabled;
+
+  if Incoming then
+    MenuItemHold.Enabled:=Active and TimerTime.Enabled
+  else
+    MenuItemHold.Enabled:=not Flashing and Active and TimerTime.Enabled;
+
+  MenuItemTransfer.Enabled:=false;
+  MenuItemConnect.Enabled:=false;
+  MenuItemClose.Enabled:=true;
+end;
+
+procedure TBisCallPhoneFrame.SetCallName(const Value: String);
+begin
+  LabelName.Caption:=Value;
+  LabelName.Visible:=Trim(LabelName.Caption)<>'';
+end;
+
+procedure TBisCallPhoneFrame.SetCallNameDescription(const Value: String);
+begin
+  LabelNameDescription.Caption:=Value;
+end;
+
+function TBisCallPhoneFrame.GetCallDescription: String;
+begin
+  Result:=LabelDescription.Caption;
+end;
+
+procedure TBisCallPhoneFrame.SetCallDescription(const Value: String);
+begin
+  LabelDescription.Caption:=Value;
+  LabelDescription.Visible:=Trim(LabelDescription.Caption)<>'';
+end;
+
+function TBisCallPhoneFrame.GetCallGroup: String;
+begin
+  Result:=LabelGroup.Caption;
+end;
+
+function TBisCallPhoneFrame.GetCallId: Variant;
+begin
+  Result:=Null;
+  if Assigned(FOnGetCallId) then
+    Result:=FOnGetCallId(Self);
+end;
+
+function TBisCallPhoneFrame.GetCallLineName: String;
+begin
+  Result:=LabelLineName.Caption;
+end;
+
+end.
+

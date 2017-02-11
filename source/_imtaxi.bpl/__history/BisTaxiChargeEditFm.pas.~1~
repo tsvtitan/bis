@@ -1,0 +1,157 @@
+unit BisTaxiChargeEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ImgList,
+  BisDataEditFm, BisParam, BisControls;
+
+type
+  TBisTaxiChargeEditForm = class(TBisDataEditForm)
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelSum: TLabel;
+    EditSum: TEdit;
+    LabelAccount: TLabel;
+    LabelDateCharge: TLabel;
+    DateTimePickerCharge: TDateTimePicker;
+    DateTimePickerChargeTime: TDateTimePicker;
+    EditAccount: TEdit;
+    ButtonAccount: TButton;
+    LabelType: TLabel;
+    ComboBoxType: TComboBox;
+    LabelWho: TLabel;
+    EditWho: TEdit;
+    LabelDateCreate: TLabel;
+    DateTimePickerCreate: TDateTimePicker;
+    DateTimePickerCreateTime: TDateTimePicker;
+  private
+  public
+    procedure BeforeShow; override;
+    procedure ChangeParam(Param: TBisParam); override;
+  end;
+
+  TBisTaxiChargeEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiChargeFilterFormIface=class(TBisTaxiChargeEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiChargeInsertFormIface=class(TBisTaxiChargeEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiChargeUpdateFormIface=class(TBisTaxiChargeEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiChargeDeleteFormIface=class(TBisTaxiChargeEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiChargeEditForm: TBisTaxiChargeEditForm;
+
+implementation
+
+uses BisUtils, BisTaxiConsts, BisTaxiDataChargeTypesFm, BisCore;
+
+{$R *.dfm}
+
+{ TBisTaxiChargeEditFormIface }
+
+constructor TBisTaxiChargeEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiChargeEditForm;
+  with Params do begin
+    AddKey('CHARGE_ID').Older('OLD_CHARGE_ID');
+    AddInvisible('WHO_CREATE_ID');
+    AddComboBoxDataSelect('CHARGE_TYPE_ID','ComboBoxType','LabelType','',
+                          TBisTaxiDataChargeTypesFormIface,'CHARGE_TYPE_NAME',true,false,'','NAME');
+    AddEditDataSelect('ACCOUNT_ID','EditAccount','LabelAccount','ButtonAccount',
+                       SClassDataAccountsFormIface,'USER_NAME',true,false);
+    AddEditFloat('SUM_CHARGE','EditSum','LabelSum',true);
+    AddEditDateTime('DATE_CHARGE','DateTimePickerCharge','DateTimePickerChargeTime','LabelDateCharge',true).ExcludeModes([emFilter]);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+    AddEdit('WHO_USER_NAME','EditWho','LabelWho',true).ExcludeModes(AllParamEditModes);
+    AddEditDateTime('DATE_CREATE','DateTimePickerCreate','DateTimePickerCreateTime','LabelDateCreate',true).ExcludeModes(AllParamEditModes);
+  end;
+end;
+
+
+{ TBisTaxiChargeFilterFormIface }
+
+constructor TBisTaxiChargeFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Фильтр списаний';
+end;
+
+{ TBisTaxiChargeInsertFormIface }
+
+constructor TBisTaxiChargeInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Permissions.Enabled:=true;
+  Available:=true;
+  ProviderName:='I_CHARGE';
+  ParentProviderName:='S_CHARGES';
+  Caption:='Добавить списание';
+  SMessageSuccess:='Списание успешно добавлено.';
+end;
+
+{ TBisTaxiChargeUpdateFormIface }
+
+constructor TBisTaxiChargeUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_CHARGE';
+  Caption:='Изменить списание';
+end;
+
+{ TBisTaxiChargeDeleteFormIface }
+
+constructor TBisTaxiChargeDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_CHARGE';
+  Caption:='Удалить списание';
+end;
+
+{ TBisTaxiChargeEditForm }
+
+procedure TBisTaxiChargeEditForm.BeforeShow;
+var
+  D: TDateTime;
+begin
+  inherited BeforeShow;
+  if Mode in [emInsert,emDuplicate] then begin
+    with Provider.Params do begin
+      D:=Core.ServerDate;
+      Find('DATE_CHARGE').SetNewValue(D);
+      Find('WHO_CREATE_ID').SetNewValue(Core.AccountId);
+      Find('WHO_USER_NAME').SetNewValue(Core.AccountUserName);
+      Find('DATE_CREATE').SetNewValue(D);
+    end;
+    UpdateButtonState;
+  end;
+end;
+
+procedure TBisTaxiChargeEditForm.ChangeParam(Param: TBisParam);
+begin
+  inherited ChangeParam(Param);
+  if AnsiSameText(Param.ParamName,'CHARGE_TYPE_ID') and not Param.Empty then begin
+
+  end;
+end;
+
+end.

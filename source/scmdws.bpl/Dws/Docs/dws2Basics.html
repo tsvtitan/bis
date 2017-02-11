@@ -1,0 +1,282 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-us">
+  <title>DelphiWebScript II - Basics</title>
+</head>
+<body>
+
+<h1>DelphiWebScript II - Basics</h1>
+
+<h2>Table of Contents</h2>
+
+<ul>
+    <li><a href="#ChapterIntroduction">Introduction</a>
+    <ul>
+        <li><a href="#cIntroductionWhatis">What is DelphiWebScript II?</a></li>
+        <li><a href="#cIntroductionLicensing">License</a></li>
+    </ul>
+    </li>
+    <li><a href="#ChapterInstallation">Installation</a>
+    <ul>
+        <li><a href="#cInstallationDelphi5">Delphi7, Delphi6, Delphi 5, (Kylix)</a></li>
+    </ul>
+    </li>
+    <li><a href="#cFirstSteps">First Steps with DelphiWebScript II</a></li>
+    <li><a href="#cIInfo">Using TProgramInfo / IInfo</a>
+    <ul>
+        <li><a href="#cIInfoParameters">Parameters, Variables and Result Values</a></li>
+        <li><a href="#cIInfoArrays">Arrays and Records</a></li>
+        <li><a href="#cIInfoFunctions">Functions</a></li>
+        <li><a href="#cIInfoObjects">Objects, Fields and Methods</a></li>
+    </ul>
+    </li>
+    <li><a href="#cDebugger">Debugger</a></li>
+    <li><a href="#cAdapter">Adapter</a></li>
+    <li><a href="#cConnector">Connector</a></li>
+</ul>
+
+<h2><a name="cIntroduction">Introduction</a></h2>
+
+<h3><a name="cIntroductionWhatis">What is DelphiWebScript II?</a></h3>
+
+<p>DelphiWebScript II (DWSII) is a scripting engine for application scripting
+or for server side scripting. The script language of DWSII is a subset of Delphi(tm)
+pascal. DelphiWebScript II is a component for the programming system "Borland Delphi"</p>
+
+<h3><a name="cIntroductionLicensing">License</a></h3>
+
+<p>DelphiWebScript II is distributed under "<a href="dwsLicense.html">Mozilla
+Public License 1.1</a>" (MPL 1.1). Please refer to the DWS homepage for additional
+information.</p>
+
+<h2><a name="cInstallation">Installation</a></h2>
+
+<h3><a name="cInstallationDelphi5">Delphi7, Delphi 6, Delphi 5 (Kylix)</a></h3>
+
+<ol>
+    <li>
+    <p>Extract the archive (if not already done) to a directory of your choice
+       - I'll call it "&lt;DWSDIR&gt;"</p>
+    </li>
+   <li>
+    <p> Start Delphi and load the right BorlandProjectGroup file according
+        to your version of Delphi. <br>
+        e.g.: <br>
+        Delphi 5 -&gt; &lt;DWSDIR&gt;\Delphi5.bpg<br>
+        Delphi 6 -&gt; &lt;DWSDIR&gt;\Delphi6.bpg<br>
+        Delphi 7 -&gt; &lt;DWSDIR&gt;\Delphi7.bpg<br>
+        <br>
+      DWSII only supports Delphi7, Delphi 6 and Delphi 5 at this time officially.
+      For all Borland C++ Builder and Kylix users: Please send feedback about your
+      experiences with DWSII to the DWS mailinglist!</p>
+   </li>
+   <li>
+    <p> If you don't see the Delphi ProjectManager, then open it. (DelphiMenu
+       -&gt; View -&gt; ProjectManager)</p>
+    </li>
+   <li>
+    <p> Compile all dws2XXXRuntimeXX.bpl packages in the project</p>
+    </li>
+   <li>
+    <p> Install the dclXXXX.bpl package</p>
+    </li>
+   <li> Add &lt;DWSDIR&gt;\source to your library path<br>
+      ATTENTION: When using Kylix be sure to include your bpl output directory
+in      your LD_LIBRARY_PATH variable!<br>
+      (See e.g. /etc/profile or ~/.bashrc)<br>
+     <br>
+    </li>
+   <li> Install the DWSII libraries (optional):
+    <ol>
+        <li>Open &lt;DWSDIR&gt;\Libraries\Delphi5\ or &lt;DWSDIR&gt;\Libraries\Delphi6\</li>
+        <li>Compile and install all the libraries you need.<br>
+         <br>
+        </li>
+
+    </ol>
+    </li>
+   <li> Look at the DWSII demo program in &lt;DWSDIR&gt;\Demos\Basic\</li>
+
+</ol>
+
+<p><br>
+If you need further assistance, please ask your question in the DWS forum
+at SourceForge: <a href="http://sourceforge.net/forum/forum.php?forum_id=64301">DWS-Forum</a>
+ </p>
+
+<h3><a name="cFirstSteps">First Steps with DelphiWebScript II</a></h3>
+
+<p>If DelphiWebScript II is installed correctly, a new tab "DWS2" appears
+in your Delphi component palette. To use DWSII in your project execute the
+following instructions:</p>
+
+<ol>
+    <li>Place a TDelphiWebScriptII component on your form.</li>
+    <li>Add the following code somewhere to your project:<br>
+      <br>
+      <code><pre>
+<b>uses</b>
+  dws2Exprs, ...
+<b>var</b>
+  prog: TProgram;
+<b>begin</b>
+  prog := DelphiWebScriptII1.Compile('PrintLn(''Hello World'');');
+  <b>try</b>
+    prog.Execute;
+    ShowMessage((prog.Result as Tdws2DefaultResult).Text);
+  <b>finally</b>
+    prog.Free;
+  <b>end</b>;
+<b>end</b>;</code></pre></li>
+
+</ol>
+
+<p>This is a very simple example. For more detailed information about using
+ DelphiWebScript II please have a look at the demo programs. </p>
+
+<h2><a name="cIInfo">Using TProgramInfo / IInfo</a></h2>
+
+<p>If you declare functions or methods in a Tdws2Unit a TProgramInfo object is used
+to exchange data with the running script program. You can read and write parameteres,
+global variables and set the result value. But you can also call functions and create
+objects. </p>
+
+<p>For the following explanations we assume that you have defined a function
+"Func" in a Tdws2Unit. The following code could be part of the OnEval event
+handler:</p>
+
+<p><code><pre><b>procedure</b> TForm1.dws2UnitFunctionsFuncEval(Info: TProgramInfo);
+<b>begin</b>
+  ...
+<b>end;</b></pre></code></p>
+
+<p>The following declaration are supposed to be made in a Tdws2Unit but are
+given in DWSII syntax:</p>
+
+<p><code><pre><b>type</b> TPoint = <b>record</b> x, y: Integer; <b>end</b>;
+<b>type</b> TNames = <b>array</b>[1..10] <b>of</b> String;
+<b>var</b> global: string;</pre></code></p>
+
+<p><code><pre><b>function</b> Func(i: Integer; point: TPoint; names: TNames): float;
+<b>begin</b>
+  // OnEval event handler
+<b>end</b>;</pre></code></p>
+
+<h4><a name="cIInfoParameters">Parameters, Variables and Result Values</a></h4>
+
+<p>You can access the parameters and global variables by their name under
+the same rules as in a normal script function (e. g. you can't read local
+variables of other procedures). </p>
+
+<p>Read the value of the parameter "i":<code><br>
+  <br>
+  x := Info.Vars['i'].Value;</code></p>
+
+<p>You can also use the default property of TProgramInfo to shortcut the expression
+ above:</p>
+
+<p><code>x := Info['i'];</code></p>
+
+<p>Of course you can also assign a value to a local variable<code><br>
+  </code><code><br>
+  Info['i'] := 12;</code></p>
+
+<p>Setting a result value for your function is very simple:</p>
+
+<p><code><pre>Info['Result'] := 3.141592;
+... or shorter and faster ...
+Info.Result := 3.141592;</pre></code></p>
+
+<h4><a name="cIInfoArrays">Arrays and Records</a></h4>
+
+<p>If the parameter or the variable is of a complex type (array, record, class) you
+can read an write values like this:</p>
+
+<p><code>x := Info.Vars['point'].Member['x'].Value;<br>
+  Info.Vars['point'].Member['y'].Value := 3;</code></p>
+
+<p><code>x := Info.Vars['names'].Element([2]).Value;<br>
+  Info.Vars['names'].Element([2]).Value := 'Hello World';</code></p>
+
+<p>Of course it's also possible to cascade such expressions:</p>
+
+<p><code>Info.Vars['xyz'].Element([2, 4, 5]).Member['aaa'].Element([1]).Value
+:= 'Hello World';</code></p>
+
+<h4><a name="cIInfoFunctions">Functions</a></h4>
+
+<p>You can also call functions using the TProgramInfo object:</p>
+
+<p><code>Info.Func['IntToStr'].Call([345]);</code></p>
+
+<p>Another possibility to call a function is given below. </p>
+
+<p><code><pre><b>var</b>
+  inf: IInfo;
+  res: Integer;
+<b>begin</b>
+  inf := Info.Func['StrToInt'];
+  inf.Parameter['value'] := '123';
+  res := inf.Call.Value;</pre></code></p>
+
+<p>Use this way if you have to call a function that uses var-parameters and
+ you're interested in the output value. You can use the "Parameter" property
+after the function call to read the output-value of the var-parameter.</p>
+
+<h4><a name="cIInfoObjects">Objects, Fields and Methods</a></h4>
+
+<p>You can also create objects using TProgramInfo. It's also possible to read
+and write properties and fields and to call methods.</p>
+
+<p><code><pre><b>var</b>
+  inf: IInfo;
+<b>begin</b>
+  inf := Info.Vars['TObject'].Method['Create'].Call;
+  inf.Member['field'].Value := 'Hello';
+  inf.Method['Free'].Call;</pre></code></p>
+
+<h3><a name="cDebugger">Debugger</a></h3>
+
+<p>If you want to debug a DWSII script program you need a debugger
+component. A very simple debugger component is part of the DWSII package:
+Tdws2SimpleDebugger. More useful debugger components are available here:
+<a href="http://sourceforge.net/projects/dws">DWS at Sourceforge</a>.
+To enable the debugging mode you have to assign an object that
+implements the IDebugger interface to TProgram.Debugger. For
+information about how to use the debugger please read the manual of
+the debugger component.</p>
+
+<h3><a name="cAdapter">Filter</a></h3>
+
+<p>A filter is also a component and has to be a descendant of Tdws2Filter.
+A filter is responsible for preprocessing the input:<br>
+</p>
+<p>The input of the DWSII compiler is a script program. But if there
+is a filter the DWSII compiler passes the input to the filter. The filter
+is responsible to transform the input - whatever it is (not necessary
+a script program) - into a valid script program. E. g. the input could
+be a HTML page containing script code embedded in HTML comment tags. The
+Tdws2HtmlFilter transforms this HTML page into a script program (extracting
+the script code from the HTML tags).</p>
+
+<h3><a name="cConnector">Connector</a></h3>
+
+<p>The "naked" DWSII component can't talk to the outer world. You have to
+add functions to a Tdws2Unit component or to assign libraries. But you may
+ also want to use COM objects in your DWSII scripts or to call functions of
+your Delphi program. To connect DWSII to external technologies like COM or
+RMI the Connector concept was introduced.</p>
+
+<p>A connector is a component that is assigned to the TDelphiWebScriptII
+component. If the compiler finds an element that belongs to a connector it
+asks the connector to handle it. The connector returns the "executable code"
+needed to use this element. The DWSII compiler inserts that "executable code"
+into the already compiled code not knowing what it exactly does. </p>
+
+<p>At runtime the DWSII code is executed by DWSII and the connector-parts
+are executed by the responsible connector. </p>
+   <br>
+
+</body>
+</html>

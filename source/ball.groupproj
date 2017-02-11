@@ -1,0 +1,154 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{e801eeea-de83-4d78-a6cf-22fc13306764}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="ball.dproj" />
+    <Projects Include="cmibase.dproj" />
+    <Projects Include="cmx.dproj" />
+    <Projects Include="cmxibase.dproj" />
+    <Projects Include="core.dproj" />
+    <Projects Include="imball.dproj" />
+    <Projects Include="imdesign.dproj" />
+    <Projects Include="imexport.dproj" />
+    <Projects Include="imimport.dproj" />
+    <Projects Include="imutil.dproj" />
+    <Projects Include="objects.dproj" />
+    <Projects Include="omcom.dproj" />
+    <Projects Include="rpmfast.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+<BorlandProject xmlns=""><Default.Personality></Default.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="ball">
+    <MSBuild Projects="ball.dproj" Targets="" />
+  </Target>
+  <Target Name="ball:Clean">
+    <MSBuild Projects="ball.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="ball:Make">
+    <MSBuild Projects="ball.dproj" Targets="Make" />
+  </Target>
+  <Target Name="objects">
+    <MSBuild Projects="objects.dproj" Targets="" />
+  </Target>
+  <Target Name="objects:Clean">
+    <MSBuild Projects="objects.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="objects:Make">
+    <MSBuild Projects="objects.dproj" Targets="Make" />
+  </Target>
+  <Target Name="core">
+    <MSBuild Projects="core.dproj" Targets="" />
+  </Target>
+  <Target Name="core:Clean">
+    <MSBuild Projects="core.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="core:Make">
+    <MSBuild Projects="core.dproj" Targets="Make" />
+  </Target>
+  <Target Name="rpmfast">
+    <MSBuild Projects="rpmfast.dproj" Targets="" />
+  </Target>
+  <Target Name="rpmfast:Clean">
+    <MSBuild Projects="rpmfast.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="rpmfast:Make">
+    <MSBuild Projects="rpmfast.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omcom">
+    <MSBuild Projects="omcom.dproj" Targets="" />
+  </Target>
+  <Target Name="omcom:Clean">
+    <MSBuild Projects="omcom.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omcom:Make">
+    <MSBuild Projects="omcom.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmx">
+    <MSBuild Projects="cmx.dproj" Targets="" />
+  </Target>
+  <Target Name="cmx:Clean">
+    <MSBuild Projects="cmx.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmx:Make">
+    <MSBuild Projects="cmx.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmxibase">
+    <MSBuild Projects="cmxibase.dproj" Targets="" />
+  </Target>
+  <Target Name="cmxibase:Clean">
+    <MSBuild Projects="cmxibase.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmxibase:Make">
+    <MSBuild Projects="cmxibase.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmibase">
+    <MSBuild Projects="cmibase.dproj" Targets="" />
+  </Target>
+  <Target Name="cmibase:Clean">
+    <MSBuild Projects="cmibase.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmibase:Make">
+    <MSBuild Projects="cmibase.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imball">
+    <MSBuild Projects="imball.dproj" Targets="" />
+  </Target>
+  <Target Name="imball:Clean">
+    <MSBuild Projects="imball.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imball:Make">
+    <MSBuild Projects="imball.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imdesign">
+    <MSBuild Projects="imdesign.dproj" Targets="" />
+  </Target>
+  <Target Name="imdesign:Clean">
+    <MSBuild Projects="imdesign.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imdesign:Make">
+    <MSBuild Projects="imdesign.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imimport">
+    <MSBuild Projects="imimport.dproj" Targets="" />
+  </Target>
+  <Target Name="imimport:Clean">
+    <MSBuild Projects="imimport.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imimport:Make">
+    <MSBuild Projects="imimport.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imexport">
+    <MSBuild Projects="imexport.dproj" Targets="" />
+  </Target>
+  <Target Name="imexport:Clean">
+    <MSBuild Projects="imexport.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imexport:Make">
+    <MSBuild Projects="imexport.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imutil">
+    <MSBuild Projects="imutil.dproj" Targets="" />
+  </Target>
+  <Target Name="imutil:Clean">
+    <MSBuild Projects="imutil.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imutil:Make">
+    <MSBuild Projects="imutil.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="ball;objects;core;rpmfast;omcom;cmx;cmxibase;cmibase;imball;imdesign;imimport;imexport;imutil" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="ball:Clean;objects:Clean;core:Clean;rpmfast:Clean;omcom:Clean;cmx:Clean;cmxibase:Clean;cmibase:Clean;imball:Clean;imdesign:Clean;imimport:Clean;imexport:Clean;imutil:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="ball:Make;objects:Make;core:Make;rpmfast:Make;omcom:Make;cmx:Make;cmxibase:Make;cmibase:Make;imball:Make;imdesign:Make;imimport:Make;imexport:Make;imutil:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

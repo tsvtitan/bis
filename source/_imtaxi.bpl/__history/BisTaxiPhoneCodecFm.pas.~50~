@@ -1,0 +1,90 @@
+unit BisTaxiPhoneCodecFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  WaveACMDrivers,
+  BisDialogFm,
+  BisWave;
+
+type
+  TBisTaxiPhoneCodecForm = class(TBisDialogForm)
+    LabelDriver: TLabel;
+    ComboBoxDrivers: TComboBox;
+  private
+    FDrivers: TBisACMDrivers;
+    FFormat: TWaveACMDriverFormat;
+    procedure RefreshDrrivers;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure BeforeShow; override;
+
+    property Format: TWaveACMDriverFormat read FFormat write FFormat;
+  end;
+
+  TBisTaxiPhoneCodecFormIface=class(TBisDialogFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiPhoneCodecForm: TBisTaxiPhoneCodecForm;
+
+implementation
+
+uses BisUtils;
+
+{$R *.dfm}
+
+{ TBisTaxiPhoneCodecFormIface }
+
+constructor TBisTaxiPhoneCodecFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiPhoneCodecForm;
+end;
+
+{ TBisTaxiPhoneCodecForm }
+
+constructor TBisTaxiPhoneCodecForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FDrivers:=TBisACMDrivers.Create;
+  RefreshDrrivers;
+end;
+
+destructor TBisTaxiPhoneCodecForm.Destroy;
+begin
+  FDrivers.Free;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiPhoneCodecForm.RefreshDrrivers;
+var
+  i: Integer;
+  Driver: TWaveACMDriver;
+  S: String;
+begin
+  ComboBoxDrivers.Items.BeginUpdate;
+  try
+    ComboBoxDrivers.Items.Clear;
+    for i:=0 to FDrivers.Count-1 do begin
+      Driver:=FDrivers.Items[i];
+      S:=FormatEx('%s (%s)',[Driver.ShortName,Driver.LongName]);
+      ComboBoxDrivers.Items.AddObject(S,Driver);
+    end;
+  finally
+    ComboBoxDrivers.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisTaxiPhoneCodecForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  //
+end;
+
+end.

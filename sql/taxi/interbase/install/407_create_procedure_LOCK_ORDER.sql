@@ -1,0 +1,24 @@
+/* Создание процедуры блокировки заказа */
+
+CREATE PROCEDURE /*PREFIX*/LOCK_ORDER
+(
+  ORDER_ID VARCHAR(32),
+  DATE_LOCK TIMESTAMP,
+  ACCOUNT_ID VARCHAR(32)
+)
+AS
+BEGIN
+
+  UPDATE /*PREFIX*/ORDERS
+     SET WHO_PROCESS_ID=:ACCOUNT_ID,
+         DATE_BEGIN=:DATE_LOCK,
+         DATE_END=NULL
+   WHERE ORDER_ID=:ORDER_ID;
+
+END
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

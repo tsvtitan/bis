@@ -1,0 +1,85 @@
+unit BisUtils;
+
+interface
+
+uses Classes;
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+function GetUniqueID: String;
+function MD5(const S: String): String;
+procedure GetStringsByString(const S,Delim: String; Strings: TStrings);
+
+
+implementation
+
+uses ActiveX,
+     BisCrypter;
+
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+begin
+  if IsTrue then Result:=ValueTrue
+  else Result:=ValueFalse;
+end;
+
+function PrepareClassID(S: string): string;
+begin
+  Result:=Copy(s, 26, 12)+Copy(s, 21, 4)+Copy(s, 16, 4)+Copy(s, 11, 4)+Copy(s, 2, 8);
+end;
+
+function CreateClassID: string;
+var
+  ClassID: TCLSID;
+  P: PWideChar;
+begin
+  CoCreateGuid(ClassID);
+  StringFromCLSID(ClassID, P);
+  Result := P;
+  CoTaskMemFree(P);
+end;
+
+function GetUniqueID: String;
+var
+  s: string;
+begin
+  s:=Copy(CreateClassID, 1, 37);
+  Result:=PrepareClassID(s);
+end;
+
+function MD5(const S: String): String;
+var
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    Result:=Crypter.HashString(S,haMD5,hfHEX);
+  finally
+    Crypter.Free;
+  end;
+end;
+
+procedure GetStringsByString(const S,Delim: String; Strings: TStrings);
+var
+  Apos: Integer;
+  S1,S2: String;
+begin
+  if Assigned(Strings) then begin
+    Apos:=-1;
+    S2:=S;
+    while Apos<>0 do begin
+      Apos:=AnsiPos(Delim,S2);
+      if Apos>0 then begin
+        S1:=Copy(S2,1,Apos-Length(Delim));
+        S2:=Copy(S2,Apos+Length(Delim),Length(S2));
+        if S1<>'' then
+          Strings.AddObject(S1,TObject(Apos))
+        else begin
+          if Length(S2)>0 then
+            APos:=-1;
+        end;
+      end else
+        Strings.AddObject(S2,TObject(Apos));
+    end;
+  end;
+end;
+
+
+end.

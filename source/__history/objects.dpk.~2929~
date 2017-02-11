@@ -1,0 +1,147 @@
+package objects;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vclx,
+  vcl,
+  vcldb,
+  dbrtl,
+  vcljpg,
+  vclactnband,
+  vclie,
+  VclSmp,
+  vclimg;
+
+contains
+  SynDBEdit in 'objects.bpl\SynEdit\Source\SynDBEdit.pas',
+  SynEdit in 'objects.bpl\SynEdit\Source\SynEdit.pas',
+  Cipher1 in 'objects.bpl\Cipher\Source\Cipher1.pas',
+  Cipher in 'objects.bpl\Cipher\Source\Cipher.pas',
+  GIFImage in 'objects.bpl\GifImage\GIFImage.pas',
+  mphexeditor in 'objects.bpl\hexedit\vcl\mphexeditor.pas',
+  kbmMemTable in 'objects.bpl\kbmMemTable\Source\kbmMemTable.pas',
+  JclDebug in 'objects.bpl\Jcl\JclDebug.pas',
+  DECUtil in 'objects.bpl\Cipher\Source\DECUtil.pas',
+  Hash in 'objects.bpl\Cipher\Source\Hash.pas',
+  HCMngr in 'objects.bpl\Cipher\Source\HCMngr.pas',
+  kbmMemBinaryStreamFormat in 'objects.bpl\kbmMemTable\Source\kbmMemBinaryStreamFormat.pas',
+  SynTextDrawer in 'objects.bpl\SynEdit\Source\SynTextDrawer.pas',
+  VirtualTrees in 'objects.bpl\DBVirtualTree\VirtualTreeView\Source\VirtualTrees.pas',
+  VTHeaderPopup in 'objects.bpl\DBVirtualTree\VirtualTreeView\Source\VTHeaderPopup.pas',
+  DTDBTreeView in 'objects.bpl\DBVirtualTree\DynamicTreeView\Source\DTDBTreeView.pas',
+  rxToolEdit in 'objects.bpl\RX\Units\rxToolEdit.pas',
+  RxRichEd in 'objects.bpl\RX\Units\RxRichEd.pas',
+  DECConst in 'objects.bpl\Cipher\Source\DECConst.pas',
+  kbmMemResEng in 'objects.bpl\kbmMemTable\Source\kbmMemResEng.pas',
+  JclTD32 in 'objects.bpl\Jcl\JclTD32.pas',
+  VTAccessibilityFactory in 'objects.bpl\DBVirtualTree\VirtualTreeView\Source\VTAccessibilityFactory.pas',
+  DTCommon in 'objects.bpl\DBVirtualTree\DynamicTreeView\Source\DTCommon.pas',
+  rxDateutil in 'objects.bpl\RX\Units\rxDateutil.pas',
+  RxCtrls in 'objects.bpl\RX\Units\RxCtrls.pas',
+  SynEditKbdHandler in 'objects.bpl\SynEdit\Source\SynEditKbdHandler.pas',
+  SynEditKeyCmds in 'objects.bpl\SynEdit\Source\SynEditKeyCmds.pas',
+  SynEditMiscClasses in 'objects.bpl\SynEdit\Source\SynEditMiscClasses.pas',
+  SynEditMiscProcs in 'objects.bpl\SynEdit\Source\SynEditMiscProcs.pas',
+  SynEditTextBuffer in 'objects.bpl\SynEdit\Source\SynEditTextBuffer.pas',
+  SynEditTypes in 'objects.bpl\SynEdit\Source\SynEditTypes.pas',
+  SynEditHighlighter in 'objects.bpl\SynEdit\Source\SynEditHighlighter.pas',
+  SynEditKeyConst in 'objects.bpl\SynEdit\Source\SynEditKeyConst.pas',
+  ALXmlDoc in 'objects.bpl\Alcinoe\source\ALXmlDoc.pas',
+  ALFcnString in 'objects.bpl\Alcinoe\source\ALFcnString.pas',
+  ALFcnHTML in 'objects.bpl\Alcinoe\source\ALFcnHTML.pas',
+  SynHighlighterSQL in 'objects.bpl\SynEdit\Source\SynHighlighterSQL.pas',
+  DIMimeStreams in 'objects.bpl\DIMime\Source\DIMimeStreams.pas',
+  DIMime in 'objects.bpl\DIMime\Source\DIMime.pas',
+  AsyncCalls in 'objects.bpl\AsyncCalls\AsyncCalls.pas',
+  ThemedDBGrid in 'objects.bpl\ThemedDBGrid.pas',
+  IpTypes in 'objects.bpl\IPHlpApi\Pas\IpTypes.pas',
+  IpExport in 'objects.bpl\IPHlpApi\Pas\IpExport.pas',
+  IpFunctions in 'objects.bpl\IPHlpApi\Pas\IpFunctions.pas',
+  IpHlpApi in 'objects.bpl\IPHlpApi\Pas\IpHlpApi.pas',
+  IpIfConst in 'objects.bpl\IPHlpApi\Pas\IpIfConst.pas',
+  IpRtrMib in 'objects.bpl\IPHlpApi\Pas\IpRtrMib.pas',
+  MSI_Startup in 'objects.bpl\MsysInfo\Source\MSI_Startup.pas',
+  MSI_APM in 'objects.bpl\MsysInfo\Source\MSI_APM.PAS',
+  MSI_CPU in 'objects.bpl\MsysInfo\Source\MSI_CPU.PAS',
+  MSI_Devices in 'objects.bpl\MsysInfo\Source\MSI_Devices.pas',
+  MSI_DirectX in 'objects.bpl\MsysInfo\Source\MSI_DirectX.pas',
+  MSI_Disk in 'objects.bpl\MsysInfo\Source\MSI_Disk.pas',
+  MSI_Display in 'objects.bpl\MsysInfo\Source\MSI_Display.pas',
+  MSI_Engines in 'objects.bpl\MsysInfo\Source\MSI_Engines.pas',
+  MSI_Machine in 'objects.bpl\MsysInfo\Source\MSI_Machine.pas',
+  MSI_Media in 'objects.bpl\MsysInfo\Source\MSI_Media.pas',
+  MSI_Memory in 'objects.bpl\MsysInfo\Source\MSI_Memory.pas',
+  MSI_Network in 'objects.bpl\MsysInfo\Source\MSI_Network.pas',
+  MSI_OS in 'objects.bpl\MsysInfo\Source\MSI_OS.pas',
+  MSI_Printers in 'objects.bpl\MsysInfo\Source\MSI_Printers.pas',
+  MSI_Processes in 'objects.bpl\MsysInfo\Source\MSI_Processes.pas',
+  MSI_Software in 'objects.bpl\MsysInfo\Source\MSI_Software.pas',
+  rxCurrEdit in 'objects.bpl\RX\Units\rxCurrEdit.pas',
+  Rxcalc in 'objects.bpl\RX\Units\Rxcalc.pas',
+  rxPickdate in 'objects.bpl\RX\Units\rxPickdate.pas',
+  DCPbase64 in 'objects.bpl\DcpCrypt2\DCPbase64.pas',
+  DCPblockciphers in 'objects.bpl\DcpCrypt2\DCPblockciphers.pas',
+  DCPblowfish in 'objects.bpl\DcpCrypt2\DCPblowfish.pas',
+  DCPcast128 in 'objects.bpl\DcpCrypt2\DCPcast128.pas',
+  DCPcast256 in 'objects.bpl\DcpCrypt2\DCPcast256.pas',
+  DCPconst in 'objects.bpl\DcpCrypt2\DCPconst.pas',
+  DCPcrypt2 in 'objects.bpl\DcpCrypt2\DCPcrypt2.pas',
+  DCPdes in 'objects.bpl\DcpCrypt2\DCPdes.pas',
+  DCPgost in 'objects.bpl\DcpCrypt2\DCPgost.pas',
+  DCPhaval in 'objects.bpl\DcpCrypt2\DCPhaval.pas',
+  DCPice in 'objects.bpl\DcpCrypt2\DCPice.pas',
+  DCPidea in 'objects.bpl\DcpCrypt2\DCPidea.pas',
+  DCPmars in 'objects.bpl\DcpCrypt2\DCPmars.pas',
+  DCPmd4 in 'objects.bpl\DcpCrypt2\DCPmd4.pas',
+  DCPmd5 in 'objects.bpl\DcpCrypt2\DCPmd5.pas',
+  DCPmisty1 in 'objects.bpl\DcpCrypt2\DCPmisty1.pas',
+  DCPrc2 in 'objects.bpl\DcpCrypt2\DCPrc2.pas',
+  DCPrc4 in 'objects.bpl\DcpCrypt2\DCPrc4.pas',
+  DCPrc5 in 'objects.bpl\DcpCrypt2\DCPrc5.pas',
+  DCPrc6 in 'objects.bpl\DcpCrypt2\DCPrc6.pas',
+  DCPrijndael in 'objects.bpl\DcpCrypt2\DCPrijndael.pas',
+  DCPripemd128 in 'objects.bpl\DcpCrypt2\DCPripemd128.pas',
+  DCPripemd160 in 'objects.bpl\DcpCrypt2\DCPripemd160.pas',
+  DCPserpent in 'objects.bpl\DcpCrypt2\DCPserpent.pas',
+  DCPsha1 in 'objects.bpl\DcpCrypt2\DCPsha1.pas',
+  DCPsha256 in 'objects.bpl\DcpCrypt2\DCPsha256.pas',
+  DCPsha512 in 'objects.bpl\DcpCrypt2\DCPsha512.pas',
+  DCPtea in 'objects.bpl\DcpCrypt2\DCPtea.pas',
+  DCPtiger in 'objects.bpl\DcpCrypt2\DCPtiger.pas',
+  DCPtwofish in 'objects.bpl\DcpCrypt2\DCPtwofish.pas',
+  SynHighlighterXML in 'objects.bpl\SynEdit\Source\SynHighlighterXML.pas',
+  JclHookExcept in 'objects.bpl\Jcl\JclHookExcept.pas',
+  WinSock2 in 'objects.bpl\WinSock2\WinSock2.pas',
+  superobject in 'objects.bpl\SuperObject\superobject.pas',
+  superxmlparser in 'objects.bpl\SuperObject\superxmlparser.pas',
+  RegExpr in 'objects.bpl\RegExpr\Source\RegExpr.pas',
+  RxTimer in 'objects.bpl\RX\Units\RxTimer.pas',
+  ALFcnUnicode in 'objects.bpl\Alcinoe\source\ALFcnUnicode.pas',
+  MiTeC_Routines in 'objects.bpl\MsysInfo\Source\MiTeC_Routines.pas';
+
+end.

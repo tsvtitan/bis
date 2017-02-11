@@ -1,0 +1,372 @@
+inherited BisCallcMainForm: TBisCallcMainForm
+  Left = 403
+  Top = 159
+  Caption = #1050#1086#1083#1083'-'#1094#1077#1085#1090#1088
+  ClientHeight = 572
+  ExplicitLeft = 403
+  ExplicitTop = 159
+  ExplicitHeight = 599
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited StatusBar: TStatusBar
+    Top = 553
+    ExplicitTop = 553
+  end
+  inherited ProgressBar2: TProgressBar
+    TabOrder = 3
+  end
+  inherited ActionMainMenuBar: TActionMainMenuBar
+    Height = 24
+    UseSystemFont = False
+    ActionManager = ActionManager
+    Font.Color = clWindowText
+    ExplicitHeight = 24
+  end
+  object ControlBar: TControlBar [4]
+    Left = 0
+    Top = 24
+    Width = 772
+    Height = 26
+    Align = alTop
+    AutoSize = True
+    BevelEdges = []
+    Color = clBtnFace
+    DrawingStyle = dsGradient
+    ParentBackground = False
+    ParentColor = False
+    TabOrder = 2
+  end
+  object ActionManager: TActionManager
+    ActionBars = <
+      item
+        Items = <
+          item
+            Items = <
+              item
+                Action = ActionFileExit
+              end>
+            Caption = #1060#1072#1081#1083
+          end
+          item
+            Items = <
+              item
+                Action = ActionOperatorTask
+              end>
+            Caption = #1047#1072#1076#1072#1085#1080#1103
+          end
+          item
+            Items = <
+              item
+                Items = <
+                  item
+                    Action = ActionHbookRoles
+                  end
+                  item
+                    Action = ActionHbookAccounts
+                  end
+                  item
+                    Action = ActionHbookAccountRoles
+                  end
+                  item
+                    Action = ActionHbookInterfaces
+                  end
+                  item
+                    Action = ActionHbookApplications
+                  end
+                  item
+                    Action = ActionHbookProfiles
+                  end
+                  item
+                    Action = ActionHbookSessions
+                  end
+                  item
+                    Action = ActionHbookApplicationInterfaces
+                  end
+                  item
+                    Action = ActionHbookPermissions
+                  end>
+                Caption = #1040#1076#1084#1080#1085#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1080#1077
+                UsageCount = 1
+              end
+              item
+                Action = ActionHbookFirmTypes
+              end
+              item
+                Action = ActionHbookFirms
+              end
+              item
+                Action = ActionHbookCurrency
+              end
+              item
+                Action = ActionHbookVariants
+              end
+              item
+                Action = ActionHbookAccountFirms
+              end
+              item
+                Action = ActionHbookAgreements
+              end
+              item
+                Action = ActionHbookPatterns
+              end
+              item
+                Action = ActionHbookGroups
+              end
+              item
+                Action = ActionHbookAccountGroups
+              end
+              item
+                Action = ActionHbookActions
+              end
+              item
+                Action = ActionHbookAccountActions
+              end
+              item
+                Action = ActionHbookResults
+              end
+              item
+                Action = ActionHbookActionResults
+              end
+              item
+                Action = ActionHbookStatuses
+              end
+              item
+                Action = ActionHbookCases
+              end
+              item
+                Action = ActionHbookDebtors
+              end
+              item
+                Action = ActionHbookDeals
+              end
+              item
+                Action = ActionHbookPayments
+              end
+              item
+                Action = ActionHbookTasks
+              end
+              item
+                Action = ActionHbookDocuments
+              end>
+            Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+          end
+          item
+            Items = <
+              item
+                Action = ActionWindowsCascade
+              end
+              item
+                Action = ActionWindowsVertical
+              end
+              item
+                Action = ActionWindowsHorizontal
+              end
+              item
+                Action = ActionWindowsCloseAll
+              end>
+            Caption = #1054#1082#1085#1072
+          end
+          item
+            Items = <
+              item
+                Action = ActionAbout
+              end>
+            Caption = #1055#1086#1084#1086#1097#1100
+          end>
+        ActionBar = ActionMainMenuBar
+      end>
+    Images = ImageList
+    Left = 104
+    Top = 152
+    StyleName = 'XP Style'
+    object ActionFileExit: TAction
+      Category = #1060#1072#1081#1083
+      Caption = #1042#1099#1093#1086#1076
+      Hint = #1042#1099#1093#1086#1076' '#1080#1079' '#1087#1088#1086#1075#1088#1072#1084#1084#1099
+      OnExecute = ActionFileExitExecute
+    end
+    object ActionWindowsCascade: TAction
+      Category = #1054#1082#1085#1072
+      Caption = #1050#1072#1089#1082#1072#1076#1086#1084
+      Hint = #1056#1072#1089#1087#1086#1083#1086#1078#1080#1090#1100' '#1086#1082#1085#1072' '#1082#1072#1089#1082#1072#1076#1086#1084
+      OnExecute = ActionWindowsCascadeExecute
+      OnUpdate = ActionWindowsCloseAllUpdate
+    end
+    object ActionWindowsVertical: TAction
+      Category = #1054#1082#1085#1072
+      Caption = #1042#1077#1088#1090#1080#1082#1072#1083#1100#1085#1086
+      Hint = #1056#1072#1089#1087#1086#1083#1086#1078#1080#1090#1100' '#1086#1082#1085#1072' '#1074#1077#1088#1090#1080#1082#1072#1083#1100#1085#1086
+      OnExecute = ActionWindowsVerticalExecute
+      OnUpdate = ActionWindowsCloseAllUpdate
+    end
+    object ActionWindowsHorizontal: TAction
+      Category = #1054#1082#1085#1072
+      Caption = #1043#1086#1088#1080#1079#1086#1085#1090#1072#1083#1100#1085#1086
+      Hint = #1056#1072#1089#1087#1086#1083#1086#1078#1080#1090#1100' '#1086#1082#1085#1072' '#1075#1086#1088#1080#1079#1086#1085#1090#1072#1083#1100#1085#1086
+      OnExecute = ActionWindowsHorizontalExecute
+      OnUpdate = ActionWindowsCloseAllUpdate
+    end
+    object ActionAbout: TAction
+      Category = #1055#1086#1084#1086#1097#1100
+      Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
+      Hint = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103' '#1086' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
+    end
+    object ActionWindowsCloseAll: TAction
+      Category = #1054#1082#1085#1072
+      Caption = #1047#1072#1082#1088#1099#1090#1100' '#1074#1089#1077
+      Hint = #1047#1072#1082#1088#1099#1090#1100' '#1074#1089#1077' '#1086#1082#1085#1072
+      OnExecute = ActionWindowsCloseAllExecute
+      OnUpdate = ActionWindowsCloseAllUpdate
+    end
+    object ActionHbookFirmTypes: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1058#1080#1087#1099' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1080
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1090#1080#1087#1086#1074' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1081
+    end
+    object ActionHbookFirms: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1054#1088#1075#1072#1085#1080#1079#1072#1094#1080#1080
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1081
+    end
+    object ActionHbookAccounts: TAction
+      Category = #1040#1076#1084#1080#1085#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1080#1077
+      Caption = #1059#1095#1077#1090#1085#1099#1077' '#1079#1072#1087#1080#1089#1080
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1091#1095#1077#1090#1085#1099#1093' '#1079#1072#1087#1080#1089#1077#1081
+    end
+    object ActionHbookRoles: TAction
+      Category = #1040#1076#1084#1080#1085#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1080#1077
+      Caption = #1056#1086#1083#1080
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1088#1086#1083#1077#1081
+    end
+    object ActionHbookApplications: TAction
+      Category = #1040#1076#1084#1080#1085#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1080#1077
+      Caption = #1055#1088#1080#1083#1086#1078#1077#1085#1080#1103
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1087#1088#1080#1083#1086#1078#1077#1085#1080#1081
+    end
+    object ActionHbookInterfaces: TAction
+      Category = #1040#1076#1084#1080#1085#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1080#1077
+      Caption = #1048#1085#1090#1077#1088#1092#1077#1081#1089#1099
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1080#1085#1090#1077#1088#1092#1077#1081#1089#1086#1074
+    end
+    object ActionHbookAccountRoles: TAction
+      Category = #1040#1076#1084#1080#1085#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1080#1077
+      Caption = #1044#1086#1089#1090#1091#1087' '#1082' '#1088#1086#1083#1103#1084
+      Hint = #1056#1086#1083#1080' '#1076#1086#1089#1090#1091#1087#1085#1099#1077' '#1091#1095#1077#1090#1085#1099#1084' '#1079#1072#1087#1080#1089#1103#1084
+    end
+    object ActionHbookProfiles: TAction
+      Category = #1040#1076#1084#1080#1085#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1080#1077
+      Caption = #1055#1088#1086#1092#1080#1083#1080
+      Hint = #1055#1088#1086#1092#1080#1083#1080' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1077#1081
+    end
+    object ActionHbookSessions: TAction
+      Category = #1040#1076#1084#1080#1085#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1080#1077
+      Caption = #1057#1077#1089#1089#1080#1080
+      Hint = #1057#1077#1089#1089#1080#1080' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1077#1081
+    end
+    object ActionHbookPermissions: TAction
+      Category = #1040#1076#1084#1080#1085#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1080#1077
+      Caption = #1055#1088#1072#1074#1072' '#1076#1086#1089#1090#1091#1087#1072
+      Hint = #1055#1088#1072#1074#1072' '#1076#1086#1089#1090#1091#1087#1072
+    end
+    object ActionHbookApplicationInterfaces: TAction
+      Category = #1040#1076#1084#1080#1085#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1080#1077
+      Caption = #1048#1085#1090#1077#1088#1092#1077#1081#1089#1099' '#1087#1088#1080#1083#1086#1078#1077#1085#1080#1081
+      Hint = #1057#1074#1103#1079#1100' '#1084#1077#1078#1076#1091' '#1080#1085#1090#1077#1088#1092#1077#1081#1089#1072#1084#1080' '#1080' '#1087#1088#1080#1083#1086#1078#1077#1085#1080#1103#1084#1080
+    end
+    object ActionHbookCurrency: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1042#1072#1083#1102#1090#1099
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1074#1072#1083#1102#1090
+    end
+    object ActionHbookVariants: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1042#1072#1088#1080#1072#1085#1090#1099' '#1088#1072#1089#1095#1077#1090#1086#1074
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1074#1072#1088#1080#1072#1085#1090#1086#1074' '#1088#1072#1089#1095#1077#1090#1086#1074
+    end
+    object ActionHbookAgreements: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1044#1086#1075#1086#1074#1086#1088#1099
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1076#1086#1075#1086#1074#1086#1088#1086#1074
+    end
+    object ActionHbookAccountFirms: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1050#1083#1080#1077#1085#1090#1099' '#1076#1086#1089#1090#1091#1087#1085#1099#1077' '#1091#1095#1077#1090#1085#1099#1084' '#1079#1072#1087#1080#1089#1103#1084
+      Hint = #1050#1083#1080#1077#1085#1090#1099' '#1076#1086#1089#1090#1091#1087#1085#1099#1077' '#1091#1095#1077#1090#1085#1099#1084' '#1079#1072#1087#1080#1089#1103#1084
+    end
+    object ActionHbookGroups: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1043#1088#1091#1087#1087#1099
+      Hint = #1043#1088#1091#1087#1087#1099' '#1082#1088#1077#1076#1080#1090#1085#1099#1093' '#1076#1077#1083
+    end
+    object ActionHbookAccountGroups: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1043#1088#1091#1087#1087#1099' '#1076#1086#1089#1090#1091#1087#1085#1099#1077' '#1091#1095#1077#1090#1085#1099#1084' '#1079#1072#1087#1080#1089#1103#1084
+      Hint = #1043#1088#1091#1087#1087#1099' '#1076#1086#1089#1090#1091#1087#1085#1099#1077' '#1091#1095#1077#1090#1085#1099#1084' '#1079#1072#1087#1080#1089#1103#1084
+    end
+    object ActionHbookActions: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1044#1077#1081#1089#1090#1074#1080#1103
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1076#1077#1081#1089#1090#1074#1080#1081
+    end
+    object ActionHbookAccountActions: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1044#1077#1081#1089#1090#1074#1080#1103' '#1076#1086#1089#1090#1091#1087#1085#1099#1077' '#1091#1095#1077#1090#1085#1099#1084' '#1079#1072#1087#1080#1089#1103#1084
+      Hint = #1044#1077#1081#1089#1090#1074#1080#1103' '#1076#1086#1089#1090#1091#1087#1085#1099#1077' '#1091#1095#1077#1090#1085#1099#1084' '#1079#1072#1087#1080#1089#1103#1084
+    end
+    object ActionHbookResults: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1088#1077#1079#1091#1083#1100#1090#1072#1090#1086#1074
+    end
+    object ActionHbookActionResults: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099' '#1076#1086#1089#1090#1091#1087#1085#1099#1077' '#1076#1077#1081#1089#1090#1074#1080#1103#1084
+      Hint = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099' '#1076#1086#1089#1090#1091#1087#1085#1099#1077' '#1076#1077#1081#1089#1090#1074#1080#1103#1084
+    end
+    object ActionHbookStatuses: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1057#1090#1072#1090#1091#1089#1099
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1089#1090#1072#1090#1091#1089#1086#1074
+    end
+    object ActionHbookCases: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1055#1072#1076#1077#1078#1080
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1087#1072#1076#1077#1078#1077#1081
+    end
+    object ActionHbookDebtors: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1044#1086#1083#1078#1085#1080#1082#1080
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1076#1086#1083#1078#1085#1080#1082#1086#1074
+    end
+    object ActionHbookDeals: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1050#1088#1077#1076#1080#1090#1085#1099#1077' '#1076#1077#1083#1072
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1082#1088#1077#1076#1080#1090#1085#1099#1093' '#1076#1077#1083
+    end
+    object ActionHbookPayments: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1055#1083#1072#1090#1077#1078#1080
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1087#1083#1072#1090#1077#1078#1077#1081
+    end
+    object ActionHbookTasks: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1047#1072#1076#1072#1085#1080#1103
+      Hint = #1047#1072#1076#1072#1085#1080#1103
+    end
+    object ActionHbookDocuments: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1044#1086#1082#1091#1084#1077#1085#1090#1099
+      Hint = #1044#1086#1082#1091#1084#1077#1085#1090#1099
+    end
+    object ActionHbookPatterns: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1064#1072#1073#1083#1086#1085#1099
+      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1096#1072#1073#1083#1086#1085#1086#1074
+    end
+    object ActionOperatorTask: TAction
+      Category = #1047#1072#1076#1072#1085#1080#1103
+      Caption = #1047#1072#1076#1072#1085#1080#1077' '#1086#1087#1077#1088#1072#1090#1086#1088#1072
+      Hint = #1047#1072#1076#1072#1085#1080#1077' '#1086#1087#1077#1088#1072#1090#1086#1088#1072
+    end
+  end
+end

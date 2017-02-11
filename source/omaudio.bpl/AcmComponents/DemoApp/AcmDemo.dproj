@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{861833bd-21c4-4c60-8629-beeb7d927d9f}</ProjectGuid>
+    <MainSource>AcmDemo.dpr</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>AcmDemo.exe</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_IOChecking>False</DCC_IOChecking>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_PentiumSafeDivide>True</DCC_PentiumSafeDivide>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_UnitSearchPath>$(DELPHI)\Lib\Debug;g:\WorkSpaceBackup\Lavoro\voiceoverip\ACMComponents</DCC_UnitSearchPath>
+    <DCC_ResourcePath>$(DELPHI)\Lib\Debug;g:\WorkSpaceBackup\Lavoro\voiceoverip\ACMComponents</DCC_ResourcePath>
+    <DCC_ObjPath>$(DELPHI)\Lib\Debug;g:\WorkSpaceBackup\Lavoro\voiceoverip\ACMComponents</DCC_ObjPath>
+    <DCC_IncludePath>$(DELPHI)\Lib\Debug;g:\WorkSpaceBackup\Lavoro\voiceoverip\ACMComponents</DCC_IncludePath>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_IOChecking>False</DCC_IOChecking>
+    <DCC_PentiumSafeDivide>True</DCC_PentiumSafeDivide>
+    <DCC_SymbolReferenceInfo>2</DCC_SymbolReferenceInfo>
+    <DCC_UnitSearchPath>$(DELPHI)\Lib\Debug;U:\source\omaudio.bpl\WaveAudio;U:\source\omaudio.bpl\AcmComponents</DCC_UnitSearchPath>
+    <DCC_ResourcePath>$(DELPHI)\Lib\Debug;U:\source\omaudio.bpl\WaveAudio;U:\source\omaudio.bpl\AcmComponents</DCC_ResourcePath>
+    <DCC_ObjPath>$(DELPHI)\Lib\Debug;U:\source\omaudio.bpl\WaveAudio;U:\source\omaudio.bpl\AcmComponents</DCC_ObjPath>
+    <DCC_IncludePath>$(DELPHI)\Lib\Debug;U:\source\omaudio.bpl\WaveAudio;U:\source\omaudio.bpl\AcmComponents</DCC_IncludePath>
+    <DCC_Define>DEBUG</DCC_Define>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">False</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1040</VersionInfo><VersionInfo Name="CodePage">1252</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName"></VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">AcmDemo.dpr</Source></Source></Delphi.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="AcmDemo.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="..\..\WaveAudio\WaveRecorders.pas" />
+    <DCCReference Include="..\msacm.pas" />
+    <DCCReference Include="..\WaveAcmDrivers.pas" />
+    <DCCReference Include="Main.pas">
+      <Form>MainFrm</Form>
+    </DCCReference>
+    <DCCReference Include="recv.pas">
+      <Form>RecvFrm</Form>
+    </DCCReference>
+    <DCCReference Include="RecvDialog.pas">
+      <Form>RecvDlg</Form>
+    </DCCReference>
+    <DCCReference Include="Send.pas">
+      <Form>SendFrm</Form>
+    </DCCReference>
+    <DCCReference Include="SendDialog.pas">
+      <Form>SendDlg</Form>
+    </DCCReference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,147 @@
+unit BisKrieltDataPatternEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ImgList, ComCtrls,
+  BisDataEditFm, BisParam, BisSynEdit, BisControls;
+
+type
+  TBisKrieltDataPatternEditForm = class(TBisDataEditForm)
+    LabelExport: TLabel;
+    EditExport: TEdit;
+    ButtonExport: TButton;
+    LabelDesign: TLabel;
+    PageControl: TPageControl;
+    TabSheetRtf: TTabSheet;
+    MemoRtf: TMemo;
+    ComboBoxDesign: TComboBox;
+  private
+    FXmlHighlighter: TBisSynXmlSyn;
+    FMemoRtf: TBisSynEdit;
+    procedure MemoRtfChange(Sender: TObject);
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure BeforeShow; override;
+  end;
+
+  TBisKrieltDataPatternEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataPatternInsertFormIface=class(TBisKrieltDataPatternEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataPatternUpdateFormIface=class(TBisKrieltDataPatternEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataPatternDeleteFormIface=class(TBisKrieltDataPatternEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataPatternEditForm: TBisKrieltDataPatternEditForm;
+
+implementation
+
+uses BisUtils, BisCore, BisFilterGroups,
+     BisKrieltDataExportsFm, BisKrieltDataDesignsFm;
+
+{$R *.dfm}
+
+{ TBisKrieltDataPatternEditFormIface }
+
+constructor TBisKrieltDataPatternEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataPatternEditForm;
+  with Params do begin
+    AddEditDataSelect('EXPORT_ID','EditExport','LabelExport','ButtonExport',
+                      TBisKrieltDataExportsFormIface,'EXPORT_NAME',true,true,'','NAME').Older('OLD_EXPORT_ID');
+    AddComboBoxDataSelect('DESIGN_ID','ComboBoxDesign','LabelDesign','ButtonDesign',
+                          TBisKrieltDataDesignsFormIface,'DESIGN_NAME',true,true,'','NAME').Older('OLD_DESIGN_ID');
+    AddMemo('RTF','MemoRtf','',true).CaptionName:='TabSheetRtf';
+  end;
+end;
+
+{ TBisKrieltDataPatternInsertFormIface }
+
+constructor TBisKrieltDataPatternInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_PATTERN';
+  Caption:='Создать шаблон';
+end;
+
+{ TBisKrieltDataPatternUpdateFormIface }
+
+constructor TBisKrieltDataPatternUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_PATTERN';
+  Caption:='Изменить шаблон';
+end;
+
+{ TBisKrieltDataPatternDeleteFormIface }
+
+constructor TBisKrieltDataPatternDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_PATTERN';
+  Caption:='Удалить шаблон';
+end;
+
+{ TBisKrieltDataPatternEditForm }
+
+constructor TBisKrieltDataPatternEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FXmlHighlighter:=TBisSynXmlSyn.Create(Self);
+
+  FMemoRtf:=TBisSynEdit.Create(Self);
+  FMemoRtf.Parent:=TabSheetRtf;
+  FMemoRtf.Align:=alClient;
+  FMemoRtf.Highlighter:=FXmlHighlighter;
+  FMemoRtf.AlignWithMargins:=true;
+  FMemoRtf.Margins.Assign(MemoRtf.Margins);
+  FMemoRtf.RightEdge:=120;
+  FMemoRtf.Gutter.Width:=10;
+  FMemoRtf.OnChange:=MemoRtfChange;
+
+  MemoRtf.Free;
+  MemoRtf:=nil;
+
+end;
+
+procedure TBisKrieltDataPatternEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+
+  if Mode in [emUpdate,emDuplicate,emDelete,emView] then begin
+    FMemoHeadRtf.OnChange:=nil;
+    FMemoBodyRtf.OnChange:=nil;
+    try
+      FMemoHeadRtf.Text:=Provider.ParamByName('HEAD_RTF').AsString;
+      FMemoBodyRtf.Text:=Provider.ParamByName('BODY_RTF').AsString;
+    finally
+      FMemoHeadRtf.OnChange:=MemoHeadRtfChange;
+      FMemoBodyRtf.OnChange:=MemoBodyRtfChange;
+    end;
+  end;
+  
+end;
+
+procedure TBisKrieltDataPatternEditForm.MemoRtfChange(Sender: TObject);
+begin
+  Provider.ParamByName('RTF').Value:=FMemoRtf.Text;
+end;
+
+end.

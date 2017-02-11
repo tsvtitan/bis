@@ -1,0 +1,251 @@
+unit BisSmHttpServer;
+
+interface
+
+uses Classes, Contnrs,
+     IdHTTPServer, IdContext, IdCustomHTTPServer,
+     BisObject, BisServers, BisServerModules, BisDataSet, BisCore,
+     BisConnections;
+
+type
+  TBisSmHttpServer=class;
+
+  TBisSmIdHttpServerClient=class(TObject)
+  end;
+
+  TBisSmIdHttpServerClients=class(TThreadList)
+  end;
+
+  TBisSmIdHttpServer=class(TIdHTTPServer)
+  private
+    FServer: TBisSmHttpServer;
+    FClients: TBisSmIdHttpServerClients;
+    FServerName: String;
+    procedure CommandGet(AContext:TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+  protected
+    procedure DoConnect(AContext: TIdContext); override;
+    procedure DoDisconnect(AContext: TIdContext); override;
+    procedure DoCommandOther(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo); override;
+    procedure DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo); override;
+
+    property Server: TBisSmHttpServer read FServer write FServer;
+  public
+    constructor Create(AOnwer: TComponent); reintroduce;
+    destructor Destroy; override;
+
+    property ServerName: String read FServerName write FServerName;
+  end;
+
+  TBisSmHttpServer=class(TBisServer)
+  private
+    FIP: String;
+    FPort: Integer;
+    FWorking: Boolean;
+    FServer: TBisSmIdHttpServer;
+    procedure ChangeParams(Sender: TObject);
+  protected
+    function GetStarted: Boolean; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure Start; override;
+    procedure Stop; override;
+
+    property Working: Boolean read FWorking write FWorking;
+  end;
+
+  TBisSmHttpServers=class(TBisServers)
+  private
+    function GetItem(Index: Integer): TBisSmHttpServer;
+  public
+    constructor Create(AOwner: TComponent); override;
+    function Working: Boolean; 
+    property Items[Index: Integer]: TBisSmHttpServer read GetItem;
+  end;
+
+
+var
+  Servers: TBisSmHttpServers=nil;
+
+implementation
+
+uses SysUtils,
+     IdSocketHandle, IdAssignedNumbers,
+     BisSmHttpConsts, BisConsts, BisUtils, BisProvider;
+
+{ TBisSmIdHttpServer }
+
+constructor TBisSmIdHttpServer.Create(AOnwer: TComponent);
+begin
+  inherited Create;
+  FClients:=TBisSmIdHttpServerClients.Create;
+  OnCommandGet:=CommandGet;
+end;
+
+destructor TBisSmIdHttpServer.Destroy;
+begin
+  Active:=false;
+  FServer:=nil;
+  FClients.Free;
+  inherited Destroy;
+end;
+
+procedure TBisSmIdHttpServer.CommandGet(AContext:TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+begin
+  // Why???
+end;
+
+procedure TBisSmIdHttpServer.DoConnect(AContext: TIdContext);
+var
+  Client: TBisSmIdHttpServerClient;
+begin
+  if Assigned(FServer) then
+    FServer.Working:=true;
+  Client:=TBisSmIdHttpServerClient.Create;
+  FClients.Add(Client);
+  AContext.Data:=Client;
+end;
+
+procedure TBisSmIdHttpServer.DoDisconnect(AContext: TIdContext);
+var
+  Client: TBisSmIdHttpServerClient;
+  List: TList; 
+begin
+  Client:=TBisSmIdHttpServerClient(AContext.Data);
+  if Assigned(Client) then begin
+    List:=FClients.LockList;
+    try
+      List.Remove(Client);
+      if Assigned(FServer) then
+        FServer.Working:=List.Count>0;
+      Client.Free;
+      AContext.Data:=nil;
+    finally
+      FClients.UnlockList;
+    end;
+  end;
+end;
+
+procedure TBisSmIdHttpServer.DoCommandOther(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+begin
+
+end;
+
+procedure TBisSmIdHttpServer.DoCommandGet(AContext:TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+var
+  P: TBisProvider;
+  Str: TStringList;
+begin
+  Str:=TStringList.Create;
+  P:=TBisProvider.Create(nil);
+  try
+    P.ProviderName:='S_ACCOUNTS';
+    P.Orders.Add('USER_NAME');
+    P.Open;
+    while not P.Eof do begin
+      P.Next;
+    end;
+    AResponseInfo.ContentText:=Str.Text;
+  finally
+    P.Free;
+    Str.Free;
+  end;
+end;
+
+{ TBisSmHttpServers }
+
+constructor TBisSmHttpServers.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Objects.OwnsObjects:=false; 
+end;
+
+function TBisSmHttpServers.GetItem(Index: Integer): TBisSmHttpServer;
+begin
+  Result:=TBisSmHttpServer(inherited Items[Index]);
+end;
+
+function TBisSmHttpServers.Working: Boolean;
+var
+  i: Integer;
+begin
+  Result:=false;
+  for i:=0 to Count-1 do begin
+    if Items[i].Working then begin
+      Result:=true;
+      break;
+    end;
+  end;
+end;
+
+{ TBisSmHttpServer }
+
+constructor TBisSmHttpServer.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Params.OnChange:=ChangeParams;
+  FServer:=TBisSmIdHttpServer.Create(nil);
+  FServer.Server:=Self;
+
+  Servers.AddServer(Self);
+end;
+
+destructor TBisSmHttpServer.Destroy;
+begin
+  Servers.Remove(Self);
+  
+  FServer.Free;
+  inherited Destroy;
+end;
+
+function TBisSmHttpServer.GetStarted: Boolean;
+begin
+  Result:=FServer.Active;
+end;
+
+procedure TBisSmHttpServer.ChangeParams(Sender: TObject);
+var
+  i: Integer;
+  Str: TStringList;
+  Param: TBisServerParam;
+  S: String;
+  SocketHandle: TIdSocketHandle;
+begin
+  for i:=0 to Params.Count-1 do begin
+    Param:=Params.Items[i];
+
+    if AnsiSameText(Param.ParamName,SParamIP) then FIP:=Param.Value;
+    if AnsiSameText(Param.ParamName,SParamPort) then FPort:=StrToIntDef(Param.Value,IdPORT_HTTP);
+  end;
+  Str:=TStringList.Create;
+  try
+    FServer.Bindings.Clear;
+    GetStringsByString(FIP,';',Str);
+    for S in Str do begin
+      SocketHandle:=FServer.Bindings.Add;
+      SocketHandle.IP:=S;
+      SocketHandle.Port:=FPort;
+    end;
+  finally
+    Str.Free;
+  end;
+end;
+
+procedure TBisSmHttpServer.Start;
+begin
+  FServer.Active:=true;
+end;
+
+procedure TBisSmHttpServer.Stop;
+begin
+  FServer.Active:=false;
+end;
+
+initialization
+  Servers:=TBisSmHttpServers.Create(nil);
+
+finalization
+  FreeAndNilEx(Servers);
+
+end.

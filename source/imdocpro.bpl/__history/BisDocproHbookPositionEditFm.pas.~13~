@@ -1,0 +1,96 @@
+unit BisDocproHbookPositionEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisDocproHbookPositionEditForm = class(TBisDataEditForm)
+    LabelView: TLabel;
+    EditView: TEdit;
+    ButtonView: TButton;
+    LabelFirm: TLabel;
+    EditFirm: TEdit;
+    ButtonFirm: TButton;
+    LabelPlan: TLabel;
+    EditPlan: TEdit;
+    ButtonPlan: TButton;
+  private
+    { Private declarations }
+  public
+  end;
+
+  TBisDocproHbookPositionEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDocproHbookDocInsertFormIface=class(TBisDocproHbookPositionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDocproHbookDocUpdateFormIface=class(TBisDocproHbookPositionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDocproHbookDocDeleteFormIface=class(TBisDocproHbookPositionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDocproHbookPositionEditForm: TBisDocproHbookPositionEditForm;
+
+implementation
+
+uses BisDocproConsts, BisDocproHbookViewsFm, BisDocproHbookPlansFm;
+
+{$R *.dfm}
+
+{ TBisDocproHbookPositionEditFormIface }
+
+constructor TBisDocproHbookPositionEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDocproHbookPositionEditForm;
+  with Params do begin
+    AddKey('POSITION_ID').Older('OLD_POSITION_ID');
+    AddEditDataSelect('PLAN_ID','EditPlan','LabelPlan','ButtonPlan',
+                      TBisDocproHbookPlansFormIface,'PLAN_NAME',true,false,'','NAME');
+    AddEditDataSelect('VIEW_ID','EditView','LabelView','ButtonView',
+                      TBisDocproHbookViewsFormIface,'VIEW_NAME',true,false,'','NAME');
+    AddEditDataSelect('FIRM_ID','EditView','LabelView','ButtonView',
+                      TBisDocproHbookViewsFormIface,'VIEW_NAME',true,false,'','NAME');
+  end;
+end;
+
+{ TBisDocproHbookDocInsertFormIface }
+
+constructor TBisDocproHbookDocInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_POSITION';
+end;
+
+{ TBisDocproHbookDocUpdateFormIface }
+
+constructor TBisDocproHbookDocUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_POSITION';
+end;
+
+{ TBisDocproHbookDocDeleteFormIface }
+
+constructor TBisDocproHbookDocDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_POSITION';
+end;
+
+end.

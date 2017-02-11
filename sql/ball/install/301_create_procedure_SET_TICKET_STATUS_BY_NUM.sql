@@ -1,0 +1,23 @@
+/* Создание процедуры изменения статуса билета по номеру */
+
+CREATE OR ALTER PROCEDURE /*PREFIX*/SET_TICKET_STATUS_BY_NUM
+(
+  TIRAGE_ID VARCHAR(32),
+  DEALER_ID VARCHAR(32),
+  TICKET_NUM VARCHAR(8),
+  USED INTEGER
+)
+AS
+BEGIN
+  UPDATE /*PREFIX*/TICKETS
+     SET USED=:USED,
+         DEALER_ID=:DEALER_ID
+   WHERE TIRAGE_ID=:TIRAGE_ID
+     AND NUM=:TICKET_NUM;
+END;
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

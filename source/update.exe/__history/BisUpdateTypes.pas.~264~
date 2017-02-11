@@ -1,0 +1,292 @@
+unit BisUpdateTypes;
+
+interface
+
+uses Classes, Contnrs;
+
+type
+
+  TBisUpdateMethod=(umConnect,umDisconnect,umGetList,umGetFiles);
+
+  TBisUpdateStreamFormat=(sfRaw,sfXml);
+
+  TBisUpdateItem=class(TObject)
+  private
+    FName: String;
+    FDir: String;
+    FVersion: String;
+    FHash: String;
+    FStream: TMemoryStream;
+    FNeed: Boolean;
+    FSize: Integer;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    property Name: String read FName write FName;
+    property Dir: String read FDir write FDir;
+    property Version: String read FVersion write FVersion;
+    property Hash: String read FHash write FHash;
+    property Need: Boolean read FNeed write FNeed;
+    property Size: Integer read FSize write FSize;
+
+    property Stream: TMemoryStream read FStream;
+  end;
+
+  TBisUpdateList=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisUpdateItem;
+
+    procedure LoadFromRawStream(Stream: TStream);
+    procedure SaveToRawStream(Stream: TStream);
+
+    procedure LoadFromXmlStream(Stream: TStream);
+    procedure SaveToXmlStream(Stream: TStream);
+
+  public
+    function AddItem(Name: String): TBisUpdateItem;
+    function FindItem(Name,Dir: String): TBisUpdateItem;
+
+    procedure LoadFromStream(Stream: TStream; AFormat: TBisUpdateStreamFormat=sfRaw);
+    procedure SaveToStream(Stream: TStream; AFormat: TBisUpdateStreamFormat=sfRaw);
+
+    procedure CopyFrom(Source: TBisUpdateList);
+
+    property Items[Index: Integer]: TBisUpdateItem read GetItem; default;
+
+  end;
+
+
+implementation
+
+uses Windows, SysUtils, Variants, 
+     ALXmlDoc,
+     BisBase64;
+
+const
+  WriterSize=4096;
+  ReaderSize=4096;
+
+function VarToIntDef(const V: Variant; const ADefault: Integer): Integer;
+begin
+  try
+    if not VarIsNull(V) then
+      Result:=V
+    else
+      Result:=ADefault;
+  except
+    Result:=ADefault;
+  end;    
+end;
+  
+{ TBisUpdateItem }
+
+constructor TBisUpdateItem.Create;
+begin
+  inherited Create;
+  FStream:=TMemoryStream.Create;
+end;
+
+destructor TBisUpdateItem.Destroy;
+begin
+  FStream.Free;
+  inherited Destroy;
+end;
+
+{ TBisUpdateList }
+
+function TBisUpdateList.GetItem(Index: Integer): TBisUpdateItem;
+begin
+  Result:=TBisUpdateItem(inherited Items[Index]);
+end;
+
+function TBisUpdateList.AddItem(Name: String): TBisUpdateItem;
+begin
+  Result:=TBisUpdateItem.Create;
+  Result.Name:=Name;
+  inherited Add(Result);
+end;
+
+procedure TBisUpdateList.CopyFrom(Source: TBisUpdateList);
+var
+  i: Integer;
+  Item, ItemNew: TBisUpdateItem;
+begin
+  if Assigned(Source) then
+    for i:=0 to Source.Count-1 do begin
+      Item:=Source.Items[i];
+      ItemNew:=
+    end;
+end;
+
+function TBisUpdateList.FindItem(Name, Dir: String): TBisUpdateItem;
+var
+  i: Integer;
+  Item: TBisUpdateItem;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.Name,Name) and
+       AnsiSameText(Item.Dir,Dir) then begin
+      Result:=Item;
+      break;
+    end;
+  end;
+end;
+
+procedure TBisUpdateList.LoadFromRawStream(Stream: TStream);
+var
+  Reader: TReader;
+  Item: TBisUpdateItem;
+begin
+  Clear;
+  Reader:=TReader.Create(Stream,ReaderSize);
+  try
+    Reader.ReadListBegin;
+    while not Reader.EndOfList do begin
+      Item:=AddItem(Reader.ReadString);
+      Item.Dir:=Reader.ReadString;
+      Item.Version:=Reader.ReadString;
+      Item.Hash:=Reader.ReadString;
+      Item.Need:=Reader.ReadBoolean;
+      Item.Size:=Reader.ReadInteger;
+      Item.Stream.SetSize(Reader.ReadInteger);
+      Reader.Read(Item.Stream.Memory^,Item.Stream.Size);
+    end;
+    Reader.ReadListEnd;
+  finally
+    Reader.Free;
+  end;
+end;
+
+procedure TBisUpdateList.SaveToRawStream(Stream: TStream);
+var
+  Writer: TWriter;
+  i: Integer;
+  Item: TBisUpdateItem;
+begin
+  Writer:=TWriter.Create(Stream,WriterSize);
+  try
+    Writer.WriteListBegin;
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      Writer.WriteString(Item.Name);
+      Writer.WriteString(Item.Dir);
+      Writer.WriteString(Item.Version);
+      Writer.WriteString(Item.Hash);
+      Writer.WriteBoolean(Item.Need);
+      Writer.WriteInteger(Item.Size);
+      Writer.WriteInteger(Item.Stream.Size);
+      Writer.Write(Item.Stream.Memory^,Item.Stream.Size);
+    end;
+    Writer.WriteListEnd;
+  finally
+    Writer.Free;
+  end;
+end;
+
+procedure TBisUpdateList.LoadFromXmlStream(Stream: TStream);
+var
+  ItemNode: TALXMLNode;
+
+  function GetValue(NodeName: String): Variant;
+  var
+    nd: TALXMLNode;
+  begin
+    Result:=Null;
+    if Assigned(ItemNode) then begin
+      nd:=ItemNode.ChildNodes.FindNode(NodeName);
+      if Assigned(nd) then
+        Result:=nd.NodeValue;
+    end;
+  end;
+var
+  Xml: TALXMLDocument;
+  ListNode, Node: TALXMLNode;
+  i: Integer;
+  Item: TBisUpdateItem;
+  S: String;
+begin
+  Clear;
+  Xml:=TALXMLDocument.Create(nil);
+  try
+    Xml.LoadFromStream(Stream);
+    ListNode:=Xml.ChildNodes.FindNode('list');
+    if Assigned(ListNode) then begin
+      for i:=0 to ListNode.ChildNodes.Count-1 do begin
+        ItemNode:=ListNode.ChildNodes[i];
+        if AnsiSameText(ItemNode.NodeName,'item') then begin
+          Node:=ItemNode.ChildNodes.FindNode('name');
+          if Assigned(Node) then begin
+            Item:=AddItem(VarToStrDef(Node.NodeValue,''));
+            Item.Dir:=VarToStrDef(GetValue('dir'),'');
+            Item.Version:=VarToStrDef(GetValue('version'),'');
+            Item.Hash:=VarToStrDef(GetValue('hash'),'');
+            Item.Need:=Boolean(VarToIntDef(GetValue('need'),0));
+            Item.Size:=VarToIntDef(GetValue('size'),0);
+            S:=VarToStrDef(GetValue('file'),'');
+            S:=Base64ToStr(S);
+            Item.Stream.Clear;
+            Item.Stream.SetSize(Length(S));
+            Item.Stream.Write(Pointer(S)^,Length(S));
+          end;
+        end;
+      end;
+    end;
+  finally
+    Xml.Free;
+  end;
+end;
+
+procedure TBisUpdateList.SaveToXmlStream(Stream: TStream);
+var
+  Xml: TALXMLDocument;
+  i: Integer;
+  Item: TBisUpdateItem;
+  ListNode, ItemNode: TALXMLNode;
+  S: String;
+begin
+  Xml:=TALXMLDocument.Create(nil);
+  try
+    Xml.Active:=true;
+    ListNode:=Xml.AddChild('list');
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      ItemNode:=ListNode.AddChild('item');
+      ItemNode.AddChild('name').NodeValue:=Item.Name;
+      ItemNode.AddChild('dir').NodeValue:=Item.Dir;
+      ItemNode.AddChild('version').NodeValue:=Item.Version;
+      ItemNode.AddChild('hash').NodeValue:=Item.Hash;
+      ItemNode.AddChild('need').NodeValue:=Integer(Item.Need);
+      ItemNode.AddChild('size').NodeValue:=Item.Size;
+      SetLength(S,Item.Stream.Size);
+      Item.Stream.Position:=0;
+      Item.Stream.Read(Pointer(S)^,Length(S));
+      ItemNode.AddChild('file').
+      NodeValue:=StrToBase64(S);
+    end;
+    ListNode.SaveToStream(Stream);
+  finally
+    Xml.Free;
+  end;
+end;
+
+procedure TBisUpdateList.LoadFromStream(Stream: TStream;  AFormat: TBisUpdateStreamFormat);
+begin
+  case AFormat of
+    sfRaw: LoadFromRawStream(Stream);
+    sfXml: LoadFromXmlStream(Stream);
+  end;
+end;
+
+procedure TBisUpdateList.SaveToStream(Stream: TStream;  AFormat: TBisUpdateStreamFormat);
+begin
+  case AFormat of
+    sfRaw: SaveToRawStream(Stream);
+    sfXml: SaveToXmlStream(Stream);
+  end;
+end;
+
+
+end.

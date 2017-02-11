@@ -1,0 +1,21 @@
+// compiler definitions
+
+{$ifdef conditionalexpressions}
+  {$if COMPILERVERSION >= 20.0}
+    {$define DELPHI_2009_UP}
+  {$ifend}
+  {$if COMPILERVERSION >= 21.0}
+    {$define DELPHI_2010_UP}
+  {$ifend}
+{$endif}
+
+{$IFDEF VER140} {$DEFINE DELPHI_6_UP} {$ENDIF}
+{$IFDEF VER150} {$DEFINE DELPHI_6_UP} {$ENDIF}
+{$IFDEF VER160} {$DEFINE DELPHI_6_UP} {$ENDIF}
+{$IFDEF VER170} {$DEFINE DELPHI_6_UP} {$ENDIF}
+{$IFDEF VER180} {$DEFINE DELPHI_6_UP} {$ENDIF}
+{$IFDEF VER185} {$DEFINE DELPHI_6_UP} {$ENDIF}
+{$IFDEF VER200} {$DEFINE DELPHI_6_UP} {$ENDIF}
+{$IFDEF VER210} {$DEFINE DELPHI_6_UP} {$ENDIF}
+
+

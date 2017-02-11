@@ -1,0 +1,51 @@
+package immess;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  imdesign;
+
+contains
+  BisMessInit in 'immess.bpl\BisMessInit.pas',
+  BisMessConsts in 'immess.bpl\BisMessConsts.pas',
+  BisMessDataPatternMessageEditFm in 'immess.bpl\BisMessDataPatternMessageEditFm.pas' {BisMessDataPatternMessageEditForm},
+  BisMessDataPatternMessagesFm in 'immess.bpl\BisMessDataPatternMessagesFm.pas' {BisMessDataPatternMessagesForm},
+  BisMessDataCodeMessageEditFm in 'immess.bpl\BisMessDataCodeMessageEditFm.pas' {BisMessDataCodeMessageEditForm},
+  BisMessDataCodeMessagesFm in 'immess.bpl\BisMessDataCodeMessagesFm.pas' {BisMessDataCodeMessagesForm},
+  BisMessDataInMessageEditFm in 'immess.bpl\BisMessDataInMessageEditFm.pas' {BisMessDataInMessageEditForm},
+  BisMessDataInMessageFilterFm in 'immess.bpl\BisMessDataInMessageFilterFm.pas' {BisMessDataInMessageFilterForm},
+  BisMessDataInMessagesFm in 'immess.bpl\BisMessDataInMessagesFm.pas' {BisMessDataInMessagesForm},
+  BisMessDataOutMessageEditFm in 'immess.bpl\BisMessDataOutMessageEditFm.pas' {BisMessDataOutMessageEditForm},
+  BisMessDataOutMessageFilterFm in 'immess.bpl\BisMessDataOutMessageFilterFm.pas' {BisMessDataOutMessageFilterForm},
+  BisMessDataOutMessageInsertExFm in 'immess.bpl\BisMessDataOutMessageInsertExFm.pas' {BisMessDataOutMessageInsertExForm},
+  BisMessDataOutMessagesImportFm in 'immess.bpl\BisMessDataOutMessagesImportFm.pas' {BisMessDataOutMessagesImportForm},
+  BisMessDataOutMessagesFrm in 'immess.bpl\BisMessDataOutMessagesFrm.pas' {BisMessDataOutMessagesFrame: TFrame},
+  BisMessDataOutMessagesFm in 'immess.bpl\BisMessDataOutMessagesFm.pas' {BisMessDataOutMessagesForm},
+  BisMessDataOperatorEditFm in 'immess.bpl\BisMessDataOperatorEditFm.pas' {BisMessDataOperatorEditForm},
+  BisMessDataOperatorsFm in 'immess.bpl\BisMessDataOperatorsFm.pas' {BisMessDataOperatorsForm};
+
+end.

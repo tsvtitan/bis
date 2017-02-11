@@ -1,0 +1,24 @@
+unit BisCmxMysql;
+
+interface
+
+uses BisConnectionModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitConnectionModule(AModule: TBisConnectionModule); stdcall;
+
+exports
+  InitConnectionModule;
+
+implementation
+
+uses Classes, Variants, DB,
+     BisCmxMySqlConnection, BisDataSet, BisCore, BisConsts,
+     BisCmxConsts;
+
+procedure InitConnectionModule(AModule: TBisConnectionModule); stdcall;
+begin
+  AModule.ConnectionClass:=TBisCmxMySqlConnection;
+end;
+
+end.

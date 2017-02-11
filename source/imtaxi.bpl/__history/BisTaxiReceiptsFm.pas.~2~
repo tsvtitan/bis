@@ -1,0 +1,86 @@
+unit BisTaxiReceiptsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataGridFm;
+
+type
+  TBisTaxiReceiptsForm = class(TBisDataGridForm)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiReceiptsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiReceiptsForm: TBisTaxiReceiptsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses DateUtils,
+     BisUtils, BisTaxiReceiptEditFm, BisConsts, BisOrders, BisFilterGroups, BisCore;
+
+{ TBisTaxiReceiptsFormIface }
+
+constructor TBisTaxiReceiptsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiReceiptsForm;
+  FilterClass:=TBisTaxiReceiptFilterFormIface;
+  InsertClass:=TBisTaxiReceiptInsertFormIface;
+  UpdateClass:=TBisTaxiReceiptUpdateFormIface;
+  DeleteClass:=TBisTaxiReceiptDeleteFormIface;
+  Permissions.Enabled:=true;
+//  Available:=true;
+  ProviderName:='S_RECEIPTS';
+  with FieldNames do begin
+    AddKey('RECEIPT_ID');
+    AddInvisible('RECEIPT_TYPE_ID');
+    AddInvisible('ACCOUNT_ID');
+    AddInvisible('WHO_CREATE_ID');
+    AddInvisible('WHO_USER_NAME');
+    AddInvisible('DATE_CREATE');
+    AddInvisible('DESCRIPTION');
+    Add('DATE_RECEIPT','Дата',110);
+    Add('USER_NAME','Счет',110);
+    Add('SUM_RECEIPT','Сумма',70).DisplayFormat:='#0.00';
+    Add('RECEIPT_TYPE_NAME','Вид поступления',110);
+  end;
+  Orders.Add('DATE_RECEIPT',otDesc);
+end;
+
+{ TBisTaxiReceiptsForm }
+
+constructor TBisTaxiReceiptsForm.Create(AOwner: TComponent);
+var
+  D: TDateTime;
+begin
+  inherited Create(AOwner);
+  if Assigned(DataFrame) then begin
+
+    D:=Core.ServerDate;
+
+    with DataFrame.CreateFilterMenuItem('Сегодня') do begin
+      with FilterGroups.AddVisible do begin
+        Filters.Add('DATE_RECEIPT',fcEqualGreater,DateOf(D));
+        Filters.Add('DATE_RECEIPT',fcLess,IncDay(DateOf(D)));
+      end;
+      Checked:=true;
+    end;
+
+    with DataFrame.CreateFilterMenuItem('Архив') do begin
+      FilterGroups.AddVisible.Filters.Add('DATE_RECEIPT',fcLess,DateOf(D));
+    end;
+
+  end;
+end;
+
+end.

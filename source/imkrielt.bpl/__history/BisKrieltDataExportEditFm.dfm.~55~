@@ -1,0 +1,479 @@
+inherited BisKrieltDataExportEditForm: TBisKrieltDataExportEditForm
+  Left = 424
+  Top = 189
+  Caption = 'BisKrieltDataExportEditForm'
+  ClientHeight = 383
+  ClientWidth = 600
+  ExplicitWidth = 608
+  ExplicitHeight = 417
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 345
+    Width = 600
+    ExplicitTop = 345
+    ExplicitWidth = 600
+    inherited ButtonOk: TButton
+      Left = 421
+      ExplicitLeft = 421
+    end
+    inherited ButtonCancel: TButton
+      Left = 517
+      ExplicitLeft = 517
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 600
+    Height = 345
+    ExplicitWidth = 600
+    ExplicitHeight = 345
+    object PageControl: TPageControl
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 594
+      Height = 339
+      ActivePage = TabSheetMain
+      Align = alClient
+      TabOrder = 0
+      OnChange = PageControlChange
+      object TabSheetMain: TTabSheet
+        Caption = #1054#1073#1097#1080#1077
+        DesignSize = (
+          586
+          311)
+        object LabelParent: TLabel
+          Left = 32
+          Top = 15
+          Width = 53
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1056#1086#1076#1080#1090#1077#1083#1100':'
+          FocusControl = EditParent
+        end
+        object LabelName: TLabel
+          Left = 8
+          Top = 42
+          Width = 77
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077':'
+          FocusControl = EditName
+        end
+        object LabelDescription: TLabel
+          Left = 32
+          Top = 69
+          Width = 53
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1054#1087#1080#1089#1072#1085#1080#1077':'
+          FocusControl = MemoDescription
+        end
+        object LabelExport: TLabel
+          Left = 39
+          Top = 248
+          Width = 46
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akLeft, akBottom]
+          Caption = #1069#1082#1089#1087#1086#1088#1090':'
+          FocusControl = EditExport
+          ExplicitTop = 123
+        end
+        object LabelView: TLabel
+          Left = 349
+          Top = 15
+          Width = 23
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akTop, akRight]
+          Caption = #1042#1080#1076':'
+          FocusControl = EditView
+          ExplicitLeft = 355
+        end
+        object LabelType: TLabel
+          Left = 350
+          Top = 42
+          Width = 22
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akTop, akRight]
+          Caption = #1058#1080#1087':'
+          FocusControl = EditType
+          ExplicitLeft = 356
+        end
+        object LabelOperation: TLabel
+          Left = 318
+          Top = 69
+          Width = 54
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akTop, akRight]
+          Caption = #1054#1087#1077#1088#1072#1094#1080#1103':'
+          FocusControl = EditOperation
+          ExplicitLeft = 324
+        end
+        object LabelParam: TLabel
+          Left = 319
+          Top = 96
+          Width = 53
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akTop, akRight]
+          Caption = #1055#1072#1088#1072#1084#1077#1090#1088':'
+          FocusControl = EditParam
+          ExplicitLeft = 325
+        end
+        object LabelCond: TLabel
+          Left = 326
+          Top = 123
+          Width = 46
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akTop, akRight]
+          Caption = #1059#1089#1083#1086#1074#1080#1077':'
+          FocusControl = ComboBoxCond
+          ExplicitLeft = 332
+        end
+        object LabelValue: TLabel
+          Left = 320
+          Top = 150
+          Width = 52
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akTop, akRight]
+          Caption = #1047#1085#1072#1095#1077#1085#1080#1077':'
+          FocusControl = EditValue
+          ExplicitLeft = 326
+        end
+        object LabelPriority: TLabel
+          Left = 175
+          Top = 275
+          Width = 48
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akRight, akBottom]
+          Caption = #1055#1086#1088#1103#1076#1086#1082':'
+          FocusControl = EditPriority
+          ExplicitLeft = 181
+          ExplicitTop = 150
+        end
+        object EditParent: TEdit
+          Left = 91
+          Top = 12
+          Width = 192
+          Height = 21
+          Color = clBtnFace
+          MaxLength = 100
+          ReadOnly = True
+          TabOrder = 0
+        end
+        object ButtonParent: TButton
+          Left = 289
+          Top = 12
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1088#1086#1076#1080#1090#1077#1083#1100#1089#1082#1091#1102' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1102
+          Caption = '...'
+          TabOrder = 1
+        end
+        object EditName: TEdit
+          Left = 91
+          Top = 39
+          Width = 213
+          Height = 21
+          Anchors = [akLeft, akTop, akRight]
+          MaxLength = 100
+          TabOrder = 2
+        end
+        object MemoDescription: TMemo
+          Left = 91
+          Top = 66
+          Width = 213
+          Height = 173
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          TabOrder = 3
+        end
+        object EditExport: TEdit
+          Left = 91
+          Top = 245
+          Width = 213
+          Height = 21
+          Anchors = [akLeft, akRight, akBottom]
+          MaxLength = 100
+          TabOrder = 4
+        end
+        object EditView: TEdit
+          Left = 378
+          Top = 12
+          Width = 169
+          Height = 21
+          Anchors = [akTop, akRight]
+          Color = clBtnFace
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          MaxLength = 100
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 6
+        end
+        object ButtonView: TButton
+          Left = 553
+          Top = 12
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1080#1076
+          Anchors = [akTop, akRight]
+          Caption = '...'
+          TabOrder = 7
+        end
+        object EditType: TEdit
+          Left = 378
+          Top = 39
+          Width = 169
+          Height = 21
+          Anchors = [akTop, akRight]
+          Color = clBtnFace
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGreen
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          MaxLength = 100
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 8
+        end
+        object ButtonType: TButton
+          Left = 553
+          Top = 39
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1090#1080#1087
+          Anchors = [akTop, akRight]
+          Caption = '...'
+          TabOrder = 9
+        end
+        object EditOperation: TEdit
+          Left = 378
+          Top = 66
+          Width = 169
+          Height = 21
+          Anchors = [akTop, akRight]
+          Color = clBtnFace
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          MaxLength = 100
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 10
+        end
+        object ButtonOperation: TButton
+          Left = 553
+          Top = 66
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1086#1087#1077#1088#1072#1094#1080#1102
+          Anchors = [akTop, akRight]
+          Caption = '...'
+          TabOrder = 11
+        end
+        object EditParam: TEdit
+          Left = 378
+          Top = 93
+          Width = 169
+          Height = 21
+          Anchors = [akTop, akRight]
+          Color = clBtnFace
+          MaxLength = 100
+          ReadOnly = True
+          TabOrder = 12
+        end
+        object ButtonParam: TButton
+          Left = 553
+          Top = 93
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1072#1088#1072#1084#1077#1090#1088
+          Anchors = [akTop, akRight]
+          Caption = '...'
+          TabOrder = 13
+        end
+        object ComboBoxCond: TComboBox
+          Left = 378
+          Top = 120
+          Width = 193
+          Height = 21
+          Style = csDropDownList
+          Anchors = [akTop, akRight]
+          ItemHeight = 13
+          TabOrder = 14
+          Items.Strings = (
+            #1088#1072#1074#1085#1086
+            #1073#1086#1083#1100#1096#1077
+            #1084#1077#1085#1100#1096#1077
+            #1085#1077' '#1088#1072#1074#1085#1086
+            #1073#1086#1083#1100#1096#1077' '#1080#1083#1080' '#1088#1072#1074#1085#1086
+            #1084#1077#1085#1100#1096#1077' '#1080#1083#1080' '#1088#1072#1074#1085#1086
+            #1087#1086#1093#1086#1078#1077' '#1085#1072
+            #1085#1077' '#1087#1086#1093#1086#1078#1077' '#1085#1072
+            #1087#1091#1089#1090#1086
+            #1085#1077' '#1087#1091#1089#1090#1086)
+        end
+        object EditValue: TEdit
+          Left = 378
+          Top = 147
+          Width = 193
+          Height = 21
+          Anchors = [akTop, akRight]
+          MaxLength = 100
+          TabOrder = 15
+        end
+        object EditPriority: TEdit
+          Left = 229
+          Top = 272
+          Width = 75
+          Height = 21
+          Anchors = [akRight, akBottom]
+          TabOrder = 5
+        end
+        object CheckBoxDisabled: TCheckBox
+          Left = 378
+          Top = 174
+          Width = 97
+          Height = 17
+          Hint = #1042#1082#1083#1102#1095#1080#1090#1100'/'#1042#1099#1082#1083#1102#1095#1080#1090#1100' '#1074' '#1101#1082#1089#1087#1086#1088#1090#1077
+          Anchors = [akTop, akRight]
+          Caption = #1042#1099#1082#1083#1102#1095#1077#1085
+          TabOrder = 16
+        end
+      end
+      object TabSheetRtf: TTabSheet
+        Caption = 'RTF'
+        ImageIndex = 4
+        object GridPanelRtf: TGridPanel
+          Left = 0
+          Top = 0
+          Width = 586
+          Height = 311
+          Align = alClient
+          BevelOuter = bvNone
+          ColumnCollection = <
+            item
+              Value = 100.000000000000000000
+            end>
+          ControlCollection = <
+            item
+              Column = 0
+              Control = GroupBoxHeadRtf
+              Row = 0
+            end
+            item
+              Column = 0
+              Control = GroupBoxBodyRtf
+              Row = 1
+            end>
+          RowCollection = <
+            item
+              Value = 25.005240752153060000
+            end
+            item
+              Value = 74.994759247846920000
+            end>
+          TabOrder = 0
+          ExplicitTop = 1
+          object GroupBoxHeadRtf: TGroupBox
+            AlignWithMargins = True
+            Left = 5
+            Top = 0
+            Width = 576
+            Height = 72
+            Margins.Left = 5
+            Margins.Top = 0
+            Margins.Right = 5
+            Margins.Bottom = 5
+            Align = alClient
+            Caption = #1047#1072#1075#1086#1083#1086#1074#1086#1082
+            TabOrder = 0
+            ExplicitHeight = 88
+            object MemoHeadRtf: TMemo
+              AlignWithMargins = True
+              Left = 7
+              Top = 15
+              Width = 562
+              Height = 50
+              Margins.Left = 5
+              Margins.Top = 0
+              Margins.Right = 5
+              Margins.Bottom = 5
+              Align = alClient
+              ScrollBars = ssBoth
+              TabOrder = 0
+              WordWrap = False
+              ExplicitHeight = 66
+            end
+          end
+          object GroupBoxBodyRtf: TGroupBox
+            AlignWithMargins = True
+            Left = 5
+            Top = 77
+            Width = 576
+            Height = 229
+            Margins.Left = 5
+            Margins.Top = 0
+            Margins.Right = 5
+            Margins.Bottom = 5
+            Align = alClient
+            Caption = #1058#1077#1083#1086
+            TabOrder = 1
+            ExplicitTop = 93
+            ExplicitHeight = 213
+            object MemoBodyRtf: TMemo
+              AlignWithMargins = True
+              Left = 7
+              Top = 15
+              Width = 562
+              Height = 207
+              Margins.Left = 5
+              Margins.Top = 0
+              Margins.Right = 5
+              Margins.Bottom = 5
+              Align = alClient
+              ScrollBars = ssBoth
+              TabOrder = 0
+              WordWrap = False
+              ExplicitHeight = 191
+            end
+          end
+        end
+      end
+      object TabSheetPatterns: TTabSheet
+        Caption = #1064#1072#1073#1083#1086#1085#1099
+        ImageIndex = 1
+      end
+      object TabSheetSorting: TTabSheet
+        Caption = #1057#1086#1088#1090#1080#1088#1086#1074#1082#1072
+        ImageIndex = 3
+        object MemoSorting: TMemo
+          AlignWithMargins = True
+          Left = 3
+          Top = 3
+          Width = 580
+          Height = 305
+          Align = alClient
+          TabOrder = 0
+        end
+      end
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 144
+    Top = 72
+  end
+end

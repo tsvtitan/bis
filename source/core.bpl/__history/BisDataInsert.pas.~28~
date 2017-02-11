@@ -1,0 +1,64 @@
+unit BisDataInsert;
+
+interface
+
+uses Classes, Contnrs,
+     BisDataEditFm;
+
+type
+  TBisDataInsertFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDataInsertFormIfaceClass=class of TBisDataInsertFormIface;
+
+  TBisDataInsertFormIfaceClasses=class(TClassList)
+  private
+    function GetItem(Index: Integer): TBisDataInsertFormIfaceClass;
+    function GetFirstItem: TBisDataInsertFormIfaceClass;
+  public
+    procedure InsertToFirst(Value: TBisDataInsertFormIfaceClass);
+    procedure CopyFrom(Source: TBisDataInsertFormIfaceClasses; WithClear: Boolean=true);
+
+    property Items[Index: Integer]: TBisDataInsertFormIfaceClass read GetItem;
+    property FirstItem: TBisDataInsertFormIfaceClass read GetFirstItem;
+  end;
+
+implementation
+
+{ TBisDataInsertFormIface }
+
+constructor TBisDataInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormCaption:='Создать';
+end;
+
+{ TBisDataInsertFormIfaceClasses }
+
+procedure TBisDataInsertFormIfaceClasses.CopyFrom(Source: TBisDataInsertFormIfaceClasses; WithClear: Boolean);
+begin
+  if WithClear then
+    Clear;
+  Assign(Source);
+end;
+
+function TBisDataInsertFormIfaceClasses.GetFirstItem: TBisDataInsertFormIfaceClass;
+begin
+  Result:=nil;
+  if Count>0 then
+    Result:=Items[0];
+end;
+
+function TBisDataInsertFormIfaceClasses.GetItem(Index: Integer): TBisDataInsertFormIfaceClass;
+begin
+  Result:=TBisDataInsertFormIfaceClass(inherited Items[Index]);
+end;
+
+procedure TBisDataInsertFormIfaceClasses.InsertToFirst(Value: TBisDataInsertFormIfaceClass);
+begin
+  Insert(0,Value);
+end;
+
+end.

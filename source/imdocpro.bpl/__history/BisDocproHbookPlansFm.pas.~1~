@@ -1,0 +1,52 @@
+unit BisDocproHbookPlansFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBisDocproHbookPlansForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisKrieltHbookViewsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDocproHbookPlansForm: TBisDocproHbookPlansForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisKrieltHbookViewEditFm;
+
+{ TBisKrieltHbookViewsFormIface }
+
+constructor TBisKrieltHbookViewsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltHbookViewsForm;
+  InsertClass:=TBisKrieltHbookViewInsertFormIface;
+  UpdateClass:=TBisKrieltHbookViewUpdateFormIface;
+  DeleteClass:=TBisKrieltHbookViewDeleteFormIface;
+  Permissions.Enabled:=true;
+  Available:=true;
+  ProviderName:='S_VIEWS';
+  with FieldNames do begin
+    AddKey('VIEW_ID');
+    AddInvisible('DESCRIPTION');
+    Add('NAME','Наименование',250);
+    Add('PRIORITY','Порядок',50);
+  end;
+  Orders.Add('PRIORITY');
+end;
+
+end.

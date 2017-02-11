@@ -1,0 +1,32 @@
+unit BisUtils;
+
+interface
+
+uses Classes;
+
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+procedure FreeAndNilEx(var Obj: TObject);
+
+implementation
+
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+begin
+  if IsTrue then Result:=ValueTrue
+  else Result:=ValueFalse;
+end;
+
+procedure FreeAndNilEx(var Obj: TObject);
+var
+  Temp: TObject;
+begin
+  if Pointer(Obj)<>nil then begin
+    Temp:=TObject(Obj);
+    try
+      Temp.Free;
+    except
+    end;
+    Pointer(Obj):=nil;
+  end;
+end;
+
+end.

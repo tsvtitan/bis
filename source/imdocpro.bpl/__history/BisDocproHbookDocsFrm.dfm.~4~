@@ -1,0 +1,29 @@
+inherited BisDocproHbookDocsFrame: TBisDocproHbookDocsFrame
+  Height = 152
+  ExplicitHeight = 152
+  inherited PanelData: TPanel
+    Height = 123
+    ExplicitHeight = 124
+    inherited GridPattern: TDBGrid
+      Height = 123
+    end
+  end
+  inherited ControlBar: TControlBar
+    ExplicitTop = 0
+  end
+  inherited ActionList: TActionList
+    object ActionPlan: TAction
+      Caption = #1055#1083#1072#1085
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1083#1072#1085' '#1076#1074#1080#1078#1077#1085#1080#1103
+      OnExecute = ActionPlanExecute
+    end
+  end
+  inherited Popup: TPopupActionBar
+    object N13: TMenuItem
+      Caption = '-'
+    end
+    object N15: TMenuItem
+      Action = ActionPlan
+    end
+  end
+end

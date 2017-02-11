@@ -1,0 +1,16 @@
+unit BisStatusIntf;
+
+interface
+
+uses BisCoreObjectsIntf;
+
+type
+
+  IBisStatus=interface(IBisCoreObject)
+  ['{4235FE2C-8130-4C98-BBB6-4FB9A8BB973E}']
+    procedure Progress(const AMin,AMax,APosition: Integer; var Breaked: Boolean);
+  end;
+
+implementation
+
+end.

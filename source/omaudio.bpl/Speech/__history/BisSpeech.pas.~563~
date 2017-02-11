@@ -1,0 +1,528 @@
+unit BisSpeech;
+
+interface
+
+uses Classes, Contnrs, mmSystem,
+     WaveUtils,
+     BisWave;
+
+type
+
+  TBisSampleVoiceType=(svtSymbol,svtSyllable,svtWord,svtPhrase);
+
+  TBisSampleVoice=class(TObject)
+  private
+    FText: String;
+    FSampleType: TBisSampleVoiceType;
+    FWave: TBisWave;
+    FUsed: Boolean;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure CopyFrom(Source: TBisSampleVoice);
+
+    property SampleType: TBisSampleVoiceType read FSampleType;
+    property Text: String read FText;
+    property Wave: TBisWave read FWave;
+    property Used: Boolean read FUsed;
+  end;
+
+  TBisSampleVoices=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisSampleVoice;
+    procedure GetSamples(SampleType: TBisSampleVoiceType; List: TBisSampleVoices); overload;
+    procedure GetSamples(IndexFrom, IndexTo: Integer; List: TBisSampleVoices); overload;
+    procedure Replace(Sample: TBisSampleVoice);
+    function GetText: String;
+//    function NotUsedExists: Boolean;
+  public
+    function AddSample(SampleType: TBisSampleVoiceType; Text: String; Used: Boolean=true): TBisSampleVoice;
+    procedure WaveSaveToStream(WaveFormat: PWaveFormatEx; Stream: TStream);
+
+    property Items[Index: Integer]: TBisSampleVoice read GetItem; default;
+    property Text: String read GetText;
+  end;
+
+  TBisSpeech=class;
+
+  TBisSpeechEvent=procedure (Sender: TBisSpeech) of object;
+
+  TBisSpeech=class(TComponent)
+  private
+    FSamples: TBisSampleVoices;
+    FPlayer: TBisStockAudioPlayer;
+    FOnPlay: TBisSpeechEvent;
+    FOnStop: TBisSpeechEvent;
+    FPlaying: Boolean;
+    FPlayStream: TMemoryStream;
+    FPCMFormat: TPCMFormat;
+    function GetAsync: Boolean;
+    procedure SetAsync(const Value: Boolean);
+    procedure PlayerStop(Sender: TObject);
+    function GetDeviceID: Cardinal;
+    procedure SetDeviceID(const Value: Cardinal);
+  protected
+    procedure DoPlay; virtual;
+    procedure DoStop; virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure MakeStream(const Text: String; WaveFormat: PWaveFormatEx; Stream: TStream); overload;
+    procedure MakeStream(const Text: String; PCMFormat: TPCMFormat; Stream: TStream); overload;
+    procedure Play(const Text: String);
+    procedure Stop;
+
+    property Samples: TBisSampleVoices read FSamples;
+    property Playing: Boolean read FPlaying;
+
+    property Async: Boolean read GetAsync write SetAsync;
+    property DeviceID: Cardinal read GetDeviceID write SetDeviceID;
+    property PCMFormat: TPCMFormat read FPCMFormat write FPCMFormat;
+
+    property OnPlay: TBisSpeechEvent read FOnPlay write FOnPlay;
+    property OnStop: TBisSpeechEvent read FOnStop write FOnStop;
+  end;
+
+implementation
+
+uses SysUtils;
+
+{ TBisSampleVoice }
+
+constructor TBisSampleVoice.Create;
+begin
+  inherited Create;
+  FWave:=TBisWave.Create;
+end;
+
+destructor TBisSampleVoice.Destroy;
+begin
+  FWave.Free;
+  inherited Destroy;
+end;
+
+procedure TBisSampleVoice.CopyFrom(Source: TBisSampleVoice);
+begin
+  if Assigned(Source) then begin
+    FText:=Source.FText;
+    FSampleType:=Source.FSampleType;
+    FWave.Assign(Source.FWave);
+    FUsed:=Source.FUsed;
+  end;
+end;
+
+
+{ TBisSampleVoices }
+
+function TBisSampleVoices.AddSample(SampleType: TBisSampleVoiceType; Text: String; Used: Boolean=true): TBisSampleVoice;
+begin
+  Result:=TBisSampleVoice.Create;
+  Result.FSampleType:=SampleType;
+  Result.FText:=Text;
+  Result.FUsed:=Used;
+  inherited Add(Result);
+end;
+
+function TBisSampleVoices.GetItem(Index: Integer): TBisSampleVoice;
+begin
+  Result:=TBisSampleVoice(inherited Items[Index]);
+end;
+
+procedure TBisSampleVoices.GetSamples(IndexFrom, IndexTo: Integer; List: TBisSampleVoices);
+var
+  i: Integer;
+  Item: TBisSampleVoice;
+begin
+  if Assigned(List) and (IndexFrom>=0) and (IndexTo<Count) then begin
+    for i:=IndexFrom to IndexTo do begin
+      Item:=Items[i];
+      List.Add(Item);
+    end;
+  end;
+end;
+
+function TBisSampleVoices.GetText: String;
+var
+  i: Integer;
+begin
+  Result:='';
+  for i:=0 to Count-1 do
+    Result:=Result+Items[i].Text;
+end;
+
+{function TBisSampleVoices.NotUsedExists: Boolean;
+var
+  i: Integer;
+begin
+  Result:=Count>0;
+  for i:=0 to Count-1 do begin
+    if not Items[i].FUsed then begin
+      Result:=true;
+      exit;
+    end;
+  end;
+end;}
+
+procedure TBisSampleVoices.GetSamples(SampleType: TBisSampleVoiceType; List: TBisSampleVoices);
+var
+  i: Integer;
+  Item: TBisSampleVoice;
+begin
+  if Assigned(List) then begin
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      if Item.FSampleType=SampleType then
+        List.Add(Item);
+    end;
+  end;
+end;
+
+procedure TBisSampleVoices.WaveSaveToStream(WaveFormat: PWaveFormatEx; Stream: TStream);
+var
+  i: Integer;
+  Item: TBisSampleVoice;
+  OldPos: Int64;
+  Wave,Temp: TBisWave;
+  Data: Pointer;
+  Size: Cardinal;
+begin
+  if Assigned(WaveFormat) then begin
+    Wave:=TBisWave.Create;
+    Temp:=TBisWave.Create;
+    OldPos:=Stream.Position;
+    Stream.Position:=0;
+    try
+      Wave.BeginRewrite(WaveFormat);
+      for i:=0 to Count-1 do begin
+        Item:=Items[i];
+        if Item.Used then begin
+          Temp.Clear;
+          Temp.Assign(Item.FWave);
+          if Temp.ConvertTo(WaveFormat) then begin
+            Temp.Position:=Temp.DataOffset;
+            Size:=Temp.DataSize;
+            GetMem(Data,Size);
+            try
+              Temp.Read(Data^,Size);
+              Wave.Write(Data^,Size)
+            finally
+              FreeMem(Data,Size);
+            end;
+          end else begin
+            Size:=Trunc(WaveFormat.nChannels*WaveFormat.nSamplesPerSec*WaveFormat.wBitsPerSample*0.100);
+            GetMem(Data,Size);
+            try
+              if SilenceWaveAudio(Data,Size,WaveFormat) then
+                Wave.Write(Data^,Size);
+            finally
+              FreeMem(Data,Size);
+            end;
+          end;
+        end;
+      end;
+      Wave.EndRewrite;
+      Wave.SaveToStream(Stream);
+    finally
+      Stream.Position:=OldPos;
+      Temp.Free;
+      Wave.Free;
+    end;
+  end;
+end;
+
+{procedure TBisSampleVoices.Replace(Text: String; Sample: TBisSampleVoice);
+
+  function CheckUsed(List: TBisSampleVoices): Boolean;
+  var
+    Item: TBisSampleVoice;
+    i: Integer;
+  begin
+    Result:=false;
+    for i:=0 to List.Count-1 do begin
+      Item:=List.Items[i];
+      if Item.FUsed then begin
+        Result:=true;
+        break;
+      end;
+    end;
+  end;
+
+  procedure DeleteNext(List: TBisSampleVoices);
+  var
+    i: Integer;
+    Item: TBisSampleVoice;
+  begin
+    for i:=1 to List.Count-1 do begin
+      Item:=List.Items[i];
+      Remove(Item);
+    end;
+  end;
+
+var
+  S1,S2: String;
+  L1,L2: Integer;
+  P,Index: Integer;
+  List: TBisSampleVoices;
+  Item: TBisSampleVoice;
+begin
+  if NotUsedExists and (Text<>'') and Assigned(Sample) then begin
+    S1:=AnsiUpperCase(Text);
+    S2:=AnsiUpperCase(Sample.Text);
+    L2:=Length(S2);
+    Index:=0;
+    repeat
+      P:=AnsiPos(S2,S1);
+      if P>0 then begin
+        Index:=Index+P-1;
+        List:=TBisSampleVoices.Create(false);
+        try
+          GetSamples(Index,Index+L2-1,List);
+          if not CheckUsed(List) then begin
+            Item:=Items[Index];
+            Item.CopyFrom(Sample);
+            Item.FUsed:=true;
+            DeleteNext(List);
+            Index:=Index+1;
+          end else
+            Index:=Index+L2-1;
+          L1:=Length(S1);
+          S1:=Copy(S1,P+L2,L1);
+        finally
+          List.Free;
+        end;
+      end;
+    until P=0;
+  end;
+end; }
+
+procedure TBisSampleVoices.Replace(Sample: TBisSampleVoice);
+
+  function GetTextFrom(Index: Integer; Indexes: TList): String;
+  var
+    i: Integer;
+    Item: TBisSampleVoice;
+  begin
+    Result:='';
+    for i:=Index to Count-1 do begin
+      Item:=Items[i];
+      if not Item.Used then begin
+        Indexes.Add(Pointer(i));
+        Result:=Result+Item.Text;
+      end;
+    end;
+  end;
+
+  function CheckUsed(List: TBisSampleVoices): Boolean;
+  var
+    Item: TBisSampleVoice;
+    i: Integer;
+  begin
+    Result:=false;
+    for i:=0 to List.Count-1 do begin
+      Item:=List.Items[i];
+      if Item.FUsed then begin
+        Result:=true;
+        break;
+      end;
+    end;
+  end;
+
+  procedure DeleteNext(List: TBisSampleVoices);
+  var
+    i: Integer;
+    Item: TBisSampleVoice;
+  begin
+    for i:=1 to List.Count-1 do begin
+      Item:=List.Items[i];
+      Remove(Item);
+    end;
+  end;
+
+var
+  S1,S2: String;
+  L1: Integer;
+  P: Integer;
+  Index: Integer;
+  Indexes: TList;
+  List: TBisSampleVoices;
+  Item: TBisSampleVoice;
+begin
+  if Assigned(Sample) then begin
+    Indexes:=TList.Create;
+    try
+      S1:=AnsiUpperCase(Sample.Text);
+      L1:=Length(S1);
+      Index:=0;
+      repeat
+        S2:=GetTextFrom(Index,Indexes);
+        S2:=AnsiUpperCase(S2);
+        P:=AnsiPos(S1,S2);
+        if P>0 then begin
+          Index:=Index+Integer(Indexes[P-1]);
+          List:=TBisSampleVoices.Create(false);
+          try
+            GetSamples(Index,Index+L1-1,List);
+            if not CheckUsed(List) then begin
+              Item:=Items[Index];
+              Item.CopyFrom(Sample);
+              Item.FUsed:=true;
+              DeleteNext(List);
+            end;
+            Index:=Index+1;
+          finally
+            List.Free;
+          end;
+        end;
+      until P=0;
+    finally
+      Indexes.Free;
+    end;
+  end;
+end;
+
+{ TBisSpeech }
+
+constructor TBisSpeech.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FSamples:=TBisSampleVoices.Create(true);
+
+  FPlayStream:=TMemoryStream.Create;
+
+  FPlayer:=TBisStockAudioPlayer.Create(nil);
+  FPlayer.DeviceID:=0;
+  FPlayer.Async:=false;
+  FPlayer.OnStop:=PlayerStop;
+
+  FPCMFormat:=Mono16bit8000Hz;
+end;
+
+destructor TBisSpeech.Destroy;
+begin
+  Stop;
+  FPlayer.Free;
+  FPlayStream.Free;
+  FSamples.Free;
+  inherited Destroy;
+end;
+
+procedure TBisSpeech.PlayerStop(Sender: TObject);
+begin
+  Stop;
+end;
+
+procedure TBisSpeech.DoPlay;
+begin
+  if Assigned(FOnPlay) then
+    FOnPlay(Self);
+end;
+
+procedure TBisSpeech.DoStop;
+begin
+  if Assigned(FOnStop) then
+    FOnStop(Self);
+end;
+
+function TBisSpeech.GetAsync: Boolean;
+begin
+  Result:=FPlayer.Async;
+end;
+
+function TBisSpeech.GetDeviceID: Cardinal;
+begin
+  Result:=FPlayer.DeviceID;
+end;
+
+procedure TBisSpeech.SetAsync(const Value: Boolean);
+begin
+  FPlayer.Async:=Value;
+end;
+
+procedure TBisSpeech.SetDeviceID(const Value: Cardinal);
+begin
+  FPlayer.DeviceID:=Value;
+end;
+
+procedure TBisSpeech.MakeStream(const Text: String; WaveFormat: PWaveFormatEx; Stream: TStream);
+
+  procedure FillPattern(Pattern: TBisSampleVoices);
+  var
+    i: Integer;
+  begin
+    for i:=1 to Length(Text) do
+      Pattern.AddSample(svtSymbol,Text[i],false);
+  end;
+
+  procedure SetType(SampleType: TBisSampleVoiceType; Pattern: TBisSampleVoices);
+  var
+    List: TBisSampleVoices;
+    Item: TBisSampleVoice;
+    i: Integer;
+  begin
+    List:=TBisSampleVoices.Create(false);
+    try
+      FSamples.GetSamples(SampleType,List);
+      for i:=0 to List.Count-1 do begin
+        Item:=List.Items[i];
+        Pattern.Replace(Item);
+      end;
+    finally
+      List.Free;
+    end;
+  end;
+
+var
+  List: TBisSampleVoices;
+begin
+  if Assigned(WaveFormat) then begin
+    List:=TBisSampleVoices.Create(true);
+    try
+      FillPattern(List);
+      SetType(svtPhrase,List);
+      SetType(svtWord,List);
+      SetType(svtSyllable,List);
+      SetType(svtSymbol,List);
+      List.WaveSaveToStream(WaveFormat,Stream);
+    finally
+      List.Free;
+    end;
+  end;
+end;
+
+procedure TBisSpeech.MakeStream(const Text: String; PCMFormat: TPCMFormat; Stream: TStream);
+var
+  P: PWaveFormatEx;
+begin
+  GetMem(P,SizeOf(TWaveFormatEx));
+  try
+    SetPCMAudioFormatS(P,PCMFormat);
+    MakeStream(Text,P,Stream);
+  finally
+    FreeMem(P,SizeOf(TWaveFormatEx));
+  end;
+end;
+
+procedure TBisSpeech.Play(const Text: String);
+begin
+  Stop;
+  if not FPlaying then begin
+    FPlayStream.Clear;
+    MakeStream(Text,FPCMFormat,FPlayStream);
+    FPlayer.PlayStream(FPlayStream,1);
+    FPlaying:=true;
+    DoPlay;
+  end;
+end;
+
+procedure TBisSpeech.Stop;
+begin
+  if FPlaying then begin
+    FPlayer.Stop;
+    FPlayer.WaitForStop;
+    FPlaying:=false;
+    DoStop;
+  end;
+end;
+
+end.

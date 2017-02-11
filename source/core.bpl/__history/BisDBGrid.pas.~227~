@@ -1,0 +1,191 @@
+unit BisDBGrid;
+
+interface
+
+uses Classes, Graphics, Grids, DbGrids, Windows, DB,
+     DBGridEh,
+     BisFieldNames, BisOrders;
+
+type
+  TBisDBGridSortingEvent=procedure(Sender: TObject; FieldName: String; OrderType: TBisOrderType; var Success: Boolean) of object;
+
+  TBisDBGridColumn=class(TColumnEh)
+  private
+    FFieldNameEx: TBisFieldName;
+  public
+    property FieldNameEx: TBisFieldName read FFieldNameEx write FFieldNameEx;
+  end;
+
+  TBisDBGridColumns=class(TDBGridColumnsEh)
+  public
+    function Add: TBisDBGridColumn;
+  end;
+
+  TBisDBGrid=class(TDBGridEh)
+  private
+    FSortEnabled: Boolean;
+    FOnSorting: TBisDBGridSortingEvent;
+    function GetColumns: TBisDBGridColumns;
+  protected
+    function CreateColumns: TDBGridColumnsEh; override;
+    procedure DoTitleClick(ACol: Longint; AColumn: TColumnEh); override;
+    procedure DrawColumnCell(const Rect: TRect; DataCol: Integer; Column: TColumnEh; State: TGridDrawState); override;
+    procedure DoSorting(FieldName: String; OrderType: TBisOrderType; var Success: Boolean); virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure CopyFromFieldNames(FieldNames: TBisFieldNames; WithClear: Boolean=true);
+
+    procedure ClearSorting;
+  published
+
+    property SortEnabled: Boolean read FSortEnabled write FSortEnabled;
+    property OnSorting: TBisDBGridSortingEvent read FOnSorting write FOnSorting;
+    property Columns: TBisDBGridColumns read GetColumns;
+  end;
+
+implementation
+
+uses SysUtils;
+
+{ TBisDBGridColumns }
+
+function TBisDBGridColumns.Add: TBisDBGridColumn;
+begin
+  Result:=TBisDBGridColumn(inherited Add);
+end;
+
+
+{ TBisDBGrid }
+
+constructor TBisDBGrid.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  OptionsEh:=OptionsEh+[dghIncSearch,dghRowHighlight,dghResizeWholeRightPart,dghDblClickOptimizeColWidth];
+  UseMultiTitle:=true;
+  RowHeight:=4;
+  VTitleMargin:=5;
+  RowLines:=1;
+end;
+
+function TBisDBGrid.CreateColumns: TDBGridColumnsEh;
+begin
+  Result:=TBisDBGridColumns.Create(Self,TBisDBGridColumn);
+end;
+
+procedure TBisDBGrid.CopyFromFieldNames(FieldNames: TBisFieldNames; WithClear: Boolean);
+var
+  i: Integer;
+  Column: TBisDBGridColumn;
+  Item: TBisFieldName;
+begin
+  if Assigned(FieldNames) then begin
+    if WithClear then
+      Columns.Clear;
+    for i:=0 to FieldNames.Count-1 do begin
+      Item:=FieldNames.Items[i];
+      if (Item.Caption)<>'' then begin
+        Column:=Columns.Add;
+        Column.Title.Caption:=Item.Caption;
+        Column.Title.TitleButton:=true;
+        Column.Title.EndEllipsis:=true;
+        Column.FieldName:=Item.FieldName;
+        Column.Visible:=Item.Visible;
+        Column.EndEllipsis:=true;
+        Column.FieldNameEx:=Item;
+        case Item.Alignment of
+          daLeft: Column.Alignment:=taLeftJustify;
+          daCenter: Column.Alignment:=taCenter;
+          daRight: Column.Alignment:=taRightJustify;
+        end;
+        if Item.Width>0 then
+          Column.Width:=Item.Width
+        else if Item.Width=0 then begin
+          Column.Width:=50;
+          Item.Width:=50;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TBisDBGrid.GetColumns: TBisDBGridColumns;
+begin
+  Result:=TBisDBGridColumns(inherited Columns);
+end;
+
+procedure TBisDBGrid.DoSorting(FieldName: String; OrderType: TBisOrderType; var Success: Boolean);
+begin
+  if Assigned(FOnSorting) then
+    FOnSorting(Self,FieldName,OrderType,Success);
+end;
+
+procedure TBisDBGrid.DoTitleClick(ACol: Longint; AColumn: TColumnEh);
+var
+  Success: Boolean;
+  OrderType: TBisOrderType;
+begin
+  if FSortEnabled then begin
+    OrderType:=otNone;
+    case AColumn.Title.SortMarker of
+      smNoneEh: OrderType:=otAsc;
+      smDownEh: OrderType:=otDesc;
+      smUpEh: OrderType:=otNone;
+    end;
+    DoSorting(AColumn.FieldName,OrderType,Success);
+    if Success then begin
+      case OrderType of
+        otNone: AColumn.Title.SortMarker:=smNoneEh;
+        otAsc: AColumn.Title.SortMarker:=smDownEh;
+        otDesc: AColumn.Title.SortMarker:=smUpEh;
+      end;
+    end;
+  end else
+    inherited DoTitleClick(ACol,AColumn);
+end;
+
+procedure TBisDBGrid.DrawColumnCell(const Rect: TRect; DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+var
+  AColumn: TBisDBGridColumn;
+  Field: TField;
+  NewRect: TRect;
+begin
+  if Column is TBisDBGridColumn then begin
+    AColumn:=TBisDBGridColumn(Column);
+    if Assigned(AColumn.FieldNameEx) and (AColumn.FieldNameEx.VisualType<>vtDefault) and
+       Assigned(DataSource) and Assigned(DataSource.DataSet) and
+       DataSource.DataSet.Active and not DataSource.DataSet.IsEmpty then begin
+      Field:=DataSource.DataSet.FindField(AColumn.FieldNameEx.CalculateName);
+      if Assigned(Field) then begin
+        case AColumn.FieldNameEx.VisualType of
+          vtCheckBox: begin
+            NewRect.Right:=Rect.Right;
+            NewRect.Left:=Rect.Left;
+            NewRect.Top:=Rect.Top+2;
+            NewRect.Bottom:=Rect.Bottom-2;
+            if Boolean(Field.AsInteger) then
+              DrawFrameControl(Canvas.Handle,NewRect,DFC_BUTTON,DFCS_CHECKED)
+            else
+              DrawFrameControl(Canvas.Handle,NewRect,DFC_BUTTON,DFCS_BUTTONCHECK);
+          end;
+        end;
+      end;
+    end;
+  end else
+    inherited DrawColumnCell(Rect,DataCol,Column,State);
+end;
+
+procedure TBisDBGrid.ClearSorting;
+var
+  i: Integer;
+begin
+  for i:=0 to Columns.Count-1 do begin
+    Columns[i].Title.SortMarker:=smNoneEh;
+  end;
+end;
+
+{initialization
+  DBGridEhInplaceSearchColor:=clRed;
+  DBGridEhInplaceSearchTextColor:=clHighlightText;}
+
+
+end.

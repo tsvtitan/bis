@@ -1,0 +1,87 @@
+unit BisDocproHbookPlanEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls, ComCtrls;
+
+type
+  TBisDocproHbookPlanEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisKrieltHbookViewEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookViewInsertFormIface=class(TBisKrieltHbookViewEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookViewUpdateFormIface=class(TBisKrieltHbookViewEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltHbookViewDeleteFormIface=class(TBisKrieltHbookViewEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDocproHbookPlanEditForm: TBisDocproHbookPlanEditForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisKrieltHbookViewEditFormIface }
+
+constructor TBisKrieltHbookViewEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltHbookViewEditForm;
+  with Params do begin
+    AddKey('VIEW_ID').Older('OLD_VIEW_ID');
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription',false);
+    AddEditInteger('PRIORITY','EditPriority','LabelPriority',true);
+  end;
+end;
+
+{ TBisKrieltHbookViewInsertFormIface }
+
+constructor TBisKrieltHbookViewInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_VIEW';
+end;
+
+{ TBisKrieltHbookViewUpdateFormIface }
+
+constructor TBisKrieltHbookViewUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_VIEW';
+end;
+
+{ TBisKrieltHbookViewDeleteFormIface }
+
+constructor TBisKrieltHbookViewDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_VIEW';
+end;
+
+end.

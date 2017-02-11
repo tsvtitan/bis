@@ -1,0 +1,46 @@
+package dws2CLXRuntime;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS OFF}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScript II'}
+{$LIBSUFFIX '60'}
+{$LIBVERSION '20'}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  visualclx,
+  dws2Runtime;
+
+{%File '..\source\dws2.inc'}
+{%File '..\Source\dws2VclClxIdeUtils.inc'}
+{%File '..\Source\dws2VclClxSymbolsToTree.inc'}
+{%File '..\Source\dws_VclClxmwPasToRtf.inc'}
+
+contains
+  dws2CLXGUIFunctions in '..\source\dws2CLXGUIFunctions.pas',
+  dws2CLXIDEUtils in '..\Source\dws2CLXIDEUtils.pas',
+  dws2CLXSymbolsToTree in '..\Source\dws2CLXSymbolsToTree.pas',
+  dws_CLXmwPasToRtf in '..\Source\dws_CLXmwPasToRtf.pas';
+
+end.

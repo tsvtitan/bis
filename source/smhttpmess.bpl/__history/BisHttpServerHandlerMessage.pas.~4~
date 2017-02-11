@@ -1,0 +1,91 @@
+unit BisHttpServerHandlerMessage;
+
+interface
+
+uses Classes,
+     HTTPApp,
+     BisHttpServerHandlerModules, BisHttpServerHandlers,
+     BisHttpServerHandlerMessageWm;
+
+type
+
+  TBisHttpServerHandlerUpdate=class(TBisHttpServerHandler)
+  private
+    FWebModule: TBisHttpServerHandlerMessageWebModule;
+    FDirectory: String;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    function HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean; override;
+    procedure CopyFrom(Source: TBisHttpServerHandler); override;
+
+  end;
+
+procedure InitServerHttpHandlerModule(AModule: TBisHttpServerHandlerModule); stdcall;
+
+exports
+  InitServerHttpHandlerModule;
+
+implementation
+
+uses SysUtils,
+     BisUtils, BisConsts, BisHttpServerHandlerUpdateConsts;
+
+procedure InitServerHttpHandlerModule(AModule: TBisHttpServerHandlerModule); stdcall;
+begin
+  AModule.HandlerClass:=TBisHttpServerHandlerUpdate;
+end;
+
+{ TBisHttpServerHandlerUpdate }
+
+constructor TBisHttpServerHandlerUpdate.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FWebModule:=TBisHttpServerHandlerUpdateWebModule.Create(Self);
+  FWebModule.Handler:=Self;
+end;
+
+destructor TBisHttpServerHandlerUpdate.Destroy;
+begin
+  FWebModule.Free;
+  inherited Destroy;
+end;
+
+procedure TBisHttpServerHandlerUpdate.Init;
+var
+  AName: String;
+  AValue: String;
+begin
+  inherited Init;
+  if Params.Active and not Params.Empty then begin
+    Params.First;
+    while not Params.Eof do begin
+      AName:=Params.FieldByName(SFieldName).AsString;
+      AValue:=Params.FieldByName(SFieldValue).AsString;
+
+      if AnsiSameText(AName,SParamDirectory) then
+        FDirectory:=ExpandFileNameEx(AValue);
+      
+      Params.Next;
+    end;
+  end;
+end;
+
+function TBisHttpServerHandlerUpdate.HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean;
+begin
+  if FWebModule is TBisHttpServerHandlerMessageWebModule then begin
+    TBisHttpServerHandlerMessageWebModule(FWebModule).Directory:=FDirectory;
+  end;
+  Result:=IWebRequestHandler(FWebModule).HandleRequest(Request,Response);
+end;
+
+procedure TBisHttpServerHandlerUpdate.CopyFrom(Source: TBisHttpServerHandler);
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) then begin
+    FDirectory:=TBisHttpServerHandlerUpdate(Source).FDirectory;
+  end;
+end;
+
+end.

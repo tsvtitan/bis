@@ -1,0 +1,483 @@
+unit BisTaxiRouteHistoryFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin,
+  StdCtrls, ExtCtrls, Grids, DBGrids, Contnrs,
+  VirtualTrees,
+  BisDbTree, BisDataGridFrm, BisFieldNames, BisDataSet, BisDataEditFm;
+
+type
+  TBisTaxiRouteHistoryFrameRoute=class(TObject)
+  var
+    LocalityId: Variant;
+    StreetId: Variant;
+    House: Variant;
+  end;
+
+  TBisTaxiRouteHistoryFrameRoutes=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisTaxiRouteHistoryFrameRoute;
+  public
+    function Find(LocalityId,StreetId,House: Variant): TBisTaxiRouteHistoryFrameRoute;
+    function Add(LocalityId,StreetId,House: Variant): TBisTaxiRouteHistoryFrameRoute;
+
+    property Items[Index: Integer]: TBisTaxiRouteHistoryFrameRoute read GetItem; default;
+  end;
+
+  TBisTaxiRouteHistoryFrame = class(TBisDataGridFrame)
+    ActionAddress: TAction;
+    ActionRoute: TAction;
+    N1: TMenuItem;
+    MenuItemRoute: TMenuItem;
+    MenuItemAddress: TMenuItem;
+    procedure ActionAddressExecute(Sender: TObject);
+    procedure ActionRouteExecute(Sender: TObject);
+    procedure ActionAddressUpdate(Sender: TObject);
+    procedure ActionRouteUpdate(Sender: TObject);
+  private
+    FRouteHistory: TBisDataSetCollectionItem;
+    FPhone: Variant;
+    FLocalityId: Variant;
+    FHouse: Variant;
+    FStreetId: Variant;
+    FColorFrom: TColor;
+    FColorTo: TColor;
+    FClientId: Variant;
+    FRoutes: TBisTaxiRouteHistoryFrameRoutes;
+    FOnAddressChange: TNotifyEvent;
+    FOnRouteChange: TNotifyEvent;
+    procedure RefreshProvider;
+    procedure GridBeforeCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+                                  Column: TColumnIndex; CellRect: TRect);
+    procedure GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas;
+                            Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+    function CanAddress: Boolean;
+    procedure Address;
+    function CanRoute: Boolean;
+    procedure Route;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure OpenRecords; override;
+
+    property Routes: TBisTaxiRouteHistoryFrameRoutes read FRoutes;
+
+    property Phone: Variant read FPhone write FPhone;
+    property ClientId: Variant read FClientId write FClientId;
+
+    property LocalityId: Variant read FLocalityId write FLocalityId;
+    property StreetId: Variant read FStreetId write FStreetId;
+    property House: Variant read FHouse write FHouse;
+
+    property ColorFrom: TColor read FColorFrom write FColorFrom;
+    property ColorTo: TColor read FColorTo write FColorTo;
+
+    property OnAddressChange: TNotifyEvent read FOnAddressChange write FOnAddressChange;
+    property OnRouteChange: TNotifyEvent read FOnRouteChange write FOnRouteChange; 
+  end;
+
+  TBisTaxiRouteHistoryUpdateIface=class(TBisDataEditFormIface)
+  public
+    procedure Execute; override;
+  end;
+
+implementation
+
+uses
+     BisConsts, BisOrders, BisProvider, BisFilterGroups, BisUtils, BisMemoFm;
+
+{$R *.dfm}
+
+{ TBisTaxiRouteHistoryFrameRoutes }
+
+function TBisTaxiRouteHistoryFrameRoutes.Add(LocalityId, StreetId, House: Variant): TBisTaxiRouteHistoryFrameRoute;
+begin
+  Result:=TBisTaxiRouteHistoryFrameRoute.Create;
+  Result.LocalityId:=LocalityId;
+  Result.StreetId:=StreetId;
+  Result.House:=House;
+  inherited Add(Result);
+end;
+
+function TBisTaxiRouteHistoryFrameRoutes.Find(LocalityId, StreetId, House: Variant): TBisTaxiRouteHistoryFrameRoute;
+var
+  i: Integer;
+  Item: TBisTaxiRouteHistoryFrameRoute;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if VarSameValue(LocalityId,Item.LocalityId) and
+       VarSameValue(StreetId,Item.StreetId) and
+       VarSameValue(House,Item.House) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisTaxiRouteHistoryFrameRoutes.GetItem(Index: Integer): TBisTaxiRouteHistoryFrameRoute;
+begin
+  Result:=TBisTaxiRouteHistoryFrameRoute(inherited Items[Index]);
+end;
+
+
+{ TBisTaxiRouteHistoryUpdateIface }
+
+{constructor TBisTaxiRouteHistoryUpdateIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_ROUTE_HISTORY';
+  with Params do begin
+    AddKey('PHONE').Older('OLD_PHONE');
+    AddKey('STREET_ID').Older('OLD_STREET_ID');
+    AddInvisible('HOUSE');
+    AddInvisible('FLAT');
+    AddInvisible('PORCH');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('CLIENT_ID');
+    AddInvisible('AMOUNT');
+    AddInvisible('DATE_FIRST');
+    AddInvisible('DATE_LAST');
+  end;
+end;}
+
+procedure TBisTaxiRouteHistoryUpdateIface.Execute;
+var
+  Form: TBisMemoForm;
+  P: TBisProvider;
+  S: String;
+begin
+  if Assigned(ParentDataSet) then begin
+    Form:=TBisMemoForm.Create(nil);
+    try
+      Form.Caption:='Изменить описание';
+      Form.Memo.Text:=ParentDataSet.FieldByName('DESCRIPTION').AsString;
+      Form.Memo.WordWrap:=true;
+      Form.Memo.ScrollBars:=ssNone;
+      Form.ButtonOk.Visible:=true;
+      if Form.ShowModal=mrOk then begin
+        S:=Trim(Form.Memo.Lines.Text);
+        P:=TBisProvider.Create(nil);
+        try
+          P.ProviderName:='U_ROUTE_HISTORY';
+          with P.Params do begin
+            AddKey('PHONE').Older('OLD_PHONE');
+            AddKey('STREET_ID').Older('OLD_STREET_ID');
+            AddKey('HOUSE').Older('OLD_HOUSE');
+            AddInvisible('FLAT');
+            AddInvisible('PORCH');
+            AddInvisible('DESCRIPTION');
+            AddInvisible('CLIENT_ID');
+            AddInvisible('AMOUNT');
+            AddInvisible('DATE_FIRST');
+            AddInvisible('DATE_LAST');
+            RefreshByDataSet(ParentDataSet,true,false);
+          end;
+          P.ParamByName('DESCRIPTION').Value:=iff(S<>'',S,NULL);
+          P.Execute;
+          if P.Success then begin
+            ParentDataSet.BeginUpdate(true);
+            try
+              ParentDataSet.Edit;
+              ParentDataSet.FieldByName('DESCRIPTION').Value:=P.ParamByName('DESCRIPTION').Value;
+              ParentDataSet.Post;
+            finally
+              ParentDataSet.EndUpdate;
+            end;
+          end;
+        finally
+          P.Free;
+        end;
+      end;
+    finally
+      Form.Free;
+    end;
+  end;
+end;
+
+{ TBisTaxiRouteHistoryFrame }
+
+constructor TBisTaxiRouteHistoryFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  UpdateClass:=TBisTaxiRouteHistoryUpdateIface;
+
+  Provider.Threaded:=false;
+  
+  with Provider.FieldDefs do begin
+    Add('ID',ftString,32);
+    Add('DIRECTION',ftInteger);
+    Add('STREET_ID',ftString,32);
+    Add('LOCALITY_ID',ftString,32);
+    Add('CLIENT_ID',ftString,32);
+    Add('DATE_LAST',ftDateTime);
+    Add('DATE_FIRST',ftDateTime);
+    Add('PHONE',ftString,100);
+    Add('LOCALITY_NAME',ftString,100);
+    Add('STREET_NAME',ftString,100);
+    Add('HOUSE',ftString,10);
+    Add('FLAT',ftString,10);
+    Add('PORCH',ftString,10);
+    Add('DESCRIPTION',ftString,250);
+    Add('AMOUNT',ftInteger);
+  end;
+
+  with Provider.FieldNames do begin
+    AddKey('ID');
+    Add('DIRECTION','Маршрут',25).Visible:=false;
+    Add('CLIENT_ID','Ид клиента',25).Visible:=false;
+    Add('DATE_FIRST','Дата начала',80).Visible:=false;
+    Add('DATE_LAST','Дата',80).DisplayFormat:=SDateTimeFormat;
+    Add('PHONE','Телефон',90);
+    Add('LOCALITY_NAME','Город',75);
+    Add('STREET_NAME','Улица',135);
+    Add('HOUSE','Дом',35);
+    Add('FLAT','Квартира',35);
+    Add('PORCH','Подъезд',35);
+    Add('DESCRIPTION','Описание',125);
+    Add('AMOUNT','Количесто',35);
+  end;
+  Provider.CreateTable();
+
+  Grid.RowVisible:=false;
+  Grid.OnBeforeCellPaint:=GridBeforeCellPaint;
+  Grid.OnPaintText:=GridPaintText;
+
+  FRoutes:=TBisTaxiRouteHistoryFrameRoutes.Create;
+
+  FRouteHistory:=nil;
+
+  FPhone:=Null;
+  FClientId:=Null;
+  FLocalityId:=Null;
+  FStreetId:=Null;
+  FHouse:=Null;
+end;
+
+destructor TBisTaxiRouteHistoryFrame.Destroy;
+begin
+  FRoutes.Free;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiRouteHistoryFrame.ActionAddressExecute(Sender: TObject);
+begin
+  Address;
+end;
+
+procedure TBisTaxiRouteHistoryFrame.ActionAddressUpdate(Sender: TObject);
+begin
+  ActionAddress.Enabled:=CanAddress;
+end;
+
+procedure TBisTaxiRouteHistoryFrame.ActionRouteExecute(Sender: TObject);
+begin
+  Route;
+end;
+
+procedure TBisTaxiRouteHistoryFrame.ActionRouteUpdate(Sender: TObject);
+begin
+  ActionRoute.Enabled:=CanRoute;
+end;
+
+procedure TBisTaxiRouteHistoryFrame.GridBeforeCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas;
+                                                        Node: PVirtualNode; Column: TColumnIndex; CellRect: TRect);
+var
+  Direction: Variant;
+  ADirection: Integer;
+begin
+  Direction:=Grid.GetNodeValue(Node,'DIRECTION');
+  if not VarIsNull(Direction) then begin
+    ADirection:=VarToIntDef(Direction,0);
+    TargetCanvas.Brush.Style:=bsSolid;
+    TargetCanvas.Brush.Color:=iff(ADirection=0,FColorFrom,FColorTo);
+    TargetCanvas.FillRect(CellRect);
+  end;
+end;
+
+procedure TBisTaxiRouteHistoryFrame.GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas;
+                                                  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+{var
+  Direction: Variant;
+  ADirection: Integer;}
+begin
+(*  Direction:=Grid.GetNodeValue(Node,'DIRECTION');
+  if not VarIsNull(Direction) then begin
+    ADirection:=VarToIntDef(Direction,0);
+    if ADirection=0 then begin
+      if (Column=Grid.FocusedColumn) and (Node=Grid.FocusedNode) then begin
+        if Grid.Focused then
+          TargetCanvas.Font.Color:=Grid.Colors.FocusedSelectionColor
+        else
+          TargetCanvas.Font.Color:=Grid.Colors.UnfocusedSelectionColor
+      end;{ else
+        TargetCanvas.Font.Color:=FColorFrom;}
+    end;
+  end; *)
+end;
+
+procedure TBisTaxiRouteHistoryFrame.RefreshProvider;
+var
+  P: TBisProvider;
+  FlagFrom: Boolean;
+  FlagTo: Boolean;
+  ALocalityId,AStreetId,AHouse: Variant;
+  Route: TBisTaxiRouteHistoryFrameRoute;
+begin
+  Provider.EmptyTable;
+  if not VarIsNull(FPhone) or not VarIsNull(FClientId) then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_ROUTE_HISTORY';
+      with P.FieldNames do begin
+        AddInvisible('PHONE');
+        AddInvisible('STREET_ID');
+        AddInvisible('LOCALITY_ID');
+        AddInvisible('CLIENT_ID');
+        AddInvisible('DATE_LAST');
+        AddInvisible('DATE_FIRST');
+        AddInvisible('LOCALITY_NAME');
+        AddInvisible('STREET_NAME');
+        AddInvisible('HOUSE');
+        AddInvisible('FLAT');
+        AddInvisible('PORCH');
+        AddInvisible('DESCRIPTION');
+        AddInvisible('AMOUNT');
+      end;
+      if not VarIsNull(FPhone) then
+        P.FilterGroups.Add.Filters.Add('PHONE',fcEqual,FPhone).CheckCase:=true;
+      if not VarIsNull(FClientId) then
+        P.FilterGroups.Add.Filters.Add('CLIENT_ID',fcEqual,FClientId).CheckCase:=true;
+      P.Orders.Add('AMOUNT',otDesc);
+      P.Orders.Add('DATE_LAST',otDesc);
+      P.Open;
+      if P.Active and not P.Empty then begin
+        P.First;
+        Provider.BeginUpdate(false);
+        try
+          while not P.Eof do begin
+            Provider.Append;
+            Provider.FieldByName('ID').Value:=GetUniqueID;
+            Provider.FieldByName('DIRECTION').Value:=Null;
+
+            ALocalityId:=P.FieldByName('LOCALITY_ID').Value;
+            AStreetId:=P.FieldByName('STREET_ID').Value;
+            AHouse:=P.FieldByName('HOUSE').Value;
+
+            FlagFrom:=VarSameValue(ALocalityId,FLocalityId) and
+                      VarSameValue(AStreetId,FStreetId) and
+                      VarSameValue(AHouse,FHouse);
+
+            if FlagFrom then
+              Provider.FieldByName('DIRECTION').Value:=0
+            else begin
+              Route:=FRoutes.Find(ALocalityId,AStreetId,AHouse);
+              FlagTo:=Assigned(Route);
+              if FlagTo then
+                Provider.FieldByName('DIRECTION').Value:=1;
+            end;
+
+            Provider.CopyRecord(P,false,false);
+            Provider.Post;
+            P.Next;
+          end;
+        finally
+          Provider.EndUpdate;
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiRouteHistoryFrame.OpenRecords;
+begin
+  inherited OpenRecords;
+  RefreshProvider;
+  FirstRecord;
+  DoUpdateCounters;
+end;
+
+function TBisTaxiRouteHistoryFrame.CanAddress: Boolean;
+var
+  Direction: Variant;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+  if Result then begin
+    Direction:=Provider.FieldByName('DIRECTION').Value;
+    if not VarIsNull(Direction) then begin
+      Result:=VarToIntDef(Direction,0)<>0;
+    end;
+  end;
+end;
+
+procedure TBisTaxiRouteHistoryFrame.Address;
+var
+  B: TBookmark;
+  Direction: Variant;
+begin
+  if CanAddress then begin
+
+    B:=Provider.GetBookmark;
+    try
+      Provider.First;
+      while not Provider.Eof do begin
+        Direction:=Provider.FieldByName('DIRECTION').Value;
+        if not VarIsNull(Direction) then begin
+          if VarToIntDef(Direction,0)=0 then begin
+            Provider.Edit;
+            Provider.FieldByName('DIRECTION').Value:=Null;
+            Provider.Post;
+          end;
+        end;
+        Provider.Next;
+      end;
+    finally
+      if Assigned(B) and Provider.BookmarkValid(B) then
+        Provider.GotoBookmark(B);
+    end;
+
+    Provider.Edit;
+    Provider.FieldByName('DIRECTION').Value:=0;
+    Provider.Post;
+
+    if Assigned(FOnAddressChange) then
+      FOnAddressChange(Self);
+
+  end;
+end;
+
+function TBisTaxiRouteHistoryFrame.CanRoute: Boolean;
+var
+  Direction: Variant;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+  if Result then begin
+    Direction:=Provider.FieldByName('DIRECTION').Value;
+    if not VarIsNull(Direction) then begin
+      Result:=VarToIntDef(Direction,0)=0;
+    end;
+  end;
+end;
+
+procedure TBisTaxiRouteHistoryFrame.Route;
+begin
+  if CanRoute then begin
+
+    Provider.Edit;
+    Provider.FieldByName('DIRECTION').Value:=1;
+    Provider.Post;
+
+    if Assigned(FOnRouteChange) then
+      FOnRouteChange(Self);
+
+  end;
+end;
+
+end.

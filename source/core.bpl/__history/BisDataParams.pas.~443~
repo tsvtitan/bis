@@ -1,0 +1,662 @@
+unit BisDataParams;
+
+interface
+
+uses Classes, Contnrs, Variants, TypInfo,
+     BisDataSet, BisLocks;
+
+type
+
+  TBisDataParam=class(TBisLock)
+  private
+    FName: String;
+    FCaption: String;
+    FDescription: String;
+    FEnabled: Boolean;
+    FVisible: Boolean;
+    FSFieldName: String;
+    FSFieldDescription: String;
+    FSFieldEnabled: String;
+    FSFieldCaption: String;
+    FSFieldVisible: String;
+  protected
+    procedure SetDataSet(DataSet: TBisDataSet); virtual;
+    procedure GetDataSet(DataSet: TBisDataSet); virtual;
+    procedure ReadData(Reader: TReader); virtual;
+    procedure WriteData(Writer: TWriter); virtual;
+
+    property SFieldName: String read FSFieldName write FSFieldName;
+    property SFieldCaption: String read FSFieldCaption write FSFieldCaption;
+    property SFieldDescription: String read FSFieldDescription write FSFieldDescription;
+    property SFieldEnabled: String read FSFieldEnabled write FSFieldEnabled;
+    property SFieldVisible: String read FSFieldVisible write FSFieldVisible;
+  public
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisDataParam); virtual;
+
+    function Same(const AName: String): Boolean;
+    function NameExists: Boolean;
+
+    property Name: String read FName write FName;
+    property Caption: String read FCaption write FCaption;
+    property Description: String read FDescription write FDescription;
+    property Enabled: Boolean read FEnabled write FEnabled;
+    property Visible: Boolean read FVisible write FVisible;
+  end;
+
+  TBisDataParamClass=class of TBisDataParam;
+
+  TBisDataParams=class(TBisLocks)
+  private
+    FOnChange: TNotifyEvent;
+    function GetItem(Index: Integer): TBisDataParam;
+  protected
+    class function GetDataParamClass: TBisDataParamClass; virtual;
+    procedure DoChange; virtual;
+    procedure CreateDataSet(DataSet: TBisDataSet); virtual;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    procedure CopyFrom(Source: TBisDataParams); virtual;
+
+    function Add: TBisDataParam; reintroduce;
+    function Find(const Name: String): TBisDataParam;
+    procedure CopyFromDataSet(DataSet: TBisDataSet; IsClear: Boolean=true); overload;
+    procedure CopyFromDataSet(const S: String; IsClear: Boolean=true); overload;
+    procedure CopyToDataSet(DataSet: TBisDataSet; IsClear: Boolean=true);
+    procedure Change; virtual;
+
+    procedure SaveToStream(Stream: TStream);
+    procedure LoadFromStream(Stream: TStream); 
+
+    property Items[Index: Integer]: TBisDataParam read GetItem; default;
+
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+  end;
+
+  TBisDataValueParam=class(TBisDataParam)
+  private
+    FValue: Variant;
+    FSFieldValue: String;
+  protected
+    procedure SetDataSet(DataSet: TBisDataSet); override;
+    procedure GetDataSet(DataSet: TBisDataSet); override;
+    procedure ReadData(Reader: TReader); override;
+    procedure WriteData(Writer: TWriter); override;
+
+    property SFieldValue: String read FSFieldValue write FSFieldValue;
+  public
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisDataParam); override;
+
+    function AsString(const Default: String=''): String;
+    function AsInteger(const Default: Integer=0): Integer;
+    function AsEnumeration(Info: PTypeInfo; const Default: Variant): Variant;
+    function AsBoolean(const Default: Boolean=false): Boolean;
+
+    procedure SaveToDataSet(DataSet: TBisDataSet);
+    procedure SaveToStream(Stream: TStream);
+
+    property Value: Variant read FValue write FValue;
+  end;
+
+  TBisDataValueParams=class(TBisDataParams)
+  private
+    function GetItem(Index: Integer): TBisDataValueParam;
+  protected
+    class function GetDataParamClass: TBisDataParamClass; override;
+    procedure CreateDataSet(DataSet: TBisDataSet); override;
+  public
+    function Find(const Name: String): TBisDataValueParam; reintroduce;
+    function Add(const Name: String; Value: Variant): TBisDataValueParam; reintroduce;
+
+    function AsInteger(const Name: String; Default: Integer=0): Integer;
+    function AsString(const Name: String; Default: String=''): String;
+    function AsEnumeration(const Name: String; Info: PTypeInfo; const Default: Variant): Variant;
+    function AsBoolean(const Name: String; Default: Boolean=false): Boolean;
+
+    procedure SaveToDataSet(const Name: String; DataSet: TBisDataSet);
+    procedure SaveToStream(const Name: String; Stream: TStream);
+
+    property Items[Index: Integer]: TBisDataValueParam read GetItem; default;
+  end;
+
+
+implementation
+
+uses SysUtils, DB,
+     BisConsts, BisUtils;
+
+{ TBisDataParam }
+
+constructor TBisDataParam.Create;
+begin
+  inherited Create;
+  FEnabled:=true;
+  FVisible:=false;
+  FSFieldName:=BisConsts.SFieldName;
+  FSFieldCaption:=BisConsts.SFieldCaption;
+  FSFieldDescription:=BisConsts.SFieldDescription;
+  FSFieldEnabled:=BisConsts.SFieldEnabled;
+  FSFieldVisible:=BisConsts.SFieldVisible;
+end;
+
+procedure TBisDataParam.CopyFrom(Source: TBisDataParam);
+begin
+  if Assigned(Source) then begin
+    FName:=Source.Name;
+    FCaption:=Source.Caption;
+    FDescription:=Source.Description;
+    FEnabled:=Source.Enabled;
+    FVisible:=Source.Visible;
+  end;
+end;
+
+function TBisDataParam.NameExists: Boolean;
+begin
+  Result:=Trim(FName)<>'';
+end;
+
+function TBisDataParam.Same(const AName: String): Boolean;
+begin
+  Result:=AnsiSameText(FName,AName);
+end;
+
+procedure TBisDataParam.SetDataSet(DataSet: TBisDataSet);
+var
+  Field: TField;
+begin
+  FName:='';
+  Field:=DataSet.FindField(FSFieldName);
+  if Assigned(Field) then
+    FName:=Field.AsString;
+
+  FCaption:='';
+  Field:=DataSet.FindField(FSFieldCaption);
+  if Assigned(Field) then
+    FCaption:=Field.AsString;
+
+  FDescription:='';
+  Field:=DataSet.FindField(FSFieldDescription);
+  if Assigned(Field) then
+    FDescription:=Field.AsString;
+
+  FEnabled:=true;
+  Field:=DataSet.FindField(FSFieldEnabled);
+  if Assigned(Field) then
+    FEnabled:=Boolean(Field.AsInteger);
+
+  FVisible:=false;
+  Field:=DataSet.FindField(FSFieldVisible);
+  if Assigned(Field) then
+    FVisible:=Boolean(Field.AsInteger);
+end;
+
+procedure TBisDataParam.GetDataSet(DataSet: TBisDataSet);
+var
+  Field: TField;
+begin
+  Field:=DataSet.FindField(FSFieldName);
+  if Assigned(Field) then
+    Field.AsString:=FName;
+
+  Field:=DataSet.FindField(FSFieldCaption);
+  if Assigned(Field) then
+    Field.AsString:=FCaption;
+
+  Field:=DataSet.FindField(FSFieldDescription);
+  if Assigned(Field) then
+    Field.AsString:=FDescription;
+
+  Field:=DataSet.FindField(FSFieldEnabled);
+  if Assigned(Field) then
+    Field.AsInteger:=Integer(FEnabled);
+
+  Field:=DataSet.FindField(FSFieldVisible);
+  if Assigned(Field) then
+    Field.AsInteger:=Integer(FVisible);
+end;
+
+procedure TBisDataParam.ReadData(Reader: TReader);
+begin
+  FName:=Reader.ReadString;
+  FCaption:=Reader.ReadString;
+  FDescription:=Reader.ReadString;
+  FEnabled:=Reader.ReadBoolean;
+  FVisible:=Reader.ReadBoolean;
+end;
+
+procedure TBisDataParam.WriteData(Writer: TWriter);
+begin
+  Writer.WriteString(FName);
+  Writer.WriteString(FCaption);
+  Writer.WriteString(FDescription);
+  Writer.WriteBoolean(FEnabled);
+  Writer.WriteBoolean(FVisible);
+end;
+
+{ TBisDataParams }
+
+constructor TBisDataParams.Create;
+begin
+  inherited Create;
+end;
+
+destructor TBisDataParams.Destroy;
+begin
+  inherited Destroy;
+end;
+
+class function TBisDataParams.GetDataParamClass: TBisDataParamClass;
+begin
+  Result:=TBisDataParam;
+end;
+
+function TBisDataParams.GetItem(Index: Integer): TBisDataParam;
+begin
+  Result:=TBisDataParam(inherited Items[Index]);
+end;
+
+procedure TBisDataParams.LoadFromStream(Stream: TStream);
+var
+  Reader: TReader;
+begin
+  if Assigned(Stream) then begin
+    Reader:=TReader.Create(Stream,ReaderBufferSize);
+    try
+      Clear;
+      Reader.ReadListBegin;
+      while not Reader.EndOfList do begin
+
+        Name:=Reader.ReadString;
+
+
+      end;
+      Reader.ReadListEnd;
+    finally
+      Reader.Free;
+    end;
+  end;
+end;
+
+procedure TBisDataParams.SaveToStream(Stream: TStream);
+var
+  Writer: TWriter;
+  i: Integer;
+begin
+  if Assigned(Stream) then begin
+    Writer:=TWriter.Create(Stream,WriterBufferSize);
+    try
+      Writer.WriteListBegin;
+      for i:=0 to Count-1 do
+        Items[i].WriteData(Writer);
+      Writer.WriteListEnd;  
+    finally
+      Writer.Free;
+    end;
+  end;
+end;
+
+function TBisDataParams.Find(const Name: String): TBisDataParam;
+var
+  i: Integer;
+  Item: TBisDataParam;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.Name,Name) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisDataParams.Add: TBisDataParam;
+var
+  AClass: TBisDataParamClass;
+begin
+  Result:=nil;
+  AClass:=GetDataParamClass;
+  if Assigned(AClass) then begin
+    Result:=AClass.Create;
+    inherited Add(Result);
+  end;
+end;
+
+procedure TBisDataParams.CopyFromDataSet(DataSet: TBisDataSet; IsClear: Boolean);
+var
+  AClass: TBisDataParamClass;
+  Param: TBisDataParam;
+  FlagFree: Boolean;
+begin
+  if IsClear then
+    Clear;
+  if Assigned(DataSet) and DataSet.Active then begin
+    DataSet.BeginUpdate(true);
+    try
+      AClass:=GetDataParamClass;
+      if Assigned(AClass) then begin
+        FlagFree:=true;
+        DataSet.First;
+        while not DataSet.Eof do begin
+          Param:=AClass.Create;
+          try
+            Param.SetDataSet(DataSet);
+            FlagFree:=Assigned(Find(Param.Name)) or not Param.Enabled;
+            if not FlagFree then
+              inherited Add(Param);
+            DataSet.Next;  
+          finally
+            if FlagFree then
+              Param.Free
+          end;
+        end;
+      end;
+    finally
+      DataSet.EndUpdate;
+    end;
+  end;
+end;
+
+procedure TBisDataParams.CopyFrom(Source: TBisDataParams);
+var
+  i: Integer;
+  Item: TBisDataParam; 
+begin
+  if Assigned(Source) then begin
+    Clear;
+    for i:=0 to Source.Count-1 do begin
+      Item:=Add;
+      if Assigned(Item) then
+        Item.CopyFrom(Source[i]);
+    end;
+  end;
+end;
+
+procedure TBisDataParams.CopyFromDataSet(const S: String; IsClear: Boolean);
+var
+  Stream: TStringStream;
+  DataSet: TBisDataSet;
+begin
+  if Trim(S)<>'' then begin
+    Stream:=TStringStream.Create(S);
+    DataSet:=TBisDataSet.Create(nil);
+    try
+      Stream.Position:=0;
+      try
+        DataSet.LoadFromStream(Stream);
+        DataSet.Open;
+        CopyFromDataSet(DataSet,IsClear);
+      except
+        //
+      end;
+    finally
+      DataSet.Free;
+      Stream.Free;
+    end;
+  end;
+end;
+
+procedure TBisDataParams.CreateDataSet(DataSet: TBisDataSet);
+begin
+  if Assigned(DataSet) then begin
+    DataSet.Close;
+    with DataSet.FieldDefs do begin
+      Clear;
+      Add(SFieldName,ftString,100);
+      Add(SFieldCaption,ftString,100);
+      Add(SFieldDescription,ftString,250);
+      Add(SFieldEnabled,ftInteger);
+      Add(SFieldVisible,ftInteger);
+    end;
+  end;
+end;
+
+procedure TBisDataParams.CopyToDataSet(DataSet: TBisDataSet; IsClear: Boolean);
+var
+  i: Integer;
+  Param: TBisDataParam;
+begin
+  if Assigned(DataSet) then begin
+
+    if not DataSet.Active then begin
+      CreateDataSet(DataSet);
+      DataSet.CreateTable();
+    end;
+
+    DataSet.BeginUpdate(true);
+    try
+      if IsClear then
+        DataSet.EmptyTable;
+
+      for i:=0 to Count-1 do begin
+        Param:=Items[i];
+        DataSet.Append;
+        Param.GetDataSet(DataSet);
+        DataSet.Post;
+      end;
+    finally
+      DataSet.EndUpdate();
+    end;
+  end;
+end;
+
+procedure TBisDataParams.DoChange;
+begin
+  if Assigned(FOnChange) then
+    FOnChange(self);
+end;
+
+procedure TBisDataParams.Change;
+begin
+  DoChange;
+end;
+
+{ TBisDataValueParam }
+
+constructor TBisDataValueParam.Create;
+begin
+  inherited Create;
+  FValue:=Null;
+  FSFieldValue:=BisConsts.SFieldValue;
+end;
+
+procedure TBisDataValueParam.CopyFrom(Source: TBisDataParam);
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisDataValueParam) then
+    FValue:=TBisDataValueParam(Source).Value;
+end;
+
+function TBisDataValueParam.AsInteger(const Default: Integer): Integer;
+begin
+  Result:=VarToIntDef(FValue,Default);
+end;
+
+function TBisDataValueParam.AsString(const Default: String): String;
+begin
+  Result:=VarToStrDef(FValue,Default);
+end;
+
+function TBisDataValueParam.AsEnumeration(Info: PTypeInfo; const Default: Variant): Variant;
+var
+  Data: PTypeData;
+  ADefault: Integer;
+  AValue: Integer;
+begin
+  Result:=Default;
+  if Assigned(Info) and (Info.Kind=tkEnumeration) then begin
+
+    Data:=GetTypeData(Info);
+
+    ADefault:=VarToIntDef(Default,Data.MinValue);
+    AValue:=GetEnumValue(Info,FValue);
+    if AValue in [Data.MinValue..Data.MaxValue] then
+      Result:=AValue
+    else begin
+      AValue:=VarToIntDef(FValue,Adefault);
+      if AValue in [Data.MinValue..Data.MaxValue] then
+        Result:=AValue;
+    end;
+
+  end;
+end;
+
+function TBisDataValueParam.AsBoolean(const Default: Boolean): Boolean;
+begin
+  Result:=Boolean(AsEnumeration(TypeInfo(Boolean),Integer(Default)));
+end;
+
+procedure TBisDataValueParam.SetDataSet(DataSet: TBisDataSet);
+var
+  Field: TField;
+begin
+  inherited SetDataSet(DataSet);
+  FValue:=Null;
+  Field:=DataSet.FindField(FSFieldValue);
+  if Assigned(Field) then
+    FValue:=Field.Value;
+end;
+
+procedure TBisDataValueParam.GetDataSet(DataSet: TBisDataSet);
+var
+  Field: TField;
+begin
+  inherited GetDataSet(DataSet);
+  Field:=DataSet.FindField(FSFieldValue);
+  if Assigned(Field) then
+    Field.Value:=FValue;
+end;
+
+procedure TBisDataValueParam.ReadData(Reader: TReader);
+begin
+  inherited ReadData(Reader);
+  FValue:=Reader.ReadVariant;
+end;
+
+procedure TBisDataValueParam.WriteData(Writer: TWriter);
+begin
+  inherited WriteData(Writer);
+  Writer.WriteVariant(FValue);
+end;
+
+procedure TBisDataValueParam.SaveToDataSet(DataSet: TBisDataSet);
+var
+  Stream: TStringStream;
+begin
+  if Assigned(DataSet) then begin
+    Stream:=TStringStream.Create(AsString);
+    try
+      Stream.Position:=0;
+      DataSet.Close;
+      DataSet.LoadFromStream(Stream);
+      DataSet.Open;
+    finally
+      Stream.Free;
+    end;
+  end;
+end;
+
+procedure TBisDataValueParam.SaveToStream(Stream: TStream);
+var
+  S: String;
+begin
+  if Assigned(Stream) then begin
+    S:=AsString;
+    Stream.Write(Pointer(S)^,Length(S));
+  end;
+end;
+
+{ TBisDataValueParams }
+
+class function TBisDataValueParams.GetDataParamClass: TBisDataParamClass;
+begin
+  Result:=TBisDataValueParam;
+end;
+
+function TBisDataValueParams.GetItem(Index: Integer): TBisDataValueParam;
+begin
+  Result:=TBisDataValueParam(inherited Items[Index]);
+end;
+
+function TBisDataValueParams.Find(const Name: String): TBisDataValueParam;
+begin
+  Result:=TBisDataValueParam(inherited Find(Name));
+end;
+
+function TBisDataValueParams.Add(const Name: String; Value: Variant): TBisDataValueParam;
+begin
+  Result:=TBisDataValueParam(inherited Add);
+  if Assigned(Result) then begin
+    Result.Name:=Name;
+    Result.Value:=Value;
+  end;
+
+end;
+
+function TBisDataValueParams.AsInteger(const Name: String; Default: Integer=0): Integer;
+var
+  Param: TBisDataValueParam;
+begin
+  Result:=Default;
+  Param:=Find(Name);
+  if Assigned(Param) then
+    Result:=Param.AsInteger(Result);
+end;
+
+function TBisDataValueParams.AsString(const Name: String; Default: String=''): String;
+var
+  Param: TBisDataValueParam;
+begin
+  Result:=Default;
+  Param:=Find(Name);
+  if Assigned(Param) then
+    Result:=Param.AsString(Result);
+end;
+
+procedure TBisDataValueParams.CreateDataSet(DataSet: TBisDataSet);
+begin
+  DataSet.FieldDefs.Add(SFieldValue,ftBlob);
+  inherited CreateDataSet(DataSet);
+end;
+
+function TBisDataValueParams.AsEnumeration(const Name: String; Info: PTypeInfo; const Default: Variant): Variant;
+var
+  Param: TBisDataValueParam;
+begin
+  Result:=Default;
+  Param:=Find(Name);
+  if Assigned(Param) then
+    Result:=Param.AsEnumeration(Info,Default);
+end;
+
+function TBisDataValueParams.AsBoolean(const Name: String; Default: Boolean=false): Boolean;
+var
+  Param: TBisDataValueParam;
+begin
+  Result:=Default;
+  Param:=Find(Name);
+  if Assigned(Param) then
+    Result:=Param.AsBoolean(Default);
+end;
+
+procedure TBisDataValueParams.SaveToDataSet(const Name: String; DataSet: TBisDataSet);
+var
+  Param: TBisDataValueParam;
+begin
+  Param:=Find(Name);
+  if Assigned(Param) then
+    Param.SaveToDataSet(DataSet);
+end;
+
+procedure TBisDataValueParams.SaveToStream(const Name: String; Stream: TStream);
+var
+  Param: TBisDataValueParam;
+begin
+  Param:=Find(Name);
+  if Assigned(Param) then
+    Param.SaveToStream(Stream);
+end;
+
+end.

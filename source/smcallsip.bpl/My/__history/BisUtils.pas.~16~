@@ -1,0 +1,148 @@
+unit BisUtils;
+
+interface
+
+uses Classes;
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+function GetUniqueID: String;
+function MD5(const S: String): String;
+procedure GetStringsByString(const S,Delim: String; Strings: TStrings);
+function IsClassParent(AClassIn: TClass; AClassParent: TClass): Boolean;
+function ParseName(const S, Delim: String; var Name, Value: String): Boolean;
+function ParseBetween(const S, LDelim, RDelim: String; var Value: String): Boolean;
+function GetTickCountEx: Cardinal;
+
+implementation
+
+uses SysUtils, ActiveX,
+     BisCrypter;
+
+function Iff(IsTrue: Boolean; ValueTrue, ValueFalse: Variant): Variant;
+begin
+  if IsTrue then Result:=ValueTrue
+  else Result:=ValueFalse;
+end;
+
+function PrepareClassID(S: string): string;
+begin
+  Result:=Copy(s, 26, 12)+Copy(s, 21, 4)+Copy(s, 16, 4)+Copy(s, 11, 4)+Copy(s, 2, 8);
+end;
+
+function CreateClassID: string;
+var
+  ClassID: TCLSID;
+  P: PWideChar;
+begin
+  CoCreateGuid(ClassID);
+  StringFromCLSID(ClassID, P);
+  Result := P;
+  CoTaskMemFree(P);
+end;
+
+function GetUniqueID: String;
+var
+  s: string;
+begin
+  s:=Copy(CreateClassID, 1, 37);
+  Result:=PrepareClassID(s);
+end;
+
+function MD5(const S: String): String;
+var
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create;
+  try
+    Result:=Crypter.HashString(S,haMD5,hfHEX);
+  finally
+    Crypter.Free;
+  end;
+end;
+
+procedure GetStringsByString(const S,Delim: String; Strings: TStrings);
+var
+  Apos: Integer;
+  S1,S2: String;
+begin
+  if Assigned(Strings) then begin
+    Apos:=-1;
+    S2:=S;
+    while Apos<>0 do begin
+      Apos:=AnsiPos(Delim,S2);
+      if Apos>0 then begin
+        S1:=Copy(S2,1,Apos-Length(Delim));
+        S2:=Copy(S2,Apos+Length(Delim),Length(S2));
+        if S1<>'' then
+          Strings.AddObject(S1,TObject(Apos))
+        else begin
+          if Length(S2)>0 then
+            APos:=-1;
+        end;
+      end else
+        Strings.AddObject(S2,TObject(Apos));
+    end;
+  end;
+end;
+
+function IsClassParent(AClassIn: TClass; AClassParent: TClass): Boolean;
+var
+  AncestorClass: TClass;
+begin
+  AncestorClass := AClassIn;
+  while (AncestorClass <> AClassParent) do
+  begin
+    if AncestorClass=nil then begin Result:=false; exit; end;
+    AncestorClass := AncestorClass.ClassParent;
+  end;
+  Result:=true;
+end;
+
+function ParseName(const S, Delim: String; var Name, Value: String): Boolean;
+var
+  APos: Integer;
+begin
+  APos:=AnsiPos(Delim,S);
+  if APos>0 then begin
+    Name:=Copy(S,1,APos-1);
+    Value:=Copy(S,APos+Length(Delim),Length(S));
+  end else
+    Name:=S;
+  Result:=(Name<>'') or (Value<>'');
+end;
+
+function ParseBetween(const S, LDelim, RDelim: String; var Value: String): Boolean;
+var
+  APos: Integer;
+  S1: String;
+begin
+  APos:=AnsiPos(LDelim,S);
+  if APos>0 then begin
+    Value:=Copy(S,1,APos-1);
+    S1:=Copy(S,APos+Length(LDelim),Length(S));
+    APos:=AnsiPos(RDelim,S1);
+    if APos>0 then begin
+      Value:=Copy(S1,1,APos-1);
+    end else
+      Value:=S1;
+  end else
+    Value:=S;
+  Result:=Value<>'';
+end;
+
+function GetTickCountEx: Cardinal;
+var
+  nTime, freq: Int64;
+begin
+  if QueryPerformanceFrequency(freq) then begin
+    if QueryPerformanceCounter(nTime) then begin
+      Result:=Trunc((nTime / Freq) * 1000) and High(Cardinal)
+    end else begin
+      Result:=GetTickCount;
+    end;
+  end else begin
+    Result:=GetTickCount;
+  end;
+end;
+
+
+end.

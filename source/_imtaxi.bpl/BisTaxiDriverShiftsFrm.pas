@@ -1,0 +1,993 @@
+unit BisTaxiDriverShiftsFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin, StdCtrls,
+  ExtCtrls, Grids, DBGrids, Contnrs,
+  VirtualTrees, VirtualDBTreeEx,
+  BisFm, BisDataFrm, BisDataGridFrm, BisDBTree, BisFieldNames, BisFilterGroups,
+  BisDataSet, BisThread, BisProvider, BisGradient, BisDataEditFm, BisControls;
+
+type
+
+  TBisTaxiDriverShiftsFrame=class;
+
+  TBisTaxiDriverShiftsFrameThread=class(TBisThread)
+  private
+    FParent: TBisTaxiDriverShiftsFrame;
+    FClient: TBisDataSet;
+    FServer: TBisProvider;
+    FInterval: Integer;
+    FAutoRefresh: Boolean;
+    FOnce: Boolean;
+    procedure GetAutoRefresh;
+    procedure GetClient;
+    procedure RefreshParent;
+  public
+    destructor Destroy; override;
+    procedure Execute; override;
+
+    property Parent: TBisTaxiDriverShiftsFrame read FParent write FParent;
+    property Interval: Integer read FInterval write FInterval;
+    property Once: Boolean read FOnce write FOnce;
+  end;
+
+  TBisTaxiDriverShiftsFrame = class(TBisDataGridFrame)
+    PanelTitle: TPanel;
+    LabelTitle: TLabel;
+    Image: TImage;
+    ToolBarMoney: TToolBar;
+    ToolButtonReceiptInsert: TToolButton;                                          
+    ToolButtonChargeInsert: TToolButton;
+    ActionReceiptInsert: TAction;
+    ActionChargeInsert: TAction;
+    N1: TMenuItem;
+    MenuItemReceiptInsert: TMenuItem;
+    MenuItemChargeInsert: TMenuItem;
+    ActionDriverDesc: TAction;
+    N2: TMenuItem;
+    MenuItemDriverDesc: TMenuItem;
+    ActionDriverLock: TAction;
+    MenuItemDriverLock: TMenuItem;
+    ActionMessage: TAction;
+    ActionCall: TAction;
+    MenuItemMessage: TMenuItem;
+    MenuItemCall: TMenuItem;
+    ActionMessages: TAction;
+    MenuItemMessages: TMenuItem;
+    ComboBoxCarTypes: TComboBox;
+    procedure ActionReceiptInsertExecute(Sender: TObject);
+    procedure ActionReceiptInsertUpdate(Sender: TObject);
+    procedure ActionChargeInsertExecute(Sender: TObject);
+    procedure ActionChargeInsertUpdate(Sender: TObject);
+    procedure ActionDriverDescExecute(Sender: TObject);
+    procedure ActionDriverLockExecute(Sender: TObject);
+    procedure ActionMessageExecute(Sender: TObject);
+    procedure ActionCallExecute(Sender: TObject);
+    procedure ActionMessageUpdate(Sender: TObject);
+    procedure ActionCallUpdate(Sender: TObject);
+    procedure ActionMessagesExecute(Sender: TObject);
+    procedure ActionMessagesUpdate(Sender: TObject);
+    procedure ComboBoxCarTypesChange(Sender: TObject);
+  private
+    FOldCarTypeId: Variant;
+    FCarTypeFilterGroup: TBisFilterGroup;
+    FDriverFilterGroups: TBisFilterGroups;
+    FOnAfterReceiptInsert: TBisDataFrameEvent;
+    FOnAfterChargeInsert: TBisDataFrameEvent;
+    FDriverDescForm: TBisForm;
+    FDriverLockForm: TBisForm;
+    FThread: TBisTaxiDriverShiftsFrameThread;
+    function GetNewParkName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+    function GetNewDriverName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+    procedure GridBeforeCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+                                  Column: TColumnIndex; CellRect: TRect);
+    procedure GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode;
+                            Column: TColumnIndex; TextType: TVSTTextType);
+    procedure GridGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+                                var Ghosted: Boolean; var ImageIndex: Integer);
+    function DriverGetRefreshFilterGroups(AForm: TBisDataEditForm): TBisFilterGroups;
+    procedure ReceiptInsertAfterExecute(AForm: TBisDataEditForm);
+    procedure ChargeInsertAfterExecute(AForm: TBisDataEditForm);
+    function GetCanAutoRefresh: Boolean;
+    procedure ThreadTerminate(Sender: TObject);
+    procedure FreeAutoRefresh;
+    function CanCall: Boolean;
+    procedure Call;
+    function CanMessage: Boolean;
+    procedure Message;
+    function CanMessages: Boolean;
+    procedure Messages;
+    procedure RefreshCarTypes;
+    function GetCarTypeId: Variant;
+    function GetCarFontColor: Variant;
+    function GetCarBrushColor: Variant;
+  protected
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); override;
+    procedure DoEventRefresh; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure OpenRecords; override;
+    procedure ResizeToolbars; override;
+
+    function CanReceiptInsert: Boolean;
+    procedure ReceiptInsert;
+    function CanChargeInsert: Boolean;                                                       
+    procedure ChargeInsert;
+    function CanDriverDesc: Boolean;
+    procedure DriverDesc;
+    function CanDriverLock: Boolean;
+    procedure DriverLock;
+    procedure StartAutoRefresh(Once: Boolean);
+    procedure StopAutoRefresh;
+
+    property CanAutoRefresh: Boolean read GetCanAutoRefresh;
+
+    property OnAfterReceiptInsert: TBisDataFrameEvent read FOnAfterReceiptInsert write FOnAfterReceiptInsert;
+    property OnAfterChargeInsert: TBisDataFrameEvent read FOnAfterChargeInsert write FOnAfterChargeInsert;
+  end;
+
+implementation
+
+uses BisCore, BisLogger, BisIfaces,
+     BisValues, BisUtils, BisConsts, BisDialogs, BisMemoFm, BisParam,
+     BisTaxiDataDriverEditFm, BisTaxiDataReceiptEditFm, BisTaxiDataChargeEditFm,
+     BisTaxiDriverShiftInsertFm, BisTaxiDriverShiftDeleteFm, BisTaxiDataDriverOutMessageEditFm,
+     BisTaxiDataOutMessageInsertExFm, BisTaxiPhoneFm;
+
+{$R *.dfm}
+
+type
+  TBisTaxiDriverShiftsOutMessagesFormIface=class(TBisTaxiDataOutMessageInsertExFormIface)
+  private
+    FFrame: TBisTaxiDriverShiftsFrame;
+  protected
+    function CreateForm: TBisForm; override;
+  public
+
+    property Frame: TBisTaxiDriverShiftsFrame read FFrame write FFrame;
+  end;
+
+  TBisCarTypeInfo=class(TObject)
+  private
+    var CarTypeId: Variant;
+    var FontColor: Variant;
+    var BrushColor: Variant;
+  end;
+
+
+{ TBisTaxiDriverShiftsOutMessagesFormIface }
+
+function TBisTaxiDriverShiftsOutMessagesFormIface.CreateForm: TBisForm;
+var
+  B: TBookmark;
+  Form: TBisTaxiDataOutMessageInsertExForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(FFrame) and Assigned(Result) and (Result is TBisTaxiDataOutMessageInsertExForm) then begin
+    B:=FFrame.Provider.GetBookmark;
+    try
+      Form:=TBisTaxiDataOutMessageInsertExForm(Result);
+      FFrame.Provider.First;
+      while not FFrame.Provider.Eof do begin
+        Form.AddRecipient(FFrame.Provider.FieldByName('DRIVER_USER_NAME').AsString,
+                          FFrame.Provider.FieldByName('DRIVER_SURNAME').AsString,
+                          FFrame.Provider.FieldByName('DRIVER_NAME').AsString,
+                          FFrame.Provider.FieldByName('DRIVER_PATRONYMIC').AsString,
+                          FFrame.Provider.FieldByName('DRIVER_ID').Value,
+                          False);
+        FFrame.Provider.Next;
+      end;
+    finally
+      if Assigned(B) and FFrame.Provider.BookmarkValid(B) then
+        FFrame.Provider.GotoBookmark(B);
+    end;
+  end;
+end;
+
+{ TBisTaxiDriverShiftsFrameThread }
+
+destructor TBisTaxiDriverShiftsFrameThread.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TBisTaxiDriverShiftsFrameThread.GetAutoRefresh;
+begin
+  FAutoRefresh:=true;
+  if Assigned(FParent) then
+    FAutoRefresh:=FParent.CanAutoRefresh;
+end;
+
+procedure TBisTaxiDriverShiftsFrameThread.GetClient;
+var
+  Stream: TMemoryStream;
+begin
+  if Assigned(FClient) and Assigned(FParent) then begin
+    Stream:=TMemoryStream.Create;
+    try
+      FParent.Provider.SaveToStream(Stream);
+      Stream.Position:=0;
+      FClient.LoadFromStream(Stream);
+      if not FClient.Active then
+        FClient.Open;
+    finally
+      Stream.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrameThread.RefreshParent;
+var
+  Id: Variant;
+begin
+  if Assigned(FServer) and Assigned(FParent) and FParent.CanAutoRefresh then begin
+    FParent.Provider.BeginUpdate;
+    try
+      Id:=FParent.Provider.FieldByName('SHIFT_ID').Value;
+      FParent.Provider.EmptyTable;
+      FServer.First;
+      while not FServer.Eof do begin
+        FParent.Provider.CopyRecord(FServer);
+        FParent.DoSynchronize;
+        FServer.Next;
+      end;
+      FParent.Provider.First;
+      FParent.Provider.Locate('SHIFT_ID',Id,[loCaseInsensitive]);
+      FParent.DoUpdateCounters;
+    finally
+      FParent.Provider.EndUpdate;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrameThread.Execute;
+
+  function ChangeExists: Boolean;
+  var
+    Found: Boolean;
+    Id: Variant;
+    i: Integer;
+    F1, F2: TField;
+  begin
+    Result:=false;
+    if FServer.Active then begin
+      Result:=FServer.RecordCount<>FClient.RecordCount;
+      if not Result then begin
+        FServer.First;
+        while not FServer.Eof do begin
+          Id:=FServer.FieldByName('SHIFT_ID').Value;
+          Found:=FClient.Locate('SHIFT_ID',Id,[loCaseInsensitive]);
+          if Found then begin
+            for i:=0 to FServer.Fields.Count-1 do begin
+              F1:=FServer.Fields[i];
+              F2:=FClient.FindField(F1.FieldName);
+              if Assigned(F2) and (F2.FieldKind<>fkCalculated) then begin
+                Result:=not VarSameValue(F1.Value,F2.Value);
+                if Result then
+                  exit;
+              end;
+            end;
+          end else begin
+            Result:=true;
+            break;
+          end;
+          FServer.Next;
+        end;
+      end;
+    end;
+  end;
+
+begin
+  inherited Execute;
+  if Assigned(Core) then begin
+    while not Terminated do begin
+      try
+        try
+          if FOnce then
+            Sleep(FInterval);
+          if Assigned(FParent) and Assigned(FParent.Provider) then begin
+            Synchronize(GetAutoRefresh);
+            if not Terminated and FAutoRefresh and Assigned(FParent) and
+               FParent.Provider.Active then begin
+              FClient:=TBisDataSet.Create(nil);
+              FServer:=TBisProvider.Create(nil);
+              try
+                FClient.WithWaitCursor:=false;
+                FServer.WithWaitCursor:=false;
+                FServer.StopException:=false;
+                Synchronize(GetClient);
+                if not Terminated and FClient.Active then begin
+                  FServer.ProviderName:=FParent.Provider.ProviderName;
+                  FServer.FieldNames.CopyFrom(FParent.Provider.FieldNames);
+                  FServer.FilterGroups.CopyFrom(FParent.Provider.FilterGroups);
+                  FServer.Orders.CopyFrom(FParent.Provider.Orders);
+                  FServer.Open;
+                  if not Terminated and ChangeExists then
+                    Synchronize(RefreshParent);
+                end;
+              finally
+                FreeAndNilEx(FServer);
+                FreeAndNilEx(FClient);
+              end;
+            end;
+          end;
+        finally
+          if not FOnce and not Terminated then
+            Sleep(FInterval);
+          if FOnce then
+            Terminate;
+        end;
+      except
+        On E: Exception do begin
+          Core.Logger.Write(E.Message,ltError);
+        end;
+      end;
+    end;
+  end;
+end;
+
+{ TBisTaxiShiftsFrame }
+
+constructor TBisTaxiDriverShiftsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ViewClass:=TBisTaxiDataDriverEditFormIface;
+  InsertClass:=TBisTaxiDriverShiftInsertFormIface;
+  DeleteClass:=TBisTaxiDriverShiftDeleteFormIface;
+
+  with Provider do begin
+    ProviderName:='S_DRIVER_SHIFTS';
+    with FieldNames do begin
+      AddKey('SHIFT_ID');
+      AddInvisible('CAR_CALLSIGN');
+      AddInvisible('DRIVER_ID');
+      AddInvisible('DRIVER_SURNAME');
+      AddInvisible('DRIVER_NAME');
+      AddInvisible('DRIVER_PATRONYMIC');
+      AddInvisible('DRIVER_PHONE');
+      AddInvisible('CAR_ID');
+      AddInvisible('PARK_ID');
+      AddInvisible('PARK_NAME');
+      AddInvisible('PARK_DESCRIPTION');
+
+      Add('DRIVER_USER_NAME','Логин',40);
+      AddCalculate('NEW_DRIVER_NAME','Водитель',GetNewDriverName,ftString,350,80);
+      Add('CAR_COLOR','Цвет автомобиля',60);
+      Add('CAR_BRAND','Марка автомобиля',55);
+      Add('CAR_STATE_NUM','Гос. номер',55);
+      Add('DATE_BEGIN','Время начала',80).DisplayFormat:='hh:nn dd.mm.yyyy';
+      AddCalculate('NEW_PARK_NAME','Стоянка',GetNewParkName,ftString,350,100);
+
+    end;
+    FilterGroups.Add.Filters.Add('DATE_END',fcIsNull,Null);
+    Orders.Add('DRIVER_SURNAME');
+    Orders.Add('DRIVER_NAME');
+    Orders.Add('DRIVER_PATRONYMIC');
+  end;
+  Grid.OnPaintText:=GridPaintText;
+  Grid.OnBeforeCellPaint:=GridBeforeCellPaint;
+  Grid.OnGetImageIndex:=GridGetImageIndex;
+
+  FDriverFilterGroups:=TBisFilterGroups.Create;
+
+  FCarTypeFilterGroup:=TBisFilterGroup.Create;
+  FCarTypeFilterGroup.GroupName:=GetUniqueID;
+  FCarTypeFilterGroup.Visible:=false;
+
+  FOldCarTypeId:=Null;
+  
+  RefreshCarTypes;
+end;
+
+destructor TBisTaxiDriverShiftsFrame.Destroy;
+begin
+  FDriverDescForm:=nil;
+  FDriverLockForm:=nil;
+  FCarTypeFilterGroup.Free;
+  FDriverFilterGroups.Free;
+  FreeAutoRefresh;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.DoEventRefresh;
+begin
+  if not Assigned(FThread) and CanAutoRefresh then
+    StartAutoRefresh(true);
+end;
+
+procedure TBisTaxiDriverShiftsFrame.FreeAutoRefresh;
+begin
+  if Assigned(FThread) then begin
+    FThread.FreeOnTerminate:=false;
+    FThread.Suspend;
+    FreeAndNilEx(FThread);
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ThreadTerminate(Sender: TObject);
+begin
+  FThread:=nil;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.StartAutoRefresh(Once: Boolean);
+begin
+  StopAutoRefresh;
+  if not Assigned(FThread) then begin
+    FThread:=TBisTaxiDriverShiftsFrameThread.Create;
+    FThread.Priority:=tpIdle;
+    FThread.OnTerminate:=ThreadTerminate;
+    FThread.FreeOnTerminate:=true;
+    FThread.Parent:=Self;
+    FThread.Interval:=1000;
+    FThread.Once:=Once;
+    FThread.Resume;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.StopAutoRefresh;
+begin
+  if Assigned(FThread) then
+    FThread.Terminate;
+end;
+
+function TBisTaxiDriverShiftsFrame.GetNewDriverName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+begin
+  Result:=null;
+  if DataSet.Active then begin
+    Result:=FormatEx('%s %s %s',[DataSet.FieldByName('DRIVER_SURNAME').AsString,
+                                 DataSet.FieldByName('DRIVER_NAME').AsString,
+                                 DataSet.FieldByName('DRIVER_PATRONYMIC').AsString]);
+  end;
+end;
+
+function TBisTaxiDriverShiftsFrame.GetNewParkName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+begin
+  Result:=null;
+  if DataSet.Active then begin
+    Result:=FormatEx('%s - %s',[DataSet.FieldByName('PARK_NAME').AsString,
+                                DataSet.FieldByName('PARK_DESCRIPTION').AsString]);
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ResizeToolbars;
+begin
+  inherited ResizeToolbars;
+  ResizeToolbar(ToolBarMoney);
+end;
+
+procedure TBisTaxiDriverShiftsFrame.OpenRecords;
+var
+  Group: TBisFilterGroup;
+begin
+  FCarTypeFilterGroup.Filters.Clear;
+  with FCarTypeFilterGroup.Filters.AddInside('CAR_ID','','S_CAR_IN_TYPES') do
+    InsideFilterGroups.Add.Filters.Add('CAR_TYPE_ID',fcEqual,GetCarTypeId).CheckCase:=true;
+
+  Group:=Provider.FilterGroups.Find(FCarTypeFilterGroup.GroupName);
+  if Assigned(Group) then
+    Provider.FilterGroups.Remove(Group);
+
+  Group:=Provider.FilterGroups.AddByName(FCarTypeFilterGroup.GroupName);
+  Group.CopyFrom(FCarTypeFilterGroup);
+
+  inherited OpenRecords;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.GridBeforeCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+                                                        Column: TColumnIndex; CellRect: TRect);
+var
+  Data: PBisDBTreeNode;
+  DataKey: PDBVTData;
+  DateKeyFocused: PDBVTData;
+  BrushColor: Variant;
+begin
+  Data:=Grid.GetDBNodeData(Node);
+  DataKey:=Grid.GetNodeData(Node);
+  DateKeyFocused:=Grid.GetNodeData(Grid.FocusedNode);
+  if Assigned(Data) and Assigned(DataKey) and Assigned(DateKeyFocused) then begin
+    if Assigned(Data.Values) {and (DataKey.Hash<>DateKeyFocused.Hash)}  then begin
+      BrushColor:=GetCarBrushColor;
+      if not VarIsNull(BrushColor) then begin
+        TargetCanvas.Brush.Style:=bsSolid;
+        TargetCanvas.Brush.Color:=TColor(VarToIntDef(BrushColor,clWindow));
+        TargetCanvas.FillRect(CellRect);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.GridPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode;
+                                                  Column: TColumnIndex; TextType: TVSTTextType);
+var
+  Data: PBisDBTreeNode;
+  DataKey: PDBVTData;
+  DateKeyFocused: PDBVTData;
+  FontColor: Variant;
+  Flag: Boolean;
+begin
+  Data:=Grid.GetDBNodeData(Node);
+  DataKey:=Grid.GetNodeData(Node);
+  DateKeyFocused:=Grid.GetNodeData(Grid.FocusedNode);
+  if Assigned(Data) and Assigned(DataKey) and Assigned(DateKeyFocused) then begin
+    Flag:=((DataKey.Hash=DateKeyFocused.Hash) and (Column<>Grid.FocusedColumn)) or (DataKey.Hash<>DateKeyFocused.Hash);
+    if Assigned(Data.Values) and Flag then begin
+      FontColor:=GetCarFontColor;
+      if not VarIsNull(FontColor) then
+        TargetCanvas.Font.Color:=TColor(VarToIntDef(FontColor,clWindowText));
+    end;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.GridGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+                                                      var Ghosted: Boolean; var ImageIndex: Integer);
+begin
+  if (Column=2) then begin
+    ImageIndex:=16;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionDriverDescExecute(Sender: TObject);
+begin
+  DriverDesc;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionDriverLockExecute(Sender: TObject);
+begin
+  DriverLock;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionMessageExecute(Sender: TObject);
+begin
+  Message;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionMessagesExecute(Sender: TObject);
+begin
+  Messages;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionMessagesUpdate(Sender: TObject);
+begin
+  ActionMessages.Enabled:=CanMessages;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionMessageUpdate(Sender: TObject);
+begin
+  ActionMessage.Enabled:=CanMessage;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionCallExecute(Sender: TObject);
+begin
+  Call;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionCallUpdate(Sender: TObject);
+begin
+  ActionCall.Enabled:=CanCall;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionChargeInsertExecute(Sender: TObject);
+begin
+  ChargeInsert;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionChargeInsertUpdate(Sender: TObject);
+begin
+  ActionChargeInsert.Enabled:=CanChargeInsert;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionReceiptInsertExecute(Sender: TObject);
+begin
+  ReceiptInsert;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ActionReceiptInsertUpdate(Sender: TObject);
+begin
+  ActionReceiptInsert.Enabled:=CanReceiptInsert;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.BeforeIfaceExecute(AIface: TBisDataEditFormIface);
+begin
+  inherited BeforeIfaceExecute(AIface);
+  if Assigned(AIface) then begin
+    if AIface is TBisTaxiDataDriverEditFormIface then begin
+      AIface.ParentProvider:=nil;
+      AIface.ParentProviderName:='S_DRIVERS';
+      AIface.OnGetRefreshFilterGroups:=DriverGetRefreshFilterGroups;
+    end;
+    if AIface is TBisTaxiDriverShiftInsertFormIface then begin
+      TBisTaxiDriverShiftInsertFormIface(AIface).CarTypeName:=ComboBoxCarTypes.Text;
+      TBisTaxiDriverShiftInsertFormIface(AIface).CarTypeId:=GetCarTypeId;
+    end;
+  end;
+end;
+
+function TBisTaxiDriverShiftsFrame.DriverGetRefreshFilterGroups(AForm: TBisDataEditForm): TBisFilterGroups;
+begin
+  FDriverFilterGroups.Clear;
+  if Provider.Active and not Provider.Empty then
+    FDriverFilterGroups.Add.Filters.Add('DRIVER_ID',fcEqual,Provider.FieldByName('DRIVER_ID').Value);
+  Result:=FDriverFilterGroups;
+end;
+
+function TBisTaxiDriverShiftsFrame.CanReceiptInsert: Boolean;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ReceiptInsertAfterExecute(AForm: TBisDataEditForm);
+begin
+  RefreshRecordsWithLocate;
+  if Assigned(FOnAfterReceiptInsert) then
+    FOnAfterReceiptInsert(Self);
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ReceiptInsert;
+var
+  AIface: TBisTaxiDataReceiptInsertFormIface;
+begin
+  if CanReceiptInsert then begin
+    AIface:=TBisTaxiDataReceiptInsertFormIface.Create(Self);
+    AIface.Caption:=ActionReceiptInsert.Caption;
+    AIface.MaxFormCount:=1;
+    with AIface.Params do begin
+      ParamByName('ACCOUNT_ID').Value:=Provider.FieldByName('DRIVER_ID').Value;
+      ParamByName('USER_NAME').Value:=Provider.FieldByName('DRIVER_USER_NAME').Value;
+    end;
+    AIface.Init;
+    AIface.OnAfterExecute:=ReceiptInsertAfterExecute;
+    Ifaces.Add(AIface);
+    AIface.AsModal:=AsModal;
+    AIface.ShowType:=ShowType;
+    AIface.Execute;
+  end;
+end;
+
+function TBisTaxiDriverShiftsFrame.CanChargeInsert: Boolean;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+end;
+
+function TBisTaxiDriverShiftsFrame.CanDriverLock: Boolean;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ChargeInsertAfterExecute(AForm: TBisDataEditForm);
+begin
+  RefreshRecordsWithLocate;
+  if Assigned(FOnAfterChargeInsert) then
+    FOnAfterChargeInsert(Self);
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ChargeInsert;
+var
+  AIface: TBisTaxiDataChargeInsertFormIface;
+begin
+  if CanChargeInsert then begin
+    AIface:=TBisTaxiDataChargeInsertFormIface.Create(Self);
+    AIface.Caption:=ActionChargeInsert.Caption;
+    AIface.MaxFormCount:=1;
+    with AIface.Params do begin
+      ParamByName('ACCOUNT_ID').Value:=Provider.FieldByName('DRIVER_ID').Value;
+      ParamByName('USER_NAME').Value:=Provider.FieldByName('DRIVER_USER_NAME').Value;
+    end;
+    AIface.Init;
+    AIface.OnAfterExecute:=ChargeInsertAfterExecute;
+    Ifaces.Add(AIface);
+    AIface.AsModal:=AsModal;
+    AIface.ShowType:=ShowType;
+    AIface.Execute;
+  end;
+end;
+
+function TBisTaxiDriverShiftsFrame.CanDriverDesc: Boolean;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.DriverDesc;
+var
+  DriverId: Variant;
+  MaxLength: Integer;
+
+  function GetDriverDesc: String;
+  var
+    P: TBisProvider;
+  begin
+    Result:='';
+    MaxLength:=0;
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_DRIVERS';
+      P.FieldNames.AddInvisible('DESCRIPTION');
+      P.FilterGroups.Add.Filters.Add('DRIVER_ID',fcEqual,DriverId);
+      P.Open;
+      if P.Active and not P.Empty then begin
+        Result:=P.FieldByName('DESCRIPTION').AsString;
+        MaxLength:=P.FieldByName('DESCRIPTION').Size;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+
+var
+  AForm: TBisMemoForm;
+  P: TBisProvider;
+  S: String;
+begin
+  if CanDriverDesc then begin
+    DriverId:=Provider.FieldByName('DRIVER_ID').Value;
+    AForm:=TBisMemoForm.Create(nil);
+    try
+      FDriverDescForm:=AForm;
+      AForm.Caption:=ActionDriverDesc.Hint;
+      AForm.Memo.Text:=GetDriverDesc;
+      AForm.Memo.WordWrap:=true;
+      AForm.Memo.ScrollBars:=ssNone;
+      AForm.ButtonOk.Visible:=true;
+      if AForm.ShowModal=mrOk then begin
+        S:=Trim(AForm.Memo.Lines.Text);
+        P:=TBisProvider.Create(nil);
+        try
+          P.ProviderName:='U_DRIVER_DESC';
+          P.Params.AddInvisible('DRIVER_ID').Value:=DriverId;
+          P.Params.AddInvisible('DESCRIPTION').Value:=iff(Trim(S)<>'',S,Null);
+          P.Execute;
+        finally
+          P.Free;
+        end;
+      end;
+    finally
+      AForm.Free;
+      FDriverDescForm:=nil;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.DriverLock;
+var
+  DriverId: Variant;
+  P: TBisProvider;
+begin
+  if CanDriverLock then begin
+    if ShowQuestion('Заблокировать водителя?',mbNo)=mrYes then begin
+      DriverId:=Provider.FieldByName('DRIVER_ID').Value;
+      if not VarIsNull(DriverId) then begin
+        P:=TBisProvider.Create(nil);
+        try
+          P.ProviderName:='LOCK_ACCOUNT';
+          P.Params.AddInvisible('ACCOUNT_ID').Value:=DriverId;
+          P.Execute;
+          if P.Success then begin
+            DriverDesc;
+            RefreshRecords;
+          end;
+        finally
+          P.Free;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TBisTaxiDriverShiftsFrame.GetCanAutoRefresh: Boolean;
+begin
+  Result:=not Popup.MenuActive and
+          not Assigned(FDriverDescForm) and
+          not Assigned(FDriverLockForm) and
+          Assigned(Grid) and not (tsThumbTracking in Grid.TreeStates) and
+          MenuItemRefreshEvent.Checked;
+end;
+
+function TBisTaxiDriverShiftsFrame.CanCall: Boolean;
+var
+  AIface: TBisTaxiPhoneFormIface;
+begin
+  Result:=Provider.Active and not Provider.Empty and
+          (Trim(Provider.FieldByName('DRIVER_PHONE').AsString)<>'');
+  if Result then begin
+    AIface:=TBisTaxiPhoneFormIface.Create(nil);
+    try
+      AIface.Init;
+      Result:=AIface.CanShow;
+    finally
+      AIface.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.Call;
+var
+  AIface: TBisTaxiPhoneFormIface;
+begin
+  if CanCall then begin
+    AIface:=TBisTaxiPhoneFormIface(Core.FindIface(TBisTaxiPhoneFormIface));
+    if Assigned(AIface) then begin
+      AIface.Dial(Provider.FieldByName('DRIVER_PHONE').AsString,Null);
+    end;
+  end;
+end;
+
+function TBisTaxiDriverShiftsFrame.CanMessage: Boolean;
+var
+  AClass: TBisIfaceClass;
+  AIface: TBisDataEditFormIface;
+begin
+  Result:=Provider.Active and not Provider.Empty and
+          (Trim(Provider.FieldByName('DRIVER_PHONE').AsString)<>'');
+  if Result then begin
+    AClass:=TBisTaxiDataDriverOutMessageInsertFormIface;
+    Result:=Assigned(AClass) and IsClassParent(AClass,TBisDataEditFormIface);
+    if Result then begin
+      AIface:=TBisDataEditFormIfaceClass(AClass).Create(nil);
+      try
+        AIface.Init;
+        Result:=AIface.CanShow;
+      finally
+        AIface.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.Message;
+var
+  AClass: TBisIfaceClass;
+  AIface: TBisDataEditFormIface;
+  P1: TBisParam;
+begin
+  if CanMessage then begin
+    AClass:=TBisTaxiDataDriverOutMessageInsertFormIface;
+    AIface:=TBisDataEditFormIfaceClass(AClass).Create(nil);
+    try
+      with AIface.Params do begin
+        ParamByName('RECIPIENT_ID').Value:=Provider.FieldByName('DRIVER_ID').Value;
+        ParamByName('RECIPIENT_USER_NAME').Value:=Provider.FieldByName('DRIVER_USER_NAME').Value;
+        ParamByName('RECIPIENT_SURNAME').Value:=Provider.FieldByName('DRIVER_SURNAME').Value;
+        ParamByName('RECIPIENT_NAME').Value:=Provider.FieldByName('DRIVER_NAME').Value;
+        ParamByName('RECIPIENT_PATRONYMIC').Value:=Provider.FieldByName('DRIVER_PATRONYMIC').Value;
+        ParamByName('CONTACT').Value:=Provider.FieldByName('DRIVER_PHONE').Value;
+        P1:=ParamByName('RECIPIENT_USER_NAME;RECIPIENT_SURNAME;RECIPIENT_NAME;RECIPIENT_PATRONYMIC');
+        P1.Value:=AIface.Params.ValueByParam(P1.ParamFormat,P1.ParamName);
+      end;
+      AIface.Init;
+      AIface.ShowType:=ShowType;
+      AIface.ShowModal;
+    finally
+      AIface.Free;
+    end;
+  end;
+end;
+
+function TBisTaxiDriverShiftsFrame.CanMessages: Boolean;
+var
+  AIface: TBisTaxiDataOutMessageInsertExFormIface;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+  if Result then begin
+    AIface:=TBisTaxiDataOutMessageInsertExFormIface.Create(nil);
+    try
+      AIface.Init;
+      Result:=AIface.CanShow;
+    finally
+      AIface.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.Messages;
+var
+  AIface: TBisTaxiDriverShiftsOutMessagesFormIface;
+begin
+  if CanMessages then begin
+    AIface:=TBisTaxiDriverShiftsOutMessagesFormIface.Create(nil);
+    try
+      AIface.Init;
+      AIface.Permissions.Enabled:=false;
+      AIface.ShowType:=ShowType;
+      AIface.Frame:=Self;
+      AIface.ShowModal;
+    finally
+      AIface.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.RefreshCarTypes;
+var
+  P: TBisProvider;
+  Obj: TBisCarTypeInfo;
+begin
+  ClearStrings(ComboBoxCarTypes.Items);
+  ComboBoxCarTypes.Items.BeginUpdate;
+  P:=TBisProvider.Create(nil);
+  try
+    P.ProviderName:='S_CAR_TYPES';
+    with P.FieldNames do begin
+      AddInvisible('CAR_TYPE_ID');
+      AddInvisible('FONT_COLOR');
+      AddInvisible('BRUSH_COLOR');
+      AddInvisible('NAME');
+    end;
+    P.Orders.Add('PRIORITY');
+    P.Open;
+    if P.Active and not P.Empty then begin
+      P.First;
+      while not P.Eof do begin
+        Obj:=TBisCarTypeInfo.Create;
+        Obj.CarTypeId:=P.FieldByName('CAR_TYPE_ID').Value;
+        Obj.FontColor:=P.FieldByName('FONT_COLOR').Value;
+        Obj.BrushColor:=P.FieldByName('BRUSH_COLOR').Value;
+        ComboBoxCarTypes.Items.AddObject(P.FieldByName('NAME').AsString,Obj);
+        P.Next;
+      end;
+      if ComboBoxCarTypes.Items.Count>0 then begin
+        ComboBoxCarTypes.ItemIndex:=0;
+        FOldCarTypeId:=GetCarTypeId;
+      end;
+    end;
+  finally
+    P.Free;
+    ComboBoxCarTypes.Items.EndUpdate;
+  end;
+end;
+
+function TBisTaxiDriverShiftsFrame.GetCarBrushColor: Variant;
+var
+  Index: Integer;
+  Obj: TBisCarTypeInfo;
+begin
+  Result:=Null;
+  Index:=ComboBoxCarTypes.ItemIndex;
+  if Index<>-1 then begin
+    Obj:=TBisCarTypeInfo(ComboBoxCarTypes.Items.Objects[Index]);
+    Result:=Obj.BrushColor;
+  end;
+end;
+
+function TBisTaxiDriverShiftsFrame.GetCarFontColor: Variant;
+var
+  Index: Integer;
+  Obj: TBisCarTypeInfo;
+begin
+  Result:=Null;
+  Index:=ComboBoxCarTypes.ItemIndex;
+  if Index<>-1 then begin
+    Obj:=TBisCarTypeInfo(ComboBoxCarTypes.Items.Objects[Index]);
+    Result:=Obj.FontColor;
+  end;
+end;
+
+function TBisTaxiDriverShiftsFrame.GetCarTypeId: Variant;
+var
+  Index: Integer;
+  Obj: TBisCarTypeInfo;
+begin
+  Result:=Null;
+  Index:=ComboBoxCarTypes.ItemIndex;
+  if Index<>-1 then begin
+    Obj:=TBisCarTypeInfo(ComboBoxCarTypes.Items.Objects[Index]);
+    Result:=Obj.CarTypeId;
+  end;
+end;
+
+procedure TBisTaxiDriverShiftsFrame.ComboBoxCarTypesChange(Sender: TObject);
+var
+  NewCarTypeId: Variant;
+begin
+  NewCarTypeId:=GetCarTypeId;
+  if not VarSameValue(FOldCarTypeId,NewCarTypeId) then begin
+    FOldCarTypeId:=NewCarTypeId;
+    RefreshRecords;
+    if Grid.Visible and Grid.Enabled and Grid.CanFocus then
+      Grid.SetFocus;
+  end;
+end;
+
+end.

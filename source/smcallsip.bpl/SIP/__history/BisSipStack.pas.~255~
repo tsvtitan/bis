@@ -1,0 +1,381 @@
+unit BisSipStack;
+
+interface
+
+uses Classes, SysUtils,
+     IdSipCore, IdSipUserAgent, IdSipMessage, IdSipRegistration, IdTimerQueue,
+     IdSipTransaction, IdSipTransport, IdSipUdpTransport,
+     IdRoutingTable, IdSipIndyLocator, IdConnectionBindings, IdSipInviteModule;
+
+type
+  TBisSipStack=class;
+
+  TBisSipUdpTransport=class(TIdSipUdpTransport,
+                            IIdSipConnectionListener,
+                            IIdSipTransportListener,
+                            IIdSipTransportSendingListener)
+  private
+    FParent: TBisSipStack;
+
+    procedure OnException(FailedMessage: TIdSipMessage; E: Exception; const Reason: String);
+    procedure OnReceiveRequest(Request: TIdSipRequest; Receiver: TIdSipTransport; Source: TIdConnectionBindings);
+    procedure OnReceiveResponse(Response: TIdSipResponse; Receiver: TIdSipTransport;Source: TIdConnectionBindings);
+    procedure OnRejectedMessage(const Msg: String; const Reason: String; Source: TIdConnectionBindings);
+    procedure OnSendRequest(Request: TIdSipRequest; Sender: TIdSipTransport; Destination: TIdConnectionBindings);
+    procedure OnSendResponse(Response: TIdSipResponse; Sender: TIdSipTransport; Destination: TIdConnectionBindings);
+    procedure OnConnection(Transport: TIdSipTransport; Connection: TIdConnectionBindings);
+    procedure OnDisconnection(Transport: TIdSipTransport; Connection: TIdConnectionBindings);
+  public
+    constructor Create; override;
+  end;
+
+  TBisSipTransactionDispatcher=class(TIdSipTransactionDispatcher)
+  private
+    FParent: TBisSipStack; 
+  protected
+    procedure OnFail(Transaction: TIdSipTransaction; FailedMessage: TIdSipMessage; const Reason: String); override;
+    procedure OnReceiveRequest(Request: TIdSipRequest; Transaction: TIdSipTransaction; Binding: TIdConnectionBindings); overload; override;
+    procedure OnReceiveResponse(Response: TIdSipResponse; Transaction: TIdSipTransaction; Binding: TIdConnectionBindings); overload; override;
+    procedure OnTerminated(Transaction: TIdSipTransaction); override;
+    procedure OnException(FailedMessage: TIdSipMessage; E: Exception; const Reason: String); override;
+    procedure OnReceiveRequest(Request: TIdSipRequest; Receiver: TIdSipTransport; Source: TIdConnectionBindings); overload; override;
+    procedure OnReceiveResponse(Response: TIdSipResponse; Receiver: TIdSipTransport; Source: TIdConnectionBindings); overload; override;
+    procedure OnRejectedMessage(const Msg: String; const Reason: String; Source: TIdConnectionBindings); override;
+  end;
+
+  TBisSipUserAgent=class(TIdSipUserAgent)
+  private
+    FParent: TBisSipStack;
+  protected
+    procedure OnFailure(RegisterAgent: TIdSipOutboundRegistrationBase; ErrorCode: Cardinal; const Reason: String); override;
+    procedure OnInboundCall(UserAgent: TIdSipInviteModule; Session: TIdSipInboundSession); override;
+    procedure OnSuccess(RegisterAgent: TIdSipOutboundRegistrationBase; CurrentBindings: TIdSipContacts); override;
+  end;
+
+  TBisSipStackMessageEvent=procedure(AStack: TBisSipStack; AMessage: String) of object;
+  
+  TBisSipStack=class(TComponent)
+  private
+    FTimerQueue: TIdThreadedTimerQueue;
+    FRoutingTable: TIdRoutingTable;
+    FTransport: TBisSipUdpTransport;
+    FLocator: TIdSipIndyLocator;
+    FDispatcher: TBisSipTransactionDispatcher;
+    FUserAgent: TBisSipUserAgent;
+    FRegistration: TIdSipOutboundRegistration;
+    FPassword: String;
+    FRemoteHost: String;
+    FRemotePort: Integer;
+    FScheme: String;
+    FRegistar: TIdSipUri;
+    FRegistered: Boolean;
+    FOnMessage: TBisSipStackMessageEvent;
+
+    procedure SendAction(Action: TIdSipAction);
+    function GetLocalHost: String;
+    procedure SetLocalHost(const Value: String);
+    function GetUserName: String;
+    procedure SetUserName(const Value: String);
+    function GetLocalPort: Integer;
+    procedure SetLocalPort(const Value: Integer);
+    function GetSoftware: String;
+    procedure SetSoftware(const Value: String);
+
+    procedure DoMessage(Message: String);
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    function Register: Boolean;
+    function UnRegister: Boolean;
+
+    property Scheme: String read FScheme write FScheme;
+    property UserName: String read GetUserName write SetUserName;
+    property Password: String read FPassword write FPassword;
+    property LocalHost: String read GetLocalHost write SetLocalHost;
+    property LocalPort: Integer read GetLocalPort write SetLocalPort;
+    property RemoteHost: String read FRemoteHost write FRemoteHost;
+    property RemotePort: Integer read FRemotePort write FRemotePort;
+    property Software: String read GetSoftware write SetSoftware;
+
+    property OnMessage: TBisSipStackMessageEvent read FOnMessage write FOnMessage; 
+
+    property Registered: Boolean read FRegistered;
+
+  end;
+
+implementation
+
+uses
+     IdSystem;
+
+{ TBisSipUdpTransport }
+
+constructor TBisSipUdpTransport.Create;
+begin
+  inherited Create;
+  AddTransportListener(Self);
+  AddTransportSendingListener(Self);
+  AddConnectionListener(Self);
+end;
+
+procedure TBisSipUdpTransport.OnException(FailedMessage: TIdSipMessage; E: Exception; const Reason: String);
+begin
+  FParent.DoMessage('TBisSipUdpTransport.OnException'+#13#10+E.Message);
+end;
+
+procedure TBisSipUdpTransport.OnReceiveRequest(Request: TIdSipRequest; Receiver: TIdSipTransport;  Source: TIdConnectionBindings);
+begin
+  FParent.DoMessage('TBisSipUdpTransport.OnReceiveRequest'+#13#10+Request.AsString);
+end;
+
+procedure TBisSipUdpTransport.OnReceiveResponse(Response: TIdSipResponse; Receiver: TIdSipTransport; Source: TIdConnectionBindings);
+begin
+  FParent.DoMessage('TBisSipUdpTransport.OnReceiveResponse'+#13#10+Response.AsString);
+end;
+
+procedure TBisSipUdpTransport.OnRejectedMessage(const Msg, Reason: String; Source: TIdConnectionBindings);
+begin
+  FParent.DoMessage('TBisSipUdpTransport.OnRejectedMessage'+#13#10+Msg);
+end;
+
+procedure TBisSipUdpTransport.OnSendRequest(Request: TIdSipRequest; Sender: TIdSipTransport; Destination: TIdConnectionBindings);
+begin
+  FParent.DoMessage('TBisSipUdpTransport.OnSendRequest'+#13#10+Request.AsString);
+end;
+
+procedure TBisSipUdpTransport.OnSendResponse(Response: TIdSipResponse; Sender: TIdSipTransport; Destination: TIdConnectionBindings);
+begin
+  FParent.DoMessage('TBisSipUdpTransport.OnSendResponse'+#13#10+Response.AsString);
+end;
+
+procedure TBisSipUdpTransport.OnConnection(Transport: TIdSipTransport; Connection: TIdConnectionBindings);
+begin
+  FParent.DoMessage('TBisSipUdpTransport.OnConnection');
+end;
+
+procedure TBisSipUdpTransport.OnDisconnection(Transport: TIdSipTransport; Connection: TIdConnectionBindings);
+begin
+  FParent.DoMessage('TBisSipUdpTransport.OnDisconnection');
+end;
+
+
+{ TBisSipTransactionDispatcher }
+
+procedure TBisSipTransactionDispatcher.OnException(FailedMessage: TIdSipMessage; E: Exception; const Reason: String);
+begin
+  inherited;
+  FParent.DoMessage('TBisSipTransactionDispatcher.OnException'+#13#10+E.Message);
+end;
+
+procedure TBisSipTransactionDispatcher.OnFail(Transaction: TIdSipTransaction; FailedMessage: TIdSipMessage; const Reason: String);
+begin
+  inherited;
+  FParent.DoMessage('TBisSipTransactionDispatcher.OnFail'+#13#10+FailedMessage.AsString);
+end;
+
+procedure TBisSipTransactionDispatcher.OnReceiveRequest(Request: TIdSipRequest; Transaction: TIdSipTransaction; Binding: TIdConnectionBindings);
+begin
+  inherited;
+  FParent.DoMessage('TBisSipTransactionDispatcher.OnReceiveRequest'+#13#10+Request.AsString);
+end;
+
+procedure TBisSipTransactionDispatcher.OnReceiveResponse(Response: TIdSipResponse; Transaction: TIdSipTransaction; Binding: TIdConnectionBindings);
+begin
+  inherited;
+  FParent.DoMessage('TBisSipTransactionDispatcher.OnReceiveResponse'+#13#10+Response.AsString);
+end;
+
+procedure TBisSipTransactionDispatcher.OnTerminated(Transaction: TIdSipTransaction);
+begin
+  inherited;
+  FParent.DoMessage('TBisSipTransactionDispatcher.OnTerminated');
+end;
+
+procedure TBisSipTransactionDispatcher.OnReceiveRequest(Request: TIdSipRequest; Receiver: TIdSipTransport; Source: TIdConnectionBindings);
+begin
+  inherited;
+  FParent.DoMessage('TBisSipTransactionDispatcher.OnReceiveRequest'+#13#10+Request.AsString);
+end;
+
+procedure TBisSipTransactionDispatcher.OnReceiveResponse(Response: TIdSipResponse; Receiver: TIdSipTransport; Source: TIdConnectionBindings);
+begin
+  inherited;
+  FParent.DoMessage('TBisSipTransactionDispatcher.OnReceiveResponse'+#13#10+Response.AsString);
+end;
+
+procedure TBisSipTransactionDispatcher.OnRejectedMessage(const Msg, Reason: String; Source: TIdConnectionBindings);
+begin
+  inherited;
+  FParent.DoMessage('TBisSipTransactionDispatcher.OnRejectedMessage'+#13#10+Msg);
+end;
+
+{ TBisSipUserAgent }
+
+procedure TBisSipUserAgent.OnFailure(RegisterAgent: TIdSipOutboundRegistrationBase; ErrorCode: Cardinal; const Reason: String);
+begin
+  inherited;
+
+end;
+
+procedure TBisSipUserAgent.OnInboundCall(UserAgent: TIdSipInviteModule; Session: TIdSipInboundSession);
+begin
+  inherited;
+
+end;
+
+procedure TBisSipUserAgent.OnSuccess(RegisterAgent: TIdSipOutboundRegistrationBase; CurrentBindings: TIdSipContacts);
+begin
+  inherited;
+
+end;
+
+{ TBisSipStack }
+
+constructor TBisSipStack.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  TIdSipTransportRegistry.RegisterTransportType(UdpTransport,TIdSipUdpTransport);
+
+  FTimerQueue:=TIdThreadedTimerQueue.Create(true);
+
+  FRoutingTable:=TIdRoutingTable.PlatformRoutingTable(OsType).Create;
+
+  FTransport:=TBisSipUdpTransport.Create;
+  FTransport.FParent:=Self;
+  FTransport.RoutingTable:=FRoutingTable;
+  FTransport.Timer:=FTimerQueue;
+
+  FLocator:=TIdSipIndyLocator.Create;
+  
+  FDispatcher:=TBisSipTransactionDispatcher.Create(FTimerQueue,FLocator);
+  FDispatcher.FParent:=Self;
+  FDispatcher.Transports.Add(FTransport);
+  
+  FUserAgent:=TBisSipUserAgent.Create;
+  FUserAgent.FParent:=Self;
+  FUserAgent.Dispatcher:=FDispatcher;
+  FUserAgent.RoutingTable:=FRoutingTable;
+  FUserAgent.Timer:=FTimerQueue;
+  FUserAgent.Locator:=FLocator;
+
+  FRegistar:=TIdSipUri.Create;
+
+  FScheme:=SipScheme;
+
+  FRegistration:=nil;
+end;
+
+destructor TBisSipStack.Destroy;
+begin
+  FRegistar.Free;
+  if Assigned(FRegistration) then
+    FRegistration.Free;
+  FUserAgent:=nil;
+  FDispatcher:=nil;
+  FLocator.Free;
+  FTransport:=nil;
+  FRoutingTable.Free;
+  FTimerQueue.Free;
+  TIdSipTransportRegistry.UnregisterTransportType(UdpTransport);
+  inherited Destroy;
+end;
+
+procedure TBisSipStack.DoMessage(Message: String);
+begin
+  if Assigned(FOnMessage) then
+    FOnMessage(Self,Message);
+end;
+
+procedure TBisSipStack.SendAction(Action: TIdSipAction);
+var
+  Wait: TIdSipActionSendWait;
+begin
+  Wait := TIdSipActionSendWait.Create;
+  Wait.ActionID := Action.ID;
+  FUserAgent.ScheduleEvent(TriggerImmediately, Wait);
+end;
+
+function TBisSipStack.GetLocalHost: String;
+begin
+  Result:=FTransport.HostName;
+end;
+
+function TBisSipStack.GetLocalPort: Integer;
+begin
+  Result:=FUserAgent.DefaultPort;
+end;
+
+function TBisSipStack.GetSoftware: String;
+begin
+  Result:=FUserAgent.UserAgentName;
+end;
+
+function TBisSipStack.GetUserName: String;
+begin
+  Result:=FUserAgent.Username;
+end;
+
+procedure TBisSipStack.SetLocalHost(const Value: String);
+begin
+  FTransport.HostName:=Value;
+  FUserAgent.DefaultIPAddress:=Value;
+end;
+
+procedure TBisSipStack.SetLocalPort(const Value: Integer);
+begin
+  FUserAgent.DefaultPort:=Value;
+end;
+
+procedure TBisSipStack.SetSoftware(const Value: String);
+begin
+  FUserAgent.UserAgentName:=Value;
+end;
+
+procedure TBisSipStack.SetUserName(const Value: String);
+begin
+  FUserAgent.Username:=Value;
+end;
+
+function TBisSipStack.Register: Boolean;
+begin
+  Result:=false;
+  if not FRegistered then begin
+
+    FTransport.Stop;
+    FTransport.ClearBindings;
+    FTransport.AddBinding(LocalHost,LocalPort);
+    FTransport.Start;
+
+    FRegistar.Scheme:=FScheme;
+    FRegistar.Username:=UserName;
+    FRegistar.Password:=Password;
+    FRegistar.Host:=RemoteHost;
+    FRegistar.Port:=RemotePort;
+
+    FRegistration:=FUserAgent.RegisterWith(FRegistar,FUserAgent.From);
+    if Assigned(FRegistration) then begin
+      FRegistration.Send;
+      Result:=true;
+      FRegistered:=Result;
+    end;
+  end;
+end;
+
+function TBisSipStack.UnRegister: Boolean;
+var
+  Ret: TIdSipOutboundUnregistration;
+begin
+  Result:=false;
+  if FRegistered then begin
+    Ret:=FUserAgent.UnregisterFrom(FRegistar);
+    if Assigned(Ret) then begin
+      Ret.Send;
+      Result:=true;
+      FRegistered:=false;
+    end;
+  end;
+end;
+
+end.

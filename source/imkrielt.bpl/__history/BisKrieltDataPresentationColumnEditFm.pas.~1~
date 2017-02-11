@@ -1,0 +1,139 @@
+unit BisKrieltDataPresentationColumnEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ImgList,
+  BisDataEditFm, BisControls, BisParam;
+
+type
+  TBisKrieltDataPresentationColumnEditForm = class(TBisDataEditForm)
+    LabelPresentation: TLabel;
+    EditPresentation: TEdit;
+    ButtonPresentation: TButton;
+    LabelColumn: TLabel;
+    EditColumn: TEdit;
+    ButtonColumn: TButton;
+    LabelPriority: TLabel;
+    EditPriority: TEdit;
+    LabelGroup: TLabel;
+    EditGroup: TEdit;
+    LabelStringBefore: TLabel;
+    EditStringBefore: TEdit;
+    LabelStringAfter: TLabel;
+    EditStringAfter: TEdit;
+    LabelDefault: TLabel;
+    EditDefault: TEdit;
+    CheckBoxVisible: TCheckBox;
+    CheckBoxUseDepend: TCheckBox;
+    CheckBoxNotEmpty: TCheckBox;
+  private
+    { Private declarations }
+  public
+    function CanShow: Boolean; override;
+  end;
+
+  TBisKrieltDataPresentationColumnEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataPresentationColumnFilterFormIface=class(TBisKrieltDataPresentationColumnEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataPresentationColumnInsertFormIface=class(TBisKrieltDataPresentationColumnEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataPresentationColumnUpdateFormIface=class(TBisKrieltDataPresentationColumnEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataPresentationColumnDeleteFormIface=class(TBisKrieltDataPresentationColumnEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataPresentationColumnEditForm: TBisKrieltDataPresentationColumnEditForm;
+
+implementation
+
+uses BisKrieltDataPresentationsFm, BisKrieltDataColumnsFm, BisParamEditDataSelect;
+
+{$R *.dfm}
+
+{ TBisKrieltDataPresentationColumnEditFormIface }
+
+constructor TBisKrieltDataPresentationColumnEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataPresentationColumnEditForm;
+  with Params do begin
+    AddEditDataSelect('PRESENTATION_ID','EditPresentation','LabelPresentation','ButtonPresentation',
+                      TBisKrieltDataPresentationsFormIface,'PRESENTATION_NAME',true,true,'','NAME').Older('OLD_PRESENTATION_ID');
+    AddEditDataSelect('COLUMN_ID','EditColumn','LabelColumn','ButtonColumn',
+                      TBisKrieltDataColumnsFormIface,'COLUMN_NAME',true,true,'','NAME').Older('OLD_COLUMN_ID');
+    AddEditInteger('PRIORITY','EditPriority','LabelPriority',true);
+    AddEditInteger('COLUMN_GROUP','EditGroup','LabelGroup',true);
+    AddEdit('STRING_BEFORE','EditStringBefore','LabelStringBefore').ExcludeModes(AllParamEditModes);
+    AddEdit('STRING_AFTER','EditStringAfter','LabelStringAfter').ExcludeModes(AllParamEditModes);
+    AddEdit('VALUE_DEFAULT','EditDefault','LabelDefault');
+    AddCheckBox('VISIBLE','CheckBoxVisible').ExcludeModes([emFilter]);
+    AddCheckBox('USE_DEPEND','CheckBoxUseDepend').ExcludeModes([emFilter]);
+    AddCheckBox('NOT_EMPTY','CheckBoxNotEmpty').ExcludeModes([emFilter]);
+  end;
+end;
+
+{ TBisKrieltDataPresentationColumnFilterFormIface }
+
+constructor TBisKrieltDataPresentationColumnFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+{ TBisKrieltDataPresentationColumnInsertFormIface }
+
+constructor TBisKrieltDataPresentationColumnInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_PRESENTATION_COLUMN';
+end;
+
+{ TBisKrieltDataPresentationColumnUpdateFormIface }
+
+constructor TBisKrieltDataPresentationColumnUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_PRESENTATION_COLUMN';
+end;
+
+{ TBisKrieltDataPresentationColumnDeleteFormIface }
+
+constructor TBisKrieltDataPresentationColumnDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_PRESENTATION_COLUMN';
+end;
+
+
+{ TBisKrieltDataPresentationColumnEditForm }
+
+function TBisKrieltDataPresentationColumnEditForm.CanShow: Boolean;
+var
+  Param: TBisParamEditDataSelect;
+begin
+  Result:=inherited CanShow;
+  if Result and (Mode in [emInsert]) then begin
+    Param:=TBisParamEditDataSelect(Provider.Params.ParamByName('COLUMN_ID'));
+    if Assigned(Param) then
+      Result:=Param.Select;
+  end;
+end;
+
+end.

@@ -1,0 +1,143 @@
+inherited BisDocproManagementForm: TBisDocproManagementForm
+  Left = 546
+  Top = 164
+  Caption = #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077' '#1076#1086#1082#1091#1084#1077#1085#1090#1072#1084#1080
+  ClientHeight = 433
+  ClientWidth = 622
+  Font.Name = 'Tahoma'
+  ExplicitLeft = 546
+  ExplicitTop = 164
+  ExplicitWidth = 630
+  ExplicitHeight = 460
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter: TSplitter
+    Left = 0
+    Top = 245
+    Width = 622
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    MinSize = 190
+    OnMoved = SplitterMoved
+    ExplicitTop = 0
+    ExplicitWidth = 264
+  end
+  object PanelMaster: TPanel
+    Left = 0
+    Top = 0
+    Width = 622
+    Height = 245
+    Align = alClient
+    BevelOuter = bvNone
+    Constraints.MinHeight = 150
+    TabOrder = 0
+    ExplicitHeight = 216
+  end
+  object StatusBar: TStatusBar
+    Left = 0
+    Top = 414
+    Width = 622
+    Height = 19
+    Panels = <>
+  end
+  object PanelDetail: TGridPanel
+    Left = 0
+    Top = 248
+    Width = 622
+    Height = 166
+    Align = alBottom
+    BevelOuter = bvNone
+    ColumnCollection = <
+      item
+        Value = 50.000048440553270000
+      end
+      item
+        Value = 49.999951559446730000
+      end>
+    Constraints.MinHeight = 120
+    ControlCollection = <
+      item
+        Column = 0
+        Control = PanelDetailLeft
+        Row = 0
+      end
+      item
+        Column = 1
+        Control = GroupBoxDescription
+        Row = 0
+      end>
+    RowCollection = <
+      item
+        Value = 100.000000000000000000
+      end>
+    TabOrder = 2
+    ExplicitLeft = -8
+    ExplicitTop = 242
+    object PanelDetailLeft: TPanel
+      Left = 0
+      Top = 0
+      Width = 310
+      Height = 164
+      Align = alClient
+      BevelOuter = bvNone
+      TabOrder = 0
+      ExplicitLeft = 72
+      ExplicitTop = 48
+      ExplicitWidth = 185
+      ExplicitHeight = 41
+    end
+    object GroupBoxDescription: TGroupBox
+      AlignWithMargins = True
+      Left = 313
+      Top = 0
+      Width = 304
+      Height = 161
+      Margins.Top = 0
+      Align = alClient
+      Caption = ' '#1055#1088#1080#1084#1077#1095#1072#1085#1080#1103' '
+      TabOrder = 1
+      ExplicitLeft = 388
+      ExplicitTop = -1
+      ExplicitWidth = 179
+      ExplicitHeight = 105
+      object DBMemoDescription: TDBMemo
+        AlignWithMargins = True
+        Left = 7
+        Top = 15
+        Width = 290
+        Height = 139
+        Margins.Left = 5
+        Margins.Top = 0
+        Margins.Right = 5
+        Margins.Bottom = 5
+        Align = alClient
+        Color = clBtnFace
+        DataField = 'DESCRIPTION'
+        DataSource = DataSource
+        ReadOnly = True
+        ScrollBars = ssVertical
+        TabOrder = 0
+        ExplicitWidth = 165
+      end
+    end
+  end
+  object TimerRefresh: TTimer
+    Enabled = False
+    OnTimer = TimerRefreshTimer
+    Left = 264
+    Top = 80
+  end
+  object TrayIcon: TTrayIcon
+    BalloonHint = #1055#1088#1086#1074#1077#1088#1100#1090#1077' '#1087#1086#1089#1090#1091#1087#1080#1074#1096#1080#1077' '#1076#1086#1082#1091#1084#1077#1085#1090#1099
+    BalloonTitle = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103
+    BalloonFlags = bfInfo
+    OnDblClick = TrayIconDblClick
+    Left = 328
+    Top = 80
+  end
+  object DataSource: TDataSource
+    Left = 405
+    Top = 275
+  end
+end

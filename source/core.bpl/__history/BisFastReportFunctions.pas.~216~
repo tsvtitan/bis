@@ -1,0 +1,442 @@
+unit BisFastReportFunctions;
+
+interface
+
+implementation
+
+uses SysUtils, Classes, DB, Variants, Controls, ComCtrls, Math, Dialogs,
+     DateUtils,
+     fs_iinterpreter,
+     BisConsts, BisCore, BisUtils, BisDialogs, BisConfig, BisPeriodFm,
+     BisFastReportClasses, BisFastReportComponents;
+
+type
+  TFunctions=class(TfsRTTIModule)
+  private
+    FCatOther: String;
+  public
+    constructor Create(AScript: TfsScript); override;
+    function DataSelectInto(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function PeriodSelect(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function WriteParam(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function ReadParam(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function ShowError(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function ShowWarning(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function ShowInfo(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function ShowQuestion(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function RandomRange(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function StrToIntDef(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function TryStrToInt(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function TryStrToDate(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function TryStrToFloat(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function IncDay(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function IncMonth(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function IncYear(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function VarToStrDef(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function GetStringsByString(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function VarIsNull(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function QuotedStr(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function GetAccountId(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function GetAccountUserName(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function DateOf(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function TimeOf(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+    function GetUniqueId(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+  end;
+
+{ TFunctions }
+
+constructor TFunctions.Create(AScript: TfsScript);
+begin
+  inherited Create(AScript);
+  FCatOther := 'ctOther';
+  with AScript do begin
+
+    AddConst('ColorControlReadOnly','TColor',ColorControlReadOnly);
+  
+    AddMethod('function DataSelectInto(InterfaceName: String; Provider: TBisProvider; LocateFields: String; LocateValues: Variant; MultiSelect: Boolean=false; UseFilter): Boolean',
+              DataSelectInto,FCatOther);
+    AddType('TBisPeriodType',fvtInt);
+    AddConst('ptYear','TBisPeriodType',ptYear);
+    AddConst('ptQuarter','TBisPeriodType',ptQuarter);
+    AddConst('ptMonth','TBisPeriodType',ptMonth);
+    AddConst('ptDay','TBisPeriodType',ptDay);
+    AddConst('ptInterval','TBisPeriodType',ptInterval);
+    AddMethod('function PeriodSelect(var PeriodType: TBisPeriodType; var DateBegin, DateEnd: TDate): Boolean',PeriodSelect,FCatOther);
+    AddType('TBisConfigMode',fvtInt);
+    AddConst('cmDefault','TBisConfigMode',cmDefault);
+    AddConst('cmBase64','TBisConfigMode',cmBase64);
+    AddMethod('procedure WriteParam(const Section,Param: String; Value: Variant; Mode: TBisConfigMode=cmDefault)',WriteParam,FCatOther);
+    AddMethod('function ReadParam(const Section,Param: String; Default: Variant; Mode: TBisConfigMode=cmDefault): Variant',ReadParam,FCatOther);
+
+    AddType('TMsgDlgBtn',fvtInt);
+    AddConst('mbYes','TMsgDlgBtn',mbYes);
+    AddConst('mbNo','TMsgDlgBtn',mbNo);
+    AddConst('mbOK','TMsgDlgBtn',mbOK);
+    AddConst('mbCancel','TMsgDlgBtn',mbCancel);
+    AddConst('mbAbort','TMsgDlgBtn',mbAbort);
+    AddConst('mbRetry','TMsgDlgBtn',mbRetry);
+    AddConst('mbIgnore','TMsgDlgBtn',mbIgnore);
+    AddConst('mbAll','TMsgDlgBtn',mbAll);
+    AddConst('mbNoToAll','TMsgDlgBtn',mbNoToAll);
+    AddConst('mbYesToAll','TMsgDlgBtn',mbYesToAll);
+    AddConst('mbHelp','TMsgDlgBtn',mbHelp);
+
+    AddType('TModalResult',fvtInt);
+    AddConst('mrNone','TModalResult',mrNone);
+    AddConst('mrOk','TModalResult',mrOk);
+    AddConst('mrCancel','TModalResult',mrCancel);
+    AddConst('mrAbort','TModalResult',mrAbort);
+    AddConst('mrRetry','TModalResult',mrRetry);
+    AddConst('mrIgnore','TModalResult',mrIgnore);
+    AddConst('mrYes','TModalResult',mrYes);
+    AddConst('mrNo','TModalResult',mrNo);
+    AddConst('mrAll','TModalResult',mrAll);
+    AddConst('mrNoToAll','TModalResult',mrNoToAll);
+    AddConst('mrYesToAll','TModalResult',mrYesToAll);
+
+    AddMethod('procedure ShowError(Message: String; UseTimer: Boolean=true)',ShowError,FCatOther);
+    AddMethod('procedure ShowInfo(Message: String; UseTimer: Boolean=true)',ShowInfo,FCatOther);
+    AddMethod('procedure ShowWarning(Message: String; UseTimer: Boolean=true)',ShowWarning,FCatOther);
+    AddMethod('function ShowQuestion(Message: String; DefaultButton: TMsgDlgBtn=mbYes; UseTimer: Boolean=true): TModalResult',ShowQuestion,FCatOther);
+    AddMethod('function RandomRange(const AFrom, ATo: Integer): Integer',RandomRange,FCatOther);
+    AddMethod('function StrToIntDef(S: String; Default: Integer): Integer',StrToIntDef,FCatOther);
+    AddMethod('function TryStrToInt(S: String; var Value: Integer): Boolean',TryStrToInt,FCatOther);
+    AddMethod('function TryStrToDate(S: String; var Value: TDateTime): Boolean',TryStrToDate,FCatOther);
+    AddMethod('function TryStrToFloat(S: String; var Value: Extended): Boolean',TryStrToFloat,FCatOther);
+    AddMethod('function IncDay(const AValue: TDateTime; const NumberOfDays: Integer): TDateTime;',IncDay,FCatOther);
+    AddMethod('function IncMonth(const AValue: TDateTime; const NumberOfMonths: Integer): TDateTime;',IncMonth,FCatOther);
+    AddMethod('function IncYear(const AValue: TDateTime; const NumberOfYears: Integer): TDateTime;',IncYear,FCatOther);
+    AddMethod('function VarToStrDef(const V: Variant; const ADefault: String): String;',VarToStrDef,FCatOther);
+    AddMethod('procedure GetStringsByString(const S,Delim: String; Strings: TStrings);',GetStringsByString,FCatOther);
+    AddMethod('function VarIsNull(const V: Variant): Boolean;',VarIsNull,FCatOther);
+    AddMethod('function QuotedStr(const S: string): string;',QuotedStr,FCatOther);
+    AddMethod('function GetAccountId: String;',GetAccountId,FCatOther);
+    AddMethod('function GetAccountUserName: String;',GetAccountUserName,FCatOther);
+    AddMethod('function DateOf(const AValue: TDateTime): TDateTime;',DateOf,FCatOther);
+    AddMethod('function TimeOf(const AValue: TDateTime): TDateTime;',TimeOf,FCatOther);
+    AddMethod('function GetUniqueId: String;',GetUniqueId,FCatOther);
+
+  end;
+end;
+
+function TFunctions.DataSelectInto(Instance: TObject; ClassType: TClass;
+                                   const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  InterfaceName: String;
+  Provider: TBisProvider;
+  LocateFields: String;
+  LocateValues: Variant;
+  MultiSelect: Boolean;
+begin
+  Result:=false;
+  if AnsiSameText(MethodName,'DataSelectInto') then begin
+    InterfaceName:=Variants.VarToStrDef(Caller.Params[0],'');
+    Provider:=TBisProvider(VarToIntDef(Caller.Params[1],0));
+    LocateFields:=Variants.VarToStrDef(Caller.Params[2],'');
+    LocateValues:=Caller.Params[3];
+    MultiSelect:=Boolean(Caller.Params[4]);
+    Result:=Core.DataSelectInto(InterfaceName,Provider.Provider,LocateFields,LocateValues,MultiSelect);
+  end;
+end;
+
+function TFunctions.PeriodSelect(Instance: TObject; ClassType: TClass;
+                                 const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  Form: TBisPeriodForm;
+  PeriodType: TBisPeriodType;
+  DateBegin: TDate;
+  DateEnd: TDate;
+begin
+  Result:=false;
+  if AnsiSameText(MethodName,'PeriodSelect') then begin
+    Form:=TBisPeriodForm.Create(nil);
+    try
+      PeriodType:=TBisPeriodType(VarToIntDef(Caller.Params[0],Integer(ptYear)));
+      DateBegin:=VarToDateDef(Caller.Params[1],Date);
+      DateEnd:=VarToDateDef(Caller.Params[2],Date);
+      Result:=Form.Select(PeriodType,DateBegin,DateEnd);
+      if Result then begin
+        Caller.Params[0]:=PeriodType;
+        Caller.Params[1]:=DateBegin;
+        Caller.Params[2]:=DateEnd;
+      end;
+    finally
+      Form.Free;
+    end;
+  end;
+end;
+
+function TFunctions.WriteParam(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  Section, Param: String;
+  Value: Variant;
+  Mode: TBisConfigMode;
+begin
+  if AnsiSameText(MethodName,'WriteParam') then begin
+    Section:=Variants.VarToStrDef(Caller.Params[0],'');
+    Param:=Variants.VarToStrDef(Caller.Params[1],'');
+    Value:=Caller.Params[2];
+    Mode:=TBisConfigMode(VarToIntDef(Caller.Params[3],0));
+    Core.Profile.Write(Section,Param,Value,Mode);
+  end;
+end;
+
+function TFunctions.ReadParam(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  Section, Param: String;
+  Default: Variant;
+  Mode: TBisConfigMode;
+begin
+  if AnsiSameText(MethodName,'ReadParam') then begin
+    Section:=Variants.VarToStrDef(Caller.Params[0],'');
+    Param:=Variants.VarToStrDef(Caller.Params[1],'');
+    Default:=Caller.Params[2];
+    Mode:=TBisConfigMode(VarToIntDef(Caller.Params[3],0));
+    Result:=Core.Profile.Read(Section,Param,Default,Mode);
+  end;
+end;
+
+function TFunctions.ShowError(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  Mess: String;
+  UseTimer: Boolean;
+begin
+  if AnsiSameText(MethodName,'ShowError') then begin
+    Mess:=Variants.VarToStrDef(Caller.Params[0],'');
+    UseTimer:=Boolean(VarToIntDef(Caller.Params[1],1));
+    BisDialogs.ShowError(Mess,UseTimer);
+  end;
+end;
+
+function TFunctions.ShowInfo(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  Mess: String;
+  UseTimer: Boolean;
+begin
+  if AnsiSameText(MethodName,'ShowInfo') then begin
+    Mess:=Variants.VarToStrDef(Caller.Params[0],'');
+    UseTimer:=Boolean(VarToIntDef(Caller.Params[1],1));
+    BisDialogs.ShowInfo(Mess,UseTimer);
+  end;
+end;
+
+function TFunctions.ShowWarning(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  Mess: String;
+  UseTimer: Boolean;
+begin
+  if AnsiSameText(MethodName,'ShowWarning') then begin
+    Mess:=Variants.VarToStrDef(Caller.Params[0],'');
+    UseTimer:=Boolean(VarToIntDef(Caller.Params[1],1));
+    BisDialogs.ShowWarning(Mess,UseTimer);
+  end;
+end;
+
+function TFunctions.ShowQuestion(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  Mess: String;
+  Button: TMsgDlgBtn;
+  UseTimer: Boolean;
+begin
+  Result:=mrNo;
+  if AnsiSameText(MethodName,'ShowQuestion') then begin
+    Mess:=Variants.VarToStrDef(Caller.Params[0],'');
+    Button:=TMsgDlgBtn(VarToIntDef(Caller.Params[1],Integer(mbNo)));
+    UseTimer:=Boolean(VarToIntDef(Caller.Params[2],1));
+    Result:=BisDialogs.ShowQuestion(Mess,Button,UseTimer);
+  end;
+end;
+
+function TFunctions.RandomRange(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  AFrom, ATo: Integer;
+begin
+  if AnsiSameText(MethodName,'RandomRange') then begin
+    AFrom:=Caller.Params[0];
+    ATo:=Caller.Params[1];
+    Result:=Math.RandomRange(AFrom,ATo);
+  end;
+end;
+
+function TFunctions.StrToIntDef(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  S: String;
+  Def: Integer;
+begin
+  Result:=VarToIntDef(Caller.Params[1],0);
+  if AnsiSameText(MethodName,'StrToIntDef') then begin
+    S:=Variants.VarToStrDef(Caller.Params[0],'');
+    Def:=VarToIntDef(Caller.Params[1],0);
+    Result:=SysUtils.StrToIntDef(S,Def);
+  end;
+end;
+
+function TFunctions.TryStrToInt(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  S: String;
+  Def: Integer;
+begin
+  Result:=false;
+  if AnsiSameText(MethodName,'TryStrToInt') then begin
+    S:=Variants.VarToStrDef(Caller.Params[0],'');
+    Result:=SysUtils.TryStrToInt(S,Def);
+    if Result then begin
+      Caller.Params[1]:=Def;
+    end;
+  end;
+end;
+
+function TFunctions.TryStrToDate(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  S: String;
+  Def: TDateTime;
+begin
+  Result:=false;
+  if AnsiSameText(MethodName,'TryStrToDate') then begin
+    S:=Variants.VarToStrDef(Caller.Params[0],'');
+    Result:=SysUtils.TryStrToDate(S,Def);
+    if Result then begin
+      Caller.Params[1]:=Def;
+    end;
+  end;
+end;
+
+function TFunctions.TryStrToFloat(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  S: String;
+  Def: Extended;
+begin
+  Result:=false;
+  if AnsiSameText(MethodName,'TryStrToFloat') then begin
+    S:=Variants.VarToStrDef(Caller.Params[0],'');
+    Result:=SysUtils.TryStrToFloat(S,Def);
+    if Result then begin
+      Caller.Params[1]:=Def;
+    end;
+  end;
+end;
+
+function TFunctions.IncDay(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  D: TDateTime;
+  Day: Word;
+begin
+  Result:=VarToDateDef(Caller.Params[0],NullDate);
+  if AnsiSameText(MethodName,'IncDay') then begin
+    D:=VarToDateDef(Caller.Params[0],NullDate);
+    Day:=VarToIntDef(Caller.Params[1],1);
+    Result:=DateUtils.IncDay(D,Day);
+  end;
+end;
+
+function TFunctions.IncMonth(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  D: TDateTime;
+  Month: Word;
+begin
+  Result:=VarToDateDef(Caller.Params[0],NullDate);
+  if AnsiSameText(MethodName,'IncMonth') then begin
+    D:=VarToDateDef(Caller.Params[0],NullDate);
+    Month:=VarToIntDef(Caller.Params[1],1);
+    Result:=SysUtils.IncMonth(D,Month);
+  end;
+end;
+
+function TFunctions.IncYear(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  D: TDateTime;
+  Year: Word;
+begin
+  Result:=VarToDateDef(Caller.Params[0],NullDate);
+  if AnsiSameText(MethodName,'IncYear') then begin
+    D:=VarToDateDef(Caller.Params[0],NullDate);
+    Year:=VarToIntDef(Caller.Params[1],1);
+    Result:=SysUtils.IncMonth(D,Year);
+  end;
+end;
+
+function TFunctions.VarToStrDef(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+begin
+  Result:='';
+  if AnsiSameText(MethodName,'VarToStrDef') then begin
+    Result:=Variants.VarToStrDef(Caller.Params[0],'');
+  end;
+end;
+
+function TFunctions.GetStringsByString(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+var
+  S: String;
+  Delim: String;
+  Strings: TStrings;
+begin
+  if AnsiSameText(MethodName,'GetStringsByString') then begin
+    S:=Variants.VarToStrDef(Caller.Params[0],'');
+    Delim:=Variants.VarToStrDef(Caller.Params[1],'');
+    Strings:=TStrings(VarToIntDef(Caller.Params[2],0));
+    BisUtils.GetStringsByString(S,Delim,Strings);
+  end;
+end;
+
+function TFunctions.VarIsNull(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+begin
+  Result:=true;
+  if AnsiSameText(MethodName,'VarIsNull') then begin
+    Result:=Variants.VarIsNull(Caller.Params[0]);
+  end;
+end;
+
+function TFunctions.QuotedStr(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+begin
+  Result:=Caller.Params[0];
+  if AnsiSameText(MethodName,'QuotedStr') then begin
+    Result:=SysUtils.QuotedStr(Caller.Params[0]);
+  end;
+end;
+
+function TFunctions.GetAccountId(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+begin
+  Result:='';
+  if AnsiSameText(MethodName,'GetAccountId') then begin
+    Result:=Core.AccountId;
+  end;
+end;
+
+function TFunctions.GetAccountUserName(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+begin
+  Result:='';
+  if AnsiSameText(MethodName,'GetAccountUserName') then begin
+    Result:=Core.AccountUserName;
+  end;
+end;
+
+function TFunctions.DateOf(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+begin
+  Result:=Caller.Params[0];
+  if AnsiSameText(MethodName,'DateOf') then begin
+    Result:=DateUtils.DateOf(Caller.Params[0]);
+  end;
+end;
+
+function TFunctions.TimeOf(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+begin
+  Result:=Caller.Params[0];
+  if AnsiSameText(MethodName,'TimeOf') then begin
+    Result:=DateUtils.TimeOf(Caller.Params[0]);
+  end;
+end;
+
+function TFunctions.GetUniqueId(Instance: TObject; ClassType: TClass; const MethodName: String; Caller: TfsMethodHelper): Variant;
+begin
+  Result:='';
+  if AnsiSameText(MethodName,'GetUniqueId') then begin
+    Result:=BisUtils.GetUniqueId;
+  end;
+end;
+
+initialization
+  fsRTTIModules.Add(TFunctions);
+
+finalization
+  if fsRTTIModules <> nil then fsRTTIModules.Remove(TFunctions);
+
+end.

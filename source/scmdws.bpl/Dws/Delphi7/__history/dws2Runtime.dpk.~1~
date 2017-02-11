@@ -1,0 +1,59 @@
+package dws2Runtime;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS OFF}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DelphiWebScript II'}
+{$LIBSUFFIX '70'}
+{$LIBVERSION '20'}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl;
+
+{%File '..\source\dws2.inc'}
+
+contains
+  dws2Errors in '..\source\dws2Errors.pas',
+  dws2Strings in '..\source\dws2Strings.pas',
+  dws2Tokenizer in '..\source\dws2Tokenizer.pas',
+  dws2Functions in '..\source\dws2Functions.pas',
+  dws2Symbols in '..\source\dws2Symbols.pas',
+  dws2Exprs in '..\source\dws2Exprs.pas',
+  dws2Comp in '..\source\dws2Comp.pas',
+  dws2Compiler in '..\source\dws2Compiler.pas',
+  dws2Debugger in '..\source\dws2Debugger.pas',
+  dws2Stack in '..\source\dws2Stack.pas',
+  dws2MathFunctions in '..\source\dws2MathFunctions.pas',
+  dws2TimeFunctions in '..\source\dws2TimeFunctions.pas',
+  dws2FileFunctions in '..\source\dws2FileFunctions.pas',
+  dws2CompStrings in '..\source\dws2CompStrings.pas',
+  dws2HtmlFilter in '..\source\dws2HtmlFilter.pas',
+  dws2GlobalVarsFunctions in '..\source\dws2GlobalVarsFunctions.pas',
+  dws2StringResult in '..\Source\dws2StringResult.pas',
+  dws2StringFunctions in '..\Source\dws2StringFunctions.pas',
+  dws2VariantFunctions in '..\Source\dws2VariantFunctions.pas',
+  dws2IDEUtils in '..\Source\dws2IDEUtils.pas',
+  dws2UnitUtils in '..\Source\dws2UnitUtils.pas';
+
+end.

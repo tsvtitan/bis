@@ -1,0 +1,152 @@
+unit BisDesignDataAlarmEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, ImgList,
+  BisDataEditFm, BisParam, BisControls;
+
+type
+  TBisDesignDataAlarmEditForm = class(TBisDataEditForm)
+    LabelRecipient: TLabel;
+    EditRecipient: TEdit;
+    ButtonRecipient: TButton;
+    LabelDateBegin: TLabel;
+    DateTimePickerBegin: TDateTimePicker;
+    DateTimePickerBeginTime: TDateTimePicker;
+    LabelType: TLabel;
+    ComboBoxType: TComboBox;
+    LabelCaption: TLabel;
+    EditCaption: TEdit;
+    LabelText: TLabel;
+    MemoText: TMemo;
+    LabelDateEnd: TLabel;
+    DateTimePickerEnd: TDateTimePicker;
+    DateTimePickerEndTime: TDateTimePicker;
+    LabelSender: TLabel;
+    EditSender: TEdit;
+  private
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure BeforeShow; override;
+
+  end;
+
+  TBisDesignDataAlarmEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDesignDataAlarmInsertFormIface=class(TBisDesignDataAlarmEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDesignDataAlarmUpdateFormIface=class(TBisDesignDataAlarmEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDesignDataAlarmDeleteFormIface=class(TBisDesignDataAlarmEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDesignDataAlarmEditForm: TBisDesignDataAlarmEditForm;
+
+function GetTypeAlarmNameByIndex(Index: Integer): String;
+
+implementation
+
+uses BisUtils, BisCore, BisFilterGroups, BisDesignConsts, BisParamEditDataSelect,
+     BisDesignDataRolesAndAccountsFm;
+
+{$R *.dfm}
+
+function GetTypeAlarmNameByIndex(Index: Integer): String;
+begin
+  Result:='';
+  case Index of
+    0: Result:='Информация';
+    1: Result:='Предупреждение';
+    2: Result:='Ошибка';
+  end;
+end;
+
+{ TBisDesignDataAlarmEditFormIface }
+
+constructor TBisDesignDataAlarmEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDesignDataAlarmEditForm;
+  with Params do begin
+    AddKey('ALARM_ID').Older('OLD_ALARM_ID');
+    AddInvisible('SENDER_ID');
+    AddComboBoxIndex('TYPE_ALARM','ComboBoxType','LabelType',true);
+    AddEditDataSelect('RECIPIENT_ID','EditRecipient','LabelRecipient','ButtonRecipient',
+                      TBisDesignDataRolesAndAccountsFormIface,'RECIPIENT_NAME',false,false,'ACCOUNT_ID','USER_NAME');
+    AddEdit('CAPTION','EditCaption','LabelCaption',true);
+    AddMemo('TEXT_ALARM','MemoText','LabelText',true);
+    AddEdit('SENDER_NAME','EditSender','LabelSender',true).ExcludeModes(AllParamEditModes);
+    AddEditDateTime('DATE_BEGIN','DateTimePickerBegin','DateTimePickerBeginTime','LabelDateBegin',true);
+    AddEditDateTime('DATE_END','DateTimePickerEnd','DateTimePickerEndTime','LabelDateEnd');
+  end;
+end;
+
+{ TBisDesignDataAlarmInsertFormIface }
+
+constructor TBisDesignDataAlarmInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_ALARM';
+  Caption:='Создать оповещение';
+end;
+
+{ TBisDesignDataAlarmUpdateFormIface }
+
+constructor TBisDesignDataAlarmUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_ALARM';
+  Caption:='Изменить оповещение';
+end;
+
+{ TBisDesignDataAlarmDeleteFormIface }
+
+constructor TBisDesignDataAlarmDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_ALARM';
+  Caption:='Удалить оповещение';
+end;
+
+{ TBisDesignDataAlarmEditForm }
+
+constructor TBisDesignDataAlarmEditForm.Create(AOwner: TComponent);
+var
+  i: Integer;
+begin
+  inherited Create(AOwner);
+
+  ComboBoxType.Clear;
+  for i:=0 to 2 do
+    ComboBoxType.Items.Add(GetTypeAlarmNameByIndex(i));
+
+end;
+
+procedure TBisDesignDataAlarmEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  if Mode in [emInsert,emDuplicate] then begin
+    with Provider.Params do begin
+      Find('TYPE_ALARM').SetNewValue(0);
+      Find('SENDER_ID').SetNewValue(Core.ServerDate);
+      Find('DATE_BEGIN').SetNewValue(Core.ServerDate);
+    end;
+  end;
+  UpdateButtonState;
+end;
+
+end.

@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{2d7f424b-25f7-4edb-935d-f5abcf455486}</ProjectGuid>
+    <MainSource>imtaxi.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\imtaxi.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_UnitSearchPath>U:\source\_dcp;U:\source\core.bpl</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp;U:\source\core.bpl</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp;U:\source\core.bpl</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp;U:\source\core.bpl</DCC_IncludePath>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="RunParams">/config imtaxi2.ini /noupdate</Parameters><Parameters Name="HostApplication">U:\bin\taxi.exe</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">2</VersionInfo><VersionInfo Name="MinorVer">1</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">6</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">Taxi interface module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">2.1.0.6</VersionInfoKeys><VersionInfoKeys Name="InternalName">imtaxi.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">imtaxi.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">2.1</VersionInfoKeys><VersionInfoKeys Name="Comments">Taxi interface module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">imtaxi.dpk</Source></Source><Excluded_Packages>
+      
+      
+      
+      
+      <Excluded_Packages Name="$(BDS)\bin\bcboffice2k100.bpl">CodeGear C++Builder Office 2000 Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\bcbofficexp100.bpl">CodeGear C++Builder Office XP Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dcloffice2k100.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dclofficexp100.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+    </Excluded_Packages></Delphi.Personality><ModelSupport>False</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="imtaxi.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="E:\Work\bis\source\core.dcp" />
+    <DCCReference Include="E:\Work\bis\source\imcall.dcp" />
+    <DCCReference Include="E:\Work\bis\source\imdesign.dcp" />
+    <DCCReference Include="E:\Work\bis\source\immess.dcp" />
+    <DCCReference Include="E:\Work\bis\source\omnet.dcp" />
+    <DCCReference Include="imtaxi.bpl\BisTaxiAddressFrm.pas">
+      <Form>BisTaxiAddressFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiClientFm.pas">
+      <Form>BisTaxiClientForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiConsts.pas" />
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataActionEditFm.pas">
+      <Form>BisTaxiDataActionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataActionsFm.pas">
+      <Form>BisTaxiDataActionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataActionsFrm.pas">
+      <Form>BisTaxiDataActionsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataBlackEditFm.pas">
+      <Form>BisTaxiDataBlackEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataBlacksFm.pas">
+      <Form>BisTaxiDataBlacksForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCalcEditFm.pas">
+      <Form>BisTaxiDataCalcEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCalcsFm.pas">
+      <Form>BisTaxiDataCalcsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCallEditFm.pas">
+      <Form>BisTaxiDataCallEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCallFilterFm.pas">
+      <Form>BisTaxiDataCallFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCallsFm.pas">
+      <Form>BisTaxiDataCallsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCarEditFm.pas">
+      <Form>BisTaxiDataCarEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCarsFm.pas">
+      <Form>BisTaxiDataCarsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCarTypeEditFm.pas">
+      <Form>BisTaxiDataCarTypeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCarTypesFm.pas">
+      <Form>BisTaxiDataCarTypesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataChargeEditFm.pas">
+      <Form>BisTaxiDataChargeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataChargeFilterFm.pas">
+      <Form>BisTaxiDataChargeFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataChargesFm.pas">
+      <Form>BisTaxiDataChargesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataChargesFrm.pas">
+      <Form>BisTaxiDataChargesFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataChargeTypeEditFm.pas">
+      <Form>BisTaxiDataChargeTypeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataChargeTypesFm.pas">
+      <Form>BisTaxiDataChargeTypesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataClientChildsFrm.pas">
+      <Form>BisTaxiDataClientChildsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataClientDriverEditFm.pas">
+      <Form>BisTaxiDataClientDriverEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataClientDriversFm.pas">
+      <Form>BisTaxiDataClientDriversForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataClientEditFm.pas">
+      <Form>BisTaxiDataClientEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataClientGroupEditFm.pas">
+      <Form>BisTaxiDataClientGroupEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataClientGroupsFm.pas">
+      <Form>BisTaxiDataClientGroupsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataClientPhoneEditFm.pas">
+      <Form>BisTaxiDataClientPhoneEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataClientPhonesFm.pas">
+      <Form>BisTaxiDataClientPhonesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataClientsFm.pas">
+      <Form>BisTaxiDataClientsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataClientsFrm.pas">
+      <Form>BisTaxiDataClientsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCompositionEditFm.pas">
+      <Form>BisTaxiDataCompositionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCompositionsFm.pas">
+      <Form>BisTaxiDataCompositionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCostEditFm.pas">
+      <Form>BisTaxiDataCostEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataCostsFm.pas">
+      <Form>BisTaxiDataCostsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDiscountEditFm.pas">
+      <Form>BisTaxiDataDiscountEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDiscountsFm.pas">
+      <Form>BisTaxiDataDiscountsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDiscountTypeEditFm.pas">
+      <Form>BisTaxiDataDiscountTypeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDiscountTypesFm.pas">
+      <Form>BisTaxiDataDiscountTypesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDispatcherEditFm.pas">
+      <Form>BisTaxiDataDispatcherEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDispatchersFm.pas">
+      <Form>BisTaxiDataDispatchersForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverDayScheduleFrm.pas">
+      <Form>BisTaxiDataDriverDayScheduleFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverEditFm.pas">
+      <Form>BisTaxiDataDriverEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverInMessageEditFm.pas">
+      <Form>BisTaxiDataDriverInMessageEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverInMessageFilterFm.pas">
+      <Form>BisTaxiDataDriverInMessageFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverInMessagesFm.pas">
+      <Form>BisTaxiDataDriverInMessagesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverOutMessageEditFm.pas">
+      <Form>BisTaxiDataDriverOutMessageEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverOutMessageFilterFm.pas">
+      <Form>BisTaxiDataDriverOutMessageFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverOutMessagesFm.pas">
+      <Form>BisTaxiDataDriverOutMessagesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriversFm.pas">
+      <Form>BisTaxiDataDriversForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriversFrm.pas">
+      <Form>BisTaxiDataDriversFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverShiftEditFm.pas">
+      <Form>BisTaxiDataDriverShiftEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverShiftsFm.pas">
+      <Form>BisTaxiDataDriverShiftsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverTypeEditFm.pas">
+      <Form>BisTaxiDataDriverTypeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverTypesFm.pas">
+      <Form>BisTaxiDataDriverTypesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataDriverWeekScheduleFrm.pas">
+      <Form>BisTaxiDataDriverWeekScheduleFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataInMessageEditFm.pas">
+      <Form>BisTaxiDataInMessageEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataInMessageFilterFm.pas">
+      <Form>BisTaxiDataInMessageFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataInMessagesFm.pas">
+      <Form>BisTaxiDataInMessagesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataMethodEditFm.pas">
+      <Form>BisTaxiDataMethodEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataMethodsFm.pas">
+      <Form>BisTaxiDataMethodsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataOrdersFrm.pas">
+      <Form>BisTaxiDataOrdersFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataOutMessageEditFm.pas">
+      <Form>BisTaxiDataOutMessageEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataOutMessageFilterFm.pas">
+      <Form>BisTaxiDataOutMessageFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataOutMessagesFm.pas">
+      <Form>BisTaxiDataOutMessagesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataParkEditFm.pas">
+      <Form>BisTaxiDataParkEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataParksFm.pas">
+      <Form>BisTaxiDataParksForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataParksFrm.pas">
+      <Form>BisTaxiDataParksFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataParkStateEditFm.pas">
+      <Form>BisTaxiDataParkStateEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataParkStateFilterFm.pas">
+      <Form>BisTaxiDataParkStateFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataParkStatesFm.pas">
+      <Form>BisTaxiDataParkStatesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataRateEditFm.pas">
+      <Form>BisTaxiDataRateEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataRatesFm.pas">
+      <Form>BisTaxiDataRatesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataRatingEditFm.pas">
+      <Form>BisTaxiDataRatingEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataRatingsFm.pas">
+      <Form>BisTaxiDataRatingsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataReceiptEditFm.pas">
+      <Form>BisTaxiDataReceiptEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataReceiptFilterFm.pas">
+      <Form>BisTaxiDataReceiptFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataReceiptsFm.pas">
+      <Form>BisTaxiDataReceiptsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataReceiptsFrm.pas">
+      <Form>BisTaxiDataReceiptsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataReceiptTypeEditFm.pas">
+      <Form>BisTaxiDataReceiptTypeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataReceiptTypesFm.pas">
+      <Form>BisTaxiDataReceiptTypesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataResultEditFm.pas">
+      <Form>BisTaxiDataResultEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataResultsFm.pas">
+      <Form>BisTaxiDataResultsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataScoreEditFm.pas">
+      <Form>BisTaxiDataScoreEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataScoreFilterFm.pas">
+      <Form>BisTaxiDataScoreFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataScoresFm.pas">
+      <Form>BisTaxiDataScoresForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataScoresFrm.pas">
+      <Form>BisTaxiDataScoresFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataServiceEditFm.pas">
+      <Form>BisTaxiDataServiceEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataServicesFm.pas">
+      <Form>BisTaxiDataServicesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataShiftEditFm.pas">
+      <Form>BisTaxiDataShiftEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataShiftsFm.pas">
+      <Form>BisTaxiDataShiftsForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataSourceEditFm.pas">
+      <Form>BisTaxiDataSourceEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataSourcesFm.pas">
+      <Form>BisTaxiDataSourcesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataZoneEditFm.pas">
+      <Form>BisTaxiDataZoneEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataZoneParkEditFm.pas">
+      <Form>BisTaxiDataZoneParkEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataZoneParksFm.pas">
+      <Form>BisTaxiDataZoneParksForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataZonesFm.pas">
+      <Form>BisTaxiDataZonesForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDataZonesFrm.pas">
+      <Form>BisTaxiDataZonesFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDriverParkDeleteFm.pas">
+      <Form>BisTaxiDriverParkDeleteForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDriverParkInsertFm.pas">
+      <Form>BisTaxiDriverParkInsertForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDriverParksFrm.pas">
+      <Form>BisTaxiDriverParksFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDriverShiftDeleteFm.pas">
+      <Form>BisTaxiDriverShiftDeleteForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDriverShiftInsertFm.pas">
+      <Form>BisTaxiDriverShiftInsertForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiDriverShiftsFrm.pas">
+      <Form>BisTaxiDriverShiftsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiHistoryFrm.pas">
+      <Form>BisTaxiHistoryFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiInit.pas" />
+    <DCCReference Include="imtaxi.bpl\BisTaxiMainFm.pas">
+      <Form>BisTaxiMainForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiOrderEditFm.pas">
+      <Form>BisTaxiOrderEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiOrderFilterFm.pas">
+      <Form>BisTaxiOrderFilterForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiOrdersFm.pas">
+      <Form>BisTaxiOrdersForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiOrdersFrm.pas">
+      <Form>BisTaxiOrdersFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiPhoneFm.pas">
+      <Form>BisTaxiPhoneForm</Form>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiPhoneFrm.pas">
+      <Form>BisTaxiPhoneFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiRouteFrm.pas">
+      <Form>BisTaxiRouteFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="imtaxi.bpl\BisTaxiRouteHistoryFrm.pas">
+      <Form>BisTaxiRouteHistoryFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+  </ItemGroup>
+</Project>

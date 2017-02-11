@@ -1,0 +1,142 @@
+inherited BisFastReportFrame: TBisFastReportFrame
+  AlignWithMargins = True
+  Width = 410
+  Constraints.MinWidth = 410
+  OnMouseWheel = FrameMouseWheel
+  ExplicitWidth = 410
+  inherited PanelReport: TPanel
+    AlignWithMargins = True
+    Top = 29
+    Width = 410
+    Height = 121
+    Margins.Left = 0
+    Margins.Right = 0
+    Margins.Bottom = 0
+    BorderWidth = 0
+    ExplicitLeft = 3
+    ExplicitTop = 35
+    ExplicitWidth = 410
+    ExplicitHeight = 112
+  end
+  inherited ControlBar: TControlBar
+    Width = 410
+    Height = 26
+    BorderWidth = 0
+    ExplicitLeft = 3
+    ExplicitTop = 3
+    ExplicitWidth = 410
+    ExplicitHeight = 26
+    inherited ToolBarRefresh: TToolBar
+      Width = 154
+      ExplicitWidth = 154
+      inherited ToolButtonExport: TToolButton
+        DropdownMenu = PopupExport
+        Style = tbsDropDown
+        ExplicitWidth = 36
+      end
+      inherited ToolButtonEdit: TToolButton
+        Left = 59
+        ExplicitLeft = 59
+      end
+      inherited ToolButtonPrint: TToolButton
+        Left = 82
+        ExplicitLeft = 82
+      end
+      inherited ToolButtonFind: TToolButton
+        Left = 105
+        ExplicitLeft = 105
+      end
+      inherited ToolButtonProperty: TToolButton
+        Left = 128
+        ExplicitLeft = 128
+      end
+    end
+    inherited ToolBarNavigate: TToolBar
+      Left = 275
+      Width = 127
+      TabOrder = 2
+      ExplicitLeft = 275
+      ExplicitWidth = 127
+      inherited PanelPageNum: TPanel
+        inherited EditPageNum: TEdit
+          Left = 1
+          Width = 33
+          Margins.Left = 1
+          Margins.Right = 1
+          ExplicitLeft = 1
+          ExplicitWidth = 33
+        end
+      end
+    end
+    object ToolBarScale: TToolBar
+      Left = 178
+      Top = 2
+      Width = 84
+      Height = 22
+      AutoSize = True
+      Caption = #1053#1072#1074#1080#1075#1072#1094#1080#1103
+      DrawingStyle = dsGradient
+      Images = ImageList
+      TabOrder = 1
+      object PanelScale: TPanel
+        Left = 0
+        Top = 0
+        Width = 81
+        Height = 22
+        BevelOuter = bvNone
+        TabOrder = 0
+        object ComboBoxScale: TComboBox
+          AlignWithMargins = True
+          Left = 0
+          Top = 0
+          Width = 81
+          Height = 21
+          Margins.Left = 0
+          Margins.Top = 0
+          Margins.Right = 0
+          Margins.Bottom = 0
+          Align = alClient
+          Style = csDropDownList
+          ItemHeight = 13
+          TabOrder = 0
+          OnChange = ComboBoxScaleChange
+        end
+      end
+    end
+  end
+  inherited ActionList: TActionList
+    object ActionUp: TAction [9]
+      Caption = 'ActionUp'
+      ShortCut = 38
+      OnExecute = ActionUpExecute
+      OnUpdate = ActionUpUpdate
+    end
+    object ActionDown: TAction [10]
+      Caption = 'ActionDown'
+      ShortCut = 40
+      OnExecute = ActionDownExecute
+      OnUpdate = ActionDownUpdate
+    end
+    object ActionPopup: TAction [11]
+      Caption = 'ActionPopup'
+      ShortCut = 8313
+      OnExecute = ActionPopupExecute
+    end
+  end
+  inherited ImageList: TImageList
+    Top = 60
+  end
+  inherited Popup: TPopupActionBar
+    Left = 152
+    Top = 58
+    object MenuItemExport: TMenuItem [1]
+      Caption = #1069#1082#1089#1087#1086#1088#1090
+      Hint = #1069#1082#1089#1087#1086#1088#1090' '#1086#1090#1095#1077#1090#1072
+      ImageIndex = 2
+    end
+  end
+  object PopupExport: TPopupActionBar
+    Left = 232
+    Top = 56
+  end
+end

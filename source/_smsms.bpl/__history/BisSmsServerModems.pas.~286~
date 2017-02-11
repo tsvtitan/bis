@@ -1,0 +1,374 @@
+unit BisSmsServerModems;
+
+interface
+
+
+uses Classes, Contnrs, Variants,
+     BisLogger, BisGsmModem, BisCoreObjects, BisServers, BisComPort;
+
+type
+  TBisSmsServerModemMode=(mmAll,mmIncoming,mmOutgoing);
+
+  TBisSmsServerModem=class;
+
+  TBisSmsServerModemThread=class(TThread)
+  private
+    FModem: TBisGsmModem;
+    FParent: TBisSmsServerModem;
+    FLoggerType: TBisLoggerType;
+    FMessage: String;
+    procedure LoggerWrite;
+    procedure DoStatus(Message: String; LogType: TBisLoggerType);
+    procedure ModemStatus(Sender: TObject; Message: String; Error: Boolean=false);
+  protected
+    property Modem: TBisGsmModem read FModem;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure Execute; override;
+
+    property Parent: TBisSmsServerModem read FParent write FParent;
+  end;
+
+  TBisSmsServerModem=class(TBisCoreObject)
+  private
+    FThread: TBisSmsServerModemThread;
+
+    FMode: TBisSmsServerModemMode;
+    FServer: TBisServer;
+    FCheckImsi: String;
+    FCheckImei: String;
+    FBaudRate: TBisComPortBaudRate;
+    FParityBits: TBisComPortParityBits;
+    FStopBits: TBisComPortStopBits;
+    FPort: String;
+    FDataBits: TBisComPortDataBits;
+    FThreadBreaked: Boolean;
+    FInterval: Integer;
+    FStorages: String;
+
+    function GetConnected: Boolean;
+    procedure ThreadTerminate(Sender: TObject);
+  protected
+    property ThreadBreaked: Boolean read FThreadBreaked write FThreadBreaked;   
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure LoggerWrite(const Message: String; LogType: TBisLoggerType=ltInformation; const LoggerName: String=''); override;
+
+    procedure Connect;
+    procedure Disconnect;
+
+    property Mode: TBisSmsServerModemMode read FMode write FMode;
+    property CheckImei: String read FCheckImei write FCheckImei;
+    property CheckImsi: String read FCheckImsi write FCheckImsi;
+
+    property Port: String read FPort write FPort;
+    property BaudRate: TBisComPortBaudRate read FBaudRate write FBaudRate;
+    property StopBits: TBisComPortStopBits read FStopBits write FStopBits;
+    property DataBits: TBisComPortDataBits read FDataBits write FDataBits;
+    property ParityBits: TBisComPortParityBits read FParityBits write FParityBits;
+    property Interval: Integer read FInterval write FInterval;
+    property Storages: String read FStorages write FStorages;
+
+    property Server: TBisServer read FServer write FServer;
+
+    property Connected: Boolean read GetConnected;
+
+  end;
+
+  TBisSmsServerModems=class(TBisCoreObjects)
+  private
+    function GetItems(Index: Integer): TBisSmsServerModem;
+    function GetConnected: Boolean;
+  public
+    function FindByPort(Port: String): TBisSmsServerModem;
+    function AddPort(Port: String): TBisSmsServerModem;
+
+    procedure Connect;
+    procedure Disconnect;
+
+    property Items[Index: Integer]: TBisSmsServerModem read GetItems;
+    property Connected: Boolean read GetConnected;
+  end;
+
+
+implementation
+
+uses Windows, SysUtils, StrUtils,
+     BisUtils, BisCore, BisProvider;
+
+
+{ TBisSmsServerModemThread }
+
+constructor TBisSmsServerModemThread.Create;
+begin
+  inherited Create(true);
+  FModem:=TBisGsmModem.Create(nil);
+end;
+
+destructor TBisSmsServerModemThread.Destroy;
+begin
+  FParent:=nil;
+  TerminateThread(Handle,0);
+  FreeAndNilEx(FModem);
+  inherited Destroy;
+end;
+
+procedure TBisSmsServerModemThread.LoggerWrite;
+begin
+  if Assigned(FParent) then
+    FParent.LoggerWrite(FMessage,FLoggerType);
+end;
+
+procedure TBisSmsServerModemThread.DoStatus(Message: String; LogType: TBisLoggerType);
+begin
+  FMessage:=Message;
+  FLoggerType:=LogType;
+  Synchronize(LoggerWrite);
+end;
+
+procedure TBisSmsServerModemThread.ModemStatus(Sender: TObject; Message: String; Error: Boolean=false);
+begin
+  FMessage:=VisibleControlCharacter(Message);
+  FLoggerType:=ltInformation;
+  if Error then
+    FLoggerType:=ltError;
+  Synchronize(LoggerWrite);
+end;
+
+procedure TBisSmsServerModemThread.Execute;
+
+  // read from modem and insert into database
+  procedure InMessages;
+  var
+    i: Integer;
+    Storage: String;
+    Strings: TStringList;
+    Messages: TBisGsmModemMessages;
+    Item: TBisGsmModemMessage;
+    P: TBisProvider;
+    List: TList;
+    SenderId: Variant;
+    CodeMessageId: Variant;
+    DateSend: TDateTime;
+    TextIn: String;
+    Contact: String;
+  begin
+    Strings:=TStringList.Create;
+    Messages:=TBisGsmModemMessages.Create;
+    List:=TList.Create;
+    try
+
+      GetStringsByString(FParent.Storages,',',Strings);
+      for i:=0 to Strings.Count-1 do begin
+        Storage:=Strings[i];
+        FModem.ReadMessages(Messages,Storage);
+      end;
+
+      for i:=0 to Messages.Count-1 do begin
+        Item:=Messages.Items[i];
+        
+        P:=TBisProvider.Create(nil);
+        try
+          P.WithWaitCursor:=false;
+          P.StopException:=false;
+          P.ProviderName:='I_IN_MEASSAGE';
+          with P.Params do begin
+            AddKey('IN_MESSAGE_ID');
+            AddInvisible('SENDER_ID').Value:=SenderId;
+            AddInvisible('CODE_MESSAGE_ID').Value:=CodeMessageId;
+            AddInvisible('DATE_SEND').Value:=DateSend;
+            AddInvisible('TEXT_IN').Value:=TextIn;
+            AddInvisible('DATE_IN').Value:=Null;
+            AddInvisible('TYPE_MESSAGE').Value:=0;
+            AddInvisible('CONTACT').Value:=Contact;
+          end;
+          try
+            P.Execute;
+            if P.Success then begin
+              List.Add(Item);
+            end;
+          except
+            On E: Exception do begin
+
+            end;
+          end;
+        finally
+          P.Free;
+        end;
+      end;
+
+    finally
+      List.Free;
+      Messages.Free;
+      Strings.Free;
+    end;
+  end;
+
+  // read from database and send by modem
+  procedure OutMessages;
+  begin
+
+  end;
+
+begin
+  if Assigned(FParent) and Assigned(FParent.Server) and Assigned(Core) then begin
+
+    FModem.OnStatus:=ModemStatus;
+    FModem.Port:=FParent.Port;
+    FModem.BaudRate:=FParent.BaudRate;
+    FModem.StopBits:=FParent.StopBits;
+    FModem.DataBits:=FParent.DataBits;
+    FModem.ParityBits:=FParent.ParityBits;
+
+    FModem.Connect;
+    try
+      if FModem.Connected then begin
+
+        while true do begin
+          Sleep(FParent.Interval);
+          FParent.Server.Working:=true;
+          try
+
+            case FParent.Mode of
+              mmAll: begin
+                InMessages;
+                OutMessages;
+              end;
+              mmIncoming: InMessages;
+              mmOutgoing: OutMessages;
+            end;
+
+            if FParent.ThreadBreaked then
+              Break;
+          finally
+            FParent.Server.Working:=false;
+          end;
+        end;
+
+      end;
+    finally
+      FModem.Disconnect;
+    end;
+  end;
+end;
+
+{ TBisSmsServerModem }
+
+constructor TBisSmsServerModem.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FInterval:=1000;
+end;
+
+destructor TBisSmsServerModem.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TBisSmsServerModem.GetConnected: Boolean;
+begin
+  Result:=Assigned(FThread) and Assigned(FThread.Modem) and
+          FThread.Modem.Connected;
+end;
+
+procedure TBisSmsServerModem.LoggerWrite(const Message: String; LogType: TBisLoggerType; const LoggerName: String);
+var
+  S: String;
+begin
+  if Assigned(FServer) then begin
+    S:=Format('%s: %s',[FPort,Message]);
+    FServer.LoggerWrite(S,LogType,LoggerName);
+  end;
+end;
+
+procedure TBisSmsServerModem.Connect;
+begin
+  Disconnect;
+  if not Connected then begin
+    FThreadBreaked:=false;
+    FThread:=TBisSmsServerModemThread.Create;
+    FThread.Parent:=Self;
+    FThread.OnTerminate:=ThreadTerminate;
+    FThread.FreeOnTerminate:=true;
+    FThread.Resume;
+  end;
+end;
+
+procedure TBisSmsServerModem.Disconnect;
+begin
+  if Assigned(FThread) then
+    FreeAndNilEx(FThread);
+end;
+
+procedure TBisSmsServerModem.ThreadTerminate(Sender: TObject);
+begin
+  if FThreadBreaked then begin
+    FThread:=nil;
+  end;
+end;
+
+{ TBisSmsServerModems }
+
+procedure TBisSmsServerModems.Connect;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do
+    Items[i].Connect;
+end;
+
+procedure TBisSmsServerModems.Disconnect;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do
+    Items[i].Disconnect;
+end;
+
+function TBisSmsServerModems.GetConnected: Boolean;
+var
+  i: Integer;
+begin
+  Result:=false;
+  for i:=0 to Count-1 do
+    if Items[i].Connected then begin
+      Result:=true;
+      exit;
+    end;
+
+end;
+
+function TBisSmsServerModems.FindByPort(Port: String): TBisSmsServerModem;
+var
+  i: Integer;
+  Item: TBisSmsServerModem;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.Port,Port) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisSmsServerModems.AddPort(Port: String): TBisSmsServerModem;
+begin
+  Result:=nil;
+  if not Assigned(FindByPort(Port)) then begin
+    Result:=TBisSmsServerModem.Create(nil);
+    Result.Port:=Port;
+    Objects.Add(Result);
+  end;
+end;
+
+function TBisSmsServerModems.GetItems(Index: Integer): TBisSmsServerModem;
+begin
+  Result:=TBisSmsServerModem(inherited Items[Index]);
+end;
+
+
+end.

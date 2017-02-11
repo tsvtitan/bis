@@ -1,0 +1,37 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = dws2VCLPasGenRuntime50_20.bpl dcldws2PasGen50_20.bpl \
+  dws2PascalParsingRuntime50_20.bpl dws2OTAFoundationRuntime50_20.bpl \
+  dcldws2UnitEditorRichPkg50_20.bpl dcldws2UnitEditorSynPkg50_20.bpl
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+dws2VCLPasGenRuntime50_20.bpl: PascalGeneration\Delphi5\dws2VCLPasGenRuntime50_20.dpk
+  $(DCC)
+
+dcldws2PasGen50_20.bpl: PascalGeneration\Delphi5\dcldws2PasGen50_20.dpk
+  $(DCC)
+
+dws2PascalParsingRuntime50_20.bpl: PascalParsing\Delphi5\dws2PascalParsingRuntime50_20.dpk
+  $(DCC)
+
+dcldws2UnitEditorRichPkg50_20.bpl: UnitCompEditor\Delphi5\dcldws2UnitEditorRichPkg50_20.dpk
+  $(DCC)
+
+dcldws2UnitEditorSynPkg50_20.bpl: UnitCompEditor\Delphi5\dcldws2UnitEditorSynPkg50_20.dpk
+  $(DCC)
+
+dws2OTAFoundationRuntime50_20.bpl: OpenToolsAPI\Delphi5\dws2OTAFoundationRuntime50_20.dpk
+  $(DCC)
+
+

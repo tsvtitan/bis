@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ 
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=windows-1252">
+ 
+  <meta http-equiv="Content-Language" content="en-us">
+  <title>New Features in DWS II</title>
+</head>
+  <body bgcolor="#ffffff">
+  
+<h1>DelphiWebScript II </h1>
+  
+<h1>ISAPI DLL</h1>
+  
+<p>The DelphiWebScript II ISAPI DLL is an ISAPI module that runs on every
+ISAPI capable web server (tested with PersonalWebServer, IIS 5 and OmniHttpd).</p>
+ 
+<h2>Contents</h2>
+ 
+<p>This DLL processes HTML documents with DWSII scripts embedded in HTML
+comment tags (&lt;% %&gt;). If a session id is passed in the HTTP request
+the built-in session manager is activated and preserves the session data
+(properties of class User) across HTTP requests. If the built-in remote debugger
+is enabled the DLL connects to the external remote debugger IDE (also part
+of this package) and processes the script in debugging mode. </p>
+ 
+<p>Available script functions:</p>
+ 
+<ul>
+   <li>All built-in DWSII utility functions</li>
+   <li>Send(), SendLn(): Send a string to the response.</li>
+   <li>Class "Request" to read the properties of the HTTP-Request that  
+  started the script</li>
+   <li>Class "Response" to read and write the properties of the HTTP    
+Response that will be sent if the script was processed.</li>
+   <li>Class "ScriptDoc" to read information about the script file</li>
+   <li>Class "Session" to read and write information about the current  
+  user session.</li>
+   <li>Function "TID" returns the session id.  </li>
+   <li>Class "TQuery" provides simple database access to BDE database   
+ aliases.</li>
+ 
+</ul>
+ 
+<h2>Installation</h2>
+ 
+<ul>
+   <li>Copy the file dws2.dll to the "scripts" directory of your web    
+server. </li>
+   <li>If necessary: Configure your web server the way that it passes requested
+documents with extension .dws to dws2.dll. </li>
+ 
+</ul>
+ 
+<p>Example: If you use PersonalWebServer (ships with Windows 98) the "scripts"
+path is "C:\inetinfo\scripts". Copy "index.dws" and the directory "demos"
+to "C:\inetinfo\wwwroot" and open the link "http://localhost/scripts/dws2.dll/index.dws" 
+in your browser. </p>
+ 
+<h2>Documentation</h2>
+ 
+<p>Have a look at the example files "index.dws" and the other example files 
+in the "demos" directory.</p>
+ 
+<h2>Configuration</h2>
+ 
+<ul>
+   <li>Script Tags: &lt;% %&gt;</li>
+   <li>Session Manager: Session cookies disabled, session ID identifier "TID", 
+    maximal concurrent sessions 150, session timeout 10 Minutes, </li>
+ 
+</ul>
+ 
+<h2>Sources</h2>
+ 
+<p>The sources for this DLL are available. Download the following components, 
+install all components and build the Delphi project "dws2Isapi\dws2.dpr".</p>
+ 
+<ul>
+   <li>DelphiWebScript II Source Package (available on the <a
+ href="http://www.dwscript.com/dwsc/">DWSC</a>     sources page)     
+    <ul>
+       <li>DelphiWebScript II</li>
+       <li>DelphiWebScript II - WebLib</li>
+       <li>DelphiWebScript II - DbLib</li>
+       <li>dws2Isapi software </li>
+     
+    </ul>
+   </li>
+   <li>DelphiWebScript II - RemoteDebugger (available on the <a
+ href="http://www.dwscript.com/dwsc/">DWSC</a>     components page)</li>
+   <li> SynEdit components (http://synedit.sourceforge.net)</li>
+   <li>Indy components (http://www.nevrona.com/Indy/) </li>
+ 
+</ul>
+ 
+<h2>Information</h2>
+ 
+<p>License: Freeware</p>
+ 
+<p>Author: Matthias Ackermann (basing on the work of Hannes Hernler, Willibald 
+Krenn and including work of Danilo Luiz Rheinheimer)</p>
+ 
+<p>Further information: <a href="http://www.dwscript.com">http://www.dwscript.com</a></p>
+ <br>
+</body>
+</html>

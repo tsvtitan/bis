@@ -1,0 +1,251 @@
+unit BisAudioTextPhrases;
+
+interface
+
+uses Contnrs,
+     BisAudioWave;
+
+type
+  TBisAudioTextSampleType=(tstSymbol,tstSyllable,tstWord,tstPhrase);
+  
+  TBisAudioTextSample=class(TObject)
+  private
+    FText: String;
+    FSampleType: TBisAudioTextSampleType;
+    FWave: TBisAudioWave;
+  public
+    constructor Create; virtual;
+    destructor Destroy; override;
+
+    property Text: String read FText;
+    property SampleType: TBisAudioTextSampleType read FSampleType;
+    property Wave: TBisAudioWave read FWave;
+  end;
+
+  TBisAudioTextSamples=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisAudioTextSample;
+  public
+    function Add(const Text: String; SampleType: TBisAudioTextSampleType): TBisAudioTextSample; 
+    function GetWave(Wave: TBisAudioWave): Boolean;
+
+    property Items[Index: Integer]: TBisAudioTextSample read GetItem; default;
+  end;
+
+  TBisAudioTextPhrase=class(TObject)
+  private
+    FText: String;
+    FBefore: Integer;
+    FAfter: Integer;
+    FSamples: TBisAudioTextSamples;
+
+    procedure SetAsXml(const S: String);
+  public
+    constructor Create; virtual;
+    destructor Destroy; override;
+    function GetWave(Wave: TBisAudioWave): Boolean;
+
+    property Text: String read FText;
+    property Before: Integer read FBefore;
+    property After: Integer read FAfter;
+    property Samples: TBisAudioTextSamples read FSamples;  
+  end;
+
+  TBisAudioTextPhrases=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisAudioTextPhrase;
+  public
+    function Add(const Text: String; Before: Integer=0; After: Integer=0): TBisAudioTextPhrase;
+    function AddXml(const Xml: String): TBisAudioTextPhrase;
+
+    procedure Parse(const Text: String);
+
+    property Items[Index: Integer]: TBisAudioTextPhrase read GetItem; default;
+  end;
+
+implementation
+
+uses SysUtils, Variants, Math,
+     ALXMLDoc,
+     BisUtils;
+
+{ TBisAudioTextSample }
+
+constructor TBisAudioTextSample.Create;
+begin
+  inherited Create;
+  FWave:=TBisAudioWave.Create;
+end;
+
+destructor TBisAudioTextSample.Destroy;
+begin
+  FWave.Free;
+  inherited Destroy;
+end;
+
+{ TBisAudioTextSamples }
+
+function TBisAudioTextSamples.GetItem(Index: Integer): TBisAudioTextSample;
+begin
+  Result:=TBisAudioTextSample(inherited Items[Index]);
+end;
+
+function TBisAudioTextSamples.Add(const Text: String; SampleType: TBisAudioTextSampleType): TBisAudioTextSample;
+begin
+  Result:=nil;
+  if Trim(Text)<>'' then begin
+    Result:=TBisAudioTextSample.Create;
+    Result.FText:=Text;
+    Result.FSampleType:=SampleType;
+    inherited Add(Result);
+  end;
+
+end;
+
+function TBisAudioTextSamples.GetWave(Wave: TBisAudioWave): Boolean;
+var
+  i: Integer;
+  Item: TBisAudioTextSample;
+begin
+  Result:=false;
+  if Assigned(Wave) and Wave.Valid then begin
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      if Item.Wave.Valid and not Item.Wave.Empty then
+        Wave.Insert(Wave.Length,Item.Wave);
+    end;
+  end;
+end;
+
+{ TBisAudioTextPhrase }
+
+constructor TBisAudioTextPhrase.Create;
+begin
+  inherited Create;
+  FSamples:=TBisAudioTextSamples.Create;
+end;
+
+destructor TBisAudioTextPhrase.Destroy;
+begin
+  FSamples.Free;
+  inherited Destroy;
+end;
+
+procedure TBisAudioTextPhrase.SetAsXml(const S: String);
+var
+  Xml: TALXMLDocument;
+  Node: TALXMLNode;
+  i: Integer;
+begin
+  Xml:=TALXMLDocument.Create(nil);
+  try
+    Xml.LoadFromXML(S);
+    for i:=0 to Xml.ChildNodes.Count-1 do begin
+      Node:=Xml.ChildNodes[i];
+      if AnsiSameText(Node.NodeName,'t') then begin
+        FText:=VarToStrDef(Node.NodeValue,'');
+        FBefore:=VarToIntDef(Node.Attributes['b'],0);
+        FAfter:=VarToIntDef(Node.Attributes['a'],0);
+      end;
+    end;
+  finally
+    Xml.Free;
+  end;
+end;
+
+function TBisAudioTextPhrase.GetWave(Wave: TBisAudioWave): Boolean;
+var
+  Temp: Cardinal;
+begin
+  Result:=FSamples.GetWave(Wave);
+  if Result and Wave.Valid and not Wave.Empty then begin
+
+    if FBefore<>0 then begin
+      if FBefore>0 then
+        Wave.InsertSilence(0,FBefore)
+      else begin
+        Temp:=Abs(FBefore);
+        if Temp>=Wave.Length then
+          Temp:=Wave.Length;
+        Wave.Delete(0,Temp);
+      end;
+    end;
+
+    if FAfter<>0 then begin
+      if FAfter>0 then
+        Wave.InsertSilence(Wave.Length,FAfter)
+      else begin
+        Temp:=Abs(FAfter);
+        if Temp>=Wave.Length then
+          Temp:=Wave.Length;
+        Wave.Delete(Wave.Length-Temp,Temp);
+      end;
+    end;
+
+  end;
+end;
+
+{ TBisAudioTextPhrases }
+
+function TBisAudioTextPhrases.GetItem(Index: Integer): TBisAudioTextPhrase;
+begin
+  Result:=TBisAudioTextPhrase(inherited Items[Index]);
+end;
+
+function TBisAudioTextPhrases.Add(const Text: String; Before, After: Integer): TBisAudioTextPhrase;
+begin
+  Result:=nil;
+  if Trim(Text)<>'' then begin
+    Result:=TBisAudioTextPhrase.Create;
+    Result.FText:=Text;
+    Result.FBefore:=Before;
+    Result.FAfter:=After;
+    inherited Add(Result);
+  end;
+end;
+
+function TBisAudioTextPhrases.AddXml(const Xml: String): TBisAudioTextPhrase;
+begin
+  Result:=nil;
+  if Trim(Xml)<>'' then begin
+    Result:=TBisAudioTextPhrase.Create;
+    Result.SetAsXml(Xml);
+    inherited Add(Result);
+  end;
+end;
+
+procedure TBisAudioTextPhrases.Parse(const Text: String);
+var
+  APos1,APos2: Integer;
+  S,Temp: String;
+const
+  D1='<t';
+  D2='/t>';
+begin
+  Clear;
+  Temp:=Text;
+  APos1:=-1;
+  APos2:=-1;
+  while (APos1<>0) and (APos2<>0) do begin
+    APos1:=AnsiPos(D1,Temp);
+    if APos1>0 then begin
+      S:=Copy(Temp,1,APos1-1);
+      Add(S);
+      Temp:=Copy(Temp,APos1,Length(Temp));
+      APos2:=AnsiPos(D2,Temp);
+      if APos2>0 then begin
+        S:=Copy(Temp,1,APos2+Length(D2)-1);
+        AddXml(S);
+        Temp:=Copy(Temp,APos2+Length(D2),Length(Temp));
+      end else begin
+        Add(Temp);
+        break;
+      end;
+    end else begin
+      Add(Temp);
+      break;
+    end;
+  end;
+end;
+
+end.

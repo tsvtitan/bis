@@ -1,0 +1,724 @@
+unit BisCallcTaskFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ExtCtrls, StdCtrls, DB, Buttons,
+  BisFm, BisCallcTaskFrm, BisControls;
+
+type
+  TBisCallcTaskFormResultType=(rtNoAction,rtAction,rtClose,rtNewPlan);
+
+  TBisCallcTaskFormResultInfo=class(TObject)
+  private
+    FResultId: Variant;
+    FActionId: Variant;
+    FPeriod: Integer;
+    FResultType: TBisCallcTaskFormResultType;
+    FChoiceDate: Boolean;
+    FChoicePerformer: Boolean;
+    FActionName: String;
+  public
+    property ResultId: Variant read FResultId write FResultId;
+    property ActionId: Variant read FActionId write FActionId;
+    property ActionName: String read FActionName write FActionName; 
+    property Period: Integer read FPeriod write FPeriod;
+    property ResultType: TBisCallcTaskFormResultType read FResultType write FResultType;
+    property ChoiceDate: Boolean read FChoiceDate write FChoiceDate;
+    property ChoicePerformer: Boolean read FChoicePerformer write FChoicePerformer;
+  end;
+
+  TBisCallcTaskForm = class(TBisForm)
+    StatusBar: TStatusBar;
+    PanelTask: TPanel;
+    PanelFrame: TPanel;
+    GroupBoxTask: TGroupBox;
+    TimerRefresh: TTimer;
+    TimerTime: TTimer;
+    LabelNoTask: TLabel;
+    PanelControls: TPanel;
+    LabelAction: TLabel;
+    EditAction: TEdit;
+    LabelDateBegin: TLabel;
+    EditDateBegin: TEdit;
+    LabelTime: TLabel;
+    EditTime: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelResult: TLabel;
+    ComboBoxResult: TComboBox;
+    ButtonExecute: TBitBtn;
+    LabelNextDate: TLabel;
+    DateTimePickerNext: TDateTimePicker;
+    DateTimePickerNextTime: TDateTimePicker;
+    ButtonDescription: TButton;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure TimerTimeTimer(Sender: TObject);
+    procedure ButtonExecuteClick(Sender: TObject);
+    procedure ComboBoxResultChange(Sender: TObject);
+    procedure TimerRefreshTimer(Sender: TObject);
+    procedure ButtonDescriptionClick(Sender: TObject);
+  private
+    FTaskId: Variant;
+    FActionId: Variant;
+    FOldGroupBoxTaskCaption: String;
+    FDateCreate: Variant;
+    FTimeDays: Integer;
+    FFrame: TBisCallcTaskFrame;
+    FUseReadiness: Boolean;
+    FPurpose: Integer;
+    FOnlyOneTask: Boolean;
+    FFromDateCreate: Variant;
+
+    procedure FirstState;
+    procedure VisibleControls(AVisible: Boolean);
+    procedure UpdateButton;
+    procedure EnableNextDateControls(AEnabled: Boolean);
+    function Readiness: Boolean;
+    procedure EnableControls(AEnabled: Boolean);
+    procedure FrameChangeControls(AEnabled: Boolean; TaskChanged: Boolean);
+    procedure SetOnlyOneTask(const Value: Boolean);
+  protected
+    function GetFrameClass: TBisCallcTaskFrameClass; virtual;
+    function ExecuteTask: Boolean; virtual;
+    function CheckControls: Boolean; virtual;
+    function TaskExists: Boolean;
+    procedure LockTask;
+    procedure UnLockTask;
+    procedure RefreshTask;
+    procedure RefreshControls;
+    procedure RefreshTime;
+    procedure ResetTime;
+    procedure RefreshResults;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure BeforeShow; override;
+    function CanShow: Boolean; override;
+
+    property Frame: TBisCallcTaskFrame read FFrame;
+
+    property UseReadiness: Boolean read FUseReadiness write FUseReadiness;
+    property Purpose: Integer read FPurpose write FPurpose;
+    property ActionId: Variant read FActionId write FActionId;
+    property OnlyOneTask: Boolean read FOnlyOneTask write SetOnlyOneTask;
+    property TaskId: Variant read FTaskId write FTaskId;
+    property FromDateCreate: Variant read FFromDateCreate write FFromDateCreate;
+
+  end;
+
+  TBisCallcTaskFormIface=class(TBisFormIface)
+  private
+    FOnlyOneTask: Boolean;
+    FTaskId: Variant;
+    FFromDateCreate: Variant;
+    function GetLastForm: TBisCallcTaskForm;
+  protected
+    function CreateForm: TBisForm; override;
+    function GetFormClass: TBisFormClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    property LastForm: TBisCallcTaskForm read GetLastForm;
+
+    property OnlyOneTask: Boolean read FOnlyOneTask write FOnlyOneTask;
+    property TaskId: Variant read FTaskId write FTaskId;
+    property FromDateCreate: Variant read FFromDateCreate write FFromDateCreate;
+  end;
+
+  TBisCallcTaskFormIfaceClass=class of TBisCallcTaskFormIface;
+
+var
+  BisCallcTaskForm: TBisCallcTaskForm;
+
+implementation
+
+uses DateUtils, StrUtils,
+     BisProvider, BisCore, BisFilterGroups, BisUtils, BisParam, BisMemoFm,
+     BisCallcHbookPlansFm, BisConsts, BisCallcReadinessFm, BisDataFm, BisIfaces,
+     BisCallcConsts, BisDialogs, BisCallcTaskExecuteInfoFm;
+
+{$R *.dfm}
+
+{ TBisCallcTaskFormIface }
+
+constructor TBisCallcTaskFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FTaskId:=Null;
+  FFromDateCreate:=Null;
+end;
+
+function TBisCallcTaskFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(LastForm) then begin
+    LastForm.OnlyOneTask:=FOnlyOneTask;
+    LastForm.UseReadiness:=iff(FOnlyOneTask,false,LastForm.UseReadiness);
+    LastForm.TaskId:=FTaskId;
+    LastForm.FromDateCreate:=FFromDateCreate;
+  end;
+end;
+
+function TBisCallcTaskFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisCallcTaskForm;
+end;
+
+function TBisCallcTaskFormIface.GetLastForm: TBisCallcTaskForm;
+begin
+  Result:=TBisCallcTaskForm(inherited LastForm);
+end;
+
+{ TBisCallcTaskForm }
+
+constructor TBisCallcTaskForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FTaskId:=Null;
+  FActionId:=Null;
+  FFromDateCreate:=Null;
+  FOldGroupBoxTaskCaption:=GroupBoxTask.Caption;
+
+  FFrame:=GetFrameClass.Create(Self);
+  FFrame.Parent:=PanelFrame;
+  FFrame.Align:=alClient;
+  FFrame.OnChangeControls:=FrameChangeControls;
+
+  EditAction.Color:=ColorControlReadOnly;
+  EditDateBegin.Color:=ColorControlReadOnly;
+  EditTime.Color:=ColorControlReadOnly;
+
+  DateTimePickerNext.Date:=DateOf(Date);
+  DateTimePickerNextTime.Time:=TimeOf(Time);
+
+  EnableNextDateControls(false);
+end;
+
+destructor TBisCallcTaskForm.Destroy;
+begin
+  if FFrame.UseUnlock then begin
+    FTaskId:=FFrame.TaskId;
+    UnLockTask;
+  end;
+  ClearStrings(ComboBoxResult.Items);
+  FFrame.Free;
+  inherited Destroy;
+end;
+
+function TBisCallcTaskForm.GetFrameClass: TBisCallcTaskFrameClass;
+begin
+  Result:=TBisCallcTaskFrame;
+end;
+
+procedure TBisCallcTaskForm.Init;
+begin
+  inherited Init;
+  FFrame.Init;
+end;
+
+function TBisCallcTaskForm.CanShow: Boolean;
+begin
+  Result:=inherited CanShow;
+  if Result and FUseReadiness and not Visible then
+    Result:=Readiness;
+end;
+
+function TBisCallcTaskForm.Readiness: Boolean;
+var
+  Form: TBisCallcReadinessForm;
+begin
+  Form:=TBisCallcReadinessForm.Create(nil);
+  try
+    Result:=Form.ShowModal=mrOk;
+  finally
+    Form.Free;
+  end;
+end;
+
+function TBisCallcTaskForm.TaskExists: Boolean;
+begin
+  Result:=not VarIsNull(FTaskId);
+end;
+
+procedure TBisCallcTaskForm.LockTask;
+var
+  P: TBisProvider;
+  Param: TBisParam;
+begin
+  P:=TBisProvider.Create(Self);
+  try
+    if not TaskExists then begin
+      P.ProviderName:='LOCK_TASK';
+      with P.Params do begin
+        AddInvisible('ACCOUNT_ID').Value:=Core.AccountId;
+        AddInvisible('PURPOSE').Value:=FPurpose;
+        AddInvisible('DATE_CREATE').Value:=FFromDateCreate;
+        Param:=AddInvisible('TASK_ID',ptOutput);
+      end;
+      P.Execute;
+      FTaskId:=Null;
+      if not VarIsNull(Param.Value) then
+        FTaskId:=Param.Value;
+    end else begin
+      P.ProviderName:='LOCK_TASK2';
+      with P.Params do begin
+        AddInvisible('ACCOUNT_ID').Value:=Core.AccountId;
+        AddInvisible('TASK_ID').Value:=FTaskId;
+      end;
+      P.Execute;
+    end;
+  finally
+    P.Free;
+  end;
+end;
+
+procedure TBisCallcTaskForm.UnLockTask;
+var
+  Provider: TBisProvider;
+begin
+  if TaskExists then begin
+    Provider:=TBisProvider.Create(Self);
+    try
+      Provider.ProviderName:='UNLOCK_TASK';
+      Provider.Params.AddInvisible('TASK_ID').Value:=FTaskId;
+      Provider.Execute;
+      FTaskId:=Null;
+    finally
+      Provider.Free;
+    end;
+  end;
+end;
+
+procedure TBisCallcTaskForm.RefreshResults;
+var
+  Provider: TBisProvider;
+  Obj: TBisCallcTaskFormResultInfo;
+begin
+  ClearStrings(ComboBoxResult.Items);
+  if not VarIsNull(FActionId) then begin
+    Provider:=TBisProvider.Create(Self);
+    try
+      Provider.ProviderName:='S_ACTION_RESULTS';
+      with Provider.FieldNames do begin
+        AddInvisible('RESULT_ID');
+        AddInvisible('RESULT_NAME');
+        AddInvisible('RESULT_ACTION_ID');
+        AddInvisible('RESULT_ACTION_NAME');
+        AddInvisible('PERIOD');
+        AddInvisible('RESULT_TYPE');
+        AddInvisible('CHOICE_DATE');
+        AddInvisible('CHOICE_PERFORMER');
+      end;
+      with Provider.FilterGroups.Add do begin
+        Filters.Add('ACTION_ID',fcEqual,FActionId);
+        Filters.Add('PURPOSE',fcEqual,FPurpose);
+      end;
+      Provider.Orders.Add('PRIORITY');
+      Provider.Open;
+      if Provider.Active and not Provider.IsEmpty then begin
+        while not Provider.Eof do begin
+          Obj:=TBisCallcTaskFormResultInfo.Create;
+          Obj.ResultId:=Provider.FieldByName('RESULT_ID').Value;
+          Obj.ActionId:=Provider.FieldByName('RESULT_ACTION_ID').Value;
+          Obj.ActionName:=Provider.FieldByName('RESULT_ACTION_NAME').AsString;
+          Obj.Period:=Provider.FieldByName('PERIOD').AsInteger;
+          Obj.ResultType:=TBisCallcTaskFormResultType(Provider.FieldByName('RESULT_TYPE').AsInteger);
+          Obj.ChoiceDate:=Boolean(Provider.FieldByName('CHOICE_DATE').AsInteger);
+          Obj.ChoicePerformer:=Boolean(Provider.FieldByName('CHOICE_PERFORMER').AsInteger);
+          ComboBoxResult.Items.AddObject(Provider.FieldByName('RESULT_NAME').AsString,Obj);
+          Provider.Next;
+        end;
+      end;
+    finally
+      Provider.Free;
+    end;
+  end;
+end;
+
+function TBisCallcTaskForm.ExecuteTask: Boolean;
+var
+  Obj: TBisCallcTaskFormResultInfo;
+  DateTask: TDateTime;
+  APlanId: Variant;
+  AIfacePlans: TBisCallcHbookPlansFormIface;
+  AClassAccounts: TBisIfaceClass;
+  AIfaceAccounts: TBisDataFormIface;
+  ATaskExecuteForm: TBisTaskExecuteForm;
+  P: TBisProvider;
+  Flag: Boolean;
+  APerformerId: Variant;
+begin
+  Result:=false;
+  if TaskExists and (ComboBoxResult.ItemIndex<>-1) then begin
+    Obj:=TBisCallcTaskFormResultInfo(ComboBoxResult.Items.Objects[ComboBoxResult.ItemIndex]);
+    if Assigned(Obj) then begin
+
+      Flag:=true;
+
+      if Obj.ResultType=rtAction then begin
+        Flag:=false;
+        ATaskExecuteForm:=TBisTaskExecuteForm.Create(nil);
+        P:=TBisProvider.Create(nil);
+        try
+          P.ProviderName:='GET_TASK_COUNT';
+          with P.Params do begin
+            AddInvisible('ACCOUNT_ID').Value:=Core.AccountId;
+            AddInvisible('PURPOSE').Value:=Purpose;
+            AddInvisible('ACTION_NAME',ptOutput);
+            AddInvisible('COUNT',ptOutput);
+          end;
+          P.Execute;
+          ATaskExecuteForm.EditResult.Text:=ComboBoxResult.Items.Strings[ComboBoxResult.ItemIndex];
+          ATaskExecuteForm.EditAction.Text:=VarToStrDef(P.Params.ParamByName('ACTION_NAME').Value,'');;
+          ATaskExecuteForm.EditTaskCount.Text:=VarToStrDef(P.Params.ParamByName('COUNT').Value,'');
+          Flag:=ATaskExecuteForm.ShowModal=mrOk;
+        finally
+          P.Free;
+          ATaskExecuteForm.Free;
+        end;
+      end;
+
+      if Flag then begin
+
+        APlanId:=Null;
+        if Obj.ResultType=rtNewPlan then begin
+          Flag:=false;
+          AIfacePlans:=TBisCallcHbookPlansFormIface.Create(nil);
+          P:=TBisProvider.Create(nil);
+          try
+            if AIfacePlans.SelectInto(P) then begin
+              if P.Active and not P.IsEmpty then begin
+                APlanId:=P.FieldByName('PLAN_ID').Value;
+                Flag:=not VarIsNull(APlanId);
+              end;
+            end;
+          finally
+            P.Free;
+            AIfacePlans.Free;
+          end;
+        end;
+
+        APerformerId:=Core.AccountId;
+        if Obj.ChoicePerformer then begin
+          Flag:=false;
+          AClassAccounts:=Core.GetIfaceClass(SIfaceClassHbookAccountsFormIface);
+          if Assigned(AClassAccounts) and IsClassParent(AClassAccounts,TBisDataFormIface) then begin
+            AIfaceAccounts:=TBisDataFormIfaceClass(AClassAccounts).Create(nil);
+            P:=TBisProvider.Create(nil);
+            try
+              AIfaceAccounts.Caption:='Выбор исполнителя';
+              if AIfaceAccounts.SelectInto(P) then begin
+                if P.Active and not P.IsEmpty then begin
+                  APerformerId:=P.FieldByName('ACCOUNT_ID').Value;
+                  Flag:=not VarIsNull(APerformerId);
+                end;
+              end;
+            finally
+              P.Free;
+              AIfaceAccounts.Free;
+            end;
+          end;
+        end;
+
+        if Flag then begin
+          DateTask:=DateOf(DateTimePickerNext.Date)+TimeOf(DateTimePickerNextTime.Time);
+          Result:=Frame.ExecuteTask(APerformerId,Obj.ResultId,MemoDescription.Lines.Text,DateTask,APlanId);
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisCallcTaskForm.FirstState;
+begin
+  FTaskId:=Null;
+  FActionId:=Null;
+  FFromDateCreate:=Null;
+  FDateCreate:=Null;
+  GroupBoxTask.Caption:=FOldGroupBoxTaskCaption;
+  EditAction.Text:='';
+  EditDateBegin.Text:='';
+  EditTime.Text:='';
+  MemoDescription.Clear;
+  ClearStrings(ComboBoxResult.Items);
+  FFrame.DealId:=Null;
+  FFrame.DealNum:='';
+  FFrame.TaskId:=Null;
+  FFrame.TaskName:='';
+  FFrame.ActionId:=Null;
+end;
+
+procedure TBisCallcTaskForm.RefreshTask;
+var
+  Provider: TBisProvider;
+begin
+  if TaskExists then begin
+    Provider:=TBisProvider.Create(Self);
+    try
+      Provider.ProviderName:='S_TASKS';
+      with Provider.FieldNames do begin
+        AddInvisible('ACTION_ID');
+        AddInvisible('ACTION_NAME');
+        AddInvisible('DEAL_ID');
+        AddInvisible('DEAL_NUM');
+        AddInvisible('DATE_CREATE');
+        AddInvisible('DATE_BEGIN');
+        AddInvisible('DESCRIPTION');
+      end;
+      Provider.FilterGroups.Add.Filters.Add('TASK_ID',fcEqual,FTaskId);
+      Provider.Open;
+      if Provider.Active then
+        MemoDescription.MaxLength:=Provider.FieldByName('DESCRIPTION').Size;
+
+      if Provider.Active and not Provider.IsEmpty then begin
+        FActionId:=Provider.FieldByName('ACTION_ID').Value;
+        EditAction.Text:=Provider.FieldByName('ACTION_NAME').AsString;
+        FDateCreate:=Provider.FieldByName('DATE_CREATE').Value;
+        GroupBoxTask.Caption:=Format(' %s от %s ',[Trim(FOldGroupBoxTaskCaption),VarToStrDef(FDateCreate,'')]);
+        EditDateBegin.Text:=Provider.FieldByName('DATE_BEGIN').AsString;
+        FFrame.DealId:=Provider.FieldByName('DEAL_ID').Value;
+        FFrame.DealNum:=Provider.FieldByName('DEAL_NUM').AsString;
+        FFrame.TaskId:=FTaskId;
+        FFrame.TaskName:=FormatEx('%s %s %s',[FFrame.DealNum,EditAction.Text,EditDateBegin.Text]);
+        FFrame.ActionId:=FActionId;
+      end;
+    finally
+      Provider.Free;
+    end;
+  end;
+end;
+
+procedure TBisCallcTaskForm.RefreshControls;
+begin
+  if not FOnlyOneTask then
+    FirstState;
+  LockTask;
+  RefreshTask;
+  RefreshResults;
+  ResetTime;
+  RefreshTime;
+  EnableControls(TaskExists);
+  DateTimePickerNext.Date:=DateOf(Date);
+  DateTimePickerNextTime.Time:=TimeOf(Time);
+  EnableNextDateControls(false);
+  VisibleControls(TaskExists);
+  FFrame.RefreshControls;
+end;
+
+procedure TBisCallcTaskForm.FrameChangeControls(AEnabled, TaskChanged: Boolean);
+begin
+  EnableControls(AEnabled);
+  if AEnabled then begin
+    if TaskChanged then begin
+      FTaskId:=Frame.TaskId;
+      RefreshTask;
+    end;
+    ResetTime;
+    RefreshTime;
+    ComboBoxResult.ItemIndex:=-1;
+    DateTimePickerNext.Date:=DateOf(Date);
+    DateTimePickerNextTime.Time:=TimeOf(Time);
+    EnableNextDateControls(false);
+  end else
+    GroupBoxTask.Caption:=FOldGroupBoxTaskCaption;
+  TimerTime.Enabled:=AEnabled;
+end;
+
+procedure TBisCallcTaskForm.EnableControls(AEnabled: Boolean);
+begin
+  LabelAction.Enabled:=AEnabled;
+  EditAction.Enabled:=AEnabled;
+  EditAction.Color:=iff(AEnabled,ColorControlReadOnly,clBtnFace);
+
+  LabelDateBegin.Enabled:=AEnabled;
+  EditDateBegin.Enabled:=AEnabled;
+  EditDateBegin.Color:=iff(AEnabled,ColorControlReadOnly,clBtnFace);
+
+  LabelTime.Enabled:=AEnabled;
+  EditTime.Enabled:=AEnabled;
+  EditTime.Color:=iff(AEnabled,ColorControlReadOnly,clBtnFace);
+
+  LabelDescription.Enabled:=AEnabled;
+  MemoDescription.Enabled:=AEnabled;
+  MemoDescription.Color:=iff(AEnabled,clWindow,clBtnFace);
+  ButtonDescription.Enabled:=AEnabled;
+
+  LabelResult.Enabled:=AEnabled;
+  ComboBoxResult.Enabled:=AEnabled;
+  ComboBoxResult.Color:=iff(AEnabled,clWindow,clBtnFace);
+
+  LabelNextDate.Enabled:=AEnabled;
+  DateTimePickerNext.Enabled:=AEnabled;
+  DateTimePickerNext.Color:=iff(AEnabled,clWindow,clBtnFace);
+  DateTimePickerNextTime.Enabled:=AEnabled;
+  DateTimePickerNextTime.Color:=iff(AEnabled,clWindow,clBtnFace);
+
+  ButtonExecute.Enabled:=AEnabled;
+
+  GroupBoxTask.Enabled:=AEnabled;
+end;
+
+procedure TBisCallcTaskForm.ResetTime;
+begin
+  FTimeDays:=0;
+end;
+
+procedure TBisCallcTaskForm.SetOnlyOneTask(const Value: Boolean);
+begin
+  FOnlyOneTask := Value;
+  FFrame.OnlyOneTask:=Value;
+end;
+
+procedure TBisCallcTaskForm.RefreshTime;
+var
+  Hour, Min, Sec, MSec: Word;
+  DStart: TDateTime;
+  DEnd: TDateTime;
+begin
+  EditTime.Text:='';
+  if TryStrToDateTime(EditDateBegin.Text,DStart) then begin
+    DEnd:=Now-DStart;
+    DecodeTime(DEnd,Hour,Min,Sec,MSec);
+    if Hour>=24 then begin
+      FTimeDays:=FTimeDays+1;
+      DEnd:=0.0;
+    end;
+    if FTimeDays=0 then
+      EditTime.Text:=FormatEx('%s',[FormatDateTime(LongTimeFormat,DEnd)])
+    else
+      EditTime.Text:=FormatEx('%d д. %s',[FTimeDays,FormatDateTime(LongTimeFormat,DEnd)]);
+  end;
+end;
+
+procedure TBisCallcTaskForm.VisibleControls(AVisible: Boolean);
+begin
+  PanelControls.Visible:=AVisible;
+  TimerTime.Enabled:=AVisible;
+
+  LabelNoTask.Visible:=not AVisible;
+  LabelNoTask.Align:=iff(LabelNoTask.Visible,alClient,alNone);
+  TimerRefresh.Enabled:=LabelNoTask.Visible;
+
+  UpdateButton;
+end;
+
+procedure TBisCallcTaskForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:=caFree;
+  inherited;
+end;
+
+procedure TBisCallcTaskForm.TimerTimeTimer(Sender: TObject);
+begin
+  TimerTime.Enabled:=false;
+  try
+    RefreshTime;
+  finally
+    TimerTime.Enabled:=True;
+  end;
+end;
+
+procedure TBisCallcTaskForm.EnableNextDateControls(AEnabled: Boolean);
+begin
+  LabelNextDate.Enabled:=AEnabled;
+  DateTimePickerNext.Enabled:=AEnabled;
+  DateTimePickerNext.Color:=iff(AEnabled,clWindow,clBtnFace);
+  DateTimePickerNextTime.Enabled:=AEnabled;
+  DateTimePickerNextTime.Color:=iff(AEnabled,clWindow,clBtnFace);
+end;
+
+procedure TBisCallcTaskForm.ComboBoxResultChange(Sender: TObject);
+var
+  Index: Integer;
+  Obj: TBisCallcTaskFormResultInfo;
+begin
+  Index:=ComboBoxResult.ItemIndex;
+  if Index<>-1 then begin
+    Obj:=TBisCallcTaskFormResultInfo(ComboBoxResult.Items.Objects[Index]);
+    DateTimePickerNext.Date:=DateOf(IncDay(Date,Obj.Period));
+    if not Obj.ChoiceDate then
+      DateTimePickerNextTime.Time:=TimeOf(NullDate)
+    else DateTimePickerNextTime.Time:=TimeOf(Time);
+    EnableNextDateControls(Obj.ChoiceDate);
+  end else begin
+    EnableNextDateControls(false);
+  end;
+  UpdateButton;
+end;
+
+procedure TBisCallcTaskForm.UpdateButton;
+begin
+  ButtonExecute.Enabled:=ComboBoxResult.ItemIndex<>-1;
+  if ButtonExecute.CanFocus then
+    ButtonExecute.SetFocus;
+end;
+
+procedure TBisCallcTaskForm.TimerRefreshTimer(Sender: TObject);
+begin
+  RefreshControls;
+end;
+
+procedure TBisCallcTaskForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  if not Visible then
+    RefreshControls;
+end;
+
+procedure TBisCallcTaskForm.ButtonDescriptionClick(Sender: TObject);
+var
+  Form: TBisMemoForm;
+begin
+  Form:=TBisMemoForm.Create(Self);
+  try
+    Form.Memo.MaxLength:=MemoDescription.MaxLength;
+    Form.Memo.Lines.Text:=MemoDescription.Lines.Text;
+    Form.Memo.WordWrap:=true;
+    Form.Memo.ScrollBars:=ssVertical;
+    Form.Memo.Font.Size:=Form.Memo.Font.Size+2;
+    Form.Caption:=ReplaceText(LabelDescription.Caption,':','');
+    if Form.ShowModal=mrOk then begin
+      MemoDescription.Lines.Text:=Form.Memo.Lines.Text;
+    end;
+  finally
+    Form.Free;
+  end;
+end;
+
+function TBisCallcTaskForm.CheckControls: Boolean;
+begin
+  Result:=ComboBoxResult.ItemIndex<>-1;
+  if Result then
+    Result:=Frame.CheckControls;
+end;
+
+procedure TBisCallcTaskForm.ButtonExecuteClick(Sender: TObject);
+begin
+  if CheckControls and ExecuteTask then begin
+    Frame.SaveChanges;
+    if not FOnlyOneTask then begin
+      if FUseReadiness then begin
+        VisibleControls(false);
+        TimerRefresh.Enabled:=false;
+        FFrame.RefreshControls;
+        if Readiness then
+          RefreshControls
+        else begin
+          if fsModal in FormState then
+            ModalResult:=mrOk
+          else Close;
+        end;
+      end else
+        RefreshControls;
+    end else
+      if fsModal in FormState then
+        ModalResult:=mrOk
+      else Close;
+  end;
+end;
+
+
+end.

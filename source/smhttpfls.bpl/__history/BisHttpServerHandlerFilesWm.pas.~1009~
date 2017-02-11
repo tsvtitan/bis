@@ -1,0 +1,644 @@
+unit BisHttpServerHandlerFilesWm;
+
+interface
+
+uses
+  SysUtils, Classes, HTTPApp, DB, Contnrs,
+  BisValues, BisHttpServerHandlers;
+
+type
+
+  TBisHttpServerHandlerFile=class(TObject)
+  private
+    FPath: String;
+    FName: String;
+    FSize: Integer;
+    FIsDir: Boolean;
+  public
+    function Same(APath: String): Boolean;
+    function BeginFrom(APath: String): Boolean;
+    function BeginTo(APath: String): Boolean;
+    procedure CopyFrom(Source: TBisHttpServerHandlerFile);
+
+    property IsDir: Boolean read FIsDir;
+    property Name: String read FName write FName;
+    property Path: String read FPath write FPath;
+    property Size: Integer read FSize write FSize;
+  end;
+
+  TBisGetFilesOption=(foDirs,foFiles);
+  TBisGetFilesOptions=set of TBisGetFilesOption;
+  
+  TBisHttpServerHandlerFiles=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisHttpServerHandlerFile;
+  public
+    function Add: TBisHttpServerHandlerFile;
+    function AddFile: TBisHttpServerHandlerFile;
+    function AddDir: TBisHttpServerHandlerFile;
+    procedure CopyFrom(Source: TBisHttpServerHandlerFiles; WithClear: Boolean);
+    function FindByPath(Path: String): TBisHttpServerHandlerFile;
+    function PathToFileName(Path: String): String;
+    function PathToDir(Path: String; var FileItem: TBisHttpServerHandlerFile): String;
+    function PathExists(Path: String): Boolean;
+    procedure Refresh(Files: TStringList);
+    procedure GetFiles(Files: TBisHttpServerHandlerFiles; Path: String; Options: TBisGetFilesOptions);
+    procedure Sort;
+
+    property Items[Index: Integer]: TBisHttpServerHandlerFile read GetItem; default;
+  end;
+
+  TBisHttpServerHandlerFilesWebModule = class(TWebModule)
+    procedure BisHttpServerHandlerMobileWebModuleDefaultAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+  private
+    FHandler: TBisHttpServerHandler;
+    FFiles: TStringList;
+    FTypes: TStringList;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property Handler: TBisHttpServerHandler read FHandler write FHandler;
+
+    property Files: TStringList read FFiles;
+    property Types: TStringList read FTypes;
+  end;
+
+var
+  BisHttpServerHandlerFilesWebModule: TBisHttpServerHandlerFilesWebModule;
+
+implementation
+
+{$R *.dfm}
+
+uses Windows, Variants, StrUtils,
+     BisConsts, BisUtils, BisFileDirs, BisCore;
+
+const
+  PathDelim='/';
+
+function GetPriorPath(Path: String; Full: Boolean; Index: Integer; WithoutDelim: Boolean): String;
+var
+  Str: TStringList;
+  i: Integer;
+begin
+  Str:=TStringList.Create;
+  try
+    GetStringsByString(Path,PathDelim,Str);
+    if Str.Count>(Index-1) then begin
+      if Full then begin
+        Result:=PathDelim;
+        for i:=0 to Str.Count-Index do begin
+          if i=0 then
+            Result:=Result+Str.Strings[i]
+          else
+            Result:=Result+PathDelim+Str.Strings[i];
+        end;
+      end else
+        Result:=iff(WithoutDelim,'',PathDelim)+Str.Strings[Str.Count-Index];
+    end else
+      Result:=Path;
+  finally
+    Str.Free;
+  end;
+end;
+
+function GetFirstPath(Path: String): String;
+var
+  Str: TStringList;
+begin
+  Str:=TStringList.Create;
+  try
+    GetStringsByString(Path,PathDelim,Str);
+    if Str.Count>0 then
+      Result:=PathDelim+Str.Strings[0]
+    else
+      Result:=Path;
+  finally
+    Str.Free;
+  end;
+end;
+
+
+{ TBisHttpServerHandlerFile }
+
+function TBisHttpServerHandlerFile.Same(APath: String): Boolean;
+begin
+  Result:=AnsiSameText(FPath,APath);
+end;
+
+function TBisHttpServerHandlerFile.BeginFrom(APath: String): Boolean;
+var
+  L: Integer;
+  S,S2: String;
+begin
+  Result:=false;
+  L:=Length(FPath);
+  if Length(APath)>=L then begin
+    S:=Copy(APath,1,L);
+    S2:=Copy(APath,L+1,1);
+    Result:=AnsiSameText(S,FPath) and ((S2='') or (S2=PathDelim));
+  end;
+end;
+
+function TBisHttpServerHandlerFile.BeginTo(APath: String): Boolean;
+var
+  L: Integer;
+  S,S2: String;
+begin
+  Result:=false;
+  L:=Length(APath);
+  if Length(FPath)>=L then begin
+    S:=Copy(FPath,1,L);
+    S2:=Copy(FPath,L+1,1);
+    Result:=AnsiSameText(S,APath) and ((S2='') or (S2=PathDelim));
+  end;
+end;
+
+procedure TBisHttpServerHandlerFile.CopyFrom(Source: TBisHttpServerHandlerFile);
+begin
+  if Assigned(Source) then begin
+    FPath:=Source.Path;
+    FName:=Source.Name;
+    FSize:=Source.Size;
+    FIsDir:=Source.IsDir;
+  end;
+end;
+
+{ TBisHttpServerHandlerFiles }
+
+function TBisHttpServerHandlerFiles.Add: TBisHttpServerHandlerFile;
+begin
+  Result:=TBisHttpServerHandlerFile.Create;
+  inherited Add(Result);
+end;
+
+function TBisHttpServerHandlerFiles.AddDir: TBisHttpServerHandlerFile;
+begin
+  Result:=Add;
+  if Assigned(Result) then
+    Result.FIsDir:=true;
+end;
+
+function TBisHttpServerHandlerFiles.AddFile: TBisHttpServerHandlerFile;
+begin
+  Result:=Add;
+  if Assigned(Result) then
+    Result.FIsDir:=false;
+end;
+
+procedure TBisHttpServerHandlerFiles.CopyFrom(Source: TBisHttpServerHandlerFiles; WithClear: Boolean);
+var
+  i: Integer;
+  Item: TBisHttpServerHandlerFile;
+begin
+  if WithClear then
+    Clear;
+  if Assigned(Source) then begin
+    for i:=0 to Source.Count - 1 do begin
+      Item:=Source.Items[i];
+      with Add do begin
+        CopyFrom(Item);
+      end;
+    end;
+  end;
+end;
+
+function TBisHttpServerHandlerFiles.FindByPath(Path: String): TBisHttpServerHandlerFile;
+var
+  Item: TBisHttpServerHandlerFile;
+  i: Integer;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.Path,Path) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisHttpServerHandlerFiles.GetItem(Index: Integer): TBisHttpServerHandlerFile;
+begin
+  Result:=TBisHttpServerHandlerFile(inherited Items[Index]);
+end;
+
+procedure TBisHttpServerHandlerFiles.Refresh(Files: TStringList);
+
+  procedure RefreshFiles;
+  var
+    i: Integer;
+    Item: TBisHttpServerHandlerFile;
+    FileName, Path: String;
+    Dir: String;
+  begin
+    if Assigned(Files) then begin
+      for i:=0 to Files.Count-1 do begin
+        Dir:=ExpandFileNameEx(Files.Names[i]);
+        if Trim(Dir)='' then begin
+          Dir:=Files.Strings[i];
+          Path:='/'+ExtractFileName(Dir);
+        end else
+          Path:=Files.ValueFromIndex[i];
+        Dir:=ExpandFileNameEx(Dir);
+        if DirectoryExists(Dir) then begin
+          Item:=FindByPath(Path);
+          if not Assigned(Item) then begin
+            Item:=AddDir;
+            Item.Name:=Dir;
+            Item.Path:=Path;
+          end;
+        end else begin
+          FileName:=Files.Names[i];
+          if Trim(FileName)='' then begin
+            FileName:=Files.Strings[i];
+            Path:='/'+ExtractFileName(FileName);
+          end else
+            Path:=Files.ValueFromIndex[i];
+          FileName:=ExpandFileNameEx(FileName);
+          if FileExists(FileName) and (Trim(Path)<>'') then begin
+            Item:=FindByPath(Path);
+            if not Assigned(Item) then begin
+              Item:=AddFile;
+              Item.Name:=FileName;
+              Item.Path:=Path;
+              Item.Size:=GetFileSizeEx(FileName);
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
+
+begin
+  RefreshFiles;
+end;
+
+function TBisHttpServerHandlerFiles.PathToFileName(Path: String): String;
+var
+  Item: TBisHttpServerHandlerFile;
+  i: Integer;
+  S: String;
+begin
+  Item:=FindByPath(Path);
+  if Assigned(Item) and not Item.IsDir then
+    Result:=Item.Name
+  else begin
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      if Item.IsDir and Item.BeginFrom(Path) then begin
+        S:=Copy(Path,Length(Item.Path)+1,Length(Path));
+        Result:=Item.Name+ReplaceText(S,'/','\');
+        break;
+      end;
+    end;
+  end;
+end;
+
+function TBisHttpServerHandlerFiles.PathToDir(Path: String; var FileItem: TBisHttpServerHandlerFile): String;
+var
+  Item: TBisHttpServerHandlerFile;
+  i: Integer;
+  S: String;
+begin
+  FileItem:=nil;
+  Item:=FindByPath(Path);
+  if Assigned(Item) and Item.IsDir then  begin
+    FileItem:=Item;
+    Result:=Item.Name;
+  end else begin
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      if (Item.IsDir and Item.BeginFrom(Path)) or
+         (not Item.IsDir and Item.BeginTo(Path)) then begin
+        S:=Copy(Path,Length(Item.Path)+1,Length(Path));
+        FileItem:=Item;
+        Result:=Item.Name+ReplaceText(S,'/','\');
+        break;
+      end else begin
+        if Item.IsDir and Item.BeginTo(Path) then begin
+          FileItem:=Item;
+          exit;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TBisHttpServerHandlerFiles.PathExists(Path: String): Boolean;
+var
+  Item: TBisHttpServerHandlerFile;
+  S: String;
+begin
+  S:=PathToDir(Path,Item);
+  Result:=Assigned(Item);
+end;
+
+procedure TBisHttpServerHandlerFiles.GetFiles(Files: TBisHttpServerHandlerFiles; Path: String; Options: TBisGetFilesOptions);
+var
+  Dir: String;
+  FileDirs: TBisFileDirs;
+  i: Integer;
+  Item: TBisFileDir;
+  ItemFile: TBisHttpServerHandlerFile;
+  ItemSource: TBisHttpServerHandlerFile;
+  S,S1,S2: String;
+begin
+  if Assigned(Files) then begin
+
+    Dir:=PathToDir(Path,ItemSource);
+    if DirectoryExists(Dir) then begin
+      FileDirs:=TBisFileDirs.Create;
+      try
+        FileDirs.Refresh(dir,true);
+        for i:=0 to FileDirs.Count-1 do begin
+          Item:=FileDirs.Items[i];
+          S:=Path+'/'+ExtractFileName(Item.Name);
+          if Item.IsDir then begin
+            if foDirs in Options then begin
+              ItemFile:=Files.AddDir;
+              ItemFile.Name:=Item.Name;
+              ItemFile.Path:=S;
+            end;
+          end else begin
+            if foFiles in Options then begin
+              ItemFile:=Files.AddFile;
+              ItemFile.Name:=Item.Name;
+              ItemFile.Path:=S;
+              ItemFile.Size:=Item.Size;
+            end;
+          end;
+        end;
+      finally
+        FileDirs.Free;
+      end;
+    end;
+
+    for i:=0 to Count-1 do begin
+      ItemSource:=Items[i];
+      ItemFile:=Files.FindByPath(ItemSource.Path);
+      if not Assigned(ItemFile) then begin
+        if ItemSource.IsDir then begin
+          if (foDirs in Options) and not ItemSource.Same(Path) and ItemSource.BeginTo(Path) then begin
+            S:=Copy(ItemSource.Path,Length(Path)+1,Length(ItemSource.Path));
+            S:=GetFirstPath(S);
+            S:=Path+S;
+            ItemFile:=Files.FindByPath(S);
+            if not Assigned(ItemFile) then begin
+              ItemFile:=Files.Add;
+              if Assigned(ItemFile) then begin
+                ItemFile.CopyFrom(ItemSource);
+                ItemFile.Path:=S;
+              end;
+            end;
+          end;
+        end else begin
+          if not ItemSource.Same(Path) and ItemSource.BeginTo(Path) then begin
+            S:=GetPriorPath(Path,true,1,false);
+            S:=Copy(ItemSource.Path,Length(Path)+1,Length(ItemSource.Path));
+            S1:=GetFirstPath(S);
+            S2:=GetPriorPath(ItemSource.Path,false,1,false);
+            S:=Path+S1;
+            ItemFile:=Files.FindByPath(S);
+            if not Assigned(ItemFile) then begin
+              ItemFile:=nil;
+              if AnsiSameText(S1,S2) then begin
+                if foFiles in Options then
+                  ItemFile:=Files.AddFile;
+              end else
+                if foDirs in Options then
+                  ItemFile:=Files.AddDir;
+              if Assigned(ItemFile) then begin
+                ItemFile.Name:='';
+                ItemFile.Path:=S;
+                ItemFile.Size:=iff(ItemFile.IsDir,0,ItemSource.Size);
+              end;
+            end;
+          end;
+        end;
+      end;
+    end;
+
+  end;
+end;
+
+procedure TBisHttpServerHandlerFiles.Sort;
+
+  function Compare(Index1, Index2: Integer): Integer;
+  begin
+    Result:=AnsiCompareText(Items[Index1].Path,Items[Index2].Path);
+  end;
+
+  procedure ExchangeItems(Index1, Index2: Integer);
+  var
+    Temp: TBisHttpServerHandlerFile;
+    Item1, Item2: TBisHttpServerHandlerFile;
+  begin
+    Temp:=TBisHttpServerHandlerFile.Create;
+    try
+      Item1:=Items[Index1];
+      Item2:=Items[Index2];
+
+      Temp.CopyFrom(Item1);
+      Item1.CopyFrom(Item2);
+      Item2.CopyFrom(Temp);
+
+    finally
+      Temp.Free;
+    end;
+  end;
+
+  procedure QuickSort(L, R: Integer);
+  var
+    I, J, P: Integer;
+  begin
+    repeat
+      I := L;
+      J := R;
+      P := (L + R) shr 1;
+      repeat
+        while Compare(I, P) < 0 do Inc(I);
+        while Compare(J, P) > 0 do Dec(J);
+        if I <= J then
+        begin
+          ExchangeItems(I, J);
+          if P = I then
+            P := J
+          else if P = J then
+            P := I;
+          Inc(I);
+          Dec(J);
+        end;
+      until I > J;
+      if L < J then QuickSort(L, J);
+      L := I;
+    until I >= R;
+  end;
+
+begin
+  if Count>0 then
+    QuickSort(0,Count-1);
+end;
+
+{ TBisHttpServerHandlerMessageWebModule }
+
+constructor TBisHttpServerHandlerFilesWebModule.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FFiles:=TStringList.Create;
+  FTypes:=TStringList.Create;
+end;
+
+destructor TBisHttpServerHandlerFilesWebModule.Destroy;
+begin
+  FTypes.Free;
+  FFiles.Free;
+  inherited Destroy;
+end;
+
+procedure TBisHttpServerHandlerFilesWebModule.BisHttpServerHandlerMobileWebModuleDefaultAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+
+  function GetRelativePath(Path: String): String;
+  var
+    L: Integer;
+  begin
+    L:=Length(FHandler.Path);
+    Result:=Copy(Path,L+1,Length(Path));
+  end;
+  
+  function SendFile(FileName: String): Boolean;
+  begin
+    Result:=false;
+    if Assigned(Response.ContentStream) and FileExists(FileName) then begin
+      Response.ContentStream:=TFileStream.Create(FileName,fmOpenRead or fmShareDenyNone);
+      Response.ContentStream.Position:=0;
+      Response.ContentType:=FTypes.Values[ExtractFileExt(FileName)];
+      Result:=true;
+    end;
+  end;
+
+  function SendPath(AFiles: TBisHttpServerHandlerFiles; RelativePath: String): Boolean;
+
+    function GetHeaderLinks(Path: String): String;
+    var
+      Str: TStringList;
+      i: Integer;
+      Link: String;
+    begin
+      Str:=TStringList.Create;
+      try
+        GetStringsByString(Path,PathDelim,Str);
+        for i:=0 to Str.Count-1 do begin
+          Link:=Link+PathDelim+Str.Strings[i];
+          Result:=Result+PathDelim+iff(i<>Str.Count-1,
+                                       FormatEx('<A href="%s">%s</A>',[Link,Str.Strings[i]]),
+                                       Str.Strings[i]);
+        end;
+      finally
+        Str.Free;
+      end;
+    end;
+
+  var
+    Strings: TStringList;
+    i: Integer;
+    Item: TBisHttpServerHandlerFile;
+    S0, S1, S2, S3, S4: String;
+    Flag: Boolean;
+    RealFiles, Temp: TBisHttpServerHandlerFiles;
+  begin
+    Result:=false;
+    Flag:=Trim(RelativePath)='';
+    if not Flag then
+      Flag:=AFiles.PathExists(RelativePath);
+    if Flag then begin
+      Strings:=TStringList.Create;
+      try
+        Strings.Add('<HTML>');
+        Strings.Add('<HEAD>');
+        Strings.Add('</HEAD>');
+        Strings.Add('<BODY>');
+        Strings.Add(FormatEx('<H1>%s</H1>',[GetHeaderLinks(Request.PathInfo)]));
+        Strings.Add('<TABLE cellSpacing=10 cellPadding=0 border=0>');
+
+        Strings.Add('<TR align=center><TD><B>#</B></TD><TD><B>type</B></TD><TD><B>name</B></TD>'+
+                    '<TD><B>size</B></TD><TD><B>content</B></TD>');
+
+        if Trim(RelativePath)<>'' then begin
+          S0:=GetPriorPath(Request.PathInfo,true,2,false);
+          S1:='...';
+          S2:='d';
+          S3:='';
+          S4:='';
+          Strings.Add(FormatEx('<TR><TD align=rigth>0</TD><TD align=center>%s</TD><TD><A href="%s">%s</A></TD>'+
+                               '<TD align=right>%s</TD><TD>%s</TD></TR>',
+                               [S2,S0,S1,S3,S4]));
+        end;
+
+        Temp:=TBisHttpServerHandlerFiles.Create;
+        RealFiles:=TBisHttpServerHandlerFiles.Create;
+        try
+          AFiles.GetFiles(Temp,RelativePath,[foDirs]);
+          Temp.Sort;
+          RealFiles.CopyFrom(Temp,false);
+          Temp.Clear;
+          AFiles.GetFiles(Temp,RelativePath,[foFiles]);
+          Temp.Sort;
+          RealFiles.CopyFrom(Temp,false);
+          for i:=0 to RealFiles.Count-1 do begin
+            Item:=RealFiles.Items[i];
+
+            S0:=FHandler.Path+Item.Path;
+            S1:=GetPriorPath(S0,false,1,true);
+            S2:=iff(Item.IsDir,'d','f');
+            S3:=iff(Item.IsDir,'',IntToStr(Item.Size));
+            S4:=iff(Item.IsDir,'',FTypes.Values[ExtractFileExt(Item.Name)]);
+
+            Strings.Add(FormatEx('<TR><TD align=rigth>%d</TD><TD align=center>%s</TD><TD><A href="%s">%s</A></TD>'+
+                                 '<TD align=right>%s</TD><TD>%s</TD></TR>',
+                                 [S2,S0,S1,S3,S4]));
+          end;
+        finally
+          RealFiles.Free;
+          Temp.Free;
+        end;
+
+        Strings.Add('</TABLE>');
+        Strings.Add('</BODY>');
+        Strings.Add('</HTML>');
+
+        Response.Content:=Trim(Strings.Text);
+        Response.ContentType:='text/html';
+        Result:=true;
+      finally
+        Strings.Free;
+      end;
+    end;
+  end;
+
+var
+  FileName: String;
+  AFiles: TBisHttpServerHandlerFiles;
+  RelativePath: String;
+begin
+  Handled:=false;
+  if Assigned(FHandler) and Assigned(Core) then begin
+    AFiles:=TBisHttpServerHandlerFiles.Create;
+    try
+      AFiles.Refresh(FFiles);
+      RelativePath:=GetRelativePath(Request.PathInfo);
+      FileName:=AFiles.PathToFileName(RelativePath);
+      if FileExists(FileName) then
+        Handled:=SendFile(FileName)
+      else
+        Handled:=SendPath(AFiles,RelativePath);
+    finally
+      AFiles.Free;
+    end;
+  end;
+end;
+
+end.

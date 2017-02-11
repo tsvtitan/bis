@@ -1,0 +1,349 @@
+unit BisExecuteFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Buttons, ImgList, ActnList,
+
+  BisFm, BisSizeGrip, BisOptionsFm, BisOptionsFrm;
+
+type
+  TBisExecuteForm = class(TBisForm)
+    PanelButtons: TPanel;
+    ButtonCancel: TButton;
+    BitBtnStart: TBitBtn;
+    BitBtnStop: TBitBtn;
+    Timer: TTimer;
+    ImageList: TImageList;
+    ActionList: TActionList;
+    ActionStart: TAction;
+    ActionStop: TAction;
+    ButtonOptions: TButton;
+    ActionOptions: TAction;
+    procedure ButtonCancelClick(Sender: TObject);
+    procedure TimerTimer(Sender: TObject);
+    procedure ActionStartExecute(Sender: TObject);
+    procedure ActionStartUpdate(Sender: TObject);
+    procedure ActionStopExecute(Sender: TObject);
+    procedure ActionStopUpdate(Sender: TObject);
+    procedure ActionOptionsExecute(Sender: TObject);
+    procedure ActionOptionsUpdate(Sender: TObject);
+  private
+    FStartCaption: String;
+    FTimerTime: Integer;
+    FAutoExit: Boolean;
+    FAutoStartTime: Integer;
+    FThread: TThread;
+    FSizeGrip: TBisSizeGrip;
+    FWorking: Boolean;
+    FOnTerminate: TNotifyEvent;
+    procedure ThreadTerminate(Sender: TObject);
+    procedure UpdateStartCaption(WithWait: Boolean);
+  protected
+    procedure DoTerminate; virtual;
+    procedure ThreadExecute(var Terminated: Boolean); virtual;
+    procedure ThreadSynchronize(AMethod: TThreadMethod);
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    function CanOptions: Boolean; override;
+    function CanStart: Boolean; virtual;
+    procedure Start; virtual;
+    function CanStop: Boolean; virtual;
+    procedure Stop; virtual;
+
+
+    property SizeGrip: TBisSizeGrip read FSizeGrip;
+    property Working: Boolean read FWorking;
+
+    property OnTerminate: TNotifyEvent read FOnTerminate write FOnTerminate;
+  end;
+
+  TBisExecuteFormIface=class(TBisFormIface)
+  private
+    FAutoStart: Boolean;
+    FAutoStartTime: Integer;
+    FAutoExit: Boolean;
+  protected
+    procedure BeforeOptions(AForm: TBisOptionsForm; AFrame: TBisOptionsFrame); override;
+    procedure AfterOptions(AForm: TBisOptionsForm; AFrame: TBisOptionsFrame); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure LoadOptions; override;
+    procedure SaveOptions; override;
+    procedure BeforeFormShow; override;
+
+  end;
+
+var
+  BisExecuteForm: TBisExecuteForm;
+
+implementation
+
+{$R *.dfm}
+
+uses
+     BisUtils, BisExecuteOptionsFrm;
+
+{ TBisExecuteFormIface }
+
+constructor TBisExecuteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisExecuteForm;
+  OptionsFrameClass:=TBisExecuteOptionsFrame;
+end;
+
+destructor TBisExecuteFormIface.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TBisExecuteFormIface.Init;
+begin
+  inherited Init;
+end;
+
+procedure TBisExecuteFormIface.LoadOptions;
+begin
+  inherited LoadOptions;
+  FAutoStart:=ProfileRead('AutoStart',FAutoStart);
+  FAutoStartTime:=ProfileRead('AutoStartTime',FAutoStartTime);
+  FAutoExit:=ProfileRead('AutoExit',FAutoExit);
+end;
+
+procedure TBisExecuteFormIface.SaveOptions;
+begin
+  inherited SaveOptions;
+  ProfileWrite('AutoStart',FAutoStart);
+  ProfileWrite('AutoStartTime',FAutoStartTime);
+  ProfileWrite('AutoExit',FAutoExit);
+end;
+
+procedure TBisExecuteFormIface.BeforeOptions(AForm: TBisOptionsForm; AFrame: TBisOptionsFrame);
+begin
+  inherited BeforeOptions(AForm,AFrame);
+  if Assigned(AFrame) then begin
+    with TBisExecuteOptionsFrame(AFrame) do begin
+      CheckBoxAutoStart.Checked:=FAutoStart;
+      UpDownAutoStart.Position:=FAutoStartTime;
+      CheckBoxAutoExit.Checked:=FAutoExit;
+    end;
+  end;
+end;
+
+procedure TBisExecuteFormIface.AfterOptions(AForm: TBisOptionsForm; AFrame: TBisOptionsFrame);
+begin
+  inherited AfterOptions(AForm,AFrame);
+  if Assigned(AFrame) then begin
+    with TBisExecuteOptionsFrame(AFrame) do begin
+      FAutoStart:=CheckBoxAutoStart.Checked;
+      FAutoStartTime:=UpDownAutoStart.Position;
+      FAutoExit:=CheckBoxAutoExit.Checked;
+    end;
+  end;
+end;
+
+procedure TBisExecuteFormIface.BeforeFormShow;
+var
+  Form: TBisExecuteForm;
+begin
+  inherited BeforeFormShow;
+  Form:=TBisExecuteForm(LastForm);
+  if Assigned(Form) then begin
+    Form.Timer.Enabled:=FAutoStart;
+    Form.FAutoStartTime:=FAutoStartTime;
+    Form.FAutoExit:=FAutoExit;
+    Form.UpdateStartCaption(FAutoStart);
+  end;
+end;
+
+
+{ TBisExecuteFormThread }
+
+type
+  TBisExecuteFormThread=class(TThread)
+  private
+    FParent: TBisExecuteForm;
+  public
+    procedure Execute; override;
+
+    property Parent: TBisExecuteForm read FParent write FParent;
+  end;
+
+{ TBisExecuteFormThread }
+
+procedure TBisExecuteFormThread.Execute;
+var
+  ATerminated: Boolean;
+begin
+  while not Terminated do begin
+    ATerminated:=false;
+    if Assigned(FParent) then begin
+      FParent.FWorking:=true;
+      try
+        FParent.ThreadExecute(ATerminated);
+      finally
+        FParent.FWorking:=false;
+      end;
+    end else
+      ATerminated:=true;
+
+    if ATerminated then
+      Terminate;
+  end;
+end;
+
+{ TBisExecuteForm }
+
+constructor TBisExecuteForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FSizeGrip:=TBisSizeGrip.Create(Self);
+  FSizeGrip.Parent:=PanelButtons;
+  FSizeGrip.Visible:=false;
+  FTimerTime:=0;
+end;
+
+destructor TBisExecuteForm.Destroy;
+begin
+  Stop;
+  FSizeGrip.Free;
+  inherited Destroy;
+end;
+
+procedure TBisExecuteForm.Init;
+begin
+  inherited Init;
+  FStartCaption:=BitBtnStart.Caption;
+end;
+
+procedure TBisExecuteForm.UpdateStartCaption(WithWait: Boolean);
+begin
+  if WithWait then
+    BitBtnStart.Caption:=FormatEx('%s (%d)',[FStartCaption,FAutoStartTime-FTimerTime])
+  else BitBtnStart.Caption:=FStartCaption;
+  BitBtnStart.Update;
+end;
+
+procedure TBisExecuteForm.TimerTimer(Sender: TObject);
+var
+  Flag: Boolean;
+begin
+  Flag:=true;
+  Timer.Enabled:=false;
+  try
+    Flag:=FTimerTime>=FAutoStartTime;
+    if Flag then
+      Start
+    else begin
+      Inc(FTimerTime);
+      UpdateStartCaption(true);
+    end;
+  finally
+    Timer.Enabled:=not Flag;
+  end;
+end;
+
+procedure TBisExecuteForm.ActionOptionsExecute(Sender: TObject);
+begin
+  Options;
+end;
+
+procedure TBisExecuteForm.ActionOptionsUpdate(Sender: TObject);
+begin
+  ActionOptions.Enabled:=CanOptions;
+end;
+
+procedure TBisExecuteForm.ActionStartExecute(Sender: TObject);
+begin
+  Start;
+end;
+
+procedure TBisExecuteForm.ActionStartUpdate(Sender: TObject);
+begin
+  ActionStart.Enabled:=CanStart;
+end;
+
+procedure TBisExecuteForm.ActionStopExecute(Sender: TObject);
+begin
+  Stop;
+end;
+
+procedure TBisExecuteForm.ActionStopUpdate(Sender: TObject);
+begin
+  ActionStop.Enabled:=CanStop;
+end;
+
+procedure TBisExecuteForm.ButtonCancelClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TBisExecuteForm.ThreadExecute(var Terminated: Boolean);
+begin
+end;
+
+procedure TBisExecuteForm.ThreadSynchronize(AMethod: TThreadMethod);
+begin
+  if Assigned(FThread) and
+     (GetCurrentThreadId=FThread.ThreadID) then
+    TBisExecuteFormThread(FThread).Synchronize(AMethod);
+end;
+
+procedure TBisExecuteForm.DoTerminate;
+begin
+  if Assigned(FOnTerminate) then
+    FOnTerminate(Self);
+end;
+
+procedure TBisExecuteForm.ThreadTerminate(Sender: TObject);
+begin
+  FThread:=nil;
+  DoTerminate;
+  UpdateStartCaption(false);
+  if FAutoExit then
+    Close;
+end;
+
+function TBisExecuteForm.CanStart: Boolean;
+begin
+  Result:=not Assigned(FThread);
+end;
+
+procedure TBisExecuteForm.Start;
+var
+  AThread: TBisExecuteFormThread;
+begin
+  if CanStart then begin
+    AThread:=TBisExecuteFormThread.Create(true);
+    FThread:=AThread;
+    AThread.OnTerminate:=ThreadTerminate;
+    AThread.FreeOnTerminate:=true;
+    AThread.Parent:=Self;
+    AThread.Resume;
+  end;
+end;
+
+function TBisExecuteForm.CanStop: Boolean;
+begin
+  Result:=Assigned(FThread);
+end;
+
+procedure TBisExecuteForm.Stop;
+begin
+  if CanStop then begin
+    FThread.Terminate;
+  end;
+end;
+
+function TBisExecuteForm.CanOptions: Boolean;
+begin
+  Result:=inherited CanOptions and not Assigned(FThread);
+end;
+
+end.

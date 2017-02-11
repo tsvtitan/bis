@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{edeb68f6-ed2f-43a8-9133-5f9a34dfd6ec}</ProjectGuid>
+    <MainSource>tapi_ex.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>E:\Downloads\Delphi\Modem\TAPI_ver2.0.5_src\tapi_ex.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>E:\Downloads\Delphi\Modem\TAPI_ver2.0.5_src</DCC_BplOutput>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">True</Package_Options><Package_Options Name="DesigntimeOnly">True</Package_Options><Package_Options Name="RuntimeOnly">False</Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName"></VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">tapi_ex.dpk</Source></Source></Delphi.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="tapi_ex.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="ACD\ACDProxy.dcr" />
+    <DCCReference Include="ACD\ACDProxy.dcr" />
+    <DCCReference Include="ACD\ACDProxy.pas" />
+    <DCCReference Include="ACD\TAPIAgent.dcr" />
+    <DCCReference Include="ACD\TAPIAgent.dcr" />
+    <DCCReference Include="ACD\TAPIAgent.pas" />
+    <DCCReference Include="designide.dcp" />
+    <DCCReference Include="Misc\TAPICtrls.pas" />
+    <DCCReference Include="Misc\TAPIDlg.pas" />
+    <DCCReference Include="Misc\TAPILineSelectDialog.dcr" />
+    <DCCReference Include="Misc\TAPILineSelectDialog.dcr" />
+    <DCCReference Include="Misc\TAPILineSelectDialog.pas" />
+    <DCCReference Include="Misc\TAPIPDlg.pas" />
+    <DCCReference Include="Misc\TAPIPhoneSelectDialog.pas" />
+    <DCCReference Include="Misc\TAPIWave.dcr" />
+    <DCCReference Include="Misc\TAPIWave.dcr" />
+    <DCCReference Include="Misc\TAPIWave.pas" />
+    <DCCReference Include="rtl.dcp" />
+    <DCCReference Include="Std\AssistedTAPI.dcr" />
+    <DCCReference Include="Std\AssistedTAPI.dcr" />
+    <DCCReference Include="Std\AssistedTAPI.pas" />
+    <DCCReference Include="Std\CallList.dcr" />
+    <DCCReference Include="Std\CallList.dcr" />
+    <DCCReference Include="Std\CallList.pas" />
+    <DCCReference Include="Std\D4Comp.pas" />
+    <DCCReference Include="Std\DevConf.dcr" />
+    <DCCReference Include="Std\DevConf.dcr" />
+    <DCCReference Include="Std\DevConf.pas" />
+    <DCCReference Include="Std\DevConfProp.pas" />
+    <DCCReference Include="Std\tapi.pas" />
+    <DCCReference Include="Std\TAPIAddress.dcr" />
+    <DCCReference Include="Std\TAPIAddress.dcr" />
+    <DCCReference Include="Std\TAPIAddress.pas" />
+    <DCCReference Include="Std\TAPICall.dcr" />
+    <DCCReference Include="Std\TAPICall.dcr" />
+    <DCCReference Include="Std\TAPICall.pas" />
+    <DCCReference Include="Std\TAPICallBack.pas" />
+    <DCCReference Include="Std\TAPIConference.dcr" />
+    <DCCReference Include="Std\TAPIConference.dcr" />
+    <DCCReference Include="Std\TAPIConference.pas" />
+    <DCCReference Include="Std\TAPICurVer.pas" />
+    <DCCReference Include="Std\TAPIDevices.pas" />
+    <DCCReference Include="Std\tapierr.pas" />
+    <DCCReference Include="Std\TAPIForward.dcr" />
+    <DCCReference Include="Std\TAPIForward.dcr" />
+    <DCCReference Include="Std\TAPIForward.pas" />
+    <DCCReference Include="Std\TAPIHelpfunc.pas" />
+    <DCCReference Include="Std\TAPILineConfigDlg.dcr" />
+    <DCCReference Include="Std\TAPILineConfigDlg.dcr" />
+    <DCCReference Include="Std\TAPILineConfigDlg.pas" />
+    <DCCReference Include="Std\TAPILines.dcr" />
+    <DCCReference Include="Std\TAPILines.dcr" />
+    <DCCReference Include="Std\TAPILines.pas" />
+    <DCCReference Include="Std\TAPILists.pas" />
+    <DCCReference Include="Std\TAPIMediaCtl.pas" />
+    <DCCReference Include="Std\TAPIObj.pas" />
+    <DCCReference Include="Std\TAPIPhone.dcr" />
+    <DCCReference Include="Std\TAPIPhone.dcr" />
+    <DCCReference Include="Std\TAPIPhone.pas" />
+    <DCCReference Include="Std\TAPIPhoneConfigDlg.pas" />
+    <DCCReference Include="Std\TAPIProv.dcr" />
+    <DCCReference Include="Std\TAPIProv.dcr" />
+    <DCCReference Include="Std\TAPIProv.pas" />
+    <DCCReference Include="Std\TAPIProvProp.pas" />
+    <DCCReference Include="Std\TAPIRedirect.pas" />
+    <DCCReference Include="Std\TAPIServices.dcr" />
+    <DCCReference Include="Std\TAPIServices.dcr" />
+    <DCCReference Include="Std\TAPIServices.pas" />
+    <DCCReference Include="Std\TAPISystem.pas" />
+    <DCCReference Include="Std\TAPIThread.pas" />
+    <DCCReference Include="Std\TAPITon.dcr" />
+    <DCCReference Include="Std\TAPITon.dcr" />
+    <DCCReference Include="Std\TAPITon.pas" />
+    <DCCReference Include="Std\TAPITrans.pas" />
+    <DCCReference Include="vcl.dcp" />
+  </ItemGroup>
+</Project>

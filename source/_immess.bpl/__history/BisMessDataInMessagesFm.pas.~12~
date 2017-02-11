@@ -1,0 +1,154 @@
+unit BisMessDataInMessagesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList, DB,
+  BisDataFrm, BisDataGridFrm, BisDataGridFm, BisFieldNames;
+
+type
+  TBisMessDataInMessagesFrame=class(TBisDataGridFrame)
+  private
+    FGroupToday: String;
+    FGroupArchive: String;
+    FSToday: String;
+    FSArchive: String;
+    FFilterMenuItemToday: TBisDataFrameFilterMenuItem;
+    FFilterMenuItemArchive: TBisDataFrameFilterMenuItem;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Init; override;
+    procedure OpenRecords; override;
+
+    property FilterMenuItemToday: TBisDataFrameFilterMenuItem read FFilterMenuItemToday;
+    property FilterMenuItemArchive: TBisDataFrameFilterMenuItem read FFilterMenuItemArchive;
+
+  published
+    property SToday: String read FSToday write FSToday;
+    property SArchive: String read FSArchive write FSArchive;   
+  end;
+
+  TBisMessDataInMessagesForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+  end;
+
+  TBisMessDataInMessagesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisMessDataInMessagesForm: TBisMessDataInMessagesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses DateUtils,
+     BisUtils, BisConsts, BisVariants, BisOrders, BisCore, BisFilterGroups,
+     BisMessDataInMessageEditFm, BisMessDataInMessageFilterFm{, BisLeak};
+
+{ TBisMessDataInMessagesFrame }
+
+constructor TBisMessDataInMessagesFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FilterClass:=TBisMessDataInMessageFilterFormIface;
+  InsertClass:=TBisMessDataInMessageInsertFormIface;
+  UpdateClass:=TBisMessDataInMessageUpdateFormIface;
+  DeleteClass:=TBisMessDataInMessageDeleteFormIface;
+  with Provider do begin
+    ProviderName:='S_IN_MESSAGES';
+    with FieldNames do begin
+      AddKey('IN_MESSAGE_ID');
+      AddInvisible('SENDER_ID');
+      AddInvisible('SENDER_NAME');
+      AddInvisible('CODE_MESSAGE_ID');
+      AddInvisible('CODE');
+      AddInvisible('TYPE_MESSAGE');
+      Add('DATE_IN','Дата получения',110);
+      Add('TEXT_IN','Текст сообщения',210);
+      Add('DATE_SEND','Дата отправки',110);
+      Add('CONTACT','Контакт',100);
+    end;
+    Orders.Add('DATE_IN',otDesc);
+  end;
+
+  FGroupToday:=GetUniqueID;
+  FGroupArchive:=GetUniqueID;
+
+  FSToday:='За сутки';
+  FSArchive:='Архив';
+
+  FFilterMenuItemToday:=CreateFilterMenuItem('За сутки');
+  FFilterMenuItemToday.Checked:=true;
+
+  FFilterMenuItemArchive:=CreateFilterMenuItem('Архив');
+
+
+{  D:=Core.ServerDate;
+
+  FTodayMenuItem:=CreateFilterMenuItem(FSToday);
+  with FTodayMenuItem do begin
+    with FilterGroups.AddVisible do begin
+      Filters.Add('DATE_IN',fcEqualGreater,DateOf(D));
+      Filters.Add('DATE_IN',fcLess,IncDay(DateOf(D)));
+    end;
+    Checked:=true;
+  end;
+
+  FArchiveMenuItem:=CreateFilterMenuItem(FSArchive);
+  with FArchiveMenuItem do begin
+    FilterGroups.AddVisible.Filters.Add('DATE_IN',fcLess,DateOf(D));
+  end;}
+
+end;
+
+procedure TBisMessDataInMessagesFrame.Init;
+begin
+  inherited Init;
+  FFilterMenuItemToday.Caption:=FSToday;
+  FFilterMenuItemArchive.Caption:=FSArchive;
+end;
+
+procedure TBisMessDataInMessagesFrame.OpenRecords;
+begin
+  inherited;
+
+end;
+
+{ TBisMessDataInMessagesFormIface }
+
+constructor TBisMessDataInMessagesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisMessDataInMessagesForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+end;
+
+{ TBisMessDataInMessagesForm }
+
+constructor TBisMessDataInMessagesForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+destructor TBisMessDataInMessagesForm.Destroy;
+begin
+  inherited Destroy;
+end;
+
+class function TBisMessDataInMessagesForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisMessDataInMessagesFrame;
+end;
+
+end.

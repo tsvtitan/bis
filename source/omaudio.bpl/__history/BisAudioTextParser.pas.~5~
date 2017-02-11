@@ -1,0 +1,49 @@
+unit BisAudioTextParser;
+
+interface
+
+type
+  TBisAudioTextParser=class(TObject)
+  public
+    procedure Parse(const Text: String);
+  end;
+
+implementation
+
+uses ALXMLDoc,
+
+{ TBisAudioTextParser }
+
+procedure TBisAudioTextParser.Parse(const Text: String);
+
+  function ParseText(Text: String): Boolean;
+  var
+    Xml: TALXMLDocument;
+    i: Integer;
+  begin
+    Xml:=TALXMLDocument.Create(nil);
+    try
+      Xml.LoadFromXML(Text);
+      for i:=0 to Xml.ChildNodes.Count-1 do begin
+{        Node:=Xml.ChildNodes[i];
+        if AnsiSameText(Node.NodeName,'d') then begin
+          DataNode:=Node;
+          for j:=0 to DataNode.ChildNodes.Count-1 do begin
+            Node:=DataNode.ChildNodes[j];
+            if AnsiSameText(Node.NodeName,'u') then UserName:=Trim(VarToStr(Node.NodeValue));
+            if AnsiSameText(Node.NodeName,'t') then TextIn:=VarToStr(Node.NodeValue);
+          end;
+        end;}
+      end;
+      Result:=true;
+    finally
+      Xml.Free;
+    end;
+  end;
+
+
+begin
+
+end;
+
+end.

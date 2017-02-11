@@ -1,0 +1,296 @@
+unit BisDeadlocks;
+
+interface
+
+uses Windows, Classes, Contnrs,
+     BisLocks;
+
+type
+  TBisDeadlock=class(TObject)
+  private
+    FThreadID: Cardinal;
+    FThreadName: String;
+    FLockName: String;
+    FLockClassName: String;
+    FLockCount: Integer;
+    FLockStep: TBisLockStep;
+    FSection: TRTLCriticalSection;
+    FStack: TStringList;
+    procedure RefreshStack;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    function SameLockName(const LockName: String): Boolean;
+    procedure Release;
+
+    property ThreadID: Cardinal read FThreadID;
+    property ThreadName: String read FThreadName;
+    property LockName: String read FLockName;
+    property LockClassName: String read FLockClassName;
+    property LockCount: Integer read FLockCount;
+    property LockStep: TBisLockStep read FLockStep;
+    property Stack: TStringList read FStack;
+  end;
+
+  TBisDeadlocks=class(TObjectList)
+  private
+    FStackEnabled: Boolean;
+    FCriticalSection: TRTLCriticalSection;
+    FEnabled: Boolean;
+    function GetItem(Index: Integer): TBisDeadlock;
+    procedure Pack(var Deadlock: TBisDeadlock); 
+  public
+    constructor Create; reintroduce;
+    destructor Destroy; override;
+
+    procedure Lock;
+    procedure UnLock;
+    
+    function Add: TBisDeadlock; overload;
+    function AddCritical(Critical: TBisCritical; Step: TBisLockStep): TBisDeadlock;
+    procedure GetDeadlocks(const LockName: String; List: TBisDeadlocks);
+    procedure Release;
+    procedure LockRelease;
+
+    procedure SaveToTextFile(const FileName: String; WithStack: Boolean);
+
+    property StackEnabled: Boolean read FStackEnabled write FStackEnabled;
+    property Enabled: Boolean read FEnabled write FEnabled;
+
+    property Items[Index: Integer]: TBisDeadlock read GetItem; default;
+  end;
+
+var
+  GlobalDeadlocks: TBisDeadlocks=nil;
+
+implementation
+
+uses SysUtils, TypInfo, StrUtils,
+     BisUtils, BisCore, BisExceptNotifier;
+
+{ TBisDeadlock }
+
+constructor TBisDeadlock.Create;
+begin
+  inherited Create;
+  FStack:=TStringList.Create;
+end;
+
+destructor TBisDeadlock.Destroy;
+begin
+  FStack.Free;
+  inherited Destroy;
+end;
+
+function TBisDeadlock.SameLockName(const LockName: String): Boolean;
+begin
+  Result:=AnsiSameText(FLockName,LockName);
+end;                                               
+
+procedure TBisDeadlock.Release;
+begin
+  LeaveCriticalSection(FSection);
+end;
+
+procedure TBisDeadlock.RefreshStack;
+begin
+  FStack.Clear;
+  GetStack(FStack,'BisLocks.LockProcListCall');
+end;
+
+
+{ TBisDeadlocks }
+
+constructor TBisDeadlocks.Create;
+begin
+  inherited Create(true);
+  FStackEnabled:=true;
+  FEnabled:=true;
+  InitializeCriticalSection(FCriticalSection);
+end;
+
+destructor TBisDeadlocks.Destroy;
+begin
+  DeleteCriticalSection(FCriticalSection);
+  inherited Destroy;
+end;
+
+function TBisDeadlocks.Add: TBisDeadlock;
+begin
+  Result:=nil;
+  if FEnabled then begin
+    Result:=TBisDeadlock.Create;
+    Result.FThreadID:=GetCurrentThreadId;
+    Result.FThreadName:=Core.GetThreadName(Result.FThreadID);
+    inherited Add(Result);
+  end;
+end;
+
+procedure TBisDeadlocks.Pack(var Deadlock: TBisDeadlock);
+var
+  List1,List2: TBisDeadlocks;
+  i: Integer;
+  Item: TBisDeadlock;
+  Steps: TBisLockSteps;
+  Ss: TBisLockSteps;
+const
+  FullSteps=[lsLocking,lsLocked,lsUnlocking,lsUnlocked];
+  HalfSteps=[lsLocking,lsLockFailed];  
+begin
+  if Assigned(Deadlock) and (Deadlock.LockStep in [lsUnlocked,lsLockFailed]) then begin
+    List1:=TBisDeadlocks.Create;
+    List2:=TBisDeadlocks.Create;
+    try
+      List1.OwnsObjects:=false;
+      List2.OwnsObjects:=false;
+      GetDeadlocks(Deadlock.LockName,List1);
+      Steps:=[];
+      for i:=0 to List1.Count-1 do begin
+        Item:=List1.Items[i];
+        if (Item.ThreadID=Deadlock.ThreadID) and
+           not (Item.LockStep in Steps) then begin
+          Include(Steps,Item.LockStep);
+          List2.Add(Item);
+        end;
+      end;
+      Ss:=[];
+      case Deadlock.LockStep of
+        lsUnlocked: Ss:=FullSteps;
+        lsLockFailed: Ss:=HalfSteps;
+      end;
+      if Steps=Ss then begin
+        for i:=List2.Count-1 downto 0 do
+          Remove(List2.Items[i]);
+      end;
+      if IndexOf(Deadlock)=-1 then
+        Deadlock:=nil;
+    finally
+      List2.Free;
+      List1.Free;
+    end;
+  end;
+end;
+
+function TBisDeadlocks.AddCritical(Critical: TBisCritical; Step: TBisLockStep): TBisDeadlock;
+begin
+  Result:=Add;
+  if Assigned(Result) then begin
+    Result.FLockName:=Critical.Name;
+    Result.FLockClassName:=Critical.ClassName;
+    Result.FLockCount:=Critical.Section.RecursionCount;
+    Result.FLockStep:=Step;
+    Result.FSection:=Critical.Section;
+  end;
+  Pack(Result);
+  if Assigned(Result) and FStackEnabled then
+    Result.RefreshStack;
+end;
+
+procedure TBisDeadlocks.GetDeadlocks(const LockName: String; List: TBisDeadlocks);
+var
+  i: Integer;
+  Item: TBisDeadlock;
+begin
+  if Assigned(List) then begin
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      if Item.SameLockName(LockName) then
+        List.Add(Item);
+    end;
+  end;
+end;
+
+function TBisDeadlocks.GetItem(Index: Integer): TBisDeadlock;
+begin
+  Result:=TBisDeadlock(inherited Items[Index]);
+end;
+
+procedure TBisDeadlocks.Lock;
+begin
+  EnterCriticalSection(FCriticalSection);
+end;
+
+procedure TBisDeadlocks.UnLock;
+begin
+  LeaveCriticalSection(FCriticalSection);
+end;
+
+procedure TBisDeadlocks.Release;
+var
+  i: Integer;
+begin
+  for i:=Count-1 downto 0 do
+    Items[i].Release;
+end;
+
+procedure TBisDeadlocks.LockRelease;
+begin
+  Lock;
+  try
+    Release;
+  finally
+    Unlock;
+  end;
+end;
+
+procedure TBisDeadlocks.SaveToTextFile(const FileName: String; WithStack: Boolean);
+var
+  i,j: Integer;
+  Item: TBisDeadlock;
+  Str: TStringList;
+  S: String;
+begin
+  Str:=TStringList.Create;
+  try
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      S:=FormatEx('%s > %d|%s (%s) %s|%d',
+                  [Item.LockName,
+                   Item.LockCount,
+                   GetEnumName(TypeInfo(TBisLockStep),Integer(Item.LockStep)),
+                   Item.LockClassName,
+                   Item.ThreadName,
+                   Item.ThreadID]);
+      Str.Add(S);
+      if WithStack then begin
+        if Item.Stack.Count>0 then begin
+          Str.Add(DupeString('=',100));
+          for j:=0 to Item.Stack.Count-1 do begin
+            S:=Item.Stack[j];
+            Str.Add(S);
+          end;
+        end;
+      end;
+    end;
+    Str.SaveToFile(FileName);
+  finally
+    Str.Free;
+  end;
+end;
+
+procedure GlobalLockProc(Cirtical: TObject; Step: TBisLockStep);
+begin
+  if Assigned(Core) and Assigned(GlobalDeadlocks) then begin
+    GlobalDeadlocks.Lock;
+    try
+      if Lock is TBisLock then
+        GlobalDeadlocks.AddLock(TBisLock(Lock),Step);
+      if Lock is TBisLocks then
+        GlobalDeadlocks.AddLocks(TBisLocks(Lock),Step);
+    finally
+      GlobalDeadlocks.UnLock;
+    end;
+  end;
+end;
+
+
+initialization
+  GlobalDeadlocks:=TBisDeadlocks.Create;
+  AddLockProc(GlobalLockProc);
+
+finalization
+  RemoveLockProc(GlobalLockProc);
+  FreeAndNilEx(GlobalDeadlocks);
+
+end.

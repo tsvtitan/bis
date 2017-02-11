@@ -1,0 +1,95 @@
+inherited BisDesignDataApplicationEditForm: TBisDesignDataApplicationEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisDesignDataApplicationEditForm'
+  ClientHeight = 210
+  ClientWidth = 312
+  ExplicitWidth = 320
+  ExplicitHeight = 244
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 172
+    Width = 312
+    ExplicitTop = 159
+    ExplicitWidth = 297
+    inherited ButtonOk: TButton
+      Left = 132
+      ExplicitLeft = 117
+    end
+    inherited ButtonCancel: TButton
+      Left = 229
+      ExplicitLeft = 214
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 312
+    Height = 172
+    ExplicitWidth = 297
+    ExplicitHeight = 159
+    object LabelName: TLabel
+      Left = 14
+      Top = 16
+      Width = 77
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077':'
+      FocusControl = EditName
+    end
+    object LabelDescription: TLabel
+      Left = 38
+      Top = 43
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1087#1080#1089#1072#1085#1080#1077':'
+      FocusControl = MemoDescription
+    end
+    object LabelProductVersion: TLabel
+      Left = 52
+      Top = 148
+      Width = 39
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akLeft, akBottom]
+      Caption = #1042#1077#1088#1089#1080#1103':'
+      FocusControl = EditProductVersion
+    end
+    object EditName: TEdit
+      Left = 97
+      Top = 13
+      Width = 204
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 0
+      ExplicitWidth = 228
+    end
+    object MemoDescription: TMemo
+      Left = 97
+      Top = 40
+      Width = 204
+      Height = 99
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      TabOrder = 1
+      ExplicitWidth = 228
+      ExplicitHeight = 117
+    end
+    object CheckBoxLocked: TCheckBox
+      Left = 198
+      Top = 147
+      Width = 97
+      Height = 17
+      Anchors = [akLeft, akBottom]
+      Caption = #1041#1083#1086#1082#1080#1088#1086#1074#1082#1072
+      TabOrder = 3
+    end
+    object EditProductVersion: TEdit
+      Left = 97
+      Top = 145
+      Width = 94
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      TabOrder = 2
+    end
+  end
+end

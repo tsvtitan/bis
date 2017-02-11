@@ -1,0 +1,32 @@
+inherited BisDataGridDetailFrame: TBisDataGridDetailFrame
+  Width = 460
+  Height = 196
+  Constraints.MinWidth = 460
+  ExplicitWidth = 460
+  ExplicitHeight = 196
+  inherited PanelData: TPanel
+    Width = 460
+    Height = 166
+    ExplicitWidth = 656
+    ExplicitHeight = 328
+    inherited GridPattern: TDBGrid
+      Width = 454
+      Height = 160
+    end
+  end
+  inherited ControlBar: TControlBar
+    Width = 460
+    ExplicitWidth = 656
+  end
+  inherited DataSource: TDataSource
+    Left = 176
+    Top = 96
+  end
+  inherited ImageList: TImageList
+    Left = 96
+  end
+  inherited Popup: TPopupActionBar
+    Left = 168
+    Top = 42
+  end
+end

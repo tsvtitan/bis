@@ -1,0 +1,331 @@
+unit BisCallcHbookReportsFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin,
+  ExtCtrls, Grids, DBGrids, Contnrs,
+
+  BisDataGridFrm, BisDataFrm, BisReportEditorFm, BisReportFm;
+
+type
+  TBisCallcHbookReportsFrameEditors=class(TObjectList)
+  public
+    function FindByClass(AClass: TClass; ACaption: String): TBisReportEditorFormIface;
+  end;
+
+  TBisCallcHbookReportsFrameReports=class(TObjectList)
+  public
+    function FindByClass(AClass: TClass; ACaption: String): TBisReportFormIface;
+  end;
+
+  TBisCallcHbookReportsFrame = class(TBisDataGridFrame)
+    ToolBarReport: TToolBar;
+    ToolButtonEditor: TToolButton;
+    ToolButtonPreview: TToolButton;
+    ActionEditor: TAction;
+    N4: TMenuItem;
+    N13: TMenuItem;
+    ActionPreview: TAction;
+    N15: TMenuItem;
+    procedure ActionEditorUpdate(Sender: TObject);
+    procedure ActionEditorExecute(Sender: TObject);
+    procedure ActionPreviewExecute(Sender: TObject);
+    procedure ActionPreviewUpdate(Sender: TObject);
+  private
+    FEditors: TBisCallcHbookReportsFrameEditors;
+    FReports: TBisCallcHbookReportsFrameReports;
+    FOnCanEditor: TBisDataFrameCanEvent;
+    FOnCanPreview: TBisDataFrameCanEvent;
+    function GetReportEditorClass: TBisReportEditorFormIfaceClass;
+    function GetReportClass: TBisReportFormIfaceClass;
+    procedure EditorSaveChanges(Sender: TObject);
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function CanEditor: Boolean;
+    procedure Editor;
+    function CanPreview: Boolean;
+    procedure Preview;
+
+    property OnCanEditor: TBisDataFrameCanEvent read FOnCanEditor write FOnCanEditor;
+    property OnCanPreview: TBisDataFrameCanEvent read FOnCanPreview write FOnCanPreview;
+  end;
+
+implementation
+
+uses BisProvider, BisDialogs, BisUtils, BisFilterGroups,
+     BisFastReportEditorFm, BisFastReportFm,
+     BisParam;
+
+{$R *.dfm}
+
+{ TBisCallcHbookReportsFrameEditors }
+
+function TBisCallcHbookReportsFrameEditors.FindByClass(AClass: TClass; ACaption: String): TBisReportEditorFormIface;
+var
+  i: Integer;
+  Obj: TObject;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Obj:=Items[i];
+    if Assigned(Obj) and (Obj is TBisReportEditorFormIface) and (Obj.ClassType=AClass) then begin
+      if AnsiSameText(TBisReportEditorFormIface(Obj).Caption,ACaption) then begin
+        Result:=TBisReportEditorFormIface(Obj);
+        exit;
+      end;
+    end;
+  end;
+end;
+
+{ TBisCallcHbookReportsFrameReports }
+
+function TBisCallcHbookReportsFrameReports.FindByClass(AClass: TClass; ACaption: String): TBisReportFormIface;
+var
+  i: Integer;
+  Obj: TObject;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Obj:=Items[i];
+    if Assigned(Obj) and (Obj is TBisReportFormIface) and (Obj.ClassType=AClass) then begin
+      if Trim(ACaption)<>'' then begin
+        if AnsiSameText(TBisReportFormIface(Obj).Caption,ACaption) then begin
+          Result:=TBisReportFormIface(Obj);
+          exit;
+        end;
+      end else begin
+        Result:=TBisReportFormIface(Obj);
+        exit;
+      end;
+    end;
+  end;
+end;
+
+
+{ TBisCallcHbookReportsFrame }
+
+constructor TBisCallcHbookReportsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FEditors:=TBisCallcHbookReportsFrameEditors.Create;
+  FReports:=TBisCallcHbookReportsFrameReports.Create;
+end;
+
+destructor TBisCallcHbookReportsFrame.Destroy;
+begin
+  FReports.Free;
+  FEditors.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCallcHbookReportsFrame.ActionEditorUpdate(Sender: TObject);
+begin
+  ActionEditor.Enabled:=CanEditor;
+end;
+
+procedure TBisCallcHbookReportsFrame.ActionPreviewExecute(Sender: TObject);
+begin
+  Preview;
+end;
+
+procedure TBisCallcHbookReportsFrame.ActionPreviewUpdate(Sender: TObject);
+begin
+  ActionPreview.Enabled:=CanPreview;
+end;
+
+procedure TBisCallcHbookReportsFrame.ActionEditorExecute(Sender: TObject);
+begin
+  Editor;
+end;
+
+function TBisCallcHbookReportsFrame.CanEditor: Boolean;
+var
+  P: TBisProvider;
+begin
+  P:=GetCurrentProvider;
+  Result:=Assigned(P) and P.Active and not P.IsEmpty;
+  if Result and Assigned(FOnCanEditor) then begin
+    Result:=FOnCanEditor(Self);
+  end;
+end;
+
+function TBisCallcHbookReportsFrame.GetReportEditorClass: TBisReportEditorFormIfaceClass;
+var
+  P: TBisProvider;
+begin
+  Result:=nil;
+  P:=GetCurrentProvider;
+  if Assigned(P) and P.Active and not P.IsEmpty then begin
+    case P.FieldByName('REPORT_TYPE').AsInteger of
+      0: Result:=TBisFastReportEditorFormIface;
+    end;
+  end;
+end;
+
+function TBisCallcHbookReportsFrame.GetReportClass: TBisReportFormIfaceClass;
+var
+  P: TBisProvider;
+begin
+  Result:=nil;
+  P:=GetCurrentProvider;
+  if Assigned(P) and P.Active and not P.IsEmpty then begin
+    case P.FieldByName('REPORT_TYPE').AsInteger of
+      0: Result:=TBisFastReportFormIface;
+    end;
+  end;
+end;
+
+procedure TBisCallcHbookReportsFrame.EditorSaveChanges(Sender: TObject);
+var
+  Stream: TMemoryStream;
+  OldCursor: TCursor;
+  S: String;
+  P: TBisProvider;
+  P2: TBisProvider;
+  B: TBookmark;
+begin
+  P:=GetCurrentProvider;
+  if Assigned(P) and P.Active and not P.IsEmpty and
+     Assigned(Sender) and (Sender is TBisReportEditorForm) then begin
+    OldCursor:=Screen.Cursor;
+    Screen.Cursor:=crHourGlass;
+    B:=P.GetBookmark; 
+    Stream:=TMemoryStream.Create;
+    P2:=TBisProvider.Create(nil);
+    try
+      P2.ProviderName:='U_REPORT';
+      with P2.Params do begin
+        AddInvisible('REPORT_ID').Older('OLD_REPORT_ID');
+        AddInvisible('REPORT_TYPE');
+        AddInvisible('PLACE');
+        AddInvisible('REPORT');
+        RefreshByDataSet(P,true,false);
+      end;
+      if not Boolean(P.FieldByName('PLACE').AsInteger) then begin
+        TBisReportEditorForm(Sender).SaveToStream(Stream);
+        Stream.Position:=0;
+        P2.Params.ParamByName('REPORT').LoadFromStream(Stream);
+      end else begin
+        S:=TBisReportEditorForm(Sender).FileName;
+        TBisReportEditorForm(Sender).SaveToFile(S);
+        P2.Params.ParamByName('REPORT').Value:=S;
+      end;
+      P2.Execute;
+    finally
+      P2.Free;
+      Stream.Free;
+      Screen.Cursor:=OldCursor;
+    end;
+  end;
+end;
+
+procedure TBisCallcHbookReportsFrame.Editor;
+var
+  P: TBisProvider;
+  AClass: TBisReportEditorFormIfaceClass;
+  AEditor: TBisReportEditorFormIface;
+  S: String;
+  Stream: TMemoryStream;
+  P2: TBisProvider;
+  ACaption: String;
+begin
+  if CanEditor then begin
+    P:=GetCurrentProvider;
+    if Assigned(P) and P.Active and not P.IsEmpty then begin
+      AClass:=GetReportEditorClass;
+      if Assigned(AClass) then begin
+        Stream:=TMemoryStream.Create;
+        P2:=TBisProvider.Create(nil);
+        AEditor:=nil;
+        try
+          ACaption:=P.FieldByName('INTERFACE_NAME').AsString;
+          AEditor:=FEditors.FindByClass(AClass,ACaption);
+          if not Assigned(AEditor) then begin
+            AEditor:=AClass.Create(Self);
+            FEditors.Add(AEditor);
+            AEditor.Init;
+          end;
+          AEditor.Caption:=ACaption;
+          AEditor.OnSaveChanges:=EditorSaveChanges;
+          P2.ProviderName:='S_REPORTS';
+          P2.FieldNames.AddInvisible('REPORT');
+          P2.FilterGroups.Add.Filters.Add('REPORT_ID',fcEqual,P.FieldByName('REPORT_ID').Value);
+          P2.Open;
+          if P2.Active and not P2.IsEmpty then begin
+            if not Boolean(P.FieldByName('PLACE').AsInteger) then begin
+              S:='';
+              TBlobField(P2.FieldByName('REPORT')).SaveToStream(Stream);
+            end else begin
+              S:=VarToStrDef(P2.FieldByName('REPORT').AsString,'');
+              if FileExists(S) then begin
+                Stream.LoadFromFile(S);
+              end;
+            end;
+            Stream.Position:=0;
+            AEditor.FileName:=S;
+            AEditor.Stream:=Stream;
+            AEditor.ShowType:=ShowType;
+            if not AsModal then
+              AEditor.Show
+            else AEditor.ShowModal;
+          end;
+        finally
+          P2.Free;
+          if Assigned(AEditor) then 
+            AEditor.Stream:=nil;
+          Stream.Free;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TBisCallcHbookReportsFrame.CanPreview: Boolean;
+var
+  P: TBisProvider;
+begin
+  P:=GetCurrentProvider;
+  Result:=Assigned(P) and P.Active and not P.IsEmpty;
+  if Result and Assigned(FOnCanPreview) then begin
+    Result:=FOnCanPreview(Self);
+  end;
+end;
+
+procedure TBisCallcHbookReportsFrame.Preview;
+var
+  P: TBisProvider;
+  AClass: TBisReportFormIfaceClass;
+  AReport: TBisReportFormIface;
+  ACaption: String;
+begin
+  if CanPreview then begin
+    P:=GetCurrentProvider;
+    if Assigned(P) and P.Active and not P.IsEmpty then begin
+      AClass:=GetReportClass;
+      if Assigned(AClass) then begin
+        ACaption:=P.FieldByName('INTERFACE_NAME').AsString;
+        AReport:=FReports.FindByClass(AClass,ACaption);
+        if not Assigned(AReport) then begin
+          AReport:=AClass.Create(Self);
+          AReport.Permissions.Enabled:=false;
+          FReports.Add(AReport);
+          AReport.Init;
+        end;
+        AReport.Caption:=ACaption;
+        AReport.ReportId:=P.FieldByName('REPORT_ID').Value;
+        AReport.ShowType:=ShowType;
+        if not AsModal then
+          AReport.Show
+        else AReport.ShowModal;
+      end;
+    end;
+  end;
+end;
+
+
+{ TBisCallcHbookReportsFramereports }
+
+end.

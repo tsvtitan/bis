@@ -1,0 +1,57 @@
+package imdocpro;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  vcl,
+  rtl,
+  vcldb,
+  dbrtl,
+  vclactnband,
+  vclx;
+
+contains
+  BisDocpro in 'imdocpro.bpl\BisDocpro.pas',
+  BisDocproConsts in 'imdocpro.bpl\BisDocproConsts.pas',
+  BisDocproMainFm in 'imdocpro.bpl\BisDocproMainFm.pas' {BisDocproMainForm},
+  BisDocproHbookViewsFm in 'imdocpro.bpl\BisDocproHbookViewsFm.pas' {BisDocproHbookViewsForm},
+  BisDocproHbookViewEditFm in 'imdocpro.bpl\BisDocproHbookViewEditFm.pas' {BisDocproHbookViewEditForm},
+  BisDocproHbookPlansFm in 'imdocpro.bpl\BisDocproHbookPlansFm.pas' {BisDocproHbookPlansForm},
+  BisDocproHbookPlanEditFm in 'imdocpro.bpl\BisDocproHbookPlanEditFm.pas' {BisDocproHbookPlanEditForm},
+  BisDocproHbookDocsFm in 'imdocpro.bpl\BisDocproHbookDocsFm.pas' {BisDocproHbookDocsForm},
+  BisDocproHbookDocEditFm in 'imdocpro.bpl\BisDocproHbookDocEditFm.pas' {BisDocproHbookDocEditForm},
+  BisDocproHbookPositionsFm in 'imdocpro.bpl\BisDocproHbookPositionsFm.pas' {BisDocproHbookPositionsForm},
+  BisDocproHbookPositionEditFm in 'imdocpro.bpl\BisDocproHbookPositionEditFm.pas' {BisDocproHbookPositionEditForm},
+  BisDocproHbookMotionsFm in 'imdocpro.bpl\BisDocproHbookMotionsFm.pas' {BisDocproHbookMotionsForm},
+  BisDocproHbookMotionEditFm in 'imdocpro.bpl\BisDocproHbookMotionEditFm.pas' {BisDocproHbookMotionEditForm},
+  BisDocproManagementFm in 'imdocpro.bpl\BisDocproManagementFm.pas' {BisDocproManagementForm},
+  BisDocproManagementMasterFrm in 'imdocpro.bpl\BisDocproManagementMasterFrm.pas' {BisDocproManagementMasterFrame: T},
+  BisDocproManagementDetailFrm in 'imdocpro.bpl\BisDocproManagementDetailFrm.pas' {BisDocproManagementDetailFrame: TFrame},
+  BisDocproManagementMasterEditFm in 'imdocpro.bpl\BisDocproManagementMasterEditFm.pas' {BisDocproManagementMasterEditForm},
+  BisDocproHbookDocsFrm in 'imdocpro.bpl\BisDocproHbookDocsFrm.pas' {BisDocproHbookDocsFrame: TFrame},
+  BisDocproHbookPlanViewsIface in 'imdocpro.bpl\BisDocproHbookPlanViewsIface.pas';
+
+end.

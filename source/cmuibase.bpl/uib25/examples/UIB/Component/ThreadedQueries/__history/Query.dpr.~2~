@@ -1,0 +1,14 @@
+program Query;
+uses
+  Forms,
+  main in 'main.pas' {Form1},
+  uiblib in 'D:\_Download\Delphi\Firebird\uib25\source\uiblib.pas',
+  uib in 'D:\_Download\Delphi\Firebird\uib25\source\uib.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.

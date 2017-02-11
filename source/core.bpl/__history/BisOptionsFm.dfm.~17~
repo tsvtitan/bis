@@ -1,0 +1,61 @@
+inherited BisOptionsForm: TBisOptionsForm
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1072
+  ClientHeight = 144
+  ClientWidth = 264
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelFrame: TPanel
+    Left = 0
+    Top = 0
+    Width = 264
+    Height = 103
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+  end
+  object PanelButtons: TPanel
+    Left = 0
+    Top = 103
+    Width = 264
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 1
+    DesignSize = (
+      264
+      41)
+    object ButtonOk: TButton
+      Left = 99
+      Top = 8
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Caption = #1054#1050
+      Default = True
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object ButtonCancel: TButton
+      Left = 180
+      Top = 8
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Cancel = True
+      Caption = #1054#1090#1084#1077#1085#1072
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+end

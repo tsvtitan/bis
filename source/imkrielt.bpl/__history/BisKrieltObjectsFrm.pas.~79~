@@ -1,0 +1,131 @@
+unit BisKrieltObjectsFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls,
+  ToolWin, StdCtrls, ExtCtrls, Grids, DBGrids,
+  BisDataGridFrm, BisFilterGroups, BisDataEditFm;
+
+type
+  TBisKrieltObjectsFrame = class(TBisDataGridFrame)
+    PanelRefresh: TPanel;
+    CheckBoxRefresh: TCheckBox;
+    EditMinute: TEdit;
+    LabelMinute: TLabel;
+    UpDownMinute: TUpDown;
+    TimerRefresh: TTimer;
+    TrayIcon: TTrayIcon;
+    procedure CheckBoxRefreshClick(Sender: TObject);
+    procedure UpDownMinuteChanging(Sender: TObject; var AllowChange: Boolean);
+    procedure TimerRefreshTimer(Sender: TObject);
+    procedure TrayIconDblClick(Sender: TObject);
+  private
+    FParamFilterGroup: TBisFilterGroup;
+  protected
+    procedure FilterRecordsAfterExecute(AForm: TBisDataEditForm); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure OpenRecords; override;
+
+  end;
+
+implementation
+
+uses BisUtils,
+     BisKrieltObjectEditFm;
+
+{$R *.dfm}
+
+constructor TBisKrieltObjectsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  TrayIcon.Icon.Assign(Application.Icon);
+  FParamFilterGroup:=TBisFilterGroup.Create;
+  FParamFilterGroup.GroupName:=GetUniqueID;
+  FParamFilterGroup.Visible:=false;
+end;
+
+destructor TBisKrieltObjectsFrame.Destroy;
+begin
+  FParamFilterGroup.Free;
+  inherited Destroy;
+end;
+
+procedure TBisKrieltObjectsFrame.FilterRecordsAfterExecute(AForm: TBisDataEditForm);
+begin
+  if Assigned(AForm) and (AForm is TBisKrieltObjectEditForm) then begin
+    FParamFilterGroup.Filters.Clear;
+    TBisKrieltObjectEditForm(AForm).GetParamFilterGroup(FParamFilterGroup);
+  end;
+  inherited FilterRecordsAfterExecute(AForm);
+end;
+
+procedure TBisKrieltObjectsFrame.OpenRecords;
+var
+  Group: TBisFilterGroup;
+begin
+  Group:=Provider.FilterGroups.Find(FParamFilterGroup.GroupName);
+  if Assigned(Group) then
+    Provider.FilterGroups.Remove(Group);
+  Group:=Provider.FilterGroups.Add;
+  Group.CopyFrom(FParamFilterGroup,true);
+  inherited OpenRecords;
+end;
+
+procedure TBisKrieltObjectsFrame.CheckBoxRefreshClick(Sender: TObject);
+begin
+  TrayIcon.Visible:=CheckBoxRefresh.Checked;
+  EditMinute.Enabled:=CheckBoxRefresh.Checked;
+  UpDownMinute.Enabled:=CheckBoxRefresh.Checked;
+  LabelMinute.Enabled:=CheckBoxRefresh.Checked;
+  TimerRefresh.Interval:=UpDownMinute.Position*1000*60;
+  TimerRefresh.Enabled:=CheckBoxRefresh.Checked;
+end;
+
+procedure TBisKrieltObjectsFrame.TimerRefreshTimer(Sender: TObject);
+begin
+  TimerRefresh.Enabled:=false;
+  try
+    RefreshRecords;
+    if not Provider.IsEmpty then begin
+      TrayIcon.ShowBalloonHint;
+    end;
+  finally
+    TimerRefresh.Enabled:=true;
+  end;
+end;
+
+procedure TBisKrieltObjectsFrame.TrayIconDblClick(Sender: TObject);
+var
+  Form: TCustomForm;
+begin
+  Form:=GetParentForm(Self);
+  if Assigned(Form) then begin
+    if Form.WindowState=wsMinimized then begin
+      ShowWindow(Form.Handle,SW_SHOW);
+      ShowWindow(Form.Handle,SW_RESTORE);
+    end;
+    Form.BringToFront;
+  end;
+  Application.BringToFront;
+  Application.Restore;
+end;
+
+procedure TBisKrieltObjectsFrame.UpDownMinuteChanging(Sender: TObject;
+  var AllowChange: Boolean);
+var
+  OldEnabled: Boolean;  
+begin
+  OldEnabled:=TimerRefresh.Enabled;
+  TimerRefresh.Enabled:=false;
+  try
+    TimerRefresh.Interval:=UpDownMinute.Position*1000*60;
+  finally
+    TimerRefresh.Enabled:=OldEnabled;
+  end;
+end;
+
+end.

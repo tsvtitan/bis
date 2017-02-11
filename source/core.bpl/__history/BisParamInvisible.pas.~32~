@@ -1,0 +1,46 @@
+unit BisParamInvisible;
+
+interface
+
+uses Classes,
+     BisParam;
+
+type
+
+  TBisParamInvisible=class(TBisParam)
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+  public
+    constructor Create; override;
+  end;
+
+implementation
+
+uses Variants, Sysutils,
+     BisUtils;
+
+{ TBisParamInvisible }
+
+constructor TBisParamInvisible.Create;
+begin
+  inherited Create;
+  FValue:=Null;
+end;
+
+function TBisParamInvisible.GetValue: Variant;
+begin
+  Result:=FValue;
+end;
+
+procedure TBisParamInvisible.SetValue(const AValue: Variant);
+begin
+  FValue:=AValue;
+  DataType:=GetFieldTypeByVarType(VarType(FValue));
+  inherited SetValue(AValue);
+end;
+
+
+
+
+end.

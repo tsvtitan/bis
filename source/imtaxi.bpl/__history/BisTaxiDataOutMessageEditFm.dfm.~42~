@@ -1,0 +1,27 @@
+inherited BisTaxiDataOutMessageEditForm: TBisTaxiDataOutMessageEditForm
+  Caption = 'BisTaxiDataOutMessageEditForm'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelControls: TPanel
+    inherited ButtonRecipient: TButton
+      OnClick = ButtonRecipientClick
+    end
+  end
+  object PopupAccount: TPopupActionBar
+    OnPopup = PopupAccountPopup
+    Left = 40
+    Top = 288
+    object MenuItemAccounts: TMenuItem
+      Caption = #1059#1095#1077#1090#1085#1099#1077' '#1079#1072#1087#1080#1089#1080
+      OnClick = MenuItemAccountsClick
+    end
+    object MenuItemDrivers: TMenuItem
+      Caption = #1042#1086#1076#1080#1090#1077#1083#1080
+      OnClick = MenuItemDriversClick
+    end
+    object MenuItemClients: TMenuItem
+      Caption = #1050#1083#1080#1077#1085#1090#1099
+      OnClick = MenuItemClientsClick
+    end
+  end
+end

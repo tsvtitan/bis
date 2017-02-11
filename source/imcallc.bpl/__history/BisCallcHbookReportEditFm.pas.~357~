@@ -1,0 +1,372 @@
+unit BisCallcHbookReportEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Contnrs,
+  BisFm, BisDataEditFm, BisParam, BisControls, BisReportEditorFm;
+
+type
+  TBisCallcHbookReportEditForm = class(TBisDataEditForm)
+    LabelInterface: TLabel;
+    EditInterface: TEdit;
+    ButtonInterface: TButton;
+    LabelReport: TLabel;
+    EditReport: TEdit;
+    LabelType: TLabel;
+    ComboBoxType: TComboBox;
+    LabelPlace: TLabel;
+    ComboBoxPlace: TComboBox;
+    OpenDialog: TOpenDialog;
+    ButtonLoad: TButton;
+    ButtonSave: TButton;
+    ButtonClear: TButton;
+    SaveDialog: TSaveDialog;
+    ButtonEditor: TButton;
+    procedure ButtonLoadClick(Sender: TObject);
+    procedure ButtonSaveClick(Sender: TObject);
+    procedure ButtonClearClick(Sender: TObject);
+    procedure ButtonEditorClick(Sender: TObject);
+    procedure EditReportChange(Sender: TObject);
+  private
+    FEditor: TBisReportEditorForm;
+    function GetReportEditorClass: TBisReportEditorFormClass;
+    procedure RunEditor;
+    procedure EditorCloseFree(Sender: TObject);
+    procedure EditorSaveChanges(Sender: TObject);
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure BeforeShow; override;
+    procedure ChangeParam(Param: TBisParam); override;
+    function CheckParam(Param: TBisParam): Boolean; override;
+  end;
+
+  TBisCallcHbookReportEditFormIface=class(TBisDataEditFormIface)
+  private
+    procedure ReportIdChange(Param: TBisParam);
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookReportInsertFormIface=class(TBisCallcHbookReportEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookReportUpdateFormIface=class(TBisCallcHbookReportEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookReportDeleteFormIface=class(TBisCallcHbookReportEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookReportEditForm: TBisCallcHbookReportEditForm;
+
+function GetReportTypeByIndex(Index: Integer): String;
+
+implementation
+
+uses
+     BisCallcHbookInterfacesFm, BisFilterGroups, BisInterfaces, BisUtils, BisProvider,
+     BisConsts, BisDialogs, BisCore, BisFastReportEditorFm;
+
+{$R *.dfm}
+
+function GetReportTypeByIndex(Index: Integer): String;
+begin
+  Result:='';
+  case Index of
+    0: Result:='FastReport';
+  end;
+end;
+
+{ TBisCallcHbookReportEditFormIface }
+
+constructor TBisCallcHbookReportEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookReportEditForm;
+  with Params do begin
+    with AddEditDataSelect('REPORT_ID','EditInterface','LabelInterface','ButtonInterface',
+                           TBisCallcHbookInterfacesFormIface,'INTERFACE_NAME',true,true,'INTERFACE_ID','NAME') do begin
+      Older('OLD_REPORT_ID');
+      FilterGroups.Add.Filters.Add('INTERFACE_TYPE',fcEqual,itReport);
+      ExcludeModes([emUpdate]);
+      OnChange:=ReportIdChange;
+    end;
+    AddComboBox('REPORT_TYPE','ComboBoxType','LabelType',true).ExcludeModes([emDuplicate,emUpdate]);
+    AddComboBox('PLACE','ComboBoxPlace','LabelPlace',true).ExcludeModes([emDuplicate,emUpdate]);
+    AddInvisible('REPORT').Required:=true;
+  end;
+end;
+
+procedure TBisCallcHbookReportEditFormIface.ReportIdChange(Param: TBisParam);
+var
+  AProvider: TBisProvider;
+  ParamReport: TBisParam;
+begin
+  if Self.ClassType<>TBisCallcHbookReportDeleteFormIface then begin
+    ParamReport:=Param.Find('REPORT');
+    if Assigned(ParamReport) then begin
+      AProvider:=TBisProvider.Create(Self);
+      try
+        AProvider.ProviderName:='S_REPORTS';
+        AProvider.FieldNames.AddInvisible('REPORT');
+        AProvider.FilterGroups.Add.Filters.Add('REPORT_ID',fcEqual,Param.Value);
+        AProvider.Open;
+        if AProvider.Active and not AProvider.IsEmpty then begin
+          ParamReport.SetNewValue(AProvider.FieldByName('REPORT').AsString);
+        end;
+      finally
+        AProvider.Free;
+      end;
+    end;
+  end;
+end;
+{ TBisCallcHbookReportInsertFormIface }
+
+constructor TBisCallcHbookReportInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_REPORT';
+end;
+
+{ TBisCallcHbookReportUpdateFormIface }
+
+constructor TBisCallcHbookReportUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_REPORT';
+end;
+
+{ TBisCallcHbookReportDeleteFormIface }
+
+constructor TBisCallcHbookReportDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_REPORT';
+end;
+
+{ TBisCallcHbookReportEditForm }
+
+constructor TBisCallcHbookReportEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ComboBoxType.Clear;
+  ComboBoxType.Items.Add(GetReportTypeByIndex(0));
+  EditReport.Color:=ColorReadOnly;
+end;
+
+destructor TBisCallcHbookReportEditForm.Destroy;
+begin
+  FreeAndNilEx(FEditor);
+  inherited Destroy;
+end;
+
+procedure TBisCallcHbookReportEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  EditInterface.ReadOnly:=not (Mode in [emFilter]);
+  EditInterface.Color:=iff(EditInterface.ReadOnly,ColorControlReadOnly,clWindow);
+  ButtonEditor.Enabled:=not Provider.Params.ParamByName('REPORT_TYPE').Empty and
+                        (Mode in [emInsert,emDuplicate,emUpdate]);
+  ButtonLoad.Enabled:=not Provider.Params.ParamByName('PLACE').Empty and
+                      (Mode in [emInsert,emDuplicate,emUpdate]);
+  ButtonClear.Enabled:=ButtonLoad.Enabled;
+  LabelReport.Enabled:=ButtonEditor.Enabled;
+  EditReport.Enabled:=ButtonEditor.Enabled;
+end;
+
+procedure TBisCallcHbookReportEditForm.EditReportChange(Sender: TObject);
+begin
+  if not EditReport.ReadOnly then begin
+    EditReport.OnChange:=nil;
+    try
+      Provider.Params.ParamByName('REPORT').Value:=EditReport.Text; 
+    finally
+      EditReport.OnChange:=EditReportChange;
+    end;
+  end;
+end;
+
+procedure TBisCallcHbookReportEditForm.ChangeParam(Param: TBisParam);
+var
+  AEmpty: Boolean;
+begin
+  inherited ChangeParam(Param);
+  if AnsiSameText(Param.ParamName,'REPORT_TYPE') then begin
+    ButtonEditor.Enabled:=not Param.Empty and
+                          not Provider.Params.ParamByName('PLACE').Empty and
+                          (Mode in [emInsert,emDuplicate,emUpdate]);
+  end;
+  if AnsiSameText(Param.ParamName,'PLACE') then begin
+    EditReport.ReadOnly:=not Boolean(VarToIntDef(Param.Value,0));
+    EditReport.Color:=iff(EditReport.ReadOnly,ColorReadOnly,clWindow);
+    ButtonEditor.Enabled:=not Param.Empty and
+                          not Provider.Params.ParamByName('REPORT_TYPE').Empty and
+                          (Mode in [emInsert,emDuplicate,emUpdate]);
+    LabelReport.Enabled:=ButtonEditor.Enabled;
+    EditReport.Enabled:=ButtonEditor.Enabled;
+    ButtonLoad.Caption:=iff(EditReport.ReadOnly,'Загрузить','Выбрать');
+    ChangeParam(Provider.Params.ParamByName('REPORT'));
+  end;
+  if AnsiSameText(Param.ParamName,'REPORT') then begin
+    AEmpty:=Param.Empty;
+    if EditReport.ReadOnly then
+      EditReport.Text:=iff(AEmpty,'Не загружен','Загружен')
+    else EditReport.Text:=VarToStrDef(Param.Value,'');
+    ButtonLoad.Enabled:=AEmpty and (Mode in [emInsert,emDuplicate,emUpdate]);
+    ButtonSave.Enabled:=not AEmpty and (Mode in [emInsert,emDuplicate,emUpdate]);
+    ButtonClear.Enabled:=ButtonSave.Enabled;
+  end;
+end;
+
+procedure TBisCallcHbookReportEditForm.ButtonLoadClick(Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.Find('REPORT');
+  if Assigned(Param) then begin
+    OpenDialog.FilterIndex:=ComboBoxType.ItemIndex+2;
+    if OpenDialog.Execute then begin
+      if EditReport.ReadOnly then
+        Param.LoadFromFile(OpenDialog.FileName)
+      else Param.Value:=OpenDialog.FileName;
+      UpdateButtonState;
+    end;
+  end;
+end;
+
+procedure TBisCallcHbookReportEditForm.ButtonSaveClick(Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.Find('REPORT');
+  if Assigned(Param) then begin
+    SaveDialog.FilterIndex:=ComboBoxType.ItemIndex+2;
+    SaveDialog.FileName:=EditInterface.Text;
+    if SaveDialog.Execute then begin
+      if EditReport.ReadOnly then
+        Param.SaveToFile(SaveDialog.FileName)
+      else CopyFile(PChar(VarToStrDef(Param.Value,'')),PChar(SaveDialog.FileName),false);  
+    end;
+  end;
+end;
+
+procedure TBisCallcHbookReportEditForm.ButtonClearClick(Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.Find('REPORT');
+  if Assigned(Param) then begin
+    Param.Clear;
+    UpdateButtonState;
+  end;
+end;
+
+function TBisCallcHbookReportEditForm.CheckParam(Param: TBisParam): Boolean;
+begin
+  if AnsiSameText(Param.ParamName,'REPORT') then begin
+    ShowError(Format(SNeedControlValue,[LabelReport.Caption]));
+    EditReport.SetFocus;
+    Result:=false;
+  end else
+    Result:=inherited CheckParam(Param);
+end;
+
+procedure TBisCallcHbookReportEditForm.ButtonEditorClick(Sender: TObject);
+begin
+  RunEditor;
+end;
+
+function TBisCallcHbookReportEditForm.GetReportEditorClass: TBisReportEditorFormClass;
+begin
+  Result:=nil;
+  case ComboBoxType.ItemIndex of
+    0: Result:=TBisFastReportEditorForm;
+  end;
+end;
+
+procedure TBisCallcHbookReportEditForm.EditorCloseFree(Sender: TObject);
+begin
+  FEditor:=nil;
+end;
+
+procedure TBisCallcHbookReportEditForm.EditorSaveChanges(Sender: TObject);
+var
+  Stream: TMemoryStream;
+  OldCursor: TCursor;
+  Param: TBisParam;
+  S: String;
+begin
+  Param:=Provider.Params.Find('REPORT');
+  if Assigned(Param) then begin
+    Stream:=TMemoryStream.Create;
+    OldCursor:=Screen.Cursor;
+    Screen.Cursor:=crHourGlass;
+    try
+      if EditReport.ReadOnly then begin
+        FEditor.SaveToStream(Stream);
+        Stream.Position:=0;
+        Param.LoadFromStream(Stream);
+      end else begin
+        S:=FEditor.FileName;
+        FEditor.SaveToFile(S);
+        Param.Value:=S;
+      end;
+      UpdateButtonState;
+    finally
+      Screen.Cursor:=OldCursor;
+      Stream.Free;
+    end;
+  end;
+end;
+
+procedure TBisCallcHbookReportEditForm.RunReportEditor;
+var
+  AClass: TBisReportEditorFormClass;
+  S: String;
+  Param: TBisParam;
+  Stream: TMemoryStream;
+begin
+  FreeAndNilEx(FEditor);
+  AClass:=GetReportEditorClass;
+  Param:=Provider.Params.Find('REPORT');
+  if Assigned(AClass) and Assigned(Param) then begin
+    Stream:=TMemoryStream.Create;
+    try
+      FEditor:=AClass.Create(Self);
+      FEditor.Caption:=EditInterface.Text;
+      FEditor.OnCloseFree:=EditorCloseFree;
+      FEditor.OnSaveChanges:=EditorSaveChanges;
+      if EditReport.ReadOnly then begin
+        S:=EditInterface.Text;
+        Param.SaveToStream(Stream);
+      end else begin
+        S:=VarToStrDef(Param.Value,'');
+        if FileExists(S) then begin
+          Stream.LoadFromFile(S);
+        end;
+      end;
+      Stream.Position:=0;
+      FEditor.FileName:=S;
+      FEditor.LoadFromStream(Stream);
+      FEditor.Init;
+      FEditor.ShowType:=ShowType;
+      if not (fsModal in FormState) then
+        FEditor.Show
+      else FEditor.ShowModal;
+    finally
+      Stream.Free;
+    end;
+  end;
+end;
+
+
+end.

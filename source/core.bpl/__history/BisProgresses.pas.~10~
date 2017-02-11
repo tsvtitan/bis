@@ -1,0 +1,31 @@
+unit BisProgresses;
+
+interface
+
+uses Classes, Contnrs;
+
+type
+
+  TBisProgressEvent=procedure () of object;
+
+  TBisProgress=class(TObject)
+  end;
+
+  TBisProgresses=class(TObjectList)
+  public
+    function Add(): TBisProgress;
+    procedure Progress(const Min, Max, Position: Integer; var Breaked: Boolean);
+  end;
+
+implementation
+
+{ TBisProgresses }
+
+procedure TBisProgresses.Progress(const Min, Max, Position: Integer; var Breaked: Boolean);
+var
+  i: Integer;
+begin
+
+end;
+
+end.

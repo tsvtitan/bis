@@ -1,0 +1,16 @@
+// ========>> Ждать СМС 10 часов,послать (лат.) СМС в ответ,принять 50 СМСок (cmssX и cmgdX - намеренно искажены)
+at+cmgf=1
+at+cscs="GSM"
+at+cnmi=3,1
+!wtime"3600"
+at+ckpd="e"
+!waits"+CMTI:"
+at+cpms="%%1"
+at+cmgr=%%2!gets"+cmgr:"
+at+cmgw="%%2"}!waits">"|I am busy.I can reply later, sorry~!gets"+cmgw:"
+at+cmssX=%%1
+at+cmgdX=%%1
+!log
+!pause
+!cycle"50"
+!wtime"15"

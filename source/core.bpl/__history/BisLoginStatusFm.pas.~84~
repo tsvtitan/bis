@@ -1,0 +1,38 @@
+unit BisLoginStatusFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, StdCtrls, ExtCtrls,
+
+  BisStatusFm, BisFm;
+
+type
+  TBisLoginStatusForm = class(TBisStatusForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisLoginStatusIface=class(TBisStatusIface)
+  protected
+    function GetFormClass: TBisFormClass; override;
+  end;
+
+var
+  BisLoginStatusForm: TBisLoginStatusForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisLoginStatusIface }
+
+function TBisLoginStatusIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisLoginStatusForm;
+end;
+
+end.

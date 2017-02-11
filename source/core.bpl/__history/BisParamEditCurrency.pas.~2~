@@ -1,0 +1,155 @@
+unit BisParamEditCurrency;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisControls;
+
+type
+  TBisParamEditCurrency=class(TBisParam)
+  private
+    FEditCurrency: TEditCurrency;
+    FLabelEditCurrency: TLabel;
+    FDateTimePickerName: String;
+    FLabelName: String;
+    FOldEditCurrencyChange: TNotifyEvent;
+    procedure EditCurrencyChange(Sender: TObject);
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetEmpty: Boolean; override;
+    function GetSize: Integer; override;
+    procedure SetSize(const Value: Integer); override;
+    function GetCaption: String; override;
+    function GetControl: TWinControl; override;
+    procedure SetEnabled(const Value: Boolean); override;
+  public  
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+    property DateTimePickerName: String read FDateTimePickerName write FDateTimePickerName;
+    property LabelName: String read FLabelName write FLabelName;
+    property EditCurrency: TEditCurrency read FEditCurrency write FEditCurrency;
+    property LabelEditCurrency: TLabel read FLabelEditCurrency;
+  end;
+
+
+implementation
+
+uses Variants, DateUtils, Graphics,
+     BisUtils, BisConsts;
+
+{ TBisParamEditCurrency }
+
+constructor TBisParamEditCurrency.Create;
+begin
+  inherited Create;
+  DataType:=ftDate;
+end;
+
+procedure TBisParamEditCurrency.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamEditCurrency) then begin
+    DateTimePickerName:=TBisParamEditCurrency(Source).DateTimePickerName;
+    LabelName:=TBisParamEditCurrency(Source).LabelName;
+  end;
+end;
+
+procedure TBisParamEditCurrency.LinkControls(Parent: TWinControl);
+var
+  Component: TComponent;
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    Component:=DoFindComponent(FDateTimePickerName);
+    if Assigned(Component) and (Component is TDateTimePicker) then
+      FEditCurrency:=ReplaceDateTimePickerToEditCurrency(TDateTimePicker(Component));
+    if Assigned(FEditCurrency) then begin
+      FOldEditCurrencyChange:=FEditCurrency.OnChange;
+      FEditCurrency.OnChange:=EditCurrencyChange;
+      FEditCurrency.MaxLength:=inherited GetSize;
+      FEditCurrency.Color:=iff(FEditCurrency.Color=clBtnFace,ColorControlReadOnly,FEditCurrency.Color);
+      FLabelEditCurrency:=TLabel(DoFindComponent(FLabelName));
+      if Assigned(FLabelEditCurrency) then
+        FLabelEditCurrency.FocusControls.Add(FEditCurrency);
+      Value:=TempValue;
+    end;
+  end;
+  inherited LinkControls(Parent);
+end;
+
+function TBisParamEditCurrency.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FEditCurrency) then
+    Result:=iff(Empty,Null,DateOf(FEditCurrency.Date));
+end;
+
+procedure TBisParamEditCurrency.SetValue(const AValue: Variant);
+begin
+  if Value<>AValue then begin
+    if Assigned(FEditCurrency) then begin
+      FEditCurrency.OnChange:=nil;
+      try
+        FEditCurrency.Date:=DateOf(VarToDateDef(AValue,NullDate));
+      finally
+        FEditCurrency.OnChange:=EditCurrencyChange;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamEditCurrency.GetEmpty: Boolean;
+begin
+  Result:=true;
+  if Assigned(FEditCurrency) then
+    Result:=DateOf(FEditCurrency.Date)=DateOf(NullDate);
+end;
+
+function TBisParamEditCurrency.GetSize: Integer;
+begin
+  Result:=inherited GetSize;
+  if Assigned(FEditCurrency) then
+    Result:=FEditCurrency.MaxLength;
+end;
+
+procedure TBisParamEditCurrency.SetEnabled(const Value: Boolean);
+begin
+  inherited SetEnabled(Value);
+  if Assigned(FLabelEditCurrency) then
+    FLabelEditCurrency.Enabled:=Value;
+end;
+
+procedure TBisParamEditCurrency.SetSize(const Value: Integer);
+begin
+  if Size<>Value then
+    if Assigned(FEditCurrency) then
+      FEditCurrency.MaxLength:=Value
+    else
+      inherited SetSize(Value);
+end;
+
+function TBisParamEditCurrency.GetControl: TWinControl;
+begin
+  Result:=FEditCurrency;
+end;
+
+function TBisParamEditCurrency.GetCaption: String;
+begin
+  Result:=inherited GetCaption;
+  if Assigned(FLabelEditCurrency) then
+    Result:=FLabelEditCurrency.Caption;
+end;
+
+procedure TBisParamEditCurrency.EditCurrencyChange(Sender: TObject);
+begin
+  DoChange(Self);
+  if Assigned(FOldEditCurrencyChange) then
+    FOldEditCurrencyChange(Sender);
+end;
+
+end.

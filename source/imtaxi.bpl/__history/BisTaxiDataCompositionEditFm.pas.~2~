@@ -1,0 +1,166 @@
+unit BisTaxiDataCompositionEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisParam, BisControls, ImgList;
+
+type
+  TBisTaxiDataCompositionEditForm = class(TBisDataEditForm)
+    LabelZone: TLabel;
+    EditZone: TEdit;
+    LabelHouses: TLabel;
+    EditHouses: TEdit;
+    LabelStreet: TLabel;
+    EditStreet: TEdit;
+    ButtonStreet: TButton;
+    LabelType: TLabel;                                                                  
+    ComboBoxType: TComboBox;
+    LabelExceptions: TLabel;
+    EditExceptions: TEdit;
+  private
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure ChangeParam(Param: TBisParam); override;
+  end;
+
+  TBisTaxiDataCompositionEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCompositionFilterFormIface=class(TBisTaxiDataCompositionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCompositionInsertFormIface=class(TBisTaxiDataCompositionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCompositionUpdateFormIface=class(TBisTaxiDataCompositionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCompositionDeleteFormIface=class(TBisTaxiDataCompositionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataCompositionEditForm: TBisTaxiDataCompositionEditForm;
+
+function GetTypeCompositionByIndex(Index: Integer): String;
+
+implementation
+
+uses DB, BisUtils, BisTaxiConsts;
+
+{$R *.dfm}
+
+function GetTypeCompositionByIndex(Index: Integer): String;
+begin
+  Result:='';
+  case Index of
+    0: Result:='Все дома';
+    1: Result:='Нечетные';
+    2: Result:='Четные';
+    3: Result:='Выборочно';
+  end;
+end;
+
+{ TBisTaxiDataCompositionEditFormIface }
+
+constructor TBisTaxiDataCompositionEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataCompositionEditForm;
+  with Params do begin
+    AddKey('COMPOSITION_ID').Older('OLD_COMPOSITION_ID');
+    AddInvisible('ZONE_ID');
+    AddInvisible('STREET_NAME');
+    AddInvisible('STREET_PREFIX');
+    AddInvisible('LOCALITY_NAME');
+    AddInvisible('LOCALITY_PREFIX');
+    AddEdit('ZONE_NAME','EditZone','LabelZone').ExcludeModes(AllParamEditModes);
+    with AddEditDataSelect('STREET_ID','EditStreet','LabelStreet','ButtonStreet',
+                            SClassDataStreetsFormIface,'STREET_PREFIX;STREET_NAME;LOCALITY_PREFIX;LOCALITY_NAME',
+                            true,false,'STREET_ID','PREFIX;NAME;LOCALITY_PREFIX;LOCALITY_NAME') do begin
+      DataAliasFormat:='%s%s, %s%s';
+      ExcludeModes([emFilter]);
+    end;
+    AddComboBox('TYPE_COMPOSITION','ComboBoxType','LabelType',true);
+    AddEdit('HOUSES','EditHouses','LabelHouses');
+    AddEdit('EXCEPTIONS','EditExceptions','LabelExceptions');
+  end;
+end;
+
+
+{ TBisTaxiDataCompositionFilterFormIface }
+
+constructor TBisTaxiDataCompositionFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Фильтр состава зоны';
+end;
+
+{ TBisTaxiDataCompositionInsertFormIface }
+
+constructor TBisTaxiDataCompositionInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_COMPOSITION';
+  Caption:='Создать состав зоны';
+end;
+
+{ TBisTaxiDataCompositionUpdateFormIface }
+
+constructor TBisTaxiDataCompositionUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_COMPOSITION';
+  Caption:='Изменить состав зоны';
+end;
+
+{ TBisTaxiDataCompositionDeleteFormIface }
+
+constructor TBisTaxiDataCompositionDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_COMPOSITION';
+  Caption:='Удалить состав зоны';
+end;
+
+{ TBisTaxiDataCompositionEditForm }
+
+constructor TBisTaxiDataCompositionEditForm.Create(AOwner: TComponent);
+var
+  i: Integer;
+begin
+  inherited Create(AOwner);
+
+  for i:=0 to 3 do
+    ComboBoxType.Items.Add(GetTypeCompositionByIndex(i));
+
+end;
+
+procedure TBisTaxiDataCompositionEditForm.ChangeParam(Param: TBisParam);
+var
+  TypeComposition: Integer;
+begin
+  inherited ChangeParam(Param);
+  if AnsiSameText(Param.ParamName,'TYPE_COMPOSITION') and not VarIsNull(Param.Value) and
+     not (Mode in [emDelete,emFilter]) then begin
+    TypeComposition:=VarToIntDef(Param.Value,0);
+    Provider.Params.Find('HOUSES').Enabled:=false;
+    case TypeComposition of
+      1,2,3: Provider.Params.Find('HOUSES').Enabled:=true;
+    end;
+  end;
+end;
+
+end.

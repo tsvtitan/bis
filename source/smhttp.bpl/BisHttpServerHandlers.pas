@@ -1,0 +1,272 @@
+unit BisHttpServerHandlers;
+
+interface
+
+uses Classes,
+     HTTPApp, ZLib,
+     BisObject, BisCoreObjects, BisCrypter, BisDataSet, BisDataParams;
+
+type
+
+  TBisHttpServerHandler=class(TBisCoreObject)
+  private
+    FEnabled: Boolean;
+    FPath: String;
+    FHost: String;
+    FUseCrypter: Boolean;
+    FCrypterAlgorithm: TBisCipherAlgorithm;
+    FCrypterMode: TBisCipherMode;
+    FCrypterKey: String;
+    FUseCompressor: Boolean;
+    FSoftware: String;
+    FCompressorLevel: TCompressionLevel;
+    FAuthRealm: String;
+    FAuthUsers: TStringList;
+    FParams: TBisDataValueParams;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+
+    function HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean; virtual;
+    procedure CopyFrom(Source: TBisHttpServerHandler); virtual;
+    function UserExists(const UserName, Password: String): Boolean; virtual;
+
+    property Enabled: Boolean read FEnabled write FEnabled;
+    property Host: String read FHost write FHost;
+    property Path: String read FPath write FPath;
+    property UseCrypter: Boolean read FUseCrypter write FUseCrypter;
+    property CrypterAlgorithm: TBisCipherAlgorithm read FCrypterAlgorithm write FCrypterAlgorithm;
+    property CrypterMode: TBisCipherMode read FCrypterMode write FCrypterMode;
+    property CrypterKey: String read FCrypterKey write FCrypterKey;
+    property UseCompressor: Boolean read FUseCompressor write FUseCompressor;
+    property CompressorLevel: TCompressionLevel read FCompressorLevel write FCompressorLevel;
+    property Software: String read FSoftware write FSoftware;
+    property AuthRealm: String read FAuthRealm write FAuthRealm;
+    property AuthUsers: TStringList read FAuthUsers;
+    property Params: TBisDataValueParams read FParams;
+  end;
+
+  TBisHttpServerHandlerClass=class of TBisHttpServerHandler;
+
+  TBisHttpServerHandlers=class(TBisCoreObjects)
+  private
+    function GetItems(Index: Integer): TBisHttpServerHandler;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    function AddClass(AClass: TBisHttpServerHandlerClass; const ObjectName: String=''): TBisHttpServerHandler;
+    function AddHandler(AHandler: TBisHttpServerHandler): Boolean;
+    function FindHandler(const Host, Document: String; var OutPath,OutScript: string): TBisHttpServerHandler;
+
+    property Items[Index: Integer]: TBisHttpServerHandler read GetItems;
+  end;
+
+
+implementation
+
+uses SysUtils,
+     BisUtils, BisHttpServerConsts, BisConsts;
+
+{ TBisHttpServerHandler }
+
+constructor TBisHttpServerHandler.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FParams:=TBisDataValueParams.Create;
+  FAuthUsers:=TStringList.Create;
+end;
+
+destructor TBisHttpServerHandler.Destroy;
+begin
+  FAuthUsers.Free;
+  FParams.Free;
+  inherited Destroy;
+end;
+
+function TBisHttpServerHandler.HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean;
+begin
+  Result:=false;
+end;
+
+procedure TBisHttpServerHandler.CopyFrom(Source: TBisHttpServerHandler);
+begin
+  if Assigned(Source) then begin
+    FHost:=Source.Host;
+    FPath:=Source.Path;
+    FUseCrypter:=Source.UseCrypter;
+    FCrypterAlgorithm:=Source.CrypterAlgorithm;
+    FCrypterMode:=Source.CrypterMode;
+    FCrypterKey:=Source.CrypterKey;
+    FUseCompressor:=Source.UseCompressor;
+    FCompressorLevel:=Source.CompressorLevel;
+    FSoftware:=Source.Software;
+    FAuthRealm:=Source.AuthRealm;
+    FAuthUsers.Assign(Source.AuthUsers);
+  end;
+end;
+
+procedure TBisHttpServerHandler.Init;
+begin
+  inherited Init;
+
+  with FParams do begin
+    FHost:=AsString(SParamHost);
+    FPath:=AsString(SParamPath);
+    FUseCrypter:=AsBoolean(SParamUseCrypter);
+    FCrypterAlgorithm:=AsEnumeration(SParamCrypterAlgorithm,TypeInfo(TBisCipherAlgorithm),caRC5);
+    FCrypterMode:=AsEnumeration(SParamCrypterMode,TypeInfo(TBisCipherMode),cmCTS);
+    FCrypterKey:=AsString(SParamCrypterKey);
+    FUseCompressor:=AsBoolean(SParamUseCompressor);
+    FCompressorLevel:=AsEnumeration(SParamCompressorLevel,TypeInfo(TCompressionLevel),clFastest);
+    FSoftware:=AsString(SParamSoftware);
+    FAuthRealm:=AsString(SParamAuthRealm);
+    FAuthUsers.Text:=AsString(SParamAuthUsers);
+  end;
+
+end;
+
+function TBisHttpServerHandler.UserExists(const UserName, Password: String): Boolean;
+var
+  Index: Integer;
+begin
+  Result:=FAuthUsers.Count=0;
+  if not Result then begin
+    Index:=FAuthUsers.IndexOfName(UserName);
+    if Index>-1 then
+      Result:=FAuthUsers.ValueFromIndex[Index]=Password;
+  end;
+end;
+
+{ TBisHttpServerHandlers }
+
+function TBisHttpServerHandlers.GetItems(Index: Integer): TBisHttpServerHandler;
+begin
+  Result:=TBisHttpServerHandler(inherited Items[Index]);
+end;
+
+function TBisHttpServerHandlers.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisHttpServerHandler;
+end;
+
+function TBisHttpServerHandlers.AddClass(AClass: TBisHttpServerHandlerClass; const ObjectName: String): TBisHttpServerHandler;
+begin
+  Result:=nil;
+  if Assigned(AClass) then begin
+    Result:=AClass.Create(Self);
+    if Trim(ObjectName)<>'' then
+      Result.ObjectName:=ObjectName;
+    if not Assigned(Find(Result.ObjectName)) then begin
+      AddObject(Result);
+    end else begin
+      FreeAndNilEx(Result);
+    end;
+  end;
+end;
+
+function TBisHttpServerHandlers.AddHandler(AHandler: TBisHttpServerHandler): Boolean;
+begin
+  Result:=false;
+  if not Assigned(Find(AHandler.ObjectName)) then begin
+    AddObject(AHandler);
+    Result:=true;
+  end;
+end;
+
+function TBisHttpServerHandlers.FindHandler(const Host, Document: String; var OutPath, OutScript: string): TBisHttpServerHandler;
+
+  function CheckHosts(Hosts: TStringList): Boolean;
+  var
+    AHost: String;
+  begin
+    Result:=false;
+    for AHost in Hosts do begin
+      if AnsiSameText(AHost,Host) or AnsiSameText(AHost,'*') then begin
+        Result:=true;
+        exit;
+      end;
+    end;
+  end;
+  
+  function CheckPath(HandlerPath: string): Boolean;
+  var
+    Apos: Integer;
+    S1,S2: string;
+    Path: string;
+  begin
+    Result:=false;
+    S1:=AnsiLowerCase(HandlerPath);
+    S2:=AnsiLowerCase(Document);
+    Apos:=AnsiPos(S1,S2);
+    if Apos=1 then begin
+      if Length(S1)<>Length(S2) then begin
+        if Length(S1)<Length(S2) then begin
+          Path:=Copy(Document,Length(HandlerPath)+1,Length(Document));
+          if Length(Path)>0 then begin
+            if Path[1]=SSlash then begin
+              OutScript:=iff(Path=SSlash,'',Path);
+              OutPath:=HandlerPath;
+              Result:=true;
+            end else begin
+            {  OutScript:=Path;
+              OutPath:=HandlerPath;
+              Result:=true;    }
+            end;
+          end;
+        end;
+      end else begin
+        OutScript:='';
+        OutPath:=Document;
+        Result:=true;
+      end;
+    end else begin
+      if (Trim(S2)='') and (S1=SSlash) then begin
+        OutScript:='';
+        OutPath:='';
+        Result:=true;
+      end;
+    end;
+  end;
+  
+var
+  i: Integer;
+  Item: TBisHttpServerHandler;
+  Hosts, Paths: TStringList;
+  APath: String;
+  Flag: Boolean;
+begin
+  Result:=nil;
+  Hosts:=TStringList.Create;
+  Paths:=TStringList.Create;
+  try
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      if Item.Enabled then begin
+        Hosts.Clear;
+        Paths.Clear;
+        GetStringsByString(Item.Host,';',Hosts);
+        GetStringsByString(Item.Path,';',Paths);
+        if CheckHosts(Hosts) then begin
+          Flag:=false;
+          for APath in Paths do begin
+            if CheckPath(APath) then begin
+              Flag:=true;
+              break;
+            end;
+          end;
+          if Flag then begin
+            Result:=Item;
+            exit;
+          end;
+        end;
+      end;
+    end;
+  finally
+    Paths.Free;
+    Hosts.Free;
+  end;
+end;
+
+
+end.

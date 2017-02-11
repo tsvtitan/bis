@@ -1,0 +1,161 @@
+unit BisCallcDealFramePaymentsFrm;
+
+interface
+
+uses Classes, DB, Variants, StdCtrls,
+     BisDataGridFrm, BisDataEditFm, BisFieldNames, BisParam,
+     BisCallcHbookPaymentEditFm;
+
+type
+  TBisCallcDealFramePaymentEditFormIface=class(TBisCallcHbookPaymentEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcDealFramePaymentInsertFormIface=class(TBisCallcDealFramePaymentEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcDealFramePaymentUpdateFormIface=class(TBisCallcDealFramePaymentEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcDealFramePaymentDeleteFormIface=class(TBisCallcDealFramePaymentEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcDealFramePaymentViewingFormIface=class(TBisCallcDealFramePaymentEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcDealFramePaymentsFrame=class(TBisDataGridFrame)
+  private
+    FDealId: Variant;
+    FDealNum: String;
+    function GetStateName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+  protected
+    function CreateIface(AClass: TBisDataEditFormIfaceClass): TBisDataEditFormIface; override;
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property DealId: Variant read FDealId write FDealId;
+    property DealNum: String read FDealNum write FDealNum;
+  end;
+
+implementation
+
+uses SysUtils,
+     BisCore, BisCallcConsts;
+
+{ TBisCallcDealFramePaymentsFrame }
+
+constructor TBisCallcDealFramePaymentsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  InsertClass:=TBisCallcDealFramePaymentInsertFormIface;
+  UpdateClass:=TBisCallcDealFramePaymentUpdateFormIface;
+  DeleteClass:=TBisCallcDealFramePaymentDeleteFormIface;
+  ViewingClass:=TBisCallcDealFramePaymentViewingFormIface;
+  Grid.NumberVisible:=true;
+  Grid.AutoResizeableColumns:=true;
+  ActionFilter.Visible:=false;
+  LabelCounter.Visible:=true;
+  with Provider do begin
+    ProviderName:='S_PAYMENTS';
+    with FieldNames do begin
+      AddKey('PAYMENT_ID');
+      AddInvisible('STATE');
+      AddInvisible('ACCOUNT_ID');
+      AddInvisible('DEAL_ID');
+      AddInvisible('DEAL_NUM');      
+      Add('DATE_PAYMENT','Дата платежа',80);
+      Add('USER_NAME','Кто ввел',100);
+      Add('AMOUNT','Сумма',70).DisplayFormat:=SDisplayFormatFloat;
+      Add('PERIOD','Период',60);
+      Add('DESCRIPTION','Комментарий',200);
+      AddCalculate('STATE_NAME','Состояние',GetStateName,ftString,100,95);
+    end;
+    Orders.Add('DATE_PAYMENT');
+  end;
+  AsModal:=true;
+end;
+
+destructor TBisCallcDealFramePaymentsFrame.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TBisCallcDealFramePaymentsFrame.GetStateName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S: String;
+begin
+  Result:=Null;
+  S:=GetStateByIndex(DataSet.FieldByName('STATE').AsInteger);
+  if Trim(S)<>'' then
+    Result:=S;
+end;
+
+function TBisCallcDealFramePaymentsFrame.CreateIface(AClass: TBisDataEditFormIfaceClass): TBisDataEditFormIface;
+begin
+  Result:=inherited CreateIface(AClass);
+  if Assigned(Result) then begin
+    with TBisCallcDealFramePaymentEditFormIface(Result) do begin
+      Params.ParamByName('DEAL_ID').SetNewValue(FDealId);
+      Params.ParamByName('DEAL_NUM').SetNewValue(FDealNum);
+      OnAfterExecute:=
+    end;
+  end;
+end;
+
+
+{ TBisCallcDealFramePaymentEditFormIface }
+
+constructor TBisCallcDealFramePaymentEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Params.ParamByName('DEAL_ID').ExcludeModes(AllParamEditModes);
+  Params.ParamByName('ACCOUNT_ID').ExcludeModes(AllParamEditModes);
+end;
+
+{ TBisCallcDealFramePaymentInsertFormIface }
+
+constructor TBisCallcDealFramePaymentInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Создать платеж';
+  ProviderName:='I_PAYMENT';
+end;
+
+{ TBisCallcDealFramePaymentUpdateFormIface }
+
+constructor TBisCallcDealFramePaymentUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Изменить платеж';
+  ProviderName:='U_PAYMENT';
+end;
+
+{ TBisCallcDealFramePaymentDeleteFormIface }
+
+constructor TBisCallcDealFramePaymentDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Удалить платеж';
+  ProviderName:='D_PAYMENT';
+end;
+
+{ TBisCallcDealFramePaymentViewingFormIface }
+
+constructor TBisCallcDealFramePaymentViewingFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Просмотр платежа';
+end;
+
+end.

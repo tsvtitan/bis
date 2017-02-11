@@ -1,0 +1,435 @@
+inherited BisTaxiDataDriverOutMessageFilterForm: TBisTaxiDataDriverOutMessageFilterForm
+  Caption = 'BisTaxiDataDriverOutMessageFilterForm'
+  ClientWidth = 513
+  ExplicitWidth = 521
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Width = 513
+    ExplicitTop = 327
+    ExplicitWidth = 513
+    DesignSize = (
+      513
+      38)
+    inherited ButtonOk: TButton
+      Left = 334
+      ExplicitLeft = 334
+    end
+    inherited ButtonCancel: TButton
+      Left = 430
+      ExplicitLeft = 430
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 513
+    ExplicitWidth = 513
+    ExplicitHeight = 327
+    DesignSize = (
+      513
+      372)
+    inherited LabelRecipient: TLabel
+      Left = 33
+      Top = 41
+      ExplicitLeft = 33
+      ExplicitTop = 41
+    end
+    inherited LabelDateCreate: TLabel
+      Left = 18
+      Top = 347
+      ExplicitLeft = 18
+      ExplicitTop = 404
+    end
+    inherited LabelDateOut: TLabel
+      Left = 17
+      Top = 293
+      ExplicitLeft = 17
+      ExplicitTop = 350
+    end
+    inherited LabelType: TLabel
+      Left = 76
+      Top = 14
+      ExplicitLeft = 76
+      ExplicitTop = 14
+    end
+    inherited LabelContact: TLabel
+      Left = 51
+      Top = 68
+      ExplicitLeft = 51
+      ExplicitTop = 68
+    end
+    inherited LabelCreator: TLabel
+      Left = 37
+      Top = 320
+      ExplicitLeft = 37
+      ExplicitTop = 377
+    end
+    inherited LabelPriority: TLabel
+      Left = 202
+      Top = 14
+      ExplicitLeft = 202
+      ExplicitTop = 14
+    end
+    inherited LabelDescription: TLabel
+      Left = 45
+      Top = 181
+      ExplicitLeft = 45
+      ExplicitTop = 136
+    end
+    inherited LabelCounter: TLabel
+      Left = 92
+      Top = 119
+      ExplicitLeft = 92
+      ExplicitTop = 119
+    end
+    object LabelDateOutTo: TLabel [9]
+      Left = 283
+      Top = 293
+      Width = 16
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1087#1086':'
+      FocusControl = DateTimePickerOutTo
+      ExplicitTop = 350
+    end
+    object LabelDateCreateTo: TLabel [10]
+      Left = 283
+      Top = 347
+      Width = 16
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1087#1086':'
+      FocusControl = DateTimePickerCreateTo
+      ExplicitTop = 404
+    end
+    inherited LabelDateBegin: TLabel
+      Left = 29
+      Top = 239
+      ExplicitLeft = 29
+      ExplicitTop = 296
+    end
+    inherited LabelDateEnd: TLabel
+      Left = 11
+      Top = 266
+      ExplicitLeft = 11
+      ExplicitTop = 323
+    end
+    object LabelDateEndTo: TLabel [13]
+      Left = 283
+      Top = 266
+      Width = 16
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1087#1086':'
+      FocusControl = DateTimePickerEndTo
+      ExplicitTop = 323
+    end
+    object LabelDateBeginTo: TLabel [14]
+      Left = 283
+      Top = 239
+      Width = 16
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1087#1086':'
+      FocusControl = DateTimePickerBeginTo
+      ExplicitTop = 296
+    end
+    inherited EditRecipient: TEdit
+      Left = 104
+      Top = 38
+      Width = 261
+      ExplicitLeft = 104
+      ExplicitTop = 38
+      ExplicitWidth = 261
+    end
+    inherited DateTimePickerCreate: TDateTimePicker
+      Left = 104
+      Top = 344
+      TabOrder = 25
+      ExplicitLeft = 104
+      ExplicitTop = 299
+    end
+    inherited DateTimePickerCreateTime: TDateTimePicker
+      Left = 198
+      Top = 344
+      TabOrder = 26
+      ExplicitLeft = 198
+      ExplicitTop = 299
+    end
+    inherited ButtonRecipient: TButton
+      Left = 371
+      Top = 38
+      ExplicitLeft = 371
+      ExplicitTop = 38
+    end
+    inherited DateTimePickerOut: TDateTimePicker
+      Left = 104
+      Top = 290
+      TabOrder = 18
+      ExplicitLeft = 104
+      ExplicitTop = 245
+    end
+    inherited DateTimePickerOutTime: TDateTimePicker
+      Left = 198
+      Top = 290
+      TabOrder = 19
+      ExplicitLeft = 198
+      ExplicitTop = 245
+    end
+    inherited ComboBoxType: TComboBox
+      Left = 104
+      Top = 11
+      ExplicitLeft = 104
+      ExplicitTop = 11
+    end
+    inherited EditContact: TEdit
+      Left = 104
+      Top = 65
+      Width = 288
+      ExplicitLeft = 104
+      ExplicitTop = 65
+      ExplicitWidth = 288
+    end
+    inherited EditCreator: TEdit
+      Left = 104
+      Top = 317
+      Width = 369
+      TabOrder = 23
+      ExplicitLeft = 104
+      ExplicitTop = 272
+      ExplicitWidth = 369
+    end
+    inherited ComboBoxPriority: TComboBox
+      Left = 267
+      Top = 11
+      Width = 125
+      ExplicitLeft = 267
+      ExplicitTop = 11
+      ExplicitWidth = 125
+    end
+    inherited MemoDescription: TMemo
+      Left = 104
+      Top = 180
+      Width = 396
+      ExplicitLeft = 104
+      ExplicitTop = 135
+      ExplicitWidth = 396
+    end
+    inherited MemoText: TMemo
+      Left = 104
+      Top = 92
+      Width = 396
+      Height = 82
+      ExplicitLeft = 104
+      ExplicitTop = 92
+      ExplicitWidth = 396
+      ExplicitHeight = 82
+    end
+    inherited ButtonPattern: TButton
+      Left = 32
+      Top = 92
+      ExplicitLeft = 32
+      ExplicitTop = 92
+    end
+    inherited DateTimePickerBegin: TDateTimePicker
+      Left = 104
+      Top = 236
+      TabOrder = 30
+      ExplicitLeft = 104
+      ExplicitTop = 191
+    end
+    inherited DateTimePickerBeginTime: TDateTimePicker
+      Left = 198
+      Top = 236
+      TabOrder = 31
+      ExplicitLeft = 198
+      ExplicitTop = 191
+    end
+    inherited DateTimePickerEnd: TDateTimePicker
+      Left = 104
+      Top = 263
+      TabOrder = 13
+      ExplicitLeft = 104
+      ExplicitTop = 218
+    end
+    inherited DateTimePickerEndTime: TDateTimePicker
+      Left = 198
+      Top = 263
+      TabOrder = 14
+      ExplicitLeft = 198
+      ExplicitTop = 218
+    end
+    inherited CheckBoxDelivery: TCheckBox
+      Left = 398
+      Top = 13
+      Visible = False
+      ExplicitLeft = 398
+      ExplicitTop = 13
+    end
+    inherited CheckBoxFlash: TCheckBox
+      Left = 476
+      Top = 13
+      Visible = False
+      ExplicitLeft = 476
+      ExplicitTop = 13
+    end
+    object ButtonCreator: TButton
+      Left = 479
+      Top = 317
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1091#1095#1077#1090#1085#1091#1102' '#1079#1072#1087#1080#1089#1100
+      Anchors = [akRight, akBottom]
+      Caption = '...'
+      TabOrder = 24
+      ExplicitTop = 272
+    end
+    object DateTimePickerOutTo: TDateTimePicker
+      Left = 305
+      Top = 290
+      Width = 88
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      TabOrder = 20
+      ExplicitTop = 245
+    end
+    object DateTimePickerOutToTime: TDateTimePicker
+      Left = 399
+      Top = 290
+      Width = 74
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 21
+      ExplicitTop = 245
+    end
+    object DateTimePickerCreateTo: TDateTimePicker
+      Left = 305
+      Top = 344
+      Width = 88
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      TabOrder = 27
+      ExplicitTop = 299
+    end
+    object DateTimePickerCreateToTime: TDateTimePicker
+      Left = 399
+      Top = 344
+      Width = 74
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 28
+      ExplicitTop = 299
+    end
+    object ButtonCreateTo: TButton
+      Left = 479
+      Top = 344
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1077#1088#1080#1086#1076
+      Anchors = [akRight, akBottom]
+      Caption = '...'
+      TabOrder = 29
+      OnClick = ButtonCreateToClick
+      ExplicitTop = 299
+    end
+    object ButtonDateOut: TButton
+      Left = 479
+      Top = 290
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1077#1088#1080#1086#1076
+      Anchors = [akRight, akBottom]
+      Caption = '...'
+      TabOrder = 22
+      OnClick = ButtonDateOutClick
+      ExplicitTop = 245
+    end
+    object DateTimePickerEndTo: TDateTimePicker
+      Left = 305
+      Top = 263
+      Width = 88
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      TabOrder = 15
+      ExplicitTop = 218
+    end
+    object DateTimePickerEndToTime: TDateTimePicker
+      Left = 399
+      Top = 263
+      Width = 74
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 16
+      ExplicitTop = 218
+    end
+    object ButtonDateEnd: TButton
+      Left = 479
+      Top = 263
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1077#1088#1080#1086#1076
+      Anchors = [akRight, akBottom]
+      Caption = '...'
+      TabOrder = 17
+      OnClick = ButtonDateEndClick
+      ExplicitTop = 218
+    end
+    object DateTimePickerBeginTo: TDateTimePicker
+      Left = 305
+      Top = 236
+      Width = 88
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      TabOrder = 10
+      ExplicitTop = 191
+    end
+    object DateTimePickerBeginToTime: TDateTimePicker
+      Left = 399
+      Top = 236
+      Width = 74
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 11
+      ExplicitTop = 191
+    end
+    object ButtonDateBegin: TButton
+      Left = 479
+      Top = 236
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1077#1088#1080#1086#1076
+      Anchors = [akRight, akBottom]
+      Caption = '...'
+      TabOrder = 12
+      OnClick = ButtonDateBeginClick
+      ExplicitTop = 191
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 184
+    Top = 64
+  end
+end

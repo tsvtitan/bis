@@ -1,0 +1,25 @@
+<%
+{ Select HtmlFilter in menu "Filter" to 
+  compile this script!}
+%>
+<html>
+<head>
+</head>
+<body>
+
+<% 
+var x: Integer;
+for x := 1 to 2 do begin 
+
+Send('Hello Word');%>
+String: <%='Hello World!!'%>
+Float: <%= 3.14159265358 %>
+Integer: <%= 32768 + 23 %>
+Boolean: <%= true or false %>
+
+<%
+end; 
+{$FILTER 'Web Scripting$HtmlFilterInclude.dws'}
+%>
+</body>
+</html>

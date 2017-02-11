@@ -1,0 +1,2447 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 00021130H .text                   CODE
+ 0002:00423000 00000394H .itext                  ICODE
+ 0003:00424000 000078B0H .data                   DATA
+ 0004:0042C000 00000038H .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 0000020E C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000210 000001C3 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:000003D4 00000086 C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:0000045C 00000064 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:000004C0 00000006 C=CODE     S=.text    G=(none)   M=DateUtils ACBP=A9
+ 0001:000004C8 00000006 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:000004D0 00000006 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:000004D8 0000001E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:000004F8 000000AE C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:000005A8 00000006 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:000005B0 00000056 C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000608 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000610 00000006 C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00000618 00000006 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000620 00000006 C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000628 00000006 C=CODE     S=.text    G=(none)   M=Themes   ACBP=A9
+ 0001:00000630 000000F6 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000728 00000006 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000730 00000006 C=CODE     S=.text    G=(none)   M=UxTheme  ACBP=A9
+ 0001:00000738 0000000E C=CODE     S=.text    G=(none)   M=SyncObjs ACBP=A9
+ 0001:00000748 00000006 C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000750 00000006 C=CODE     S=.text    G=(none)   M=DwmApi   ACBP=A9
+ 0001:00000758 0000011E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000878 00000006 C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000880 00000006 C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000888 00000006 C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:00000890 00000006 C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000898 00000006 C=CODE     S=.text    G=(none)   M=GraphUtil ACBP=A9
+ 0001:000008A0 00000006 C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:000008A8 00000006 C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:000008B0 0001123E C=CODE     S=.text    G=(none)   M=cUnicodeCodecs ACBP=A9
+ 0001:00011AF0 00002C2A C=CODE     S=.text    G=(none)   M=GsmSms   ACBP=A9
+ 0001:0001471C 0000005E C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:0001477C 00000006 C=CODE     S=.text    G=(none)   M=WideStrings ACBP=A9
+ 0001:00014784 00000006 C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:0001478C 00000006 C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:00014794 00000006 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:0001479C 00000016 C=CODE     S=.text    G=(none)   M=BisObject ACBP=A9
+ 0001:000147B4 00000036 C=CODE     S=.text    G=(none)   M=BisCoreObjects ACBP=A9
+ 0001:000147EC 0000000E C=CODE     S=.text    G=(none)   M=BisValues ACBP=A9
+ 0001:000147FC 00000046 C=CODE     S=.text    G=(none)   M=BisUtils ACBP=A9
+ 0001:00014844 00000016 C=CODE     S=.text    G=(none)   M=BisDialogs ACBP=A9
+ 0001:0001485C 0000017E C=CODE     S=.text    G=(none)   M=BisFm    ACBP=A9
+ 0001:000149DC 0000009E C=CODE     S=.text    G=(none)   M=BisThreads ACBP=A9
+ 0001:00014A7C 00000006 C=CODE     S=.text    G=(none)   M=BisLocks ACBP=A9
+ 0001:00014A84 00000006 C=CODE     S=.text    G=(none)   M=DECUtil  ACBP=A9
+ 0001:00014A8C 00000006 C=CODE     S=.text    G=(none)   M=Hash     ACBP=A9
+ 0001:00014A94 00000006 C=CODE     S=.text    G=(none)   M=Cipher   ACBP=A9
+ 0001:00014A9C 00000006 C=CODE     S=.text    G=(none)   M=Cipher1  ACBP=A9
+ 0001:00014AA4 00000006 C=CODE     S=.text    G=(none)   M=BisCryptUtils ACBP=A9
+ 0001:00014AAC 00000006 C=CODE     S=.text    G=(none)   M=BisObjects ACBP=A9
+ 0001:00014AB4 00000016 C=CODE     S=.text    G=(none)   M=BisParams ACBP=A9
+ 0001:00014ACC 00000016 C=CODE     S=.text    G=(none)   M=BisControls ACBP=A9
+ 0001:00014AE4 00000006 C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00014AEC 00000006 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00014AF4 00000006 C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00014AFC 00000006 C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00014B04 00000006 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00014B0C 00000006 C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00014B14 00000006 C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00014B1C 00000006 C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00014B24 00000006 C=CODE     S=.text    G=(none)   M=rxToolEdit ACBP=A9
+ 0001:00014B2C 00000006 C=CODE     S=.text    G=(none)   M=rxDateUtil ACBP=A9
+ 0001:00014B34 00000006 C=CODE     S=.text    G=(none)   M=RXCtrls  ACBP=A9
+ 0001:00014B3C 00000006 C=CODE     S=.text    G=(none)   M=RxHook   ACBP=A9
+ 0001:00014B44 00000006 C=CODE     S=.text    G=(none)   M=RXConst  ACBP=A9
+ 0001:00014B4C 00000006 C=CODE     S=.text    G=(none)   M=rxVclutils ACBP=A9
+ 0001:00014B54 00000006 C=CODE     S=.text    G=(none)   M=RXProps  ACBP=A9
+ 0001:00014B5C 00000006 C=CODE     S=.text    G=(none)   M=rxAppUtils ACBP=A9
+ 0001:00014B64 00000006 C=CODE     S=.text    G=(none)   M=RxPrgrss ACBP=A9
+ 0001:00014B6C 00000006 C=CODE     S=.text    G=(none)   M=SynEdit  ACBP=A9
+ 0001:00014B74 00000006 C=CODE     S=.text    G=(none)   M=SynEditHighlighter ACBP=A9
+ 0001:00014B7C 00000006 C=CODE     S=.text    G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0001:00014B84 00000006 C=CODE     S=.text    G=(none)   M=SynRegExpr ACBP=A9
+ 0001:00014B8C 00000006 C=CODE     S=.text    G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0001:00014B94 00000006 C=CODE     S=.text    G=(none)   M=SynTextDrawer ACBP=A9
+ 0001:00014B9C 00000006 C=CODE     S=.text    G=(none)   M=rxCurrEdit ACBP=A9
+ 0001:00014BA4 00000006 C=CODE     S=.text    G=(none)   M=ThemedDBGrid ACBP=A9
+ 0001:00014BAC 00000006 C=CODE     S=.text    G=(none)   M=RxRichEd ACBP=A9
+ 0001:00014BB4 00000006 C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:00014BBC 00000006 C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00014BC4 00000016 C=CODE     S=.text    G=(none)   M=BisParam ACBP=A9
+ 0001:00014BDC 0000000E C=CODE     S=.text    G=(none)   M=BisFilterGroups ACBP=A9
+ 0001:00014BEC 00000006 C=CODE     S=.text    G=(none)   M=GIFImage ACBP=A9
+ 0001:00014BF4 00000006 C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:00014BFC 00000006 C=CODE     S=.text    G=(none)   M=BisOrders ACBP=A9
+ 0001:00014C04 00000036 C=CODE     S=.text    G=(none)   M=BisDataSet ACBP=A9
+ 0001:00014C3C 00000016 C=CODE     S=.text    G=(none)   M=BisDataParams ACBP=A9
+ 0001:00014C54 00000016 C=CODE     S=.text    G=(none)   M=BisCore  ACBP=A9
+ 0001:00014C6C 0000002E C=CODE     S=.text    G=(none)   M=BisIfaces ACBP=A9
+ 0001:00014C9C 00000006 C=CODE     S=.text    G=(none)   M=BisFieldNames ACBP=A9
+ 0001:00014CA4 00000006 C=CODE     S=.text    G=(none)   M=kbmMemTable ACBP=A9
+ 0001:00014CAC 00000006 C=CODE     S=.text    G=(none)   M=BisConnectionUtils ACBP=A9
+ 0001:00014CB4 00000006 C=CODE     S=.text    G=(none)   M=BisModules ACBP=A9
+ 0001:00014CBC 00000006 C=CODE     S=.text    G=(none)   M=SynHighlighterXML ACBP=A9
+ 0001:00014CC4 00000006 C=CODE     S=.text    G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0001:00014CCC 00000006 C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:00014CD4 00000006 C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:00014CDC 00000006 C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00014CE4 00000006 C=CODE     S=.text    G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0001:00014CEC 00000006 C=CODE     S=.text    G=(none)   M=ActnMan  ACBP=A9
+ 0001:00014CF4 00000006 C=CODE     S=.text    G=(none)   M=ActnMenus ACBP=A9
+ 0001:00014CFC 00000006 C=CODE     S=.text    G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0001:00014D04 0000000E C=CODE     S=.text    G=(none)   M=BisProvider ACBP=A9
+ 0001:00014D14 00000006 C=CODE     S=.text    G=(none)   M=GIFImg   ACBP=A9
+ 0001:00014D1C 00000006 C=CODE     S=.text    G=(none)   M=BisSystemUtils ACBP=A9
+ 0001:00014D24 00000016 C=CODE     S=.text    G=(none)   M=BisDialogFm ACBP=A9
+ 0001:00014D3C 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_Routines ACBP=A9
+ 0001:00014D44 00000006 C=CODE     S=.text    G=(none)   M=MSI_Processes ACBP=A9
+ 0001:00014D4C 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0001:00014D54 00000006 C=CODE     S=.text    G=(none)   M=MSI_Devices ACBP=A9
+ 0001:00014D5C 00000006 C=CODE     S=.text    G=(none)   M=MSI_CPU  ACBP=A9
+ 0001:00014D64 00000006 C=CODE     S=.text    G=(none)   M=BisExceptNotifier ACBP=A9
+ 0001:00014D6C 00000006 C=CODE     S=.text    G=(none)   M=JclDebug ACBP=A9
+ 0001:00014D74 00000006 C=CODE     S=.text    G=(none)   M=JclSysInfo ACBP=A9
+ 0001:00014D7C 00000006 C=CODE     S=.text    G=(none)   M=JclStrings ACBP=A9
+ 0001:00014D84 00000006 C=CODE     S=.text    G=(none)   M=JclSysUtils ACBP=A9
+ 0001:00014D8C 00000006 C=CODE     S=.text    G=(none)   M=JclWideStrings ACBP=A9
+ 0001:00014D94 00000006 C=CODE     S=.text    G=(none)   M=JclShell ACBP=A9
+ 0001:00014D9C 00000006 C=CODE     S=.text    G=(none)   M=JclRegistry ACBP=A9
+ 0001:00014DA4 00000006 C=CODE     S=.text    G=(none)   M=JclHookExcept ACBP=A9
+ 0001:00014DAC 00000026 C=CODE     S=.text    G=(none)   M=BisServers ACBP=A9
+ 0001:00014DD4 00000006 C=CODE     S=.text    G=(none)   M=BisDeadlocks ACBP=A9
+ 0001:00014DDC 00000046 C=CODE     S=.text    G=(none)   M=BisServerMainFm ACBP=A9
+ 0001:00014E24 0000001E C=CODE     S=.text    G=(none)   M=BisMainFm ACBP=A9
+ 0001:00014E44 00000006 C=CODE     S=.text    G=(none)   M=BisServiceApplication ACBP=A9
+ 0001:00014E4C 00000006 C=CODE     S=.text    G=(none)   M=BisSvcMgr ACBP=A9
+ 0001:00014E54 00000006 C=CODE     S=.text    G=(none)   M=SvcMgr   ACBP=A9
+ 0001:00014E5C 00000006 C=CODE     S=.text    G=(none)   M=BisNetUtils ACBP=A9
+ 0001:00014E64 00000006 C=CODE     S=.text    G=(none)   M=AsyncCalls ACBP=A9
+ 0001:00014E6C 000000B6 C=CODE     S=.text    G=(none)   M=XComDrv  ACBP=A9
+ 0001:00014F24 00000006 C=CODE     S=.text    G=(none)   M=CPort    ACBP=A9
+ 0001:00014F2C 00000006 C=CODE     S=.text    G=(none)   M=CPortCtl ACBP=A9
+ 0001:00014F34 00002A72 C=CODE     S=.text    G=(none)   M=BisGsmModem ACBP=A9
+ 0001:000179A8 000000BE C=CODE     S=.text    G=(none)   M=BisGsmServerConsts ACBP=A9
+ 0001:00017A68 0000532A C=CODE     S=.text    G=(none)   M=BisGsmServerInit ACBP=A9
+ 0001:0001CD94 0000331E C=CODE     S=.text    G=(none)   M=BisGsmServerModemsFm ACBP=A9
+ 0001:000200B4 000004DA C=CODE     S=.text    G=(none)   M=BisGsmServerMainFm ACBP=A9
+ 0001:00020590 00000B9F C=CODE     S=.text    G=(none)   M=.smgsm   ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000010 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=Dialogs  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnList ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000004C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000054 00000006 C=ICODE    S=.itext   G=(none)   M=Graphics ACBP=A9
+ 0002:0000005C 00000006 C=ICODE    S=.itext   G=(none)   M=Registry ACBP=A9
+ 0002:00000064 00000006 C=ICODE    S=.itext   G=(none)   M=IniFiles ACBP=A9
+ 0002:0000006C 00000006 C=ICODE    S=.itext   G=(none)   M=Themes   ACBP=A9
+ 0002:00000074 00000006 C=ICODE    S=.itext   G=(none)   M=Controls ACBP=A9
+ 0002:0000007C 00000006 C=ICODE    S=.itext   G=(none)   M=Menus    ACBP=A9
+ 0002:00000084 00000006 C=ICODE    S=.itext   G=(none)   M=UxTheme  ACBP=A9
+ 0002:0000008C 00000006 C=ICODE    S=.itext   G=(none)   M=MultiMon ACBP=A9
+ 0002:00000094 00000006 C=ICODE    S=.itext   G=(none)   M=DwmApi   ACBP=A9
+ 0002:0000009C 00000006 C=ICODE    S=.itext   G=(none)   M=Forms    ACBP=A9
+ 0002:000000A4 00000006 C=ICODE    S=.itext   G=(none)   M=HelpIntfs ACBP=A9
+ 0002:000000AC 00000006 C=ICODE    S=.itext   G=(none)   M=Printers ACBP=A9
+ 0002:000000B4 00000006 C=ICODE    S=.itext   G=(none)   M=ExtCtrls ACBP=A9
+ 0002:000000BC 00000006 C=ICODE    S=.itext   G=(none)   M=GraphUtil ACBP=A9
+ 0002:000000C4 00000006 C=ICODE    S=.itext   G=(none)   M=Clipbrd  ACBP=A9
+ 0002:000000CC 00000006 C=ICODE    S=.itext   G=(none)   M=FlatSB   ACBP=A9
+ 0002:000000D4 00000008 C=ICODE    S=.itext   G=(none)   M=cUnicodeCodecs ACBP=A9
+ 0002:000000DC 00000008 C=ICODE    S=.itext   G=(none)   M=GsmSms   ACBP=A9
+ 0002:000000E4 00000006 C=ICODE    S=.itext   G=(none)   M=DB       ACBP=A9
+ 0002:000000EC 00000006 C=ICODE    S=.itext   G=(none)   M=WideStrings ACBP=A9
+ 0002:000000F4 00000006 C=ICODE    S=.itext   G=(none)   M=FMTBcd   ACBP=A9
+ 0002:000000FC 00000006 C=ICODE    S=.itext   G=(none)   M=SqlTimSt ACBP=A9
+ 0002:00000104 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:0000010C 00000006 C=ICODE    S=.itext   G=(none)   M=BisUtils ACBP=A9
+ 0002:00000114 00000006 C=ICODE    S=.itext   G=(none)   M=BisFm    ACBP=A9
+ 0002:0000011C 00000006 C=ICODE    S=.itext   G=(none)   M=BisThreads ACBP=A9
+ 0002:00000124 00000006 C=ICODE    S=.itext   G=(none)   M=BisLocks ACBP=A9
+ 0002:0000012C 00000006 C=ICODE    S=.itext   G=(none)   M=DECUtil  ACBP=A9
+ 0002:00000134 00000006 C=ICODE    S=.itext   G=(none)   M=Hash     ACBP=A9
+ 0002:0000013C 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher   ACBP=A9
+ 0002:00000144 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher1  ACBP=A9
+ 0002:0000014C 00000006 C=ICODE    S=.itext   G=(none)   M=BisCryptUtils ACBP=A9
+ 0002:00000154 00000006 C=ICODE    S=.itext   G=(none)   M=DBCtrls  ACBP=A9
+ 0002:0000015C 00000006 C=ICODE    S=.itext   G=(none)   M=ComCtrls ACBP=A9
+ 0002:00000164 00000006 C=ICODE    S=.itext   G=(none)   M=ExtActns ACBP=A9
+ 0002:0000016C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtDlgs  ACBP=A9
+ 0002:00000174 00000006 C=ICODE    S=.itext   G=(none)   M=Buttons  ACBP=A9
+ 0002:0000017C 00000006 C=ICODE    S=.itext   G=(none)   M=Mapi     ACBP=A9
+ 0002:00000184 00000006 C=ICODE    S=.itext   G=(none)   M=DBPWDlg  ACBP=A9
+ 0002:0000018C 00000006 C=ICODE    S=.itext   G=(none)   M=DBLogDlg ACBP=A9
+ 0002:00000194 00000006 C=ICODE    S=.itext   G=(none)   M=rxToolEdit ACBP=A9
+ 0002:0000019C 00000006 C=ICODE    S=.itext   G=(none)   M=rxDateUtil ACBP=A9
+ 0002:000001A4 00000006 C=ICODE    S=.itext   G=(none)   M=RXCtrls  ACBP=A9
+ 0002:000001AC 00000006 C=ICODE    S=.itext   G=(none)   M=RxHook   ACBP=A9
+ 0002:000001B4 00000006 C=ICODE    S=.itext   G=(none)   M=RXConst  ACBP=A9
+ 0002:000001BC 00000006 C=ICODE    S=.itext   G=(none)   M=rxVclutils ACBP=A9
+ 0002:000001C4 00000006 C=ICODE    S=.itext   G=(none)   M=RXProps  ACBP=A9
+ 0002:000001CC 00000006 C=ICODE    S=.itext   G=(none)   M=rxAppUtils ACBP=A9
+ 0002:000001D4 00000006 C=ICODE    S=.itext   G=(none)   M=RxPrgrss ACBP=A9
+ 0002:000001DC 00000006 C=ICODE    S=.itext   G=(none)   M=SynEdit  ACBP=A9
+ 0002:000001E4 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditHighlighter ACBP=A9
+ 0002:000001EC 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0002:000001F4 00000006 C=ICODE    S=.itext   G=(none)   M=SynRegExpr ACBP=A9
+ 0002:000001FC 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0002:00000204 00000006 C=ICODE    S=.itext   G=(none)   M=SynTextDrawer ACBP=A9
+ 0002:0000020C 00000006 C=ICODE    S=.itext   G=(none)   M=rxCurrEdit ACBP=A9
+ 0002:00000214 00000006 C=ICODE    S=.itext   G=(none)   M=ThemedDBGrid ACBP=A9
+ 0002:0000021C 00000006 C=ICODE    S=.itext   G=(none)   M=RxRichEd ACBP=A9
+ 0002:00000224 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtnrs ACBP=A9
+ 0002:0000022C 00000006 C=ICODE    S=.itext   G=(none)   M=CheckLst ACBP=A9
+ 0002:00000234 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImage ACBP=A9
+ 0002:0000023C 00000006 C=ICODE    S=.itext   G=(none)   M=jpeg     ACBP=A9
+ 0002:00000244 00000006 C=ICODE    S=.itext   G=(none)   M=BisCore  ACBP=A9
+ 0002:0000024C 00000006 C=ICODE    S=.itext   G=(none)   M=kbmMemTable ACBP=A9
+ 0002:00000254 00000006 C=ICODE    S=.itext   G=(none)   M=BisConnectionUtils ACBP=A9
+ 0002:0000025C 00000006 C=ICODE    S=.itext   G=(none)   M=SynHighlighterXML ACBP=A9
+ 0002:00000264 00000006 C=ICODE    S=.itext   G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0002:0000026C 00000006 C=ICODE    S=.itext   G=(none)   M=OleServer ACBP=A9
+ 0002:00000274 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtrls ACBP=A9
+ 0002:0000027C 00000006 C=ICODE    S=.itext   G=(none)   M=AxCtrls  ACBP=A9
+ 0002:00000284 00000006 C=ICODE    S=.itext   G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0002:0000028C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMan  ACBP=A9
+ 0002:00000294 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMenus ACBP=A9
+ 0002:0000029C 00000006 C=ICODE    S=.itext   G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0002:000002A4 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImg   ACBP=A9
+ 0002:000002AC 00000006 C=ICODE    S=.itext   G=(none)   M=BisSystemUtils ACBP=A9
+ 0002:000002B4 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_Routines ACBP=A9
+ 0002:000002BC 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Processes ACBP=A9
+ 0002:000002C4 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0002:000002CC 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Devices ACBP=A9
+ 0002:000002D4 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_CPU  ACBP=A9
+ 0002:000002DC 00000006 C=ICODE    S=.itext   G=(none)   M=BisExceptNotifier ACBP=A9
+ 0002:000002E4 00000006 C=ICODE    S=.itext   G=(none)   M=JclDebug ACBP=A9
+ 0002:000002EC 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysInfo ACBP=A9
+ 0002:000002F4 00000006 C=ICODE    S=.itext   G=(none)   M=JclStrings ACBP=A9
+ 0002:000002FC 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysUtils ACBP=A9
+ 0002:00000304 00000006 C=ICODE    S=.itext   G=(none)   M=JclWideStrings ACBP=A9
+ 0002:0000030C 00000006 C=ICODE    S=.itext   G=(none)   M=JclShell ACBP=A9
+ 0002:00000314 00000006 C=ICODE    S=.itext   G=(none)   M=JclRegistry ACBP=A9
+ 0002:0000031C 00000006 C=ICODE    S=.itext   G=(none)   M=JclHookExcept ACBP=A9
+ 0002:00000324 00000006 C=ICODE    S=.itext   G=(none)   M=BisDeadlocks ACBP=A9
+ 0002:0000032C 00000006 C=ICODE    S=.itext   G=(none)   M=BisServiceApplication ACBP=A9
+ 0002:00000334 00000006 C=ICODE    S=.itext   G=(none)   M=BisSvcMgr ACBP=A9
+ 0002:0000033C 00000006 C=ICODE    S=.itext   G=(none)   M=SvcMgr   ACBP=A9
+ 0002:00000344 00000006 C=ICODE    S=.itext   G=(none)   M=AsyncCalls ACBP=A9
+ 0002:0000034C 00000006 C=ICODE    S=.itext   G=(none)   M=XComDrv  ACBP=A9
+ 0002:00000354 00000006 C=ICODE    S=.itext   G=(none)   M=CPort    ACBP=A9
+ 0002:0000035C 00000006 C=ICODE    S=.itext   G=(none)   M=CPortCtl ACBP=A9
+ 0002:00000364 00000008 C=ICODE    S=.itext   G=(none)   M=BisGsmModem ACBP=A9
+ 0002:0000036C 00000008 C=ICODE    S=.itext   G=(none)   M=BisGsmServerConsts ACBP=A9
+ 0002:00000374 00000008 C=ICODE    S=.itext   G=(none)   M=BisGsmServerInit ACBP=A9
+ 0002:0000037C 00000008 C=ICODE    S=.itext   G=(none)   M=BisGsmServerModemsFm ACBP=A9
+ 0002:00000384 00000008 C=ICODE    S=.itext   G=(none)   M=BisGsmServerMainFm ACBP=A9
+ 0002:0000038C 00000005 C=ICODE    S=.itext   G=(none)   M=.smgsm   ACBP=A9
+ 0003:00000000 0000002C C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0003:0000002C 00007728 C=DATA     S=.data    G=DGROUP   M=cUnicodeCodecs ACBP=A9
+ 0003:00007754 00000104 C=DATA     S=.data    G=DGROUP   M=GsmSms   ACBP=A9
+ 0003:00007858 00000004 C=DATA     S=.data    G=DGROUP   M=BisGsmServerConsts ACBP=A9
+ 0004:00000000 0000000C C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:0000000C 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000014 00000004 C=BSS      S=.bss     G=DGROUP   M=cUnicodeCodecs ACBP=A9
+ 0004:00000018 00000004 C=BSS      S=.bss     G=DGROUP   M=GsmSms   ACBP=A9
+ 0004:0000001C 00000004 C=BSS      S=.bss     G=DGROUP   M=BisGsmModem ACBP=A9
+ 0004:00000020 00000004 C=BSS      S=.bss     G=DGROUP   M=BisGsmServerConsts ACBP=A9
+ 0004:00000024 00000004 C=BSS      S=.bss     G=DGROUP   M=BisGsmServerInit ACBP=A9
+ 0004:00000028 00000008 C=BSS      S=.bss     G=DGROUP   M=BisGsmServerModemsFm ACBP=A9
+ 0004:00000030 00000008 C=BSS      S=.bss     G=DGROUP   M=BisGsmServerMainFm ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:0000038C       .smgsm..smgsm
+ 0001:00021110       .smgsm.@GetPackageInfoTable
+ 0001:00021118       .smgsm.@PackageLoad
+ 0001:00021124       .smgsm.@PackageUnload
+ 0004:0000001C       BisGsmModem..5
+ 0001:00014F34       BisGsmModem..TBisCustomComm
+ 0001:000152D4       BisGsmModem..TBisGsmModem
+ 0001:0001516C       BisGsmModem..TBisGsmModemMessage
+ 0001:0001522C       BisGsmModem..TBisGsmModemMessages
+ 0002:00000364       BisGsmModem.BisGsmModem
+ 0001:00015E84       BisGsmModem.CalculateTimeOut
+ 0001:00017978       BisGsmModem.Finalization
+ 0001:00016758       BisGsmModem.TBisGsmModem.Clear
+ 0001:000167EC       BisGsmModem.TBisGsmModem.CommandOk
+ 0001:0001687C       BisGsmModem.TBisGsmModem.Connect
+ 0001:00015648       BisGsmModem.TBisGsmModem.Create
+ 0001:00017324       BisGsmModem.TBisGsmModem.DeleteAllMessages
+ 0001:00017194       BisGsmModem.TBisGsmModem.DeleteMessage
+ 0001:000172F0       BisGsmModem.TBisGsmModem.DeleteMessages
+ 0001:00015890       BisGsmModem.TBisGsmModem.Destroy
+ 0001:00016B20       BisGsmModem.TBisGsmModem.Disconnect
+ 0001:000158C0       BisGsmModem.TBisGsmModem.DoStatus
+ 0001:00015C54       BisGsmModem.TBisGsmModem.GetBaudRate
+ 0001:00015CF4       BisGsmModem.TBisGsmModem.GetBaudRateSpeed
+ 0001:00015DD8       BisGsmModem.TBisGsmModem.GetConnected
+ 0001:00015C24       BisGsmModem.TBisGsmModem.GetDataBits
+ 0001:00015BB8       BisGsmModem.TBisGsmModem.GetParityBits
+ 0001:00015DC0       BisGsmModem.TBisGsmModem.GetPort
+ 0001:000162E4       BisGsmModem.TBisGsmModem.GetResponseBy
+ 0001:00016100       BisGsmModem.TBisGsmModem.GetResponseOk
+ 0001:00015BFC       BisGsmModem.TBisGsmModem.GetStopBits
+ 0001:00016C4C       BisGsmModem.TBisGsmModem.GetSupportedMessageModes
+ 0001:00015DF8       BisGsmModem.TBisGsmModem.ModemCommEvent
+ 0001:00015E24       BisGsmModem.TBisGsmModem.ModemData
+ 0001:000163E8       BisGsmModem.TBisGsmModem.ParseNumbers
+ 0001:000165E8       BisGsmModem.TBisGsmModem.ParseServiceCenter
+ 0001:00017110       BisGsmModem.TBisGsmModem.ReadMessages
+ 0001:00016D2C       BisGsmModem.TBisGsmModem.ReadPduMessages
+ 0001:00016860       BisGsmModem.TBisGsmModem.Ready
+ 0001:000178D0       BisGsmModem.TBisGsmModem.SendMessage
+ 0001:00017910       BisGsmModem.TBisGsmModem.SendMessages
+ 0001:000173B8       BisGsmModem.TBisGsmModem.SendPduMessage
+ 0001:00015EDC       BisGsmModem.TBisGsmModem.SendRequest
+ 0001:00016050       BisGsmModem.TBisGsmModem.SendRequestOk
+ 0001:00015A7C       BisGsmModem.TBisGsmModem.SetBisComPortBaudRate
+ 0001:00015918       BisGsmModem.TBisGsmModem.SetDataBits
+ 0001:00015970       BisGsmModem.TBisGsmModem.SetParityBits
+ 0001:00015BAC       BisGsmModem.TBisGsmModem.SetPort
+ 0001:000159E8       BisGsmModem.TBisGsmModem.SetStopBits
+ 0001:00015A28       BisGsmModem.TBisGsmModem.SetTimeout
+ 0001:0001734C       BisGsmModem.TBisGsmModem.Text8Bit
+ 0001:000154D4       BisGsmModem.TBisGsmModemMessage.Create
+ 0001:00015518       BisGsmModem.TBisGsmModemMessage.SetOriginalNumber
+ 0001:00015538       BisGsmModem.TBisGsmModemMessage.SetOriginalText
+ 0001:000155A8       BisGsmModem.TBisGsmModemMessages.Add
+ 0001:0001556C       BisGsmModem.TBisGsmModemMessages.Find
+ 0001:00015558       BisGsmModem.TBisGsmModemMessages.GetItems
+ 0004:00000020       BisGsmServerConsts..1
+ 0002:0000036C       BisGsmServerConsts.BisGsmServerConsts
+ 0001:00017A38       BisGsmServerConsts.Finalization
+ 0003:00007858       BisGsmServerConsts.ServerModule
+ 0004:00000024       BisGsmServerInit..2
+ 0001:00017AC0       BisGsmServerInit..TBisGsmServer
+ 0001:00018344       BisGsmServerInit..TBisGsmServerModemThread
+ 0002:00000374       BisGsmServerInit.BisGsmServerInit
+ 0001:0001C860       BisGsmServerInit.CheckImei
+ 0001:0001C8F4       BisGsmServerInit.CheckImsi
+ 0001:00019200       BisGsmServerInit.DeleteMessagesByTypes
+ 0001:0001A080       BisGsmServerInit.ExecuteAnswer
+ 0001:00019AD4       BisGsmServerInit.ExecuteCommand
+ 0001:00019898       BisGsmServerInit.ExecuteProc
+ 0001:0001CD64       BisGsmServerInit.Finalization
+ 0001:000195D4       BisGsmServerInit.GetCodeMessageId
+ 0001:00019360       BisGsmServerInit.GetSenderId
+ 0001:0001ADA0       BisGsmServerInit.IncomingGranted
+ 0001:00018324       BisGsmServerInit.InitServerModule
+ 0001:0001B2B8       BisGsmServerInit.InMessages
+ 0001:0001AF70       BisGsmServerInit.IsStatusReport
+ 0001:0001B0D8       BisGsmServerInit.OutMessageDelivery
+ 0001:0001BA8C       BisGsmServerInit.OutMessages
+ 0001:0001C780       BisGsmServerInit.OutMessagesByOperators
+ 0001:00018CDC       BisGsmServerInit.TBisGsmServer.ChangeParams
+ 0001:000183F8       BisGsmServerInit.TBisGsmServer.Create
+ 0001:00018CA0       BisGsmServerInit.TBisGsmServer.Destroy
+ 0001:00018CD4       BisGsmServerInit.TBisGsmServer.GetStarted
+ 0001:00019178       BisGsmServerInit.TBisGsmServer.ModemStatus
+ 0001:0001CB50       BisGsmServerInit.TBisGsmServer.Start
+ 0001:0001CC7C       BisGsmServerInit.TBisGsmServer.Stop
+ 0001:0001CAB0       BisGsmServerInit.TBisGsmServer.ThreadBegin
+ 0001:0001CB44       BisGsmServerInit.TBisGsmServer.ThreadEnd
+ 0001:0001C984       BisGsmServerInit.TBisGsmServer.ThreadTimeout
+ 0001:0001B804       BisGsmServerInit.UnlockMessage
+ 0001:0001A620       BisGsmServerInit.WriteMessage
+ 0004:00000034       BisGsmServerMainFm..3
+ 0001:000200B4       BisGsmServerMainFm..TBisGsmServerMainForm
+ 0001:000202DC       BisGsmServerMainFm..TBisGsmServerMainFormIface
+ 0002:00000384       BisGsmServerMainFm.BisGsmServerMainFm
+ 0004:00000030       BisGsmServerMainFm.BisGsmServerMainForm
+ 0001:00020560       BisGsmServerMainFm.Finalization
+ 0001:00020430       BisGsmServerMainFm.InitIfaceModule
+ 0001:000204F4       BisGsmServerMainFm.TBisGsmServerMainForm.CanOptions
+ 0001:000204B4       BisGsmServerMainFm.TBisGsmServerMainForm.Create
+ 0001:000204EC       BisGsmServerMainFm.TBisGsmServerMainForm.GetServerClass
+ 0001:00020500       BisGsmServerMainFm.TBisGsmServerMainForm.Options
+ 0001:00020474       BisGsmServerMainFm.TBisGsmServerMainFormIface.Create
+ 0004:0000002C       BisGsmServerModemsFm..3
+ 0001:0001CD94       BisGsmServerModemsFm..TBisGsmServerModemsForm
+ 0001:0001D59C       BisGsmServerModemsFm..TBisGsmServerModemsFormIface
+ 0002:0000037C       BisGsmServerModemsFm.BisGsmServerModemsFm
+ 0004:00000028       BisGsmServerModemsFm.BisGsmServerModemsForm
+ 0001:00020084       BisGsmServerModemsFm.Finalization
+ 0001:0001FC28       BisGsmServerModemsFm.TBisGsmServerModemsForm.ButtonOkClick
+ 0001:0001FC50       BisGsmServerModemsFm.TBisGsmServerModemsForm.ButtonSaveClick
+ 0001:0001FC68       BisGsmServerModemsFm.TBisGsmServerModemsForm.ButtonTestClick
+ 0001:0001EA84       BisGsmServerModemsFm.TBisGsmServerModemsForm.CheckBoxEnabledClick
+ 0001:0001F754       BisGsmServerModemsFm.TBisGsmServerModemsForm.CheckFields
+ 0001:0001F6B4       BisGsmServerModemsFm.TBisGsmServerModemsForm.ComboBoxComportChange
+ 0001:0001D768       BisGsmServerModemsFm.TBisGsmServerModemsForm.Create
+ 0001:0001DCA8       BisGsmServerModemsFm.TBisGsmServerModemsForm.Destroy
+ 0001:0001E3B0       BisGsmServerModemsFm.TBisGsmServerModemsForm.EnableModems
+ 0001:0001DE90       BisGsmServerModemsFm.TBisGsmServerModemsForm.FillDefault
+ 0001:0001F100       BisGsmServerModemsFm.TBisGsmServerModemsForm.GetModems
+ 0001:0001DCD8       BisGsmServerModemsFm.TBisGsmServerModemsForm.Init
+ 0001:0001E3AC       BisGsmServerModemsFm.TBisGsmServerModemsForm.LoadFromBase
+ 0001:0001FFF4       BisGsmServerModemsFm.TBisGsmServerModemsForm.RestartServer
+ 0001:0001FFF0       BisGsmServerModemsFm.TBisGsmServerModemsForm.SaveModems
+ 0001:0001EBF8       BisGsmServerModemsFm.TBisGsmServerModemsForm.SetModems
+ 0001:0001FC80       BisGsmServerModemsFm.TBisGsmServerModemsForm.SetOnlyOneModem
+ 0001:0001FDC4       BisGsmServerModemsFm.TBisGsmServerModemsForm.TestModem
+ 0001:0001D6F8       BisGsmServerModemsFm.TBisGsmServerModemsFormIface.Create
+ 0001:0001D738       BisGsmServerModemsFm.TBisGsmServerModemsFormIface.CreateForm
+ 0001:0001D758       BisGsmServerModemsFm.TBisGsmServerModemsFormIface.ShowByCommand
+ 0004:00000014       cUnicodeCodecs..221
+ 0001:00000B98       cUnicodeCodecs..EUnicodeCodecException
+ 0001:00001184       cUnicodeCodecs..TCustomSingleByteCodec
+ 0001:00000AE4       cUnicodeCodecs..TCustomUnicodeCodec
+ 0001:000061A8       cUnicodeCodecs..TEBCDIC_USCodec
+ 0001:00003C1C       cUnicodeCodecs..TIBM037Codec
+ 0001:00003CD8       cUnicodeCodecs..TIBM038Codec
+ 0001:00005A38       cUnicodeCodecs..TIBM1004Codec
+ 0001:00005AF4       cUnicodeCodecs..TIBM1026Codec
+ 0001:00005BB0       cUnicodeCodecs..TIBM1047Codec
+ 0001:00003D94       cUnicodeCodecs..TIBM256Codec
+ 0001:00003E50       cUnicodeCodecs..TIBM273Codec
+ 0001:00003F0C       cUnicodeCodecs..TIBM274Codec
+ 0001:00003FC8       cUnicodeCodecs..TIBM275Codec
+ 0001:00004084       cUnicodeCodecs..TIBM277Codec
+ 0001:00004140       cUnicodeCodecs..TIBM278Codec
+ 0001:000041FC       cUnicodeCodecs..TIBM280Codec
+ 0001:000042B8       cUnicodeCodecs..TIBM281Codec
+ 0001:00004374       cUnicodeCodecs..TIBM284Codec
+ 0001:00004430       cUnicodeCodecs..TIBM285Codec
+ 0001:000044EC       cUnicodeCodecs..TIBM290Codec
+ 0001:000045A8       cUnicodeCodecs..TIBM297Codec
+ 0001:00004664       cUnicodeCodecs..TIBM420Codec
+ 0001:00004720       cUnicodeCodecs..TIBM423Codec
+ 0001:000047DC       cUnicodeCodecs..TIBM424Codec
+ 0001:00004898       cUnicodeCodecs..TIBM437Codec
+ 0001:00004954       cUnicodeCodecs..TIBM500Codec
+ 0001:00004A10       cUnicodeCodecs..TIBM850Codec
+ 0001:00004ACC       cUnicodeCodecs..TIBM851Codec
+ 0001:00004B88       cUnicodeCodecs..TIBM852Codec
+ 0001:00004C44       cUnicodeCodecs..TIBM855Codec
+ 0001:00004D00       cUnicodeCodecs..TIBM857Codec
+ 0001:00004DBC       cUnicodeCodecs..TIBM860Codec
+ 0001:00004E78       cUnicodeCodecs..TIBM861Codec
+ 0001:00004F34       cUnicodeCodecs..TIBM862Codec
+ 0001:00004FF0       cUnicodeCodecs..TIBM863Codec
+ 0001:000050AC       cUnicodeCodecs..TIBM864Codec
+ 0001:00005168       cUnicodeCodecs..TIBM865Codec
+ 0001:00005224       cUnicodeCodecs..TIBM866Codec
+ 0001:000052E0       cUnicodeCodecs..TIBM868Codec
+ 0001:0000539C       cUnicodeCodecs..TIBM869Codec
+ 0001:00005458       cUnicodeCodecs..TIBM870Codec
+ 0001:00005514       cUnicodeCodecs..TIBM871Codec
+ 0001:000055D0       cUnicodeCodecs..TIBM874Codec
+ 0001:0000568C       cUnicodeCodecs..TIBM875Codec
+ 0001:00005748       cUnicodeCodecs..TIBM880Codec
+ 0001:00005804       cUnicodeCodecs..TIBM904Codec
+ 0001:000058C0       cUnicodeCodecs..TIBM905Codec
+ 0001:0000597C       cUnicodeCodecs..TIBM918Codec
+ 0001:000018EC       cUnicodeCodecs..TISO8859_10Codec
+ 0001:000019B0       cUnicodeCodecs..TISO8859_13Codec
+ 0001:00001A74       cUnicodeCodecs..TISO8859_14Codec
+ 0001:00001B38       cUnicodeCodecs..TISO8859_15Codec
+ 0001:00001250       cUnicodeCodecs..TISO8859_1Codec
+ 0001:0000130C       cUnicodeCodecs..TISO8859_2Codec
+ 0001:000013C8       cUnicodeCodecs..TISO8859_3Codec
+ 0001:00001484       cUnicodeCodecs..TISO8859_4Codec
+ 0001:00001540       cUnicodeCodecs..TISO8859_5Codec
+ 0001:000015FC       cUnicodeCodecs..TISO8859_6Codec
+ 0001:000016B8       cUnicodeCodecs..TISO8859_7Codec
+ 0001:00001774       cUnicodeCodecs..TISO8859_8Codec
+ 0001:00001830       cUnicodeCodecs..TISO8859_9Codec
+ 0001:00006320       cUnicodeCodecs..TJIS_X0201Codec
+ 0001:00006264       cUnicodeCodecs..TKOI8_RCodec
+ 0001:00005DE4       cUnicodeCodecs..TMacCyrillicCodec
+ 0001:00005EA8       cUnicodeCodecs..TMacGreekCodec
+ 0001:00005F64       cUnicodeCodecs..TMacIcelandicCodec
+ 0001:00005C6C       cUnicodeCodecs..TMacLatin2Codec
+ 0001:00005D28       cUnicodeCodecs..TMacRomanCodec
+ 0001:00006028       cUnicodeCodecs..TMacTurkishCodec
+ 0001:000063DC       cUnicodeCodecs..TNextStepCodec
+ 0001:000010E0       cUnicodeCodecs..TUCS2Codec
+ 0001:00000E30       cUnicodeCodecs..TUCS4BECodec
+ 0001:00000EDC       cUnicodeCodecs..TUCS4LECodec
+ 0001:00000F88       cUnicodeCodecs..TUCS4_2143Codec
+ 0001:00001034       cUnicodeCodecs..TUCS4_3412Codec
+ 0001:000060EC       cUnicodeCodecs..TUSASCIICodec
+ 0001:00000CD8       cUnicodeCodecs..TUTF16BECodec
+ 0001:00000D84       cUnicodeCodecs..TUTF16LECodec
+ 0001:00000C34       cUnicodeCodecs..TUTF8Codec
+ 0001:00002C08       cUnicodeCodecs..TWindows1026Codec
+ 0001:00002CCC       cUnicodeCodecs..TWindows1047Codec
+ 0001:00002D90       cUnicodeCodecs..TWindows1140Codec
+ 0001:00002E54       cUnicodeCodecs..TWindows1141Codec
+ 0001:00002F18       cUnicodeCodecs..TWindows1142Codec
+ 0001:00002FDC       cUnicodeCodecs..TWindows1143Codec
+ 0001:000030A0       cUnicodeCodecs..TWindows1144Codec
+ 0001:00003164       cUnicodeCodecs..TWindows1145Codec
+ 0001:00003228       cUnicodeCodecs..TWindows1146Codec
+ 0001:000032EC       cUnicodeCodecs..TWindows1147Codec
+ 0001:000033B0       cUnicodeCodecs..TWindows1148Codec
+ 0001:00003474       cUnicodeCodecs..TWindows1149Codec
+ 0001:00003538       cUnicodeCodecs..TWindows1250Codec
+ 0001:000035FC       cUnicodeCodecs..TWindows1251Codec
+ 0001:000036C0       cUnicodeCodecs..TWindows1252Codec
+ 0001:00003784       cUnicodeCodecs..TWindows1253Codec
+ 0001:00003848       cUnicodeCodecs..TWindows1254Codec
+ 0001:0000390C       cUnicodeCodecs..TWindows1255Codec
+ 0001:000039D0       cUnicodeCodecs..TWindows1256Codec
+ 0001:00003A94       cUnicodeCodecs..TWindows1257Codec
+ 0001:00003B58       cUnicodeCodecs..TWindows1258Codec
+ 0001:00001BFC       cUnicodeCodecs..TWindows37Codec
+ 0001:00001CB8       cUnicodeCodecs..TWindows437Codec
+ 0001:00001D7C       cUnicodeCodecs..TWindows500Codec
+ 0001:00001E40       cUnicodeCodecs..TWindows708Codec
+ 0001:00001F04       cUnicodeCodecs..TWindows737Codec
+ 0001:00001FC8       cUnicodeCodecs..TWindows775Codec
+ 0001:0000208C       cUnicodeCodecs..TWindows850Codec
+ 0001:00002150       cUnicodeCodecs..TWindows852Codec
+ 0001:00002214       cUnicodeCodecs..TWindows855Codec
+ 0001:000022D8       cUnicodeCodecs..TWindows857Codec
+ 0001:0000239C       cUnicodeCodecs..TWindows858Codec
+ 0001:00002460       cUnicodeCodecs..TWindows861Codec
+ 0001:00002524       cUnicodeCodecs..TWindows862Codec
+ 0001:000025E8       cUnicodeCodecs..TWindows863Codec
+ 0001:000026AC       cUnicodeCodecs..TWindows864Codec
+ 0001:00002770       cUnicodeCodecs..TWindows865Codec
+ 0001:00002834       cUnicodeCodecs..TWindows866Codec
+ 0001:000028F8       cUnicodeCodecs..TWindows869Codec
+ 0001:000029BC       cUnicodeCodecs..TWindows870Codec
+ 0001:00002A80       cUnicodeCodecs..TWindows874Codec
+ 0001:00002B44       cUnicodeCodecs..TWindows875Codec
+ 0001:00007AD8       cUnicodeCodecs.CharFromHighMap
+ 0001:00007BEC       cUnicodeCodecs.CharFromISOMap
+ 0001:000079D8       cUnicodeCodecs.CharFromMap
+ 0003:00005114       cUnicodeCodecs.CP1026Map
+ 0003:00005314       cUnicodeCodecs.CP1047Map
+ 0003:0000085C       cUnicodeCodecs.CP37Map
+ 0003:000001C8       cUnicodeCodecs.CP437Alias
+ 0003:0000285C       cUnicodeCodecs.CP437Map
+ 0003:0000295C       cUnicodeCodecs.CP500Map
+ 0003:00002E5C       cUnicodeCodecs.CP850Map
+ 0003:0000305C       cUnicodeCodecs.CP852Map
+ 0003:0000315C       cUnicodeCodecs.CP855Map
+ 0003:0000325C       cUnicodeCodecs.CP857Map
+ 0003:0000345C       cUnicodeCodecs.CP861Map
+ 0003:0000355C       cUnicodeCodecs.CP862Map
+ 0003:0000365C       cUnicodeCodecs.CP863Map
+ 0003:00003A14       cUnicodeCodecs.CP865Map
+ 0003:00003B14       cUnicodeCodecs.CP866Map
+ 0003:00003D14       cUnicodeCodecs.CP869Map
+ 0002:000000D4       cUnicodeCodecs.cUnicodeCodecs
+ 0001:000078E4       cUnicodeCodecs.DetectUTF16BEBOM
+ 0001:0000794C       cUnicodeCodecs.DetectUTF16BOM
+ 0001:00007918       cUnicodeCodecs.DetectUTF16LEBOM
+ 0001:000070E8       cUnicodeCodecs.DetectUTF8BOM
+ 0001:00008A84       cUnicodeCodecs.DetectUTFEncoding
+ 0003:000001F8       cUnicodeCodecs.EBCDIC_USAlias
+ 0001:00008BEC       cUnicodeCodecs.EncodingToUTF16
+ 0001:00008B00       cUnicodeCodecs.EncodingToUTF16
+ 0001:00008B70       cUnicodeCodecs.EncodingToUTF16
+ 0001:00008C18       cUnicodeCodecs.EncodingToUTF16
+ 0001:00011898       cUnicodeCodecs.Finalization
+ 0001:0000860C       cUnicodeCodecs.GetCodecClassByAlias
+ 0001:0000868C       cUnicodeCodecs.GetEncodingName
+ 0001:00008980       cUnicodeCodecs.GetSystemEncodingCodecClass
+ 0001:000086E0       cUnicodeCodecs.GetSystemEncodingName
+ 0003:00000A5C       cUnicodeCodecs.IBM038Map
+ 0003:00005014       cUnicodeCodecs.IBM1004Map
+ 0003:00000C5C       cUnicodeCodecs.IBM256Map
+ 0003:00000E5C       cUnicodeCodecs.IBM273Map
+ 0003:0000105C       cUnicodeCodecs.IBM274Map
+ 0003:0000125C       cUnicodeCodecs.IBM275Map
+ 0003:0000145C       cUnicodeCodecs.IBM277Map
+ 0003:0000165C       cUnicodeCodecs.IBM278Map
+ 0003:0000185C       cUnicodeCodecs.IBM280Map
+ 0003:00001A5C       cUnicodeCodecs.IBM284Map
+ 0003:00001C5C       cUnicodeCodecs.IBM285Map
+ 0003:00001E5C       cUnicodeCodecs.IBM290Map
+ 0003:0000205C       cUnicodeCodecs.IBM297Map
+ 0003:0000225C       cUnicodeCodecs.IBM420Map
+ 0003:0000245C       cUnicodeCodecs.IBM423Map
+ 0003:0000265C       cUnicodeCodecs.IBM424Map
+ 0003:00002F5C       cUnicodeCodecs.IBM851Map
+ 0003:0000335C       cUnicodeCodecs.IBM860Map
+ 0003:0000385C       cUnicodeCodecs.IBM864Map
+ 0003:00003C14       cUnicodeCodecs.IBM868Map
+ 0003:00004014       cUnicodeCodecs.IBM870Map
+ 0003:00004214       cUnicodeCodecs.IBM871Map
+ 0003:00004514       cUnicodeCodecs.IBM874Map
+ 0003:00004814       cUnicodeCodecs.IBM875Map
+ 0003:00004A14       cUnicodeCodecs.IBM880Map
+ 0003:00004C14       cUnicodeCodecs.IBM905Map
+ 0003:00004E14       cUnicodeCodecs.IBM918Map
+ 0003:00000154       cUnicodeCodecs.ISO8859_10Alias
+ 0003:0000061C       cUnicodeCodecs.ISO8859_10Map
+ 0003:0000016C       cUnicodeCodecs.ISO8859_13Alias
+ 0003:000006DC       cUnicodeCodecs.ISO8859_13Map
+ 0003:0000017C       cUnicodeCodecs.ISO8859_14Alias
+ 0003:0000079C       cUnicodeCodecs.ISO8859_14Map
+ 0003:00000198       cUnicodeCodecs.ISO8859_15Alias
+ 0003:00000070       cUnicodeCodecs.ISO8859_1Alias
+ 0001:00007814       cUnicodeCodecs.ISO8859_1StringToUTF8String
+ 0003:00000090       cUnicodeCodecs.ISO8859_2Alias
+ 0003:000003DC       cUnicodeCodecs.ISO8859_2Map
+ 0003:000000A8       cUnicodeCodecs.ISO8859_3Alias
+ 0003:0000049C       cUnicodeCodecs.ISO8859_3Map
+ 0003:000000C0       cUnicodeCodecs.ISO8859_4Alias
+ 0003:0000055C       cUnicodeCodecs.ISO8859_4Map
+ 0003:000000D8       cUnicodeCodecs.ISO8859_5Alias
+ 0003:000000EC       cUnicodeCodecs.ISO8859_6Alias
+ 0003:00000108       cUnicodeCodecs.ISO8859_7Alias
+ 0003:00000128       cUnicodeCodecs.ISO8859_8Alias
+ 0003:0000013C       cUnicodeCodecs.ISO8859_9Alias
+ 0001:000064E8       cUnicodeCodecs.IsUSASCIIString
+ 0001:00006534       cUnicodeCodecs.IsUSASCIIWideBuf
+ 0001:00006580       cUnicodeCodecs.IsUSASCIIWideString
+ 0003:000001B0       cUnicodeCodecs.KOI8_RAlias
+ 0003:00007554       cUnicodeCodecs.KOI8_RMap
+ 0001:000073B8       cUnicodeCodecs.LongBufToUTF8Size
+ 0001:0000742C       cUnicodeCodecs.LongStringToUTF8Size
+ 0001:000076B8       cUnicodeCodecs.LongStringToUTF8String
+ 0001:0000667C       cUnicodeCodecs.LongStringToWideString
+ 0001:000065A8       cUnicodeCodecs.LongToWide
+ 0003:000001C4       cUnicodeCodecs.MacCyrillicAlias
+ 0003:00007154       cUnicodeCodecs.MacCyrillicMap
+ 0003:00007254       cUnicodeCodecs.MacGreekMap
+ 0003:00007354       cUnicodeCodecs.MacIcelandicMap
+ 0003:000001B4       cUnicodeCodecs.MacLatin2Alias
+ 0003:00006F54       cUnicodeCodecs.MacLatin2Map
+ 0003:000001C0       cUnicodeCodecs.MacRomanAlias
+ 0003:00007054       cUnicodeCodecs.MacRomanMap
+ 0003:00007454       cUnicodeCodecs.MacTurkishMap
+ 0003:00000354       cUnicodeCodecs.MaxCode
+ 0003:00007654       cUnicodeCodecs.NextStepMap
+ 0001:00008CE0       cUnicodeCodecs.RaiseUnicodeCodecException
+ 0001:00008D14       cUnicodeCodecs.RaiseUnicodeCodecException
+ 0001:000079B0       cUnicodeCodecs.SwapUTF16Endian
+ 0001:00009178       cUnicodeCodecs.TCustomSingleByteCodec.Create
+ 0001:000091C0       cUnicodeCodecs.TCustomSingleByteCodec.CreateEx
+ 0001:0000921C       cUnicodeCodecs.TCustomSingleByteCodec.Decode
+ 0001:00009390       cUnicodeCodecs.TCustomSingleByteCodec.DecodeUCS4Char
+ 0001:000093B4       cUnicodeCodecs.TCustomSingleByteCodec.Encode
+ 0001:0000951C       cUnicodeCodecs.TCustomSingleByteCodec.EncodeUCS4Char
+ 0001:000095B4       cUnicodeCodecs.TCustomSingleByteCodec.InternalReadUCS4Char
+ 0001:0000960C       cUnicodeCodecs.TCustomSingleByteCodec.InternalWriteUCS4Char
+ 0001:00008D4C       cUnicodeCodecs.TCustomUnicodeCodec.Create
+ 0001:00008DB4       cUnicodeCodecs.TCustomUnicodeCodec.CreateEx
+ 0001:00008EE4       cUnicodeCodecs.TCustomUnicodeCodec.DecodeStr
+ 0001:00008FAC       cUnicodeCodecs.TCustomUnicodeCodec.EncodeStr
+ 0001:00008FE0       cUnicodeCodecs.TCustomUnicodeCodec.ReadBuffer
+ 0001:00009054       cUnicodeCodecs.TCustomUnicodeCodec.ReadUCS4Char
+ 0001:00008E28       cUnicodeCodecs.TCustomUnicodeCodec.ResetReadAhead
+ 0001:00008E44       cUnicodeCodecs.TCustomUnicodeCodec.SetDecodeReplaceChar
+ 0001:00008E60       cUnicodeCodecs.TCustomUnicodeCodec.SetErrorAction
+ 0001:00008EB4       cUnicodeCodecs.TCustomUnicodeCodec.SetOnRead
+ 0001:00008E7C       cUnicodeCodecs.TCustomUnicodeCodec.SetReadLFOption
+ 0001:00008E98       cUnicodeCodecs.TCustomUnicodeCodec.SetWriteLFOption
+ 0001:00009020       cUnicodeCodecs.TCustomUnicodeCodec.WriteBuffer
+ 0001:000090EC       cUnicodeCodecs.TCustomUnicodeCodec.WriteUCS4Char
+ 0001:00010454       cUnicodeCodecs.TEBCDIC_USCodec.DecodeChar
+ 0001:000107D8       cUnicodeCodecs.TEBCDIC_USCodec.EncodeChar
+ 0001:0000D4FC       cUnicodeCodecs.TIBM037Codec.DecodeChar
+ 0001:0000D524       cUnicodeCodecs.TIBM037Codec.EncodeChar
+ 0001:0000D560       cUnicodeCodecs.TIBM038Codec.DecodeChar
+ 0001:0000D588       cUnicodeCodecs.TIBM038Codec.EncodeChar
+ 0001:0000F28C       cUnicodeCodecs.TIBM1004Codec.DecodeChar
+ 0001:0000F2C4       cUnicodeCodecs.TIBM1004Codec.EncodeChar
+ 0001:0000F484       cUnicodeCodecs.TIBM1026Codec.DecodeChar
+ 0001:0000F4C8       cUnicodeCodecs.TIBM1026Codec.EncodeChar
+ 0001:0000F5C4       cUnicodeCodecs.TIBM1047Codec.DecodeChar
+ 0001:0000F608       cUnicodeCodecs.TIBM1047Codec.EncodeChar
+ 0001:0000D5C4       cUnicodeCodecs.TIBM256Codec.DecodeChar
+ 0001:0000D5EC       cUnicodeCodecs.TIBM256Codec.EncodeChar
+ 0001:0000D628       cUnicodeCodecs.TIBM273Codec.DecodeChar
+ 0001:0000D650       cUnicodeCodecs.TIBM273Codec.EncodeChar
+ 0001:0000D68C       cUnicodeCodecs.TIBM274Codec.DecodeChar
+ 0001:0000D6B4       cUnicodeCodecs.TIBM274Codec.EncodeChar
+ 0001:0000D6F0       cUnicodeCodecs.TIBM275Codec.DecodeChar
+ 0001:0000D718       cUnicodeCodecs.TIBM275Codec.EncodeChar
+ 0001:0000D754       cUnicodeCodecs.TIBM277Codec.DecodeChar
+ 0001:0000D77C       cUnicodeCodecs.TIBM277Codec.EncodeChar
+ 0001:0000D7B8       cUnicodeCodecs.TIBM278Codec.DecodeChar
+ 0001:0000D7E0       cUnicodeCodecs.TIBM278Codec.EncodeChar
+ 0001:0000D81C       cUnicodeCodecs.TIBM280Codec.DecodeChar
+ 0001:0000D844       cUnicodeCodecs.TIBM280Codec.EncodeChar
+ 0001:0000D880       cUnicodeCodecs.TIBM281Codec.DecodeChar
+ 0001:0000D90C       cUnicodeCodecs.TIBM281Codec.EncodeChar
+ 0001:0000D9A4       cUnicodeCodecs.TIBM284Codec.DecodeChar
+ 0001:0000D9CC       cUnicodeCodecs.TIBM284Codec.EncodeChar
+ 0001:0000DA08       cUnicodeCodecs.TIBM285Codec.DecodeChar
+ 0001:0000DA30       cUnicodeCodecs.TIBM285Codec.EncodeChar
+ 0001:0000DA6C       cUnicodeCodecs.TIBM290Codec.DecodeChar
+ 0001:0000DA94       cUnicodeCodecs.TIBM290Codec.EncodeChar
+ 0001:0000DAD0       cUnicodeCodecs.TIBM297Codec.DecodeChar
+ 0001:0000DAF8       cUnicodeCodecs.TIBM297Codec.EncodeChar
+ 0001:0000DB34       cUnicodeCodecs.TIBM420Codec.DecodeChar
+ 0001:0000DB5C       cUnicodeCodecs.TIBM420Codec.EncodeChar
+ 0001:0000DB98       cUnicodeCodecs.TIBM423Codec.DecodeChar
+ 0001:0000DBC0       cUnicodeCodecs.TIBM423Codec.EncodeChar
+ 0001:0000DBFC       cUnicodeCodecs.TIBM424Codec.DecodeChar
+ 0001:0000DC24       cUnicodeCodecs.TIBM424Codec.EncodeChar
+ 0001:0000DCD8       cUnicodeCodecs.TIBM437Codec.DecodeChar
+ 0001:0000DD10       cUnicodeCodecs.TIBM437Codec.EncodeChar
+ 0001:0000DDB4       cUnicodeCodecs.TIBM500Codec.DecodeChar
+ 0001:0000DDDC       cUnicodeCodecs.TIBM500Codec.EncodeChar
+ 0001:0000DFF8       cUnicodeCodecs.TIBM850Codec.DecodeChar
+ 0001:0000E030       cUnicodeCodecs.TIBM850Codec.EncodeChar
+ 0001:0000E06C       cUnicodeCodecs.TIBM851Codec.DecodeChar
+ 0001:0000E0A4       cUnicodeCodecs.TIBM851Codec.EncodeChar
+ 0001:0000E158       cUnicodeCodecs.TIBM852Codec.DecodeChar
+ 0001:0000E190       cUnicodeCodecs.TIBM852Codec.EncodeChar
+ 0001:0000E244       cUnicodeCodecs.TIBM855Codec.DecodeChar
+ 0001:0000E27C       cUnicodeCodecs.TIBM855Codec.EncodeChar
+ 0001:0000E330       cUnicodeCodecs.TIBM857Codec.DecodeChar
+ 0001:0000E380       cUnicodeCodecs.TIBM857Codec.EncodeChar
+ 0001:0000E4D0       cUnicodeCodecs.TIBM860Codec.DecodeChar
+ 0001:0000E508       cUnicodeCodecs.TIBM860Codec.EncodeChar
+ 0001:0000E5BC       cUnicodeCodecs.TIBM861Codec.DecodeChar
+ 0001:0000E5F4       cUnicodeCodecs.TIBM861Codec.EncodeChar
+ 0001:0000E6A8       cUnicodeCodecs.TIBM862Codec.DecodeChar
+ 0001:0000E6E0       cUnicodeCodecs.TIBM862Codec.EncodeChar
+ 0001:0000E794       cUnicodeCodecs.TIBM863Codec.DecodeChar
+ 0001:0000E7CC       cUnicodeCodecs.TIBM863Codec.EncodeChar
+ 0001:0000E880       cUnicodeCodecs.TIBM864Codec.DecodeChar
+ 0001:0000E8B8       cUnicodeCodecs.TIBM864Codec.EncodeChar
+ 0001:0000EA4C       cUnicodeCodecs.TIBM865Codec.DecodeChar
+ 0001:0000EA84       cUnicodeCodecs.TIBM865Codec.EncodeChar
+ 0001:0000EB38       cUnicodeCodecs.TIBM866Codec.DecodeChar
+ 0001:0000EB70       cUnicodeCodecs.TIBM866Codec.EncodeChar
+ 0001:0000EBAC       cUnicodeCodecs.TIBM868Codec.DecodeChar
+ 0001:0000EBE4       cUnicodeCodecs.TIBM868Codec.EncodeChar
+ 0001:0000ECE8       cUnicodeCodecs.TIBM869Codec.DecodeChar
+ 0001:0000ED20       cUnicodeCodecs.TIBM869Codec.EncodeChar
+ 0001:0000EDC4       cUnicodeCodecs.TIBM870Codec.DecodeChar
+ 0001:0000EDEC       cUnicodeCodecs.TIBM870Codec.EncodeChar
+ 0001:0000EE28       cUnicodeCodecs.TIBM871Codec.DecodeChar
+ 0001:0000EE50       cUnicodeCodecs.TIBM871Codec.EncodeChar
+ 0001:0000EF04       cUnicodeCodecs.TIBM874Codec.DecodeChar
+ 0001:0000EF3C       cUnicodeCodecs.TIBM874Codec.EncodeChar
+ 0001:0000EFE0       cUnicodeCodecs.TIBM875Codec.DecodeChar
+ 0001:0000F008       cUnicodeCodecs.TIBM875Codec.EncodeChar
+ 0001:0000F044       cUnicodeCodecs.TIBM880Codec.DecodeChar
+ 0001:0000F06C       cUnicodeCodecs.TIBM880Codec.EncodeChar
+ 0001:0000F0A8       cUnicodeCodecs.TIBM904Codec.DecodeChar
+ 0001:0000F0F8       cUnicodeCodecs.TIBM904Codec.EncodeChar
+ 0001:0000F1C4       cUnicodeCodecs.TIBM905Codec.DecodeChar
+ 0001:0000F1EC       cUnicodeCodecs.TIBM905Codec.EncodeChar
+ 0001:0000F228       cUnicodeCodecs.TIBM918Codec.DecodeChar
+ 0001:0000F250       cUnicodeCodecs.TIBM918Codec.EncodeChar
+ 0001:0000D160       cUnicodeCodecs.TISO8859_10Codec.DecodeChar
+ 0001:0000D198       cUnicodeCodecs.TISO8859_10Codec.EncodeChar
+ 0001:0000D1D8       cUnicodeCodecs.TISO8859_13Codec.DecodeChar
+ 0001:0000D210       cUnicodeCodecs.TISO8859_13Codec.EncodeChar
+ 0001:0000D250       cUnicodeCodecs.TISO8859_14Codec.DecodeChar
+ 0001:0000D288       cUnicodeCodecs.TISO8859_14Codec.EncodeChar
+ 0001:0000D2C8       cUnicodeCodecs.TISO8859_15Codec.DecodeChar
+ 0001:0000D384       cUnicodeCodecs.TISO8859_15Codec.EncodeChar
+ 0001:0000C760       cUnicodeCodecs.TISO8859_1Codec.Decode
+ 0001:0000C698       cUnicodeCodecs.TISO8859_1Codec.DecodeChar
+ 0001:0000C6B8       cUnicodeCodecs.TISO8859_1Codec.EncodeChar
+ 0001:0000C7C0       cUnicodeCodecs.TISO8859_2Codec.DecodeChar
+ 0001:0000C7F8       cUnicodeCodecs.TISO8859_2Codec.EncodeChar
+ 0001:0000C838       cUnicodeCodecs.TISO8859_3Codec.DecodeChar
+ 0001:0000C870       cUnicodeCodecs.TISO8859_3Codec.EncodeChar
+ 0001:0000C8B0       cUnicodeCodecs.TISO8859_4Codec.DecodeChar
+ 0001:0000C8E8       cUnicodeCodecs.TISO8859_4Codec.EncodeChar
+ 0001:0000C928       cUnicodeCodecs.TISO8859_5Codec.DecodeChar
+ 0001:0000C97C       cUnicodeCodecs.TISO8859_5Codec.EncodeChar
+ 0001:0000CACC       cUnicodeCodecs.TISO8859_6Codec.DecodeChar
+ 0001:0000CB40       cUnicodeCodecs.TISO8859_6Codec.EncodeChar
+ 0001:0000CC40       cUnicodeCodecs.TISO8859_7Codec.DecodeChar
+ 0001:0000CCF0       cUnicodeCodecs.TISO8859_7Codec.EncodeChar
+ 0001:0000CE18       cUnicodeCodecs.TISO8859_8Codec.DecodeChar
+ 0001:0000CECC       cUnicodeCodecs.TISO8859_8Codec.EncodeChar
+ 0001:0000CFF0       cUnicodeCodecs.TISO8859_9Codec.DecodeChar
+ 0001:0000D068       cUnicodeCodecs.TISO8859_9Codec.EncodeChar
+ 0001:00010BB0       cUnicodeCodecs.TJIS_X0201Codec.DecodeChar
+ 0001:00010C20       cUnicodeCodecs.TJIS_X0201Codec.EncodeChar
+ 0001:00010B3C       cUnicodeCodecs.TKOI8_RCodec.DecodeChar
+ 0001:00010B74       cUnicodeCodecs.TKOI8_RCodec.EncodeChar
+ 0001:0001011C       cUnicodeCodecs.TMacCyrillicCodec.DecodeChar
+ 0001:00010154       cUnicodeCodecs.TMacCyrillicCodec.EncodeChar
+ 0001:00010194       cUnicodeCodecs.TMacGreekCodec.DecodeChar
+ 0001:000101CC       cUnicodeCodecs.TMacGreekCodec.EncodeChar
+ 0001:0001020C       cUnicodeCodecs.TMacIcelandicCodec.DecodeChar
+ 0001:00010244       cUnicodeCodecs.TMacIcelandicCodec.EncodeChar
+ 0001:0001002C       cUnicodeCodecs.TMacLatin2Codec.DecodeChar
+ 0001:00010064       cUnicodeCodecs.TMacLatin2Codec.EncodeChar
+ 0001:000100A4       cUnicodeCodecs.TMacRomanCodec.DecodeChar
+ 0001:000100DC       cUnicodeCodecs.TMacRomanCodec.EncodeChar
+ 0001:00010288       cUnicodeCodecs.TMacTurkishCodec.DecodeChar
+ 0001:000102C0       cUnicodeCodecs.TMacTurkishCodec.EncodeChar
+ 0001:00010D08       cUnicodeCodecs.TNextStepCodec.DecodeChar
+ 0001:00010D40       cUnicodeCodecs.TNextStepCodec.EncodeChar
+ 0001:0000C0C4       cUnicodeCodecs.TUCS2Codec.Decode
+ 0001:0000C28C       cUnicodeCodecs.TUCS2Codec.Encode
+ 0001:0000C450       cUnicodeCodecs.TUCS2Codec.InternalReadUCS4Char
+ 0001:0000C538       cUnicodeCodecs.TUCS2Codec.InternalWriteUCS4Char
+ 0001:0000C604       cUnicodeCodecs.TUCS2Codec.WriteUCS4Char
+ 0001:0000A3DC       cUnicodeCodecs.TUCS4BECodec.Decode
+ 0001:0000A710       cUnicodeCodecs.TUCS4BECodec.Encode
+ 0001:0000A92C       cUnicodeCodecs.TUCS4BECodec.InternalReadUCS4Char
+ 0001:0000AA2C       cUnicodeCodecs.TUCS4BECodec.InternalWriteUCS4Char
+ 0001:0000AA88       cUnicodeCodecs.TUCS4BECodec.WriteUCS4Char
+ 0001:0000AB1C       cUnicodeCodecs.TUCS4LECodec.Decode
+ 0001:0000AE48       cUnicodeCodecs.TUCS4LECodec.Encode
+ 0001:0000B064       cUnicodeCodecs.TUCS4LECodec.InternalReadUCS4Char
+ 0001:0000B164       cUnicodeCodecs.TUCS4LECodec.InternalWriteUCS4Char
+ 0001:0000B1C0       cUnicodeCodecs.TUCS4LECodec.WriteUCS4Char
+ 0001:0000B254       cUnicodeCodecs.TUCS4_2143Codec.Decode
+ 0001:0000B588       cUnicodeCodecs.TUCS4_2143Codec.Encode
+ 0001:0000B7A4       cUnicodeCodecs.TUCS4_2143Codec.InternalReadUCS4Char
+ 0001:0000B89C       cUnicodeCodecs.TUCS4_2143Codec.InternalWriteUCS4Char
+ 0001:0000B8F8       cUnicodeCodecs.TUCS4_2143Codec.WriteUCS4Char
+ 0001:0000B98C       cUnicodeCodecs.TUCS4_3412Codec.Decode
+ 0001:0000BCB8       cUnicodeCodecs.TUCS4_3412Codec.Encode
+ 0001:0000BED4       cUnicodeCodecs.TUCS4_3412Codec.InternalReadUCS4Char
+ 0001:0000BFD4       cUnicodeCodecs.TUCS4_3412Codec.InternalWriteUCS4Char
+ 0001:0000C030       cUnicodeCodecs.TUCS4_3412Codec.WriteUCS4Char
+ 0001:00010300       cUnicodeCodecs.TUSASCIICodec.DecodeChar
+ 0001:000103AC       cUnicodeCodecs.TUSASCIICodec.EncodeChar
+ 0001:00009CCC       cUnicodeCodecs.TUTF16BECodec.Decode
+ 0001:00009D54       cUnicodeCodecs.TUTF16BECodec.Encode
+ 0001:00009DAC       cUnicodeCodecs.TUTF16BECodec.InternalReadUCS4Char
+ 0001:00009F64       cUnicodeCodecs.TUTF16BECodec.InternalWriteUCS4Char
+ 0001:00009F9C       cUnicodeCodecs.TUTF16BECodec.WriteUCS4Char
+ 0001:0000A030       cUnicodeCodecs.TUTF16LECodec.Decode
+ 0001:0000A0DC       cUnicodeCodecs.TUTF16LECodec.Encode
+ 0001:0000A164       cUnicodeCodecs.TUTF16LECodec.InternalReadUCS4Char
+ 0001:0000A310       cUnicodeCodecs.TUTF16LECodec.InternalWriteUCS4Char
+ 0001:0000A348       cUnicodeCodecs.TUTF16LECodec.WriteUCS4Char
+ 0001:00009648       cUnicodeCodecs.TUTF8Codec.Decode
+ 0001:000098FC       cUnicodeCodecs.TUTF8Codec.Encode
+ 0001:000099AC       cUnicodeCodecs.TUTF8Codec.InternalReadUCS4Char
+ 0001:00009C00       cUnicodeCodecs.TUTF8Codec.InternalWriteUCS4Char
+ 0001:00009C38       cUnicodeCodecs.TUTF8Codec.WriteUCS4Char
+ 0001:0000F3E0       cUnicodeCodecs.TWindows1026Codec.DecodeChar
+ 0001:0000F424       cUnicodeCodecs.TWindows1026Codec.EncodeChar
+ 0001:0000F520       cUnicodeCodecs.TWindows1047Codec.DecodeChar
+ 0001:0000F564       cUnicodeCodecs.TWindows1047Codec.EncodeChar
+ 0001:0000F660       cUnicodeCodecs.TWindows1140Codec.DecodeChar
+ 0001:0000F694       cUnicodeCodecs.TWindows1140Codec.EncodeChar
+ 0001:0000F75C       cUnicodeCodecs.TWindows1141Codec.DecodeChar
+ 0001:0000F784       cUnicodeCodecs.TWindows1141Codec.EncodeChar
+ 0001:0000F7C8       cUnicodeCodecs.TWindows1142Codec.DecodeChar
+ 0001:0000F7F0       cUnicodeCodecs.TWindows1142Codec.EncodeChar
+ 0001:0000F834       cUnicodeCodecs.TWindows1143Codec.DecodeChar
+ 0001:0000F85C       cUnicodeCodecs.TWindows1143Codec.EncodeChar
+ 0001:0000F8A0       cUnicodeCodecs.TWindows1144Codec.DecodeChar
+ 0001:0000F8C8       cUnicodeCodecs.TWindows1144Codec.EncodeChar
+ 0001:0000F90C       cUnicodeCodecs.TWindows1145Codec.DecodeChar
+ 0001:0000F934       cUnicodeCodecs.TWindows1145Codec.EncodeChar
+ 0001:0000F978       cUnicodeCodecs.TWindows1146Codec.DecodeChar
+ 0001:0000F9A0       cUnicodeCodecs.TWindows1146Codec.EncodeChar
+ 0001:0000F9E4       cUnicodeCodecs.TWindows1147Codec.DecodeChar
+ 0001:0000FA0C       cUnicodeCodecs.TWindows1147Codec.EncodeChar
+ 0001:0000FA50       cUnicodeCodecs.TWindows1148Codec.DecodeChar
+ 0001:0000FA78       cUnicodeCodecs.TWindows1148Codec.EncodeChar
+ 0001:0000FABC       cUnicodeCodecs.TWindows1149Codec.DecodeChar
+ 0001:0000FAE4       cUnicodeCodecs.TWindows1149Codec.EncodeChar
+ 0001:0000FB28       cUnicodeCodecs.TWindows1250Codec.DecodeChar
+ 0001:0000FB60       cUnicodeCodecs.TWindows1250Codec.EncodeChar
+ 0001:0000FBA4       cUnicodeCodecs.TWindows1251Codec.DecodeChar
+ 0001:0000FBDC       cUnicodeCodecs.TWindows1251Codec.EncodeChar
+ 0001:0000FC20       cUnicodeCodecs.TWindows1252Codec.DecodeChar
+ 0001:0000FC5C       cUnicodeCodecs.TWindows1252Codec.EncodeChar
+ 0001:0000FD44       cUnicodeCodecs.TWindows1253Codec.DecodeChar
+ 0001:0000FD7C       cUnicodeCodecs.TWindows1253Codec.EncodeChar
+ 0001:0000FDC0       cUnicodeCodecs.TWindows1254Codec.DecodeChar
+ 0001:0000FDF8       cUnicodeCodecs.TWindows1254Codec.EncodeChar
+ 0001:0000FE3C       cUnicodeCodecs.TWindows1255Codec.DecodeChar
+ 0001:0000FE74       cUnicodeCodecs.TWindows1255Codec.EncodeChar
+ 0001:0000FEB8       cUnicodeCodecs.TWindows1256Codec.DecodeChar
+ 0001:0000FEF0       cUnicodeCodecs.TWindows1256Codec.EncodeChar
+ 0001:0000FF34       cUnicodeCodecs.TWindows1257Codec.DecodeChar
+ 0001:0000FF6C       cUnicodeCodecs.TWindows1257Codec.EncodeChar
+ 0001:0000FFB0       cUnicodeCodecs.TWindows1258Codec.DecodeChar
+ 0001:0000FFE8       cUnicodeCodecs.TWindows1258Codec.EncodeChar
+ 0001:0000D494       cUnicodeCodecs.TWindows37Codec.DecodeChar
+ 0001:0000D4BC       cUnicodeCodecs.TWindows37Codec.EncodeChar
+ 0001:0000DC60       cUnicodeCodecs.TWindows437Codec.DecodeChar
+ 0001:0000DC98       cUnicodeCodecs.TWindows437Codec.EncodeChar
+ 0001:0000DD4C       cUnicodeCodecs.TWindows500Codec.DecodeChar
+ 0001:0000DD74       cUnicodeCodecs.TWindows500Codec.EncodeChar
+ 0001:0000DE18       cUnicodeCodecs.TWindows708Codec.DecodeChar
+ 0001:0000DE50       cUnicodeCodecs.TWindows708Codec.EncodeChar
+ 0001:0000DE90       cUnicodeCodecs.TWindows737Codec.DecodeChar
+ 0001:0000DEC8       cUnicodeCodecs.TWindows737Codec.EncodeChar
+ 0001:0000DF08       cUnicodeCodecs.TWindows775Codec.DecodeChar
+ 0001:0000DF40       cUnicodeCodecs.TWindows775Codec.EncodeChar
+ 0001:0000DF80       cUnicodeCodecs.TWindows850Codec.DecodeChar
+ 0001:0000DFB8       cUnicodeCodecs.TWindows850Codec.EncodeChar
+ 0001:0000E0E0       cUnicodeCodecs.TWindows852Codec.DecodeChar
+ 0001:0000E118       cUnicodeCodecs.TWindows852Codec.EncodeChar
+ 0001:0000E1CC       cUnicodeCodecs.TWindows855Codec.DecodeChar
+ 0001:0000E204       cUnicodeCodecs.TWindows855Codec.EncodeChar
+ 0001:0000E2B8       cUnicodeCodecs.TWindows857Codec.DecodeChar
+ 0001:0000E2F0       cUnicodeCodecs.TWindows857Codec.EncodeChar
+ 0001:0000E438       cUnicodeCodecs.TWindows858Codec.DecodeChar
+ 0001:0000E480       cUnicodeCodecs.TWindows858Codec.EncodeChar
+ 0001:0000E544       cUnicodeCodecs.TWindows861Codec.DecodeChar
+ 0001:0000E57C       cUnicodeCodecs.TWindows861Codec.EncodeChar
+ 0001:0000E630       cUnicodeCodecs.TWindows862Codec.DecodeChar
+ 0001:0000E668       cUnicodeCodecs.TWindows862Codec.EncodeChar
+ 0001:0000E71C       cUnicodeCodecs.TWindows863Codec.DecodeChar
+ 0001:0000E754       cUnicodeCodecs.TWindows863Codec.EncodeChar
+ 0001:0000E808       cUnicodeCodecs.TWindows864Codec.DecodeChar
+ 0001:0000E840       cUnicodeCodecs.TWindows864Codec.EncodeChar
+ 0001:0000E9D4       cUnicodeCodecs.TWindows865Codec.DecodeChar
+ 0001:0000EA0C       cUnicodeCodecs.TWindows865Codec.EncodeChar
+ 0001:0000EAC0       cUnicodeCodecs.TWindows866Codec.DecodeChar
+ 0001:0000EAF8       cUnicodeCodecs.TWindows866Codec.EncodeChar
+ 0001:0000EC20       cUnicodeCodecs.TWindows869Codec.DecodeChar
+ 0001:0000EC80       cUnicodeCodecs.TWindows869Codec.EncodeChar
+ 0001:0000ED5C       cUnicodeCodecs.TWindows870Codec.DecodeChar
+ 0001:0000ED84       cUnicodeCodecs.TWindows870Codec.EncodeChar
+ 0001:0000EE8C       cUnicodeCodecs.TWindows874Codec.DecodeChar
+ 0001:0000EEC4       cUnicodeCodecs.TWindows874Codec.EncodeChar
+ 0001:0000EF78       cUnicodeCodecs.TWindows875Codec.DecodeChar
+ 0001:0000EFA0       cUnicodeCodecs.TWindows875Codec.EncodeChar
+ 0003:000003D4       cUnicodeCodecs.UCS2_CR
+ 0003:000003D8       cUnicodeCodecs.UCS2_CRLF
+ 0003:000003D0       cUnicodeCodecs.UCS2_LF
+ 0003:00000394       cUnicodeCodecs.UCS4BE_CR
+ 0003:00000398       cUnicodeCodecs.UCS4BE_CRLF
+ 0003:00000390       cUnicodeCodecs.UCS4BE_LF
+ 0001:00006CD8       cUnicodeCodecs.UCS4CharToUTF16BE
+ 0001:00006EE0       cUnicodeCodecs.UCS4CharToUTF16LE
+ 0001:00006AA4       cUnicodeCodecs.UCS4CharToUTF8
+ 0001:0000727C       cUnicodeCodecs.UCS4CharToUTF8CharSize
+ 0001:000077A0       cUnicodeCodecs.UCS4CharToUTF8String
+ 0003:000003A4       cUnicodeCodecs.UCS4LE_CR
+ 0003:000003A8       cUnicodeCodecs.UCS4LE_CRLF
+ 0003:000003A0       cUnicodeCodecs.UCS4LE_LF
+ 0003:000003B4       cUnicodeCodecs.UCS4_2143_CR
+ 0003:000003B8       cUnicodeCodecs.UCS4_2143_CRLF
+ 0003:000003B0       cUnicodeCodecs.UCS4_2143_LF
+ 0003:000003C4       cUnicodeCodecs.UCS4_3412_CR
+ 0003:000003C8       cUnicodeCodecs.UCS4_3412_CRLF
+ 0003:000003C0       cUnicodeCodecs.UCS4_3412_LF
+ 0003:0000021C       cUnicodeCodecs.UnicodeCodecAliasList
+ 0003:0000002C       cUnicodeCodecs.USASCIIAlias
+ 0003:00000208       cUnicodeCodecs.UTF16BEAlias
+ 0003:0000037C       cUnicodeCodecs.UTF16BE_CR
+ 0003:00000380       cUnicodeCodecs.UTF16BE_CRLF
+ 0003:00000378       cUnicodeCodecs.UTF16BE_LF
+ 0003:00000214       cUnicodeCodecs.UTF16LEAlias
+ 0003:00000388       cUnicodeCodecs.UTF16LE_CR
+ 0003:0000038C       cUnicodeCodecs.UTF16LE_CRLF
+ 0003:00000384       cUnicodeCodecs.UTF16LE_LF
+ 0001:00008C40       cUnicodeCodecs.UTF16ToEncoding
+ 0001:00008CB8       cUnicodeCodecs.UTF16ToEncoding
+ 0003:00000200       cUnicodeCodecs.UTF8Alias
+ 0001:00007204       cUnicodeCodecs.UTF8BufLength
+ 0001:00007134       cUnicodeCodecs.UTF8CharSize
+ 0001:00007254       cUnicodeCodecs.UTF8StringLength
+ 0001:000074F8       cUnicodeCodecs.UTF8StringToLongString
+ 0001:00007454       cUnicodeCodecs.UTF8StringToWideString
+ 0001:000068CC       cUnicodeCodecs.UTF8ToUCS4Char
+ 0001:00006A54       cUnicodeCodecs.UTF8ToWideChar
+ 0003:00000370       cUnicodeCodecs.UTF8_CR
+ 0003:00000374       cUnicodeCodecs.UTF8_CRLF
+ 0003:0000036C       cUnicodeCodecs.UTF8_LF
+ 0001:00007354       cUnicodeCodecs.WideBufToUTF8Size
+ 0001:000075FC       cUnicodeCodecs.WideBufToUTF8String
+ 0001:00006CAC       cUnicodeCodecs.WideCharToUTF8
+ 0001:000068A4       cUnicodeCodecs.WideStringToLongString
+ 0001:00007404       cUnicodeCodecs.WideStringToUTF8Size
+ 0001:00007778       cUnicodeCodecs.WideStringToUTF8String
+ 0001:000066B8       cUnicodeCodecs.WideToLong
+ 0001:000067D8       cUnicodeCodecs.WideToLongString
+ 0003:000001D4       cUnicodeCodecs.Win1250Alias
+ 0003:000001E0       cUnicodeCodecs.Win1251Alias
+ 0003:000001EC       cUnicodeCodecs.Win1252Alias
+ 0003:00005514       cUnicodeCodecs.Windows1141Map
+ 0003:00005714       cUnicodeCodecs.Windows1142Map
+ 0003:00005914       cUnicodeCodecs.Windows1143Map
+ 0003:00005B14       cUnicodeCodecs.Windows1144Map
+ 0003:00005D14       cUnicodeCodecs.Windows1145Map
+ 0003:00005F14       cUnicodeCodecs.Windows1146Map
+ 0003:00006114       cUnicodeCodecs.Windows1147Map
+ 0003:00006314       cUnicodeCodecs.Windows1148Map
+ 0003:00006514       cUnicodeCodecs.Windows1149Map
+ 0003:00006714       cUnicodeCodecs.Windows1250Map
+ 0003:00006814       cUnicodeCodecs.Windows1251Map
+ 0003:00006914       cUnicodeCodecs.Windows1252Map
+ 0003:00006954       cUnicodeCodecs.Windows1253Map
+ 0003:00006A54       cUnicodeCodecs.Windows1254Map
+ 0003:00006B54       cUnicodeCodecs.Windows1255Map
+ 0003:00006C54       cUnicodeCodecs.Windows1256Map
+ 0003:00006D54       cUnicodeCodecs.Windows1257Map
+ 0003:00006E54       cUnicodeCodecs.Windows1258Map
+ 0003:00002B5C       cUnicodeCodecs.Windows708Map
+ 0003:00002C5C       cUnicodeCodecs.Windows737Map
+ 0003:00002D5C       cUnicodeCodecs.Windows775Map
+ 0003:0000375C       cUnicodeCodecs.Windows864Map
+ 0003:00003E14       cUnicodeCodecs.Windows870Map
+ 0003:00004414       cUnicodeCodecs.Windows874Map
+ 0003:00004614       cUnicodeCodecs.Windows875Map
+ 0004:00000018       GsmSms..4
+ 0001:00011BE0       GsmSms..TSMS
+ 0001:00011B50       GsmSms..TSMSDecoder
+ 0001:00011C7C       GsmSms..TSMSStatusReport
+ 0003:00007758       GsmSms.Alphabet7Bit
+ 0003:00007754       GsmSms.Alphabet7Escape
+ 0001:00011FDC       GsmSms.AlphabetIndex7Bit
+ 0001:00012058       GsmSms.Encode7Bit
+ 0001:00012004       GsmSms.EscapeIndex7Bit
+ 0001:000146EC       GsmSms.Finalization
+ 0001:000128C4       GsmSms.GSMCodingScheme
+ 0001:00012208       GsmSms.GSMDecode7Bit
+ 0001:00012464       GsmSms.GSMDecode8Bit
+ 0001:00012644       GsmSms.GSMDecodeUcs2
+ 0001:00012414       GsmSms.GSMEncode7Bit
+ 0001:00012570       GsmSms.GSMEncode8Bit
+ 0001:00012840       GsmSms.GSMEncodeUcs2
+ 0001:000121B8       GsmSms.GSMLength7Bit
+ 0001:00012930       GsmSms.GSMLongMsgData
+ 0002:000000DC       GsmSms.GsmSms
+ 0001:00012038       GsmSms.Is7Bit
+ 0001:00011EF8       GsmSms.Pack7Bit
+ 0001:00013868       GsmSms.TSMS.Get_Address
+ 0001:0001401C       GsmSms.TSMS.Get_CodingScheme
+ 0001:000130FC       GsmSms.TSMS.Get_Message
+ 0001:00013438       GsmSms.TSMS.Get_PDU
+ 0001:000138C4       GsmSms.TSMS.Get_SMSC
+ 0001:00013930       GsmSms.TSMS.Get_TimeStamp
+ 0001:000139AC       GsmSms.TSMS.Get_Validity
+ 0001:000140AC       GsmSms.TSMS.NewMessageRefPDU
+ 0001:00014074       GsmSms.TSMS.Set_Message
+ 0001:00013FD0       GsmSms.TSMS.Set_MessageRef
+ 0001:00013B84       GsmSms.TSMS.Set_PDU
+ 0001:0001408C       GsmSms.TSMS.Set_UDHI
+ 0001:00012E00       GsmSms.TSMSDecoder.DecodeNumber
+ 0001:00012C4C       GsmSms.TSMSDecoder.DecodeTimeStamp
+ 0001:00012FE8       GsmSms.TSMSDecoder.EncodeNumber
+ 0001:00013E98       GsmSms.TSMSDecoder.MakeCRLF
+ 0001:00013AF8       GsmSms.TSMSDecoder.ReverseOctets
+ 0001:0001419C       GsmSms.TSMSStatusReport.Create
+ 0001:000146E4       GsmSms.TSMSStatusReport.Get_IsDelivered
+ 0001:000141E0       GsmSms.TSMSStatusReport.Set_PDU
+ 0001:00011D38       GsmSms.Unpack7Bit
+ 0001:00000358       SysInit.@InitPkg
+ 0001:000003BC       SysInit.@PackageLoad
+ 0001:000003C8       SysInit.@PackageUnload
+ 0001:00000248       SysInit.AllocTlsBuffer
+ 0001:00000304       SysInit.ExitProcessTLS
+ 0001:000002CC       SysInit.ExitThreadTLS
+ 0001:00000210       SysInit.FreeLibrary
+ 0001:00000254       SysInit.GetTlsSize
+ 0004:00000004       SysInit.HInstance
+ 0001:00000328       SysInit.InitializeModule
+ 0001:000002A0       SysInit.InitProcessTLS
+ 0001:0000025C       SysInit.InitThreadTLS
+ 0001:00000218       SysInit.LocalAlloc
+ 0001:00000220       SysInit.LocalFree
+ 0003:00000004       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0001:00000228       SysInit.TlsAlloc
+ 0004:00000008       SysInit.tlsBuffer
+ 0001:00000230       SysInit.TlsFree
+ 0001:00000238       SysInit.TlsGetValue
+ 0003:00000000       SysInit.TlsIndex
+ 0005:00000000       SysInit.TlsLast
+ 0003:0000001C       SysInit.TlsProc
+ 0001:00000240       SysInit.TlsSetValue
+ 0001:00000334       SysInit.UninitializeModule
+ 0004:0000000C       Windows..3
+ 0001:0000045C       Windows.CreateProcess
+ 0001:0000047C       Windows.Finalization
+ 0001:00000464       Windows.FreeLibrary
+ 0001:0000046C       Windows.GetACP
+ 0001:00000474       Windows.GetLastError
+ 0004:00000010       Windows.HtmlHelpModule
+ 0002:00000010       Windows.Windows
+
+
+  Address             Publics by Value
+
+ 0001:00000210       SysInit.FreeLibrary
+ 0001:00000218       SysInit.LocalAlloc
+ 0001:00000220       SysInit.LocalFree
+ 0001:00000228       SysInit.TlsAlloc
+ 0001:00000230       SysInit.TlsFree
+ 0001:00000238       SysInit.TlsGetValue
+ 0001:00000240       SysInit.TlsSetValue
+ 0001:00000248       SysInit.AllocTlsBuffer
+ 0001:00000254       SysInit.GetTlsSize
+ 0001:0000025C       SysInit.InitThreadTLS
+ 0001:000002A0       SysInit.InitProcessTLS
+ 0001:000002CC       SysInit.ExitThreadTLS
+ 0001:00000304       SysInit.ExitProcessTLS
+ 0001:00000328       SysInit.InitializeModule
+ 0001:00000334       SysInit.UninitializeModule
+ 0001:00000358       SysInit.@InitPkg
+ 0001:000003BC       SysInit.@PackageLoad
+ 0001:000003C8       SysInit.@PackageUnload
+ 0001:0000045C       Windows.CreateProcess
+ 0001:00000464       Windows.FreeLibrary
+ 0001:0000046C       Windows.GetACP
+ 0001:00000474       Windows.GetLastError
+ 0001:0000047C       Windows.Finalization
+ 0001:00000AE4       cUnicodeCodecs..TCustomUnicodeCodec
+ 0001:00000B98       cUnicodeCodecs..EUnicodeCodecException
+ 0001:00000C34       cUnicodeCodecs..TUTF8Codec
+ 0001:00000CD8       cUnicodeCodecs..TUTF16BECodec
+ 0001:00000D84       cUnicodeCodecs..TUTF16LECodec
+ 0001:00000E30       cUnicodeCodecs..TUCS4BECodec
+ 0001:00000EDC       cUnicodeCodecs..TUCS4LECodec
+ 0001:00000F88       cUnicodeCodecs..TUCS4_2143Codec
+ 0001:00001034       cUnicodeCodecs..TUCS4_3412Codec
+ 0001:000010E0       cUnicodeCodecs..TUCS2Codec
+ 0001:00001184       cUnicodeCodecs..TCustomSingleByteCodec
+ 0001:00001250       cUnicodeCodecs..TISO8859_1Codec
+ 0001:0000130C       cUnicodeCodecs..TISO8859_2Codec
+ 0001:000013C8       cUnicodeCodecs..TISO8859_3Codec
+ 0001:00001484       cUnicodeCodecs..TISO8859_4Codec
+ 0001:00001540       cUnicodeCodecs..TISO8859_5Codec
+ 0001:000015FC       cUnicodeCodecs..TISO8859_6Codec
+ 0001:000016B8       cUnicodeCodecs..TISO8859_7Codec
+ 0001:00001774       cUnicodeCodecs..TISO8859_8Codec
+ 0001:00001830       cUnicodeCodecs..TISO8859_9Codec
+ 0001:000018EC       cUnicodeCodecs..TISO8859_10Codec
+ 0001:000019B0       cUnicodeCodecs..TISO8859_13Codec
+ 0001:00001A74       cUnicodeCodecs..TISO8859_14Codec
+ 0001:00001B38       cUnicodeCodecs..TISO8859_15Codec
+ 0001:00001BFC       cUnicodeCodecs..TWindows37Codec
+ 0001:00001CB8       cUnicodeCodecs..TWindows437Codec
+ 0001:00001D7C       cUnicodeCodecs..TWindows500Codec
+ 0001:00001E40       cUnicodeCodecs..TWindows708Codec
+ 0001:00001F04       cUnicodeCodecs..TWindows737Codec
+ 0001:00001FC8       cUnicodeCodecs..TWindows775Codec
+ 0001:0000208C       cUnicodeCodecs..TWindows850Codec
+ 0001:00002150       cUnicodeCodecs..TWindows852Codec
+ 0001:00002214       cUnicodeCodecs..TWindows855Codec
+ 0001:000022D8       cUnicodeCodecs..TWindows857Codec
+ 0001:0000239C       cUnicodeCodecs..TWindows858Codec
+ 0001:00002460       cUnicodeCodecs..TWindows861Codec
+ 0001:00002524       cUnicodeCodecs..TWindows862Codec
+ 0001:000025E8       cUnicodeCodecs..TWindows863Codec
+ 0001:000026AC       cUnicodeCodecs..TWindows864Codec
+ 0001:00002770       cUnicodeCodecs..TWindows865Codec
+ 0001:00002834       cUnicodeCodecs..TWindows866Codec
+ 0001:000028F8       cUnicodeCodecs..TWindows869Codec
+ 0001:000029BC       cUnicodeCodecs..TWindows870Codec
+ 0001:00002A80       cUnicodeCodecs..TWindows874Codec
+ 0001:00002B44       cUnicodeCodecs..TWindows875Codec
+ 0001:00002C08       cUnicodeCodecs..TWindows1026Codec
+ 0001:00002CCC       cUnicodeCodecs..TWindows1047Codec
+ 0001:00002D90       cUnicodeCodecs..TWindows1140Codec
+ 0001:00002E54       cUnicodeCodecs..TWindows1141Codec
+ 0001:00002F18       cUnicodeCodecs..TWindows1142Codec
+ 0001:00002FDC       cUnicodeCodecs..TWindows1143Codec
+ 0001:000030A0       cUnicodeCodecs..TWindows1144Codec
+ 0001:00003164       cUnicodeCodecs..TWindows1145Codec
+ 0001:00003228       cUnicodeCodecs..TWindows1146Codec
+ 0001:000032EC       cUnicodeCodecs..TWindows1147Codec
+ 0001:000033B0       cUnicodeCodecs..TWindows1148Codec
+ 0001:00003474       cUnicodeCodecs..TWindows1149Codec
+ 0001:00003538       cUnicodeCodecs..TWindows1250Codec
+ 0001:000035FC       cUnicodeCodecs..TWindows1251Codec
+ 0001:000036C0       cUnicodeCodecs..TWindows1252Codec
+ 0001:00003784       cUnicodeCodecs..TWindows1253Codec
+ 0001:00003848       cUnicodeCodecs..TWindows1254Codec
+ 0001:0000390C       cUnicodeCodecs..TWindows1255Codec
+ 0001:000039D0       cUnicodeCodecs..TWindows1256Codec
+ 0001:00003A94       cUnicodeCodecs..TWindows1257Codec
+ 0001:00003B58       cUnicodeCodecs..TWindows1258Codec
+ 0001:00003C1C       cUnicodeCodecs..TIBM037Codec
+ 0001:00003CD8       cUnicodeCodecs..TIBM038Codec
+ 0001:00003D94       cUnicodeCodecs..TIBM256Codec
+ 0001:00003E50       cUnicodeCodecs..TIBM273Codec
+ 0001:00003F0C       cUnicodeCodecs..TIBM274Codec
+ 0001:00003FC8       cUnicodeCodecs..TIBM275Codec
+ 0001:00004084       cUnicodeCodecs..TIBM277Codec
+ 0001:00004140       cUnicodeCodecs..TIBM278Codec
+ 0001:000041FC       cUnicodeCodecs..TIBM280Codec
+ 0001:000042B8       cUnicodeCodecs..TIBM281Codec
+ 0001:00004374       cUnicodeCodecs..TIBM284Codec
+ 0001:00004430       cUnicodeCodecs..TIBM285Codec
+ 0001:000044EC       cUnicodeCodecs..TIBM290Codec
+ 0001:000045A8       cUnicodeCodecs..TIBM297Codec
+ 0001:00004664       cUnicodeCodecs..TIBM420Codec
+ 0001:00004720       cUnicodeCodecs..TIBM423Codec
+ 0001:000047DC       cUnicodeCodecs..TIBM424Codec
+ 0001:00004898       cUnicodeCodecs..TIBM437Codec
+ 0001:00004954       cUnicodeCodecs..TIBM500Codec
+ 0001:00004A10       cUnicodeCodecs..TIBM850Codec
+ 0001:00004ACC       cUnicodeCodecs..TIBM851Codec
+ 0001:00004B88       cUnicodeCodecs..TIBM852Codec
+ 0001:00004C44       cUnicodeCodecs..TIBM855Codec
+ 0001:00004D00       cUnicodeCodecs..TIBM857Codec
+ 0001:00004DBC       cUnicodeCodecs..TIBM860Codec
+ 0001:00004E78       cUnicodeCodecs..TIBM861Codec
+ 0001:00004F34       cUnicodeCodecs..TIBM862Codec
+ 0001:00004FF0       cUnicodeCodecs..TIBM863Codec
+ 0001:000050AC       cUnicodeCodecs..TIBM864Codec
+ 0001:00005168       cUnicodeCodecs..TIBM865Codec
+ 0001:00005224       cUnicodeCodecs..TIBM866Codec
+ 0001:000052E0       cUnicodeCodecs..TIBM868Codec
+ 0001:0000539C       cUnicodeCodecs..TIBM869Codec
+ 0001:00005458       cUnicodeCodecs..TIBM870Codec
+ 0001:00005514       cUnicodeCodecs..TIBM871Codec
+ 0001:000055D0       cUnicodeCodecs..TIBM874Codec
+ 0001:0000568C       cUnicodeCodecs..TIBM875Codec
+ 0001:00005748       cUnicodeCodecs..TIBM880Codec
+ 0001:00005804       cUnicodeCodecs..TIBM904Codec
+ 0001:000058C0       cUnicodeCodecs..TIBM905Codec
+ 0001:0000597C       cUnicodeCodecs..TIBM918Codec
+ 0001:00005A38       cUnicodeCodecs..TIBM1004Codec
+ 0001:00005AF4       cUnicodeCodecs..TIBM1026Codec
+ 0001:00005BB0       cUnicodeCodecs..TIBM1047Codec
+ 0001:00005C6C       cUnicodeCodecs..TMacLatin2Codec
+ 0001:00005D28       cUnicodeCodecs..TMacRomanCodec
+ 0001:00005DE4       cUnicodeCodecs..TMacCyrillicCodec
+ 0001:00005EA8       cUnicodeCodecs..TMacGreekCodec
+ 0001:00005F64       cUnicodeCodecs..TMacIcelandicCodec
+ 0001:00006028       cUnicodeCodecs..TMacTurkishCodec
+ 0001:000060EC       cUnicodeCodecs..TUSASCIICodec
+ 0001:000061A8       cUnicodeCodecs..TEBCDIC_USCodec
+ 0001:00006264       cUnicodeCodecs..TKOI8_RCodec
+ 0001:00006320       cUnicodeCodecs..TJIS_X0201Codec
+ 0001:000063DC       cUnicodeCodecs..TNextStepCodec
+ 0001:000064E8       cUnicodeCodecs.IsUSASCIIString
+ 0001:00006534       cUnicodeCodecs.IsUSASCIIWideBuf
+ 0001:00006580       cUnicodeCodecs.IsUSASCIIWideString
+ 0001:000065A8       cUnicodeCodecs.LongToWide
+ 0001:0000667C       cUnicodeCodecs.LongStringToWideString
+ 0001:000066B8       cUnicodeCodecs.WideToLong
+ 0001:000067D8       cUnicodeCodecs.WideToLongString
+ 0001:000068A4       cUnicodeCodecs.WideStringToLongString
+ 0001:000068CC       cUnicodeCodecs.UTF8ToUCS4Char
+ 0001:00006A54       cUnicodeCodecs.UTF8ToWideChar
+ 0001:00006AA4       cUnicodeCodecs.UCS4CharToUTF8
+ 0001:00006CAC       cUnicodeCodecs.WideCharToUTF8
+ 0001:00006CD8       cUnicodeCodecs.UCS4CharToUTF16BE
+ 0001:00006EE0       cUnicodeCodecs.UCS4CharToUTF16LE
+ 0001:000070E8       cUnicodeCodecs.DetectUTF8BOM
+ 0001:00007134       cUnicodeCodecs.UTF8CharSize
+ 0001:00007204       cUnicodeCodecs.UTF8BufLength
+ 0001:00007254       cUnicodeCodecs.UTF8StringLength
+ 0001:0000727C       cUnicodeCodecs.UCS4CharToUTF8CharSize
+ 0001:00007354       cUnicodeCodecs.WideBufToUTF8Size
+ 0001:000073B8       cUnicodeCodecs.LongBufToUTF8Size
+ 0001:00007404       cUnicodeCodecs.WideStringToUTF8Size
+ 0001:0000742C       cUnicodeCodecs.LongStringToUTF8Size
+ 0001:00007454       cUnicodeCodecs.UTF8StringToWideString
+ 0001:000074F8       cUnicodeCodecs.UTF8StringToLongString
+ 0001:000075FC       cUnicodeCodecs.WideBufToUTF8String
+ 0001:000076B8       cUnicodeCodecs.LongStringToUTF8String
+ 0001:00007778       cUnicodeCodecs.WideStringToUTF8String
+ 0001:000077A0       cUnicodeCodecs.UCS4CharToUTF8String
+ 0001:00007814       cUnicodeCodecs.ISO8859_1StringToUTF8String
+ 0001:000078E4       cUnicodeCodecs.DetectUTF16BEBOM
+ 0001:00007918       cUnicodeCodecs.DetectUTF16LEBOM
+ 0001:0000794C       cUnicodeCodecs.DetectUTF16BOM
+ 0001:000079B0       cUnicodeCodecs.SwapUTF16Endian
+ 0001:000079D8       cUnicodeCodecs.CharFromMap
+ 0001:00007AD8       cUnicodeCodecs.CharFromHighMap
+ 0001:00007BEC       cUnicodeCodecs.CharFromISOMap
+ 0001:0000860C       cUnicodeCodecs.GetCodecClassByAlias
+ 0001:0000868C       cUnicodeCodecs.GetEncodingName
+ 0001:000086E0       cUnicodeCodecs.GetSystemEncodingName
+ 0001:00008980       cUnicodeCodecs.GetSystemEncodingCodecClass
+ 0001:00008A84       cUnicodeCodecs.DetectUTFEncoding
+ 0001:00008B00       cUnicodeCodecs.EncodingToUTF16
+ 0001:00008B70       cUnicodeCodecs.EncodingToUTF16
+ 0001:00008BEC       cUnicodeCodecs.EncodingToUTF16
+ 0001:00008C18       cUnicodeCodecs.EncodingToUTF16
+ 0001:00008C40       cUnicodeCodecs.UTF16ToEncoding
+ 0001:00008CB8       cUnicodeCodecs.UTF16ToEncoding
+ 0001:00008CE0       cUnicodeCodecs.RaiseUnicodeCodecException
+ 0001:00008D14       cUnicodeCodecs.RaiseUnicodeCodecException
+ 0001:00008D4C       cUnicodeCodecs.TCustomUnicodeCodec.Create
+ 0001:00008DB4       cUnicodeCodecs.TCustomUnicodeCodec.CreateEx
+ 0001:00008E28       cUnicodeCodecs.TCustomUnicodeCodec.ResetReadAhead
+ 0001:00008E44       cUnicodeCodecs.TCustomUnicodeCodec.SetDecodeReplaceChar
+ 0001:00008E60       cUnicodeCodecs.TCustomUnicodeCodec.SetErrorAction
+ 0001:00008E7C       cUnicodeCodecs.TCustomUnicodeCodec.SetReadLFOption
+ 0001:00008E98       cUnicodeCodecs.TCustomUnicodeCodec.SetWriteLFOption
+ 0001:00008EB4       cUnicodeCodecs.TCustomUnicodeCodec.SetOnRead
+ 0001:00008EE4       cUnicodeCodecs.TCustomUnicodeCodec.DecodeStr
+ 0001:00008FAC       cUnicodeCodecs.TCustomUnicodeCodec.EncodeStr
+ 0001:00008FE0       cUnicodeCodecs.TCustomUnicodeCodec.ReadBuffer
+ 0001:00009020       cUnicodeCodecs.TCustomUnicodeCodec.WriteBuffer
+ 0001:00009054       cUnicodeCodecs.TCustomUnicodeCodec.ReadUCS4Char
+ 0001:000090EC       cUnicodeCodecs.TCustomUnicodeCodec.WriteUCS4Char
+ 0001:00009178       cUnicodeCodecs.TCustomSingleByteCodec.Create
+ 0001:000091C0       cUnicodeCodecs.TCustomSingleByteCodec.CreateEx
+ 0001:0000921C       cUnicodeCodecs.TCustomSingleByteCodec.Decode
+ 0001:00009390       cUnicodeCodecs.TCustomSingleByteCodec.DecodeUCS4Char
+ 0001:000093B4       cUnicodeCodecs.TCustomSingleByteCodec.Encode
+ 0001:0000951C       cUnicodeCodecs.TCustomSingleByteCodec.EncodeUCS4Char
+ 0001:000095B4       cUnicodeCodecs.TCustomSingleByteCodec.InternalReadUCS4Char
+ 0001:0000960C       cUnicodeCodecs.TCustomSingleByteCodec.InternalWriteUCS4Char
+ 0001:00009648       cUnicodeCodecs.TUTF8Codec.Decode
+ 0001:000098FC       cUnicodeCodecs.TUTF8Codec.Encode
+ 0001:000099AC       cUnicodeCodecs.TUTF8Codec.InternalReadUCS4Char
+ 0001:00009C00       cUnicodeCodecs.TUTF8Codec.InternalWriteUCS4Char
+ 0001:00009C38       cUnicodeCodecs.TUTF8Codec.WriteUCS4Char
+ 0001:00009CCC       cUnicodeCodecs.TUTF16BECodec.Decode
+ 0001:00009D54       cUnicodeCodecs.TUTF16BECodec.Encode
+ 0001:00009DAC       cUnicodeCodecs.TUTF16BECodec.InternalReadUCS4Char
+ 0001:00009F64       cUnicodeCodecs.TUTF16BECodec.InternalWriteUCS4Char
+ 0001:00009F9C       cUnicodeCodecs.TUTF16BECodec.WriteUCS4Char
+ 0001:0000A030       cUnicodeCodecs.TUTF16LECodec.Decode
+ 0001:0000A0DC       cUnicodeCodecs.TUTF16LECodec.Encode
+ 0001:0000A164       cUnicodeCodecs.TUTF16LECodec.InternalReadUCS4Char
+ 0001:0000A310       cUnicodeCodecs.TUTF16LECodec.InternalWriteUCS4Char
+ 0001:0000A348       cUnicodeCodecs.TUTF16LECodec.WriteUCS4Char
+ 0001:0000A3DC       cUnicodeCodecs.TUCS4BECodec.Decode
+ 0001:0000A710       cUnicodeCodecs.TUCS4BECodec.Encode
+ 0001:0000A92C       cUnicodeCodecs.TUCS4BECodec.InternalReadUCS4Char
+ 0001:0000AA2C       cUnicodeCodecs.TUCS4BECodec.InternalWriteUCS4Char
+ 0001:0000AA88       cUnicodeCodecs.TUCS4BECodec.WriteUCS4Char
+ 0001:0000AB1C       cUnicodeCodecs.TUCS4LECodec.Decode
+ 0001:0000AE48       cUnicodeCodecs.TUCS4LECodec.Encode
+ 0001:0000B064       cUnicodeCodecs.TUCS4LECodec.InternalReadUCS4Char
+ 0001:0000B164       cUnicodeCodecs.TUCS4LECodec.InternalWriteUCS4Char
+ 0001:0000B1C0       cUnicodeCodecs.TUCS4LECodec.WriteUCS4Char
+ 0001:0000B254       cUnicodeCodecs.TUCS4_2143Codec.Decode
+ 0001:0000B588       cUnicodeCodecs.TUCS4_2143Codec.Encode
+ 0001:0000B7A4       cUnicodeCodecs.TUCS4_2143Codec.InternalReadUCS4Char
+ 0001:0000B89C       cUnicodeCodecs.TUCS4_2143Codec.InternalWriteUCS4Char
+ 0001:0000B8F8       cUnicodeCodecs.TUCS4_2143Codec.WriteUCS4Char
+ 0001:0000B98C       cUnicodeCodecs.TUCS4_3412Codec.Decode
+ 0001:0000BCB8       cUnicodeCodecs.TUCS4_3412Codec.Encode
+ 0001:0000BED4       cUnicodeCodecs.TUCS4_3412Codec.InternalReadUCS4Char
+ 0001:0000BFD4       cUnicodeCodecs.TUCS4_3412Codec.InternalWriteUCS4Char
+ 0001:0000C030       cUnicodeCodecs.TUCS4_3412Codec.WriteUCS4Char
+ 0001:0000C0C4       cUnicodeCodecs.TUCS2Codec.Decode
+ 0001:0000C28C       cUnicodeCodecs.TUCS2Codec.Encode
+ 0001:0000C450       cUnicodeCodecs.TUCS2Codec.InternalReadUCS4Char
+ 0001:0000C538       cUnicodeCodecs.TUCS2Codec.InternalWriteUCS4Char
+ 0001:0000C604       cUnicodeCodecs.TUCS2Codec.WriteUCS4Char
+ 0001:0000C698       cUnicodeCodecs.TISO8859_1Codec.DecodeChar
+ 0001:0000C6B8       cUnicodeCodecs.TISO8859_1Codec.EncodeChar
+ 0001:0000C760       cUnicodeCodecs.TISO8859_1Codec.Decode
+ 0001:0000C7C0       cUnicodeCodecs.TISO8859_2Codec.DecodeChar
+ 0001:0000C7F8       cUnicodeCodecs.TISO8859_2Codec.EncodeChar
+ 0001:0000C838       cUnicodeCodecs.TISO8859_3Codec.DecodeChar
+ 0001:0000C870       cUnicodeCodecs.TISO8859_3Codec.EncodeChar
+ 0001:0000C8B0       cUnicodeCodecs.TISO8859_4Codec.DecodeChar
+ 0001:0000C8E8       cUnicodeCodecs.TISO8859_4Codec.EncodeChar
+ 0001:0000C928       cUnicodeCodecs.TISO8859_5Codec.DecodeChar
+ 0001:0000C97C       cUnicodeCodecs.TISO8859_5Codec.EncodeChar
+ 0001:0000CACC       cUnicodeCodecs.TISO8859_6Codec.DecodeChar
+ 0001:0000CB40       cUnicodeCodecs.TISO8859_6Codec.EncodeChar
+ 0001:0000CC40       cUnicodeCodecs.TISO8859_7Codec.DecodeChar
+ 0001:0000CCF0       cUnicodeCodecs.TISO8859_7Codec.EncodeChar
+ 0001:0000CE18       cUnicodeCodecs.TISO8859_8Codec.DecodeChar
+ 0001:0000CECC       cUnicodeCodecs.TISO8859_8Codec.EncodeChar
+ 0001:0000CFF0       cUnicodeCodecs.TISO8859_9Codec.DecodeChar
+ 0001:0000D068       cUnicodeCodecs.TISO8859_9Codec.EncodeChar
+ 0001:0000D160       cUnicodeCodecs.TISO8859_10Codec.DecodeChar
+ 0001:0000D198       cUnicodeCodecs.TISO8859_10Codec.EncodeChar
+ 0001:0000D1D8       cUnicodeCodecs.TISO8859_13Codec.DecodeChar
+ 0001:0000D210       cUnicodeCodecs.TISO8859_13Codec.EncodeChar
+ 0001:0000D250       cUnicodeCodecs.TISO8859_14Codec.DecodeChar
+ 0001:0000D288       cUnicodeCodecs.TISO8859_14Codec.EncodeChar
+ 0001:0000D2C8       cUnicodeCodecs.TISO8859_15Codec.DecodeChar
+ 0001:0000D384       cUnicodeCodecs.TISO8859_15Codec.EncodeChar
+ 0001:0000D494       cUnicodeCodecs.TWindows37Codec.DecodeChar
+ 0001:0000D4BC       cUnicodeCodecs.TWindows37Codec.EncodeChar
+ 0001:0000D4FC       cUnicodeCodecs.TIBM037Codec.DecodeChar
+ 0001:0000D524       cUnicodeCodecs.TIBM037Codec.EncodeChar
+ 0001:0000D560       cUnicodeCodecs.TIBM038Codec.DecodeChar
+ 0001:0000D588       cUnicodeCodecs.TIBM038Codec.EncodeChar
+ 0001:0000D5C4       cUnicodeCodecs.TIBM256Codec.DecodeChar
+ 0001:0000D5EC       cUnicodeCodecs.TIBM256Codec.EncodeChar
+ 0001:0000D628       cUnicodeCodecs.TIBM273Codec.DecodeChar
+ 0001:0000D650       cUnicodeCodecs.TIBM273Codec.EncodeChar
+ 0001:0000D68C       cUnicodeCodecs.TIBM274Codec.DecodeChar
+ 0001:0000D6B4       cUnicodeCodecs.TIBM274Codec.EncodeChar
+ 0001:0000D6F0       cUnicodeCodecs.TIBM275Codec.DecodeChar
+ 0001:0000D718       cUnicodeCodecs.TIBM275Codec.EncodeChar
+ 0001:0000D754       cUnicodeCodecs.TIBM277Codec.DecodeChar
+ 0001:0000D77C       cUnicodeCodecs.TIBM277Codec.EncodeChar
+ 0001:0000D7B8       cUnicodeCodecs.TIBM278Codec.DecodeChar
+ 0001:0000D7E0       cUnicodeCodecs.TIBM278Codec.EncodeChar
+ 0001:0000D81C       cUnicodeCodecs.TIBM280Codec.DecodeChar
+ 0001:0000D844       cUnicodeCodecs.TIBM280Codec.EncodeChar
+ 0001:0000D880       cUnicodeCodecs.TIBM281Codec.DecodeChar
+ 0001:0000D90C       cUnicodeCodecs.TIBM281Codec.EncodeChar
+ 0001:0000D9A4       cUnicodeCodecs.TIBM284Codec.DecodeChar
+ 0001:0000D9CC       cUnicodeCodecs.TIBM284Codec.EncodeChar
+ 0001:0000DA08       cUnicodeCodecs.TIBM285Codec.DecodeChar
+ 0001:0000DA30       cUnicodeCodecs.TIBM285Codec.EncodeChar
+ 0001:0000DA6C       cUnicodeCodecs.TIBM290Codec.DecodeChar
+ 0001:0000DA94       cUnicodeCodecs.TIBM290Codec.EncodeChar
+ 0001:0000DAD0       cUnicodeCodecs.TIBM297Codec.DecodeChar
+ 0001:0000DAF8       cUnicodeCodecs.TIBM297Codec.EncodeChar
+ 0001:0000DB34       cUnicodeCodecs.TIBM420Codec.DecodeChar
+ 0001:0000DB5C       cUnicodeCodecs.TIBM420Codec.EncodeChar
+ 0001:0000DB98       cUnicodeCodecs.TIBM423Codec.DecodeChar
+ 0001:0000DBC0       cUnicodeCodecs.TIBM423Codec.EncodeChar
+ 0001:0000DBFC       cUnicodeCodecs.TIBM424Codec.DecodeChar
+ 0001:0000DC24       cUnicodeCodecs.TIBM424Codec.EncodeChar
+ 0001:0000DC60       cUnicodeCodecs.TWindows437Codec.DecodeChar
+ 0001:0000DC98       cUnicodeCodecs.TWindows437Codec.EncodeChar
+ 0001:0000DCD8       cUnicodeCodecs.TIBM437Codec.DecodeChar
+ 0001:0000DD10       cUnicodeCodecs.TIBM437Codec.EncodeChar
+ 0001:0000DD4C       cUnicodeCodecs.TWindows500Codec.DecodeChar
+ 0001:0000DD74       cUnicodeCodecs.TWindows500Codec.EncodeChar
+ 0001:0000DDB4       cUnicodeCodecs.TIBM500Codec.DecodeChar
+ 0001:0000DDDC       cUnicodeCodecs.TIBM500Codec.EncodeChar
+ 0001:0000DE18       cUnicodeCodecs.TWindows708Codec.DecodeChar
+ 0001:0000DE50       cUnicodeCodecs.TWindows708Codec.EncodeChar
+ 0001:0000DE90       cUnicodeCodecs.TWindows737Codec.DecodeChar
+ 0001:0000DEC8       cUnicodeCodecs.TWindows737Codec.EncodeChar
+ 0001:0000DF08       cUnicodeCodecs.TWindows775Codec.DecodeChar
+ 0001:0000DF40       cUnicodeCodecs.TWindows775Codec.EncodeChar
+ 0001:0000DF80       cUnicodeCodecs.TWindows850Codec.DecodeChar
+ 0001:0000DFB8       cUnicodeCodecs.TWindows850Codec.EncodeChar
+ 0001:0000DFF8       cUnicodeCodecs.TIBM850Codec.DecodeChar
+ 0001:0000E030       cUnicodeCodecs.TIBM850Codec.EncodeChar
+ 0001:0000E06C       cUnicodeCodecs.TIBM851Codec.DecodeChar
+ 0001:0000E0A4       cUnicodeCodecs.TIBM851Codec.EncodeChar
+ 0001:0000E0E0       cUnicodeCodecs.TWindows852Codec.DecodeChar
+ 0001:0000E118       cUnicodeCodecs.TWindows852Codec.EncodeChar
+ 0001:0000E158       cUnicodeCodecs.TIBM852Codec.DecodeChar
+ 0001:0000E190       cUnicodeCodecs.TIBM852Codec.EncodeChar
+ 0001:0000E1CC       cUnicodeCodecs.TWindows855Codec.DecodeChar
+ 0001:0000E204       cUnicodeCodecs.TWindows855Codec.EncodeChar
+ 0001:0000E244       cUnicodeCodecs.TIBM855Codec.DecodeChar
+ 0001:0000E27C       cUnicodeCodecs.TIBM855Codec.EncodeChar
+ 0001:0000E2B8       cUnicodeCodecs.TWindows857Codec.DecodeChar
+ 0001:0000E2F0       cUnicodeCodecs.TWindows857Codec.EncodeChar
+ 0001:0000E330       cUnicodeCodecs.TIBM857Codec.DecodeChar
+ 0001:0000E380       cUnicodeCodecs.TIBM857Codec.EncodeChar
+ 0001:0000E438       cUnicodeCodecs.TWindows858Codec.DecodeChar
+ 0001:0000E480       cUnicodeCodecs.TWindows858Codec.EncodeChar
+ 0001:0000E4D0       cUnicodeCodecs.TIBM860Codec.DecodeChar
+ 0001:0000E508       cUnicodeCodecs.TIBM860Codec.EncodeChar
+ 0001:0000E544       cUnicodeCodecs.TWindows861Codec.DecodeChar
+ 0001:0000E57C       cUnicodeCodecs.TWindows861Codec.EncodeChar
+ 0001:0000E5BC       cUnicodeCodecs.TIBM861Codec.DecodeChar
+ 0001:0000E5F4       cUnicodeCodecs.TIBM861Codec.EncodeChar
+ 0001:0000E630       cUnicodeCodecs.TWindows862Codec.DecodeChar
+ 0001:0000E668       cUnicodeCodecs.TWindows862Codec.EncodeChar
+ 0001:0000E6A8       cUnicodeCodecs.TIBM862Codec.DecodeChar
+ 0001:0000E6E0       cUnicodeCodecs.TIBM862Codec.EncodeChar
+ 0001:0000E71C       cUnicodeCodecs.TWindows863Codec.DecodeChar
+ 0001:0000E754       cUnicodeCodecs.TWindows863Codec.EncodeChar
+ 0001:0000E794       cUnicodeCodecs.TIBM863Codec.DecodeChar
+ 0001:0000E7CC       cUnicodeCodecs.TIBM863Codec.EncodeChar
+ 0001:0000E808       cUnicodeCodecs.TWindows864Codec.DecodeChar
+ 0001:0000E840       cUnicodeCodecs.TWindows864Codec.EncodeChar
+ 0001:0000E880       cUnicodeCodecs.TIBM864Codec.DecodeChar
+ 0001:0000E8B8       cUnicodeCodecs.TIBM864Codec.EncodeChar
+ 0001:0000E9D4       cUnicodeCodecs.TWindows865Codec.DecodeChar
+ 0001:0000EA0C       cUnicodeCodecs.TWindows865Codec.EncodeChar
+ 0001:0000EA4C       cUnicodeCodecs.TIBM865Codec.DecodeChar
+ 0001:0000EA84       cUnicodeCodecs.TIBM865Codec.EncodeChar
+ 0001:0000EAC0       cUnicodeCodecs.TWindows866Codec.DecodeChar
+ 0001:0000EAF8       cUnicodeCodecs.TWindows866Codec.EncodeChar
+ 0001:0000EB38       cUnicodeCodecs.TIBM866Codec.DecodeChar
+ 0001:0000EB70       cUnicodeCodecs.TIBM866Codec.EncodeChar
+ 0001:0000EBAC       cUnicodeCodecs.TIBM868Codec.DecodeChar
+ 0001:0000EBE4       cUnicodeCodecs.TIBM868Codec.EncodeChar
+ 0001:0000EC20       cUnicodeCodecs.TWindows869Codec.DecodeChar
+ 0001:0000EC80       cUnicodeCodecs.TWindows869Codec.EncodeChar
+ 0001:0000ECE8       cUnicodeCodecs.TIBM869Codec.DecodeChar
+ 0001:0000ED20       cUnicodeCodecs.TIBM869Codec.EncodeChar
+ 0001:0000ED5C       cUnicodeCodecs.TWindows870Codec.DecodeChar
+ 0001:0000ED84       cUnicodeCodecs.TWindows870Codec.EncodeChar
+ 0001:0000EDC4       cUnicodeCodecs.TIBM870Codec.DecodeChar
+ 0001:0000EDEC       cUnicodeCodecs.TIBM870Codec.EncodeChar
+ 0001:0000EE28       cUnicodeCodecs.TIBM871Codec.DecodeChar
+ 0001:0000EE50       cUnicodeCodecs.TIBM871Codec.EncodeChar
+ 0001:0000EE8C       cUnicodeCodecs.TWindows874Codec.DecodeChar
+ 0001:0000EEC4       cUnicodeCodecs.TWindows874Codec.EncodeChar
+ 0001:0000EF04       cUnicodeCodecs.TIBM874Codec.DecodeChar
+ 0001:0000EF3C       cUnicodeCodecs.TIBM874Codec.EncodeChar
+ 0001:0000EF78       cUnicodeCodecs.TWindows875Codec.DecodeChar
+ 0001:0000EFA0       cUnicodeCodecs.TWindows875Codec.EncodeChar
+ 0001:0000EFE0       cUnicodeCodecs.TIBM875Codec.DecodeChar
+ 0001:0000F008       cUnicodeCodecs.TIBM875Codec.EncodeChar
+ 0001:0000F044       cUnicodeCodecs.TIBM880Codec.DecodeChar
+ 0001:0000F06C       cUnicodeCodecs.TIBM880Codec.EncodeChar
+ 0001:0000F0A8       cUnicodeCodecs.TIBM904Codec.DecodeChar
+ 0001:0000F0F8       cUnicodeCodecs.TIBM904Codec.EncodeChar
+ 0001:0000F1C4       cUnicodeCodecs.TIBM905Codec.DecodeChar
+ 0001:0000F1EC       cUnicodeCodecs.TIBM905Codec.EncodeChar
+ 0001:0000F228       cUnicodeCodecs.TIBM918Codec.DecodeChar
+ 0001:0000F250       cUnicodeCodecs.TIBM918Codec.EncodeChar
+ 0001:0000F28C       cUnicodeCodecs.TIBM1004Codec.DecodeChar
+ 0001:0000F2C4       cUnicodeCodecs.TIBM1004Codec.EncodeChar
+ 0001:0000F3E0       cUnicodeCodecs.TWindows1026Codec.DecodeChar
+ 0001:0000F424       cUnicodeCodecs.TWindows1026Codec.EncodeChar
+ 0001:0000F484       cUnicodeCodecs.TIBM1026Codec.DecodeChar
+ 0001:0000F4C8       cUnicodeCodecs.TIBM1026Codec.EncodeChar
+ 0001:0000F520       cUnicodeCodecs.TWindows1047Codec.DecodeChar
+ 0001:0000F564       cUnicodeCodecs.TWindows1047Codec.EncodeChar
+ 0001:0000F5C4       cUnicodeCodecs.TIBM1047Codec.DecodeChar
+ 0001:0000F608       cUnicodeCodecs.TIBM1047Codec.EncodeChar
+ 0001:0000F660       cUnicodeCodecs.TWindows1140Codec.DecodeChar
+ 0001:0000F694       cUnicodeCodecs.TWindows1140Codec.EncodeChar
+ 0001:0000F75C       cUnicodeCodecs.TWindows1141Codec.DecodeChar
+ 0001:0000F784       cUnicodeCodecs.TWindows1141Codec.EncodeChar
+ 0001:0000F7C8       cUnicodeCodecs.TWindows1142Codec.DecodeChar
+ 0001:0000F7F0       cUnicodeCodecs.TWindows1142Codec.EncodeChar
+ 0001:0000F834       cUnicodeCodecs.TWindows1143Codec.DecodeChar
+ 0001:0000F85C       cUnicodeCodecs.TWindows1143Codec.EncodeChar
+ 0001:0000F8A0       cUnicodeCodecs.TWindows1144Codec.DecodeChar
+ 0001:0000F8C8       cUnicodeCodecs.TWindows1144Codec.EncodeChar
+ 0001:0000F90C       cUnicodeCodecs.TWindows1145Codec.DecodeChar
+ 0001:0000F934       cUnicodeCodecs.TWindows1145Codec.EncodeChar
+ 0001:0000F978       cUnicodeCodecs.TWindows1146Codec.DecodeChar
+ 0001:0000F9A0       cUnicodeCodecs.TWindows1146Codec.EncodeChar
+ 0001:0000F9E4       cUnicodeCodecs.TWindows1147Codec.DecodeChar
+ 0001:0000FA0C       cUnicodeCodecs.TWindows1147Codec.EncodeChar
+ 0001:0000FA50       cUnicodeCodecs.TWindows1148Codec.DecodeChar
+ 0001:0000FA78       cUnicodeCodecs.TWindows1148Codec.EncodeChar
+ 0001:0000FABC       cUnicodeCodecs.TWindows1149Codec.DecodeChar
+ 0001:0000FAE4       cUnicodeCodecs.TWindows1149Codec.EncodeChar
+ 0001:0000FB28       cUnicodeCodecs.TWindows1250Codec.DecodeChar
+ 0001:0000FB60       cUnicodeCodecs.TWindows1250Codec.EncodeChar
+ 0001:0000FBA4       cUnicodeCodecs.TWindows1251Codec.DecodeChar
+ 0001:0000FBDC       cUnicodeCodecs.TWindows1251Codec.EncodeChar
+ 0001:0000FC20       cUnicodeCodecs.TWindows1252Codec.DecodeChar
+ 0001:0000FC5C       cUnicodeCodecs.TWindows1252Codec.EncodeChar
+ 0001:0000FD44       cUnicodeCodecs.TWindows1253Codec.DecodeChar
+ 0001:0000FD7C       cUnicodeCodecs.TWindows1253Codec.EncodeChar
+ 0001:0000FDC0       cUnicodeCodecs.TWindows1254Codec.DecodeChar
+ 0001:0000FDF8       cUnicodeCodecs.TWindows1254Codec.EncodeChar
+ 0001:0000FE3C       cUnicodeCodecs.TWindows1255Codec.DecodeChar
+ 0001:0000FE74       cUnicodeCodecs.TWindows1255Codec.EncodeChar
+ 0001:0000FEB8       cUnicodeCodecs.TWindows1256Codec.DecodeChar
+ 0001:0000FEF0       cUnicodeCodecs.TWindows1256Codec.EncodeChar
+ 0001:0000FF34       cUnicodeCodecs.TWindows1257Codec.DecodeChar
+ 0001:0000FF6C       cUnicodeCodecs.TWindows1257Codec.EncodeChar
+ 0001:0000FFB0       cUnicodeCodecs.TWindows1258Codec.DecodeChar
+ 0001:0000FFE8       cUnicodeCodecs.TWindows1258Codec.EncodeChar
+ 0001:0001002C       cUnicodeCodecs.TMacLatin2Codec.DecodeChar
+ 0001:00010064       cUnicodeCodecs.TMacLatin2Codec.EncodeChar
+ 0001:000100A4       cUnicodeCodecs.TMacRomanCodec.DecodeChar
+ 0001:000100DC       cUnicodeCodecs.TMacRomanCodec.EncodeChar
+ 0001:0001011C       cUnicodeCodecs.TMacCyrillicCodec.DecodeChar
+ 0001:00010154       cUnicodeCodecs.TMacCyrillicCodec.EncodeChar
+ 0001:00010194       cUnicodeCodecs.TMacGreekCodec.DecodeChar
+ 0001:000101CC       cUnicodeCodecs.TMacGreekCodec.EncodeChar
+ 0001:0001020C       cUnicodeCodecs.TMacIcelandicCodec.DecodeChar
+ 0001:00010244       cUnicodeCodecs.TMacIcelandicCodec.EncodeChar
+ 0001:00010288       cUnicodeCodecs.TMacTurkishCodec.DecodeChar
+ 0001:000102C0       cUnicodeCodecs.TMacTurkishCodec.EncodeChar
+ 0001:00010300       cUnicodeCodecs.TUSASCIICodec.DecodeChar
+ 0001:000103AC       cUnicodeCodecs.TUSASCIICodec.EncodeChar
+ 0001:00010454       cUnicodeCodecs.TEBCDIC_USCodec.DecodeChar
+ 0001:000107D8       cUnicodeCodecs.TEBCDIC_USCodec.EncodeChar
+ 0001:00010B3C       cUnicodeCodecs.TKOI8_RCodec.DecodeChar
+ 0001:00010B74       cUnicodeCodecs.TKOI8_RCodec.EncodeChar
+ 0001:00010BB0       cUnicodeCodecs.TJIS_X0201Codec.DecodeChar
+ 0001:00010C20       cUnicodeCodecs.TJIS_X0201Codec.EncodeChar
+ 0001:00010D08       cUnicodeCodecs.TNextStepCodec.DecodeChar
+ 0001:00010D40       cUnicodeCodecs.TNextStepCodec.EncodeChar
+ 0001:00011898       cUnicodeCodecs.Finalization
+ 0001:00011B50       GsmSms..TSMSDecoder
+ 0001:00011BE0       GsmSms..TSMS
+ 0001:00011C7C       GsmSms..TSMSStatusReport
+ 0001:00011D38       GsmSms.Unpack7Bit
+ 0001:00011EF8       GsmSms.Pack7Bit
+ 0001:00011FDC       GsmSms.AlphabetIndex7Bit
+ 0001:00012004       GsmSms.EscapeIndex7Bit
+ 0001:00012038       GsmSms.Is7Bit
+ 0001:00012058       GsmSms.Encode7Bit
+ 0001:000121B8       GsmSms.GSMLength7Bit
+ 0001:00012208       GsmSms.GSMDecode7Bit
+ 0001:00012414       GsmSms.GSMEncode7Bit
+ 0001:00012464       GsmSms.GSMDecode8Bit
+ 0001:00012570       GsmSms.GSMEncode8Bit
+ 0001:00012644       GsmSms.GSMDecodeUcs2
+ 0001:00012840       GsmSms.GSMEncodeUcs2
+ 0001:000128C4       GsmSms.GSMCodingScheme
+ 0001:00012930       GsmSms.GSMLongMsgData
+ 0001:00012C4C       GsmSms.TSMSDecoder.DecodeTimeStamp
+ 0001:00012E00       GsmSms.TSMSDecoder.DecodeNumber
+ 0001:00012FE8       GsmSms.TSMSDecoder.EncodeNumber
+ 0001:000130FC       GsmSms.TSMS.Get_Message
+ 0001:00013438       GsmSms.TSMS.Get_PDU
+ 0001:00013868       GsmSms.TSMS.Get_Address
+ 0001:000138C4       GsmSms.TSMS.Get_SMSC
+ 0001:00013930       GsmSms.TSMS.Get_TimeStamp
+ 0001:000139AC       GsmSms.TSMS.Get_Validity
+ 0001:00013AF8       GsmSms.TSMSDecoder.ReverseOctets
+ 0001:00013B84       GsmSms.TSMS.Set_PDU
+ 0001:00013E98       GsmSms.TSMSDecoder.MakeCRLF
+ 0001:00013FD0       GsmSms.TSMS.Set_MessageRef
+ 0001:0001401C       GsmSms.TSMS.Get_CodingScheme
+ 0001:00014074       GsmSms.TSMS.Set_Message
+ 0001:0001408C       GsmSms.TSMS.Set_UDHI
+ 0001:000140AC       GsmSms.TSMS.NewMessageRefPDU
+ 0001:0001419C       GsmSms.TSMSStatusReport.Create
+ 0001:000141E0       GsmSms.TSMSStatusReport.Set_PDU
+ 0001:000146E4       GsmSms.TSMSStatusReport.Get_IsDelivered
+ 0001:000146EC       GsmSms.Finalization
+ 0001:00014F34       BisGsmModem..TBisCustomComm
+ 0001:0001516C       BisGsmModem..TBisGsmModemMessage
+ 0001:0001522C       BisGsmModem..TBisGsmModemMessages
+ 0001:000152D4       BisGsmModem..TBisGsmModem
+ 0001:000154D4       BisGsmModem.TBisGsmModemMessage.Create
+ 0001:00015518       BisGsmModem.TBisGsmModemMessage.SetOriginalNumber
+ 0001:00015538       BisGsmModem.TBisGsmModemMessage.SetOriginalText
+ 0001:00015558       BisGsmModem.TBisGsmModemMessages.GetItems
+ 0001:0001556C       BisGsmModem.TBisGsmModemMessages.Find
+ 0001:000155A8       BisGsmModem.TBisGsmModemMessages.Add
+ 0001:00015648       BisGsmModem.TBisGsmModem.Create
+ 0001:00015890       BisGsmModem.TBisGsmModem.Destroy
+ 0001:000158C0       BisGsmModem.TBisGsmModem.DoStatus
+ 0001:00015918       BisGsmModem.TBisGsmModem.SetDataBits
+ 0001:00015970       BisGsmModem.TBisGsmModem.SetParityBits
+ 0001:000159E8       BisGsmModem.TBisGsmModem.SetStopBits
+ 0001:00015A28       BisGsmModem.TBisGsmModem.SetTimeout
+ 0001:00015A7C       BisGsmModem.TBisGsmModem.SetBisComPortBaudRate
+ 0001:00015BAC       BisGsmModem.TBisGsmModem.SetPort
+ 0001:00015BB8       BisGsmModem.TBisGsmModem.GetParityBits
+ 0001:00015BFC       BisGsmModem.TBisGsmModem.GetStopBits
+ 0001:00015C24       BisGsmModem.TBisGsmModem.GetDataBits
+ 0001:00015C54       BisGsmModem.TBisGsmModem.GetBaudRate
+ 0001:00015CF4       BisGsmModem.TBisGsmModem.GetBaudRateSpeed
+ 0001:00015DC0       BisGsmModem.TBisGsmModem.GetPort
+ 0001:00015DD8       BisGsmModem.TBisGsmModem.GetConnected
+ 0001:00015DF8       BisGsmModem.TBisGsmModem.ModemCommEvent
+ 0001:00015E24       BisGsmModem.TBisGsmModem.ModemData
+ 0001:00015E84       BisGsmModem.CalculateTimeOut
+ 0001:00015EDC       BisGsmModem.TBisGsmModem.SendRequest
+ 0001:00016050       BisGsmModem.TBisGsmModem.SendRequestOk
+ 0001:00016100       BisGsmModem.TBisGsmModem.GetResponseOk
+ 0001:000162E4       BisGsmModem.TBisGsmModem.GetResponseBy
+ 0001:000163E8       BisGsmModem.TBisGsmModem.ParseNumbers
+ 0001:000165E8       BisGsmModem.TBisGsmModem.ParseServiceCenter
+ 0001:00016758       BisGsmModem.TBisGsmModem.Clear
+ 0001:000167EC       BisGsmModem.TBisGsmModem.CommandOk
+ 0001:00016860       BisGsmModem.TBisGsmModem.Ready
+ 0001:0001687C       BisGsmModem.TBisGsmModem.Connect
+ 0001:00016B20       BisGsmModem.TBisGsmModem.Disconnect
+ 0001:00016C4C       BisGsmModem.TBisGsmModem.GetSupportedMessageModes
+ 0001:00016D2C       BisGsmModem.TBisGsmModem.ReadPduMessages
+ 0001:00017110       BisGsmModem.TBisGsmModem.ReadMessages
+ 0001:00017194       BisGsmModem.TBisGsmModem.DeleteMessage
+ 0001:000172F0       BisGsmModem.TBisGsmModem.DeleteMessages
+ 0001:00017324       BisGsmModem.TBisGsmModem.DeleteAllMessages
+ 0001:0001734C       BisGsmModem.TBisGsmModem.Text8Bit
+ 0001:000173B8       BisGsmModem.TBisGsmModem.SendPduMessage
+ 0001:000178D0       BisGsmModem.TBisGsmModem.SendMessage
+ 0001:00017910       BisGsmModem.TBisGsmModem.SendMessages
+ 0001:00017978       BisGsmModem.Finalization
+ 0001:00017A38       BisGsmServerConsts.Finalization
+ 0001:00017AC0       BisGsmServerInit..TBisGsmServer
+ 0001:00018324       BisGsmServerInit.InitServerModule
+ 0001:00018344       BisGsmServerInit..TBisGsmServerModemThread
+ 0001:000183F8       BisGsmServerInit.TBisGsmServer.Create
+ 0001:00018CA0       BisGsmServerInit.TBisGsmServer.Destroy
+ 0001:00018CD4       BisGsmServerInit.TBisGsmServer.GetStarted
+ 0001:00018CDC       BisGsmServerInit.TBisGsmServer.ChangeParams
+ 0001:00019178       BisGsmServerInit.TBisGsmServer.ModemStatus
+ 0001:00019200       BisGsmServerInit.DeleteMessagesByTypes
+ 0001:00019360       BisGsmServerInit.GetSenderId
+ 0001:000195D4       BisGsmServerInit.GetCodeMessageId
+ 0001:00019898       BisGsmServerInit.ExecuteProc
+ 0001:00019AD4       BisGsmServerInit.ExecuteCommand
+ 0001:0001A080       BisGsmServerInit.ExecuteAnswer
+ 0001:0001A620       BisGsmServerInit.WriteMessage
+ 0001:0001ADA0       BisGsmServerInit.IncomingGranted
+ 0001:0001AF70       BisGsmServerInit.IsStatusReport
+ 0001:0001B0D8       BisGsmServerInit.OutMessageDelivery
+ 0001:0001B2B8       BisGsmServerInit.InMessages
+ 0001:0001B804       BisGsmServerInit.UnlockMessage
+ 0001:0001BA8C       BisGsmServerInit.OutMessages
+ 0001:0001C780       BisGsmServerInit.OutMessagesByOperators
+ 0001:0001C860       BisGsmServerInit.CheckImei
+ 0001:0001C8F4       BisGsmServerInit.CheckImsi
+ 0001:0001C984       BisGsmServerInit.TBisGsmServer.ThreadTimeout
+ 0001:0001CAB0       BisGsmServerInit.TBisGsmServer.ThreadBegin
+ 0001:0001CB44       BisGsmServerInit.TBisGsmServer.ThreadEnd
+ 0001:0001CB50       BisGsmServerInit.TBisGsmServer.Start
+ 0001:0001CC7C       BisGsmServerInit.TBisGsmServer.Stop
+ 0001:0001CD64       BisGsmServerInit.Finalization
+ 0001:0001CD94       BisGsmServerModemsFm..TBisGsmServerModemsForm
+ 0001:0001D59C       BisGsmServerModemsFm..TBisGsmServerModemsFormIface
+ 0001:0001D6F8       BisGsmServerModemsFm.TBisGsmServerModemsFormIface.Create
+ 0001:0001D738       BisGsmServerModemsFm.TBisGsmServerModemsFormIface.CreateForm
+ 0001:0001D758       BisGsmServerModemsFm.TBisGsmServerModemsFormIface.ShowByCommand
+ 0001:0001D768       BisGsmServerModemsFm.TBisGsmServerModemsForm.Create
+ 0001:0001DCA8       BisGsmServerModemsFm.TBisGsmServerModemsForm.Destroy
+ 0001:0001DCD8       BisGsmServerModemsFm.TBisGsmServerModemsForm.Init
+ 0001:0001DE90       BisGsmServerModemsFm.TBisGsmServerModemsForm.FillDefault
+ 0001:0001E3AC       BisGsmServerModemsFm.TBisGsmServerModemsForm.LoadFromBase
+ 0001:0001E3B0       BisGsmServerModemsFm.TBisGsmServerModemsForm.EnableModems
+ 0001:0001EA84       BisGsmServerModemsFm.TBisGsmServerModemsForm.CheckBoxEnabledClick
+ 0001:0001EBF8       BisGsmServerModemsFm.TBisGsmServerModemsForm.SetModems
+ 0001:0001F100       BisGsmServerModemsFm.TBisGsmServerModemsForm.GetModems
+ 0001:0001F6B4       BisGsmServerModemsFm.TBisGsmServerModemsForm.ComboBoxComportChange
+ 0001:0001F754       BisGsmServerModemsFm.TBisGsmServerModemsForm.CheckFields
+ 0001:0001FC28       BisGsmServerModemsFm.TBisGsmServerModemsForm.ButtonOkClick
+ 0001:0001FC50       BisGsmServerModemsFm.TBisGsmServerModemsForm.ButtonSaveClick
+ 0001:0001FC68       BisGsmServerModemsFm.TBisGsmServerModemsForm.ButtonTestClick
+ 0001:0001FC80       BisGsmServerModemsFm.TBisGsmServerModemsForm.SetOnlyOneModem
+ 0001:0001FDC4       BisGsmServerModemsFm.TBisGsmServerModemsForm.TestModem
+ 0001:0001FFF0       BisGsmServerModemsFm.TBisGsmServerModemsForm.SaveModems
+ 0001:0001FFF4       BisGsmServerModemsFm.TBisGsmServerModemsForm.RestartServer
+ 0001:00020084       BisGsmServerModemsFm.Finalization
+ 0001:000200B4       BisGsmServerMainFm..TBisGsmServerMainForm
+ 0001:000202DC       BisGsmServerMainFm..TBisGsmServerMainFormIface
+ 0001:00020430       BisGsmServerMainFm.InitIfaceModule
+ 0001:00020474       BisGsmServerMainFm.TBisGsmServerMainFormIface.Create
+ 0001:000204B4       BisGsmServerMainFm.TBisGsmServerMainForm.Create
+ 0001:000204EC       BisGsmServerMainFm.TBisGsmServerMainForm.GetServerClass
+ 0001:000204F4       BisGsmServerMainFm.TBisGsmServerMainForm.CanOptions
+ 0001:00020500       BisGsmServerMainFm.TBisGsmServerMainForm.Options
+ 0001:00020560       BisGsmServerMainFm.Finalization
+ 0001:00021110       .smgsm.@GetPackageInfoTable
+ 0001:00021118       .smgsm.@PackageLoad
+ 0001:00021124       .smgsm.@PackageUnload
+ 0002:00000010       Windows.Windows
+ 0002:000000D4       cUnicodeCodecs.cUnicodeCodecs
+ 0002:000000DC       GsmSms.GsmSms
+ 0002:00000364       BisGsmModem.BisGsmModem
+ 0002:0000036C       BisGsmServerConsts.BisGsmServerConsts
+ 0002:00000374       BisGsmServerInit.BisGsmServerInit
+ 0002:0000037C       BisGsmServerModemsFm.BisGsmServerModemsFm
+ 0002:00000384       BisGsmServerMainFm.BisGsmServerMainFm
+ 0002:0000038C       .smgsm..smgsm
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.Module
+ 0003:0000001C       SysInit.TlsProc
+ 0003:0000002C       cUnicodeCodecs.USASCIIAlias
+ 0003:00000070       cUnicodeCodecs.ISO8859_1Alias
+ 0003:00000090       cUnicodeCodecs.ISO8859_2Alias
+ 0003:000000A8       cUnicodeCodecs.ISO8859_3Alias
+ 0003:000000C0       cUnicodeCodecs.ISO8859_4Alias
+ 0003:000000D8       cUnicodeCodecs.ISO8859_5Alias
+ 0003:000000EC       cUnicodeCodecs.ISO8859_6Alias
+ 0003:00000108       cUnicodeCodecs.ISO8859_7Alias
+ 0003:00000128       cUnicodeCodecs.ISO8859_8Alias
+ 0003:0000013C       cUnicodeCodecs.ISO8859_9Alias
+ 0003:00000154       cUnicodeCodecs.ISO8859_10Alias
+ 0003:0000016C       cUnicodeCodecs.ISO8859_13Alias
+ 0003:0000017C       cUnicodeCodecs.ISO8859_14Alias
+ 0003:00000198       cUnicodeCodecs.ISO8859_15Alias
+ 0003:000001B0       cUnicodeCodecs.KOI8_RAlias
+ 0003:000001B4       cUnicodeCodecs.MacLatin2Alias
+ 0003:000001C0       cUnicodeCodecs.MacRomanAlias
+ 0003:000001C4       cUnicodeCodecs.MacCyrillicAlias
+ 0003:000001C8       cUnicodeCodecs.CP437Alias
+ 0003:000001D4       cUnicodeCodecs.Win1250Alias
+ 0003:000001E0       cUnicodeCodecs.Win1251Alias
+ 0003:000001EC       cUnicodeCodecs.Win1252Alias
+ 0003:000001F8       cUnicodeCodecs.EBCDIC_USAlias
+ 0003:00000200       cUnicodeCodecs.UTF8Alias
+ 0003:00000208       cUnicodeCodecs.UTF16BEAlias
+ 0003:00000214       cUnicodeCodecs.UTF16LEAlias
+ 0003:0000021C       cUnicodeCodecs.UnicodeCodecAliasList
+ 0003:00000354       cUnicodeCodecs.MaxCode
+ 0003:0000036C       cUnicodeCodecs.UTF8_LF
+ 0003:00000370       cUnicodeCodecs.UTF8_CR
+ 0003:00000374       cUnicodeCodecs.UTF8_CRLF
+ 0003:00000378       cUnicodeCodecs.UTF16BE_LF
+ 0003:0000037C       cUnicodeCodecs.UTF16BE_CR
+ 0003:00000380       cUnicodeCodecs.UTF16BE_CRLF
+ 0003:00000384       cUnicodeCodecs.UTF16LE_LF
+ 0003:00000388       cUnicodeCodecs.UTF16LE_CR
+ 0003:0000038C       cUnicodeCodecs.UTF16LE_CRLF
+ 0003:00000390       cUnicodeCodecs.UCS4BE_LF
+ 0003:00000394       cUnicodeCodecs.UCS4BE_CR
+ 0003:00000398       cUnicodeCodecs.UCS4BE_CRLF
+ 0003:000003A0       cUnicodeCodecs.UCS4LE_LF
+ 0003:000003A4       cUnicodeCodecs.UCS4LE_CR
+ 0003:000003A8       cUnicodeCodecs.UCS4LE_CRLF
+ 0003:000003B0       cUnicodeCodecs.UCS4_2143_LF
+ 0003:000003B4       cUnicodeCodecs.UCS4_2143_CR
+ 0003:000003B8       cUnicodeCodecs.UCS4_2143_CRLF
+ 0003:000003C0       cUnicodeCodecs.UCS4_3412_LF
+ 0003:000003C4       cUnicodeCodecs.UCS4_3412_CR
+ 0003:000003C8       cUnicodeCodecs.UCS4_3412_CRLF
+ 0003:000003D0       cUnicodeCodecs.UCS2_LF
+ 0003:000003D4       cUnicodeCodecs.UCS2_CR
+ 0003:000003D8       cUnicodeCodecs.UCS2_CRLF
+ 0003:000003DC       cUnicodeCodecs.ISO8859_2Map
+ 0003:0000049C       cUnicodeCodecs.ISO8859_3Map
+ 0003:0000055C       cUnicodeCodecs.ISO8859_4Map
+ 0003:0000061C       cUnicodeCodecs.ISO8859_10Map
+ 0003:000006DC       cUnicodeCodecs.ISO8859_13Map
+ 0003:0000079C       cUnicodeCodecs.ISO8859_14Map
+ 0003:0000085C       cUnicodeCodecs.CP37Map
+ 0003:00000A5C       cUnicodeCodecs.IBM038Map
+ 0003:00000C5C       cUnicodeCodecs.IBM256Map
+ 0003:00000E5C       cUnicodeCodecs.IBM273Map
+ 0003:0000105C       cUnicodeCodecs.IBM274Map
+ 0003:0000125C       cUnicodeCodecs.IBM275Map
+ 0003:0000145C       cUnicodeCodecs.IBM277Map
+ 0003:0000165C       cUnicodeCodecs.IBM278Map
+ 0003:0000185C       cUnicodeCodecs.IBM280Map
+ 0003:00001A5C       cUnicodeCodecs.IBM284Map
+ 0003:00001C5C       cUnicodeCodecs.IBM285Map
+ 0003:00001E5C       cUnicodeCodecs.IBM290Map
+ 0003:0000205C       cUnicodeCodecs.IBM297Map
+ 0003:0000225C       cUnicodeCodecs.IBM420Map
+ 0003:0000245C       cUnicodeCodecs.IBM423Map
+ 0003:0000265C       cUnicodeCodecs.IBM424Map
+ 0003:0000285C       cUnicodeCodecs.CP437Map
+ 0003:0000295C       cUnicodeCodecs.CP500Map
+ 0003:00002B5C       cUnicodeCodecs.Windows708Map
+ 0003:00002C5C       cUnicodeCodecs.Windows737Map
+ 0003:00002D5C       cUnicodeCodecs.Windows775Map
+ 0003:00002E5C       cUnicodeCodecs.CP850Map
+ 0003:00002F5C       cUnicodeCodecs.IBM851Map
+ 0003:0000305C       cUnicodeCodecs.CP852Map
+ 0003:0000315C       cUnicodeCodecs.CP855Map
+ 0003:0000325C       cUnicodeCodecs.CP857Map
+ 0003:0000335C       cUnicodeCodecs.IBM860Map
+ 0003:0000345C       cUnicodeCodecs.CP861Map
+ 0003:0000355C       cUnicodeCodecs.CP862Map
+ 0003:0000365C       cUnicodeCodecs.CP863Map
+ 0003:0000375C       cUnicodeCodecs.Windows864Map
+ 0003:0000385C       cUnicodeCodecs.IBM864Map
+ 0003:00003A14       cUnicodeCodecs.CP865Map
+ 0003:00003B14       cUnicodeCodecs.CP866Map
+ 0003:00003C14       cUnicodeCodecs.IBM868Map
+ 0003:00003D14       cUnicodeCodecs.CP869Map
+ 0003:00003E14       cUnicodeCodecs.Windows870Map
+ 0003:00004014       cUnicodeCodecs.IBM870Map
+ 0003:00004214       cUnicodeCodecs.IBM871Map
+ 0003:00004414       cUnicodeCodecs.Windows874Map
+ 0003:00004514       cUnicodeCodecs.IBM874Map
+ 0003:00004614       cUnicodeCodecs.Windows875Map
+ 0003:00004814       cUnicodeCodecs.IBM875Map
+ 0003:00004A14       cUnicodeCodecs.IBM880Map
+ 0003:00004C14       cUnicodeCodecs.IBM905Map
+ 0003:00004E14       cUnicodeCodecs.IBM918Map
+ 0003:00005014       cUnicodeCodecs.IBM1004Map
+ 0003:00005114       cUnicodeCodecs.CP1026Map
+ 0003:00005314       cUnicodeCodecs.CP1047Map
+ 0003:00005514       cUnicodeCodecs.Windows1141Map
+ 0003:00005714       cUnicodeCodecs.Windows1142Map
+ 0003:00005914       cUnicodeCodecs.Windows1143Map
+ 0003:00005B14       cUnicodeCodecs.Windows1144Map
+ 0003:00005D14       cUnicodeCodecs.Windows1145Map
+ 0003:00005F14       cUnicodeCodecs.Windows1146Map
+ 0003:00006114       cUnicodeCodecs.Windows1147Map
+ 0003:00006314       cUnicodeCodecs.Windows1148Map
+ 0003:00006514       cUnicodeCodecs.Windows1149Map
+ 0003:00006714       cUnicodeCodecs.Windows1250Map
+ 0003:00006814       cUnicodeCodecs.Windows1251Map
+ 0003:00006914       cUnicodeCodecs.Windows1252Map
+ 0003:00006954       cUnicodeCodecs.Windows1253Map
+ 0003:00006A54       cUnicodeCodecs.Windows1254Map
+ 0003:00006B54       cUnicodeCodecs.Windows1255Map
+ 0003:00006C54       cUnicodeCodecs.Windows1256Map
+ 0003:00006D54       cUnicodeCodecs.Windows1257Map
+ 0003:00006E54       cUnicodeCodecs.Windows1258Map
+ 0003:00006F54       cUnicodeCodecs.MacLatin2Map
+ 0003:00007054       cUnicodeCodecs.MacRomanMap
+ 0003:00007154       cUnicodeCodecs.MacCyrillicMap
+ 0003:00007254       cUnicodeCodecs.MacGreekMap
+ 0003:00007354       cUnicodeCodecs.MacIcelandicMap
+ 0003:00007454       cUnicodeCodecs.MacTurkishMap
+ 0003:00007554       cUnicodeCodecs.KOI8_RMap
+ 0003:00007654       cUnicodeCodecs.NextStepMap
+ 0003:00007754       GsmSms.Alphabet7Escape
+ 0003:00007758       GsmSms.Alphabet7Bit
+ 0003:00007858       BisGsmServerConsts.ServerModule
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       SysInit.tlsBuffer
+ 0004:0000000C       Windows..3
+ 0004:00000010       Windows.HtmlHelpModule
+ 0004:00000014       cUnicodeCodecs..221
+ 0004:00000018       GsmSms..4
+ 0004:0000001C       BisGsmModem..5
+ 0004:00000020       BisGsmServerConsts..1
+ 0004:00000024       BisGsmServerInit..2
+ 0004:00000028       BisGsmServerModemsFm.BisGsmServerModemsForm
+ 0004:0000002C       BisGsmServerModemsFm..3
+ 0004:00000030       BisGsmServerMainFm.BisGsmServerMainForm
+ 0004:00000034       BisGsmServerMainFm..3
+ 0005:00000000       SysInit.TlsLast
+
+
+Line numbers for GsmSms(smgsm.bpl\GsmSms.pas) segment .text
+
+   190 0001:00011D38   191 0001:00011D66   192 0001:00011D6E   193 0001:00011D8B
+   194 0001:00011D93   195 0001:00011D95   196 0001:00011D99   197 0001:00011DA7
+   198 0001:00011DBD   200 0001:00011DD3   201 0001:00011DF3   202 0001:00011E05
+   203 0001:00011E20   204 0001:00011E4E   205 0001:00011E6E   206 0001:00011E6F
+   207 0001:00011E74   208 0001:00011E7F   209 0001:00011E96   210 0001:00011E98
+   212 0001:00011E9C   196 0001:00011E9D   213 0001:00011EA4   214 0001:00011EAF
+   221 0001:00011EF8   222 0001:00011F1C   223 0001:00011F24   224 0001:00011F2E
+   225 0001:00011F30   226 0001:00011F3B   227 0001:00011F47   228 0001:00011F4C
+   229 0001:00011F51   231 0001:00011F57   232 0001:00011F61   233 0001:00011F9B
+   234 0001:00011FA9   237 0001:00011FAC   238 0001:00011FAE   226 0001:00011FAF
+   239 0001:00011FB2   245 0001:00011FDC   246 0001:00011FDD   247 0001:00011FE0
+   248 0001:00011FE2   249 0001:00011FE9   250 0001:00011FEE   251 0001:00011FF0
+   252 0001:00011FF2   248 0001:00011FF6   253 0001:00011FFE   257 0001:00012004
+   259 0001:00012030   261 0001:00012034   263 0001:00012037   266 0001:00012038
+   267 0001:0001203B   268 0001:00012055   276 0001:00012058   277 0001:00012080
+   278 0001:00012088   279 0001:00012090   280 0001:0001209B   281 0001:000120A0
+   282 0001:000120A9   283 0001:000120B8   285 0001:000120C1   286 0001:00012111
+   287 0001:00012115   288 0001:00012119   289 0001:0001211D   290 0001:00012121
+   291 0001:00012125   292 0001:00012129   293 0001:0001212D   294 0001:00012131
+   295 0001:00012135   296 0001:00012139   299 0001:0001213D   301 0001:0001213F
+   305 0001:0001215B   306 0001:0001215D   307 0001:00012172   281 0001:00012173
+   309 0001:0001217C   310 0001:00012187   315 0001:000121B8   316 0001:000121CE
+   317 0001:000121E2   323 0001:00012208   324 0001:00012235   325 0001:0001223D
+   326 0001:00012253   327 0001:0001225E   328 0001:00012263   329 0001:0001226C
+   330 0001:00012274   331 0001:00012287   332 0001:0001228D   333 0001:0001229C
+   334 0001:0001229D   338 0001:000122A6   339 0001:000122F5   340 0001:00012300
+   344 0001:0001230B   345 0001:00012316   346 0001:00012321   347 0001:0001232C
+   348 0001:00012337   349 0001:0001233F   350 0001:00012347   351 0001:0001234F
+   352 0001:00012357   355 0001:0001235F   372 0001:00012367   373 0001:00012379
+   374 0001:0001237E   375 0001:0001238E   377 0001:000123B1   378 0001:000123B4
+   382 0001:000123BA   383 0001:000123D4   328 0001:000123D5   385 0001:000123DE
+   388 0001:00012414   389 0001:0001242D   390 0001:00012441   397 0001:00012464
+   398 0001:0001248C   399 0001:00012493   400 0001:000124AB   401 0001:000124B8
+   402 0001:000124D1   403 0001:00012502   404 0001:00012518   401 0001:00012519
+   405 0001:0001251C   412 0001:00012570   413 0001:00012591   414 0001:00012598
+   416 0001:000125A0   417 0001:000125AD   418 0001:000125B8   419 0001:000125D5
+   420 0001:000125E5   421 0001:000125EF   416 0001:000125F2   422 0001:000125F5
+   432 0001:00012644   433 0001:00012674   436 0001:0001267D   435 0001:0001268A
+   437 0001:000126A2   438 0001:000126AA   439 0001:000126CE   440 0001:0001275A
+   438 0001:0001275C   441 0001:00012763   442 0001:00012772   443 0001:00012780
+   444 0001:0001278A   445 0001:00012794   447 0001:000127B9   449 0001:000127D7
+   451 0001:000127E7   457 0001:00012840   458 0001:00012861   460 0001:00012868
+   461 0001:00012870   462 0001:0001287B   463 0001:00012890   464 0001:0001289A
+   461 0001:0001289B   465 0001:0001289E   828 0001:000128C4   829 0001:000128CA
+   830 0001:000128CC   831 0001:000128DE   832 0001:000128EC   833 0001:000128EE
+   834 0001:000128F0   830 0001:000128F1   836 0001:000128F4   837 0001:000128F9
+   838 0001:000128FB   839 0001:0001290D   840 0001:00012918   841 0001:0001291A
+   842 0001:0001291C   838 0001:0001291D   845 0001:00012920   846 0001:00012925
+   847 0001:00012927   857 0001:00012930   858 0001:00012967   859 0001:0001297C
+   860 0001:0001298B   861 0001:00012999   862 0001:000129A4   863 0001:000129AF
+   864 0001:000129BC   865 0001:000129CA   867 0001:000129FB   870 0001:00012A1B
+   871 0001:00012A4B   872 0001:00012A66   874 0001:00012A79   875 0001:00012AA9
+   876 0001:00012ADC   879 0001:00012B11   880 0001:00012B41   881 0001:00012B74
+   884 0001:00012BA6   885 0001:00012BAD   868 0001:00012BC9   891 0001:00012BE0
+   892 0001:00012BEA   894 0001:00012BFB   902 0001:00012C4C   904 0001:00012C87
+   905 0001:00012C95   907 0001:00012CAD   908 0001:00012CCD   909 0001:00012CED
+   910 0001:00012D0E   911 0001:00012D2F   912 0001:00012D50   915 0001:00012D70
+   916 0001:00012D7C   917 0001:00012D81   921 0001:00012DBB   923 0001:00012DC9
+   928 0001:00012E00   929 0001:00012E34   930 0001:00012E42   931 0001:00012E70
+   933 0001:00012E78   936 0001:00012EB1   937 0001:00012EDC   938 0001:00012EFA
+   939 0001:00012F1A   940 0001:00012F59   943 0001:00012F7A   945 0001:00012F87
+   948 0001:00012FE8   949 0001:00013010   951 0001:0001301C   952 0001:0001302A
+   953 0001:00013036   956 0001:00013051   958 0001:00013072   959 0001:00013097
+   960 0001:000130AE   980 0001:000130FC   981 0001:00013122   982 0001:00013130
+   983 0001:00013138   985 0001:0001313D   986 0001:00013149   997 0001:00013152
+   998 0001:0001315C   999 0001:0001318B  1001 0001:00013193  1004 0001:000131AA
+  1005 0001:000131B2  1004 0001:000131BF  1007 0001:000131C2  1008 0001:000131D5
+  1014 0001:000131E3  1016 0001:00013211  1017 0001:00013218  1020 0001:00013231
+  1023 0001:0001323C  1024 0001:00013242  1026 0001:0001326C  1029 0001:00013287
+  1031 0001:0001328C  1032 0001:00013292  1034 0001:000132B2  1037 0001:000132C6
+  1043 0001:000132D3  1045 0001:000132D8  1046 0001:000132DE  1048 0001:000132FE
+  1051 0001:00013312  1058 0001:0001331F  1060 0001:0001332C  1062 0001:00013355
+  1064 0001:00013367  1079 0001:00013438  1081 0001:0001345C  1082 0001:00013467
+  1083 0001:00013469  1085 0001:00013477  1114 0001:00013484  1115 0001:0001348C
+  1122 0001:00013494  1124 0001:0001349C  1125 0001:000134A2  1126 0001:000134D2
+  1127 0001:000134E1  1128 0001:000134EC  1127 0001:000134FC  1149 0001:00013501
+  1150 0001:0001350C  1151 0001:00013521  1154 0001:0001352E  1155 0001:00013538
+  1158 0001:00013559  1159 0001:0001355D  1160 0001:00013563  1161 0001:00013593
+  1168 0001:00013594  1169 0001:0001359F  1170 0001:000135BD  1173 0001:000135CC
+  1174 0001:000135D0  1175 0001:000135D6  1176 0001:00013606  1183 0001:00013607
+  1184 0001:00013612  1185 0001:00013630  1188 0001:0001363F  1190 0001:00013644
+  1192 0001:0001365E  1193 0001:00013667  1197 0001:00013676  1213 0001:00013683
+  1214 0001:00013690  1218 0001:000136AA  1222 0001:000136B3  1226 0001:000136BC
+  1227 0001:000136C8  1231 0001:000136D7  1232 0001:000136E4  1241 0001:000136F5
+  1244 0001:00013702  1246 0001:0001370F  1247 0001:00013730  1248 0001:00013736
+  1250 0001:00013740  1252 0001:0001374A  1254 0001:0001375B  1256 0001:00013782
+  1257 0001:00013784  1259 0001:000137BA  1262 0001:00013868  1263 0001:00013881
+  1264 0001:000138A2  1267 0001:000138C4  1268 0001:000138DE  1269 0001:00013906
+  1270 0001:0001390D  1273 0001:00013930  1274 0001:0001394C  1276 0001:0001395C
+  1277 0001:00013984  1283 0001:000139AC  1284 0001:000139CB  1285 0001:000139D3
+  1286 0001:000139EB  1291 0001:00013A00  1292 0001:00013A18  1293 0001:00013A33
+  1294 0001:00013A48  1295 0001:00013A67  1296 0001:00013A7C  1299 0001:00013A94
+  1301 0001:00013AA2  1307 0001:00013AF8  1308 0001:00013B1A  1310 0001:00013B21
+  1311 0001:00013B29  1312 0001:00013B3C  1313 0001:00013B47  1309 0001:00013B4A
+  1316 0001:00013B56  1317 0001:00013B60  1324 0001:00013B84  1357 0001:00013BAA
+  1360 0001:00013BB7  1361 0001:00013BC5  1367 0001:00013C00  1368 0001:00013C05
+  1370 0001:00013C1C  1373 0001:00013C29  1375 0001:00013C48  1376 0001:00013C52
+  1379 0001:00013C62  1394 0001:00013C70  1396 0001:00013CB3  1399 0001:00013CBA
+  1401 0001:00013CC9  1403 0001:00013CD8  1404 0001:00013CE0  1405 0001:00013CE2
+  1406 0001:00013CEB  1407 0001:00013CF7  1408 0001:00013D01  1416 0001:00013D07
+  1417 0001:00013D15  1418 0001:00013D21  1419 0001:00013D2D  1420 0001:00013D39
+  1423 0001:00013D41  1427 0001:00013D46  1428 0001:00013D57  1429 0001:00013D65
+  1431 0001:00013DAB  1434 0001:00013DB8  1436 0001:00013DD4  1437 0001:00013DF4
+  1448 0001:00013E02  1450 0001:00013E4E  1462 0001:00013E55  1463 0001:00013E61
+  1469 0001:00013E98  1470 0001:00013EC2  1471 0001:00013ECA  1473 0001:00013ECC
+  1474 0001:00013EE3  1477 0001:00013EEE  1478 0001:00013F18  1479 0001:00013F34
+  1481 0001:00013F38  1482 0001:00013F4E  1485 0001:00013F6C  1488 0001:00013F8A
+  1473 0001:00013F8B  1489 0001:00013F92  1492 0001:00013FD0  1493 0001:00013FD6
+  1494 0001:00013FED  1495 0001:0001400A  1498 0001:0001401C  1499 0001:00014032
+  1500 0001:00014038  1501 0001:0001404D  1502 0001:00014051  1505 0001:00014074
+  1506 0001:0001407A  1507 0001:00014084  1508 0001:00014088  1511 0001:0001408C
+  1512 0001:00014092  1513 0001:0001409C  1514 0001:000140A6  1520 0001:000140AC
+  1521 0001:000140D9  1522 0001:000140E3  1524 0001:000140EE  1526 0001:0001411E
+  1527 0001:00014123  1529 0001:00014129  1530 0001:0001413B  1532 0001:0001414E
+  1533 0001:00014159  1538 0001:0001419C  1539 0001:000141B5  1540 0001:000141BE
+  1541 0001:000141C1  1549 0001:000141E0  1550 0001:00014204  1554 0001:0001420E
+  1555 0001:00014213  1556 0001:00014219  1557 0001:00014248  1558 0001:00014274
+  1562 0001:0001427D  1564 0001:000142A7  1565 0001:000142AC  1567 0001:000142B1
+  1568 0001:000142B7  1569 0001:000142BB  1572 0001:000142C9  1573 0001:000142DF
+  1576 0001:000142E4  1579 0001:000142EC  1582 0001:000142FF  1584 0001:0001432D
+  1591 0001:00014359  1593 0001:00014360  1598 0001:00014380  1601 0001:000143A1
+  1604 0001:000143CF  1605 0001:000143D2  1606 0001:000143EE  1607 0001:0001441B
+  1608 0001:0001441E  1610 0001:00014424  1612 0001:00014427  1614 0001:0001442D
+  1615 0001:0001443F  1616 0001:00014460  1617 0001:0001446C  1618 0001:00014478
+  1619 0001:00014484  1620 0001:00014488  1622 0001:0001448B  1624 0001:00014495
+  1625 0001:0001449A  1626 0001:000144C7  1627 0001:000144CA  1629 0001:000144D0
+  1630 0001:000144FD  1631 0001:00014510  1632 0001:00014518  1633 0001:0001451E
+  1634 0001:0001452B  1632 0001:0001452E  1636 0001:00014534  1639 0001:00014546
+  1640 0001:0001455F  1641 0001:00014576  1642 0001:000145B4  1643 0001:000145D2
+  1644 0001:000145F0  1648 0001:000145FD  1697 0001:000146E4  1698 0001:000146EB
+
+Line numbers for GsmSms(smgsm.bpl\GsmSms.pas) segment .itext
+
+  1700 0002:000000DC
+
+Line numbers for MiTeC_ToolHelp32(MiTeC_ToolHelp32.pas) segment .text
+
+   438 0001:00000000
+
+Line numbers for IpRtrMib(objects.bpl\IPHlpApi\Pas\IpRtrMib.pas) segment .text
+
+  1062 0001:00000000
+
+Line numbers for IpExport(objects.bpl\IPHlpApi\Pas\IpExport.pas) segment .text
+
+   343 0001:00000000
+
+Line numbers for IpTypes(objects.bpl\IPHlpApi\Pas\IpTypes.pas) segment .text
+
+   228 0001:00000000
+
+Line numbers for IpHlpApi(objects.bpl\IPHlpApi\Pas\IpHlpApi.pas) segment .text
+
+   752 0001:00000000
+
+Line numbers for BisGsmModem(smgsm.bpl\BisGsmModem.pas) segment .text
+
+   171 0001:000154D4   172 0001:000154E6   173 0001:000154EF   174 0001:000154F3
+   175 0001:000154F7   177 0001:000154FB   180 0001:00015518   181 0001:0001551E
+   182 0001:00015528   183 0001:00015533   186 0001:00015538   187 0001:0001553E
+   188 0001:00015548   189 0001:00015552   194 0001:00015558   195 0001:0001555E
+   196 0001:00015567   202 0001:0001556C   203 0001:00015575   204 0001:0001557A
+   205 0001:00015585   206 0001:0001558E   207 0001:00015593   208 0001:00015596
+   210 0001:00015598   204 0001:00015599   211 0001:0001559C   214 0001:000155A8
+   215 0001:000155D4   216 0001:000155E2   217 0001:000155E5   218 0001:000155EB
+   219 0001:000155F6   221 0001:000155FA   222 0001:00015604   225 0001:0001560F
+   226 0001:00015618   232 0001:00015648   233 0001:0001565F   234 0001:00015668
+   235 0001:0001567B   236 0001:00015687   237 0001:00015697   238 0001:000156A4
+   239 0001:000156B1   240 0001:000156C0   242 0001:000156CE   243 0001:000156D5
+   244 0001:000156E4   245 0001:000156EB   246 0001:000156F5   248 0001:000156FF
+   250 0001:00015703   251 0001:00015710   252 0001:0001571D   253 0001:0001572A
+   254 0001:00015737   255 0001:00015747   256 0001:00015754   257 0001:00015761
+   259 0001:0001576E   261 0001:00015778   263 0001:00015784   266 0001:00015890
+   267 0001:0001589B   268 0001:000158A3   269 0001:000158AF   272 0001:000158C0
+   273 0001:000158E3   274 0001:000158EA   275 0001:000158F6   279 0001:00015918
+   280 0001:00015929   281 0001:0001593A   282 0001:0001594B   283 0001:0001595C
+   285 0001:0001596C   289 0001:00015970   290 0001:00015993   291 0001:000159A1
+   292 0001:000159B2   293 0001:000159C3   294 0001:000159D4   296 0001:000159E4
+   300 0001:000159E8   301 0001:000159F5   302 0001:00015A03   303 0001:00015A14
+   305 0001:00015A24   308 0001:00015A28   309 0001:00015A2F   310 0001:00015A32
+   311 0001:00015A3E   312 0001:00015A45   313 0001:00015A51   314 0001:00015A63
+   315 0001:00015A75   319 0001:00015A7C   320 0001:00015ACF   321 0001:00015ADD
+   322 0001:00015AE8   323 0001:00015AF6   324 0001:00015B04   325 0001:00015B12
+   326 0001:00015B20   327 0001:00015B2E   328 0001:00015B3C   329 0001:00015B4A
+   330 0001:00015B58   331 0001:00015B66   332 0001:00015B74   333 0001:00015B82
+   334 0001:00015B90   335 0001:00015B9E   337 0001:00015BAB   341 0001:00015BAC
+   342 0001:00015BB4   345 0001:00015BB8   346 0001:00015BB9   347 0001:00015BBB
+   348 0001:00015BE6   349 0001:00015BEA   350 0001:00015BEE   351 0001:00015BF2
+   352 0001:00015BF6   354 0001:00015BF8   357 0001:00015BFC   358 0001:00015BFD
+   359 0001:00015BFF   360 0001:00015C16   361 0001:00015C1A   362 0001:00015C1E
+   364 0001:00015C20   367 0001:00015C24   368 0001:00015C25   369 0001:00015C27
+   370 0001:00015C40   371 0001:00015C44   372 0001:00015C48   373 0001:00015C4C
+   375 0001:00015C4E   378 0001:00015C54   379 0001:00015C55   380 0001:00015C57
+   381 0001:00015CAF   382 0001:00015CB3   383 0001:00015CB7   384 0001:00015CBB
+   385 0001:00015CBF   386 0001:00015CC3   387 0001:00015CC7   388 0001:00015CCB
+   389 0001:00015CCF   390 0001:00015CD3   391 0001:00015CD7   392 0001:00015CDB
+   393 0001:00015CDF   394 0001:00015CE3   395 0001:00015CE7   396 0001:00015CEB
+   398 0001:00015CED   401 0001:00015CF4   402 0001:00015CF5   403 0001:00015CF7
+   404 0001:00015D4F   405 0001:00015D53   406 0001:00015D5A   407 0001:00015D61
+   408 0001:00015D68   409 0001:00015D6F   410 0001:00015D76   411 0001:00015D7D
+   412 0001:00015D84   413 0001:00015D8B   414 0001:00015D92   415 0001:00015D99
+   416 0001:00015DA0   417 0001:00015DA7   418 0001:00015DAE   419 0001:00015DB5
+   421 0001:00015DBA   424 0001:00015DC0   425 0001:00015DC6   426 0001:00015DD3
+   429 0001:00015DD8   430 0001:00015DDB   431 0001:00015DF3   434 0001:00015DF8
+   435 0001:00015DFD   436 0001:00015E03   438 0001:00015E0F   443 0001:00015E24
+   444 0001:00015E3D   445 0001:00015E47   446 0001:00015E54   447 0001:00015E5F
+   455 0001:00015E84   456 0001:00015E90   457 0001:00015EAB   458 0001:00015EC6
+   459 0001:00015ECA   460 0001:00015ECC   466 0001:00015EDC   467 0001:00015F34
+   468 0001:00015F3B   469 0001:00015F45   471 0001:00015F70   472 0001:00015F76
+   473 0001:00015F7C   475 0001:00015F7F   476 0001:00015F89   478 0001:00015F96
+   479 0001:00015FB2   480 0001:00015FB8   481 0001:00015FCE   482 0001:00015FD8
+   486 0001:00016005   489 0001:00016050   490 0001:0001607D   491 0001:000160C1
+   498 0001:00016100   499 0001:0001612B   500 0001:0001612F   501 0001:00016139
+   502 0001:00016148   503 0001:00016156   504 0001:00016175   505 0001:0001618D
+   507 0001:00016196   508 0001:000161A4   509 0001:000161B4   510 0001:000161CE
+   511 0001:000161D8   512 0001:000161E8   513 0001:000161EF   514 0001:00016209
+   515 0001:0001620F   516 0001:00016229   517 0001:0001624B   513 0001:0001624E
+   518 0001:00016253   519 0001:00016281   525 0001:00016292   527 0001:000162A2
+   532 0001:000162E4   533 0001:00016316   534 0001:00016324   535 0001:0001632B
+   536 0001:0001633D   537 0001:0001634F   539 0001:0001635B   542 0001:000163A1
+   544 0001:000163B3   553 0001:000163E8   554 0001:0001641E   555 0001:00016426
+   556 0001:00016435   557 0001:00016444   558 0001:00016452   559 0001:00016456
+   560 0001:00016466   561 0001:0001647C   562 0001:00016484   563 0001:000164A1
+   564 0001:000164A9   565 0001:000164B5   566 0001:000164CD   567 0001:000164E9
+   568 0001:000164EF   569 0001:00016501   570 0001:0001652B   572 0001:0001652F
+   560 0001:00016530   573 0001:00016537   575 0001:00016564   576 0001:0001656C
+   578 0001:0001657C   586 0001:000165E8   587 0001:00016616   588 0001:0001661D
+   589 0001:0001662C   590 0001:0001663A   591 0001:0001664A   592 0001:00016656
+   593 0001:0001666E   594 0001:00016684   595 0001:00016695   598 0001:000166C0
+   600 0001:000166E9   602 0001:000166F9   605 0001:00016758   606 0001:00016770
+   607 0001:00016789   608 0001:0001679D   613 0001:000167EC   614 0001:00016816
+   615 0001:00016827   616 0001:00016836   620 0001:00016860   621 0001:0001686D
+   624 0001:0001687C   626 0001:0001689F   627 0001:000168AD   628 0001:000168BC
+   630 0001:000168C7   631 0001:000168D6   633 0001:000168E1   634 0001:000168F4
+   635 0001:00016925   636 0001:0001692D   637 0001:0001693D   638 0001:0001694B
+   639 0001:00016958   640 0001:0001697A   641 0001:0001699C   642 0001:000169BE
+   643 0001:000169EE   644 0001:00016A10   645 0001:00016A40   647 0001:00016A47
+   653 0001:00016A69   656 0001:00016A7B   659 0001:00016B20   660 0001:00016B3F
+   661 0001:00016B4D   662 0001:00016B60   663 0001:00016B67   664 0001:00016B6E
+   665 0001:00016B79   666 0001:00016B84   667 0001:00016B8F   668 0001:00016B9A
+   669 0001:00016BA5   670 0001:00016BB0   671 0001:00016BBB   672 0001:00016BCA
+   676 0001:00016C16   678 0001:00016C28   681 0001:00016C4C   682 0001:00016C58
+   683 0001:00016C62   684 0001:00016C70   685 0001:00016C84   686 0001:00016C91
+   687 0001:00016CA5   690 0001:00016CCD   691 0001:00016CDA   692 0001:00016CE1
+   695 0001:00016CED   710 0001:00016D2C   711 0001:00016D62   712 0001:00016D70
+   713 0001:00016D80   714 0001:00016D9F   715 0001:00016DB7   717 0001:00016DEC
+   718 0001:00016DF0   719 0001:00016E05   720 0001:00016E3E   721 0001:00016E8F
+   722 0001:00016E9E   723 0001:00016EAD   724 0001:00016EBB   725 0001:00016EC2
+   726 0001:00016ED2   727 0001:00016EE8   728 0001:00016F00   729 0001:00016F09
+   730 0001:00016F11   731 0001:00016F21   732 0001:00016F31   733 0001:00016F49
+   734 0001:00016F5F   735 0001:00016F70   736 0001:00016F9C   740 0001:00016FAC
+   741 0001:00016FB2   742 0001:00016FBD   743 0001:00016FC1   745 0001:00016FD6
+   747 0001:00016FDD   726 0001:00016FDE   749 0001:00016FF2   750 0001:00016FFA
+   755 0001:0001700A   717 0001:0001700D   761 0001:00017019   764 0001:0001703B
+   765 0001:00017048   766 0001:0001704F   769 0001:0001705B   776 0001:00017110
+   777 0001:00017137   778 0001:00017139   779 0001:0001713D   780 0001:00017143
+   781 0001:00017147   782 0001:0001714D   784 0001:0001714F   785 0001:00017153
+   786 0001:00017157   790 0001:0001716C   793 0001:00017194   794 0001:000171B4
+   795 0001:000171B8   796 0001:000171C6   797 0001:000171D2   798 0001:000171D6
+   799 0001:00017207   803 0001:0001723F   806 0001:00017261   807 0001:0001726E
+   808 0001:00017275   811 0001:00017281   816 0001:000172F0   817 0001:000172F8
+   818 0001:000172FC   819 0001:00017307   820 0001:00017319   818 0001:0001731A
+   822 0001:0001731D   828 0001:00017324   849 0001:00017335   855 0001:0001734C
+   856 0001:0001736B   857 0001:0001736D   858 0001:0001737E   859 0001:00017386
+   860 0001:0001738B   861 0001:0001738D   863 0001:0001738F   857 0001:00017390
+   864 0001:00017393   885 0001:000173B8   886 0001:000173DD   887 0001:000173E1
+   888 0001:000173EF   889 0001:000173FF   890 0001:00017407   892 0001:0001741F
+   893 0001:00017427   894 0001:00017429   895 0001:00017436   896 0001:0001746D
+   899 0001:0001747E   900 0001:0001748D   901 0001:0001749B   902 0001:000174A5
+   903 0001:000174AF   904 0001:000174B9   905 0001:000174C7   907 0001:000174D2
+   908 0001:000174DD   910 0001:000174E8   911 0001:000174ED   912 0001:000174F1
+   914 0001:000174F6   915 0001:000174FA   917 0001:000174FD   919 0001:0001750D
+   920 0001:00017523   921 0001:00017527   923 0001:0001754C   924 0001:00017557
+   925 0001:000175A1   926 0001:000175C7   930 0001:000175DC   931 0001:000175E3
+   933 0001:000175E8   934 0001:00017601   935 0001:00017619   936 0001:00017631
+   938 0001:00017635   939 0001:0001765E   940 0001:00017671   941 0001:00017680
+   942 0001:00017696   943 0001:000176DC   944 0001:000176E7   945 0001:00017731
+   946 0001:00017757   947 0001:00017777   938 0001:0001777A   951 0001:0001778E
+   954 0001:0001779E   961 0001:000177A4   964 0001:000177C6   965 0001:000177D3
+   966 0001:000177DA   969 0001:000177E6   974 0001:000178D0   975 0001:000178D7
+   976 0001:000178DB   977 0001:000178DD   978 0001:000178E1   979 0001:000178E7
+   980 0001:000178EB   981 0001:000178F1   983 0001:000178F3   984 0001:000178F7
+   985 0001:000178FB   989 0001:00017907   995 0001:00017910   996 0001:00017920
+   997 0001:00017925   998 0001:0001792C   999 0001:00017932  1000 0001:00017936
+  1001 0001:0001793C  1003 0001:0001793E  1004 0001:00017948  1005 0001:00017956
+  1006 0001:0001796B  1004 0001:0001796C  1008 0001:0001796F
+
+Line numbers for BisGsmModem(smgsm.bpl\BisGsmModem.pas) segment .itext
+
+  1010 0002:00000364
+
+Line numbers for BisGsmServerConsts(smgsm.bpl\BisGsmServerConsts.pas) segment .itext
+
+    36 0002:0000036C
+
+Line numbers for BisGsmServerInit(smgsm.bpl\BisGsmServerInit.pas) segment .text
+
+   193 0001:00018324   194 0001:0001832A   195 0001:00018332   196 0001:0001833E
+  1062 0001:000183F8  1063 0001:0001840F  1064 0001:00018418  1066 0001:00018425
+  1068 0001:00018437  1069 0001:00018448  1070 0001:00018458  1071 0001:00018462
+  1073 0001:0001846C  1074 0001:0001847C  1075 0001:0001848C  1076 0001:0001849C
+  1077 0001:000184AC  1078 0001:000184BC  1079 0001:000184CC  1080 0001:000184DC
+  1081 0001:000184EC  1082 0001:000184FC  1083 0001:0001850C  1084 0001:0001851C
+  1085 0001:0001852C  1086 0001:0001853C  1087 0001:0001854C  1088 0001:0001855C
+  1089 0001:0001856C  1090 0001:0001857C  1091 0001:0001858C  1092 0001:0001859C
+  1093 0001:000185AC  1094 0001:000185BC  1095 0001:000185CC  1096 0001:000185DC
+  1097 0001:000185EC  1098 0001:000185FC  1099 0001:0001860C  1100 0001:0001861C
+  1101 0001:0001862C  1102 0001:0001863C  1103 0001:0001864C  1104 0001:0001865C
+  1105 0001:0001866C  1106 0001:0001867C  1108 0001:0001868C  1109 0001:00018693
+  1112 0001:00018CA0  1113 0001:00018CAB  1114 0001:00018CB2  1115 0001:00018CBA
+  1116 0001:00018CC6  1120 0001:00018CD4  1121 0001:00018CD8  1124 0001:00018CDC
+  1125 0001:00018CFC  1126 0001:00018D28  1127 0001:00018D65  1128 0001:00018D82
+  1129 0001:00018DAE  1130 0001:00018DCE  1131 0001:00018DEE  1132 0001:00018E1A
+  1133 0001:00018E43  1134 0001:00018E86  1135 0001:00018EDB  1136 0001:00018F2D
+  1137 0001:00018F7F  1138 0001:00018FB7  1139 0001:00018FEF  1140 0001:00019015
+  1141 0001:0001903B  1142 0001:00019061  1143 0001:000190AA  1149 0001:00019178
+  1150 0001:0001919F  1151 0001:000191B2  1152 0001:000191B4  1153 0001:000191BA
+  1154 0001:000191BC  1155 0001:000191CA  1171 0001:00019200  1172 0001:0001921F
+  1173 0001:0001922E  1174 0001:0001923D  1176 0001:0001924B  1178 0001:00019266
+  1180 0001:0001927F  1181 0001:00019291  1182 0001:0001929E  1183 0001:000192C1
+  1180 0001:000192C2  1185 0001:000192C5  1186 0001:000192D3  1187 0001:000192DD
+  1188 0001:000192E9  1185 0001:000192EA  1190 0001:000192ED  1193 0001:00019315
+  1194 0001:0001931D  1196 0001:0001932D  1205 0001:00019360  1206 0001:0001938D
+  1207 0001:0001939D  1208 0001:000193B2  1209 0001:000193C3  1210 0001:000193D1
+  1211 0001:000193E3  1212 0001:000193EC  1213 0001:000193F8  1214 0001:00019404
+  1216 0001:00019410  1217 0001:00019422  1218 0001:00019441  1219 0001:00019460
+  1221 0001:0001947E  1222 0001:0001948C  1223 0001:00019494  1224 0001:000194A0
+  1225 0001:000194AA  1229 0001:000194CF  1232 0001:000194F6  1235 0001:00019506
+  1240 0001:000195D4  1241 0001:0001960D  1242 0001:00019614  1243 0001:00019625
+  1244 0001:00019633  1245 0001:00019645  1246 0001:0001964E  1247 0001:00019671
+  1248 0001:0001967F  1249 0001:0001968D  1250 0001:0001969B  1251 0001:000196A9
+  1253 0001:000196B7  1254 0001:000196C5  1255 0001:000196CD  1256 0001:000196DD
+  1257 0001:000196F3  1258 0001:00019715  1259 0001:00019737  1260 0001:00019759
+  1264 0001:00019796  1267 0001:000197BD  1269 0001:000197CD  1274 0001:00019898
+  1275 0001:000198DF  1276 0001:0001991B  1277 0001:0001992C  1278 0001:0001993A
+  1279 0001:00019944  1280 0001:0001994E  1281 0001:0001995E  1282 0001:00019967
+  1283 0001:0001998E  1285 0001:000199A4  1286 0001:000199B2  1287 0001:000199BA
+  1288 0001:000199C6  1290 0001:00019A02  1291 0001:00019A04  1295 0001:00019A52
+  1297 0001:00019A62  1309 0001:00019AD4  1310 0001:00019B58  1311 0001:00019BA3
+  1312 0001:00019BB2  1313 0001:00019BC0  1314 0001:00019BF4  1315 0001:00019C28
+  1316 0001:00019C5C  1317 0001:00019C91  1318 0001:00019CB2  1319 0001:00019CD3
+  1321 0001:00019CF4  1322 0001:00019CFF  1323 0001:00019D11  1324 0001:00019D1D
+  1325 0001:00019D93  1322 0001:00019D94  1326 0001:00019D9B  1327 0001:00019DA9
+  1329 0001:00019DBB  1330 0001:00019DC5  1332 0001:00019DCB  1334 0001:00019DFB
+  1335 0001:00019DFF  1337 0001:00019E22  1339 0001:00019E9B  1340 0001:00019E9D
+  1344 0001:00019EFA  1346 0001:00019F0A  1358 0001:0001A080  1359 0001:0001A0FB
+  1360 0001:0001A11C  1361 0001:0001A12B  1362 0001:0001A13A  1363 0001:0001A148
+  1364 0001:0001A170  1365 0001:0001A198  1366 0001:0001A1CC  1367 0001:0001A201
+  1368 0001:0001A222  1370 0001:0001A243  1371 0001:0001A24E  1372 0001:0001A25C
+  1373 0001:0001A268  1374 0001:0001A2BE  1371 0001:0001A2BF  1375 0001:0001A2C2
+  1376 0001:0001A2D0  1378 0001:0001A31B  1379 0001:0001A32B  1380 0001:0001A346
+  1381 0001:0001A362  1382 0001:0001A369  1383 0001:0001A374  1384 0001:0001A385
+  1385 0001:0001A389  1387 0001:0001A3AC  1390 0001:0001A425  1391 0001:0001A427
+  1395 0001:0001A484  1396 0001:0001A48C  1398 0001:0001A49C  1405 0001:0001A620
+  1406 0001:0001A6BA  1408 0001:0001A6C2  1409 0001:0001A6D3  1410 0001:0001A6E1
+  1417 0001:0001A760  1418 0001:0001A76A  1419 0001:0001A774  1420 0001:0001A786
+  1421 0001:0001A78F  1422 0001:0001A79D  1423 0001:0001A7B3  1424 0001:0001A7C9
+  1425 0001:0001A7EC  1426 0001:0001A815  1427 0001:0001A83B  1428 0001:0001A865
+  1429 0001:0001A88E  1430 0001:0001A918  1431 0001:0001A92E  1433 0001:0001A954
+  1434 0001:0001A962  1435 0001:0001A96A  1436 0001:0001A976  1437 0001:0001A993
+  1440 0001:0001AA0C  1441 0001:0001AA0E  1444 0001:0001AA6B  1447 0001:0001AA7B
+  1449 0001:0001AA8B  1451 0001:0001AA9B  1452 0001:0001AAA7  1453 0001:0001AABE
+  1455 0001:0001AAE3  1456 0001:0001AAEF  1457 0001:0001AB12  1459 0001:0001AB43
+  1460 0001:0001AB5A  1462 0001:0001AB6A  1463 0001:0001AB81  1467 0001:0001ABAC
+  1468 0001:0001ABCF  1474 0001:0001AC00  1479 0001:0001ADA0  1480 0001:0001ADD6
+  1481 0001:0001ADDA  1482 0001:0001ADEB  1483 0001:0001ADF9  1484 0001:0001AE0B
+  1485 0001:0001AE14  1486 0001:0001AE2A  1487 0001:0001AE4E  1489 0001:0001AE5C
+  1490 0001:0001AE6A  1491 0001:0001AE72  1492 0001:0001AE7E  1495 0001:0001AEB0
+  1498 0001:0001AED7  1500 0001:0001AEE7  1505 0001:0001AF70  1506 0001:0001AF95
+  1507 0001:0001AF99  1508 0001:0001AFC3  1509 0001:0001AFD4  1510 0001:0001AFE2
+  1511 0001:0001AFF0  1512 0001:0001AFFB  1513 0001:0001B007  1514 0001:0001B014
+  1515 0001:0001B021  1517 0001:0001B032  1520 0001:0001B051  1523 0001:0001B078
+  1526 0001:0001B088  1531 0001:0001B0D8  1532 0001:0001B104  1533 0001:0001B108
+  1534 0001:0001B119  1535 0001:0001B127  1536 0001:0001B139  1537 0001:0001B142
+  1538 0001:0001B162  1539 0001:0001B185  1541 0001:0001B1A8  1542 0001:0001B1B6
+  1543 0001:0001B1BE  1546 0001:0001B1E6  1549 0001:0001B20D  1551 0001:0001B21D
+  1574 0001:0001B2B8  1575 0001:0001B2D8  1577 0001:0001B2F3  1578 0001:0001B302
+  1579 0001:0001B311  1581 0001:0001B31F  1583 0001:0001B33A  1584 0001:0001B353
+  1585 0001:0001B36E  1586 0001:0001B37C  1587 0001:0001B3A2  1584 0001:0001B3A5
+  1589 0001:0001B3AD  1591 0001:0001B3F5  1592 0001:0001B412  1594 0001:0001B41F
+  1596 0001:0001B43D  1597 0001:0001B45E  1598 0001:0001B479  1599 0001:0001B48A
+  1601 0001:0001B4AA  1606 0001:0001B4CA  1608 0001:0001B4DF  1610 0001:0001B4FA
+  1612 0001:0001B4FE  1613 0001:0001B508  1614 0001:0001B523  1615 0001:0001B52E
+  1616 0001:0001B536  1617 0001:0001B53E  1619 0001:0001B56B  1620 0001:0001B57C
+  1621 0001:0001B58A  1622 0001:0001B597  1623 0001:0001B5B7  1625 0001:0001B5C4
+  1626 0001:0001B5D9  1627 0001:0001B5E7  1628 0001:0001B5FC  1630 0001:0001B647
+  1632 0001:0001B656  1633 0001:0001B65A  1624 0001:0001B662  1636 0001:0001B674
+  1638 0001:0001B6DB  1641 0001:0001B6F5  1644 0001:0001B705  1645 0001:0001B70B
+  1650 0001:0001B726  1591 0001:0001B729  1655 0001:0001B742  1656 0001:0001B74A
+  1658 0001:0001B75A  1669 0001:0001B804  1670 0001:0001B837  1671 0001:0001B858
+  1672 0001:0001B869  1673 0001:0001B877  1674 0001:0001B881  1675 0001:0001B88B
+  1676 0001:0001B89D  1677 0001:0001B8A6  1678 0001:0001B8D6  1679 0001:0001B8FB
+  1681 0001:0001B911  1682 0001:0001B91F  1683 0001:0001B927  1684 0001:0001B933
+  1686 0001:0001B96F  1687 0001:0001B971  1690 0001:0001B9BF  1692 0001:0001B9CF
+  1706 0001:0001BA8C  1707 0001:0001BABE  1708 0001:0001BACA  1710 0001:0001BAE7
+  1711 0001:0001BB2A  1712 0001:0001BB3B  1713 0001:0001BB49  1714 0001:0001BB51
+  1715 0001:0001BB5B  1716 0001:0001BB65  1717 0001:0001BB77  1718 0001:0001BB80
+  1719 0001:0001BBAE  1720 0001:0001BBD7  1721 0001:0001BC01  1722 0001:0001BC6B
+  1723 0001:0001BCEC  1724 0001:0001BD02  1726 0001:0001BD2C  1727 0001:0001BD3A
+  1728 0001:0001BD42  1729 0001:0001BD52  1730 0001:0001BD6E  1732 0001:0001BDA7
+  1734 0001:0001BDAF  1735 0001:0001BDC0  1736 0001:0001BDCE  1737 0001:0001BDD8
+  1738 0001:0001BDE2  1740 0001:0001BDF4  1741 0001:0001BDFD  1742 0001:0001BE09
+  1743 0001:0001BE15  1744 0001:0001BE21  1745 0001:0001BE2D  1746 0001:0001BE39
+  1747 0001:0001BE45  1748 0001:0001BE51  1749 0001:0001BE5D  1750 0001:0001BE69
+  1751 0001:0001BE75  1752 0001:0001BE81  1753 0001:0001BE8D  1755 0001:0001BE99
+  1756 0001:0001BEAB  1757 0001:0001BED3  1758 0001:0001BEF4  1760 0001:0001BF19
+  1761 0001:0001BF22  1762 0001:0001BF30  1765 0001:0001BF3E  1766 0001:0001BF4C
+  1767 0001:0001BF54  1769 0001:0001BF74  1771 0001:0001BF85  1773 0001:0001BF92
+  1774 0001:0001BF96  1775 0001:0001BF9E  1776 0001:0001BFAC  1777 0001:0001BFBF
+  1778 0001:0001BFCE  1779 0001:0001BFDC  1780 0001:0001BFF1  1781 0001:0001C00F
+  1782 0001:0001C01F  1783 0001:0001C041  1784 0001:0001C0B8  1780 0001:0001C0BB
+  1785 0001:0001C0C2  1786 0001:0001C0CD  1787 0001:0001C0F8  1788 0001:0001C102
+  1789 0001:0001C11E  1790 0001:0001C136  1791 0001:0001C14E  1794 0001:0001C159
+  1795 0001:0001C16E  1796 0001:0001C17A  1798 0001:0001C190  1799 0001:0001C1A2
+  1801 0001:0001C1B4  1805 0001:0001C237  1806 0001:0001C248  1807 0001:0001C24E
+  1808 0001:0001C25C  1810 0001:0001C279  1813 0001:0001C2D5  1817 0001:0001C2F2
+  1819 0001:0001C308  1772 0001:0001C310  1825 0001:0001C33B  1828 0001:0001C35F
+  1834 0001:0001C38A  1837 0001:0001C3AE  1839 0001:0001C3BE  1844 0001:0001C780
+  1845 0001:0001C7A1  1846 0001:0001C7B6  1847 0001:0001C7D1  1849 0001:0001C7E0
+  1850 0001:0001C80E  1846 0001:0001C80F  1852 0001:0001C814  1853 0001:0001C829
+  1856 0001:0001C860  1857 0001:0001C875  1858 0001:0001C890  1859 0001:0001C894
+  1860 0001:0001C8B0  1861 0001:0001C8B4  1863 0001:0001C8CF  1866 0001:0001C8F4
+  1867 0001:0001C909  1868 0001:0001C921  1869 0001:0001C925  1870 0001:0001C93E
+  1871 0001:0001C942  1873 0001:0001C95D  1877 0001:0001C984  1878 0001:0001C993
+  1880 0001:0001C99F  1882 0001:0001C9B7  1883 0001:0001C9BE  1884 0001:0001C9CC
+  1885 0001:0001C9D1  1886 0001:0001C9DF  1887 0001:0001C9EB  1889 0001:0001C9F3
+  1891 0001:0001C9FF  1892 0001:0001CA06  1893 0001:0001CA0A  1895 0001:0001CA11
+  1896 0001:0001CA15  1897 0001:0001CA21  1899 0001:0001CA34  1900 0001:0001CA3B
+  1903 0001:0001CA44  1905 0001:0001CA4D  1912 0001:0001CA6F  1915 0001:0001CA90
+  1916 0001:0001CA98  1920 0001:0001CAA7  1925 0001:0001CAB0  1926 0001:0001CAB5
+  1927 0001:0001CAB7  1929 0001:0001CACD  1930 0001:0001CAD7  1931 0001:0001CAE4
+  1932 0001:0001CAF6  1933 0001:0001CB08  1934 0001:0001CB1A  1935 0001:0001CB2C
+  1937 0001:0001CB3D  1941 0001:0001CB44  1944 0001:0001CB4F  1947 0001:0001CB50
+  1948 0001:0001CB72  1949 0001:0001CB7A  1950 0001:0001CB97  1951 0001:0001CBA9
+  1952 0001:0001CBB7  1953 0001:0001CBCF  1954 0001:0001CBE1  1955 0001:0001CBE8
+  1956 0001:0001CBEF  1958 0001:0001CC1C  1959 0001:0001CC1E  1963 0001:0001CC50
+  1966 0001:0001CC7C  1967 0001:0001CC9B  1968 0001:0001CCAB  1969 0001:0001CCBD
+  1970 0001:0001CCCB  1971 0001:0001CCD6  1972 0001:0001CCDD  1974 0001:0001CD0A
+  1975 0001:0001CD0C  1979 0001:0001CD3E
+
+Line numbers for BisGsmServerInit(smgsm.bpl\BisGsmServerInit.pas) segment .itext
+
+  1981 0002:00000374
+
+Line numbers for BisGsmServerModemsFm(smgsm.bpl\BisGsmServerModemsFm.pas) segment .text
+
+   133 0001:0001D6F8   134 0001:0001D70A   135 0001:0001D713   136 0001:0001D71B
+   139 0001:0001D738   140 0001:0001D73B   141 0001:0001D742   142 0001:0001D746
+   143 0001:0001D753   147 0001:0001D758   148 0001:0001D75F   149 0001:0001D767
+   154 0001:0001D768   155 0001:0001D77F   157 0001:0001D788   158 0001:0001D799
+   159 0001:0001D7AA   160 0001:0001D7BB   162 0001:0001D7CC   163 0001:0001D7E2
+   164 0001:0001D7E5   165 0001:0001D7F7   166 0001:0001D809   167 0001:0001D81B
+   168 0001:0001D82D   169 0001:0001D83F   170 0001:0001D851   171 0001:0001D863
+   172 0001:0001D875   173 0001:0001D887   174 0001:0001D899   175 0001:0001D8AB
+   176 0001:0001D8BD   177 0001:0001D8CF   178 0001:0001D8E1   179 0001:0001D8F3
+   181 0001:0001D905   183 0001:0001D912   184 0001:0001D91D   185 0001:0001D924
+   187 0001:0001D92B   188 0001:0001D93B   189 0001:0001D94B   190 0001:0001D95B
+   191 0001:0001D96B   192 0001:0001D97B   193 0001:0001D98B   194 0001:0001D99B
+   195 0001:0001D9AB   196 0001:0001D9BB   197 0001:0001D9CB   198 0001:0001D9DB
+   204 0001:0001D9EB   207 0001:0001DCA8   208 0001:0001DCB3   209 0001:0001DCBE
+   210 0001:0001DCCA   215 0001:0001DCD8   216 0001:0001DCE2   218 0001:0001DCEA
+   219 0001:0001DCFE   220 0001:0001DD0C   221 0001:0001DD2B   222 0001:0001DD4D
+   224 0001:0001DD7C   227 0001:0001DD98   228 0001:0001DDAC   229 0001:0001DDBA
+   230 0001:0001DDD9   231 0001:0001DDFB   232 0001:0001DE1D   233 0001:0001DE3F
+   235 0001:0001DE6E   238 0001:0001DE8A   243 0001:0001DE90   244 0001:0001DEAC
+   245 0001:0001DEC0   246 0001:0001DECE   247 0001:0001DEE2   248 0001:0001DEF0
+   249 0001:0001DEF5   250 0001:0001DF03   251 0001:0001DF3D   252 0001:0001DF5D
+   253 0001:0001DF7D   254 0001:0001DF9D   255 0001:0001DFBA   256 0001:0001DFD7
+   257 0001:0001DFF4   258 0001:0001E011   259 0001:0001E02E   260 0001:0001E04E
+   261 0001:0001E06E   262 0001:0001E08E   263 0001:0001E0AB   264 0001:0001E0C8
+   265 0001:0001E0E5   266 0001:0001E105   267 0001:0001E116   248 0001:0001E117
+   269 0001:0001E123   271 0001:0001E133   272 0001:0001E15E   270 0001:0001E16C
+   275 0001:0001E17E   276 0001:0001E196   277 0001:0001E1A9   281 0001:0001E1D2
+   283 0001:0001E1EE   347 0001:0001E3AC   350 0001:0001E3B0   351 0001:0001E3D3
+   352 0001:0001E3E0   353 0001:0001E3ED   354 0001:0001E433   355 0001:0001E440
+   356 0001:0001E44D   357 0001:0001E45A   358 0001:0001E4A0   359 0001:0001E4AD
+   360 0001:0001E4F9   361 0001:0001E506   362 0001:0001E513   363 0001:0001E520
+   364 0001:0001E578   365 0001:0001E585   366 0001:0001E592   367 0001:0001E5EA
+   368 0001:0001E5F7   369 0001:0001E604   370 0001:0001E65C   371 0001:0001E669
+   372 0001:0001E676   373 0001:0001E6CE   374 0001:0001E6DB   375 0001:0001E6E8
+   376 0001:0001E740   377 0001:0001E75E   378 0001:0001E77C   379 0001:0001E7E5
+   380 0001:0001E803   381 0001:0001E821   382 0001:0001E88A   383 0001:0001E897
+   384 0001:0001E8A4   385 0001:0001E8FC   386 0001:0001E909   387 0001:0001E916
+   388 0001:0001E96E   389 0001:0001E97B   390 0001:0001E988   391 0001:0001E9E0
+   392 0001:0001E9ED   393 0001:0001E9FA   394 0001:0001EA52   397 0001:0001EA84
+   398 0001:0001EA8C   399 0001:0001EAB5   400 0001:0001EAC3   401 0001:0001EAD9
+   402 0001:0001EAEC   403 0001:0001EB01   405 0001:0001EB11   406 0001:0001EB18
+   407 0001:0001EB35   408 0001:0001EB46   404 0001:0001EB54   410 0001:0001EB66
+   413 0001:0001EB83   414 0001:0001EB96   418 0001:0001EBB1   419 0001:0001EBCC
+   422 0001:0001EBF8   423 0001:0001EC24   424 0001:0001EC55   425 0001:0001EC60
+   426 0001:0001EC8B   427 0001:0001ECB2   428 0001:0001ECDA   429 0001:0001ED05
+   430 0001:0001ED2C   431 0001:0001ED53   432 0001:0001ED7E   433 0001:0001EDA9
+   434 0001:0001EE18   435 0001:0001EE43   436 0001:0001EE6E   437 0001:0001EE96
+   438 0001:0001EEBE   439 0001:0001EEE6   440 0001:0001EF0E   442 0001:0001EF1C
+   445 0001:0001F100   446 0001:0001F12D   447 0001:0001F161   448 0001:0001F178
+   449 0001:0001F18F   450 0001:0001F19D   451 0001:0001F1C0   452 0001:0001F1EB
+   453 0001:0001F213   454 0001:0001F23E   455 0001:0001F27C   456 0001:0001F2A4
+   457 0001:0001F2CC   458 0001:0001F2F8   459 0001:0001F324   460 0001:0001F34B
+   461 0001:0001F375   462 0001:0001F385   463 0001:0001F3B1   464 0001:0001F3DD
+   465 0001:0001F408   466 0001:0001F433   467 0001:0001F45E   468 0001:0001F489
+   470 0001:0001F4B1   471 0001:0001F4CD   474 0001:0001F4F1   477 0001:0001F6B4
+   478 0001:0001F6CE   479 0001:0001F6EC   480 0001:0001F6F9   481 0001:0001F711
+   483 0001:0001F72D   486 0001:0001F754   487 0001:0001F775   489 0001:0001F777
+   490 0001:0001F788   491 0001:0001F7BE   492 0001:0001F7CC   495 0001:0001F7D1
+   497 0001:0001F7E7   498 0001:0001F7F8   499 0001:0001F82E   500 0001:0001F83C
+   503 0001:0001F841   504 0001:0001F852   505 0001:0001F888   506 0001:0001F896
+   509 0001:0001F89B   510 0001:0001F8AC   511 0001:0001F8E2   512 0001:0001F8F0
+   515 0001:0001F8F5   516 0001:0001F906   517 0001:0001F93C   518 0001:0001F94A
+   521 0001:0001F94F   522 0001:0001F960   523 0001:0001F996   524 0001:0001F9A4
+   527 0001:0001F9A9   528 0001:0001F9BA   529 0001:0001F9F0   530 0001:0001F9FE
+   533 0001:0001FA03   534 0001:0001FA22   535 0001:0001FA58   536 0001:0001FA66
+   539 0001:0001FA6B   540 0001:0001FA8A   541 0001:0001FAC0   542 0001:0001FACE
+   545 0001:0001FAD0   546 0001:0001FAEF   547 0001:0001FB25   548 0001:0001FB33
+   552 0001:0001FB35   553 0001:0001FB37   556 0001:0001FC28   557 0001:0001FC2B
+   558 0001:0001FC36   559 0001:0001FC3D   560 0001:0001FC44   562 0001:0001FC4E
+   565 0001:0001FC50   566 0001:0001FC53   567 0001:0001FC5E   568 0001:0001FC65
+   571 0001:0001FC68   572 0001:0001FC6B   573 0001:0001FC76   574 0001:0001FC7D
+   577 0001:0001FC80   578 0001:0001FCA4   580 0001:0001FCAE   581 0001:0001FCBE
+   582 0001:0001FCD3   584 0001:0001FD20   585 0001:0001FD35   586 0001:0001FD4A
+   587 0001:0001FD97   594 0001:0001FDC4   595 0001:0001FDE8   596 0001:0001FDFE
+   597 0001:0001FE0D   598 0001:0001FE1D   599 0001:0001FE2E   600 0001:0001FE3C
+   601 0001:0001FE55   602 0001:0001FE6D   603 0001:0001FE85   604 0001:0001FE9D
+   605 0001:0001FEB5   606 0001:0001FECA   607 0001:0001FED8   608 0001:0001FEE0
+   609 0001:0001FEEC   610 0001:0001FF1C   612 0001:0001FF46   615 0001:0001FF6E
+   618 0001:0001FF8A   619 0001:0001FF92   622 0001:0001FFAA   670 0001:0001FFF0
+   676 0001:0001FFF4   677 0001:0001FFF9   679 0001:0002002B   680 0001:0002002D
+   681 0001:00020046   682 0001:00020059   685 0001:0002005F   680 0001:00020060
+   687 0001:00020063   688 0001:00020067   689 0001:0002006E   690 0001:00020076
+   694 0001:0002007D
+
+Line numbers for BisGsmServerModemsFm(smgsm.bpl\BisGsmServerModemsFm.pas) segment .itext
+
+   697 0002:0000037C
+
+Line numbers for BisGsmServerMainFm(smgsm.bpl\BisGsmServerMainFm.pas) segment .text
+
+    46 0001:00020430    47 0001:00020437    48 0001:0002044B    49 0001:0002044E
+    50 0001:00020452    51 0001:0002045F    53 0001:0002046C    58 0001:00020474
+    59 0001:00020486    60 0001:0002048F    61 0001:00020497    66 0001:000204B4
+    67 0001:000204C6    68 0001:000204CF    72 0001:000204EC    73 0001:000204F1
+    77 0001:000204F4    78 0001:000204FF    83 0001:00020500    84 0001:00020507
+    85 0001:00020515    86 0001:00020526    87 0001:00020534    89 0001:0002054C
+    92 0001:0002055C
+
+Line numbers for BisGsmServerMainFm(smgsm.bpl\BisGsmServerMainFm.pas) segment .itext
+
+    95 0002:00000384
+
+Line numbers for .smgsm(smgsm.dpk) segment .itext
+
+    41 0002:0000038C
+
+Bound resource files
+
+BisGsmServerModemsFm.dfm
+BisGsmServerMainFm.dfm
+smgsm.res
+smgsm.drf
+
+
+Program entry point at 0002:0000038C

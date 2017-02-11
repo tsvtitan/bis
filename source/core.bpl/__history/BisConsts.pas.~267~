@@ -1,0 +1,293 @@
+unit BisConsts;
+
+interface
+
+uses Graphics;
+
+const
+{  ECConnectFailed=10001;
+  EÑDisconnectFailed=10002;
+  ECInvalidSession=10003;
+  ECLoginFailed=10004;
+  ECLogoutFailed=10005;
+  ECCheckFailed=10006;
+  ECUpdateFailed=10007;
+  ECLoadInterfacesFailed=10008;
+  ECRefreshPermissionsFailed=10009;
+  ECLoadProfileFailed=10010;
+  ECSaveProfileFailed=10011;
+  ECGetRecordsFailed=10012;
+  ECExecuteFailed=10013;
+  ECLoadMenusFailed=10014;
+  ECLoadTasksFailed=10015;
+  ECSaveTaskFailed=10016;
+  ECLoadAlarmsFailed=10017;
+  ECLoadScriptFailed=10018;
+  ECLoadReportFailed=10019;
+  ECExportFailed=10020;
+  ECImportFailed=10021;
+  ECLoadDocumentFailed=10022;
+  ECGetServerDateFailed=10023;
+  ECCancelFailed=10024;}
+
+
+  CountStartDelim=50;
+  MaxFieldNameSize=100;
+  MaxFieldDescriptionSize=250;
+  SplashSleepTime=1000;
+  LoginSleepTime=500;
+  NullDate=0.0;
+  MaxDecimals=10;
+
+  ColorSearching=clRed;                
+  ColorControlFocused=clInfoBk;
+  ColorControlLabelFocused=clBlue;
+  ColorControlReadOnly=$00E4E4E4;
+  ColorChess=$00EEEEEE;
+  ColorSelected=$00FEDFCD;
+  ColorSorted=$00EBEBEB;
+
+  WriterBufferSize=4096;
+  ReaderBufferSize=4096;
+
+  ENDSESSION_DEFAULT=$FFFFFFFF;
+
+resourcestring
+  SCmdParamConfig='config';
+  SCmdParamLog='log';
+  SCmdParamBase='base';
+  SCmdParamService='service';
+  SCmdParamInstall='install';
+  SCmdParamUninstall='uninstall';
+  SCmdParamCommand='command';
+  SCmdParamHelp='help';
+  SCmdParamQ='?';
+  SCmdParamShow='show';
+  SCmdParamNoLogin='nologin';
+
+  SParamCryptHash='CryptHash';
+  SParamSplash='Splash';
+  SParamIcon='Icon';
+  SParamTitle='Title';
+  SParamVersion='Version';
+  SParamName='Name';
+  SParamDescription='Description';
+  SParamId='Id';
+  SParamShowMainForm='ShowMainForm';
+  SParamDefaultLanguage='DefaultLanguage';
+  SParamLanguages='Languages';
+  SParamSite='Site';
+  SParamLogo='Logo';
+  SParamContent='Content';
+  SParamCheckPermissions='CheckPermissions';
+  SParamLeft='Left';
+  SParamTop='Top';
+  SParamWidth='Width';
+  SParamHeight='Height';
+  SParamWindowState='WindowState';
+  SParamCommands='Commands';
+  SParamApplications='Applications';
+  SParamProductId='ProductId';
+  SParamProductName='ProductName';
+  SParamProductUrl='ProductUrl';
+  SParamProductRegUrl='ProductRegUrl';
+  SParamProductEmail='ProductEmail';
+  SParamDisplay='Display';
+
+  SParamEditIfaceAsModal='EditIfaceAsModal';
+  SParamIfaceOnlyOneForm='IfaceOnlyOneForm';
+  SParamTranslateToLog='TranslateToLog';
+
+  SFieldID='ID';
+  SFieldName='NAME';
+  SFieldWidth='WIDTH';
+  SFieldDescription='DESCRIPTION';
+  SFieldCaption='CAPTION';
+  SFieldDataType='DATA_TYPE';
+  SFieldType='TYPE';
+  SFieldValue='VALUE';
+  SFieldSize='SIZE';
+  SFieldPrecision='PRECISION';
+  SFieldString='STRING';
+  SFieldTranslation='TRANSLATION';
+  SFieldLanguage='LANGUAGE';
+  SFieldEnabled='ENABLED';
+  SFieldFileName='FILE_NAME';
+  SFieldVisible='VISIBLE';
+  SFieldChecked='CHECKED';
+  SFieldResult='RESULT';
+  SFieldConnections='CONNECTIONS';
+  SFieldParams='PARAMS';
+  SFieldServers='SERVERS';
+  SFieldModule='MODULE';
+  SFieldIface='IFACE';
+  SFieldIfaces='IFACES';
+  SFieldTaskId='TASK_ID';
+  SFieldAccountId='ACCOUNT_ID';
+  SFieldDataSet='DATASET';
+  SFieldCheckSum='CHECKSUM';
+
+  SFileName='FileName';
+  SMode='Mode';
+  SCut='Cut';
+  SEnabled='Enabled';
+  SThreadInfo='ThreadInfo';
+  SMaxSize='MaxSize';
+  SThreadNames='ThreadNames';
+  SObjectNames='ObjectNames';
+  SSleepTime='SleepTime';
+  SDescription='Description';
+  SCaption='Caption';
+  SStackEnabled='StackEnabled';
+  SStackOnlySource='StackOnlySource';
+  SStackAfterProcName='StackAfterProcName';
+  SEncoded='Encoded';
+  SUserName='UserName';
+  SPassword='Password';
+  SAutoConnect='AutoConnect';
+  SStatusVisible='StatusVisible';
+  SLoginRetry='LoginRetry';
+  SConnectionRetry='ConnectionRetry';
+  SConnection='Connection';
+  SDefaultConnection='DefaultConnection';
+  SSecondaryLogin='SecondaryLogin';
+  SConnectionEditing='ConnectionEditing';
+  SConnectionVisible='ConnectionVisible';
+  SSendSystemInfo='SendSystemInfo';
+  SApplicationVisible='ApplicationVisible';
+  SHeadColor='HeadColor';
+  SDelimColor='DelimColor';
+  SReport='Report';
+  SProvider='Provider';
+  SProviderDesc='Provider';
+  SLabel='Label';
+  SLabelDecs='Label';
+  SEdit='Edit';
+  SEditDesc='Edit';
+  SEditDate='EditDate';
+  SEditDateDesc='EditDate';
+  SMemo='Memo';
+  SMemoDesc='Memo';
+  SRadioButton='RadioButton';
+  SRadioButtonDesc='RadioButton';
+  SComboBox='ComboBox';
+  SComboBoxDesc='ComboBox';
+  SEditFloat='EditFloat';
+  SEditFloatDesc='EditFloat';
+  SDate='Date';
+  SMinute='Minute';
+  SSecond='Second';
+  SCount='Count';
+  SModule='Module';
+  SIface='Iface';
+  SSessionId='SessionId';
+  SMessage='Message';
+  SCommand='Command';
+  STimeOut='TimeOut';
+  SData='Data';
+  SLockTimeout='Lock timeout';
+
+  SLogInformation='Information';
+  SLogWarning='Warning';
+  SLogError='Error';
+  SLogUnknown='Unknown';
+  SLogFormatMessage='FormatMessage';
+  SLogFormatDateTime='FormatDateTime';
+  SLogFormatObjectName='FormatObjectName';
+  SLogFormatCut='FormatCut';
+  SLogFormatCutDateTime='FormatCutDateTime';
+  SLogDelim='Delim';
+
+  SIniExtension='.ini';
+  SLogExtension='.log';
+  SBisExtension='.bis';
+
+  SNameConfig='Config';
+  SNameLogger='Logger';
+  SNameLocalBase='Local Base';
+  SNameCoreModules='Core Modules';
+  SNameCoreIfaces='Core Interfaces';
+
+  SCoreStartDelim='StartDelim';
+  SCoreStartDir='StartDir';
+  SCoreStartCmd='StartCmd';
+  SCoreStartMode='StartMode';
+  SCoreStartAction='StartAction';
+  SCoreStartModuleInfo='StartModuleInfo';
+  SCoreStartConfigFileName='StartConfigFileName';
+  SCoreStartLoggerFileName='StartLoggerFileName';
+  SCoreStartConfigText='StartConfigText';
+  SCoreBeginSnapshot='BeginSnapshot';
+  SCoreEndSnapshot='EndSnapshot';
+  SCoreFinishDelim='StartDelim';
+
+  SLocalBaseLoadFromFileSuccess='LoadFromFileSuccess';
+  SLocalBaseLoadFromFileFailed='LoadFromFileFailed';
+  SLocalBaseSaveToFileSuccess='SaveToFileSuccess';
+  SLocalBaseSaveToFileFailed='SaveToFileFailed';
+
+  STBisCryptInfo='TBISCRYPTINFO';
+  SBisInfo='BISINFO';
+  
+  SInitObjectModule='InitObjectModule';
+  SInitConnectionModule='InitConnectionModule';
+  SInitIfaceModule='InitIfaceModule';
+  SInitServerModule='InitServerModule';
+  SInitScriptModule='InitScriptModule';
+  SInitReportModule='InitReportModule';
+  SInitMapModule='InitMapModule';
+  SInitProviderModule='InitProviderModule';
+
+  SUnknownImageFormat='Unknown image format';
+  SMutexFormat='%s %s %s';
+
+  SAsterisk='*';
+  SReturn=#13#10;
+  SMenuDelim='-';
+  SFieldDelim=';';
+  SDateFormat='dd.mm.yyyy';
+  STimeFormat='hh:nn:ss';
+  SDateTimeFormat='dd.mm.yyyy hh:nn:ss';
+  SDateTimeFormatEx='dd.mm.yyyy hh:nn:ss.zzz';
+
+  STahoma='Tahoma';
+  SUseCloseQuery='UseCloseQuery';
+  SShowTrayIcon='ShowTrayIcon';
+
+  SLogin='Login';
+  SLogout='Logout';
+  SLoadProfile='LoadProfile';
+  SSaveProfile='SaveProfile';
+  SRefreshPermissions='RefreshPermissions';
+  SLoadInterfaces='LoadInterfaces';
+  SGetRecords='GetRecords';
+  SExecute='Execute';
+  SCancel='Cancel';
+  SLoadMenus='LoadMenus';
+  SLoadTasks='LoadTasks';
+  SSaveTask='SaveTask';
+  SLoadAlarms='LoadAlarms';
+  SLoadScript='LoadScript';
+  SLoadReport='LoadReport';
+  SLoadDocument='LoadDocument';
+
+  SEventAlarm='CBC805C736F597274D7B8588AE15F9C5';
+  SEventDeleteSession='7343F5E621C593A74B03F485E3AAA276';
+  SEventCheckSession='F4787DCBAE92A1AF4A8416AB98616E3A';
+  SEventRefreshTasks='D7624010D2CC9D7549CF137E40AC2424';
+  SEventTerminate='4925FD4AC61EB0ED4A3D5A8DB899F072';
+  SEventMessage='C1EC37D36E9BBDCA4AC356699242A3AF';
+  SEventExecuteCommand='34A9DFB84291BCAA4E25E9CF0A4B95AE';
+  SEventCreateFile='9C8128FF91DA927F4A6E3E2B7EFB2E9F';
+  SEventDeleteFile='2FB5D6135464B4D34897C216EF7C9346';
+  SEventTerminateProcess='F9C9EE7EFF85873B49F17D67E300B1FC';
+
+  SDefaultClassPrefix='TBis';
+
+  SVariableName='$name';
+  SVariableTitle='$title';
+  SVariableVersion='$version';
+
+implementation
+
+end.

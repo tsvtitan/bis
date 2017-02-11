@@ -1,0 +1,288 @@
+unit BisTaxiRouteFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls, ImgList,                                    
+  BisTaxiAddressFrm, BisControls;
+
+type
+  TBisTaxiRouteFrame = class(TBisTaxiAddressFrame)
+    LabelDistance: TLabel;
+    EditDistance: TEdit;
+    LabelPeriod: TLabel;
+    EditPeriod: TEdit;
+    LabelAmount: TLabel;
+    EditAmount: TEdit;
+    LabelCost: TLabel;
+    EditCost: TEdit;
+    TimerRefreshCost: TTimer;
+    EditDistanceAll: TEdit;
+    procedure EditPeriodChange(Sender: TObject);
+    procedure TimerRefreshCostTimer(Sender: TObject);
+  private
+    FPriorFrame: TBisTaxiAddressFrame;
+    FEditDistance: TEditFloat;
+    FEditDistanceAll: TEditFloat;
+    FEditPeriod: TEditInteger;
+    FEditCost: TEditCalc;
+    FEditAmount: TEditInteger;
+
+    FOnZoneCostChange: TNotifyEvent;
+    FChangeByZone: Boolean;
+    function GetDistance: Variant;
+    function GetCost: Variant;
+    function GetPeriod: Variant;
+    function GetAmount: Variant;
+    procedure SetAmount(const Value: Variant);
+    procedure SetCost(const Value: Variant);
+    procedure SetDistance(const Value: Variant);
+    procedure SetPeriod(const Value: Variant);
+  protected
+    procedure DoChangeZone; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure DisableChanges; override;
+    procedure EnableChanges; override;
+    procedure EnableControls(AEnabled: Boolean); override;
+
+    procedure RefreshZoneCost;
+    procedure CalculateDistanceAll;
+
+    property Distance: Variant read GetDistance write SetDistance;
+    property Period: Variant read GetPeriod write SetPeriod;
+    property Cost: Variant read GetCost write SetCost;
+    property Amount: Variant read GetAmount write SetAmount;
+
+    property PriorFrame: TBisTaxiAddressFrame read FPriorFrame write FPriorFrame;
+    property ChangeByZone: Boolean read FChangeByZone write FChangeByZone;
+
+    property OnZoneCostChange: TNotifyEvent read FOnZoneCostChange write FOnZoneCostChange;
+  end;
+
+var
+  BisTaxiRouteFrame: TBisTaxiRouteFrame;
+
+implementation
+
+uses BisUtils;
+
+{$R *.dfm}
+
+{ TBisTaxiRouteFrame }
+
+constructor TBisTaxiRouteFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  EditDistance.OnChange:=nil;
+  EditPeriod.OnChange:=nil;
+  EditCost.OnChange:=nil;
+  EditAmount.OnChange:=nil;
+
+  EditDistance.Alignment:=taRightJustify;
+  EditDistanceAll.Alignment:=taRightJustify;
+  EditPeriod.Alignment:=taRightJustify;
+  EditCost.Alignment:=taRightJustify;
+
+  FEditDistance:=ReplaceEditToEditFloat(EditDistance);
+  FEditDistance.DisplayFormat:='#0.00';
+  FEditDistanceAll:=ReplaceEditToEditFloat(EditDistanceAll);
+  FEditDistanceAll.DisplayFormat:='#0.00';
+  FEditPeriod:=ReplaceEditToEditInteger(EditPeriod);
+  FEditCost:=ReplaceEditToEditCalc(EditCost);
+  FEditAmount:=ReplaceEditToEditInteger(EditAmount);
+
+  FEditDistance.OnChange:=EditPeriodChange;
+  FEditPeriod.OnChange:=EditPeriodChange;
+  FEditCost.OnChange:=EditPeriodChange;
+  FEditAmount.OnChange:=EditPeriodChange;
+
+  FChangeByZone:=true;
+end;
+
+destructor TBisTaxiRouteFrame.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TBisTaxiRouteFrame.DisableChanges;
+begin
+  inherited DisableChanges;
+  EditAmount.OnChange:=nil;
+  EditDistance.OnChange:=nil;
+  EditPeriod.OnChange:=nil;
+  EditCost.OnChange:=nil;
+  CanChange:=false;
+end;
+
+procedure TBisTaxiRouteFrame.EnableChanges;
+begin
+  inherited EnableChanges;
+  EditAmount.OnChange:=nil;
+  EditDistance.OnChange:=EditPeriodChange;
+  EditPeriod.OnChange:=EditPeriodChange;
+  EditCost.OnChange:=EditPeriodChange;
+  CanChange:=true;
+end;
+
+procedure TBisTaxiRouteFrame.EnableControls(AEnabled: Boolean);
+begin
+  inherited EnableControls(AEnabled);
+  LabelAmount.Enabled:=AEnabled;
+  EditAmount.Enabled:=AEnabled;
+  LabelDistance.Enabled:=AEnabled;
+  EditDistance.Enabled:=AEnabled;
+  EditDistanceAll.Enabled:=AEnabled;
+  LabelPeriod.Enabled:=AEnabled;
+  EditPeriod.Enabled:=AEnabled;
+  LabelCost.Enabled:=AEnabled;
+  EditCost.Enabled:=AEnabled;
+end;
+
+procedure TBisTaxiRouteFrame.DoChangeZone;
+begin
+  if CanChange then
+    RefreshZoneCost;
+  inherited DoChangeZone;
+end;
+
+procedure TBisTaxiRouteFrame.EditPeriodChange(Sender: TObject);
+begin
+  TimerRefreshCost.Enabled:=false;
+  TimerRefreshCost.Enabled:=true;
+end;
+
+procedure TBisTaxiRouteFrame.RefreshZoneCost;
+var
+  ZoneToId: Variant;
+  ZoneFrom: TBisTaxiZone;
+  Cost: TBisTaxiCost;
+  Index: Integer;
+begin
+  FEditDistance.OnChange:=nil;
+  FEditPeriod.OnChange:=nil;
+  FEditCost.OnChange:=nil;
+  try
+    if FChangeByZone then begin
+      FEditDistance.Text:='';
+      FEditPeriod.Text:='';
+      FEditCost.Text:='';
+      if Assigned(FPriorFrame) then begin
+        Index:=FPriorFrame.ComboBoxZone.ItemIndex;
+        if (Index<>-1) then begin
+          ZoneFrom:=TBisTaxiZone(FPriorFrame.ComboBoxZone.Items.Objects[Index]);
+          ZoneToId:=ZoneId;
+          if Assigned(ZoneFrom) and not VarIsNull(ZoneToId) then begin
+            Cost:=ZoneFrom.Costs.Find(ZoneToId);
+            if Assigned(Cost) then begin
+              if not VarIsNull(Cost.Distance) then
+                FEditDistance.Value:=VarToExtendedDef(Cost.Distance,0.0);
+              if not VarIsNull(Cost.Period) then
+                FEditPeriod.Value:=VarToIntDef(Cost.Period,0);
+              if not VarIsNull(Cost.Cost) then
+                FEditCost.Value:=VarToExtendedDef(Cost.Cost,0.0);
+            end;
+          end;
+        end;
+      end;
+    end;
+    CalculateDistanceAll;
+  finally
+    FEditDistance.OnChange:=EditPeriodChange;
+    FEditPeriod.OnChange:=EditPeriodChange;
+    FEditCost.OnChange:=EditPeriodChange;
+  end;
+end;
+
+procedure TBisTaxiRouteFrame.TimerRefreshCostTimer(Sender: TObject);
+begin
+  TimerRefreshCost.Enabled:=false;
+  if Assigned(FOnZoneCostChange) then
+    FOnZoneCostChange(Self);
+end;
+
+function TBisTaxiRouteFrame.GetDistance: Variant;
+begin
+  Result:=Null;
+  if Trim(FEditDistance.Text)<>'' then
+    Result:=FEditDistance.Value;
+end;
+
+procedure TBisTaxiRouteFrame.SetDistance(const Value: Variant);
+begin
+  if not VarIsNull(Value) then begin
+    FEditDistance.Text:='';
+    FEditDistance.Value:=VarToExtendedDef(Value,0.0);
+  end else
+    FEditDistance.Text:='';
+  CalculateDistanceAll;  
+end;
+
+function TBisTaxiRouteFrame.GetAmount: Variant;
+begin
+  Result:=Null;
+  if Trim(FEditAmount.Text)<>'' then
+    Result:=FEditAmount.Value;
+end;
+
+procedure TBisTaxiRouteFrame.SetAmount(const Value: Variant);
+begin
+  if not VarIsNull(Value) then
+    FEditAmount.Value:=VarToIntDef(Value,0)
+  else
+    FEditAmount.Text:='';
+end;
+
+function TBisTaxiRouteFrame.GetCost: Variant;
+begin
+  Result:=Null;
+  if Trim(FEditCost.Text)<>'' then
+    Result:=FEditCost.Value;
+end;
+
+procedure TBisTaxiRouteFrame.SetCost(const Value: Variant);
+begin
+  if not VarIsNull(Value) then
+    FEditCost.Value:=VarToExtendedDef(Value,0.0)
+  else
+    FEditCost.Text:='';
+end;
+
+function TBisTaxiRouteFrame.GetPeriod: Variant;
+begin
+  Result:=Null;
+  if Trim(FEditPeriod.Text)<>'' then
+    Result:=FEditPeriod.Value;
+end;
+
+procedure TBisTaxiRouteFrame.SetPeriod(const Value: Variant);
+begin
+  if not VarIsNull(Value) then
+    FEditPeriod.Value:=VarToIntDef(Value,0)
+  else
+    FEditPeriod.Text:='';
+end;
+
+procedure TBisTaxiRouteFrame.CalculateDistanceAll;
+var
+  Prior: TBisTaxiAddressFrame;
+  Value: Extended; 
+begin
+  Value:=FEditDistance.Value;
+  FEditDistanceAll.Text:='';
+  Prior:=PriorFrame;
+  while Assigned(Prior) do begin
+    if Prior=Self then
+      break;
+    if Prior is TBisTaxiRouteFrame then begin
+      Value:=Value+VarToExtendedDef(TBisTaxiRouteFrame(Prior).Distance,0.0);
+      Prior:=TBisTaxiRouteFrame(Prior).PriorFrame;
+    end else
+      Prior:=nil;
+  end;
+  FEditDistanceAll.Value:=Value;
+end;
+
+end.

@@ -1,0 +1,84 @@
+unit BisKrieltDataQuestionsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList, DBCtrls,
+  BisFm, BisDataFrm,
+  BisDataGridFm, BisKrieltDataQuestionsFrm;
+
+type
+  TBisKrieltDataQuestionsForm = class(TBisDataGridForm)
+    PanelControls: TPanel;
+    GroupBoxControls: TGroupBox;
+    PanelDescription: TPanel;
+    DBMemoQuestionText: TDBMemo;
+  private
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataQuestionsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataInputTypesForm: TBisKrieltDataQuestionsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses
+    BisFilterGroups, BisOrders,
+    BisKrieltDataQuestionEditFm;
+
+{ TBisKrieltDataQuestionsFormIface }
+
+constructor TBisKrieltDataQuestionsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataQuestionsForm;
+  FilterClass:=TBisKrieltDataQuestionFilterFormIface;
+  InsertClass:=TBisKrieltDataQuestionInsertFormIface;
+  UpdateClass:=TBisKrieltDataQuestionUpdateFormIface;
+  DeleteClass:=TBisKrieltDataQuestionDeleteFormIface; 
+  Permissions.Enabled:=true;
+  ProviderName:='S_QUESTIONS';
+  with FieldNames do begin
+    AddKey('QUESTION_ID');
+    AddInvisible('SUBJECT_ID');
+    AddInvisible('CONSULTANT_ID');
+    AddInvisible('CONSULTANT_SURNAME');
+    AddInvisible('CONSULTANT_NAME');
+    AddInvisible('CONSULTANT_PATRONYMIC');
+    AddInvisible('QUESTION_TEXT');
+    Add('NUM','Номер',50);
+    Add('DATE_CREATE','Дата создания',120);
+    Add('SUBJECT_NAME','Тема',170);
+    Add('NAME','Имя',80);
+    Add('CONTACT','Контакт',80);
+  end;
+  Orders.Add('DATE_CREATE',otDesc);
+end;
+
+{ TBisKrieltDataQuestionsForm }
+
+constructor TBisKrieltDataQuestionsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  if Assigned(DataFrame) then begin
+    DBMemoQuestionText.DataSource:=DataFrame.DataSource;
+  end;
+end;
+
+class function TBisKrieltDataQuestionsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisKrieltDataQuestionsFrame;
+end;
+
+end.

@@ -1,0 +1,54 @@
+unit BisCallcHbookRolesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBisCallcHbookRolesForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookRolesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookRolesForm: TBisCallcHbookRolesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHbookRoleEditFm;
+
+{ TBisCallcHbookRolesFormIface }
+
+constructor TBisCallcHbookRolesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookRolesForm;
+  InsertClass:=TBisCallcHbookRoleInsertFormIface;
+  UpdateClass:=TBisCallcHbookRoleUpdateFormIface;
+  DeleteClass:=TBisCallcHbookRoleDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_ACCOUNTS';
+  with FieldNames do begin
+    AddKey('ACCOUNT_ID');
+    AddInvisible('IS_ROLE');
+    AddInvisible('AUTO_CREATED');
+    AddInvisible('LOCKED');
+    Add('USER_NAME','Роль',150);
+    Add('DESCRIPTION','Описание',200);
+  end;
+  FilterGroups.Add.Filters.Add('IS_ROLE',fcEqual,1);
+  Orders.Add('USER_NAME');
+end;
+
+end.

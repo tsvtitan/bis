@@ -1,0 +1,129 @@
+package imkrielt;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  omnet,
+  vcl,
+  rtl,
+  dbrtl;
+
+contains
+  BisKrielt in 'imkrielt.bpl\BisKrielt.pas',
+  BisKrieltConsts in 'imkrielt.bpl\BisKrieltConsts.pas',
+  BisKrieltMainFm in 'imkrielt.bpl\BisKrieltMainFm.pas' {BisKrieltMainForm},
+  BisKrieltDataTypesFm in 'imkrielt.bpl\BisKrieltDataTypesFm.pas' {BisKrieltDataTypesForm},
+  BisKrieltDataTypeEditFm in 'imkrielt.bpl\BisKrieltDataTypeEditFm.pas' {BisKrieltDataTypeEditForm},
+  BisKrieltDataViewsFm in 'imkrielt.bpl\BisKrieltDataViewsFm.pas' {BisKrieltDataViewsForm},
+  BisKrieltDataViewEditFm in 'imkrielt.bpl\BisKrieltDataViewEditFm.pas' {BisKrieltDataViewEditForm},
+  BisKrieltDataOperationEditFm in 'imkrielt.bpl\BisKrieltDataOperationEditFm.pas' {BisKrieltDataOperationEditForm},
+  BisKrieltDataOperationsFm in 'imkrielt.bpl\BisKrieltDataOperationsFm.pas' {BisKrieltDataOperationsForm},
+  BisKrieltDataParamEditFm in 'imkrielt.bpl\BisKrieltDataParamEditFm.pas' {BisKrieltDataParamEditForm},
+  BisKrieltDataParamsFm in 'imkrielt.bpl\BisKrieltDataParamsFm.pas' {BisKrieltDataParamsForm},
+  BisKrieltDataViewTypeEditFm in 'imkrielt.bpl\BisKrieltDataViewTypeEditFm.pas' {BisKrieltDataViewTypeEditForm},
+  BisKrieltDataViewTypesFm in 'imkrielt.bpl\BisKrieltDataViewTypesFm.pas' {BisKrieltDataViewTypesForm},
+  BisKrieltDataInputParamsFm in 'imkrielt.bpl\BisKrieltDataInputParamsFm.pas' {BisKrieltDataInputParamsForm},
+  BisKrieltDataInputParamEditFm in 'imkrielt.bpl\BisKrieltDataInputParamEditFm.pas' {BisKrieltDataInputParamEditForm},
+  BisKrieltDataAccountParamEditFm in 'imkrielt.bpl\BisKrieltDataAccountParamEditFm.pas' {BisKrieltDataAccountParamEditForm},
+  BisKrieltDataAccountParamsFm in 'imkrielt.bpl\BisKrieltDataAccountParamsFm.pas' {BisKrieltDataAccountParamsForm},
+  BisKrieltDataParamValueEditFm in 'imkrielt.bpl\BisKrieltDataParamValueEditFm.pas' {BisKrieltDataParamValueEditForm},
+  BisKrieltDataParamValuesFm in 'imkrielt.bpl\BisKrieltDataParamValuesFm.pas' {BisKrieltDataParamValuesForm},
+  BisKrieltDataParamValueDependsFm in 'imkrielt.bpl\BisKrieltDataParamValueDependsFm.pas' {BisKrieltDataParamValueDependsForm},
+  BisKrieltDataParamValueDependEditFm in 'imkrielt.bpl\BisKrieltDataParamValueDependEditFm.pas' {BisKrieltDataParamValueDependEditForm},
+  BisKrieltDataPresentationsFm in 'imkrielt.bpl\BisKrieltDataPresentationsFm.pas' {BisKrieltDataPresentationsForm},
+  BisKrieltDataPresentationEditFm in 'imkrielt.bpl\BisKrieltDataPresentationEditFm.pas' {BisKrieltDataPresentationEditForm},
+  BisKrieltDataPresentationsFrm in 'imkrielt.bpl\BisKrieltDataPresentationsFrm.pas' {BisKrieltDataPresentationsFrame: TFrame},
+  BisKrieltDataColumnEditFm in 'imkrielt.bpl\BisKrieltDataColumnEditFm.pas' {BisKrieltDataColumnEditForm},
+  BisKrieltDataColumnsFm in 'imkrielt.bpl\BisKrieltDataColumnsFm.pas' {BisKrieltDataColumnsForm},
+  BisKrieltDataColumnParamEditFm in 'imkrielt.bpl\BisKrieltDataColumnParamEditFm.pas' {BisKrieltDataColumnParamEditForm},
+  BisKrieltDataColumnParamsFm in 'imkrielt.bpl\BisKrieltDataColumnParamsFm.pas' {BisKrieltDataColumnParamsForm},
+  BisKrieltDataAccountPresentationEditFm in 'imkrielt.bpl\BisKrieltDataAccountPresentationEditFm.pas' {BisKrieltDataAccountPresentationEditForm},
+  BisKrieltDataAccountPresenatationsFm in 'imkrielt.bpl\BisKrieltDataAccountPresenatationsFm.pas' {BisKrieltDataAccountPresenatationsForm},
+  BisKrieltDataServiceEditFm in 'imkrielt.bpl\BisKrieltDataServiceEditFm.pas' {BisKrieltDataServiceEditForm},
+  BisKrieltDataServicesFm in 'imkrielt.bpl\BisKrieltDataServicesFm.pas' {BisKrieltDataServicesForm},
+  BisKrieltDataPageEditFm in 'imkrielt.bpl\BisKrieltDataPageEditFm.pas' {BisKrieltDataPageEditForm},
+  BisKrieltDataPagesFm in 'imkrielt.bpl\BisKrieltDataPagesFm.pas' {BisKrieltDataPagesForm},
+  BisKrieltDataBannersFm in 'imkrielt.bpl\BisKrieltDataBannersFm.pas' {BisKrieltDataBannersForm},
+  BisKrieltDataBannerEditFm in 'imkrielt.bpl\BisKrieltDataBannerEditFm.pas' {BisKrieltDataBannerEditForm},
+  BisKrieltDataPlacementsFm in 'imkrielt.bpl\BisKrieltDataPlacementsFm.pas' {BisKrieltDataPlacementsForm},
+  BisKrieltDataPlacementEditFm in 'imkrielt.bpl\BisKrieltDataPlacementEditFm.pas' {BisKrieltDataPlacementEditForm},
+  BisKrieltPresentationFm in 'imkrielt.bpl\BisKrieltPresentationFm.pas' {BisKrieltPresentationForm},
+  BisKrieltPresentationFrm in 'imkrielt.bpl\BisKrieltPresentationFrm.pas' {BisKrieltPresentationFrame: TFrame},
+  BisKrieltPresentationEditFm in 'imkrielt.bpl\BisKrieltPresentationEditFm.pas' {BisKrieltPresentationEditForm},
+  BisKrieltDataPublishingFm in 'imkrielt.bpl\BisKrieltDataPublishingFm.pas' {BisKrieltDataPublishingForm},
+  BisKrieltDataPublishingEditFm in 'imkrielt.bpl\BisKrieltDataPublishingEditFm.pas' {BisKrieltDataPublishingEditForm},
+  BisKrieltDataIssuesFm in 'imkrielt.bpl\BisKrieltDataIssuesFm.pas' {BisKrieltDataIssuesForm},
+  BisKrieltDataIssueEditFm in 'imkrielt.bpl\BisKrieltDataIssueEditFm.pas' {BisKrieltDataIssueEditForm},
+  BisKrieltImportFm in 'imkrielt.bpl\BisKrieltImportFm.pas' {BisKrieltImportForm},
+  BisKrieltDataCreditProgramsFm in 'imkrielt.bpl\BisKrieltDataCreditProgramsFm.pas' {BisKrieltDataCreditProgramsForm},
+  BisKrieltDataCreditProgramEditFm in 'imkrielt.bpl\BisKrieltDataCreditProgramEditFm.pas' {BisKrieltDataCreditProgramEditForm},
+  BisRtfStream in 'imkrielt.bpl\BisRtfStream.pas',
+  BisKrieltObjectsFm in 'imkrielt.bpl\BisKrieltObjectsFm.pas' {BisKrieltObjectsForm},
+  BisKrieltObjectEditFm in 'imkrielt.bpl\BisKrieltObjectEditFm.pas' {BisKrieltObjectEditForm},
+  BisKrieltObjectParamEditFm in 'imkrielt.bpl\BisKrieltObjectParamEditFm.pas' {BisKrieltObjectParamEditForm},
+  BisKrieltObjectDeleteFm in 'imkrielt.bpl\BisKrieltObjectDeleteFm.pas' {BisKrieltObjectDeleteForm},
+  ShockwaveFlashObjects_TLB in 'imkrielt.bpl\ShockwaveFlashObjects_TLB.pas',
+  BisKrieltObjectsFrm in 'imkrielt.bpl\BisKrieltObjectsFrm.pas' {BisKrieltObjectsFrame: TFrame},
+  BisKrieltDataSubscriptionsFm in 'imkrielt.bpl\BisKrieltDataSubscriptionsFm.pas' {BisKrieltDataSubscriptionsForm},
+  BisKrieltDataSubscriptionEditFm in 'imkrielt.bpl\BisKrieltDataSubscriptionEditFm.pas' {BisKrieltDataSubscriptionEditForm},
+  BisKrieltDataAccountSubscriptionsFm in 'imkrielt.bpl\BisKrieltDataAccountSubscriptionsFm.pas' {BisKrieltDataAccountSubscriptionsForm},
+  BisKrieltDataAccountSubscriptionEditFm in 'imkrielt.bpl\BisKrieltDataAccountSubscriptionEditFm.pas' {BisKrieltDataAccountSubscriptionEditForm},
+  BisKrieltDataSubscriptionContentsFm in 'imkrielt.bpl\BisKrieltDataSubscriptionContentsFm.pas' {BisKrieltDataSubscriptionContentsForm},
+  BisKrieltDataSubscriptionContentEditFm in 'imkrielt.bpl\BisKrieltDataSubscriptionContentEditFm.pas' {BisKrieltDataSubscriptionContentEditForm},
+  BisKrieltRefreshIface in 'imkrielt.bpl\BisKrieltRefreshIface.pas',
+  BisKrieltDataColumnsFrm in 'imkrielt.bpl\BisKrieltDataColumnsFrm.pas' {BisKrieltDataColumnsFrame: TFrame},
+  BisKrieltDataParamsFrm in 'imkrielt.bpl\BisKrieltDataParamsFrm.pas' {BisKrieltDataParamsFrame: TFrame},
+  BisKrieltDataParamValuesFrm in 'imkrielt.bpl\BisKrieltDataParamValuesFrm.pas' {BisKrieltDataParamValuesFrame: TFrame},
+  BisKrieltDataViewsFrm in 'imkrielt.bpl\BisKrieltDataViewsFrm.pas' {BisKrieltDataViewsFrame: TFrame},
+  BisKrieltDataTypesFrm in 'imkrielt.bpl\BisKrieltDataTypesFrm.pas' {BisKrieltDataTypesFrame: TFrame},
+  BisKrieltDataTypeOperationEditFm in 'imkrielt.bpl\BisKrieltDataTypeOperationEditFm.pas' {BisKrieltDataTypeOperationEditForm},
+  BisKrieltDataTypeOperationsFm in 'imkrielt.bpl\BisKrieltDataTypeOperationsFm.pas' {BisKrieltDataTypeOperationsForm},
+  BisKrieltDataExportsFm in 'imkrielt.bpl\BisKrieltDataExportsFm.pas' {BisKrieltDataExportsForm},
+  BisKrieltDataExportEditFm in 'imkrielt.bpl\BisKrieltDataExportEditFm.pas' {BisKrieltDataExportEditForm},
+  BisKrieltDataDesignsFm in 'imkrielt.bpl\BisKrieltDataDesignsFm.pas' {BisKrieltDataDesignsForm},
+  BisKrieltDataDesignEditFm in 'imkrielt.bpl\BisKrieltDataDesignEditFm.pas' {BisKrieltDataDesignEditForm},
+  BisKrieltExportRtfFm in 'imkrielt.bpl\BisKrieltExportRtfFm.pas' {BisKrieltExportRtfForm},
+  BisKrieltDataPatternsFm in 'imkrielt.bpl\BisKrieltDataPatternsFm.pas' {BisKrieltDataPatternsForm},
+  BisKrieltDataPatternEditFm in 'imkrielt.bpl\BisKrieltDataPatternEditFm.pas' {BisKrieltDataPatternEditForm},
+  BisKrieltObjectParamFrm in 'imkrielt.bpl\BisKrieltObjectParamFrm.pas' {BisKrieltObjectParamFrame: TFrame},
+  BisKrieltObjectsDeleteFm in 'imkrielt.bpl\BisKrieltObjectsDeleteFm.pas' {BisKrieltObjectsDeleteForm},
+  BisKrieltDataConsultantsFm in 'imkrielt.bpl\BisKrieltDataConsultantsFm.pas' {BisKrieltDataConsultantsForm},
+  BisKrieltDataConsultantEditFm in 'imkrielt.bpl\BisKrieltDataConsultantEditFm.pas' {BisKrieltDataConsultantEditForm},
+  BisKrieltDataSubjectsFm in 'imkrielt.bpl\BisKrieltDataSubjectsFm.pas' {BisKrieltDataSubjectsForm},
+  BisKrieltDataSubjectEditFm in 'imkrielt.bpl\BisKrieltDataSubjectEditFm.pas' {BisKrieltDataSubjectEditForm},
+  BisKrieltDataQuestionsFm in 'imkrielt.bpl\BisKrieltDataQuestionsFm.pas' {BisKrieltDataQuestionsForm},
+  BisKrieltDataQuestionEditFm in 'imkrielt.bpl\BisKrieltDataQuestionEditFm.pas' {BisKrieltDataQuestionEditForm},
+  BisKrieltDataAnswersFm in 'imkrielt.bpl\BisKrieltDataAnswersFm.pas' {BisKrieltDataAnswersForm},
+  BisKrieltDataAnswerEditFm in 'imkrielt.bpl\BisKrieltDataAnswerEditFm.pas' {BisKrieltDataAnswerEditForm},
+  BisKrieltDataQuestionsFrm in 'imkrielt.bpl\BisKrieltDataQuestionsFrm.pas' {BisKrieltDataQuestionsFrame: TFrame},
+  BisKrieltDataArticlesFm in 'imkrielt.bpl\BisKrieltDataArticlesFm.pas' {BisKrieltDataArticlesForm},
+  BisKrieltDataArticlesFrm in 'imkrielt.bpl\BisKrieltDataArticlesFrm.pas' {BisKrieltDataArticlesFrame: TFrame},
+  BisKrieltDataArticleEditFm in 'imkrielt.bpl\BisKrieltDataArticleEditFm.pas' {BisKrieltDataArticleEditForm},
+  BisKrieltDataCommentsFm in 'imkrielt.bpl\BisKrieltDataCommentsFm.pas' {BisKrieltDataCommentsForm},
+  BisKrieltDataCommentEditFm in 'imkrielt.bpl\BisKrieltDataCommentEditFm.pas' {BisKrieltDataCommentEditForm},
+  BisKrieltExportXlsFm in 'imkrielt.bpl\BisKrieltExportXlsFm.pas' {BisKrieltExportXlsForm};
+
+end.

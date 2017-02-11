@@ -1,0 +1,106 @@
+inherited BisDocproHbookMotionEditForm: TBisDocproHbookMotionEditForm
+  Left = 651
+  Top = 464
+  Caption = 'BisDocproHbookMotionEditForm'
+  ClientHeight = 227
+  ClientWidth = 327
+  ExplicitLeft = 651
+  ExplicitTop = 464
+  ExplicitWidth = 335
+  ExplicitHeight = 254
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 189
+    Width = 327
+    ExplicitTop = 130
+    ExplicitWidth = 297
+    inherited ButtonOk: TButton
+      Left = 150
+      ExplicitLeft = 120
+    end
+    inherited ButtonCancel: TButton
+      Left = 247
+      ExplicitLeft = 217
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 327
+    Height = 189
+    ExplicitWidth = 297
+    ExplicitHeight = 130
+    object LabelDescription: TLabel
+      Left = 37
+      Top = 94
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1087#1080#1089#1072#1085#1080#1077':'
+      FocusControl = MemoDescription
+    end
+    object LabelView: TLabel
+      Left = 11
+      Top = 67
+      Width = 79
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1042#1080#1076' '#1076#1086#1082#1091#1084#1077#1085#1090#1072':'
+      FocusControl = EditView
+    end
+    object LabelPosition: TLabel
+      Left = 23
+      Top = 19
+      Width = 67
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1042#1080#1076' '#1087#1086#1079#1080#1094#1080#1103':'
+      FocusControl = EditPosition
+    end
+    object MemoDescription: TMemo
+      Left = 96
+      Top = 91
+      Width = 220
+      Height = 89
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      TabOrder = 2
+    end
+    object EditView: TEdit
+      Left = 96
+      Top = 64
+      Width = 193
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonView: TButton
+      Left = 295
+      Top = 64
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1080#1076' '#1076#1086#1082#1091#1084#1077#1085#1090#1072
+      Caption = '...'
+      TabOrder = 1
+    end
+    object EditPosition: TEdit
+      Left = 96
+      Top = 16
+      Width = 89
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 3
+    end
+    object ButtonPosition: TButton
+      Left = 191
+      Top = 16
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1086#1079#1080#1094#1080#1102' '#1087#1083#1072#1085#1072
+      Caption = '...'
+      TabOrder = 4
+    end
+  end
+end

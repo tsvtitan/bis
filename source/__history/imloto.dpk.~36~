@@ -1,0 +1,55 @@
+package imloto;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  omcom,
+  vcl,
+  rtl,
+  dbrtl;
+
+contains
+  BisLoto in 'imloto.bpl\BisLoto.pas',
+  BisLotoConsts in 'imloto.bpl\BisLotoConsts.pas',
+  BisLotoMainFm in 'imloto.bpl\BisLotoMainFm.pas' {BisLotoMainForm},
+  BisLotoDataMembersFm in 'imloto.bpl\BisLotoDataMembersFm.pas' {BisLotoDataMembersForm},
+  BisLotoDataMemberEditFm in 'imloto.bpl\BisLotoDataMemberEditFm.pas' {BisLotoDataMemberEditForm},
+  BisLotoDataTiragesFm in 'imloto.bpl\BisLotoDataTiragesFm.pas' {BisLotoDataTiragesForm},
+  BisLotoDataTirageEditFm in 'imloto.bpl\BisLotoDataTirageEditFm.pas' {BisLotoDataTirageEditForm},
+  BisLotoTicketImportFm in 'imloto.bpl\BisLotoTicketImportFm.pas' {BisLotoTicketImportForm},
+  BisLotoTicketManageFm in 'imloto.bpl\BisLotoTicketManageFm.pas' {BisLotoTicketManageForm},
+  BisLotoLotteryFm in 'imloto.bpl\BisLotoLotteryFm.pas' {BisLotoLotteryForm},
+  BisLotoBarrelFrm in 'imloto.bpl\BisLotoBarrelFrm.pas' {BisLotoBarrelFrame: TFrame},
+  BisLotoRound1Frm in 'imloto.bpl\BisLotoRound1Frm.pas' {BisLotoRound1Frame: TFrame},
+  BisLotoRound2Frm in 'imloto.bpl\BisLotoRound2Frm.pas' {BisLotoRound2Frame: TFrame},
+  BisLotoRound3Frm in 'imloto.bpl\BisLotoRound3Frm.pas' {BisLotoRound3Frame: TFrame},
+  BisLotoRound4Frm in 'imloto.bpl\BisLotoRound4Frm.pas' {BisLotoRound4Frame: TFrame},
+  BisLotoTiragePrizesFrm in 'imloto.bpl\BisLotoTiragePrizesFrm.pas' {BisLotoTiragePrizesFrame: TFrame},
+  BisLotoTiragePrizeEditFm in 'imloto.bpl\BisLotoTiragePrizeEditFm.pas' {BisLotoTiragePrizeEditForm: T},
+  BisLotoSiteExportIface in 'imloto.bpl\BisLotoSiteExportIface.pas';
+
+end.

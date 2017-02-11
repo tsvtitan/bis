@@ -1,0 +1,95 @@
+inherited BisDesignDataConstEditForm: TBisDesignDataConstEditForm
+  Left = 612
+  Top = 267
+  Caption = 'BisDesignDataConstEditForm'
+  ClientHeight = 255
+  ClientWidth = 361
+  ExplicitWidth = 369
+  ExplicitHeight = 289
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 217
+    Width = 361
+    ExplicitTop = 217
+    ExplicitWidth = 361
+    inherited ButtonOk: TButton
+      Left = 181
+      ExplicitLeft = 181
+    end
+    inherited ButtonCancel: TButton
+      Left = 278
+      ExplicitLeft = 278
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 361
+    Height = 217
+    ExplicitWidth = 361
+    ExplicitHeight = 217
+    object LabelName: TLabel
+      Left = 13
+      Top = 16
+      Width = 79
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077':'
+      FocusControl = EditName
+    end
+    object LabelDescription: TLabel
+      Left = 39
+      Top = 43
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1054#1087#1080#1089#1072#1085#1080#1077':'
+      FocusControl = MemoDescription
+    end
+    object LabelValue: TLabel
+      Left = 41
+      Top = 122
+      Width = 51
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1047#1085#1072#1095#1077#1085#1080#1077':'
+      FocusControl = MemoValue
+    end
+    object EditName: TEdit
+      Left = 98
+      Top = 13
+      Width = 226
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 0
+    end
+    object MemoDescription: TMemo
+      Left = 98
+      Top = 40
+      Width = 253
+      Height = 73
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 2
+    end
+    object MemoValue: TMemo
+      Left = 98
+      Top = 119
+      Width = 253
+      Height = 90
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      ScrollBars = ssBoth
+      TabOrder = 3
+      WordWrap = False
+    end
+    object ButtonName: TButton
+      Left = 330
+      Top = 13
+      Width = 21
+      Height = 21
+      Hint = #1059#1085#1080#1082#1072#1083#1100#1085#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077
+      Anchors = [akTop, akRight]
+      Caption = '...'
+      TabOrder = 1
+      OnClick = ButtonNameClick
+    end
+  end
+end

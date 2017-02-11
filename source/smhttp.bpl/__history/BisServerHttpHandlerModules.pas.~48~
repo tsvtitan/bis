@@ -1,0 +1,211 @@
+unit BisServerHttpHandlerModules;
+
+interface
+
+uses Classes,
+     BisObject, BisModules, BisDataSet, BisServerHttpHandlers;
+
+type
+  TBisServerHttpHandlerModule=class;
+
+  TBisServerHttpHandlerModuleInitProc=procedure (AModule: TBisServerHttpHandlerModule); stdcall;
+
+  TBisServerHttpHandlerModule=class(TBisModule)
+  private
+    FInitProc: TBisServerHttpHandlerModuleInitProc;
+    FTable: TBisDataSet;
+    FHandlers: TBisServerHttpHandlers;
+    FHandlerClass: TBisServerHttpHandlerClass;
+    procedure RefreshHandlers;
+  protected
+    procedure DoInitProc(AModule: TBisModule); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Unload; override;
+    procedure Init; override;
+
+    property HandlerClass: TBisServerHttpHandlerClass read FHandlerClass write FHandlerClass;
+  end;
+
+  TBisServerHttpHandlerModules=class(TBisModules)
+  private
+    function GetItems(Index: Integer): TBisServerHttpHandlerModule;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    function FindHandler(const Host, Document: String; var OutPath,OutScript: string): TBisServerHttpHandler;
+
+    property Items[Index: Integer]: TBisServerHttpHandlerModule read GetItems;
+  end;
+
+implementation
+
+uses Windows, SysUtils, DB,
+     BisConsts, BisLogger, BisUtils, BisServerHttpConsts;
+
+{ TBisServerHttpHandlerModule }
+
+constructor TBisServerHttpHandlerModule.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FHandlers:=TBisServerHttpHandlers.Create(Self);
+  FTable:=TBisDataSet.Create(Self);
+
+end;
+
+destructor TBisServerHttpHandlerModule.Destroy;
+begin
+  FHandlers.Free;
+  FTable.Free;
+  inherited Destroy;
+end;
+
+procedure TBisServerHttpHandlerModule.Init;
+var
+  Stream: TMemoryStream;
+  AModules: TBisServerHttpHandlerModules;
+  Field: TField;
+begin
+  inherited Init;
+  if Assigned(Owner) and (Owner is TBisServerHttpHandlerModules) then begin
+    AModules:=TBisServerHttpHandlerModules(Owner);
+    FTable.Close;
+    if AModules.Table.Active and not AModules.Table.IsEmpty then begin
+      Stream:=TMemoryStream.Create;
+      try
+        Field:=AModules.Table.FindField(SFieldHandlers);
+        if Assigned(Field) and Field.IsBlob then begin
+          TBlobField(Field).SaveToStream(Stream);
+          Stream.Position:=0;
+          FTable.LoadFromStream(Stream);
+          FTable.Open;
+        end;
+      finally
+        Stream.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisServerHttpHandlerModule.RefreshHandlers;
+var
+  AHandler: TBisServerHttpHandler;
+  AObjectName: String;
+begin
+  if FTable.Active and not FTable.IsEmpty then begin
+    if Assigned(FHandlerClass) then begin
+      FHandlers.Clear;
+      FTable.First;
+      while not FTable.Eof do begin
+        AObjectName:=FTable.FieldByName(SFieldName).AsString+FHandlerClass.GetObjectName;
+        AHandler:=FHandlers.AddClass(FHandlerClass,AObjectName);
+        if Assigned(AHandler) then begin
+          AHandler.Description:=FTable.FieldByName(SFieldDescription).AsString;
+          AHandler.Enabled:=Boolean(FTable.FieldByName(SFieldEnabled).AsInteger);
+          AHandler.Host:=FTable.FieldByName(SFieldHost).AsString;
+          AHandler.Path:=FTable.FieldByName(SFieldPath).AsString;
+        end;
+        FTable.Next;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisServerHttpHandlerModule.DoInitProc(AModule: TBisModule);
+begin
+  @FInitProc:=GetProcAddress(Module,PChar(SInitServerHttpHandlerModule));
+  if Assigned(@FInitProc) then begin
+    try
+      FInitProc(Self);
+      RefreshHandlers;
+      FHandlers.Init;
+      LoggerWrite(FormatEx(SInitSuccess,[FileName]));
+    except
+      On E: Exception do begin
+        LoggerWrite(FormatEx(SInitFailed,[FileName,E.Message]),ltError);
+      end;
+    end;
+  end else begin
+    LoggerWrite(FormatEx(SInitProcNotFound,[FileName]),ltError);
+  end;
+end;
+
+procedure TBisServerHttpHandlerModule.Unload;
+begin
+  FHandlers.Clear;
+  inherited Unload;
+end;
+
+{ TBisServerHttpHandlerModules }
+
+function TBisServerHttpHandlerModules.GetItems(Index: Integer): TBisServerHttpHandlerModule;
+begin
+  Result:=TBisServerHttpHandlerModule(inherited Items[Index]);
+end;
+
+function TBisServerHttpHandlerModules.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisServerHttpHandlerModule;
+end;
+
+function TBisServerHttpHandlerModules.FindHandler(const Host, Document: String; var OutPath, OutScript: string): TBisServerHttpHandler;
+begin
+  Result:=nil;
+{  function CheckDocument(HandleDocument: string): Boolean;
+  var
+    Apos: Integer;
+    S1,S2: string;
+    Path: string;
+  const
+    SSlash='/';
+  begin
+    Result:=false;
+    S1:=AnsiLowerCase(HandleDocument);
+    S2:=AnsiLowerCase(Document);
+    Apos:=AnsiPos(S1,S2);
+    if Apos=1 then begin
+      if Length(S1)<>Length(S2) then begin
+        if Length(S1)<Length(S2) then begin
+          Path:=Copy(Document,Length(HandleDocument)+1,Length(Document));
+          if Length(Path)>0 then begin
+            if Path[1]=SSlash then begin
+              OutScript:=HandleDocument;
+              OutPath:=Path;
+              Result:=true;
+            end;
+          end;
+        end;
+      end else begin
+        OutScript:=Document;
+        OutPath:=SSlash;
+        Result:=true;
+      end;
+    end;
+  end;
+  
+var
+  i: Integer;
+  Handler: TBisServerHttpHandler;
+begin
+  Result:=nil;
+  if Assigned(FServer) then
+    Result:=FServer.Modules.
+  
+  for i:=0 to FHandlers.Count-1 do begin
+    Handler:=ISeoSvrHttpHandler(FHandlers.Items[i]);
+    if Assigned(Handler) then begin
+      if AnsiSameText(Handler.HostName,HostName) and
+         CheckDocument(Handler.Document) then begin
+        with Handler do begin
+        end;
+        Result:=Handler;
+        exit;
+      end;  
+    end;
+  end;
+end;}
+end;
+
+
+end.

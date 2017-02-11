@@ -1,0 +1,25 @@
+type
+  TClassA = class
+    str: string;
+    function GetStr: string;
+    procedure SetStr(s: string);
+    property t: string read GetStr write SetStr;
+  end;
+
+function TClassA.GetStr: string;
+begin
+  result := 'read property';
+end;
+
+procedure TClassA.SetStr(s: string);
+begin
+  str := 'write property ' + s;
+end;
+
+var a: TClassA;
+
+a := TClassA.Create;
+PrintLn(a.t); 
+
+a.t := '"Hallo"';
+PrintLn(a.str);

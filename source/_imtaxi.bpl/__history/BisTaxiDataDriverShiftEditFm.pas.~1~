@@ -1,0 +1,150 @@
+unit BisTaxiDataDriverShiftEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB,
+  BisDataEditFm, BisParam, BisControls, ImgList;
+
+type
+  TBisTaxiDataDriverShiftEditForm = class(TBisDataEditForm)
+    LabelDriver: TLabel;
+    EditDriver: TEdit;
+    LabelDateBegin: TLabel;
+    DateTimePickerBegin: TDateTimePicker;
+    DateTimePickerBeginTime: TDateTimePicker;
+    ButtonDriver: TButton;
+    LabelDateEnd: TLabel;
+    DateTimePickerEnd: TDateTimePicker;
+    DateTimePickerEndTime: TDateTimePicker;
+  private
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure BeforeShow; override;
+    procedure ChangeParam(Param: TBisParam); override;
+
+  end;
+
+  TBisTaxiDataDriverShiftEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataDriverShiftFilterFormIface=class(TBisTaxiDataDriverShiftEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataDriverShiftInsertFormIface=class(TBisTaxiDataDriverShiftEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataDriverShiftUpdateFormIface=class(TBisTaxiDataDriverShiftEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataDriverShiftDeleteFormIface=class(TBisTaxiDataDriverShiftEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataDriverShiftEditForm: TBisTaxiDataDriverShiftEditForm;
+
+implementation
+
+uses BisUtils, BisTaxiConsts, BisCore, BisFilterGroups, BisTaxiDataDriversFm, BisParamEditDataSelect;
+
+{$R *.dfm}
+
+{ TBisTaxiDataDriverShiftEditFormIface }
+
+constructor TBisTaxiDataDriverShiftEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataDriverShiftEditForm;
+  with Params do begin
+    AddKey('SHIFT_ID').Older('OLD_SHIFT_ID');
+    AddInvisible('ACCOUNT_ID');
+    AddInvisible('CAR_CALLSIGN');
+    AddEditDataSelect('DRIVER_ID','EditDriver','LabelDriver','ButtonDriver',
+                       TBisTaxiDataDriversFormIface,'DRIVER_NAME',true,false,'','USER_NAME');
+    AddEditDateTime('DATE_BEGIN','DateTimePickerBegin','DateTimePickerBeginTime','LabelDateBegin',true).FilterCondition:=fcEqualGreater;
+    AddEditDateTime('DATE_END','DateTimePickerEnd','DateTimePickerEndTime','LabelDateEnd').FilterCondition:=fcEqualLess;
+  end;
+end;
+
+{ TBisTaxiDataDriverShiftFilterFormIface }
+
+constructor TBisTaxiDataDriverShiftFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Фильтр смен';
+end;
+
+{ TBisTaxiDataDriverShiftInsertFormIface }
+
+constructor TBisTaxiDataDriverShiftInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_SHIFT';
+  Caption:='Создать смену';
+end;
+
+{ TBisTaxiDataDriverShiftUpdateFormIface }
+
+constructor TBisTaxiDataDriverShiftUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_SHIFT';
+  Caption:='Изменить смену';
+end;
+
+{ TBisTaxiDataDriverShiftDeleteFormIface }
+
+constructor TBisTaxiDataDriverShiftDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_SHIFT';
+  Caption:='Удалить смену';
+end;
+
+{ TBisTaxiDataDriverShiftEditForm }
+
+constructor TBisTaxiDataDriverShiftEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+procedure TBisTaxiDataDriverShiftEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  if Mode in [emInsert,emDuplicate] then begin
+    with Provider.Params do begin
+      Find('DATE_BEGIN').SetNewValue(Core.ServerDate);
+
+    end;
+  end;
+  Provider.Params.Find('ACCOUNT_ID').SetNewValue(Provider.Params.Find('DRIVER_ID').Value);
+  UpdateButtonState;
+end;
+
+procedure TBisTaxiDataDriverShiftEditForm.ChangeParam(Param: TBisParam);
+var
+  DriverIdParam: TBisParamEditDataSelect;
+begin
+  inherited ChangeParam(Param);
+  if AnsiSameText(Param.ParamName,'DRIVER_NAME') and not Param.Empty then begin
+    Provider.Params.ParamByName('ACCOUNT_ID').Value:=Provider.Params.ParamByName('DRIVER_ID').Value;
+    DriverIdParam:=TBisParamEditDataSelect(Provider.Params.ParamByName('DRIVER_ID'));
+    if DriverIdParam.Empty then
+      Provider.Params.ParamByName('CAR_CALLSIGN').SetNewValue(Null)
+    else
+      Provider.Params.ParamByName('CAR_CALLSIGN').SetNewValue(DriverIdParam.Values.GetVariant('CAR_CALLSIGN'));
+  end;
+end;
+
+end.

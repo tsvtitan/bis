@@ -1,0 +1,511 @@
+unit BisTaxiWaveFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, StdCtrls, Buttons, ExtCtrls, mmSystem,
+  WaveUtils,
+  BisFrm,
+  BisWave;
+
+type
+  TBisTaxiWaveFrame=class;
+
+  TBisTaxiWaveFrameEvent=procedure (Frame: TBisTaxiWaveFrame) of object;
+
+  TBisTaxiWaveFrame = class(TBisFrame)
+    TrackBarPosition: TTrackBar;
+    BitBtnPlay: TBitBtn;
+    BitBtnPause: TBitBtn;
+    BitBtnStop: TBitBtn;
+    BitBtnLoad: TBitBtn;
+    BitBtnSave: TBitBtn;
+    BitBtnClear: TBitBtn;
+    SaveDialog: TSaveDialog;
+    OpenDialog: TOpenDialog;
+    Timer: TTimer;
+    TrackBarVolume: TTrackBar;
+    LabelTime: TStaticText;
+    BitBtnRecord: TBitBtn;                                       
+    procedure BitBtnPlayClick(Sender: TObject);
+    procedure BitBtnPauseClick(Sender: TObject);
+    procedure BitBtnStopClick(Sender: TObject);
+    procedure BitBtnLoadClick(Sender: TObject);
+    procedure BitBtnSaveClick(Sender: TObject);
+    procedure BitBtnClearClick(Sender: TObject);
+    procedure TrackBarPositionChange(Sender: TObject);
+    procedure TimerTimer(Sender: TObject);
+    procedure TrackBarVolumeChange(Sender: TObject);
+    procedure BitBtnRecordClick(Sender: TObject);
+  private
+    FPlayer: TBisStockAudioPlayer;
+    FRecorder: TBisLiveAudioRecorder;
+    FWaveOriginal: TBisWave;
+    FWaveTransform: TBisWave;
+    FWaveTransformPCMFormat: TPCMFormat;
+    FOnClear: TBisTaxiWaveFrameEvent;
+    FOnLoad: TBisTaxiWaveFrameEvent;
+    FEditable: Boolean;
+    FOnBeforePlay: TBisTaxiWaveFrameEvent;
+    FEventHappend: Boolean;
+    FEventTime: Cardinal;
+    FOnEvent: TBisTaxiWaveFrameEvent;
+    FCurrentVolume: Integer;
+    FConverted: Boolean;
+    FOnAfterRecord: TBisTaxiWaveFrameEvent;
+
+    procedure PlayerStop(Sender: TObject);
+    procedure PlayerData(Sender: TObject; const Buffer: Pointer; BufferSize: DWord);
+    procedure RecorderData(Sender: TObject; const Buffer: Pointer; BufferSize: Cardinal; var FreeIt: Boolean);
+    procedure UpdateTime(Position: Cardinal);
+    procedure SetEditable(const Value: Boolean);
+    function GetEmpty: Boolean;
+    function ConvertFrom: Boolean;
+    procedure PlayerFirst(FromBegin: Boolean);
+    procedure RecorderFirst;
+  protected
+    procedure DoClear;
+    procedure DoLoad;
+    procedure DoBeforePlay;
+    procedure DoAfterRecord;
+    procedure DoEvent;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure LoadFromStream(Stream: TStream);
+    procedure SaveToStream(Stream: TStream);
+    function CanPlay: Boolean;
+    procedure Play;
+    function CanRecord: Boolean;
+    procedure &Record;
+    function CanPause: Boolean;
+    procedure Pause;
+    function CanStop: Boolean;
+    procedure Stop;
+    function CanLoad: Boolean;
+    procedure Load;
+    function CanSave: Boolean;
+    procedure Save;
+    function CanClear: Boolean;
+    procedure Clear;
+    procedure UpdateStates;
+
+    property Editable: Boolean read FEditable write SetEditable;
+    property EventTime: Cardinal read FEventTime write FEventTime;
+    property Empty: Boolean read GetEmpty;
+
+    property OnClear: TBisTaxiWaveFrameEvent read FOnClear write FOnClear;
+    property OnLoad: TBisTaxiWaveFrameEvent read FOnLoad write FOnLoad;
+    property OnBeforePlay: TBisTaxiWaveFrameEvent read FOnBeforePlay write FOnBeforePlay;
+    property OnAfterRecord: TBisTaxiWaveFrameEvent read FOnAfterRecord write FOnAfterRecord; 
+    property OnEvent: TBisTaxiWaveFrameEvent read FOnEvent write FOnEvent;
+  end;
+
+implementation
+
+uses DateUtils,
+     BisUtils;
+
+{$R *.dfm}
+
+{ TBisTaxiWaveFrame }
+
+constructor TBisTaxiWaveFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  FWaveOriginal:=TBisWave.Create;
+  
+  FWaveTransform:=TBisWave.Create;
+  FWaveTransformPCMFormat:=Mono16bit22050Hz;
+
+  FPlayer:=TBisStockAudioPlayer.Create(nil);
+  FPlayer.DeviceID:=0;
+  FPlayer.Async:=false;
+  FPlayer.BufferLength:=100;
+  FPlayer.BufferCount:=5;
+//  FPlayer.Options:=[woSetVolume];
+  FPlayer.OnStop:=PlayerStop;
+  FPlayer.OnData:=PlayerData;
+
+  FRecorder:=TBisLiveAudioRecorder.Create(nil);
+  FRecorder.DeviceID:=0;
+  FRecorder.Async:=false;
+  FRecorder.PCMFormat:=FWaveTransformPCMFormat;
+  FRecorder.OnData:=RecorderData;
+
+  FEditable:=true;
+  FEventTime:=0;
+  FEventHappend:=false;
+end;
+
+destructor TBisTaxiWaveFrame.Destroy;
+begin
+  Stop;
+  FRecorder.Free;
+  FPlayer.Free;
+  FWaveTransform.Free;
+  FWaveOriginal.Free;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiWaveFrame.DoAfterRecord;
+begin
+  if Assigned(FOnAfterRecord) then
+    FOnAfterRecord(Self);
+end;
+
+procedure TBisTaxiWaveFrame.DoBeforePlay;
+begin
+  if Assigned(FOnBeforePlay) then
+    FOnBeforePlay(Self);
+end;
+
+procedure TBisTaxiWaveFrame.DoClear;
+begin
+  if Assigned(FOnClear) then
+    FOnClear(Self);
+end;
+
+procedure TBisTaxiWaveFrame.DoEvent;
+begin
+  if Assigned(FOnEvent) then
+    FOnEvent(Self);
+end;
+
+procedure TBisTaxiWaveFrame.DoLoad;
+begin
+  if Assigned(FOnLoad) then
+    FOnLoad(Self);
+end;
+
+procedure TBisTaxiWaveFrame.PlayerFirst(FromBegin: Boolean);
+begin
+  FEventHappend:=false;
+  FCurrentVolume:=-(TrackBarVolume.Position);
+  FPlayer.Paused:=false;
+  FPlayer.Stop;
+  FPlayer.WaitForStop;
+  if FromBegin then
+    TrackBarPosition.Position:=0;
+end;
+
+procedure TBisTaxiWaveFrame.RecorderFirst;
+begin
+  FRecorder.Paused:=false;
+  FRecorder.Active:=false;
+  FRecorder.WaitForStop;
+end;
+
+function TBisTaxiWaveFrame.GetEmpty: Boolean;
+begin
+  Result:=FWaveOriginal.Empty;
+end;
+
+procedure TBisTaxiWaveFrame.BitBtnClearClick(Sender: TObject);
+begin
+  Clear;
+end;
+
+procedure TBisTaxiWaveFrame.BitBtnLoadClick(Sender: TObject);
+begin
+  Load;
+end;
+
+procedure TBisTaxiWaveFrame.BitBtnPauseClick(Sender: TObject);
+begin
+  Pause;
+end;
+
+procedure TBisTaxiWaveFrame.BitBtnPlayClick(Sender: TObject);
+begin
+  Play;
+end;
+
+procedure TBisTaxiWaveFrame.BitBtnRecordClick(Sender: TObject);
+begin
+  &Record;
+end;
+
+procedure TBisTaxiWaveFrame.BitBtnSaveClick(Sender: TObject);
+begin
+  Save;
+end;
+
+procedure TBisTaxiWaveFrame.BitBtnStopClick(Sender: TObject);
+begin
+  Stop;
+end;
+
+procedure TBisTaxiWaveFrame.PlayerData(Sender: TObject; const Buffer: Pointer; BufferSize: DWord);
+begin
+  ChangeWaveAudioVolume(Buffer,BufferSize,FWaveTransform.WaveFormat,FCurrentVolume);
+end;
+
+procedure TBisTaxiWaveFrame.PlayerStop(Sender: TObject);
+begin
+  Stop;
+end;
+
+procedure TBisTaxiWaveFrame.UpdateStates;
+begin
+  TrackBarPosition.Enabled:=not FWaveOriginal.Empty;
+  TrackBarVolume.Enabled:=not FWaveOriginal.Empty and FConverted;
+  BitBtnPlay.Enabled:=CanPlay;
+  BitBtnRecord.Enabled:=CanRecord;
+  BitBtnPause.Enabled:=CanPause;
+  BitBtnStop.Enabled:=CanStop;
+  BitBtnLoad.Enabled:=CanLoad;
+  BitBtnSave.Enabled:=CanSave;
+  BitBtnClear.Enabled:=CanClear;
+  Timer.Enabled:=FPlayer.Active or FRecorder.Active;
+end;
+
+procedure TBisTaxiWaveFrame.UpdateTime(Position: Cardinal);
+var
+   D: TDateTime;
+begin
+  D:=Position/MSecsPerSec/SecsPerDay;
+  LabelTime.Caption:=FormatEx('%s',[FormatDateTime('hh:nn:ss.zzz',D)]);
+  LabelTime.Update;
+end;
+
+procedure TBisTaxiWaveFrame.TimerTimer(Sender: TObject);
+begin
+
+  if FPlayer.Active and not FPlayer.Paused then begin
+    Timer.Enabled:=false;
+    TrackBarPosition.OnChange:=nil;
+    try
+      TrackBarPosition.Position:=FPlayer.Position;
+      UpdateTime(FPlayer.Position);
+      if not FEventHappend then begin
+        if (FPlayer.Position>=FEventTime) and (FPlayer.Position<=(FEventTime+Timer.Interval*3)) then begin
+          FEventHappend:=true;
+          DoEvent;
+        end;
+      end;
+    finally
+      TrackBarPosition.OnChange:=TrackBarPositionChange;
+      Timer.Enabled:=true;
+    end;
+  end;
+
+  if FRecorder.Active and not FRecorder.Paused then begin
+    Timer.Enabled:=false;
+    try
+      UpdateTime(FRecorder.Position);
+    finally
+      Timer.Enabled:=true;
+    end;
+  end;
+
+end;
+
+procedure TBisTaxiWaveFrame.TrackBarPositionChange(Sender: TObject);
+begin
+  FPlayer.Position:=TrackBarPosition.Position;
+  UpdateTime(FPlayer.Position);
+end;
+
+procedure TBisTaxiWaveFrame.TrackBarVolumeChange(Sender: TObject);
+begin
+  FCurrentVolume:=-(TrackBarVolume.Position);
+end;
+
+procedure TBisTaxiWaveFrame.SetEditable(const Value: Boolean);
+begin
+  FEditable := Value;
+  UpdateStates;
+end;
+
+function TBisTaxiWaveFrame.CanPlay: Boolean;
+begin
+  Result:=(not FPlayer.Active or FPlayer.Paused) and
+           not FWaveOriginal.Empty;
+end;
+
+procedure TBisTaxiWaveFrame.Play;
+begin
+  if CanPlay then begin
+    if not FPlayer.Paused then begin
+      PlayerFirst(false);
+      DoBeforePlay;
+      FConverted:=ConvertFrom;
+      FPlayer.Position:=TrackBarPosition.Position;
+      FPlayer.PlayStream(FWaveTransform.Stream,0);
+    end else
+      FPlayer.Paused:=false;
+  end;
+  UpdateStates;
+end;
+
+function TBisTaxiWaveFrame.CanRecord: Boolean;
+begin
+  Result:=(not FRecorder.Active or FRecorder.Paused) and
+          FWaveOriginal.Empty;
+end;
+
+procedure TBisTaxiWaveFrame.&Record;
+begin
+  if CanRecord then begin
+    if not FRecorder.Paused then begin
+      RecorderFirst;
+      FWaveTransform.BeginRewritePCM(FWaveTransformPCMFormat);
+      FRecorder.Active:=true;
+    end else
+      FRecorder.Paused:=false;
+  end;
+  UpdateStates;
+end;
+
+procedure TBisTaxiWaveFrame.RecorderData(Sender: TObject; const Buffer: Pointer; BufferSize: Cardinal; var FreeIt: Boolean);
+begin
+  FreeIt:=true;
+  if (BufferSize>0) then begin
+{    FWaveTransform.Stream.Position:=FWaveTransform.Stream.Size;
+    FWaveTransform.Stream.Write(Buffer^,BufferSize);}
+    FWaveTransform.Write(Buffer^,BufferSize);
+  end;
+end;
+
+function TBisTaxiWaveFrame.CanPause: Boolean;
+begin
+  Result:=(FPlayer.Active and not FPlayer.Paused) or
+          (FRecorder.Active and not FRecorder.Paused);
+end;
+
+procedure TBisTaxiWaveFrame.Pause;
+begin
+  if CanPause then begin
+    if FPlayer.Active then
+      FPlayer.Paused:=true;
+    if FRecorder.Active then
+      FRecorder.Paused:=true;
+  end;
+  UpdateStates;
+end;
+
+function TBisTaxiWaveFrame.CanStop: Boolean;
+begin
+  Result:=FPlayer.Active or FRecorder.Active;
+end;
+
+procedure TBisTaxiWaveFrame.Stop;
+begin
+  if CanStop then begin
+    if FPlayer.Active then
+      PlayerFirst(true);
+    if FRecorder.Active then begin
+      RecorderFirst;
+      FWaveTransform.EndRewrite;
+      FWaveOriginal.Assign(FWaveTransform);
+      TrackBarPosition.Max:=FWaveOriginal.Length;
+      UpdateTime(TrackBarPosition.Max);
+      DoAfterRecord;
+    end;
+  end else if not FPlayer.Active then
+    PlayerFirst(true)
+  else
+    RecorderFirst;
+  UpdateStates;
+end;
+
+function TBisTaxiWaveFrame.CanLoad: Boolean;
+begin
+  Result:=not FPlayer.Active and not FRecorder.Active and
+          FEditable;
+end;
+
+procedure TBisTaxiWaveFrame.Load;
+begin
+  if CanLoad then begin
+    if OpenDialog.Execute then begin
+      PlayerFirst(true);
+      FWaveOriginal.LoadFromFile(OpenDialog.FileName);
+      TrackBarPosition.Max:=FWaveOriginal.Length;
+      UpdateTime(TrackBarPosition.Max);
+      DoLoad;
+    end;
+  end;
+  UpdateStates;
+end;
+
+function TBisTaxiWaveFrame.CanSave: Boolean;
+begin
+  Result:=not FWaveOriginal.Empty;
+end;
+
+procedure TBisTaxiWaveFrame.Save;
+begin
+  if CanSave then begin
+    if SaveDialog.Execute then
+      FWaveOriginal.SaveToFile(SaveDialog.FileName);
+  end;
+  UpdateStates;
+end;
+
+function TBisTaxiWaveFrame.CanClear: Boolean;
+begin
+  Result:=not FPlayer.Active and not FWaveOriginal.Empty and FEditable;
+end;
+
+procedure TBisTaxiWaveFrame.Clear;
+begin
+  if CanClear then begin
+    PlayerFirst(true);
+    RecorderFirst;
+    FWaveOriginal.Clear;
+    FWaveTransform.Clear;
+    UpdateTime(0);
+    DoClear;
+  end;
+  UpdateStates;
+end;
+
+function TBisTaxiWaveFrame.ConvertFrom: Boolean;
+const
+  Formats: array[0..5] of TPCMFormat = (Mono8Bit8000Hz,Mono16bit8000Hz,Mono8bit11025Hz,
+                                        Mono16bit11025Hz,Mono8bit22050Hz,Mono16bit22050Hz);
+var
+  i: Integer;
+  FMT: TPCMFormatæ
+begin
+  Result:=false;
+  if not FWaveOriginal.Empty then begin
+    FWaveTransform.Assign(FWaveOriginal);
+    for i:=Length(Formats) downto Low(Formats) do begin
+      Result:=FWaveTransform.ConvertToPCM(Formats[i]);
+      if Result then
+        break;
+    end;
+  end;
+end;
+
+procedure TBisTaxiWaveFrame.LoadFromStream(Stream: TStream);
+var
+  OldPos: Integer;
+begin
+  if CanLoad then begin
+    OldPos:=Stream.Position;
+    Stream.Position:=0;
+    try
+      PlayerFirst(true);
+      FWaveOriginal.LoadFromStream(Stream);
+      TrackBarPosition.Max:=FWaveOriginal.Length;
+      UpdateTime(TrackBarPosition.Max);
+    finally
+      Stream.Position:=OldPos;
+    end;
+  end;
+  UpdateStates;
+end;
+
+procedure TBisTaxiWaveFrame.SaveToStream(Stream: TStream);
+begin
+  FWaveOriginal.SaveToStream(Stream);
+end;
+
+end.

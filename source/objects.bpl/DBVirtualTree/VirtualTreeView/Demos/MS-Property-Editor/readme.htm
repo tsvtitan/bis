@@ -1,0 +1,369 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1255">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./readme_files/filelist.xml">
+<title>The Virtual Property Tree</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>n/a</o:Author>
+  <o:LastAuthor>n/a</o:LastAuthor>
+  <o:Revision>31</o:Revision>
+  <o:TotalTime>57</o:TotalTime>
+  <o:Created>2002-10-15T18:26:00Z</o:Created>
+  <o:LastSaved>2002-10-15T20:38:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>430</o:Words>
+  <o:Characters>2455</o:Characters>
+  <o:Lines>20</o:Lines>
+  <o:Paragraphs>4</o:Paragraphs>
+  <o:CharactersWithSpaces>3014</o:CharactersWithSpaces>
+  <o:Version>9.2720</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:Zoom>160</w:Zoom>
+  <w:DrawingGridHorizontalSpacing>9.35 pt</w:DrawingGridHorizontalSpacing>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+@font-face
+	{font-family:Verdana;
+	panose-1:2 11 6 4 3 5 4 4 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:536871559 0 0 0 415 0;}
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	mso-bidi-font-size:12.0pt;
+	font-family:Verdana;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:18.0pt;
+	font-family:Arial;
+	mso-font-kerning:16.0pt;}
+h2
+	{mso-style-next:Normal;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:12.0pt;
+	font-family:Verdana;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:.1in .1in 1.0in .1in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<h1><span style='font-family:Verdana'>The Virtual Property Tree<o:p></o:p></span></h1>
+
+<h2><span style='font-size:8.0pt'>By Carmi Grushko, <a
+href="mailto:sf_yourshadow@bezeqint.net"><span style='mso-bidi-font-size:12.0pt;
+font-weight:normal'>sf_yourshadow@bezeqint.net</span></a><o:p></o:p></span></h2>
+
+<p class=MsoNormal>Current Version: 1.0</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<h2>Overview<br style='mso-special-character:line-break'>
+<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+<![endif]></h2>
+
+<p class=MsoNormal style='margin-left:18.7pt'>TVirtualPropertyTree is a
+descendant of TvirtualStringTree (by Mike Lischke), which simulates <b>Microsoft
+Visual Studio</b> property tree, which can usually be seen in the right-bottom
+part of the screen. Users of Delphi should be familiar with the concept, as it
+is exploited in <b>Delphi’s Object Inspector</b>. At any rate, I think
+Microsoft’s implementation looks <i>much</i> better, so I followed it. <br
+style='mso-special-character:line-break'>
+<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+<![endif]></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'>TVirtualPropertyTree’s interface
+is as identical to Microsoft’s property tree as I could make it.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<h2>Usage<br style='mso-special-character:line-break'>
+<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+<![endif]></h2>
+
+<p class=MsoNormal style='margin-left:18.7pt'>All the functionality of
+TVirtualPropertyTree is derived from this single record :</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><span
+style="mso-spacerun: yes">&nbsp; </span>TField = <b>record</b><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><span
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>Name : <b>string</b>;<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><span
+style="mso-spacerun: yes">&nbsp; </span><span style="mso-spacerun:
+yes">&nbsp;&nbsp;</span>Category : <b>string</b>;<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><span
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>Data : pointer;<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><span
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>DataType : TDataType;<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New";
+color:#339966'><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>//
+dtCombo support<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><span
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>ComboData : <b>array of</b>
+<b>string</b>;<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New";
+color:#339966'><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>//
+dtInteger/dtExtended support<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><span
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>MinValue,<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><span
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>MaxValue : integer;<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='font-family:"Courier New"'><span
+style="mso-spacerun: yes">&nbsp; </span><b>end</b>;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'><br
+style='mso-special-character:line-break'>
+<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'>Explanation of the various
+fields:<br style='mso-special-character:line-break'>
+<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+<![endif]></p>
+
+<table border=0 cellspacing=0 cellpadding=0 style='margin-left:37.0pt;
+ border-collapse:collapse;mso-padding-alt:0in 5.4pt 0in 5.4pt'>
+ <tr>
+  <td width="16%" valign=top style='width:16.74%;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New"'>Name:<o:p></o:p></span></p>
+  </td>
+  <td valign=top style='padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-family:"Courier New"'>The name
+  of the field; displayed in the left part of the tree.</span><span
+  style='font-family:"Courier New"'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="16%" valign=top style='width:16.74%;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New"'>Category:<o:p></o:p></span></p>
+  </td>
+  <td valign=top style='padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-family:"Courier New"'>Fields
+  are arranged in Categories (such as “DDE”, “Visual”); this is the name of the
+  Category this field belongs to.</span><span style='font-family:"Courier New"'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="16%" valign=top style='width:16.74%;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New"'>Data:<o:p></o:p></span></p>
+  </td>
+  <td valign=top style='padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-family:"Courier New"'>The tree
+  directly modifies variables when the user changes them; this is a pointer to
+  that data. The type of the pointed-to data is determined by the next member, </span><span
+  style='font-family:"Courier New"'>DataType</span><span style='mso-bidi-font-family:
+  "Courier New"'>.</span><span style='font-family:"Courier New"'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="16%" valign=top style='width:16.74%;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New"'>DataType: <span
+  style="mso-spacerun: yes">&nbsp;</span><o:p></o:p></span></p>
+  </td>
+  <td valign=top style='padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-family:"Courier New"'>One of
+  the following value : </span><span style='font-family:"Courier New"'>dtInteger,
+  dtString, dtCombo, dtColor, dtExtended</span><span style='mso-bidi-font-family:
+  "Courier New"'>. This member defines what type </span><span style='font-family:
+  "Courier New"'>Data</span><span style='mso-bidi-font-family:"Courier New"'>
+  should point to. For example, if </span><span style='font-family:"Courier New"'>DataType
+  = dtString</span><span style='mso-bidi-font-family:"Courier New"'>, </span><span
+  style='font-family:"Courier New"'>Data</span><span style='mso-bidi-font-family:
+  "Courier New"'> should have been set to something like </span><span
+  style='font-family:"Courier New"'>Data := @s;</span><span style='mso-bidi-font-family:
+  "Courier New"'>, where s is declared as </span><span style='font-family:"Courier New"'>string</span><span
+  style='mso-bidi-font-family:"Courier New"'>.</span><span style='font-family:
+  "Courier New"'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="16%" valign=top style='width:16.74%;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New"'>ComboData:<o:p></o:p></span></p>
+  </td>
+  <td valign=top style='padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-family:"Courier New"'>If </span><span
+  style='font-family:"Courier New"'>DataType</span><span style='mso-bidi-font-family:
+  "Courier New"'> is </span><span style='font-family:"Courier New"'>dtCombo</span><span
+  style='mso-bidi-font-family:"Courier New"'>, </span><span style='font-family:
+  "Courier New"'>ComboData</span><span style='mso-bidi-font-family:"Courier New"'>
+  should be filled with the values that will be displayed in the ComboBox that
+  will be created for this field. </span><span style='font-family:"Courier New"'>Data</span><span
+  style='mso-bidi-font-family:"Courier New"'> must be pointing to an </span><span
+  style='font-family:"Courier New"'>integer</span><span style='mso-bidi-font-family:
+  "Courier New"'>, which will receive the index of the selected item in the
+  ComboBox.</span><span style='font-family:"Courier New"'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="16%" valign=top style='width:16.74%;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New"'>MinValue,<o:p></o:p></span></p>
+  <p class=MsoNormal><span style='font-family:"Courier New"'>MaxValue:<o:p></o:p></span></p>
+  </td>
+  <td valign=top style='padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-family:"Courier New"'>If </span><span
+  style='font-family:"Courier New"'>DataType</span><span style='mso-bidi-font-family:
+  "Courier New"'> is </span><span style='font-family:"Courier New"'>dtInteger</span><span
+  style='mso-bidi-font-family:"Courier New"'> or </span><span style='font-family:
+  "Courier New"'>dtExtended</span><span style='mso-bidi-font-family:"Courier New"'>,
+  these two members define the maximal and minimal values that the tree will allow
+  the user to enter.</span><span style='font-family:"Courier New"'><o:p></o:p></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal><span style='mso-bidi-font-family:"Courier New"'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='mso-bidi-font-family:
+"Courier New"'>Various types for </span><span style='font-family:"Courier New"'>DataType</span><span
+style='mso-bidi-font-family:"Courier New"'>:<br style='mso-special-character:
+line-break'>
+<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:37.4pt'><span style='font-family:"Courier New"'>dtInteger:</span><span
+style='mso-bidi-font-family:"Courier New"'> </span><span style='font-family:
+"Courier New"'>Data</span><span style='mso-bidi-font-family:"Courier New"'>
+points to an integer variable; see </span><span style='font-family:"Courier New"'>MinValue</span><span
+style='mso-bidi-font-family:"Courier New"'> and </span><span style='font-family:
+"Courier New"'>MaxValue</span><span style='mso-bidi-font-family:"Courier New"'>
+(</span><span style='font-family:"Courier New"'>PInteger</span><span
+style='mso-bidi-font-family:"Courier New"'>).<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:37.4pt'><span style='font-family:"Courier New"'>dtString:</span><span
+style='mso-bidi-font-family:"Courier New"'> </span><span style='font-family:
+"Courier New"'>Data</span><span style='mso-bidi-font-family:"Courier New"'>
+points to a string variable (</span><span style='font-family:"Courier New"'>PString</span><span
+style='mso-bidi-font-family:"Courier New"'>).<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:37.4pt'><span style='font-family:"Courier New"'>dtCombo:</span><span
+style='mso-bidi-font-family:"Courier New"'> </span><span style='font-family:
+"Courier New"'>Data</span><span style='mso-bidi-font-family:"Courier New"'>
+points to an integer variable; see </span><span style='font-family:"Courier New"'>ComboData</span><span
+style='mso-bidi-font-family:"Courier New"'> (</span><span style='font-family:
+"Courier New"'>PInteger</span><span style='mso-bidi-font-family:"Courier New"'>).<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:37.4pt'><span style='font-family:"Courier New"'>dtColor:</span><span
+style='mso-bidi-font-family:"Courier New"'> </span><span style='font-family:
+"Courier New"'>Data</span><span style='mso-bidi-font-family:"Courier New"'>
+points to a </span><span style='font-family:"Courier New"'>TColor</span><span
+style='mso-bidi-font-family:"Courier New"'> variable (</span><span
+style='font-family:"Courier New"'>PColor</span><span style='mso-bidi-font-family:
+"Courier New"'>).<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:37.4pt'><span style='font-family:"Courier New"'>dtExtended:</span><span
+style='mso-bidi-font-family:"Courier New"'> </span><span style='font-family:
+"Courier New"'>Data</span><span style='mso-bidi-font-family:"Courier New"'>
+points to an extended variable; see </span><span style='font-family:"Courier New"'>MinValue</span><span
+style='mso-bidi-font-family:"Courier New"'> and </span><span style='font-family:
+"Courier New"'>MaxValue</span><span style='mso-bidi-font-family:"Courier New"'>
+(</span><span style='font-family:"Courier New"'>PExtended</span><span
+style='mso-bidi-font-family:"Courier New"'>).<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:37.4pt'><span style='mso-bidi-font-family:
+"Courier New"'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='mso-bidi-font-family:
+"Courier New"'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='mso-bidi-font-family:
+"Courier New"'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='mso-bidi-font-family:
+"Courier New"'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='mso-bidi-font-family:
+"Courier New"'>To use the tree, the first thing to do is to create field
+entries in the tree’s Fields public field; for an example, see the demo project
+in the package. Then all fields must be filled in according to their </span><span
+style='font-family:"Courier New"'>DataType</span><span style='mso-bidi-font-family:
+"Courier New"'> member.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><b><span style='mso-bidi-font-family:
+"Courier New"'>Note: </span></b><span style='mso-bidi-font-family:"Courier New"'>each
+field’s </span><span style='font-family:"Courier New"'>Data </span><span
+style='mso-bidi-font-family:"Courier New"'>must be pointing to a valid, correct
+variable.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.7pt'><span style='mso-bidi-font-family:
+"Courier New"'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<h2>License<br style='mso-special-character:line-break'>
+<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+<![endif]></h2>
+
+<p class=MsoNormal style='margin-left:18.7pt'>This whole package is governed by
+the Mozilla Public License 1.1 (MPL 1.1), which can be easily obtained from <a
+href="http://www.mozilla.org/MPL/MPL-1.1.html">http://www.mozilla.org/MPL/MPL-1.1.html</a>
+.</p>
+
+</div>
+
+</body>
+
+</html>

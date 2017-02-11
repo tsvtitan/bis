@@ -1,0 +1,15 @@
+program smpp;
+
+uses
+  Forms,
+  BisMainFm in 'BisMainFm.pas' {BisMainForm},
+  cUnicodeCodecs in 'cUnicodeCodecs.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TBisMainForm, BisMainForm);
+  Application.Run;
+end.

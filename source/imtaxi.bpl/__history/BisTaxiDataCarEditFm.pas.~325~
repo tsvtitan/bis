@@ -1,0 +1,492 @@
+unit BisTaxiDataCarEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ImgList, CheckLst, DB, Menus, ActnPopup, ExtDlgs,
+  BisDataEditFm, BisParam, BisFilterGroups, BisControls;
+
+type
+  TBisTaxiDataCarEditForm = class(TBisDataEditForm)
+    LabelStateNum: TLabel;
+    EditStateNum: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelYearCreated: TLabel;                                                                         
+    EditYearCreated: TEdit;
+    LabelCallsign: TLabel;
+    EditCallsign: TEdit;
+    LabelBrand: TLabel;
+    EditBrand: TEdit;
+    LabelColor: TLabel;
+    EditColor: TEdit;
+    LabelPts: TLabel;
+    MemoPts: TMemo;
+    LabelPayload: TLabel;
+    EditPayload: TEdit;
+    LabelAmount: TLabel;
+    EditAmount: TEdit;
+    LabelCarTypes: TLabel;
+    CheckListBoxCarTypes: TCheckListBox;
+    PanelPhoto: TPanel;
+    ShapePhoto: TShape;
+    ImagePhoto: TImage;
+    ButtonPhoto: TButton;
+    SavePictureDialog: TSavePictureDialog;
+    OpenPictureDialog: TOpenPictureDialog;
+    PopupActionBarPhoto: TPopupActionBar;
+    MenuItemLoadPhoto: TMenuItem;
+    MenuItemSavePhoto: TMenuItem;
+    MenuItemClearPhoto: TMenuItem;
+    procedure CheckListBoxCarTypesClickCheck(Sender: TObject);
+    procedure ButtonPhotoClick(Sender: TObject);
+    procedure MenuItemLoadPhotoClick(Sender: TObject);
+    procedure MenuItemSavePhotoClick(Sender: TObject);
+    procedure MenuItemClearPhotoClick(Sender: TObject);
+    procedure PopupActionBarPhotoPopup(Sender: TObject);
+  private
+    FCarTypesChanged: Boolean;
+    procedure RefreshCarTypes;
+    procedure RefreshCarInTypes;
+    procedure RefreshPhoto;
+    procedure SetDeleteCarInTypes(Before: Boolean);
+    procedure SetInsertCarInTypes;
+    function CheckedCount: Integer;
+    function GetCarTypeFlag(Param: TBisParam): Variant;
+    function GetRealCarId: Variant;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure BeforeShow; override;
+    procedure Execute; override;
+    function ChangesExists: Boolean; override;
+    function CheckParam(Param: TBisParam): Boolean; override;
+    procedure ChangeParam(Param: TBisParam); override;
+    procedure RefreshParams; override;
+
+    procedure GetCarTypesFilterGroup(AFilterGroup: TBisFilterGroup);
+  end;
+
+  TBisTaxiDataCarEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCarViewFormIface=class(TBisTaxiDataCarEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCarFilterFormIface=class(TBisTaxiDataCarEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCarInsertFormIface=class(TBisTaxiDataCarEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCarUpdateFormIface=class(TBisTaxiDataCarEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataCarDeleteFormIface=class(TBisTaxiDataCarEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataCarEditForm: TBisTaxiDataCarEditForm;
+
+implementation
+
+uses BisUtils, BisProvider, BisParamCalculate, BisParams,
+     BisTaxiDataCarTypesFm, BisParamComboBoxDataSelect;
+
+{$R *.dfm}
+
+type
+  TBisCarTypeInfo=class(TObject)
+  private
+    var CarTypeId: Variant;
+  end;
+
+{ TBisTaxiDataCarEditFormIface }
+
+constructor TBisTaxiDataCarEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataCarEditForm;
+  with Params do begin
+    AddKey('CAR_ID').Older('OLD_CAR_ID');
+    AddEdit('STATE_NUM','EditStateNum','LabelStateNum',true);
+    with AddCalculate('CAR_TYPE_FLAG',nil) do begin
+      Required:=true;
+      ParamType:=ptUnknown;
+      CaptionName:='LabelCarTypes';
+      ControlName:='CheckListBoxCarTypes';
+    end;
+    AddEdit('CALLSIGN','EditCallsign','LabelCallsign');
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+    AddEdit('BRAND','EditBrand','LabelBrand',true);
+    AddEdit('COLOR','EditColor','LabelColor',true);
+    AddEditInteger('YEAR_CREATED','EditYearCreated','LabelYearCreated');
+    AddEditInteger('PAYLOAD','EditPayload','LabelPayload');
+    AddEditInteger('AMOUNT','EditAmount','LabelAmount');
+    AddMemo('PTS','MemoPts','LabelPts');
+
+    AddImage('PHOTO','ImagePhoto');
+    
+  end;
+end;
+
+{ TBisTaxiDataCarViewFormIface }
+
+constructor TBisTaxiDataCarViewFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Просмотр автомобиля';
+end;
+
+{ TBisTaxiDataCarFilterFormIface }
+
+constructor TBisTaxiDataCarFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Фильтр автомобилей';
+  
+end;
+
+{ TBisTaxiDataCarInsertFormIface }
+
+constructor TBisTaxiDataCarInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Permissions.Enabled:=true;
+  ProviderName:='I_CAR';
+  ParentProviderName:='S_CARS';
+  Caption:='Создать автомобиль';
+  SMessageSuccess:='Автомобиль %STATE_NUM успешно создан.';
+end;
+
+{ TBisTaxiDataCarUpdateFormIface }
+
+constructor TBisTaxiDataCarUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_CAR';
+  Caption:='Изменить автомобиль';
+end;
+
+{ TBisTaxiDataCarDeleteFormIface }
+
+constructor TBisTaxiDataCarDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_CAR';
+  Caption:='Удалить автомобиль';
+end;
+
+{ TBisTaxiDataCarEditForm }
+
+constructor TBisTaxiDataCarEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  RefreshCarTypes;
+end;
+
+function TBisTaxiDataCarEditForm.GetRealCarId: Variant;
+var
+  Param: TBisParam;
+begin
+  Result:=Null;
+  if (Mode=emDuplicate) then begin
+    if Assigned(Provider.ParentDataSet) then
+      Result:=Provider.ParentDataSet.FieldByName('CAR_ID').Value;
+  end else begin
+    Param:=Provider.ParamByName('CAR_ID');
+    Result:=Param.Value;
+  end;
+end;
+
+procedure TBisTaxiDataCarEditForm.RefreshPhoto;
+var
+  P: TBisProvider;
+  CarId: Variant;
+begin
+  CarId:=GetRealCarId;
+  if not VarIsNull(CarId) then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=false;
+      P.ProviderName:='S_CARS';
+      P.FieldNames.AddInvisible('PHOTO');
+      P.FilterGroups.Add.Filters.Add('CAR_ID',fcEqual,CarId).CheckCase:=true;
+      P.Open;
+      if P.Active and not P.IsEmpty then begin
+        with Provider.Params.ParamByName('PHOTO') do begin
+          SetNewValue(P.FieldByName('PHOTO').AsString);
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDataCarEditForm.RefreshCarInTypes;
+var
+  P: TBisProvider;
+  CarId: Variant;  
+  CarTypeId: Variant;
+  i: Integer;
+  Obj: TBisCarTypeInfo;
+begin
+  CarId:=GetRealCarId;
+  if not VarIsNull(CarId) then begin
+    CheckListBoxCarTypes.Items.BeginUpdate;
+    P:=TBisProvider.Create(nil);
+    try
+      P.WithWaitCursor:=false;
+      P.ProviderName:='S_CAR_IN_TYPES';
+      P.FieldNames.AddInvisible('CAR_TYPE_ID');
+      P.FilterGroups.Add.Filters.Add('CAR_ID',fcEqual,Param.Value);
+      P.Open;
+      if P.Active then begin
+        P.First;
+        while not P.Eof do begin
+          CarTypeId:=P.FieldByName('CAR_TYPE_ID').Value;
+          for i:=0 to CheckListBoxCarTypes.Items.Count-1 do begin
+            Obj:=TBisCarTypeInfo(CheckListBoxCarTypes.Items.Objects[i]);
+            if VarSameValue(CarTypeId,Obj.CarTypeId) then begin
+              CheckListBoxCarTypes.Checked[i]:=true;
+            end;
+          end;
+          P.Next;
+        end;
+        Provider.ParamByName('CAR_TYPE_FLAG').DefaultValue:=GetCarTypeFlag(nil);
+      end;
+    finally
+      P.Free;
+      CheckListBoxCarTypes.Items.EndUpdate;
+    end;
+  end;
+end;
+procedure TBisTaxiDataCarEditForm.RefreshParams;
+var
+  OldCursor: TCursor;
+begin
+  OldCursor:=Screen.Cursor;
+  try
+    Screen.Cursor:=OldCursor;
+
+    inherited RefreshParams;
+
+    if not (Mode in [emInsert,emFilter]) then
+      RefreshPhoto;
+
+    if not (Mode in [emInsert,emDuplicate,emFilter])then begin
+      RefreshCarInTypes;
+    end;
+
+  finally
+    Screen.Cursor:=OldCursor;
+  end;
+end;
+
+procedure TBisTaxiDataCarEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  TBisParamCalculate(Provider.ParamByName('CAR_TYPE_FLAG')).OnGetValue:=GetCarTypeFlag;
+
+  PanelPhoto.Color:=CheckListBoxCarTypes.Color;
+  ButtonPhoto.Enabled:=Mode in [emView,emInsert,emDuplicate,emUpdate];
+
+  UpdateButtonState;
+end;
+
+procedure TBisTaxiDataCarEditForm.ButtonPhotoClick(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  Pt:=PanelPhoto.ClientToScreen(Point(ButtonPhoto.Left,ButtonPhoto.Top+ButtonPhoto.Height));
+  PopupActionBarPhoto.Popup(Pt.X,Pt.Y);
+end;
+
+procedure TBisTaxiDataCarEditForm.ChangeParam(Param: TBisParam);
+begin
+  inherited ChangeParam(Param);
+end;
+
+function TBisTaxiDataCarEditForm.ChangesExists: Boolean;
+begin
+  Result:=inherited ChangesExists or FCarTypesChanged;
+end;
+
+function TBisTaxiDataCarEditForm.CheckedCount: Integer;
+var
+  i: Integer;
+begin
+  Result:=0;
+  for i:=0 to CheckListBoxCarTypes.Count-1 do begin
+    if CheckListBoxCarTypes.Checked[i] then
+      Inc(Result);
+  end;
+end;
+
+procedure TBisTaxiDataCarEditForm.CheckListBoxCarTypesClickCheck(Sender: TObject);
+begin
+  FCarTypesChanged:=true;
+  UpdateButtonState;
+end;
+
+function TBisTaxiDataCarEditForm.CheckParam(Param: TBisParam): Boolean;
+begin
+  Result:=inherited CheckParam(Param);
+end;
+
+procedure TBisTaxiDataCarEditForm.RefreshCarTypes;
+var
+  P: TBisProvider;
+  Obj: TBisCarTypeInfo;
+begin
+  ClearStrings(CheckListBoxCarTypes.Items);
+  CheckListBoxCarTypes.Items.BeginUpdate;
+  P:=TBisProvider.Create(nil);
+  try
+    P.ProviderName:='S_CAR_TYPES';
+    with P.FieldNames do begin
+      AddInvisible('CAR_TYPE_ID');
+      AddInvisible('NAME');
+    end;
+    P.FilterGroups.Add.Filters.Add('VISIBLE',fcEqual,1);
+    P.Orders.Add('PRIORITY');
+    P.Open;
+    if P.Active then begin
+      P.First;
+      while not P.Eof do begin
+        Obj:=TBisCarTypeInfo.Create;
+        Obj.CarTypeId:=P.FieldByName('CAR_TYPE_ID').Value;
+        CheckListBoxCarTypes.Items.AddObject(P.FieldByName('NAME').AsString,Obj);
+        P.Next;
+      end;
+    end;
+  finally
+    P.Free;
+    CheckListBoxCarTypes.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisTaxiDataCarEditForm.SetDeleteCarInTypes(Before: Boolean);
+var
+  Obj: TBisCarTypeInfo;
+  Param: TBisParam;
+  i: Integer;
+  Package: TBisPackageParams;
+begin
+  Param:=Provider.Params.Find('CAR_ID');
+  if Assigned(Param) and not Param.Empty then begin
+    Package:=Provider.PackageAfter;
+    if Before then
+      Package:=Provider.PackageBefore;
+    Package.DeleteByProvider('D_CAR_IN_TYPE');
+    for i:=0 to CheckListBoxCarTypes.Items.Count-1 do begin
+      Obj:=TBisCarTypeInfo(CheckListBoxCarTypes.Items.Objects[i]);
+      with Package.Add do begin
+        ProviderName:='D_CAR_IN_TYPE';
+        with AddInvisible('CAR_ID') do begin
+          Older('OLD_CAR_ID');
+          Value:=Param.Value;
+        end;
+        with AddInvisible('CAR_TYPE_ID') do begin
+          Older('OLD_CAR_TYPE_ID');
+          Value:=Obj.CarTypeId;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDataCarEditForm.SetInsertCarInTypes;
+var
+  Obj: TBisCarTypeInfo;
+  Param: TBisParam;
+  i: Integer;
+begin
+  Param:=Provider.Params.Find('CAR_ID');
+  if Assigned(Param) and not Param.Empty then begin
+    Provider.PackageAfter.DeleteByProvider('I_CAR_IN_TYPE');
+    for i:=0 to CheckListBoxCarTypes.Items.Count-1 do begin
+      if CheckListBoxCarTypes.Checked[i] then begin
+        Obj:=TBisCarTypeInfo(CheckListBoxCarTypes.Items.Objects[i]);
+        with Provider.PackageAfter.Add do begin
+          ProviderName:='I_CAR_IN_TYPE';
+          AddInvisible('CAR_ID').Value:=Param.Value;
+          AddInvisible('CAR_TYPE_ID').Value:=Obj.CarTypeId;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TBisTaxiDataCarEditForm.GetCarTypeFlag(Param: TBisParam): Variant;
+begin
+  Result:=Null;
+  if CheckedCount>0 then
+    Result:=true;
+end;
+
+procedure TBisTaxiDataCarEditForm.GetCarTypesFilterGroup(AFilterGroup: TBisFilterGroup);
+var
+  i: Integer;
+  Obj: TBisCarTypeInfo;
+  Group: TBisFilterGroup;
+begin
+  for i:=0 to CheckListBoxCarTypes.Count-1 do begin
+    if CheckListBoxCarTypes.Checked[i] then begin
+      Obj:=TBisCarTypeInfo(CheckListBoxCarTypes.Items.Objects[i]);
+      Group:=AFilterGroup.Filters.AddInside('CAR_ID','','S_CAR_IN_TYPES').InsideFilterGroups.Add;
+      Group.Filters.Add('CAR_TYPE_ID',fcEqual,Obj.CarTypeId).CheckCase:=true;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDataCarEditForm.MenuItemClearPhotoClick(Sender: TObject);
+begin
+  Provider.Params.ParamByName('PHOTO').Clear;
+end;
+
+procedure TBisTaxiDataCarEditForm.MenuItemLoadPhotoClick(Sender: TObject);
+begin
+  if OpenPictureDialog.Execute then
+    Provider.Params.ParamByName('PHOTO').LoadFromFile(OpenPictureDialog.FileName);
+end;
+
+procedure TBisTaxiDataCarEditForm.MenuItemSavePhotoClick(Sender: TObject);
+begin
+  if SavePictureDialog.Execute then
+    Provider.Params.ParamByName('PHOTO').SaveToFile(SavePictureDialog.FileName);
+end;
+
+procedure TBisTaxiDataCarEditForm.PopupActionBarPhotoPopup(Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.ParamByName('PHOTO');
+  MenuItemSavePhoto.Enabled:=not Param.Empty;
+  MenuItemClearPhoto.Enabled:=MenuItemSavePhoto.Enabled;
+end;
+
+procedure TBisTaxiDataCarEditForm.Execute;
+begin
+  if Mode in [emDelete,emUpdate] then
+    SetDeleteCarInTypes(Mode in [emDelete]);
+  if Mode in [emInsert,emUpdate,emDuplicate] then
+    SetInsertCarInTypes;
+  inherited Execute;
+end;
+
+
+end.

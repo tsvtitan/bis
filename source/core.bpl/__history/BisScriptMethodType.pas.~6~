@@ -1,0 +1,43 @@
+unit BisScriptMethodType;
+
+interface
+
+uses
+     BisScriptType, BisScriptParam;
+
+type
+  TBisScriptMethodTypeKind=(smtkProcedure,smtkFunction);
+
+  TBisScriptMethodType=class(TBisScriptType)
+  private
+    FParams: TBisScriptFuncParams;
+    FResultType: String;
+    FMethodKind: TBisScriptMethodTypeKind;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+
+    property Params: TBisScriptFuncParams read FParams;
+    property ResultType: String read FResultType write FResultType;
+    property MethodKind: TBisScriptMethodTypeKind read FMethodKind write FMethodKind;
+  end;
+
+
+implementation
+
+{ TBisScriptMethodType }
+
+constructor TBisScriptMethodType.Create;
+begin
+  inherited Create;
+  FKind:=stkMethod;
+  FParams:=TBisScriptFuncParams.Create;
+end;
+
+destructor TBisScriptMethodType.Destroy;
+begin
+  FParams.Free;
+  inherited Destroy;
+end;
+
+end.

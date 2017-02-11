@@ -1,0 +1,830 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 000061C0H .text                   CODE
+ 0002:00408000 0000038CH .itext                  ICODE
+ 0003:00409000 0000007CH .data                   DATA
+ 0004:0040A000 00000034H .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 0000016E C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000170 000001C3 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:00000334 00000106 C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:0000043C 00000054 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:00000490 00000006 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:00000498 0000003E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:000004D8 0000001E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:000004F8 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000500 0000000E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000510 0000005E C=CODE     S=.text    G=(none)   M=HTTPApp  ACBP=A9
+ 0001:00000570 0000000E C=CODE     S=.text    G=(none)   M=IdBaseComponent ACBP=A9
+ 0001:00000580 00000006 C=CODE     S=.text    G=(none)   M=IdSysVCL ACBP=A9
+ 0001:00000588 00000006 C=CODE     S=.text    G=(none)   M=IdException ACBP=A9
+ 0001:00000590 00000016 C=CODE     S=.text    G=(none)   M=IdGlobal ACBP=A9
+ 0001:000005A8 0000001E C=CODE     S=.text    G=(none)   M=IdComponent ACBP=A9
+ 0001:000005C8 00000006 C=CODE     S=.text    G=(none)   M=IdStack  ACBP=A9
+ 0001:000005D0 00000006 C=CODE     S=.text    G=(none)   M=IdWinSock2 ACBP=A9
+ 0001:000005D8 00000006 C=CODE     S=.text    G=(none)   M=IdWship6 ACBP=A9
+ 0001:000005E0 00000006 C=CODE     S=.text    G=(none)   M=IdStackWindows ACBP=A9
+ 0001:000005E8 00000086 C=CODE     S=.text    G=(none)   M=IdCustomTCPServer ACBP=A9
+ 0001:00000670 00000006 C=CODE     S=.text    G=(none)   M=IdThread ACBP=A9
+ 0001:00000678 00000006 C=CODE     S=.text    G=(none)   M=IdSocketHandle ACBP=A9
+ 0001:00000680 00000006 C=CODE     S=.text    G=(none)   M=IdIOHandlerStack ACBP=A9
+ 0001:00000688 00000006 C=CODE     S=.text    G=(none)   M=IdIOHandler ACBP=A9
+ 0001:00000690 00000006 C=CODE     S=.text    G=(none)   M=IdContext ACBP=A9
+ 0001:00000698 0000005E C=CODE     S=.text    G=(none)   M=IdCustomHTTPServer ACBP=A9
+ 0001:000006F8 00000006 C=CODE     S=.text    G=(none)   M=IdHTTPHeaderInfo ACBP=A9
+ 0001:00000700 0000000E C=CODE     S=.text    G=(none)   M=IdHeaderList ACBP=A9
+ 0001:00000710 00000006 C=CODE     S=.text    G=(none)   M=IdGlobalProtocols ACBP=A9
+ 0001:00000718 00000006 C=CODE     S=.text    G=(none)   M=IdCharsets ACBP=A9
+ 0001:00000720 00000006 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000728 00000006 C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000730 00000006 C=CODE     S=.text    G=(none)   M=IdAuthentication ACBP=A9
+ 0001:00000738 00000006 C=CODE     S=.text    G=(none)   M=IdCoderMIME ACBP=A9
+ 0001:00000740 0000001E C=CODE     S=.text    G=(none)   M=IdCookie ACBP=A9
+ 0001:00000760 00000006 C=CODE     S=.text    G=(none)   M=IdSSL    ACBP=A9
+ 0001:00000768 0000000E C=CODE     S=.text    G=(none)   M=BisObject ACBP=A9
+ 0001:00000778 00000026 C=CODE     S=.text    G=(none)   M=BisServers ACBP=A9
+ 0001:000007A0 0000003E C=CODE     S=.text    G=(none)   M=BisObjects ACBP=A9
+ 0001:000007E0 00000016 C=CODE     S=.text    G=(none)   M=BisDataSet ACBP=A9
+ 0001:000007F8 00000006 C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00000800 0000004E C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:00000850 00000006 C=CODE     S=.text    G=(none)   M=WideStrings ACBP=A9
+ 0001:00000858 00000006 C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:00000860 00000006 C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:00000868 00000006 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:00000870 000000EE C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000960 00000006 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000968 00000006 C=CODE     S=.text    G=(none)   M=Themes   ACBP=A9
+ 0001:00000970 00000006 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000978 00000006 C=CODE     S=.text    G=(none)   M=UxTheme  ACBP=A9
+ 0001:00000980 00000006 C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000988 00000006 C=CODE     S=.text    G=(none)   M=DwmApi   ACBP=A9
+ 0001:00000990 0000010E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000AA0 00000006 C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000AA8 00000006 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000AB0 00000006 C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000AB8 00000006 C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000AC0 00000006 C=CODE     S=.text    G=(none)   M=GraphUtil ACBP=A9
+ 0001:00000AC8 00000006 C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000AD0 00000006 C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000AD8 0000002E C=CODE     S=.text    G=(none)   M=BisUtils ACBP=A9
+ 0001:00000B08 0000004E C=CODE     S=.text    G=(none)   M=BisCoreObjects ACBP=A9
+ 0001:00000B58 000000EE C=CODE     S=.text    G=(none)   M=BisFm    ACBP=A9
+ 0001:00000C48 0000001E C=CODE     S=.text    G=(none)   M=BisCrypter ACBP=A9
+ 0001:00000C68 00000006 C=CODE     S=.text    G=(none)   M=DECUtil  ACBP=A9
+ 0001:00000C70 00000006 C=CODE     S=.text    G=(none)   M=Hash     ACBP=A9
+ 0001:00000C78 00000006 C=CODE     S=.text    G=(none)   M=Cipher   ACBP=A9
+ 0001:00000C80 00000006 C=CODE     S=.text    G=(none)   M=Cipher1  ACBP=A9
+ 0001:00000C88 00000006 C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00000C90 00000006 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00000C98 00000006 C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00000CA0 00000006 C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00000CA8 00000006 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00000CB0 00000006 C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00000CB8 00000006 C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00000CC0 00000006 C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00000CC8 00000006 C=CODE     S=.text    G=(none)   M=rxToolEdit ACBP=A9
+ 0001:00000CD0 00000006 C=CODE     S=.text    G=(none)   M=rxDateUtil ACBP=A9
+ 0001:00000CD8 00000006 C=CODE     S=.text    G=(none)   M=RXCtrls  ACBP=A9
+ 0001:00000CE0 00000006 C=CODE     S=.text    G=(none)   M=RxHook   ACBP=A9
+ 0001:00000CE8 00000006 C=CODE     S=.text    G=(none)   M=RXConst  ACBP=A9
+ 0001:00000CF0 00000006 C=CODE     S=.text    G=(none)   M=rxVclutils ACBP=A9
+ 0001:00000CF8 00000006 C=CODE     S=.text    G=(none)   M=RXProps  ACBP=A9
+ 0001:00000D00 00000006 C=CODE     S=.text    G=(none)   M=rxAppUtils ACBP=A9
+ 0001:00000D08 00000006 C=CODE     S=.text    G=(none)   M=RxPrgrss ACBP=A9
+ 0001:00000D10 00000006 C=CODE     S=.text    G=(none)   M=rxCurrEdit ACBP=A9
+ 0001:00000D18 00000006 C=CODE     S=.text    G=(none)   M=ThemedDBGrid ACBP=A9
+ 0001:00000D20 00000006 C=CODE     S=.text    G=(none)   M=RxRichEd ACBP=A9
+ 0001:00000D28 00000006 C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:00000D30 00000006 C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00000D38 00000006 C=CODE     S=.text    G=(none)   M=BisIfaces ACBP=A9
+ 0001:00000D40 00000056 C=CODE     S=.text    G=(none)   M=BisModules ACBP=A9
+ 0001:00000D98 00000006 C=CODE     S=.text    G=(none)   M=GIFImage ACBP=A9
+ 0001:00000DA0 00000006 C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:00000DA8 00000006 C=CODE     S=.text    G=(none)   M=BisCore  ACBP=A9
+ 0001:00000DB0 00000006 C=CODE     S=.text    G=(none)   M=kbmMemTable ACBP=A9
+ 0001:00000DB8 00000006 C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:00000DC0 00000006 C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:00000DC8 00000006 C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00000DD0 00000006 C=CODE     S=.text    G=(none)   M=ActnMan  ACBP=A9
+ 0001:00000DD8 00000006 C=CODE     S=.text    G=(none)   M=ActnMenus ACBP=A9
+ 0001:00000DE0 00000006 C=CODE     S=.text    G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0001:00000DE8 00000006 C=CODE     S=.text    G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0001:00000DF0 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_Routines ACBP=A9
+ 0001:00000DF8 00000006 C=CODE     S=.text    G=(none)   M=MSI_Processes ACBP=A9
+ 0001:00000E00 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0001:00000E08 00000006 C=CODE     S=.text    G=(none)   M=MSI_Devices ACBP=A9
+ 0001:00000E10 00000006 C=CODE     S=.text    G=(none)   M=MSI_CPU  ACBP=A9
+ 0001:00000E18 00000006 C=CODE     S=.text    G=(none)   M=JclDebug ACBP=A9
+ 0001:00000E20 00000006 C=CODE     S=.text    G=(none)   M=JclSysInfo ACBP=A9
+ 0001:00000E28 00000006 C=CODE     S=.text    G=(none)   M=JclStrings ACBP=A9
+ 0001:00000E30 00000006 C=CODE     S=.text    G=(none)   M=JclSysUtils ACBP=A9
+ 0001:00000E38 00000006 C=CODE     S=.text    G=(none)   M=JclWideStrings ACBP=A9
+ 0001:00000E40 00000006 C=CODE     S=.text    G=(none)   M=JclShell ACBP=A9
+ 0001:00000E48 00000006 C=CODE     S=.text    G=(none)   M=JclRegistry ACBP=A9
+ 0001:00000E50 00000006 C=CODE     S=.text    G=(none)   M=JclHookExcept ACBP=A9
+ 0001:00000E58 00000006 C=CODE     S=.text    G=(none)   M=BisServiceApplication ACBP=A9
+ 0001:00000E60 00000006 C=CODE     S=.text    G=(none)   M=BisSvcMgr ACBP=A9
+ 0001:00000E68 00000006 C=CODE     S=.text    G=(none)   M=BisCryptUtils ACBP=A9
+ 0001:00000E70 00000006 C=CODE     S=.text    G=(none)   M=SvcMgr   ACBP=A9
+ 0001:00000E78 0000009E C=CODE     S=.text    G=(none)   M=BisHttpServerConsts ACBP=A9
+ 0001:00000F18 00000A2E C=CODE     S=.text    G=(none)   M=BisHttpServerHandlers ACBP=A9
+ 0001:00001948 000008AA C=CODE     S=.text    G=(none)   M=BisHttpServerHandlerModules ACBP=A9
+ 0001:000021F4 0000000E C=CODE     S=.text    G=(none)   M=ZLib     ACBP=A9
+ 0001:00002204 00000D2E C=CODE     S=.text    G=(none)   M=BisHttpServerResponse ACBP=A9
+ 0001:00002F34 00000956 C=CODE     S=.text    G=(none)   M=BisHttpServerRequest ACBP=A9
+ 0001:0000388C 0000188A C=CODE     S=.text    G=(none)   M=BisHttpServer ACBP=A9
+ 0001:00005118 00000056 C=CODE     S=.text    G=(none)   M=BisServerMainFm ACBP=A9
+ 0001:00005170 0000001E C=CODE     S=.text    G=(none)   M=BisMainFm ACBP=A9
+ 0001:00005190 00000406 C=CODE     S=.text    G=(none)   M=BisHttpServerMainFm ACBP=A9
+ 0001:00005598 00000C27 C=CODE     S=.text    G=(none)   M=.smhttp  ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:00000010 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=HTTPApp  ACBP=A9
+ 0002:0000004C 00000006 C=ICODE    S=.itext   G=(none)   M=IdSysVCL ACBP=A9
+ 0002:00000054 00000006 C=ICODE    S=.itext   G=(none)   M=IdGlobal ACBP=A9
+ 0002:0000005C 00000006 C=ICODE    S=.itext   G=(none)   M=IdComponent ACBP=A9
+ 0002:00000064 00000006 C=ICODE    S=.itext   G=(none)   M=IdStack  ACBP=A9
+ 0002:0000006C 00000006 C=ICODE    S=.itext   G=(none)   M=IdWinSock2 ACBP=A9
+ 0002:00000074 00000006 C=ICODE    S=.itext   G=(none)   M=IdWship6 ACBP=A9
+ 0002:0000007C 00000006 C=ICODE    S=.itext   G=(none)   M=IdStackWindows ACBP=A9
+ 0002:00000084 00000006 C=ICODE    S=.itext   G=(none)   M=IdThread ACBP=A9
+ 0002:0000008C 00000006 C=ICODE    S=.itext   G=(none)   M=IdIOHandlerStack ACBP=A9
+ 0002:00000094 00000006 C=ICODE    S=.itext   G=(none)   M=IdIOHandler ACBP=A9
+ 0002:0000009C 00000006 C=ICODE    S=.itext   G=(none)   M=IdCustomHTTPServer ACBP=A9
+ 0002:000000A4 00000006 C=ICODE    S=.itext   G=(none)   M=IdGlobalProtocols ACBP=A9
+ 0002:000000AC 00000006 C=ICODE    S=.itext   G=(none)   M=IdCharsets ACBP=A9
+ 0002:000000B4 00000006 C=ICODE    S=.itext   G=(none)   M=Registry ACBP=A9
+ 0002:000000BC 00000006 C=ICODE    S=.itext   G=(none)   M=IniFiles ACBP=A9
+ 0002:000000C4 00000006 C=ICODE    S=.itext   G=(none)   M=IdAuthentication ACBP=A9
+ 0002:000000CC 00000006 C=ICODE    S=.itext   G=(none)   M=IdCoderMIME ACBP=A9
+ 0002:000000D4 00000006 C=ICODE    S=.itext   G=(none)   M=IdCookie ACBP=A9
+ 0002:000000DC 00000006 C=ICODE    S=.itext   G=(none)   M=IdSSL    ACBP=A9
+ 0002:000000E4 00000006 C=ICODE    S=.itext   G=(none)   M=Graphics ACBP=A9
+ 0002:000000EC 00000006 C=ICODE    S=.itext   G=(none)   M=DB       ACBP=A9
+ 0002:000000F4 00000006 C=ICODE    S=.itext   G=(none)   M=WideStrings ACBP=A9
+ 0002:000000FC 00000006 C=ICODE    S=.itext   G=(none)   M=FMTBcd   ACBP=A9
+ 0002:00000104 00000006 C=ICODE    S=.itext   G=(none)   M=SqlTimSt ACBP=A9
+ 0002:0000010C 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:00000114 00000006 C=ICODE    S=.itext   G=(none)   M=Controls ACBP=A9
+ 0002:0000011C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnList ACBP=A9
+ 0002:00000124 00000006 C=ICODE    S=.itext   G=(none)   M=Themes   ACBP=A9
+ 0002:0000012C 00000006 C=ICODE    S=.itext   G=(none)   M=Menus    ACBP=A9
+ 0002:00000134 00000006 C=ICODE    S=.itext   G=(none)   M=UxTheme  ACBP=A9
+ 0002:0000013C 00000006 C=ICODE    S=.itext   G=(none)   M=MultiMon ACBP=A9
+ 0002:00000144 00000006 C=ICODE    S=.itext   G=(none)   M=DwmApi   ACBP=A9
+ 0002:0000014C 00000006 C=ICODE    S=.itext   G=(none)   M=Forms    ACBP=A9
+ 0002:00000154 00000006 C=ICODE    S=.itext   G=(none)   M=HelpIntfs ACBP=A9
+ 0002:0000015C 00000006 C=ICODE    S=.itext   G=(none)   M=Dialogs  ACBP=A9
+ 0002:00000164 00000006 C=ICODE    S=.itext   G=(none)   M=Printers ACBP=A9
+ 0002:0000016C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtCtrls ACBP=A9
+ 0002:00000174 00000006 C=ICODE    S=.itext   G=(none)   M=GraphUtil ACBP=A9
+ 0002:0000017C 00000006 C=ICODE    S=.itext   G=(none)   M=Clipbrd  ACBP=A9
+ 0002:00000184 00000006 C=ICODE    S=.itext   G=(none)   M=FlatSB   ACBP=A9
+ 0002:0000018C 00000006 C=ICODE    S=.itext   G=(none)   M=BisUtils ACBP=A9
+ 0002:00000194 00000006 C=ICODE    S=.itext   G=(none)   M=BisFm    ACBP=A9
+ 0002:0000019C 00000006 C=ICODE    S=.itext   G=(none)   M=DECUtil  ACBP=A9
+ 0002:000001A4 00000006 C=ICODE    S=.itext   G=(none)   M=Hash     ACBP=A9
+ 0002:000001AC 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher   ACBP=A9
+ 0002:000001B4 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher1  ACBP=A9
+ 0002:000001BC 00000006 C=ICODE    S=.itext   G=(none)   M=DBCtrls  ACBP=A9
+ 0002:000001C4 00000006 C=ICODE    S=.itext   G=(none)   M=ComCtrls ACBP=A9
+ 0002:000001CC 00000006 C=ICODE    S=.itext   G=(none)   M=ExtActns ACBP=A9
+ 0002:000001D4 00000006 C=ICODE    S=.itext   G=(none)   M=ExtDlgs  ACBP=A9
+ 0002:000001DC 00000006 C=ICODE    S=.itext   G=(none)   M=Buttons  ACBP=A9
+ 0002:000001E4 00000006 C=ICODE    S=.itext   G=(none)   M=Mapi     ACBP=A9
+ 0002:000001EC 00000006 C=ICODE    S=.itext   G=(none)   M=DBPWDlg  ACBP=A9
+ 0002:000001F4 00000006 C=ICODE    S=.itext   G=(none)   M=DBLogDlg ACBP=A9
+ 0002:000001FC 00000006 C=ICODE    S=.itext   G=(none)   M=rxToolEdit ACBP=A9
+ 0002:00000204 00000006 C=ICODE    S=.itext   G=(none)   M=rxDateUtil ACBP=A9
+ 0002:0000020C 00000006 C=ICODE    S=.itext   G=(none)   M=RXCtrls  ACBP=A9
+ 0002:00000214 00000006 C=ICODE    S=.itext   G=(none)   M=RxHook   ACBP=A9
+ 0002:0000021C 00000006 C=ICODE    S=.itext   G=(none)   M=RXConst  ACBP=A9
+ 0002:00000224 00000006 C=ICODE    S=.itext   G=(none)   M=rxVclutils ACBP=A9
+ 0002:0000022C 00000006 C=ICODE    S=.itext   G=(none)   M=RXProps  ACBP=A9
+ 0002:00000234 00000006 C=ICODE    S=.itext   G=(none)   M=rxAppUtils ACBP=A9
+ 0002:0000023C 00000006 C=ICODE    S=.itext   G=(none)   M=RxPrgrss ACBP=A9
+ 0002:00000244 00000006 C=ICODE    S=.itext   G=(none)   M=rxCurrEdit ACBP=A9
+ 0002:0000024C 00000006 C=ICODE    S=.itext   G=(none)   M=ThemedDBGrid ACBP=A9
+ 0002:00000254 00000006 C=ICODE    S=.itext   G=(none)   M=RxRichEd ACBP=A9
+ 0002:0000025C 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtnrs ACBP=A9
+ 0002:00000264 00000006 C=ICODE    S=.itext   G=(none)   M=CheckLst ACBP=A9
+ 0002:0000026C 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImage ACBP=A9
+ 0002:00000274 00000006 C=ICODE    S=.itext   G=(none)   M=jpeg     ACBP=A9
+ 0002:0000027C 00000006 C=ICODE    S=.itext   G=(none)   M=BisCore  ACBP=A9
+ 0002:00000284 00000006 C=ICODE    S=.itext   G=(none)   M=kbmMemTable ACBP=A9
+ 0002:0000028C 00000006 C=ICODE    S=.itext   G=(none)   M=OleServer ACBP=A9
+ 0002:00000294 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtrls ACBP=A9
+ 0002:0000029C 00000006 C=ICODE    S=.itext   G=(none)   M=AxCtrls  ACBP=A9
+ 0002:000002A4 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMan  ACBP=A9
+ 0002:000002AC 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMenus ACBP=A9
+ 0002:000002B4 00000006 C=ICODE    S=.itext   G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0002:000002BC 00000006 C=ICODE    S=.itext   G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0002:000002C4 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_Routines ACBP=A9
+ 0002:000002CC 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Processes ACBP=A9
+ 0002:000002D4 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0002:000002DC 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Devices ACBP=A9
+ 0002:000002E4 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_CPU  ACBP=A9
+ 0002:000002EC 00000006 C=ICODE    S=.itext   G=(none)   M=JclDebug ACBP=A9
+ 0002:000002F4 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysInfo ACBP=A9
+ 0002:000002FC 00000006 C=ICODE    S=.itext   G=(none)   M=JclStrings ACBP=A9
+ 0002:00000304 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysUtils ACBP=A9
+ 0002:0000030C 00000006 C=ICODE    S=.itext   G=(none)   M=JclWideStrings ACBP=A9
+ 0002:00000314 00000006 C=ICODE    S=.itext   G=(none)   M=JclShell ACBP=A9
+ 0002:0000031C 00000006 C=ICODE    S=.itext   G=(none)   M=JclRegistry ACBP=A9
+ 0002:00000324 00000006 C=ICODE    S=.itext   G=(none)   M=JclHookExcept ACBP=A9
+ 0002:0000032C 00000006 C=ICODE    S=.itext   G=(none)   M=BisServiceApplication ACBP=A9
+ 0002:00000334 00000006 C=ICODE    S=.itext   G=(none)   M=BisSvcMgr ACBP=A9
+ 0002:0000033C 00000006 C=ICODE    S=.itext   G=(none)   M=BisCryptUtils ACBP=A9
+ 0002:00000344 00000006 C=ICODE    S=.itext   G=(none)   M=SvcMgr   ACBP=A9
+ 0002:0000034C 00000008 C=ICODE    S=.itext   G=(none)   M=BisHttpServerConsts ACBP=A9
+ 0002:00000354 00000008 C=ICODE    S=.itext   G=(none)   M=BisHttpServerHandlers ACBP=A9
+ 0002:0000035C 00000008 C=ICODE    S=.itext   G=(none)   M=BisHttpServerHandlerModules ACBP=A9
+ 0002:00000364 00000008 C=ICODE    S=.itext   G=(none)   M=BisHttpServerResponse ACBP=A9
+ 0002:0000036C 00000008 C=ICODE    S=.itext   G=(none)   M=BisHttpServerRequest ACBP=A9
+ 0002:00000374 00000008 C=ICODE    S=.itext   G=(none)   M=BisHttpServer ACBP=A9
+ 0002:0000037C 00000008 C=ICODE    S=.itext   G=(none)   M=BisHttpServerMainFm ACBP=A9
+ 0002:00000384 00000005 C=ICODE    S=.itext   G=(none)   M=.smhttp  ACBP=A9
+ 0003:00000000 00000030 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0004:00000000 0000000C C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:0000000C 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000014 00000004 C=BSS      S=.bss     G=DGROUP   M=BisHttpServerConsts ACBP=A9
+ 0004:00000018 00000004 C=BSS      S=.bss     G=DGROUP   M=BisHttpServerHandlers ACBP=A9
+ 0004:0000001C 00000004 C=BSS      S=.bss     G=DGROUP   M=BisHttpServerHandlerModules ACBP=A9
+ 0004:00000020 00000004 C=BSS      S=.bss     G=DGROUP   M=BisHttpServerResponse ACBP=A9
+ 0004:00000024 00000004 C=BSS      S=.bss     G=DGROUP   M=BisHttpServerRequest ACBP=A9
+ 0004:00000028 00000004 C=BSS      S=.bss     G=DGROUP   M=BisHttpServer ACBP=A9
+ 0004:0000002C 00000008 C=BSS      S=.bss     G=DGROUP   M=BisHttpServerMainFm ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:00000384       .smhttp..smhttp
+ 0001:000061A0       .smhttp.@GetPackageInfoTable
+ 0001:000061A8       .smhttp.@PackageLoad
+ 0001:000061B4       .smhttp.@PackageUnload
+ 0004:00000028       BisHttpServer..5
+ 0001:00003B18       BisHttpServer..TBisHttpServer
+ 0001:000039D8       BisHttpServer..TBisIdHttpServer
+ 0001:0000388C       BisHttpServer..TBisIdHttpServerClient
+ 0001:0000393C       BisHttpServer..TBisIdHttpServerClients
+ 0002:00000374       BisHttpServer.BisHttpServer
+ 0001:000046B4       BisHttpServer.CommandGetNotFound
+ 0001:000050E8       BisHttpServer.Finalization
+ 0001:00003DAC       BisHttpServer.InitServerModule
+ 0001:00004D48       BisHttpServer.TBisHttpServer.ChangeParams
+ 0001:00004AA4       BisHttpServer.TBisHttpServer.Create
+ 0001:00004CE0       BisHttpServer.TBisHttpServer.Destroy
+ 0001:00004D18       BisHttpServer.TBisHttpServer.GetStarted
+ 0001:00004D24       BisHttpServer.TBisHttpServer.Init
+ 0001:00005098       BisHttpServer.TBisHttpServer.Start
+ 0001:000050C0       BisHttpServer.TBisHttpServer.Stop
+ 0001:00003E58       BisHttpServer.TBisIdHttpServer.CommandGet
+ 0001:0000426C       BisHttpServer.TBisIdHttpServer.Compress
+ 0001:00003DC4       BisHttpServer.TBisIdHttpServer.Create
+ 0001:0000445C       BisHttpServer.TBisIdHttpServer.DecodeStream
+ 0001:00004358       BisHttpServer.TBisIdHttpServer.Decompress
+ 0001:00003E1C       BisHttpServer.TBisIdHttpServer.Destroy
+ 0001:00004780       BisHttpServer.TBisIdHttpServer.DoCommandGet
+ 0001:00004110       BisHttpServer.TBisIdHttpServer.DoCommandOther
+ 0001:00003E60       BisHttpServer.TBisIdHttpServer.DoConnect
+ 0001:00003F44       BisHttpServer.TBisIdHttpServer.DoDisconnect
+ 0001:00004558       BisHttpServer.TBisIdHttpServer.EncodeStream
+ 0001:00004048       BisHttpServer.TBisIdHttpServer.GetHandlerByDocument
+ 0001:00004118       BisHttpServer.TBisIdHttpServer.GetKey
+ 0001:00004074       BisHttpServer.TBisIdHttpServer.GetRealyHost
+ 0001:00004654       BisHttpServer.TBisIdHttpServer.ResponseSendResponse
+ 0004:00000014       BisHttpServerConsts..1
+ 0002:0000034C       BisHttpServerConsts.BisHttpServerConsts
+ 0001:00000EE8       BisHttpServerConsts.Finalization
+ 0004:0000001C       BisHttpServerHandlerModules..3
+ 0001:00001948       BisHttpServerHandlerModules..TBisHttpServerHandlerModule
+ 0001:00001A64       BisHttpServerHandlerModules..TBisHttpServerHandlerModules
+ 0002:0000035C       BisHttpServerHandlerModules.BisHttpServerHandlerModules
+ 0001:000021C4       BisHttpServerHandlerModules.Finalization
+ 0001:00001B68       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.Create
+ 0001:00001BC4       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.Destroy
+ 0001:00001FA4       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.DoInitProc
+ 0001:00001BFC       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.Init
+ 0001:00001D2C       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.RefreshHandlers
+ 0001:0000212C       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.Unload
+ 0001:00002160       BisHttpServerHandlerModules.TBisHttpServerHandlerModules.FindHandler
+ 0001:00002144       BisHttpServerHandlerModules.TBisHttpServerHandlerModules.GetItems
+ 0001:00002158       BisHttpServerHandlerModules.TBisHttpServerHandlerModules.GetObjectClass
+ 0004:00000018       BisHttpServerHandlers..3
+ 0001:00000F18       BisHttpServerHandlers..TBisHttpServerHandler
+ 0001:00001044       BisHttpServerHandlers..TBisHttpServerHandlers
+ 0002:00000354       BisHttpServerHandlers.BisHttpServerHandlers
+ 0001:00001548       BisHttpServerHandlers.CheckPath
+ 0001:00001918       BisHttpServerHandlers.Finalization
+ 0001:000011A8       BisHttpServerHandlers.TBisHttpServerHandler.CopyFrom
+ 0001:0000112C       BisHttpServerHandlers.TBisHttpServerHandler.Create
+ 0001:00001174       BisHttpServerHandlers.TBisHttpServerHandler.Destroy
+ 0001:000011A4       BisHttpServerHandlers.TBisHttpServerHandler.HandleRequest
+ 0001:00001200       BisHttpServerHandlers.TBisHttpServerHandler.Init
+ 0001:0000146C       BisHttpServerHandlers.TBisHttpServerHandlers.AddClass
+ 0001:00001510       BisHttpServerHandlers.TBisHttpServerHandlers.AddHandler
+ 0001:0000175C       BisHttpServerHandlers.TBisHttpServerHandlers.FindHandler
+ 0001:00001450       BisHttpServerHandlers.TBisHttpServerHandlers.GetItems
+ 0001:00001464       BisHttpServerHandlers.TBisHttpServerHandlers.GetObjectClass
+ 0001:0000153C       BisHttpServerHandlers.TBisHttpServerHandlers.Remove
+ 0004:00000030       BisHttpServerMainFm..3
+ 0001:00005190       BisHttpServerMainFm..TBisHttpServerMainForm
+ 0001:00005398       BisHttpServerMainFm..TBisHttpServerMainFormIface
+ 0002:0000037C       BisHttpServerMainFm.BisHttpServerMainFm
+ 0004:0000002C       BisHttpServerMainFm.BisHttpServerMainForm
+ 0001:00005568       BisHttpServerMainFm.Finalization
+ 0001:000054D0       BisHttpServerMainFm.InitIfaceModule
+ 0001:00005528       BisHttpServerMainFm.TBisHttpServerMainForm.Create
+ 0001:00005560       BisHttpServerMainFm.TBisHttpServerMainForm.GetServerClass
+ 0001:000054E8       BisHttpServerMainFm.TBisHttpServerMainFormIface.Create
+ 0004:00000024       BisHttpServerRequest..2
+ 0001:00002F34       BisHttpServerRequest..TBisHttpServerRequest
+ 0002:0000036C       BisHttpServerRequest.BisHttpServerRequest
+ 0001:0000385C       BisHttpServerRequest.Finalization
+ 0001:0000301C       BisHttpServerRequest.TBisHttpServerRequest.Create
+ 0001:00003140       BisHttpServerRequest.TBisHttpServerRequest.GetDateVariable
+ 0001:00003694       BisHttpServerRequest.TBisHttpServerRequest.GetFieldByName
+ 0001:000031B8       BisHttpServerRequest.TBisHttpServerRequest.GetIntegerVariable
+ 0001:000030F0       BisHttpServerRequest.TBisHttpServerRequest.GetInternalPathInfo
+ 0001:00003118       BisHttpServerRequest.TBisHttpServerRequest.GetInternalScriptName
+ 0001:00003210       BisHttpServerRequest.TBisHttpServerRequest.GetStringVariable
+ 0001:000036B0       BisHttpServerRequest.TBisHttpServerRequest.ReadClient
+ 0001:00003704       BisHttpServerRequest.TBisHttpServerRequest.ReadString
+ 0001:00003758       BisHttpServerRequest.TBisHttpServerRequest.TranslateURI
+ 0001:000037D0       BisHttpServerRequest.TBisHttpServerRequest.WriteClient
+ 0001:0000376C       BisHttpServerRequest.TBisHttpServerRequest.WriteHeaders
+ 0001:000037AC       BisHttpServerRequest.TBisHttpServerRequest.WriteString
+ 0004:00000020       BisHttpServerResponse..2
+ 0001:00002204       BisHttpServerResponse..TBisHttpServerResponse
+ 0002:00000364       BisHttpServerResponse.BisHttpServerResponse
+ 0001:00002F04       BisHttpServerResponse.Finalization
+ 0001:00002308       BisHttpServerResponse.TBisHttpServerResponse.Create
+ 0001:00002448       BisHttpServerResponse.TBisHttpServerResponse.Destroy
+ 0001:00002470       BisHttpServerResponse.TBisHttpServerResponse.GetContent
+ 0001:000024A4       BisHttpServerResponse.TBisHttpServerResponse.GetDateVariable
+ 0001:000026BC       BisHttpServerResponse.TBisHttpServerResponse.GetIntegerVariable
+ 0001:0000248C       BisHttpServerResponse.TBisHttpServerResponse.GetLogMessage
+ 0001:00002498       BisHttpServerResponse.TBisHttpServerResponse.GetStatusCode
+ 0001:00002878       BisHttpServerResponse.TBisHttpServerResponse.GetStringVariable
+ 0001:00002E1C       BisHttpServerResponse.TBisHttpServerResponse.MoveCookiesAndCustomHeaders
+ 0001:00002D1C       BisHttpServerResponse.TBisHttpServerResponse.SendRedirect
+ 0001:00002D3C       BisHttpServerResponse.TBisHttpServerResponse.SendResponse
+ 0001:00002D70       BisHttpServerResponse.TBisHttpServerResponse.SendStream
+ 0001:00002D98       BisHttpServerResponse.TBisHttpServerResponse.Sent
+ 0001:00002DA0       BisHttpServerResponse.TBisHttpServerResponse.SetContent
+ 0001:00002E00       BisHttpServerResponse.TBisHttpServerResponse.SetContentStream
+ 0001:000025B4       BisHttpServerResponse.TBisHttpServerResponse.SetDateVariable
+ 0001:00002794       BisHttpServerResponse.TBisHttpServerResponse.SetIntegerVariable
+ 0001:00002DF0       BisHttpServerResponse.TBisHttpServerResponse.SetLogMessage
+ 0001:00002DF4       BisHttpServerResponse.TBisHttpServerResponse.SetStatusCode
+ 0001:00002AA4       BisHttpServerResponse.TBisHttpServerResponse.SetStringVariable
+ 0001:000002B8       SysInit.@InitPkg
+ 0001:0000031C       SysInit.@PackageLoad
+ 0001:00000328       SysInit.@PackageUnload
+ 0001:000001A8       SysInit.AllocTlsBuffer
+ 0001:00000264       SysInit.ExitProcessTLS
+ 0001:0000022C       SysInit.ExitThreadTLS
+ 0001:00000170       SysInit.FreeLibrary
+ 0001:000001B4       SysInit.GetTlsSize
+ 0004:00000004       SysInit.HInstance
+ 0001:00000288       SysInit.InitializeModule
+ 0001:00000200       SysInit.InitProcessTLS
+ 0001:000001BC       SysInit.InitThreadTLS
+ 0001:00000178       SysInit.LocalAlloc
+ 0001:00000180       SysInit.LocalFree
+ 0003:00000008       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0003:00000004       SysInit.PtrToNil
+ 0001:00000188       SysInit.TlsAlloc
+ 0004:00000008       SysInit.tlsBuffer
+ 0001:00000190       SysInit.TlsFree
+ 0001:00000198       SysInit.TlsGetValue
+ 0003:00000000       SysInit.TlsIndex
+ 0005:00000000       SysInit.TlsLast
+ 0003:00000020       SysInit.TlsProc
+ 0001:000001A0       SysInit.TlsSetValue
+ 0001:00000294       SysInit.UninitializeModule
+ 0004:0000000C       Windows..3
+ 0001:0000044C       Windows.Finalization
+ 0001:0000043C       Windows.FreeLibrary
+ 0001:00000444       Windows.GetProcAddress
+ 0004:00000010       Windows.HtmlHelpModule
+ 0002:00000010       Windows.Windows
+
+
+  Address             Publics by Value
+
+ 0001:00000170       SysInit.FreeLibrary
+ 0001:00000178       SysInit.LocalAlloc
+ 0001:00000180       SysInit.LocalFree
+ 0001:00000188       SysInit.TlsAlloc
+ 0001:00000190       SysInit.TlsFree
+ 0001:00000198       SysInit.TlsGetValue
+ 0001:000001A0       SysInit.TlsSetValue
+ 0001:000001A8       SysInit.AllocTlsBuffer
+ 0001:000001B4       SysInit.GetTlsSize
+ 0001:000001BC       SysInit.InitThreadTLS
+ 0001:00000200       SysInit.InitProcessTLS
+ 0001:0000022C       SysInit.ExitThreadTLS
+ 0001:00000264       SysInit.ExitProcessTLS
+ 0001:00000288       SysInit.InitializeModule
+ 0001:00000294       SysInit.UninitializeModule
+ 0001:000002B8       SysInit.@InitPkg
+ 0001:0000031C       SysInit.@PackageLoad
+ 0001:00000328       SysInit.@PackageUnload
+ 0001:0000043C       Windows.FreeLibrary
+ 0001:00000444       Windows.GetProcAddress
+ 0001:0000044C       Windows.Finalization
+ 0001:00000EE8       BisHttpServerConsts.Finalization
+ 0001:00000F18       BisHttpServerHandlers..TBisHttpServerHandler
+ 0001:00001044       BisHttpServerHandlers..TBisHttpServerHandlers
+ 0001:0000112C       BisHttpServerHandlers.TBisHttpServerHandler.Create
+ 0001:00001174       BisHttpServerHandlers.TBisHttpServerHandler.Destroy
+ 0001:000011A4       BisHttpServerHandlers.TBisHttpServerHandler.HandleRequest
+ 0001:000011A8       BisHttpServerHandlers.TBisHttpServerHandler.CopyFrom
+ 0001:00001200       BisHttpServerHandlers.TBisHttpServerHandler.Init
+ 0001:00001450       BisHttpServerHandlers.TBisHttpServerHandlers.GetItems
+ 0001:00001464       BisHttpServerHandlers.TBisHttpServerHandlers.GetObjectClass
+ 0001:0000146C       BisHttpServerHandlers.TBisHttpServerHandlers.AddClass
+ 0001:00001510       BisHttpServerHandlers.TBisHttpServerHandlers.AddHandler
+ 0001:0000153C       BisHttpServerHandlers.TBisHttpServerHandlers.Remove
+ 0001:00001548       BisHttpServerHandlers.CheckPath
+ 0001:0000175C       BisHttpServerHandlers.TBisHttpServerHandlers.FindHandler
+ 0001:00001918       BisHttpServerHandlers.Finalization
+ 0001:00001948       BisHttpServerHandlerModules..TBisHttpServerHandlerModule
+ 0001:00001A64       BisHttpServerHandlerModules..TBisHttpServerHandlerModules
+ 0001:00001B68       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.Create
+ 0001:00001BC4       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.Destroy
+ 0001:00001BFC       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.Init
+ 0001:00001D2C       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.RefreshHandlers
+ 0001:00001FA4       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.DoInitProc
+ 0001:0000212C       BisHttpServerHandlerModules.TBisHttpServerHandlerModule.Unload
+ 0001:00002144       BisHttpServerHandlerModules.TBisHttpServerHandlerModules.GetItems
+ 0001:00002158       BisHttpServerHandlerModules.TBisHttpServerHandlerModules.GetObjectClass
+ 0001:00002160       BisHttpServerHandlerModules.TBisHttpServerHandlerModules.FindHandler
+ 0001:000021C4       BisHttpServerHandlerModules.Finalization
+ 0001:00002204       BisHttpServerResponse..TBisHttpServerResponse
+ 0001:00002308       BisHttpServerResponse.TBisHttpServerResponse.Create
+ 0001:00002448       BisHttpServerResponse.TBisHttpServerResponse.Destroy
+ 0001:00002470       BisHttpServerResponse.TBisHttpServerResponse.GetContent
+ 0001:0000248C       BisHttpServerResponse.TBisHttpServerResponse.GetLogMessage
+ 0001:00002498       BisHttpServerResponse.TBisHttpServerResponse.GetStatusCode
+ 0001:000024A4       BisHttpServerResponse.TBisHttpServerResponse.GetDateVariable
+ 0001:000025B4       BisHttpServerResponse.TBisHttpServerResponse.SetDateVariable
+ 0001:000026BC       BisHttpServerResponse.TBisHttpServerResponse.GetIntegerVariable
+ 0001:00002794       BisHttpServerResponse.TBisHttpServerResponse.SetIntegerVariable
+ 0001:00002878       BisHttpServerResponse.TBisHttpServerResponse.GetStringVariable
+ 0001:00002AA4       BisHttpServerResponse.TBisHttpServerResponse.SetStringVariable
+ 0001:00002D1C       BisHttpServerResponse.TBisHttpServerResponse.SendRedirect
+ 0001:00002D3C       BisHttpServerResponse.TBisHttpServerResponse.SendResponse
+ 0001:00002D70       BisHttpServerResponse.TBisHttpServerResponse.SendStream
+ 0001:00002D98       BisHttpServerResponse.TBisHttpServerResponse.Sent
+ 0001:00002DA0       BisHttpServerResponse.TBisHttpServerResponse.SetContent
+ 0001:00002DF0       BisHttpServerResponse.TBisHttpServerResponse.SetLogMessage
+ 0001:00002DF4       BisHttpServerResponse.TBisHttpServerResponse.SetStatusCode
+ 0001:00002E00       BisHttpServerResponse.TBisHttpServerResponse.SetContentStream
+ 0001:00002E1C       BisHttpServerResponse.TBisHttpServerResponse.MoveCookiesAndCustomHeaders
+ 0001:00002F04       BisHttpServerResponse.Finalization
+ 0001:00002F34       BisHttpServerRequest..TBisHttpServerRequest
+ 0001:0000301C       BisHttpServerRequest.TBisHttpServerRequest.Create
+ 0001:000030F0       BisHttpServerRequest.TBisHttpServerRequest.GetInternalPathInfo
+ 0001:00003118       BisHttpServerRequest.TBisHttpServerRequest.GetInternalScriptName
+ 0001:00003140       BisHttpServerRequest.TBisHttpServerRequest.GetDateVariable
+ 0001:000031B8       BisHttpServerRequest.TBisHttpServerRequest.GetIntegerVariable
+ 0001:00003210       BisHttpServerRequest.TBisHttpServerRequest.GetStringVariable
+ 0001:00003694       BisHttpServerRequest.TBisHttpServerRequest.GetFieldByName
+ 0001:000036B0       BisHttpServerRequest.TBisHttpServerRequest.ReadClient
+ 0001:00003704       BisHttpServerRequest.TBisHttpServerRequest.ReadString
+ 0001:00003758       BisHttpServerRequest.TBisHttpServerRequest.TranslateURI
+ 0001:0000376C       BisHttpServerRequest.TBisHttpServerRequest.WriteHeaders
+ 0001:000037AC       BisHttpServerRequest.TBisHttpServerRequest.WriteString
+ 0001:000037D0       BisHttpServerRequest.TBisHttpServerRequest.WriteClient
+ 0001:0000385C       BisHttpServerRequest.Finalization
+ 0001:0000388C       BisHttpServer..TBisIdHttpServerClient
+ 0001:0000393C       BisHttpServer..TBisIdHttpServerClients
+ 0001:000039D8       BisHttpServer..TBisIdHttpServer
+ 0001:00003B18       BisHttpServer..TBisHttpServer
+ 0001:00003DAC       BisHttpServer.InitServerModule
+ 0001:00003DC4       BisHttpServer.TBisIdHttpServer.Create
+ 0001:00003E1C       BisHttpServer.TBisIdHttpServer.Destroy
+ 0001:00003E58       BisHttpServer.TBisIdHttpServer.CommandGet
+ 0001:00003E60       BisHttpServer.TBisIdHttpServer.DoConnect
+ 0001:00003F44       BisHttpServer.TBisIdHttpServer.DoDisconnect
+ 0001:00004048       BisHttpServer.TBisIdHttpServer.GetHandlerByDocument
+ 0001:00004074       BisHttpServer.TBisIdHttpServer.GetRealyHost
+ 0001:00004110       BisHttpServer.TBisIdHttpServer.DoCommandOther
+ 0001:00004118       BisHttpServer.TBisIdHttpServer.GetKey
+ 0001:0000426C       BisHttpServer.TBisIdHttpServer.Compress
+ 0001:00004358       BisHttpServer.TBisIdHttpServer.Decompress
+ 0001:0000445C       BisHttpServer.TBisIdHttpServer.DecodeStream
+ 0001:00004558       BisHttpServer.TBisIdHttpServer.EncodeStream
+ 0001:00004654       BisHttpServer.TBisIdHttpServer.ResponseSendResponse
+ 0001:000046B4       BisHttpServer.CommandGetNotFound
+ 0001:00004780       BisHttpServer.TBisIdHttpServer.DoCommandGet
+ 0001:00004AA4       BisHttpServer.TBisHttpServer.Create
+ 0001:00004CE0       BisHttpServer.TBisHttpServer.Destroy
+ 0001:00004D18       BisHttpServer.TBisHttpServer.GetStarted
+ 0001:00004D24       BisHttpServer.TBisHttpServer.Init
+ 0001:00004D48       BisHttpServer.TBisHttpServer.ChangeParams
+ 0001:00005098       BisHttpServer.TBisHttpServer.Start
+ 0001:000050C0       BisHttpServer.TBisHttpServer.Stop
+ 0001:000050E8       BisHttpServer.Finalization
+ 0001:00005190       BisHttpServerMainFm..TBisHttpServerMainForm
+ 0001:00005398       BisHttpServerMainFm..TBisHttpServerMainFormIface
+ 0001:000054D0       BisHttpServerMainFm.InitIfaceModule
+ 0001:000054E8       BisHttpServerMainFm.TBisHttpServerMainFormIface.Create
+ 0001:00005528       BisHttpServerMainFm.TBisHttpServerMainForm.Create
+ 0001:00005560       BisHttpServerMainFm.TBisHttpServerMainForm.GetServerClass
+ 0001:00005568       BisHttpServerMainFm.Finalization
+ 0001:000061A0       .smhttp.@GetPackageInfoTable
+ 0001:000061A8       .smhttp.@PackageLoad
+ 0001:000061B4       .smhttp.@PackageUnload
+ 0002:00000010       Windows.Windows
+ 0002:0000034C       BisHttpServerConsts.BisHttpServerConsts
+ 0002:00000354       BisHttpServerHandlers.BisHttpServerHandlers
+ 0002:0000035C       BisHttpServerHandlerModules.BisHttpServerHandlerModules
+ 0002:00000364       BisHttpServerResponse.BisHttpServerResponse
+ 0002:0000036C       BisHttpServerRequest.BisHttpServerRequest
+ 0002:00000374       BisHttpServer.BisHttpServer
+ 0002:0000037C       BisHttpServerMainFm.BisHttpServerMainFm
+ 0002:00000384       .smhttp..smhttp
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.PtrToNil
+ 0003:00000008       SysInit.Module
+ 0003:00000020       SysInit.TlsProc
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       SysInit.tlsBuffer
+ 0004:0000000C       Windows..3
+ 0004:00000010       Windows.HtmlHelpModule
+ 0004:00000014       BisHttpServerConsts..1
+ 0004:00000018       BisHttpServerHandlers..3
+ 0004:0000001C       BisHttpServerHandlerModules..3
+ 0004:00000020       BisHttpServerResponse..2
+ 0004:00000024       BisHttpServerRequest..2
+ 0004:00000028       BisHttpServer..5
+ 0004:0000002C       BisHttpServerMainFm.BisHttpServerMainForm
+ 0004:00000030       BisHttpServerMainFm..3
+ 0005:00000000       SysInit.TlsLast
+
+
+Line numbers for IpRtrMib(objects.bpl\IPHlpApi\Pas\IpRtrMib.pas) segment .text
+
+  1062 0001:00000000
+
+Line numbers for IpExport(objects.bpl\IPHlpApi\Pas\IpExport.pas) segment .text
+
+   343 0001:00000000
+
+Line numbers for IpTypes(objects.bpl\IPHlpApi\Pas\IpTypes.pas) segment .text
+
+   228 0001:00000000
+
+Line numbers for IpHlpApi(objects.bpl\IPHlpApi\Pas\IpHlpApi.pas) segment .text
+
+   752 0001:00000000
+
+Line numbers for MiTeC_ToolHelp32(MiTeC_ToolHelp32.pas) segment .text
+
+   438 0001:00000000
+
+Line numbers for BisHttpServerConsts(smhttp.bpl\BisHttpServerConsts.pas) segment .itext
+
+    83 0002:0000034C
+
+Line numbers for BisHttpServerHandlers(smhttp.bpl\BisHttpServerHandlers.pas) segment .text
+
+    69 0001:0000112C    70 0001:0000113E    71 0001:00001147    72 0001:00001158
+    75 0001:00001174    76 0001:0000117F    77 0001:00001187    78 0001:00001193
+    82 0001:000011A4    83 0001:000011A6    86 0001:000011A8    87 0001:000011AE
+    88 0001:000011B2    89 0001:000011BD    90 0001:000011C8    91 0001:000011CF
+    92 0001:000011D6    93 0001:000011DD    94 0001:000011E8    95 0001:000011EF
+    97 0001:000011FA   103 0001:00001200   104 0001:00001221   105 0001:00001228
+   106 0001:00001248   108 0001:00001255   109 0001:0000127F   111 0001:000012AA
+   112 0001:000012D1   113 0001:000012F8   114 0001:00001321   115 0001:0000134A
+   116 0001:00001373   117 0001:0000139A   118 0001:000013C3   120 0001:000013EA
+   107 0001:000013F2   123 0001:00001402   128 0001:00001450   129 0001:00001456
+   130 0001:0000145F   134 0001:00001464   135 0001:00001469   138 0001:0000146C
+   139 0001:0000148E   140 0001:00001493   141 0001:00001497   142 0001:000014A3
+   143 0001:000014B3   144 0001:000014C0   145 0001:000014D1   147 0001:000014DE
+   150 0001:000014E6   153 0001:00001510   154 0001:00001517   155 0001:00001519
+   156 0001:00001527   157 0001:00001531   159 0001:00001533   163 0001:0000153C
+   164 0001:00001544   173 0001:00001548   174 0001:00001573   175 0001:00001575
+   176 0001:00001580   177 0001:0000158E   178 0001:00001599   179 0001:000015A0
+   180 0001:000015BA   181 0001:000015D4   182 0001:000015FB   183 0001:0000160B
+   184 0001:00001639   185 0001:0000168A   186 0001:00001698   191 0001:0000169C
+   192 0001:000016A7   193 0001:000016B8   196 0001:000016BC   197 0001:000016E7
+   198 0001:000016F2   199 0001:000016FD   202 0001:000016FF   210 0001:0000175C
+   211 0001:0000177F   212 0001:00001784   213 0001:00001793   214 0001:000017A2
+   215 0001:000017B0   216 0001:000017CC   217 0001:000017DA   218 0001:000017E7
+   219 0001:000017EF   220 0001:000017F7   221 0001:0000180A   222 0001:0000181D
+   223 0001:0000182F   224 0001:00001833   225 0001:00001859   226 0001:00001867
+   227 0001:0000186B   224 0001:0000186D   229 0001:00001886   230 0001:0000189E
+   231 0001:000018A4   232 0001:000018AA   236 0001:000018B1   215 0001:000018B4
+   238 0001:000018CA   239 0001:000018D2   241 0001:000018E2
+
+Line numbers for BisHttpServerHandlers(smhttp.bpl\BisHttpServerHandlers.pas) segment .itext
+
+   244 0002:00000354
+
+Line numbers for BisHttpServerHandlerModules(smhttp.bpl\BisHttpServerHandlerModules.pas) segment .text
+
+    51 0001:00001B68    52 0001:00001B7A    53 0001:00001B83    54 0001:00001B97
+    56 0001:00001BA8    59 0001:00001BC4    60 0001:00001BCF    61 0001:00001BDA
+    62 0001:00001BE2    63 0001:00001BEE    70 0001:00001BFC    71 0001:00001C17
+    72 0001:00001C1E    74 0001:00001C3E    75 0001:00001C46    76 0001:00001C66
+    77 0001:00001C8B    78 0001:00001C9B    79 0001:00001CAA    80 0001:00001CB8
+    81 0001:00001CC2    82 0001:00001CCE    83 0001:00001CD9    85 0001:00001CEE
+    90 0001:00001CFE    98 0001:00001D2C    99 0001:00001D4F   100 0001:00001D75
+   101 0001:00001D85   102 0001:00001D93   104 0001:00001DA3   105 0001:00001DEC
+   106 0001:00001E08   107 0001:00001E10   108 0001:00001E49   109 0001:00001E77
+   110 0001:00001E9F   111 0001:00001EAF   112 0001:00001EBE   113 0001:00001ECC
+   114 0001:00001ED6   115 0001:00001EE2   116 0001:00001EED   118 0001:00001F02
+   130 0001:00001F12   103 0001:00001F1D   134 0001:00001F30   137 0001:00001FA4
+   138 0001:00001FCC   139 0001:00001FF6   140 0001:00001FFE   141 0001:0000200C
+   142 0001:00002016   143 0001:0000201E   144 0001:0000202C   146 0001:0000207A
+   147 0001:0000207C   151 0001:000020C0   153 0001:000020F0   156 0001:0000212C
+   157 0001:0000212F   158 0001:0000213A   159 0001:00002141   164 0001:00002144
+   165 0001:0000214A   166 0001:00002153   170 0001:00002158   171 0001:0000215D
+   177 0001:00002160   178 0001:00002172   179 0001:00002174   180 0001:00002186
+   181 0001:00002190   182 0001:00002196   183 0001:000021B1   186 0001:000021B5
+   179 0001:000021B6   187 0001:000021B9
+
+Line numbers for BisHttpServerHandlerModules(smhttp.bpl\BisHttpServerHandlerModules.pas) segment .itext
+
+   190 0002:0000035C
+
+Line numbers for BisHttpServerResponse(smhttp.bpl\BisHttpServerResponse.pas) segment .text
+
+    65 0001:00002308    66 0001:00002334    67 0001:0000233A    68 0001:00002340
+    69 0001:00002346    70 0001:0000234F    71 0001:0000236A    73 0001:00002378
+    74 0001:00002384    75 0001:00002397    76 0001:000023AA    77 0001:000023BA
+    78 0001:000023CB    79 0001:000023D5    80 0001:000023EA    83 0001:00002448
+    84 0001:00002453    85 0001:0000245F    88 0001:00002470    89 0001:00002476
+    90 0001:00002486    93 0001:0000248C    94 0001:0000248F    95 0001:00002496
+    99 0001:00002498   100 0001:000024A1   103 0001:000024A4   104 0001:000024C3
+   105 0001:000024D1   106 0001:000024E2   107 0001:000024F3   109 0001:00002504
+   111 0001:0000253C   114 0001:000025B4   115 0001:000025CC   116 0001:000025DA
+   117 0001:000025EB   118 0001:000025FC   120 0001:0000260D   122 0001:00002645
+   125 0001:000026BC   126 0001:000026D4   127 0001:000026DB   129 0001:000026E3
+   131 0001:0000271B   134 0001:00002794   135 0001:000027AF   136 0001:000027B6
+   138 0001:000027C5   140 0001:000027FD   143 0001:00002878   144 0001:00002896
+   145 0001:000028D8   146 0001:000028ED   147 0001:00002902   148 0001:00002914
+   149 0001:00002926   150 0001:0000293B   151 0001:00002952   152 0001:00002964
+   153 0001:00002973   154 0001:00002982   155 0001:00002991   156 0001:000029A5
+   158 0001:000029B9   161 0001:000029F1   164 0001:00002AA4   165 0001:00002AC2
+   166 0001:00002B04   167 0001:00002B1A   168 0001:00002B2E   169 0001:00002B40
+   170 0001:00002B52   171 0001:00002B66   172 0001:00002B7D   173 0001:00002B8F
+   174 0001:00002B9E   175 0001:00002BAD   176 0001:00002BBC   177 0001:00002BD0
+   179 0001:00002BE4   182 0001:00002C1C   185 0001:00002D1C   186 0001:00002D22
+   187 0001:00002D26   188 0001:00002D2D   189 0001:00002D37   192 0001:00002D3C
+   193 0001:00002D3F   195 0001:00002D43   196 0001:00002D4F   197 0001:00002D56
+   198 0001:00002D5D   199 0001:00002D65   200 0001:00002D6D   203 0001:00002D70
+   204 0001:00002D77   205 0001:00002D93   209 0001:00002D98   210 0001:00002D9C
+   213 0001:00002DA0   214 0001:00002DA8   215 0001:00002DB5   216 0001:00002DC2
+   218 0001:00002DD6   220 0001:00002DE8   225 0001:00002DF0   229 0001:00002DF4
+   230 0001:00002DFC   233 0001:00002E00   234 0001:00002E06   235 0001:00002E0F
+   236 0001:00002E18   241 0001:00002E1C   242 0001:00002E39   243 0001:00002E4B
+   244 0001:00002E5C   246 0001:00002E79   242 0001:00002E7A   247 0001:00002E7D
+   248 0001:00002E88   249 0001:00002E9A   251 0001:00002ED5   248 0001:00002ED6
+   252 0001:00002ED9
+
+Line numbers for BisHttpServerResponse(smhttp.bpl\BisHttpServerResponse.pas) segment .itext
+
+   254 0002:00000364
+
+Line numbers for BisHttpServerRequest(smhttp.bpl\BisHttpServerRequest.pas) segment .text
+
+    52 0001:0000301C    53 0001:00003048    54 0001:0000304B    55 0001:00003051
+    56 0001:00003057    57 0001:00003060    58 0001:00003065    59 0001:00003082
+    60 0001:000030AC    58 0001:000030AF    61 0001:000030B2    64 0001:000030F0
+    65 0001:000030F6    66 0001:000030FC    68 0001:00003109    69 0001:00003112
+    72 0001:00003118    73 0001:0000311E    74 0001:00003124    76 0001:00003131
+    77 0001:0000313A    82 0001:00003140    83 0001:0000315F    84 0001:0000316A
+    85 0001:00003176    87 0001:00003184    89 0001:00003190    92 0001:000031B8
+    93 0001:000031D1    94 0001:000031E9    99 0001:00003210   100 0001:00003230
+   101 0001:000032B7   102 0001:000032CC   103 0001:000032E1   104 0001:000032F6
+   105 0001:0000330B   106 0001:00003320   107 0001:00003335   108 0001:00003348
+   109 0001:0000335B   110 0001:0000336D   112 0001:0000337F   113 0001:00003390
+   115 0001:000033A7   116 0001:000033BA   117 0001:000033CF   118 0001:000033E4
+   119 0001:000033F6   120 0001:00003408   121 0001:00003422   122 0001:00003435
+   123 0001:00003448   124 0001:0000345B   125 0001:0000346E   126 0001:00003483
+   127 0001:00003496   129 0001:000034A5   130 0001:000034B5   131 0001:000034C9
+   132 0001:000034D8   137 0001:000034F9   138 0001:00003506   139 0001:0000350F
+   140 0001:00003526   141 0001:00003541   143 0001:0000354D   145 0001:00003556
+   146 0001:00003566   147 0001:0000356F   149 0001:0000357F   151 0001:00003586
+   154 0001:00003694   155 0001:0000369D   156 0001:000036AC   159 0001:000036B0
+   160 0001:000036BA   161 0001:000036DC   162 0001:000036E0   163 0001:000036F4
+   166 0001:000036F9   168 0001:000036FB   173 0001:00003704   174 0001:0000370E
+   175 0001:00003730   177 0001:00003734   178 0001:00003747   181 0001:0000374C
+   182 0001:00003753   185 0001:00003758   188 0001:0000375E   189 0001:00003767
+   192 0001:0000376C   193 0001:00003775   194 0001:0000377D   195 0001:0000378C
+   196 0001:0000379A   197 0001:000037A2   198 0001:000037A4   201 0001:000037AC
+   202 0001:000037B2   203 0001:000037CB   204 0001:000037CD   209 0001:000037D0
+   210 0001:000037DF   211 0001:000037EE   212 0001:000037FC   213 0001:00003808
+   214 0001:00003814   215 0001:00003831   217 0001:00003841   219 0001:00003851
+
+Line numbers for BisHttpServerRequest(smhttp.bpl\BisHttpServerRequest.pas) segment .itext
+
+   222 0002:0000036C
+
+Line numbers for BisHttpServer(smhttp.bpl\BisHttpServer.pas) segment .text
+
+   104 0001:00003DAC   105 0001:00003DAF   106 0001:00003DBD   111 0001:00003DC4
+   112 0001:00003DD6   113 0001:00003DDF   114 0001:00003DF1   115 0001:00003E01
+   118 0001:00003E1C   119 0001:00003E27   120 0001:00003E30   121 0001:00003E3B
+   122 0001:00003E47   125 0001:00003E58   127 0001:00003E5B   133 0001:00003E60
+   134 0001:00003E83   135 0001:00003E8B   136 0001:00003E95   137 0001:00003E99
+   139 0001:00003EEC   140 0001:00003EFA   141 0001:00003F05   142 0001:00003F12
+   144 0001:00003F18   150 0001:00003F44   151 0001:00003F65   152 0001:00003F68
+   153 0001:00003F70   154 0001:00003F80   155 0001:00003F8E   156 0001:00003F97
+   157 0001:00003FA3   158 0001:00003FB6   160 0001:00003FF2   161 0001:00003FF9
+   163 0001:0000400B   166 0001:00004021   169 0001:00004048   170 0001:0000404D
+   171 0001:0000404F   172 0001:00004059   173 0001:0000406B   180 0001:00004074
+   181 0001:00004099   182 0001:000040A8   183 0001:000040AC   184 0001:000040BD
+   186 0001:000040D5   188 0001:000040DF   191 0001:00004110   192 0001:00004113
+   197 0001:00004118   198 0001:00004166   199 0001:00004175   200 0001:00004183
+   201 0001:000041D5   203 0001:000041FE   205 0001:0000420E   211 0001:0000426C
+   212 0001:00004275   213 0001:0000427F   214 0001:0000428E   215 0001:0000429C
+   216 0001:000042B1   217 0001:000042BF   218 0001:000042CB   220 0001:000042EC
+   222 0001:000042FC   223 0001:00004308   224 0001:00004314   225 0001:00004328
+   227 0001:00004341   230 0001:00004351   238 0001:00004358   239 0001:00004366
+   240 0001:00004370   241 0001:0000437F   242 0001:0000438D   243 0001:00004399
+   244 0001:000043AB   246 0001:000043B9   247 0001:000043CE   248 0001:000043DE
+   250 0001:000043EF   252 0001:000043FF   253 0001:0000440B   254 0001:00004417
+   255 0001:0000442B   257 0001:00004444   260 0001:00004454   266 0001:0000445C
+   267 0001:0000447E   268 0001:00004486   269 0001:00004495   270 0001:000044A4
+   271 0001:000044B2   272 0001:000044CD   273 0001:000044D9   274 0001:000044E4
+   275 0001:000044EF   276 0001:00004502   278 0001:0000451A   279 0001:00004522
+   282 0001:00004532   288 0001:00004558   289 0001:0000457A   290 0001:00004582
+   291 0001:00004591   292 0001:000045A0   293 0001:000045AE   294 0001:000045B9
+   295 0001:000045D4   296 0001:000045E0   297 0001:000045EB   298 0001:000045FE
+   300 0001:00004616   301 0001:0000461E   304 0001:0000462E   309 0001:00004654
+   310 0001:0000465A   312 0001:0000466F   313 0001:0000467C   314 0001:00004685
+   315 0001:0000468E   316 0001:00004697   319 0001:000046AE   327 0001:000046B4
+   328 0001:000046D9   329 0001:000046E9   330 0001:00004736   331 0001:00004757
+   340 0001:00004780   341 0001:000047B3   342 0001:000047BC   344 0001:000047D6
+   346 0001:00004828   347 0001:0000483B   348 0001:00004850   349 0001:0000486B
+   350 0001:00004879   351 0001:0000488B   352 0001:0000489C   353 0001:000048AA
+   354 0001:000048B1   356 0001:000048BB   358 0001:000048DC   359 0001:000048E5
+   361 0001:00004906   362 0001:0000490F   364 0001:0000491D   365 0001:00004934
+   366 0001:00004942   367 0001:00004950   368 0001:0000496B   369 0001:00004979
+   370 0001:00004989   371 0001:00004992   372 0001:000049A0   373 0001:000049B2
+   374 0001:000049BE   377 0001:000049C8   380 0001:000049E8   383 0001:00004A05
+   387 0001:00004A22   390 0001:00004A32   393 0001:00004A60   396 0001:00004A6F
+   401 0001:00004AA4   402 0001:00004ABB   403 0001:00004AC4   404 0001:00004AD1
+   405 0001:00004AE4   407 0001:00004AEA   409 0001:00004AFB   410 0001:00004B08
+   411 0001:00004B15   412 0001:00004B25   413 0001:00004B35   414 0001:00004B42
+   415 0001:00004B4F   416 0001:00004B5C   418 0001:00004B69   421 0001:00004CE0
+   423 0001:00004CEB   424 0001:00004CF3   425 0001:00004CFB   426 0001:00004D07
+   430 0001:00004D18   431 0001:00004D22   434 0001:00004D24   435 0001:00004D27
+   436 0001:00004D2E   437 0001:00004D3E   438 0001:00004D46   448 0001:00004D48
+   450 0001:00004D7A   451 0001:00004D99   452 0001:00004DA9   453 0001:00004DDF
+   454 0001:00004E15   455 0001:00004E41   456 0001:00004E50   457 0001:00004E5E
+   458 0001:00004E73   459 0001:00004E88   460 0001:00004E94   461 0001:00004EA2
+   462 0001:00004EB3   465 0001:00004ECE   468 0001:00004EDE   450 0001:00004EE1
+   470 0001:00004EEA   471 0001:00004EF9   472 0001:00004F08   473 0001:00004F16
+   474 0001:00004F27   475 0001:00004F3A   476 0001:00004F4D   477 0001:00004F76
+   478 0001:00004F9C   479 0001:00004FAF   480 0001:00004FBA   477 0001:00004FCA
+   481 0001:00004FE3   476 0001:00004FFB   482 0001:00005018   484 0001:0000503D
+   485 0001:00005045   487 0001:00005055   490 0001:00005098   491 0001:0000509C
+   492 0001:000050AA   493 0001:000050B4   494 0001:000050BC   497 0001:000050C0
+   498 0001:000050C4   499 0001:000050D2   500 0001:000050DC   501 0001:000050E4
+
+Line numbers for BisHttpServer(smhttp.bpl\BisHttpServer.pas) segment .itext
+
+   503 0002:00000374
+
+Line numbers for BisHttpServerMainFm(smhttp.bpl\BisHttpServerMainFm.pas) segment .text
+
+    42 0001:000054D0    43 0001:000054D3    44 0001:000054E4    49 0001:000054E8
+    50 0001:000054FA    51 0001:00005503    52 0001:0000550B    57 0001:00005528
+    58 0001:0000553A    59 0001:00005543    63 0001:00005560    64 0001:00005565
+
+Line numbers for BisHttpServerMainFm(smhttp.bpl\BisHttpServerMainFm.pas) segment .itext
+
+    66 0002:0000037C
+
+Line numbers for .smhttp(smhttp.dpk) segment .itext
+
+    41 0002:00000384
+
+Bound resource files
+
+BisHttpServerMainFm.dfm
+smhttp.res
+smhttp.drf
+
+
+Program entry point at 0002:00000384

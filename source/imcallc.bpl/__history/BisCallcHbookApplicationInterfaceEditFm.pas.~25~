@@ -1,0 +1,110 @@
+unit BisCallcHbookApplicationInterfaceEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisCallcHbookApplicationInterfaceEditForm = class(TBisDataEditForm)
+    LabelApplication: TLabel;
+    EditApplication: TEdit;
+    ButtonApplication: TButton;
+    LabelInterface: TLabel;
+    EditInterface: TEdit;
+    ButtonInterface: TButton;
+    LabelPriority: TLabel;
+    EditPriority: TEdit;
+    CheckBoxAutoRun: TCheckBox;
+    LabelAccount: TLabel;
+    EditAccount: TEdit;
+    ButtonAccount: TButton;
+  private
+    { Private declarations }
+  public
+    procedure Execute; override;
+  end;
+
+  TBisCallcHbookApplicationInterfaceEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookApplicationInterfaceInsertFormIface=class(TBisCallcHbookApplicationInterfaceEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookApplicationInterfaceUpdateFormIface=class(TBisCallcHbookApplicationInterfaceEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookApplicationInterfaceDeleteFormIface=class(TBisCallcHbookApplicationInterfaceEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookApplicationInterfaceEditForm: TBisCallcHbookApplicationInterfaceEditForm;
+
+implementation
+
+uses BisCallcHbookInterfacesFm, BisCallcHbookRoleAndAccountsFm, BisCallcHbookApplicationsFm,
+     BisCore;
+
+{$R *.dfm}
+
+{ TBisCallcHbookApplicationInterfaceEditFormIface }
+
+constructor TBisCallcHbookApplicationInterfaceEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookApplicationInterfaceEditForm;
+  with Params do begin
+    AddEditDataSelect('APPLICATION_ID','EditApplication','LabelApplication','ButtonApplication',
+                      TBisCallcHbookApplicationsFormIface,'APPLICATION_NAME',true,true,'','NAME').Older('OLD_APPLICATION_ID');
+    AddEditDataSelect('Account_ID','EditAccount','LabelAccount','ButtonAccount',
+                      TBisCallcHbookAccountsFormIface,'Account_NAME',true,true,'','NAME').Older('OLD_Account_ID');
+    AddEditDataSelect('INTERFACE_ID','EditInterface','LabelInterface','ButtonInterface',
+                      TBisCallcHbookInterfacesFormIface,'INTERFACE_NAME',true,true,'','NAME').Older('OLD_INTERFACE_ID');
+    AddEditInteger('PRIORITY','EditPriority','LabelPriority',true);
+    AddCheckBox('AUTO_RUN','CheckBoxAutoRun');                
+  end;
+end;
+
+{ TBisCallcHbookApplicationInterfaceInsertFormIface }
+
+constructor TBisCallcHbookApplicationInterfaceInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_APPLICATION_INTERFACE';
+end;
+
+{ TBisCallcHbookApplicationInterfaceUpdateFormIface }
+
+constructor TBisCallcHbookApplicationInterfaceUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_APPLICATION_INTERFACE';
+end;
+
+{ TBisCallcHbookApplicationInterfaceDeleteFormIface }
+
+constructor TBisCallcHbookApplicationInterfaceDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_APPLICATION_INTERFACE';
+end;
+
+{ TBisCallcHbookApplicationInterfaceEditForm }
+
+procedure TBisCallcHbookApplicationInterfaceEditForm.Execute;
+begin
+  inherited Execute;
+  Core.ReloadInterfaces;
+end;
+
+end.

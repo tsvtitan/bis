@@ -1,0 +1,955 @@
+unit BisCallcBiasFIO;
+
+interface
+
+uses SysUtils;
+
+type
+  TTypeCase=(tcNone,tcNominitive,tcGenitive,tcDative,tcInstrumental,tcAccusative,tcPrepositional);
+
+function GetGenitiveCase(const InSurName, InName, InPatronymic: String; var OutSurName, OutName, OutPatronymic: String): String; overload;
+function GetGenitiveCase(const FIO: String): String; overload; // родительный
+function GetDativeCase(const InSurName, InName, InPatronymic: String; var OutSurName, OutName, OutPatronymic: String): String; overload;
+function GetDativeCase(const FIO: String): String; overload; // дательный
+function GetInstrumentalCase(const InSurName, InName, InPatronymic: String; var OutSurName, OutName, OutPatronymic: String): String; overload;
+function GetInstrumentalCase(const FIO: String): String; overload; // творительный
+function GetAccusativeCase(const InSurName, InName, InPatronymic: String; var OutSurName, OutName, OutPatronymic: String): String; overload;
+function GetAccusativeCase(const FIO: String): String; overload; // винительный
+function GetPrepositionalCase(const InSurName, InName, InPatronymic: String; var OutSurName, OutName, OutPatronymic: String): String; overload;
+function GetPrepositionalCase(const FIO: String): String; overload; // предложный
+function GetSex(InPatronymic: String): Char;
+function IsMale(InPatronymic: String): Boolean;
+
+implementation
+
+uses Classes;
+
+type
+  EDeclenError = class(Exception)
+  public
+    ErrorCode : Integer;
+  end;
+
+
+const
+  Vocalic      : Set of Char = ['а','о','у','ы','э','я','е','ё','ю','и']; // гласные
+  Consonant    : Set of Char = ['б','в','г','д','ж','з','й','к','л','м','н','п',
+                                'р','с','т','ф','х','ц','ч','ш','щ']; // согласные
+  SoftSibilant : Set of Char = ['ч','щ'];        // мягкие шипящие согласные
+  HardSibilant : Set of Char = ['ц','ш'];        // твердые шипящие согласные
+  GKX          : Set of Char = ['г','к','х'];    // исключения для окончания -а
+  WordDelims   : Set of Char = [' ', #9];        // разделители слов в ФИО
+
+  exInvalidCase = -1;
+  exInvalidSex  = -2;
+
+var
+  aEnd : array[1..6] of String;                  // массив окончаний
+
+  FirstNameMExeptions               : TStringList;
+  FirstNameWExeptions               : TStringList;
+  LastNameExeptions                 : TStringList;
+  FirstPartLastNameExeptions        : TStringList;
+  FirstNameParallelForms            : TStringList;
+  FirstNameMExeptionsPresent        : Boolean;
+  FirstNameWExeptionsPresent        : Boolean;
+  LastNameExeptionsPresent          : Boolean;
+  FirstPartLastNameExeptionsPresent : Boolean;
+  FirstNameParallelFormsPresent     : Boolean;
+
+
+
+////////////////////////////////////////////
+
+{----------------------------------------------------------------------}
+{ Возвращает True если указаное число типа LongInt находится в         }
+{ заданом диапозоне.                                                   }
+{ Параметры:                                                           }
+{  vBeg   - Начала диапозона                                           }
+{  vEnd   - Конец диапозона                                            }
+{  vValue - Проверяемое число                                          }
+{----------------------------------------------------------------------}
+function IsRangeInt(vBeg: LongInt; vEnd: LongInt; vValue: Integer): Boolean;
+begin
+  Result := (vValue >= vBeg) and (vValue <= vEnd);
+end; { IsRangeInt }
+
+
+function RetCountWord(InFio: String; Ch: Char): Integer;
+var
+  i: Integer;
+  chNew: Char;
+begin
+  Result:=0;
+  for i:=1 to Length(InFio) do begin
+    chNew:=InFio[i];
+    if chNew=ch then
+      Inc(Result);
+  end;
+end;
+
+{----------------------------------------------------------------------}
+{ Определение пола по отчеству                                         }
+{----------------------------------------------------------------------}
+function GetSex(InPatronymic: String): Char;
+var
+  nLen : Integer;
+begin
+  InPatronymic := AnsiLowerCase(InPatronymic);
+  nLen := Length(InPatronymic);
+  if (InPatronymic[nLen] = 'ч') or
+     (Copy(InPatronymic, nLen-3, 4) = 'оглы')
+     // сюда можно добавить другие признаки мужских отчеств
+  then Result := 'м'
+  else Result := 'ж';
+end;
+
+function IsMale(InPatronymic: String): Boolean;
+var
+  C: Char;
+begin
+  C:=GetSex(InPatronymic);
+  Result:=C='м';
+end;
+
+{----------------------------------------------------------------------}
+{ Формирование массива окончаний, для соответствующих падежей          }
+{ Индексы массива : 1-именительный                                     }
+{                   2-родительный                                      }
+{                   3-дательный                                        }
+{                   4-винительный                                      }
+{                   5-творительный                                     }
+{                   6-предложный                                       }
+{----------------------------------------------------------------------}
+procedure SetEndings(c1, c2, c3, c4, c5, c6: String);
+begin
+  aEnd[1] := c1;
+  aEnd[2] := c2;
+  aEnd[3] := c3;
+  aEnd[4] := c4;
+  aEnd[5] := c5;
+  aEnd[6] := c6;
+end; { SetEndings }
+
+{----------------------------------------------------------------------}
+{ Очистка массива окончаний                                            }
+{----------------------------------------------------------------------}
+procedure ClearEndings;
+begin
+  SetEndings('','','','','','');
+end; { ClearEndings }
+
+
+{----------------------------------------------------------------------}
+{ Определяет количество слогов в слове по числу гласных                }
+{----------------------------------------------------------------------}
+function CountSyllable(AnyWord: String): Integer;
+var
+  ii : Integer;
+begin
+  AnyWord := AnsiLowerCase(AnyWord);
+  Result := 0;
+  for ii:=1 to Length(AnyWord) do
+    if AnyWord[ii] in Vocalic then Inc(Result);
+end;
+
+{----------------------------------------------------------------------}
+{ Возвращает параллельную форму имени на -а для cFirstName на -о       }
+{----------------------------------------------------------------------}
+function NameParallelForm(cFirstName: String): String;
+var
+  i : Integer;
+  S : String;
+begin
+  Result := cFirstName;
+  if FirstNameParallelFormsPresent then begin
+    for i:=0 to FirstNameParallelForms.Count-1 do begin
+      S := FirstNameParallelForms[i];
+      if cFirstName = Copy(S, 1, Pos('=', S)-1) then begin
+        Result := Copy(S, Pos('=', S)+1, Length(S));
+        Break;
+      end;
+    end;
+  end;
+end;
+
+
+{----------------------------------------------------------------------}
+{ Возвращает сроку в которой каждое слово начинается с большой         }
+{ буквы                                                                }
+{----------------------------------------------------------------------}
+function Proper(cStr: String): String;
+var
+  nLen, I : Integer;
+begin
+//  Result := AnsiProperCase(cStr,[' ','-']);
+  Result := AnsiLowerCase(cStr);
+  I := 1;
+  nLen := Length(Result);
+  while I <= nLen do begin
+    while (I <= nLen) and ((Result[I] = ' ') or (Result[I] = '-'))do Inc(I);
+    if I <= nLen then Result[I] := AnsiUpperCase(Result[I])[1];
+    while (I <= nLen) and not ((Result[I] = ' ') or (Result[I] = '-')) do Inc(I);
+  end;
+end; { Proper }
+
+{----------------------------------------------------------------------}
+{ Проверка на допустимость склонения                                   }
+{ Параметры:                                                           }
+{  AnyWord    - фамилия или имя                                        }
+{  Male       - род (True - мужской; False - женский)                  }
+{  IsLastName - флаг проверки фамилии                                  }
+{  Multiple   - флаг составной фамилии (True - составная)              }
+{----------------------------------------------------------------------}
+
+function NonDeclension(AnyWord: String; Male, IsLastName, Multiple: Boolean): Boolean;
+var
+  nLen, I   : Integer;
+  cLastChar : Char;
+  cEnding   : String;
+begin
+  Result := True;
+  if AnyWord = '' then Exit;       // во избежание ошибки работы с пустой строкой
+
+  nLen := Length(AnyWord);
+  cLastChar := AnyWord[nLen];
+
+  if IsLastName then begin         // проверяем фамилию
+    if Multiple then begin         // фамилия составная
+      if (                         // "зашитые" приставки и несклоняемые части фамилий
+        (AnyWord = 'Бут')   or     // Бут-Гусаим
+        (AnyWord = 'Тер')   or     // Тер-Ованесян
+        (AnyWord = 'Аскер') or     // Аскер-Заде
+        (AnyWord = 'Кара')         // Кара-Мурза
+                                   // другие несклоняемые приставки (в т.ч.части фамилий)
+         ) then Exit;
+      if FirstPartLastNameExeptionsPresent then   // просмотр словаря исключений
+        if FirstPartLastNameExeptions.Find(AnyWord, I) then Exit;
+    end;
+
+// Не склоняются: русские фамилии на -ого, -яго, -ово, -их, -ых
+    if (
+      (Copy(AnyWord, nLen-2, 3) = 'ого') or         // Шамбинаго
+      (Copy(AnyWord, nLen-2, 3) = 'яго') or         // Дебяго
+      (Copy(AnyWord, nLen-2, 3) = 'ово') or         // Хитрово
+      (Copy(AnyWord, nLen-1, 2) = 'их')  or         // Долгих
+      (Copy(AnyWord, nLen-1, 2) = 'ых')) then Exit; // Седых
+
+    cEnding := Copy(AnyWord, nLen-1, 2);            // две последние буквы
+
+// Не склоняются: фамилии на -а, -я с предшествующим гласным И
+    if (
+      (cEnding ='ия') or           // сонеты Эредия, стихи Гарсия
+      (cEnding ='иа')) then Exit;  // рассказы Гулиа
+
+// Не склоняются: женские фамилии, оканчивающиеся на согласный звук и -ь
+    if (not Male) and (cLastChar in Consonant + ['ь']) then Exit;
+
+    if LastNameExeptionsPresent then     // просмотр словаря исключений
+      if LastNameExeptions.Find(AnyWord, I) then Exit;
+
+    Result := (cLastChar in ['о','у','ы','э',    'е','ё','ю','и']);
+  end
+  else begin                             // проверяем имя
+    if Male then begin                   // мужские имена
+      if FirstNameMExeptionsPresent then // просмотр словаря исключений
+        if FirstNameMExeptions.Find(AnyWord, I) then Exit;
+    end
+    else begin                           // женские имена
+      if cLastChar in Consonant then Exit;
+      if FirstNameWExeptionsPresent then // просмотр словаря исключений
+        if FirstNameWExeptions.Find(AnyWord, I) then Exit;
+    end;
+    Result := (cLastChar in ['о','у','ы','э',    'е','ё','ю','и']);
+  end;
+end; { NonDeclension }
+
+{----------------------------------------------------------------------}
+{ Выделение слова из предложения по его порядковому номеру (при Index  }
+{ большем, чем число слов возвращается пустая строка)                  }
+{ Параметры:                                                           }
+{   Index  - номер слова                                               }
+{   Source - предложение                                               }
+{----------------------------------------------------------------------}
+function A_ExtractWord(Index: Integer; Source: String): String;
+var
+  tmpS    : String;
+  i, iPos : Integer;
+begin
+  tmpS := Trim(Source);
+  for i := 1 to Index-1 do begin
+    iPos := Pos(' ', tmpS);
+    if iPos = 0 then iPos := Length(tmpS);
+    tmpS := Trim(Copy(tmpS, iPos+1, Length(tmpS)));
+  end;
+  iPos := Pos(' ', tmpS);
+  if iPos = 0 then iPos := Length(tmpS);
+  Result := Trim(Copy(tmpS, 1, iPos));
+end;
+
+
+{----------------------------------------------------------------------}
+{ Разделение ФИО на фамилию, имя, отчество                             }
+{ Параметры:                                                           }
+{  cFIO        - переменная передающая фамилию, имя и отчество,        }
+{                написанные через пробелы                              }
+{  cLastName   - возвращаемая фамилия                                  }
+{  cFirstName  - возвращаемое имя                                      }
+{  cMiddleName - возвращаемое отчество                                 }
+{----------------------------------------------------------------------}
+
+function ExtractWord(InFio: string;
+                     var cLastName,cFirstName,cMiddleName: String; Delims: Char): string;
+var
+  Apos: Integer;
+  Last: Integer;
+  tmps: string;
+begin
+  Result:=InFio;
+  tmps:=InFio;
+  Apos:=Pos(Delims,tmps);
+  if APos<>0 then begin
+   cLastName:=Copy(InFio,1,APos-1);
+   tmps:=Copy(InFio,APos+1,Length(InFio)-Length(cLastName));
+  end else begin
+   cLastName:=InFio;
+   exit;
+  end;
+  last:=APos;
+  APos:=Pos(Delims,tmps);
+  if APos<>0 then begin
+   cFirstName:=Copy(tmps,1,APos-1);
+   tmps:=Copy(InFio,APos+last+1,Length(InFio)-Length(cFirstName));
+  end else begin
+   cFirstName:=tmps;
+   exit;
+  end;
+
+  cMiddleName:=Copy(tmps,1,Length(tmps));
+
+end;
+
+procedure SeparateFIO(cFIO: String; var cLastName, cFirstName, cMiddleName: String);
+var
+  PointPos, nLen : Integer;
+begin
+  ExtractWord(cFIO,cLastName,cFirstName,cMiddleName,' ');
+  PointPos := Pos('.', cFirstName);
+  if PointPos <> 0 then begin                            // инициалы или сокращения
+    nLen := Length(cFirstName);
+    if PointPos <> nLen then begin                       // инициалы написаны слитно
+      cMiddleName := Copy(cFirstName, PointPos+1, nLen); // инициал отчества
+      cFirstName := Copy(cFirstName, 1, PointPos);       // инициал имени
+    end;
+  end;
+end;
+
+
+
+{----------------------------------------------------------------------}
+{ Преобразование мужской фамилии                                       }
+{ Параметры:                                                           }
+{  cLastName - фамилия в именительном падеже                           }
+{  nPadeg    - падеж (допустимые значения 1..6)                        }
+{              1-именительный                                          }
+{              2-родительный                                           }
+{              3-дательный                                             }
+{              4-винительный                                           }
+{              5-творительный                                          }
+{              6-предложный                                            }
+{----------------------------------------------------------------------}
+function GetLastNameM(cLastName: String; nPadeg: Integer; Multiple: Boolean): String;
+var
+  nLen      : Integer;
+  cEnd      : String;
+  nDelimPos : Integer;
+  cFstPart  : String;
+  cEndPart  : String;
+begin
+  nDelimPos := Pos('-', cLastName);                      // позиция разделителя
+  if nDelimPos > 0 then begin                            // фамилия составная
+    cFstPart := Trim(Copy(cLastName, 1, nDelimPos - 1)); // выделяем часть до дефиса
+    cEndPart := Trim(Copy(cLastName, nDelimPos + 1, Length(cLastName)));
+    Result := GetLastNameM(cFstPart, nPadeg, True) +     // склоняем первую часть
+              '-' +                                      // восстановили дефис
+              GetLastNameM(cEndPart, nPadeg, False);     // склоняем остаток
+    Exit;
+  end;
+  cLastName := Proper(cLastName);
+  Result := cLastName;
+  if NonDeclension(cLastName, True, True, Multiple) then Exit;  // склонять не надо
+  ClearEndings;                                          // очистим массив окончаний
+  nLen := Length(cLastName);                             // длина фамилии
+  cEnd := Copy(cLastName, nLen - 1, 2);                  // берем посление 2 буквы фамилии
+  if (cEnd = 'ый') then begin
+    SetEndings('','ого','ому','ого','ым','ом');
+    if nPadeg > 1 then cLastName := Copy(cLastName, 1, nLen - 2);
+  end else
+  if (cEnd = 'ой') then begin
+    SetEndings('','ого','ому','ого','ым','ом');
+    if CountSyllable(cLastName) = 1 then begin
+      SetEndings('й','я','ю','я','ем','е');              // Цой
+      cLastName := Copy(cLastName, 1, nLen - 1);         // формируем фамилию
+    end
+    else begin
+      if cLastName[nLen-2] in (GKX + SoftSibilant) then aEnd[5] := 'им';
+      if nPadeg > 1 then cLastName := Copy(cLastName, 1, nLen - 2);
+    end;
+  end else
+  if (cEnd = 'ий') or (cEnd = 'ей') or (cEnd = 'ай') or (cEnd = 'яй') then begin
+    if (cEnd = 'ий') and (cLastName[nLen-2] in GKX) then begin
+      SetEndings(cEnd,'ого','ому','ого','им','ом');
+      cLastName := Copy(cLastName, 1, nLen-2);
+    end else
+    if (cEnd = 'ий') and
+       (cLastName[nLen-2] in HardSibilant+SoftSibilant+['н','ж']) then begin
+      SetEndings(cEnd,'его','ему','его','им','ем');      // Пригожий, Синий, Леший
+      cLastName := Copy(cLastName, 1, nLen-2);
+    end
+    else begin
+      SetEndings('й','я','ю','я','ем','е');
+      cLastName := Copy(cLastName, 1, nLen - 1);         // формируем фамилию
+    end;
+  end else
+  if (cEnd = 'ын') or (cEnd = 'ин') or (cEnd = 'ев') or (cEnd = 'ёв') or
+     (cEnd = 'ов') then begin
+    SetEndings('','а','у','а','ым','е');
+    if (cLastName = 'Лев') and (nPadeg > 1) then cLastName := 'Льв';
+    // если фамилия - один слог, то тв.п. -ом (Лин - Лином)
+    if CountSyllable(cLastName) = 1 then aEnd[5] := 'ом';
+    if cLastName = 'Львов' then aEnd[5] := 'ым';
+  end else
+  if (cEnd = 'ич') or (cEnd = 'ач')then begin
+    SetEndings('','а','у','а','ем','е');
+  end else
+  if (cEnd = 'ок') then begin
+    SetEndings('','а','у','а','ом','е');
+    if (nPadeg > 1) and (CountSyllable(cLastName) > 1) then
+      cLastName := Copy(cLastName, 1, nLen - 2) + 'к';   // выпадает гласная (Симонок - Симонком; Сок - Соком)
+  end else
+  if (cEnd='ец') then begin
+    SetEndings('','а','у','а','ом','е');
+    if (nPadeg > 1) then begin                           //преобразуем cLastName
+      case AnsiLowerCase(cLastName[nLen - 2])[1] of      // анализ 3 буквы с конца
+        'а',         // Заец
+        'е',         // Компанеец
+        'и',         // Компаниец
+        'о',         // Коломоец
+        'у' : begin  // Поцелуец
+                aEnd[5] := 'ем';
+                cLastName := Copy(cLastName, 1, nLen - 2) + 'йц';
+              end;
+        'л' : if cLastName[nLen-3] in Vocalic then
+                // если предыдущая - гласная
+                cLastName := Copy(cLastName, 1, nLen - 2) + 'ьц'   // Козелец
+              else begin
+                aEnd[5] := 'ем';                                   // Зайдлец, Клец
+                if cLastName[nLen-3] = 'й' then aEnd[5] := 'ом';   // Михайлец
+              end;
+        'д',                                                       // Хардец
+        'н' : if cLastName[nLen - 3] in Vocalic then
+                if CountSyllable(cLastName) > 2 then
+                  cLastName := Copy(cLastName, 1, nLen - 2) + 'ц'; // Любанец иначе не изменяем cLastName (Близнец,Динец)
+        'п' : if (nLen > 3) then begin
+                if (cLastName[nLen-3] in Vocalic) then begin
+                  // если предыдущая - гласная
+                  aEnd[5] := 'ем';
+                  cLastName := Copy(cLastName, 1, nLen - 2) +'ц';  // Коропец
+                end;
+              end
+              else aEnd[5] := 'ем';                                // Пец
+      else
+        cLastName := Copy(cLastName, 1, nLen - 2) + 'ц';           // Мышковец
+      end; { case }
+    end; { if }
+  end else begin
+    cEnd := Copy(cLastName,nLen,1);                    // берем посленюю букву фамилии
+    if (cEnd = 'а') and (cLastName[nLen-1] in Consonant) then begin
+      SetEndings('а','ы','е','у','ой','е');
+      // если перед -а стоит [г,к,х] или мягкая шипящая или [ж,ш], то окончание род.п. -и
+      if cLastName[nLen-1] in (GKX + SoftSibilant + ['ж','ш']) then aEnd[2] := 'и';
+      // если перед -а стоит шипящая, то окончание тв.п. -ой (при ударении на конец слова)
+      // или -ей. Пусть для определенности ударение никогда не падает на последнюю гласную
+      if (cLastName[nLen-1] in (SoftSibilant + HardSibilant + ['ж'])) and
+         (cLastName[nLen-2] in Vocalic)  then aEnd[5] := 'ей'; // Мережей, Панежей но Ганжой
+      cLastName := Copy(cLastName, 1, nLen - 1);
+    end else
+    if (cEnd = 'я') and (cLastName[nLen-1] in (Consonant+['ь'])) then begin
+      SetEndings('я','и','е','ю','ей','е');
+      cLastName := Copy(cLastName, 1, nLen - 1);
+    end else
+    if cEnd = 'ь' then begin
+      SetEndings('','я','ю','я','ем','е');
+      if nPadeg > 1 then cLastName := Copy(cLastName, 1, nLen - 1);
+    end else
+    if cEnd[1] in Consonant then begin
+      SetEndings('','а','у','а','ом','е');
+      if cEnd[1] in HardSibilant then aEnd[5] := 'ем';
+    end;
+  end;
+  Result := cLastName + aEnd[nPadeg];
+end; { GetLastNameM }
+
+{----------------------------------------------------------------------}
+{ Преобразование женской фамилии                                       }
+{ Параметры:                                                           }
+{  cLastName - фамилия в именительном падеже                           }
+{  nPadeg    - падеж (допустимые значения 1..6)                        }
+{              1-именительный                                          }
+{              2-родительный                                           }
+{              3-дательный                                             }
+{              4-винительный                                           }
+{              5-творительный                                          }
+{              6-предложный                                            }
+{----------------------------------------------------------------------}
+function GetLastNameW(cLastName: String; nPadeg: Integer; Multiple: Boolean): String;
+var
+  nLen      : Integer;
+  cEnd      : String;
+  nDelimPos : Integer;
+  cFstPart  : String;
+  cEndPart  : String;
+begin
+  nDelimPos := Pos('-', cLastName);                      // позиция разделителя
+  if nDelimPos > 0 then begin                            // фамилия составная
+    cFstPart := Trim(Copy(cLastName, 1, nDelimPos - 1)); // выделяем часть до дефиса
+    cEndPart := Trim(Copy(cLastName, nDelimPos + 1, Length(cLastName)));
+    Result := GetLastNameW(cFstPart, nPadeg, True) +     // склоняем первую часть
+              '-' +                                      // восстановили дефис
+              GetLastNameW(cEndPart, nPadeg, False);     // склоняем остаток
+    Exit;
+  end;
+  cLastName := Proper(cLastName);
+  Result := cLastName;
+  if NonDeclension(cLastName, False, True, Multiple) then Exit; // склонять не надо
+  ClearEndings;                                          // очистим массив окончаний
+  nLen := Length(cLastName);                             // длина фамилии
+  cEnd := Copy(cLastName, nLen - 3, 4);                  // берем посление 4 буквы фамилии
+  if cEnd = 'цына' then begin
+    SetEndings('а','ой','ой','у','ой','ой');
+    cLastName := Copy(cLastName, 1, nLen - 1);           // формируем фамилию
+  end else begin
+    cEnd := Copy(cLastName, nLen - 2, 3);                // берем последние 3 буквы
+    if (cEnd = 'ова') or (cEnd = 'ева') or (cEnd = 'ёва') or (cEnd = 'ина') then begin
+      SetEndings('а','ой','ой','у','ой','ой');
+      cLastName := Copy(cLastName, 1, nLen - 1);         // формируем фамилию
+    end else begin
+      cEnd := Copy(cLastName, nLen - 1, 2);              // берем посление 2 буквы фамилии
+      if (cEnd = 'ая') or (cEnd = 'яя') then begin
+        if cEnd = 'ая' then begin
+          SetEndings('ая','ой','ой','ую','ой','ой');
+          if cLastName[nLen-2] in (SoftSibilant + HardSibilant + ['ж']) then
+            SetEndings('ая','eй','eй','ую','eй','eй');   // Осадчая, Дюжая
+        end
+        else SetEndings('яя','ей','ей','юю','ей','ей');
+        cLastName := Copy(cLastName, 1, nLen - 2);       // формируем фамилию
+      end else begin
+        cEnd := Copy(cLastName, nLen, 1);                // берем посленюю букву фамилии
+        if (cEnd = 'а') and (cLastName[nLen-1] in Consonant) then begin
+          SetEndings('а','ы','е','у','ой','е');
+          // если перед -а стоит [г,к,х] или мягкая шипящая или [ж,ш], то окончание род.п. -и
+          if cLastName[nLen-1] in (GKX + SoftSibilant + ['ж','ш']) then aEnd[2] := 'и';
+          // если перед -а стоит шипящая, то окончание тв.п. -ой (при ударении на конец слова)
+          // или -ей. Путь для определенности ударение никогда не падает на последнюю гласную
+          if (cLastName[nLen-1] in (SoftSibilant + HardSibilant + ['ж'])) and
+             (cLastName[nLen-2] in Vocalic)  then aEnd[5] := 'ей'; // Мережей, Панежей но Ганжой
+          cLastName := Copy(cLastName, 1, nLen - 1);
+        end else
+        if (cEnd = 'я') and (cLastName[nLen-1] in (Consonant+['ь'])) then begin
+          SetEndings('я','и','е','ю','ей','е');
+          cLastName := Copy(cLastName, 1, nLen - 1);
+        end;
+      end;
+    end;
+  end;
+  Result := cLastName + aEnd[nPadeg];                    // добавляем к фамилии окончание
+end; { GetLastNameW }
+
+{----------------------------------------------------------------------}
+{ Функция преобразования мужского имени                                }
+{ Параметры:                                                           }
+{  cFirstName - имя в именительном падеже                              }
+{  nPadeg     - падеж (допустимые значения 1..6)                       }
+{               1-именительный                                         }
+{               2-родительный                                          }
+{               3-дательный                                            }
+{               4-винительный                                          }
+{               5-творительный                                         }
+{               6-предложный                                           }
+{----------------------------------------------------------------------}
+function GetFirstNameM(cFirstName: String; nPadeg: Integer): String;
+var
+  nLen : Integer;
+  cEnd : String;
+begin
+  cFirstName := Proper(cFirstName);
+  Result := cFirstName;
+  if nPadeg > 1 then begin                               // падеж не именительный - попытаемся склонять
+    nLen := Length(cFirstName);
+    cEnd := Copy(cFirstName, nLen, 1);                   // смотрим окончание
+    if cEnd = 'о' then
+      cFirstName := NameParallelForm(cFirstName);        // заменим на параллельную форму, если она есть
+    if NonDeclension(cFirstName, True, False, False) then Exit;  // склонять не надо
+    SetEndings('','а','у','а','ом','е');                 // массив окончаний по умолчанию
+    if (cFirstName='Лев') then
+      cFirstName := 'Льв'                                // Лев - имя с выпадающей гласной
+    else if (cFirstName = 'Павел') then
+      cFirstName := 'Павл'                               // Павел - тоже выпадает гласная
+    else begin
+      if (cEnd = 'й') or (cEnd = 'ь') then begin
+        SetEndings(cEnd,'я','ю','я','ем','е');
+        if cFirstName[nLen-1] = 'и' then aEnd[6] := 'и'; // о Виталии
+        cFirstName := Copy(cFirstName, 1, nLen-1);
+      end else
+      if (cEnd = 'а') then begin                         // Зосима
+        SetEndings('а','ы','е','у','ой','е');
+        if cFirstName[nLen-1] in (GKX + SoftSibilant + ['ж','ш']) then
+          aEnd[2] := 'и';                                // Лука
+        cFirstName := Copy(cFirstName, 1, nLen-1);
+      end
+      else if (cEnd = 'я') then begin                    // Илья, Добрыня
+        SetEndings('я','и','е','ю','ей','е');
+        cFirstName := Copy(cFirstName, 1, nLen-1);
+      end;
+    end;
+    Result := cFirstName + aEnd[nPadeg];
+  end;
+end; { GetFirstNameM }
+
+{----------------------------------------------------------------------}
+{ Функция преобразования женского имени                                }
+{ Параметры:                                                           }
+{  cFirstName - имя в именительном падеже                              }
+{  nPadeg     - падеж (допустимые значения 1..6)                       }
+{               1-именительный                                         }
+{               2-родительный                                          }
+{               3-дательный                                            }
+{               4-винительный                                          }
+{               5-творительный                                         }
+{               6-предложный                                           }
+{----------------------------------------------------------------------}
+function GetFirstNameW(cFirstName: String; nPadeg: Integer): String;
+var
+  nLen : Integer;
+  cEnd : String;
+begin
+  cFirstName := Proper(cFirstName);
+  Result := cFirstName;
+  if NonDeclension(cFirstName, False, False, False) then Exit; // склонять не надо
+  ClearEndings;                                          // очистим массив окончаний
+  nLen := Length(cFirstName);
+  cEnd := Copy(cFirstName, nLen, 1);                     // смотрим окончание
+  if cEnd = 'а' then begin
+    SetEndings('а','ы','е','у','ой','е');
+    if cFirstName[nLen-1] in (GKX + SoftSibilant + ['ж','ш']) then
+      aEnd[2] := 'и';                                    // Вероника
+    cFirstName := Copy(cFirstName, 1, nLen - 1);
+  end else
+  if cEnd = 'я' then begin
+    SetEndings('я','и','и','ю','ей','и');                // Лидия - о Лидии
+    if cFirstName[nLen - 1] in ['ь','о'] then begin
+      aEnd[3] := 'е';
+      aEnd[6] := 'е';                                    // Софья - о Софье Зоя - о Зое
+    end;
+    cFirstName := Copy(cFirstName, 1, nLen - 1);
+  end else
+  if cEnd = 'ь' then begin                               // Любовь
+    SetEndings('ь','и','и','ь','ью','и');
+    cFirstName:=Copy(cFirstName, 1, nLen - 1);
+  end;
+  Result := cFirstName + aEnd[nPadeg];
+end; { GetFirstNameW }
+
+{----------------------------------------------------------------------}
+{ Функция преобразования мужского отчества                             }
+{ Параметры:                                                           }
+{  cMiddleName  - отчество в именительном падеже                       }
+{  nPadeg       - падеж (допустимые значения 1..6)                     }
+{                1-именительный                                        }
+{                2-родительный                                         }
+{                3-дательный                                           }
+{                4-винительный                                         }
+{                5-творительный                                        }
+{                6-предложный                                          }
+{----------------------------------------------------------------------}
+function GetMiddleNameM(cMiddleName: String; nPadeg: Integer): String;
+begin
+  cMiddleName := Proper(cMiddleName);
+  Result := cMiddleName;
+  if cMiddleName = '' then Exit;
+  SetEndings('','а','у','а','ем','е');
+  if cMiddleName[Length(cMiddleName)] <> 'ч' then ClearEndings; // Оглы и другие
+  Result := cMiddleName + aEnd[nPadeg];
+end; { GetMiddleNameM }
+
+{----------------------------------------------------------------------}
+{ Функция преобразования женского отчества                             }
+{ Параметры:                                                           }
+{  cMiddleName - отчество в именительном падеже                        }
+{  nPadeg      - падеж (допустимые значения 1..6)                      }
+{                1-именительный                                        }
+{                2-родительный                                         }
+{                3-дательный                                           }
+{                4-винительный                                         }
+{                5-творительный                                        }
+{                6-предложный                                          }
+{----------------------------------------------------------------------}
+function GetMiddleNameW(cMiddleName: String; nPadeg: Integer): String;
+var
+  nLen : Integer;
+  cEnd : String;
+begin
+  cMiddleName := Proper(cMiddleName);
+  Result := cMiddleName;
+  if cMiddleName = '' then Exit;
+  nLen := Length(cMiddleName);
+  cEnd := Copy(cMiddleName, nLen, 1);                    // смотрим окончание
+  SetEndings('а','ы','е','у','ой','е');
+  if cEnd = 'а' then cMiddleName := Copy(cMiddleName, 1, nLen - 1)
+                else ClearEndings;                       // очистим массив окончаний
+  Result := cMiddleName + aEnd[nPadeg];
+end; { GetMiddleNameW }
+
+
+{----------------------------------------------------------------------}
+{ Создает ошибку склонения                                             }
+{----------------------------------------------------------------------}
+function CreateDeclenError(ErrorCode: Integer): EDeclenError;
+type
+  TErrorRec = record
+    Code  : Integer;
+    Ident : String;
+  end;
+const
+  DeclenErrorMap: array[0..1] of TErrorRec = (
+    (Code: exInvalidCase; Ident: 'Недопустимое значение падежа'),
+    (Code: exInvalidSex;  Ident: 'Недопустимый пол'));
+var
+  i : Integer;
+begin
+  Result:=nil;
+  i := Low(DeclenErrorMap);
+  while (i <= High(DeclenErrorMap)) and (DeclenErrorMap[i].Code <> ErrorCode) do
+    Inc(i);
+  if i <= High(DeclenErrorMap) then
+    Result := EDeclenError.Create(DeclenErrorMap[i].Ident);
+  Result.ErrorCode := ErrorCode;
+end;
+
+{----------------------------------------------------------------------}
+{ Функция преобразования фамилии, имени, отчества из именительного     }
+{ падежа в любой другой падеж                                          }
+{ Параметры:                                                           }
+{  cLastName    - фамилия                                              }
+{  cFirstName   - имя                                                  }
+{  cMiddleName  - отчество                                             }
+{  сSex         - пол (допустимые значения "м", "ж")                   }
+{  nPadeg       - падеж (допустимые значения 1..6)                     }
+{                 1-именительный                                       }
+{                 2-родительный                                        }
+{                 3-дательный                                          }
+{                 4-винительный                                        }
+{                 5-творительный                                       }
+{                 6-предложный                                         }
+{----------------------------------------------------------------------}
+function GetFIO(cLastName, cFirstName, cMiddleName: String;
+                cSex: String; nPadeg: Integer): String;
+var
+  nLen : Integer;
+begin
+  cLastName   := Trim(cLastName);
+  cFirstName  := Trim(cFirstName);
+  cMiddleName := Trim(cMiddleName);
+  if IsRangeInt(1, 6, nPadeg) then begin
+    if cSex = '' then                                                 // если пол не задан
+      if cMiddleName <> '' then begin                                 // но задано отчество
+        nLen := Length(cMiddleName);
+        if nLen>0 then
+         if cMiddleName[nLen] <> '.' then                              // и оно не инициал
+          cSex := GetSex(cMiddleName)                                 // определим пол
+         else begin
+          Result := Trim(Proper(cLastName) + ' ' + Proper(cFirstName) + Proper(cMiddleName));
+          Exit;                                                       // выходим ничего не делая
+         end;
+      end
+      else begin
+        Result := Trim(Proper(cLastName) + ' ' + Proper(cFirstName));
+        Exit;                                                         // выходим ничего не делая
+      end;
+    cSex := AnsiLowerCase(cSex);
+    if cSex = 'м' then begin
+      Result := GetLastNameM(cLastName, nPadeg, False);               // преобразуем фамилию
+
+      nLen := Length(cFirstName);
+      if nLen>0 then
+       if cFirstName[nLen] = '.' then                                  // указан инициал имени
+        Result := Result + ' ' + Proper(cFirstName)                   // оставим его
+       else
+        Result := Result + ' ' + GetFirstNameM(cFirstName, nPadeg);   // преобразуем имя
+
+      nLen := Length(cMiddleName);
+      if nLen>0 then
+       if cMiddleName[nLen] = '.' then                                 // указан инициал отчества
+        Result := Result + Proper(cMiddleName)                        // оставим его
+       else
+        Result := Result + ' ' + GetMiddleNameM(cMiddleName, nPadeg); // преобразуем отчество
+    end else
+    if cSex = 'ж' then begin
+      Result := GetLastNameW(cLastName, nPadeg, False);               // преобразуем фамилию
+
+      nLen := Length(cFirstName);
+      if nLen>0 then
+       if cFirstName[nLen] = '.' then                                  // указан инициал имени
+        Result := Result + ' ' + Proper(cFirstName)                   // оставим его
+       else
+        Result := Result + ' ' + GetFirstNameW(cFirstName, nPadeg);   // преобразуем имя
+
+      nLen := Length(cMiddleName);
+      if nLen>0 then
+      if cMiddleName[nLen] = '.' then                                 // указан инициал отчества
+        Result := Result + Proper(cMiddleName)                        // оставим его
+      else
+        Result := Result + ' ' + GetMiddleNameW(cMiddleName, nPadeg); // преобразуем отчество
+    end else
+      raise CreateDeclenError(exInvalidSex);
+  end else
+      raise CreateDeclenError(exInvalidCase);
+  Result := Trim(Result);
+end;
+
+{----------------------------------------------------------------------}
+{ Функция преобразования фамилии, имени, отчества, записанных          }
+{ одной строкой, из именительного падежа в любой другой падеж          }
+{ Параметры:                                                           }
+{  cFIO         - фамилия                                              }
+{  сSex         - пол (допустимые значения "м", "ж")                   }
+{  nPadeg       - падеж (допустимые значения 1..6)                     }
+{                 1-именительный                                       }
+{                 2-родительный                                        }
+{                 3-дательный                                          }
+{                 4-винительный                                        }
+{                 5-творительный                                       }
+{                 6-предложный                                         }
+{----------------------------------------------------------------------}
+
+function TrimCharForOne(const Ch: Char; const s: string): string;
+var
+    I: Integer;
+    tmps: string;
+begin
+    for i:=1 to Length(s) do begin
+     if i=1 then begin
+       tmps:=s[i];
+     end else begin
+       if (s[i]<>Ch) then
+        tmps:=tmps+s[i]
+       else
+        if (s[i-1]<>Ch) then
+          tmps:=tmps+s[i];
+     end;
+    end;
+    Result:=tmps;
+end;
+
+function GetFIOFromStr(cFIO: String; cSex: String; TypeCase: TTypeCase): String;
+var
+  F, I, O : String;
+  nPadeg: Byte;
+  tmps: string;
+begin
+  nPadeg:=Integer(TypeCase);
+  if nPadeg<>0 then begin
+    tmps:=Trim(TrimCharForOne(' ',cFIO));
+    SeparateFIO(tmps, F, I, O);
+    Result := GetFIO(F, I, O, cSex, nPadeg);
+  end; 
+end;
+
+
+function GetGenitiveCase(const InSurName, InName, InPatronymic: String; var OutSurName, OutName, OutPatronymic: String): String; overload;
+begin
+  Result:='';
+  if (Length(InSurName)>0) and
+     (Length(InName)>0) and
+     (Length(InPatronymic)>0) then begin
+    Result:=GetFIO(InSurName,InName,InPatronymic,'',Integer(tcGenitive));
+    SeparateFIO(Result,OutSurName,OutName,OutPatronymic);
+  end;
+end;
+
+function GetGenitiveCase(const FIO: String): String; overload;
+begin
+  if Length(FIO)>3 then
+    Result:=GetFIOFromStr(FIO,'',tcGenitive);
+end;
+
+function GetDativeCase(const InSurName, InName, InPatronymic: String; var OutSurName, OutName, OutPatronymic: String): String; overload;
+begin
+  Result:='';
+  if (Length(InSurName)>0) and
+     (Length(InName)>0) and
+     (Length(InPatronymic)>0) then begin
+    Result:=GetFIO(InSurName,InName,InPatronymic,'',Integer(tcDative));
+    SeparateFIO(Result,OutSurName,OutName,OutPatronymic);
+  end;
+end;
+
+function GetDativeCase(const FIO: String): String; overload;
+begin
+  if Length(FIO)>3 then
+    Result:=GetFIOFromStr(FIO,'',tcDative);
+end;
+
+function GetInstrumentalCase(const InSurName, InName, InPatronymic: String; var OutSurName, OutName, OutPatronymic: String): String; overload;
+begin
+  Result:='';
+  if (Length(InSurName)>0) and
+     (Length(InName)>0) and
+     (Length(InPatronymic)>0) then begin
+    Result:=GetFIO(InSurName,InName,InPatronymic,'',Integer(tcInstrumental));
+    SeparateFIO(Result,OutSurName,OutName,OutPatronymic);
+  end;
+end;
+
+function GetInstrumentalCase(const FIO: String): String; overload;
+begin
+  if Length(FIO)>3 then
+    Result:=GetFIOFromStr(FIO,'',tcInstrumental);
+end;
+
+function GetAccusativeCase(const InSurName, InName, InPatronymic: String; var OutSurName, OutName, OutPatronymic: String): string; overload;
+begin
+  Result:='';
+  if (Length(InSurName)>0) and
+     (Length(InName)>0) and
+     (Length(InPatronymic)>0) then begin
+    Result:=GetFIO(InSurName,InName,InPatronymic,'',Integer(tcAccusative));
+    SeparateFIO(Result,OutSurName,OutName,OutPatronymic);
+  end;
+end;
+
+function GetAccusativeCase(const FIO: String): String; overload;
+begin
+  if Length(FIO)>3 then
+    Result:=GetFIOFromStr(FIO,'',tcAccusative);
+end;
+
+function GetPrepositionalCase(const InSurName, InName, InPatronymic: String; var OutSurName, OutName, OutPatronymic: String): String;
+begin
+  Result:='';
+  if (Length(InSurName)>0) and
+     (Length(InName)>0) and
+     (Length(InPatronymic)>0) then begin
+    Result:=GetFIO(InSurName,InName,InPatronymic,'',Integer(tcPrepositional));
+    SeparateFIO(Result,OutSurName,OutName,OutPatronymic);
+  end;
+end;
+
+function GetPrepositionalCase(const FIO: String): String;
+begin
+  if Length(FIO)>3 then
+    Result:=GetFIOFromStr(FIO,'',tcPrepositional);
+end;
+
+end.
+

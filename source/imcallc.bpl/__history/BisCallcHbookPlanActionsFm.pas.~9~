@@ -1,0 +1,55 @@
+unit BisCallcHbookPlanActionsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBisCallcHbookPlanActionsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookPlanActionsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHbookPlanActionsForm: TBisCallcHbookPlanActionsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisCallcHbookPlanActionEditFm;
+
+{ TBisCallcHbookPlanActionsFormIface }
+
+constructor TBisCallcHbookPlanActionsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookPlanActionsForm;
+  InsertClass:=TBisCallcHbookPlanActionInsertFormIface;
+  UpdateClass:=TBisCallcHbookPlanActionUpdateFormIface;
+  DeleteClass:=TBisCallcHbookPlanActionDeleteFormIface;
+  Permissions.Enabled:=true;
+  Available:=true;
+  ProviderName:='S_PLAN_ACTIONS';
+  with FieldNames do begin
+    AddKey('PLAN_ID');
+    AddKey('ACTION_ID');
+    Add('PLAN_NAME','План',100);
+    Add('Action_NAME','Организация',200);
+    Add('PRIORITY','Порядок',50);
+  end;
+  Orders.Add('USER_NAME');
+  Orders.Add('PRIORITY');
+  Orders.Add('Action_NAME');
+end;
+
+end.

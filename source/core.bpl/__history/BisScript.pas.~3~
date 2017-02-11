@@ -1,0 +1,38 @@
+unit BisScript;
+
+interface
+
+uses Classes,
+     BisObject, BisCoreObjects;
+
+type
+
+  TBisScript=class(TBisCoreObject)
+  end;
+
+  TBisScriptClass=class of TBisScript;
+
+{  TBisScripts=class(TBisCoreObjects)
+  private
+    function GetItems(Index: Integer): TBisScript;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+
+    property Items[Index: Integer]: TBisScript read GetItems;
+  end;}
+
+implementation
+
+
+{function TBisScripts.GetItems(Index: Integer): TBisScript;
+begin
+  Result:=TBisScript(inherited Items[Index]);
+end;
+
+function TBisScripts.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisScript;
+end;}
+
+end.

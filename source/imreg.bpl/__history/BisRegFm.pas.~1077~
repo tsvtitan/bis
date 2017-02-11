@@ -1,0 +1,847 @@
+unit BisRegFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ShellApi,
+  BisFm, BisDialogFm, BisControls;
+
+type
+  TBisRegForm = class(TBisDialogForm)
+    LabelProduct: TLabel;
+    GroupBoxData: TGroupBox;
+    LabelEmail: TLabel;
+    EditEmail: TEdit;
+    EditSurname: TEdit;
+    LabelSurname: TLabel;
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelPatronymic: TLabel;
+    EditPatronymic: TEdit;
+    LabelCompany: TLabel;
+    EditCompany: TEdit;
+    LabelAddress: TLabel;
+    EditAddress: TEdit;
+    LabelPhone: TLabel;
+    EditPhone: TEdit;
+    LabelSite: TLabel;
+    EditSite: TEdit;
+    CheckBoxInfo: TCheckBox;
+    LabelEmailNeed: TLabel;
+    LabelNameNeed: TLabel;
+    LabelKey: TLabel;
+    EditKey: TEdit;
+    LabelKeyNeed: TLabel;
+    LabelWay: TLabel;
+    ComboBoxWay: TComboBox;
+    LabelProductName: TLabel;
+    procedure ButtonOkClick(Sender: TObject);
+    procedure LabelProductNameMouseEnter(Sender: TObject);
+    procedure LabelProductNameMouseLeave(Sender: TObject);
+    procedure LabelProductNameClick(Sender: TObject);
+  private
+    FSNeedToEnterKey: String;
+    FSNeedToEnterName: String;
+    FSNeedToEnterEmail: String;
+    FProductId: String;
+    FProductUrl: String;
+    FProductRegUrl: String;
+    FProductEmail: String;
+    FSDirect: String;
+    FSManual: String;
+    FSResultCodeError: String;
+    FSRegisterSuccess: String;
+    FSInvalidRegisterCode: String;
+    FSRegister: String;
+    function CheckFields: Boolean;
+    function Registration: Boolean;
+    procedure RestrictControls(Restricted: Boolean);
+    procedure Encode(Key: String; Stream: TStream);
+    procedure Decode(Key: String; Stream: TStream);
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Init; override;
+  published
+    property SNeedToEnterKey: String read FSNeedToEnterKey write FSNeedToEnterKey;
+    property SNeedToEnterName: String read FSNeedToEnterName write FSNeedToEnterName;
+    property SNeedToEnterEmail: String read FSNeedToEnterEmail write FSNeedToEnterEmail;
+    property SResultCodeError: String read FSResultCodeError write FSResultCodeError;
+    property SRegisterSuccess: String read FSRegisterSuccess write FSRegisterSuccess;
+    property SInvalidRegisterCode: String read FSInvalidRegisterCode write FSInvalidRegisterCode;
+    property SDirect: String read FSDirect write FSDirect;
+    property SManual: String read FSManual write FSManual;
+    property SRegister: String read FSRegister write FSRegister;
+  end;
+
+  TBisRegFormIface=class(TBisDialogFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisRegForm: TBisRegForm;
+
+implementation
+
+uses DateUtils, StrUtils, Zlib, ComObj, ActiveX,
+     IdHttp, IdComponent, IdMultipartFormData,
+     ALXmlDoc, 
+     DCPrijndael,
+     BisCore, BisUtils, BisDialogs, BisConsts, BisSystemInfo, BisConfig,
+     BisBase64, BisCrypter, BisRegCodeFm, BisRegEmailFm;
+
+{$R *.dfm}
+
+{ TBisRegFormIface }
+
+constructor TBisRegFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisRegForm;
+end;
+
+{ TBisRegForm }
+
+constructor TBisRegForm.Create(AOwner: TComponent);
+var
+  S: String;
+begin
+  inherited Create(AOwner);
+  SizeGrip.Visible:=true;
+
+
+  S:='';
+  if Core.LocalBase.ReadParam(SParamProductId,S) then
+    FProductId:=Trim(S);
+
+  S:='';
+  if Core.LocalBase.ReadParam(SParamProductName,S) then
+    LabelProductName.Caption:=Trim(S);
+
+  S:='';
+  if Core.LocalBase.ReadParam(SParamProductUrl,S) then begin
+    FProductUrl:=Trim(S);
+    if FProductUrl<>'' then begin
+      LabelProductName.Cursor:=crHandPoint;
+    end;
+  end;
+
+  S:='';
+  if Core.LocalBase.ReadParam(SParamProductRegUrl,S) then
+    FProductRegUrl:=Trim(S);
+
+  S:='';
+  if Core.LocalBase.ReadParam(SParamProductEmail,S) then
+    FProductEmail:=Trim(S);
+
+  FSNeedToEnterKey:='Необходимо ввести ключ.';
+  FSNeedToEnterName:='Необходимо ввести имя.';
+  FSNeedToEnterEmail:='Необходимо ввести email.';
+  FSResultCodeError:='Ошибка регистрации [%d]. Пожалуйста, обратитесь к разработчикам.';
+  FSRegisterSuccess:='Регистрация прошла успешно.';
+  FSInvalidRegisterCode:='Неверный регистрационный код.';
+  FSDirect:='прямой';
+  FSManual:='ручной';
+  FSRegister:='Register';
+
+  ComboBoxWay.Clear;
+  ComboBoxWay.Items.Add(FSDirect);
+  ComboBoxWay.Items.Add(FSManual);
+  ComboBoxWay.ItemIndex:=0;
+end;
+
+procedure TBisRegForm.Init;
+var
+  Index: Integer;
+begin
+  inherited Init;
+  Index:=ComboBoxWay.ItemIndex;
+  try
+    ComboBoxWay.Items.Strings[0]:=FSDirect;
+    ComboBoxWay.Items.Strings[1]:=FSManual;
+  finally
+    ComboBoxWay.ItemIndex:=Index;
+  end;
+end;
+
+{function PadWithZeros(const str : string; size : integer) : string;
+var
+  origsize, i : integer;
+begin
+  Result := str;
+  origsize := Length(Result);
+  if ((origsize mod size) <> 0) or (origsize = 0) then
+  begin
+    SetLength(Result,((origsize div size)+1)*size);
+    for i := origsize+1 to Length(Result) do
+      Result[i] := #0;
+  end;
+end;
+
+procedure TBisRegForm.Decode(Key: String; Stream: TStream);
+var
+  S: String;
+  Zip: TDecompressionStream;
+  TempStream: TMemoryStream;
+  Crypter: TBisCrypter;
+  Cipher: TDCP_rijndael;
+  Vector: String;
+  Buffer: array[0..1023] of Char;
+  Count: Integer;
+const
+  KeySize=32;
+  BlockSize=16;
+begin
+  TempStream:=TMemoryStream.Create;
+  Crypter:=TBisCrypter.Create;
+  Cipher:=TDCP_rijndael.Create(nil);
+  try
+    Key:=PadWithZeros(Crypter.HashString(Key,haMD5,hfHEX),KeySize);
+    SetLength(S,Stream.Size);
+    Stream.Position:=0;
+    Stream.Read(Pointer(S)^,Length(S));
+    Stream.Size:=0;
+    S:=Base64ToStr(S);
+    Vector:=PadWithZeros('',BlockSize);
+    Cipher.Init(Key[1],256,@Vector[1]);
+    Cipher.DecryptCBC(S[1],S[1],Length(S));
+    S:=TrimRight(S);
+    Stream.Position:=0;
+    Stream.Write(Pointer(S)^,Length(S));
+    Stream.Position:=0;
+    Zip:=TDecompressionStream.Create(Stream);
+    try
+      repeat
+        Count:=Zip.Read(Buffer,SizeOf(Buffer));
+        TempStream.Write(Buffer,Count);
+      until Count=0;
+    finally
+      Zip.Free;
+    end;
+    TempStream.Position:=0;
+    Stream.Size:=0;
+    Stream.CopyFrom(TempStream,TempStream.Size);
+    Stream.Position:=0;
+  finally
+    Cipher.Free;
+    Crypter.Free;
+    TempStream.Free;
+  end;
+end;
+
+procedure TBisRegForm.Encode(Key: String; Stream: TStream);
+var
+  Zip: TCompressionStream;
+  TempStream: TMemoryStream;
+  Crypter: TBisCrypter;
+  Cipher: TDCP_rijndael;
+  Vector: String;
+  S: String;
+const
+  KeySize=32;
+  BlockSize=16;
+begin
+  TempStream:=TMemoryStream.Create;
+  Crypter:=TBisCrypter.Create;
+  Cipher:=TDCP_rijndael.Create(nil);
+  try
+    Key:=PadWithZeros(Crypter.HashString(Key,haMD5,hfHEX),KeySize);
+    Zip:=TCompressionStream.Create(clMax,TempStream);
+    try
+      Stream.Position:=0;
+      Zip.CopyFrom(Stream,Stream.Size);
+    finally
+      Zip.Free;
+    end;
+    Vector:=PadWithZeros('',BlockSize);
+    Cipher.Init(Key[1],256,@Vector[1]);
+    SetLength(S,TempStream.Size);
+    TempStream.Position:=0;
+    TempStream.Read(Pointer(S)^,Length(S));
+    S:=PadWithZeros(S,BlockSize);
+    Cipher.EncryptCBC(S[1],S[1],Length(S));
+    S:=StrToBase64(S);
+    Stream.Size:=0;
+    Stream.Position:=0;
+    Stream.Write(Pointer(S)^,Length(S));
+    Stream.Position:=0;
+  finally
+    Cipher.Free;
+    Crypter.Free;
+    TempStream.Free;
+  end;
+end;}
+
+procedure TBisRegForm.Decode(Key: String; Stream: TStream);
+var
+  S: String;
+  Zip: TDecompressionStream;
+  TempStream: TMemoryStream;
+  Crypter: TBisCrypter;
+  Buffer: array[0..1023] of Char;
+  Count: Integer;
+begin
+  TempStream:=TMemoryStream.Create;
+  Crypter:=TBisCrypter.Create;
+  try
+    Key:=Crypter.HashString(Key,haMD5,hfHEX);
+    SetLength(S,Stream.Size);
+    Stream.Position:=0;
+    Stream.Read(Pointer(S)^,Length(S));
+    Stream.Size:=0;
+    S:=Base64ToStr(S);
+    Crypter.DecodeString(Key,S,caMcryptRijndael,cmCBC);
+    Stream.Position:=0;
+    Stream.Write(Pointer(S)^,Length(S));
+    Stream.Position:=0;
+    Zip:=TDecompressionStream.Create(Stream);
+    try
+      repeat
+        Count:=Zip.Read(Buffer,SizeOf(Buffer));
+        TempStream.Write(Buffer,Count);
+      until Count=0;
+    finally
+      Zip.Free;
+    end;
+    TempStream.Position:=0;
+    Stream.Size:=0;
+    Stream.CopyFrom(TempStream,TempStream.Size);
+    Stream.Position:=0;
+  finally
+    Crypter.Free;
+    TempStream.Free;
+  end;
+end;
+
+procedure TBisRegForm.Encode(Key: String; Stream: TStream);
+var
+  Zip: TCompressionStream;
+  TempStream: TMemoryStream;
+  Crypter: TBisCrypter;
+  S: String;
+begin
+  TempStream:=TMemoryStream.Create;
+  Crypter:=TBisCrypter.Create;
+  try
+    Key:=Crypter.HashString(Key,haMD5,hfHEX);
+    Zip:=TCompressionStream.Create(clMax,TempStream);
+    try
+      Stream.Position:=0;
+      Zip.CopyFrom(Stream,Stream.Size);
+    finally
+      Zip.Free;
+    end;
+    SetLength(S,TempStream.Size);
+    TempStream.Position:=0;
+    TempStream.Read(Pointer(S)^,Length(S));
+    Crypter.EncodeString(S,caMcryptRijndael,cmCBC);
+    S:=StrToBase64(S);
+    Stream.Size:=0;
+    Stream.Position:=0;
+    Stream.Write(Pointer(S)^,Length(S));
+    Stream.Position:=0;
+  finally
+    Crypter.Free;
+    TempStream.Free;
+  end;
+end;
+
+procedure TBisRegForm.LabelProductNameClick(Sender: TObject);
+begin
+  if FProductUrl<>'' then
+    ShellExecute(0,'open',PChar(FProductUrl),nil,nil,SW_SHOW);
+end;
+
+procedure TBisRegForm.LabelProductNameMouseEnter(Sender: TObject);
+begin
+  if FProductUrl<>'' then begin
+    LabelProductName.Font.Style:=LabelProductName.Font.Style+[fsUnderline];
+    LabelProductName.Font.Color:=clBlue;
+  end;
+end;
+
+procedure TBisRegForm.LabelProductNameMouseLeave(Sender: TObject);
+begin
+  if FProductUrl<>'' then begin
+    LabelProductName.Font.Style:=LabelProductName.Font.Style-[fsUnderline];
+    LabelProductName.Font.Color:=clWindowText;
+  end;
+end;
+
+procedure TBisRegForm.RestrictControls(Restricted: Boolean);
+var
+  AEnabled: Boolean;
+begin
+  AEnabled:=not Restricted;
+  LabelProduct.Enabled:=AEnabled;
+  LabelProductName.Enabled:=AEnabled;
+  LabelWay.Enabled:=AEnabled;
+  ComboBoxWay.Enabled:=AEnabled;
+  ComboBoxWay.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelKey.Enabled:=AEnabled;
+  EditKey.Enabled:=AEnabled;
+  EditKey.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelKeyNeed.Enabled:=AEnabled;
+  LabelName.Enabled:=AEnabled;
+  EditName.Enabled:=AEnabled;
+  EditName.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelNameNeed.Enabled:=AEnabled;
+  LabelEmail.Enabled:=AEnabled;
+  EditEmail.Enabled:=AEnabled;
+  EditEmail.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelEmailNeed.Enabled:=AEnabled;
+  LabelSurname.Enabled:=AEnabled;
+  EditSurname.Enabled:=AEnabled;
+  EditSurname.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelPatronymic.Enabled:=AEnabled;
+  EditPatronymic.Enabled:=AEnabled;
+  EditPatronymic.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelCompany.Enabled:=AEnabled;
+  EditCompany.Enabled:=AEnabled;
+  EditCompany.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelAddress.Enabled:=AEnabled;
+  EditAddress.Enabled:=AEnabled;
+  EditAddress.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelPhone.Enabled:=AEnabled;
+  EditPhone.Enabled:=AEnabled;
+  EditPhone.Color:=iff(AEnabled,clWindow,clBtnFace);
+  LabelSite.Enabled:=AEnabled;
+  EditSite.Enabled:=AEnabled;
+  EditSite.Color:=iff(AEnabled,clWindow,clBtnFace);
+  CheckBoxInfo.Enabled:=AEnabled;
+  ButtonOk.Enabled:=AEnabled;
+end;
+
+function TBisRegForm.CheckFields: Boolean;
+begin
+  Result:=false;
+  if Trim(EditKey.Text)='' then begin
+    ShowError(FSNeedToEnterKey);
+    EditKey.SetFocus;
+    exit;
+  end;
+  if Trim(EditName.Text)='' then begin
+    ShowError(FSNeedToEnterName);
+    EditName.SetFocus;
+    exit;
+  end;
+  if Trim(EditEmail.Text)='' then begin
+    ShowError(FSNeedToEnterEmail);
+    EditEmail.SetFocus;
+    exit;
+  end;
+  Result:=true;
+end;
+
+procedure TBisRegForm.ButtonOkClick(Sender: TObject);
+begin
+  if CheckFields then
+    if Registration then begin
+      ModalResult:=mrOk;
+    end;
+end;
+
+function TBisRegForm.Registration: Boolean;
+var
+  NewDate: Variant;
+  NewCount: Variant;
+  Info: String;
+
+  function GetInfo: String;
+  var
+    Info: TBisSystemInfo;
+    Str: TStringList;
+  begin
+    Str:=TStringList.Create;
+    Info:=TBisSystemInfo.Create(nil);
+    try
+      Result:='';
+      try
+        Info.Report(Str,[siCPU,siMemory,siOS,siDisk,siMachine,siNetwork,{siDisplay,}
+                         {siEngines,siDevices,siAPM,siDirectX,siMedia,}siProcesses,
+                          siModules{siPrinters,siSoftware,siStartup}]);
+        Result:=Str.Text;                          
+      except
+      end;
+    finally
+      Info.Free;
+      Str.Free;
+    end;
+  end;
+
+  procedure DelimStream(Stream: TStream; Len: Integer; Delim: String);
+  var
+    Temp: TMemoryStream;
+  begin
+    Temp:=TMemoryStream.Create;
+    try
+      if Len>Stream.Size then
+        Len:=Stream.Size;
+      Stream.Position:=0;
+      while (Stream.Position<Stream.Size) do begin
+        if (Stream.Position+Len)>Stream.Size then
+          Len:=Stream.Size-Stream.Position;
+        Temp.CopyFrom(Stream,Len);
+        Temp.Write(Pointer(Delim)^,Length(Delim));
+      end;
+      Temp.Position:=0;
+      Stream.Size:=0;
+      Stream.CopyFrom(Temp,Temp.Size);
+      Stream.Position:=0;
+    finally
+      Temp.Free;
+    end;
+  end;
+
+{  procedure PackRequest(Key: String; Stream: TStream; Rnd: String);
+  var
+    Xml: TBisXmlDocument;
+    Data: TBisXmlDocumentNode;
+  begin
+    Xml:=TBisXmlDocument.Create(nil);
+    try
+      Data:=Xml.Nodes.AddNode('data');
+      Data:=Data.ChildNodes.AddNode('test1');
+      Data:=Data.ChildNodes.AddNode('test2');
+      Data:=Data.ChildNodes.AddNode('test3');
+      Data.ChildNodes.AddNode('rnd').NodeValue:=Rnd;
+      Data.ChildNodes.AddNode('product_id').NodeValue:=FProductId;
+      Data.ChildNodes.AddNode('product_name').NodeValue:=Trim(LabelProductName.Caption);
+      Data.ChildNodes.AddNode('product_key_id').NodeValue:=Trim(EditKey.Text);
+      Data.ChildNodes.AddNode('email').NodeValue:=Trim(EditEmail.Text);
+      Data.ChildNodes.AddNode('surname').NodeValue:=Trim(EditSurname.Text);
+      Data.ChildNodes.AddNode('name').NodeValue:=Trim(EditName.Text);
+      Data.ChildNodes.AddNode('patronimyc').NodeValue:=Trim(EditPatronymic.Text);
+      Data.ChildNodes.AddNode('site').NodeValue:=Trim(EditSite.Text);
+      Data.ChildNodes.AddNode('company').NodeValue:=Trim(EditCompany.Text);
+      Data.ChildNodes.AddNode('phone').NodeValue:=Trim(EditPhone.Text);
+      Data.ChildNodes.AddNode('address').NodeValue:=Trim(EditAddress.Text);
+      Data.ChildNodes.AddNode('info').NodeValue:=StrToBase64(info);
+//      Xml.SaveToStream(Stream);
+      Xml.SaveToFile('c:\1.xml');
+      Encode(Key,Stream);
+      DelimStream(Stream,90,#13#10);
+    finally
+      Xml.Free;
+    end;
+  end;}
+
+{  procedure UnpackReponse(Key: String; Stream: TStream);
+  var
+    Xml: TBisXmlDocument;
+    i: Integer;
+    j: Integer;
+    Node, Data: TBisXmlDocumentNode;
+    ADate, ACount: String;
+    FS: TFormatSettings;
+    D: TDateTime;
+    C: Integer;
+  begin
+    Xml:=TBisXmlDocument.Create(nil);
+    try
+      Decode(Key,Stream);
+      Xml.LoadFromStream(Stream);
+      for i:=0 to Xml.Nodes.Count-1 do begin
+        Node:=Xml.Nodes.Items[i];
+        if AnsiSameText(Node.NodeName,'data') then begin
+          Data:=Node;
+          for j:=0 to Data.ChildNodes.Count-1 do begin
+            Node:=Data.ChildNodes.Items[j];
+            if AnsiSameText(Node.NodeName,'date') then begin
+              ADate:=VarToStrDef(Node.NodeValue,'');
+              FS.DateSeparator:='.';
+              FS.ShortDateFormat:=SDateFormat;
+              if TryStrToDate(ADate,D,FS) then
+                NewDate:=D;
+            end;
+            if AnsiSameText(Node.NodeName,'count') then begin
+              ACount:=VarToStrDef(Node.NodeValue,'');
+              if TryStrToInt(ACount,C) then
+                NewCount:=C;
+            end;
+          end;
+        end;
+      end;
+    finally
+      Xml.Free;
+    end;
+  end;}
+
+  procedure PackRequest(Key: String; Stream: TStream; Rnd: String);
+  var
+    Xml: TALXMLDocument;
+    Data: TALXMLNode;
+  begin
+    Xml:=TALXMLDocument.Create(nil);
+    try
+      Xml.Options:=Xml.Options+[doNodeAutoIndent];
+      Xml.LoadFromXML('<?xml version="1.0" encoding="windows-1251" standalone="yes"?>');
+      Data:=Xml.AddChild('data');
+      Data.AddChild('rnd').NodeValue:=Rnd;
+      Data.AddChild('product_id').NodeValue:=FProductId;
+      Data.AddChild('product_name').NodeValue:=Trim(LabelProductName.Caption);
+      Data.AddChild('product_key_id').NodeValue:=Trim(EditKey.Text);
+      Data.AddChild('email').NodeValue:=Trim(EditEmail.Text);
+      Data.AddChild('surname').NodeValue:=Trim(EditSurname.Text);
+      Data.AddChild('name').NodeValue:=Trim(EditName.Text);
+      Data.AddChild('patronimyc').NodeValue:=Trim(EditPatronymic.Text);
+      Data.AddChild('site').NodeValue:=Trim(EditSite.Text);
+      Data.AddChild('company').NodeValue:=Trim(EditCompany.Text);
+      Data.AddChild('phone').NodeValue:=Trim(EditPhone.Text);
+      Data.AddChild('address').NodeValue:=Trim(EditAddress.Text);
+      Data.AddChild('info').NodeValue:=StrToBase64(info);
+      Xml.SaveToStream(Stream);
+      Encode(Key,Stream);
+      DelimStream(Stream,90,#13#10);
+    finally
+      Xml.Free;
+    end;
+  end;
+
+  procedure UnpackReponse(Key: String; Stream: TStream);
+  var
+    Xml: TALXMLDocument;
+    i: Integer;
+    j: Integer;
+    Node, Data: TALXMLNode;
+    ADate, ACount: String;
+    FS: TFormatSettings;
+    D: TDateTime;
+    C: Integer;
+  begin
+    Xml:=TALXMLDocument.Create(nil);
+    try
+      Decode(Key,Stream);
+      Xml.LoadFromStream(Stream);
+      for i:=0 to Xml.ChildNodes.Count-1 do begin
+        Node:=Xml.ChildNodes[i];
+        if AnsiSameText(Node.NodeName,'data') then begin
+          Data:=Node;
+          for j:=0 to Data.ChildNodes.Count-1 do begin
+            Node:=Data.ChildNodes[j];
+            if AnsiSameText(Node.NodeName,'date') then begin
+              ADate:=VarToStrDef(Node.NodeValue,'');
+              FS.DateSeparator:='.';
+              FS.ShortDateFormat:=SDateFormat;
+              if TryStrToDate(ADate,D,FS) then
+                NewDate:=D;
+            end;
+            if AnsiSameText(Node.NodeName,'count') then begin
+              ACount:=VarToStrDef(Node.NodeValue,'');
+              if TryStrToInt(ACount,C) then
+                NewCount:=C;
+            end;
+          end;
+        end;
+      end;
+    finally
+      Xml.Free;
+    end;
+  end;
+
+  function GetTextStream(Stream: TStream): String;
+  var
+    Position: Integer;
+  begin
+    if Assigned(Stream) then begin
+      Position:=Stream.Position;
+      try
+        Stream.Position:=0;
+        SetLength(Result,Stream.Size);
+        Stream.Read(Pointer(Result)^,Length(Result));
+        Result:=Trim(Result);
+      finally
+        Stream.Position:=Position;
+      end;
+    end;
+  end;
+
+  function RegisterDirect: Boolean;
+  var
+    Http: TIdHttp;
+    RequestStream: TMemoryStream;
+    ResponseStream: TMemoryStream;
+    Rnd: String;
+    Key: String;
+    Code: String;
+    Form: TBisRegCodeForm;
+    AResult: Integer;
+  begin
+    Result:=false;
+    if FProductRegUrl<>'' then begin
+      Http:=TIdHttp.Create(nil);
+      RequestStream:=TMemoryStream.Create;
+      ResponseStream:=TMemoryStream.Create;
+      try
+        Http.Request.UserAgent:='';
+        try
+          Http.URL.URI:=FProductRegUrl;
+          Key:=Format('%s:%s%s',[Http.URL.Host,Http.URL.Path,Http.URL.Document]);
+          Rnd:=GetUniqueID;
+          PackRequest(Key,RequestStream,Rnd);
+          RequestStream.Position:=0;
+          Http.Post(FProductRegUrl,RequestStream,ResponseStream);
+          Code:=GetTextStream(ResponseStream);
+
+          AResult:=StrToIntDef(Trim(Code),-1);
+          if AResult=0 then begin
+            Form:=TBisRegCodeForm.Create(nil);
+            try
+              if Form.ShowModal=mrOk then begin
+                Code:=Trim(Form.MemoCode.Text);
+                ResponseStream.Clear;
+                ResponseStream.Write(Pointer(Code)^,Length(Code));
+                ResponseStream.Position:=0;
+                Key:=Key+'+'+Rnd;
+                try
+                  UnpackReponse(Key,ResponseStream);
+                  Result:=true;
+                except
+                  on E: Exception do
+                    raise Exception.Create(FSInvalidRegisterCode)
+                end;
+              end;
+            finally
+              Form.Free;
+            end;
+          end else
+            raise Exception.Create(FormatEx(FSResultCodeError,[AResult]));
+
+        except
+          On E: Exception do begin
+            LoggerWrite(E.Message);
+            ShowError(E.Message);
+          end;
+        end;
+      finally
+        ResponseStream.Free;
+        RequestStream.Free;
+        Http.Free;
+      end;
+    end;
+  end;
+
+  function EmailLinkOpen(Body: String): Boolean;
+  var
+    S: String;
+    Str: TStringList;
+    i: Integer;
+    Ret: THandle;
+  begin
+    Result:=false;
+    S:=Format('mailto:%s?subject=%s',[FProductEmail,FSRegister]);
+    if Body<>'' then begin
+      Str:=TStringList.Create;
+      try
+        Str.Text:=Body;
+        S:=S+'&body=';
+        for i:=0 to Str.Count-1 do begin
+          S:=S+'%20%0D%0A'+Str[i];
+        end;
+      finally
+        Str.Free;
+      end;
+    end;
+    if Length(S)<=1000 then begin
+      Ret:=ShellExecute(0,'open',PChar(S),nil,nil,SW_SHOW);
+      Result:=Ret>32;
+    end;
+  end;
+
+  function EmailExample(Body: String): Boolean;
+  var
+    Form: TBisRegEmailForm;
+  begin
+    Form:=TBisRegEmailForm.Create(nil);
+    try
+      Form.EditFrom.Text:=Trim(EditEmail.Text);
+      Form.EditTo.Text:=FProductEmail;
+      Form.EditSubject.Text:=FSRegister;
+      Form.MemoBody.Text:=Trim(Body);
+      Form.ShowModal;
+      Result:=true;
+    finally
+      Form.Free;
+    end;
+  end;
+
+  function RegisterManual: Boolean;
+  var
+    Stream: TMemoryStream;
+    Key: String;
+    Rnd: String;
+    Body: String;
+    Form: TBisRegCodeForm;
+    Code: String;
+    Flag: Boolean;
+  begin
+    Result:=false;
+    if FProductEmail<>'' then begin
+      Stream:=TMemoryStream.Create;
+      try
+        Key:=Format('%s',[FProductEmail]);
+        Rnd:=GetUniqueID;
+        PackRequest(Key,Stream,Rnd);
+        Body:=GetTextStream(Stream);
+        Flag:=EmailLinkOpen(Body);
+        if not Flag then
+          Flag:=EmailExample(Body);
+        if Flag then begin
+          Form:=TBisRegCodeForm.Create(nil);
+          try
+            if Form.ShowModal=mrOk then begin
+              Code:=Trim(Form.MemoCode.Text);
+              Stream.Clear;
+              Stream.Write(Pointer(Code)^,Length(Code));
+              Stream.Position:=0;
+              Key:=Key+'+'+Rnd;
+              try
+                UnpackReponse(Key,Stream);
+                Result:=true;
+              except
+                on E: Exception do
+                  raise Exception.Create(FSInvalidRegisterCode)
+              end;
+            end;
+          finally
+            Form.Free;
+          end;
+        end;
+      finally
+        Stream.Free;
+      end;
+    end;
+  end;
+
+var
+  OldCursor: TCursor;
+begin
+  OldCursor:=Screen.Cursor;
+  Screen.Cursor:=crHourGlass;
+  RestrictControls(true);
+  try
+    Update;
+    Result:=false;
+    NewDate:=Core.Audit.Date;
+    NewCount:=Core.Audit.Count;
+    if CheckBoxInfo.Checked then
+      Info:=GetInfo;
+    case ComboBoxWay.ItemIndex of
+      0: Result:=RegisterDirect;
+      1: Result:=RegisterManual;
+    end;
+    if Result then begin
+      Core.Audit.Date:=NewDate;
+      Core.Audit.Count:=NewCount;
+      Core.Audit.Enabled:=not VarIsNull(NewDate) or not VarIsNull(NewCount);
+      Core.Audit.Save;
+      ShowInfo(FSRegisterSuccess);
+    end;
+  finally
+    RestrictControls(false);
+    Screen.Cursor:=OldCursor;
+  end;
+end;
+
+end.

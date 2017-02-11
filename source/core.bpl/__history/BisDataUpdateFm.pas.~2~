@@ -1,0 +1,83 @@
+unit BisDataUpdateFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataEditFm, StdCtrls, ExtCtrls, Contnrs, BisFm;
+
+type
+  TBisDataUpdateForm = class(TBisDataEditForm)
+  private
+    { Private declarations }
+  public
+    procedure Execute; override;
+  end;
+
+  TBisDataUpdateFormIface=class(TBisDataEditFormIface)
+  protected
+    function GetFormClass: TBisFormClass; override;
+  end;
+
+  TBisDataUpdateFormIfaceClass=class of TBisDataUpdateFormIface;
+
+  TBisDataUpdateFormIfaceClasses=class(TClassList)
+  private
+    function GetItem(Index: Integer): TBisDataUpdateFormIfaceClass;
+    function GetFirstItem: TBisDataUpdateFormIfaceClass;
+  public
+    procedure InsertToFirst(Value: TBisDataUpdateFormIfaceClass);
+    procedure CopyFrom(Source: TBisDataUpdateFormIfaceClasses; WithClear: Boolean=true);
+
+    property Items[Index: Integer]: TBisDataUpdateFormIfaceClass read GetItem;
+    property FirstItem: TBisDataUpdateFormIfaceClass read GetFirstItem;
+  end;
+  
+var
+  BisDataUpdateForm: TBisDataUpdateForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisDataUpdateFormIface }
+
+function TBisDataUpdateFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisDataUpdateForm;
+end;
+
+{ TBisDataUpdateFormIfaceClasses }
+
+procedure TBisDataUpdateFormIfaceClasses.CopyFrom(Source: TBisDataUpdateFormIfaceClasses; WithClear: Boolean);
+begin
+  if WithClear then
+    Clear;
+  Assign(Source);
+end;
+
+function TBisDataUpdateFormIfaceClasses.GetFirstItem: TBisDataUpdateFormIfaceClass;
+begin
+  Result:=nil;
+  if Count>0 then
+    Result:=Items[0];
+end;
+
+function TBisDataUpdateFormIfaceClasses.GetItem(Index: Integer): TBisDataUpdateFormIfaceClass;
+begin
+  Result:=TBisDataUpdateFormIfaceClass(inherited Items[Index]);
+end;
+
+procedure TBisDataUpdateFormIfaceClasses.InsertToFirst(Value: TBisDataUpdateFormIfaceClass);
+begin
+  Insert(0,Value);
+end;
+
+{ TBisDataUpdateForm }
+
+procedure TBisDataUpdateForm.Execute;
+begin
+  inherited Execute;
+end;
+
+end.

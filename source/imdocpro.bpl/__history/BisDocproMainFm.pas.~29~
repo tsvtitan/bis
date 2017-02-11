@@ -1,0 +1,144 @@
+unit BisDocproMainFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, StdCtrls, ExtCtrls, XPMan, ComCtrls, Contnrs,
+  BisObject, ActnList, XPStyleActnCtrls, ShellAPI, AppEvnts, Menus, ActnPopup, Buttons,
+  ActnMan, ToolWin, ActnCtrls, ActnMenus, CustomizeDlg, jpeg, ActnColorMaps,
+
+  BisFm, BisCore, BisConnections, BisDataFm, BisProvider, BisIfaces,
+  BisMDIMainFm,
+  BisDocproManagementFm;
+
+type
+  TBisDocproMainForm = class(TBisMDIMainForm)
+    ActionManager: TActionManager;
+    ActionFileExit: TAction;
+    ActionWindowsCascade: TAction;
+    ActionWindowsVertical: TAction;
+    ActionWindowsHorizontal: TAction;
+    ActionWindowsCloseAll: TAction;
+    PanelControlBar: TPanel;
+    ControlBar: TControlBar;
+    ToolBar1: TToolBar;
+    ToolButtonManagement: TToolButton;
+    ActionListToolbar: TActionList;
+    ActionManagement: TAction;
+    ImageListToolbar: TImageList;
+    procedure ActionManagementExecute(Sender: TObject);
+    procedure ActionManagementUpdate(Sender: TObject);
+  private
+    FActions: TObjectList;
+    FFileItem: TActionClientItem;
+    FWindowsItem: TActionClientItem;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure RefreshMenus; override;                 
+  end;
+
+  TBisDocproMainFormIface=class(TBisMDIMainFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDocproMainForm: TBisDocproMainForm;
+
+var
+  MainIface: TBisDocproMainFormIface=nil;
+  ManagementIface: TBisDocproHbookMotionsFormIface=nil;
+
+implementation
+
+{$R *.dfm}
+
+uses BisIfaceModules, BisConsts, BisUtils, BisFilterGroups, BisFieldNames;
+
+{ TBisDocproMainFormIface }
+
+constructor TBisDocproMainFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDocproMainForm;
+end;
+
+{ TBisDocproMainForm }
+
+procedure TBisDocproMainForm.ActionManagementExecute(Sender: TObject);
+begin
+  ManagementIface.Show;
+end;
+
+procedure TBisDocproMainForm.ActionManagementUpdate(Sender: TObject);
+begin
+  ActionManagement.Enabled:=ManagementIface.CanShow;
+end;
+
+constructor TBisDocproMainForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  AutoMenu:=true;
+  FActions:=TObjectList.Create(true);
+  TestIface.ShowType:=stMdiChild;
+end;
+
+destructor TBisDocproMainForm.Destroy;
+begin
+  FActions.Free;
+  inherited Destroy;
+end;
+
+procedure TBisDocproMainForm.RefreshMenus;
+var
+  ParentItems: TActionClients;
+  Item: TActionClientItem;
+const
+  FSFileItemCaption='Файл';
+  FSFileExitItemCaption='Выход';
+  FSWindowsItemCaption='Окна';
+  FSWindowsCascadeItemCaption='Каскадом';
+  FSWindowsVerticalItemCaption='Вертикально';
+  FSWindowsHorizontalItemCaption='Горизонтально';
+  FSWindowsCloseAllItemCaption='Закрыть все';
+begin
+  FFileItem:=nil;
+  FWindowsItem:=nil;
+
+  if Assigned(ActionMainMenuBar.ActionClient) then begin
+    ParentItems:=ActionMainMenuBar.ActionClient.Items;
+    if Assigned(ParentItems) then begin
+      inherited RefreshMenus;
+
+      FFileItem:=FindItemByCaption(ParentItems,FSFileItemCaption);
+      if Assigned(FFileItem) then begin
+        Item:=FindItemByCaption(FFileItem.Items,FSFileExitItemCaption);
+        if Assigned(Item) then
+          Item.Action:=ActionFileExit;
+      end;
+
+      FWindowsItem:=FindItemByCaption(ParentItems,FSWindowsItemCaption);
+      if Assigned(FWindowsItem) then begin
+        Item:=FindItemByCaption(FWindowsItem.Items,FSWindowsCascadeItemCaption);
+        if Assigned(Item) then
+          Item.Action:=ActionWindowsCascade;
+        Item:=FindItemByCaption(FWindowsItem.Items,FSWindowsVerticalItemCaption);
+        if Assigned(Item) then
+          Item.Action:=ActionWindowsVertical;
+        Item:=FindItemByCaption(FWindowsItem.Items,FSWindowsHorizontalItemCaption);
+        if Assigned(Item) then
+          Item.Action:=ActionWindowsHorizontal;
+        Item:=FindItemByCaption(FWindowsItem.Items,FSWindowsCloseAllItemCaption);
+        if Assigned(Item) then
+          Item.Action:=ActionWindowsCloseAll;
+      end;
+
+      ActionMainMenuBar.CreateControls;
+    end;
+  end;
+end;
+
+
+end.

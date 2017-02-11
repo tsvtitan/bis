@@ -1,0 +1,1 @@
+loader.exe /config imdesign.ini /noupdate

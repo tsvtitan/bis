@@ -1,0 +1,129 @@
+unit BisKrieltDataTypesFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin,
+  ExtCtrls, Grids, DBGrids, StdCtrls, Contnrs,
+
+  BisDataGridFrm, BisKrieltDataTypeOperationsFm;
+
+type
+  TBisKrieltDataTypesFrameIfaces=class(TObjectList)
+  public
+    function FindTypeById(TypeId: Variant): TBisKrieltDataTypeOperationsFormIface;
+  end;
+
+  TBisKrieltDataTypesFrame = class(TBisDataGridFrame)
+    ToolBar1: TToolBar;
+    N18: TMenuItem;
+    ToolButtonComposition: TToolButton;
+    ActionComposition: TAction;
+    MenuItemComposition: TMenuItem;
+    procedure ActionCompositionExecute(Sender: TObject);
+    procedure ActionCompositionUpdate(Sender: TObject);
+  private
+    FIfaces: TBisKrieltDataTypesFrameIfaces;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function CanComposition: Boolean;
+    procedure Composition;
+  end;
+
+implementation
+
+uses BisProvider, BisDialogs, BisUtils, BisKrieltDataColumnEditFm, BisFilterGroups;
+
+{$R *.dfm}
+
+{ TBisKrieltDataTypesFrameIfaces }
+
+function TBisKrieltDataTypesFrameIfaces.FindTypeById(TypeId: Variant): TBisKrieltDataTypeOperationsFormIface;
+var
+  i: Integer;
+  Obj: TObject;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Obj:=Items[i];
+    if Assigned(Obj) and (Obj is TBisKrieltDataTypeOperationsFormIface) then begin
+      if VarSameValue(TBisKrieltDataTypeOperationsFormIface(Obj).TypeId,TypeId) then begin
+        Result:=TBisKrieltDataTypeOperationsFormIface(Obj);
+        exit;
+      end; 
+    end;
+  end;
+end;
+
+{ TBisKrieltDataColumnsFrame }
+
+constructor TBisKrieltDataTypesFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FIfaces:=TBisKrieltDataTypesFrameIfaces.Create;
+end;
+
+destructor TBisKrieltDataTypesFrame.Destroy;
+begin
+  FIfaces.Free;
+  inherited Destroy;
+end;
+
+procedure TBisKrieltDataTypesFrame.ActionCompositionExecute(Sender: TObject);
+begin
+  Composition;
+end;
+
+procedure TBisKrieltDataTypesFrame.ActionCompositionUpdate(Sender: TObject);
+begin
+  ActionComposition.Enabled:=CanComposition;
+end;
+
+function TBisKrieltDataTypesFrame.CanComposition: Boolean;
+var
+  Iface: TBisKrieltDataTypeOperationsFormIface;
+begin
+  Result:=Provider.Active and not Provider.Empty;
+  if Result then begin
+    Iface:=TBisKrieltDataTypeOperationsFormIface.Create(nil);
+    try
+      Iface.Init;
+      Result:=Iface.CanShow;
+    finally
+      Iface.Free;
+    end;
+  end;
+end;
+
+procedure TBisKrieltDataTypesFrame.Composition;
+var
+  Iface: TBisKrieltDataTypeOperationsFormIface;
+  TypeId: Variant;
+  TypeName: String;
+begin
+  if CanComposition then begin
+    TypeId:=Provider.FieldByName('TYPE_ID').Value;
+    TypeName:=Provider.FieldByName('NAME').AsString;
+    Iface:=FIfaces.FindTypeById(TypeId);
+    if not Assigned(Iface) then begin
+      Iface:=TBisKrieltDataTypeOperationsFormIface.Create(Self);
+      Iface.TypeId:=TypeId;
+      Iface.TypeName:=TypeName;
+      Iface.MaxFormCount:=1;
+      Iface.FilterOnShow:=false;
+      FIfaces.Add(Iface);
+      Iface.Init;
+      Iface.LoadOptions;
+      Iface.FilterGroups.Add.Filters.Add('TYPE_ID',fcEqual,TypeId);
+    end;
+    Iface.Caption:=FormatEx('%s => %s',[ActionComposition.Hint,TypeName]);
+    Iface.ShowType:=ShowType;
+    if AsModal then
+      Iface.ShowModal
+    else Iface.Show;    
+  end;
+end;
+
+end.

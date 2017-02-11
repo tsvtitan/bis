@@ -1,0 +1,275 @@
+inherited BisTaxiOrderFilterForm: TBisTaxiOrderFilterForm
+  Caption = 'BisTaxiOrderFilterForm'
+  ClientHeight = 291
+  ClientWidth = 612
+  ExplicitWidth = 620
+  ExplicitHeight = 325
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 253
+    Width = 612
+    ExplicitTop = 253
+    ExplicitWidth = 612
+    inherited ButtonOk: TButton
+      Left = 433
+      ExplicitLeft = 433
+    end
+    inherited ButtonCancel: TButton
+      Left = 529
+      ExplicitLeft = 529
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 612
+    Height = 253
+    ExplicitWidth = 612
+    ExplicitHeight = 253
+    object LabelPhone: TLabel
+      Left = 17
+      Top = 13
+      Width = 48
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1058#1077#1083#1077#1092#1086#1085':'
+      FocusControl = EditPhone
+    end
+    object LabelCustomer: TLabel
+      Left = 208
+      Top = 13
+      Width = 30
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1060#1048#1054':'
+      FocusControl = EditCustomer
+    end
+    object GroupBoxDateAccept: TGroupBox
+      Left = 7
+      Top = 37
+      Width = 597
+      Height = 63
+      Anchors = [akLeft, akTop, akRight]
+      Caption = ' '#1044#1072#1090#1072' '#1080' '#1074#1088#1077#1084#1103' '#1087#1088#1080#1085#1103#1090#1080#1103' '
+      TabOrder = 2
+      object PanelDateAccept: TPanel
+        AlignWithMargins = True
+        Left = 5
+        Top = 15
+        Width = 587
+        Height = 43
+        Margins.Top = 0
+        Align = alClient
+        BevelOuter = bvNone
+        Color = 11184895
+        ParentBackground = False
+        TabOrder = 0
+        object LabelDateAcceptTo: TLabel
+          Left = 205
+          Top = 14
+          Width = 15
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1087#1086':'
+          FocusControl = DateTimePickerAcceptTo
+        end
+        object LabelDateAcceptFrom: TLabel
+          Left = 12
+          Top = 14
+          Width = 9
+          Height = 13
+          Alignment = taRightJustify
+          Caption = #1089':'
+          FocusControl = DateTimePickerAcceptFrom
+        end
+        object DateTimePickerTimeAcceptTo: TDateTimePicker
+          Left = 320
+          Top = 11
+          Width = 74
+          Height = 21
+          Date = 39507.457070671300000000
+          Time = 39507.457070671300000000
+          Kind = dtkTime
+          TabOrder = 3
+        end
+        object ButtonAccept: TButton
+          Left = 400
+          Top = 11
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1077#1088#1080#1086#1076
+          Caption = '...'
+          TabOrder = 4
+          OnClick = ButtonAcceptClick
+        end
+        object DateTimePickerAcceptTo: TDateTimePicker
+          Left = 226
+          Top = 11
+          Width = 88
+          Height = 21
+          Date = 39507.457070671300000000
+          Time = 39507.457070671300000000
+          TabOrder = 2
+        end
+        object DateTimePickerTimeAcceptFrom: TDateTimePicker
+          Left = 121
+          Top = 11
+          Width = 74
+          Height = 21
+          Date = 39507.457070671300000000
+          Time = 39507.457070671300000000
+          Kind = dtkTime
+          TabOrder = 1
+        end
+        object DateTimePickerAcceptFrom: TDateTimePicker
+          Left = 27
+          Top = 11
+          Width = 88
+          Height = 21
+          Date = 39507.457070671300000000
+          Time = 39507.457070671300000000
+          TabOrder = 0
+        end
+      end
+    end
+    object EditPhone: TEdit
+      Left = 71
+      Top = 10
+      Width = 121
+      Height = 21
+      TabOrder = 0
+    end
+    object GroupBoxDateArrival: TGroupBox
+      Left = 7
+      Top = 179
+      Width = 598
+      Height = 63
+      Anchors = [akLeft, akTop, akRight]
+      Caption = ' '#1044#1072#1090#1072' '#1080' '#1074#1088#1077#1084#1103' '#1087#1086#1076#1072#1095#1080' '
+      TabOrder = 4
+      object PanelDateArrival: TPanel
+        AlignWithMargins = True
+        Left = 5
+        Top = 15
+        Width = 588
+        Height = 43
+        Margins.Top = 0
+        Align = alClient
+        BevelOuter = bvNone
+        Color = 11206570
+        ParentBackground = False
+        TabOrder = 0
+        DesignSize = (
+          588
+          43)
+        object LabelDateArrivalTo: TLabel
+          Left = 362
+          Top = 16
+          Width = 15
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akTop, akRight]
+          Caption = #1087#1086':'
+          FocusControl = DateTimePickerArrivalTo
+          ExplicitLeft = 205
+        end
+        object LabelDateArrivalFrom: TLabel
+          Left = 169
+          Top = 16
+          Width = 9
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akTop, akRight]
+          Caption = #1089':'
+          FocusControl = DateTimePickerArrivalFrom
+          ExplicitLeft = 12
+        end
+        object DateTimePickerTimeArrivalTo: TDateTimePicker
+          Left = 477
+          Top = 13
+          Width = 74
+          Height = 21
+          Anchors = [akTop, akRight]
+          Date = 39507.457070671300000000
+          Time = 39507.457070671300000000
+          Kind = dtkTime
+          TabOrder = 3
+        end
+        object ButtonArrival: TButton
+          Left = 557
+          Top = 13
+          Width = 21
+          Height = 21
+          Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1077#1088#1080#1086#1076
+          Anchors = [akTop, akRight]
+          Caption = '...'
+          TabOrder = 4
+          OnClick = ButtonArrivalClick
+        end
+        object DateTimePickerArrivalTo: TDateTimePicker
+          Left = 383
+          Top = 13
+          Width = 88
+          Height = 21
+          Anchors = [akTop, akRight]
+          Date = 39507.457070671300000000
+          Time = 39507.457070671300000000
+          TabOrder = 2
+        end
+        object DateTimePickerTimeArrivalFrom: TDateTimePicker
+          Left = 278
+          Top = 13
+          Width = 74
+          Height = 21
+          Anchors = [akTop, akRight]
+          Date = 39507.457070671300000000
+          Time = 39507.457070671300000000
+          Kind = dtkTime
+          TabOrder = 1
+        end
+        object DateTimePickerArrivalFrom: TDateTimePicker
+          Left = 184
+          Top = 13
+          Width = 88
+          Height = 21
+          Anchors = [akTop, akRight]
+          Date = 39507.457070671300000000
+          Time = 39507.457070671300000000
+          TabOrder = 0
+        end
+      end
+    end
+    object GroupBoxAddressArrival: TGroupBox
+      Left = 7
+      Top = 101
+      Width = 598
+      Height = 77
+      Anchors = [akLeft, akTop, akRight]
+      Caption = ' '#1040#1076#1088#1077#1089' '#1087#1086#1076#1072#1095#1080' '
+      TabOrder = 3
+      object PanelAddressArrival: TPanel
+        AlignWithMargins = True
+        Left = 5
+        Top = 15
+        Width = 588
+        Height = 57
+        Margins.Top = 0
+        Align = alClient
+        BevelOuter = bvNone
+        Color = 16766378
+        ParentBackground = False
+        TabOrder = 0
+      end
+    end
+    object EditCustomer: TEdit
+      Left = 244
+      Top = 10
+      Width = 204
+      Height = 21
+      TabOrder = 1
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 512
+    Top = 16
+  end
+end

@@ -1,0 +1,112 @@
+inherited BisCallcHbookApplicationInterfaceEditForm: TBisCallcHbookApplicationInterfaceEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisCallcHbookApplicationInterfaceEditForm'
+  ClientHeight = 127
+  ClientWidth = 287
+  ExplicitLeft = 513
+  ExplicitTop = 212
+  ExplicitWidth = 295
+  ExplicitHeight = 154
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 89
+    Width = 287
+    ExplicitTop = 197
+    ExplicitWidth = 495
+    inherited ButtonOk: TButton
+      Left = 110
+      ExplicitLeft = 318
+    end
+    inherited ButtonCancel: TButton
+      Left = 207
+      ExplicitLeft = 415
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 287
+    Height = 89
+    ExplicitTop = 1
+    ExplicitWidth = 424
+    ExplicitHeight = 348
+    object LabelApplication: TLabel
+      Left = 9
+      Top = 13
+      Width = 67
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1088#1080#1083#1086#1078#1077#1085#1080#1077':'
+      FocusControl = EditApplication
+    end
+    object LabelInterface: TLabel
+      Left = 16
+      Top = 40
+      Width = 60
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1048#1085#1090#1077#1088#1092#1077#1081#1089':'
+      FocusControl = EditInterface
+    end
+    object LabelPriority: TLabel
+      Left = 29
+      Top = 67
+      Width = 47
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1086#1088#1103#1076#1086#1082':'
+      FocusControl = EditPriority
+    end
+    object EditApplication: TEdit
+      Left = 84
+      Top = 10
+      Width = 168
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonApplication: TButton
+      Left = 258
+      Top = 10
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1088#1080#1083#1086#1078#1077#1085#1080#1077
+      Caption = '...'
+      TabOrder = 1
+    end
+    object EditInterface: TEdit
+      Left = 84
+      Top = 37
+      Width = 168
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object ButtonInterface: TButton
+      Left = 258
+      Top = 37
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1080#1085#1090#1077#1088#1092#1077#1081#1089
+      Caption = '...'
+      TabOrder = 3
+    end
+    object EditPriority: TEdit
+      Left = 84
+      Top = 64
+      Width = 73
+      Height = 21
+      TabOrder = 4
+    end
+    object CheckBoxAutoRun: TCheckBox
+      Left = 163
+      Top = 66
+      Width = 97
+      Height = 17
+      Caption = #1040#1074#1090#1086#1079#1072#1087#1091#1089#1082
+      TabOrder = 5
+    end
+  end
+end

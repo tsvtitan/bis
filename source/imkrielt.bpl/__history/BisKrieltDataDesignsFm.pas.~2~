@@ -1,0 +1,51 @@
+unit BisKrieltDataDesignsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList;
+
+type
+  TBisKrieltDataDesignsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisKrieltDataDesignsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataDesignsForm: TBisKrieltDataDesignsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisKrieltDataDesignEditFm;
+
+{ TBisKrieltDataDesignsFormIface }
+
+constructor TBisKrieltDataDesignsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataDesignsForm;
+  InsertClass:=TBisKrieltDataDesignInsertFormIface;
+  UpdateClass:=TBisKrieltDataDesignUpdateFormIface;
+  DeleteClass:=TBisKrieltDataDesignDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_DesignS';
+  with FieldNames do begin
+    AddKey('Design_ID');
+    AddInvisible('DESCRIPTION');
+    Add('NUM','Номер',50);
+    Add('NAME','Наименование',300);
+  end;
+  Orders.Add('NUM');
+end;
+
+end.

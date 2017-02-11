@@ -1,0 +1,50 @@
+package scmdws;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  vcl,
+  rtl;
+
+contains
+  BisDws in 'scmdws.bpl\BisDws.pas',
+  dws2Errors in 'scmdws.bpl\Dws\Source\dws2Errors.pas',
+  dws2Exprs in 'scmdws.bpl\Dws\Source\dws2Exprs.pas',
+  dws2Functions in 'scmdws.bpl\Dws\Source\dws2Functions.pas',
+  dws2StringResult in 'scmdws.bpl\Dws\Source\dws2StringResult.pas',
+  dws2Strings in 'scmdws.bpl\Dws\Source\dws2Strings.pas',
+  dws2Symbols in 'scmdws.bpl\Dws\Source\dws2Symbols.pas',
+  dws2ComConnector in 'scmdws.bpl\Dws\Source\dws2ComConnector.pas',
+  dws2Comp in 'scmdws.bpl\Dws\Source\dws2Comp.pas',
+  dws2Compiler in 'scmdws.bpl\Dws\Source\dws2Compiler.pas',
+  dws2Debugger in 'scmdws.bpl\Dws\Source\dws2Debugger.pas',
+  BisDwsScriptIface in 'scmdws.bpl\BisDwsScriptIface.pas',
+  dws2Stack in 'scmdws.bpl\Dws\Source\dws2Stack.pas',
+  BrowserFrm in 'scmdws.bpl\del\BrowserFrm.pas',
+  BisDwsConsts in 'scmdws.bpl\BisDwsConsts.pas';
+
+end.

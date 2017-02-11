@@ -1,0 +1,23 @@
+unit BisSecure;
+
+interface
+
+uses BisIfaceModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+
+exports
+  InitIfaceModule;
+
+implementation
+
+uses BisSecureMainFm, BisCore;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  Core.NotCheckBaseLoaded:=true;
+  AModule.Ifaces.AddClass(TBisSecureMainFormIface);
+end;
+
+end.

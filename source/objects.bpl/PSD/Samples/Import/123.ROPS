@@ -1,0 +1,12 @@
+Program test;
+var
+  Obj: TBisObjects;
+begin
+  Obj:=TBisObjects.Create;
+  try
+    Obj.Name:='Test';
+    Writeln(Obj.Name);
+  finally
+  //  Obj.Free
+  end;
+end.

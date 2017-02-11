@@ -1,0 +1,526 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 00002940H .text                   CODE
+ 0002:00404000 000005A4H .itext                  ICODE
+ 0003:00405000 0000002CH .data                   DATA
+ 0004:00406000 0000001CH .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 00000086 C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000088 000001C3 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:0000024C 00000086 C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:000002D4 0000004C C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:00000320 00000006 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:00000328 00000006 C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:00000330 00000006 C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000338 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000340 0000001E C=CODE     S=.text    G=(none)   M=BisObject ACBP=A9
+ 0001:00000360 00000006 C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000368 00000036 C=CODE     S=.text    G=(none)   M=BisCoreObjects ACBP=A9
+ 0001:000003A0 00000006 C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:000003A8 00000006 C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:000003B0 00000006 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:000003B8 00000006 C=CODE     S=.text    G=(none)   M=BisUtils ACBP=A9
+ 0001:000003C0 00000006 C=CODE     S=.text    G=(none)   M=BisCore  ACBP=A9
+ 0001:000003C8 00000006 C=CODE     S=.text    G=(none)   M=DECUtil  ACBP=A9
+ 0001:000003D0 00000006 C=CODE     S=.text    G=(none)   M=Hash     ACBP=A9
+ 0001:000003D8 00000006 C=CODE     S=.text    G=(none)   M=Cipher   ACBP=A9
+ 0001:000003E0 00000006 C=CODE     S=.text    G=(none)   M=Cipher1  ACBP=A9
+ 0001:000003E8 00000006 C=CODE     S=.text    G=(none)   M=BisCryptUtils ACBP=A9
+ 0001:000003F0 00000006 C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:000003F8 00000006 C=CODE     S=.text    G=(none)   M=WideStrings ACBP=A9
+ 0001:00000400 00000006 C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:00000408 00000006 C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:00000410 00000006 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:00000418 00000006 C=CODE     S=.text    G=(none)   M=kbmMemTable ACBP=A9
+ 0001:00000420 00000006 C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000428 00000006 C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000430 00000006 C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000438 00000006 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000440 00000006 C=CODE     S=.text    G=(none)   M=Themes   ACBP=A9
+ 0001:00000448 00000006 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000450 00000006 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000458 00000006 C=CODE     S=.text    G=(none)   M=UxTheme  ACBP=A9
+ 0001:00000460 00000006 C=CODE     S=.text    G=(none)   M=DwmApi   ACBP=A9
+ 0001:00000468 00000006 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000470 00000006 C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000478 00000006 C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000480 00000006 C=CODE     S=.text    G=(none)   M=GraphUtil ACBP=A9
+ 0001:00000488 00000006 C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000490 00000006 C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000498 00000006 C=CODE     S=.text    G=(none)   M=GIFImage ACBP=A9
+ 0001:000004A0 00000006 C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:000004A8 00000006 C=CODE     S=.text    G=(none)   M=RxRichEd ACBP=A9
+ 0001:000004B0 00000006 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:000004B8 00000006 C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:000004C0 00000006 C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:000004C8 00000006 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:000004D0 00000006 C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:000004D8 00000006 C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:000004E0 00000006 C=CODE     S=.text    G=(none)   M=rxToolEdit ACBP=A9
+ 0001:000004E8 00000006 C=CODE     S=.text    G=(none)   M=rxDateUtil ACBP=A9
+ 0001:000004F0 00000006 C=CODE     S=.text    G=(none)   M=RXCtrls  ACBP=A9
+ 0001:000004F8 00000006 C=CODE     S=.text    G=(none)   M=RxHook   ACBP=A9
+ 0001:00000500 00000006 C=CODE     S=.text    G=(none)   M=RXConst  ACBP=A9
+ 0001:00000508 00000006 C=CODE     S=.text    G=(none)   M=rxVclutils ACBP=A9
+ 0001:00000510 00000006 C=CODE     S=.text    G=(none)   M=RXProps  ACBP=A9
+ 0001:00000518 00000006 C=CODE     S=.text    G=(none)   M=rxAppUtils ACBP=A9
+ 0001:00000520 00000006 C=CODE     S=.text    G=(none)   M=RxPrgrss ACBP=A9
+ 0001:00000528 00000006 C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00000530 00000006 C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00000538 00000006 C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00000540 00000076 C=CODE     S=.text    G=(none)   M=BisConnections ACBP=A9
+ 0001:000005B8 00000006 C=CODE     S=.text    G=(none)   M=ActnMan  ACBP=A9
+ 0001:000005C0 00000006 C=CODE     S=.text    G=(none)   M=ActnMenus ACBP=A9
+ 0001:000005C8 00000006 C=CODE     S=.text    G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0001:000005D0 00000006 C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:000005D8 00000006 C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:000005E0 00000006 C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:000005E8 00000006 C=CODE     S=.text    G=(none)   M=BisFastReportClasses ACBP=A9
+ 0001:000005F0 00000006 C=CODE     S=.text    G=(none)   M=frxClass ACBP=A9
+ 0001:000005F8 00000006 C=CODE     S=.text    G=(none)   M=fs_iinterpreter ACBP=A9
+ 0001:00000600 00000006 C=CODE     S=.text    G=(none)   M=fs_iconst ACBP=A9
+ 0001:00000608 00000006 C=CODE     S=.text    G=(none)   M=fs_itools ACBP=A9
+ 0001:00000610 00000006 C=CODE     S=.text    G=(none)   M=frxRes   ACBP=A9
+ 0001:00000618 00000006 C=CODE     S=.text    G=(none)   M=frxDMPClass ACBP=A9
+ 0001:00000620 00000006 C=CODE     S=.text    G=(none)   M=frxDsgnIntf ACBP=A9
+ 0001:00000628 00000006 C=CODE     S=.text    G=(none)   M=fs_iinirtti ACBP=A9
+ 0001:00000630 00000006 C=CODE     S=.text    G=(none)   M=fs_idialogsrtti ACBP=A9
+ 0001:00000638 00000006 C=CODE     S=.text    G=(none)   M=fs_iclassesrtti ACBP=A9
+ 0001:00000640 00000006 C=CODE     S=.text    G=(none)   M=fs_iformsrtti ACBP=A9
+ 0001:00000648 00000006 C=CODE     S=.text    G=(none)   M=fs_igraphicsrtti ACBP=A9
+ 0001:00000650 00000006 C=CODE     S=.text    G=(none)   M=fs_ijs   ACBP=A9
+ 0001:00000658 00000006 C=CODE     S=.text    G=(none)   M=fs_ibasic ACBP=A9
+ 0001:00000660 00000006 C=CODE     S=.text    G=(none)   M=fs_icpp  ACBP=A9
+ 0001:00000668 00000006 C=CODE     S=.text    G=(none)   M=fs_ipascal ACBP=A9
+ 0001:00000670 00000006 C=CODE     S=.text    G=(none)   M=frxClassRTTI ACBP=A9
+ 0001:00000678 00000006 C=CODE     S=.text    G=(none)   M=frxPrinter ACBP=A9
+ 0001:00000680 00000006 C=CODE     S=.text    G=(none)   M=frxPreview ACBP=A9
+ 0001:00000688 00000006 C=CODE     S=.text    G=(none)   M=frxSearchDialog ACBP=A9
+ 0001:00000690 00000006 C=CODE     S=.text    G=(none)   M=frxrcClass ACBP=A9
+ 0001:00000698 00000006 C=CODE     S=.text    G=(none)   M=frxGraphicUtils ACBP=A9
+ 0001:000006A0 00000006 C=CODE     S=.text    G=(none)   M=frxChm   ACBP=A9
+ 0001:000006A8 00000006 C=CODE     S=.text    G=(none)   M=frxDesgn ACBP=A9
+ 0001:000006B0 00000006 C=CODE     S=.text    G=(none)   M=Tabs     ACBP=A9
+ 0001:000006B8 00000006 C=CODE     S=.text    G=(none)   M=frxDataTree ACBP=A9
+ 0001:000006C0 00000006 C=CODE     S=.text    G=(none)   M=frxrcInsp ACBP=A9
+ 0001:000006C8 00000006 C=CODE     S=.text    G=(none)   M=frxUnicodeCtrls ACBP=A9
+ 0001:000006D0 00000006 C=CODE     S=.text    G=(none)   M=frxrcDesgn ACBP=A9
+ 0001:000006D8 00000006 C=CODE     S=.text    G=(none)   M=frxStdWizard ACBP=A9
+ 0001:000006E0 00000006 C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:000006E8 00000006 C=CODE     S=.text    G=(none)   M=frxDesgnEditors ACBP=A9
+ 0001:000006F0 00000006 C=CODE     S=.text    G=(none)   M=frxEditFormat ACBP=A9
+ 0001:000006F8 00000006 C=CODE     S=.text    G=(none)   M=BisFastReportControls ACBP=A9
+ 0001:00000700 00000006 C=CODE     S=.text    G=(none)   M=JclDebug ACBP=A9
+ 0001:00000708 00000006 C=CODE     S=.text    G=(none)   M=JclSysInfo ACBP=A9
+ 0001:00000710 00000006 C=CODE     S=.text    G=(none)   M=JclStrings ACBP=A9
+ 0001:00000718 00000006 C=CODE     S=.text    G=(none)   M=JclSysUtils ACBP=A9
+ 0001:00000720 00000006 C=CODE     S=.text    G=(none)   M=JclWideStrings ACBP=A9
+ 0001:00000728 00000006 C=CODE     S=.text    G=(none)   M=JclShell ACBP=A9
+ 0001:00000730 00000006 C=CODE     S=.text    G=(none)   M=JclRegistry ACBP=A9
+ 0001:00000738 00000006 C=CODE     S=.text    G=(none)   M=JclHookExcept ACBP=A9
+ 0001:00000740 00000006 C=CODE     S=.text    G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0001:00000748 00000006 C=CODE     S=.text    G=(none)   M=BisServiceApplication ACBP=A9
+ 0001:00000750 00000006 C=CODE     S=.text    G=(none)   M=BisSvcMgr ACBP=A9
+ 0001:00000758 00000006 C=CODE     S=.text    G=(none)   M=SvcMgr   ACBP=A9
+ 0001:00000760 00000006 C=CODE     S=.text    G=(none)   M=BisFastReportComponents ACBP=A9
+ 0001:00000768 00000006 C=CODE     S=.text    G=(none)   M=frxCustomDB ACBP=A9
+ 0001:00000770 00000006 C=CODE     S=.text    G=(none)   M=frxCustomDBRTTI ACBP=A9
+ 0001:00000778 00000006 C=CODE     S=.text    G=(none)   M=fs_idbrtti ACBP=A9
+ 0001:00000780 00000006 C=CODE     S=.text    G=(none)   M=frxCustomDBEditor ACBP=A9
+ 0001:00000788 00000006 C=CODE     S=.text    G=(none)   M=frxConnWizard ACBP=A9
+ 0001:00000790 00000006 C=CODE     S=.text    G=(none)   M=frxrcExports ACBP=A9
+ 0001:00000798 00000006 C=CODE     S=.text    G=(none)   M=frxExportTXT ACBP=A9
+ 0001:000007A0 00000006 C=CODE     S=.text    G=(none)   M=frxExportODF ACBP=A9
+ 0001:000007A8 00000006 C=CODE     S=.text    G=(none)   M=frxNetUtils ACBP=A9
+ 0001:000007B0 00000006 C=CODE     S=.text    G=(none)   M=frxGradient ACBP=A9
+ 0001:000007B8 00000006 C=CODE     S=.text    G=(none)   M=frxGradientRTTI ACBP=A9
+ 0001:000007C0 00000006 C=CODE     S=.text    G=(none)   M=frxDCtrl ACBP=A9
+ 0001:000007C8 00000006 C=CODE     S=.text    G=(none)   M=frxDCtrlRTTI ACBP=A9
+ 0001:000007D0 00000006 C=CODE     S=.text    G=(none)   M=frxBarcode ACBP=A9
+ 0001:000007D8 00000006 C=CODE     S=.text    G=(none)   M=frxBarcod ACBP=A9
+ 0001:000007E0 00000006 C=CODE     S=.text    G=(none)   M=frxBarcodeRTTI ACBP=A9
+ 0001:000007E8 00000006 C=CODE     S=.text    G=(none)   M=frxBarcodeEditor ACBP=A9
+ 0001:000007F0 00000006 C=CODE     S=.text    G=(none)   M=frxOLE   ACBP=A9
+ 0001:000007F8 00000006 C=CODE     S=.text    G=(none)   M=frxOLEEditor ACBP=A9
+ 0001:00000800 00000006 C=CODE     S=.text    G=(none)   M=frxOLERTTI ACBP=A9
+ 0001:00000808 00000006 C=CODE     S=.text    G=(none)   M=frxRich  ACBP=A9
+ 0001:00000810 00000006 C=CODE     S=.text    G=(none)   M=frxRichEdit ACBP=A9
+ 0001:00000818 00000006 C=CODE     S=.text    G=(none)   M=frxRichEditor ACBP=A9
+ 0001:00000820 00000006 C=CODE     S=.text    G=(none)   M=frxRichRTTI ACBP=A9
+ 0001:00000828 00000006 C=CODE     S=.text    G=(none)   M=frxCross ACBP=A9
+ 0001:00000830 00000006 C=CODE     S=.text    G=(none)   M=frxCrossRTTI ACBP=A9
+ 0001:00000838 00000006 C=CODE     S=.text    G=(none)   M=frxCrossEditor ACBP=A9
+ 0001:00000840 00000006 C=CODE     S=.text    G=(none)   M=frxChBox ACBP=A9
+ 0001:00000848 00000006 C=CODE     S=.text    G=(none)   M=frxChBoxRTTI ACBP=A9
+ 0001:00000850 00000006 C=CODE     S=.text    G=(none)   M=frxChart ACBP=A9
+ 0001:00000858 00000006 C=CODE     S=.text    G=(none)   M=TeCanvas ACBP=A9
+ 0001:00000860 00000006 C=CODE     S=.text    G=(none)   M=TeeConst ACBP=A9
+ 0001:00000868 00000006 C=CODE     S=.text    G=(none)   M=TeeHtml  ACBP=A9
+ 0001:00000870 00000006 C=CODE     S=.text    G=(none)   M=TeeProcs ACBP=A9
+ 0001:00000878 00000006 C=CODE     S=.text    G=(none)   M=Chart    ACBP=A9
+ 0001:00000880 00000006 C=CODE     S=.text    G=(none)   M=TeEngine ACBP=A9
+ 0001:00000888 00000006 C=CODE     S=.text    G=(none)   M=frxChartEditor ACBP=A9
+ 0001:00000890 00000006 C=CODE     S=.text    G=(none)   M=TeeGally ACBP=A9
+ 0001:00000898 00000006 C=CODE     S=.text    G=(none)   M=TeeGalleryPanel ACBP=A9
+ 0001:000008A0 00000006 C=CODE     S=.text    G=(none)   M=frxChartHelpers ACBP=A9
+ 0001:000008A8 00000006 C=CODE     S=.text    G=(none)   M=ArrowCha ACBP=A9
+ 0001:000008B0 00000006 C=CODE     S=.text    G=(none)   M=BubbleCh ACBP=A9
+ 0001:000008B8 00000006 C=CODE     S=.text    G=(none)   M=TeeShape ACBP=A9
+ 0001:000008C0 00000006 C=CODE     S=.text    G=(none)   M=GanttCh  ACBP=A9
+ 0001:000008C8 00000006 C=CODE     S=.text    G=(none)   M=frxChartRTTI ACBP=A9
+ 0001:000008D0 00000006 C=CODE     S=.text    G=(none)   M=fs_ichartrtti ACBP=A9
+ 0001:000008D8 000000CE C=CODE     S=.text    G=(none)   M=BisCmxConnection ACBP=A9
+ 0001:000009A8 00000006 C=CODE     S=.text    G=(none)   M=DBXCommon ACBP=A9
+ 0001:000009B0 00000006 C=CODE     S=.text    G=(none)   M=ClassRegistry ACBP=A9
+ 0001:000009B8 00000006 C=CODE     S=.text    G=(none)   M=SqlExpr  ACBP=A9
+ 0001:000009C0 00000006 C=CODE     S=.text    G=(none)   M=DBXSybaseASEReadOnlyMetaData ACBP=A9
+ 0001:000009C8 00000006 C=CODE     S=.text    G=(none)   M=DBXSybaseASAReadOnlyMetaData ACBP=A9
+ 0001:000009D0 00000006 C=CODE     S=.text    G=(none)   M=DBXOracleReadOnlyMetaData ACBP=A9
+ 0001:000009D8 00000006 C=CODE     S=.text    G=(none)   M=DBXMySqlReadOnlyMetaData ACBP=A9
+ 0001:000009E0 00000006 C=CODE     S=.text    G=(none)   M=DBXMsSqlReadOnlyMetaData ACBP=A9
+ 0001:000009E8 00000006 C=CODE     S=.text    G=(none)   M=DBXDb2ReadOnlyMetaData ACBP=A9
+ 0001:000009F0 00000006 C=CODE     S=.text    G=(none)   M=DBXInterbaseReadOnlyMetaData ACBP=A9
+ 0001:000009F8 00000006 C=CODE     S=.text    G=(none)   M=DBXInformixReadOnlyMetaData ACBP=A9
+ 0001:00000A00 00000006 C=CODE     S=.text    G=(none)   M=DBXDynalink ACBP=A9
+ 0001:00000A08 00000006 C=CODE     S=.text    G=(none)   M=DBXClient ACBP=A9
+ 0001:00000A10 00000006 C=CODE     S=.text    G=(none)   M=DBXJSonStreamWriter ACBP=A9
+ 0001:00000A18 00000006 C=CODE     S=.text    G=(none)   M=DBXDataStoreReadOnlyMetaData ACBP=A9
+ 0001:00000A20 00000006 C=CODE     S=.text    G=(none)   M=DBXPool  ACBP=A9
+ 0001:00000A28 00000006 C=CODE     S=.text    G=(none)   M=DBXTrace ACBP=A9
+ 0001:00000A30 00000FB2 C=CODE     S=.text    G=(none)   M=BisCmxMsSqlConnection ACBP=A9
+ 0001:000019E4 00000042 C=CODE     S=.text    G=(none)   M=BisCmxMssql ACBP=A9
+ 0001:00001A28 00000F17 C=CODE     S=.text    G=(none)   M=.cmxmssql ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:00000010 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=IniFiles ACBP=A9
+ 0002:0000004C 00000006 C=ICODE    S=.itext   G=(none)   M=Graphics ACBP=A9
+ 0002:00000054 00000006 C=ICODE    S=.itext   G=(none)   M=Registry ACBP=A9
+ 0002:0000005C 00000006 C=ICODE    S=.itext   G=(none)   M=BisUtils ACBP=A9
+ 0002:00000064 00000006 C=ICODE    S=.itext   G=(none)   M=BisCore  ACBP=A9
+ 0002:0000006C 00000006 C=ICODE    S=.itext   G=(none)   M=DECUtil  ACBP=A9
+ 0002:00000074 00000006 C=ICODE    S=.itext   G=(none)   M=Hash     ACBP=A9
+ 0002:0000007C 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher   ACBP=A9
+ 0002:00000084 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher1  ACBP=A9
+ 0002:0000008C 00000006 C=ICODE    S=.itext   G=(none)   M=BisCryptUtils ACBP=A9
+ 0002:00000094 00000006 C=ICODE    S=.itext   G=(none)   M=DB       ACBP=A9
+ 0002:0000009C 00000006 C=ICODE    S=.itext   G=(none)   M=WideStrings ACBP=A9
+ 0002:000000A4 00000006 C=ICODE    S=.itext   G=(none)   M=FMTBcd   ACBP=A9
+ 0002:000000AC 00000006 C=ICODE    S=.itext   G=(none)   M=SqlTimSt ACBP=A9
+ 0002:000000B4 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:000000BC 00000006 C=ICODE    S=.itext   G=(none)   M=kbmMemTable ACBP=A9
+ 0002:000000C4 00000006 C=ICODE    S=.itext   G=(none)   M=Forms    ACBP=A9
+ 0002:000000CC 00000006 C=ICODE    S=.itext   G=(none)   M=HelpIntfs ACBP=A9
+ 0002:000000D4 00000006 C=ICODE    S=.itext   G=(none)   M=MultiMon ACBP=A9
+ 0002:000000DC 00000006 C=ICODE    S=.itext   G=(none)   M=ActnList ACBP=A9
+ 0002:000000E4 00000006 C=ICODE    S=.itext   G=(none)   M=Themes   ACBP=A9
+ 0002:000000EC 00000006 C=ICODE    S=.itext   G=(none)   M=Controls ACBP=A9
+ 0002:000000F4 00000006 C=ICODE    S=.itext   G=(none)   M=Menus    ACBP=A9
+ 0002:000000FC 00000006 C=ICODE    S=.itext   G=(none)   M=UxTheme  ACBP=A9
+ 0002:00000104 00000006 C=ICODE    S=.itext   G=(none)   M=DwmApi   ACBP=A9
+ 0002:0000010C 00000006 C=ICODE    S=.itext   G=(none)   M=Dialogs  ACBP=A9
+ 0002:00000114 00000006 C=ICODE    S=.itext   G=(none)   M=Printers ACBP=A9
+ 0002:0000011C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtCtrls ACBP=A9
+ 0002:00000124 00000006 C=ICODE    S=.itext   G=(none)   M=GraphUtil ACBP=A9
+ 0002:0000012C 00000006 C=ICODE    S=.itext   G=(none)   M=Clipbrd  ACBP=A9
+ 0002:00000134 00000006 C=ICODE    S=.itext   G=(none)   M=FlatSB   ACBP=A9
+ 0002:0000013C 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImage ACBP=A9
+ 0002:00000144 00000006 C=ICODE    S=.itext   G=(none)   M=jpeg     ACBP=A9
+ 0002:0000014C 00000006 C=ICODE    S=.itext   G=(none)   M=RxRichEd ACBP=A9
+ 0002:00000154 00000006 C=ICODE    S=.itext   G=(none)   M=ComCtrls ACBP=A9
+ 0002:0000015C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtActns ACBP=A9
+ 0002:00000164 00000006 C=ICODE    S=.itext   G=(none)   M=ExtDlgs  ACBP=A9
+ 0002:0000016C 00000006 C=ICODE    S=.itext   G=(none)   M=Buttons  ACBP=A9
+ 0002:00000174 00000006 C=ICODE    S=.itext   G=(none)   M=Mapi     ACBP=A9
+ 0002:0000017C 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtnrs ACBP=A9
+ 0002:00000184 00000006 C=ICODE    S=.itext   G=(none)   M=rxToolEdit ACBP=A9
+ 0002:0000018C 00000006 C=ICODE    S=.itext   G=(none)   M=rxDateUtil ACBP=A9
+ 0002:00000194 00000006 C=ICODE    S=.itext   G=(none)   M=RXCtrls  ACBP=A9
+ 0002:0000019C 00000006 C=ICODE    S=.itext   G=(none)   M=RxHook   ACBP=A9
+ 0002:000001A4 00000006 C=ICODE    S=.itext   G=(none)   M=RXConst  ACBP=A9
+ 0002:000001AC 00000006 C=ICODE    S=.itext   G=(none)   M=rxVclutils ACBP=A9
+ 0002:000001B4 00000006 C=ICODE    S=.itext   G=(none)   M=RXProps  ACBP=A9
+ 0002:000001BC 00000006 C=ICODE    S=.itext   G=(none)   M=rxAppUtils ACBP=A9
+ 0002:000001C4 00000006 C=ICODE    S=.itext   G=(none)   M=RxPrgrss ACBP=A9
+ 0002:000001CC 00000006 C=ICODE    S=.itext   G=(none)   M=DBCtrls  ACBP=A9
+ 0002:000001D4 00000006 C=ICODE    S=.itext   G=(none)   M=DBPWDlg  ACBP=A9
+ 0002:000001DC 00000006 C=ICODE    S=.itext   G=(none)   M=DBLogDlg ACBP=A9
+ 0002:000001E4 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMan  ACBP=A9
+ 0002:000001EC 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMenus ACBP=A9
+ 0002:000001F4 00000006 C=ICODE    S=.itext   G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0002:000001FC 00000006 C=ICODE    S=.itext   G=(none)   M=OleServer ACBP=A9
+ 0002:00000204 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtrls ACBP=A9
+ 0002:0000020C 00000006 C=ICODE    S=.itext   G=(none)   M=AxCtrls  ACBP=A9
+ 0002:00000214 00000006 C=ICODE    S=.itext   G=(none)   M=BisFastReportClasses ACBP=A9
+ 0002:0000021C 00000006 C=ICODE    S=.itext   G=(none)   M=frxClass ACBP=A9
+ 0002:00000224 00000006 C=ICODE    S=.itext   G=(none)   M=fs_iinterpreter ACBP=A9
+ 0002:0000022C 00000006 C=ICODE    S=.itext   G=(none)   M=fs_iconst ACBP=A9
+ 0002:00000234 00000006 C=ICODE    S=.itext   G=(none)   M=fs_itools ACBP=A9
+ 0002:0000023C 00000006 C=ICODE    S=.itext   G=(none)   M=frxRes   ACBP=A9
+ 0002:00000244 00000006 C=ICODE    S=.itext   G=(none)   M=frxDMPClass ACBP=A9
+ 0002:0000024C 00000006 C=ICODE    S=.itext   G=(none)   M=frxDsgnIntf ACBP=A9
+ 0002:00000254 00000006 C=ICODE    S=.itext   G=(none)   M=fs_iinirtti ACBP=A9
+ 0002:0000025C 00000006 C=ICODE    S=.itext   G=(none)   M=fs_idialogsrtti ACBP=A9
+ 0002:00000264 00000006 C=ICODE    S=.itext   G=(none)   M=fs_iclassesrtti ACBP=A9
+ 0002:0000026C 00000006 C=ICODE    S=.itext   G=(none)   M=fs_iformsrtti ACBP=A9
+ 0002:00000274 00000006 C=ICODE    S=.itext   G=(none)   M=fs_igraphicsrtti ACBP=A9
+ 0002:0000027C 00000006 C=ICODE    S=.itext   G=(none)   M=fs_ijs   ACBP=A9
+ 0002:00000284 00000006 C=ICODE    S=.itext   G=(none)   M=fs_ibasic ACBP=A9
+ 0002:0000028C 00000006 C=ICODE    S=.itext   G=(none)   M=fs_icpp  ACBP=A9
+ 0002:00000294 00000006 C=ICODE    S=.itext   G=(none)   M=fs_ipascal ACBP=A9
+ 0002:0000029C 00000006 C=ICODE    S=.itext   G=(none)   M=frxClassRTTI ACBP=A9
+ 0002:000002A4 00000006 C=ICODE    S=.itext   G=(none)   M=frxPrinter ACBP=A9
+ 0002:000002AC 00000006 C=ICODE    S=.itext   G=(none)   M=frxPreview ACBP=A9
+ 0002:000002B4 00000006 C=ICODE    S=.itext   G=(none)   M=frxSearchDialog ACBP=A9
+ 0002:000002BC 00000006 C=ICODE    S=.itext   G=(none)   M=frxrcClass ACBP=A9
+ 0002:000002C4 00000006 C=ICODE    S=.itext   G=(none)   M=frxGraphicUtils ACBP=A9
+ 0002:000002CC 00000006 C=ICODE    S=.itext   G=(none)   M=frxChm   ACBP=A9
+ 0002:000002D4 00000006 C=ICODE    S=.itext   G=(none)   M=frxDesgn ACBP=A9
+ 0002:000002DC 00000006 C=ICODE    S=.itext   G=(none)   M=Tabs     ACBP=A9
+ 0002:000002E4 00000006 C=ICODE    S=.itext   G=(none)   M=frxDataTree ACBP=A9
+ 0002:000002EC 00000006 C=ICODE    S=.itext   G=(none)   M=frxrcInsp ACBP=A9
+ 0002:000002F4 00000006 C=ICODE    S=.itext   G=(none)   M=frxUnicodeCtrls ACBP=A9
+ 0002:000002FC 00000006 C=ICODE    S=.itext   G=(none)   M=frxrcDesgn ACBP=A9
+ 0002:00000304 00000006 C=ICODE    S=.itext   G=(none)   M=frxStdWizard ACBP=A9
+ 0002:0000030C 00000006 C=ICODE    S=.itext   G=(none)   M=CheckLst ACBP=A9
+ 0002:00000314 00000006 C=ICODE    S=.itext   G=(none)   M=frxDesgnEditors ACBP=A9
+ 0002:0000031C 00000006 C=ICODE    S=.itext   G=(none)   M=frxEditFormat ACBP=A9
+ 0002:00000324 00000006 C=ICODE    S=.itext   G=(none)   M=BisFastReportControls ACBP=A9
+ 0002:0000032C 00000006 C=ICODE    S=.itext   G=(none)   M=JclDebug ACBP=A9
+ 0002:00000334 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysInfo ACBP=A9
+ 0002:0000033C 00000006 C=ICODE    S=.itext   G=(none)   M=JclStrings ACBP=A9
+ 0002:00000344 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysUtils ACBP=A9
+ 0002:0000034C 00000006 C=ICODE    S=.itext   G=(none)   M=JclWideStrings ACBP=A9
+ 0002:00000354 00000006 C=ICODE    S=.itext   G=(none)   M=JclShell ACBP=A9
+ 0002:0000035C 00000006 C=ICODE    S=.itext   G=(none)   M=JclRegistry ACBP=A9
+ 0002:00000364 00000006 C=ICODE    S=.itext   G=(none)   M=JclHookExcept ACBP=A9
+ 0002:0000036C 00000006 C=ICODE    S=.itext   G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0002:00000374 00000006 C=ICODE    S=.itext   G=(none)   M=BisServiceApplication ACBP=A9
+ 0002:0000037C 00000006 C=ICODE    S=.itext   G=(none)   M=BisSvcMgr ACBP=A9
+ 0002:00000384 00000006 C=ICODE    S=.itext   G=(none)   M=SvcMgr   ACBP=A9
+ 0002:0000038C 00000006 C=ICODE    S=.itext   G=(none)   M=BisFastReportComponents ACBP=A9
+ 0002:00000394 00000006 C=ICODE    S=.itext   G=(none)   M=frxCustomDB ACBP=A9
+ 0002:0000039C 00000006 C=ICODE    S=.itext   G=(none)   M=frxCustomDBRTTI ACBP=A9
+ 0002:000003A4 00000006 C=ICODE    S=.itext   G=(none)   M=fs_idbrtti ACBP=A9
+ 0002:000003AC 00000006 C=ICODE    S=.itext   G=(none)   M=frxCustomDBEditor ACBP=A9
+ 0002:000003B4 00000006 C=ICODE    S=.itext   G=(none)   M=frxConnWizard ACBP=A9
+ 0002:000003BC 00000006 C=ICODE    S=.itext   G=(none)   M=frxrcExports ACBP=A9
+ 0002:000003C4 00000006 C=ICODE    S=.itext   G=(none)   M=frxExportTXT ACBP=A9
+ 0002:000003CC 00000006 C=ICODE    S=.itext   G=(none)   M=frxExportODF ACBP=A9
+ 0002:000003D4 00000006 C=ICODE    S=.itext   G=(none)   M=frxNetUtils ACBP=A9
+ 0002:000003DC 00000006 C=ICODE    S=.itext   G=(none)   M=frxGradient ACBP=A9
+ 0002:000003E4 00000006 C=ICODE    S=.itext   G=(none)   M=frxGradientRTTI ACBP=A9
+ 0002:000003EC 00000006 C=ICODE    S=.itext   G=(none)   M=frxDCtrl ACBP=A9
+ 0002:000003F4 00000006 C=ICODE    S=.itext   G=(none)   M=frxDCtrlRTTI ACBP=A9
+ 0002:000003FC 00000006 C=ICODE    S=.itext   G=(none)   M=frxBarcode ACBP=A9
+ 0002:00000404 00000006 C=ICODE    S=.itext   G=(none)   M=frxBarcod ACBP=A9
+ 0002:0000040C 00000006 C=ICODE    S=.itext   G=(none)   M=frxBarcodeRTTI ACBP=A9
+ 0002:00000414 00000006 C=ICODE    S=.itext   G=(none)   M=frxBarcodeEditor ACBP=A9
+ 0002:0000041C 00000006 C=ICODE    S=.itext   G=(none)   M=frxOLE   ACBP=A9
+ 0002:00000424 00000006 C=ICODE    S=.itext   G=(none)   M=frxOLEEditor ACBP=A9
+ 0002:0000042C 00000006 C=ICODE    S=.itext   G=(none)   M=frxOLERTTI ACBP=A9
+ 0002:00000434 00000006 C=ICODE    S=.itext   G=(none)   M=frxRich  ACBP=A9
+ 0002:0000043C 00000006 C=ICODE    S=.itext   G=(none)   M=frxRichEdit ACBP=A9
+ 0002:00000444 00000006 C=ICODE    S=.itext   G=(none)   M=frxRichEditor ACBP=A9
+ 0002:0000044C 00000006 C=ICODE    S=.itext   G=(none)   M=frxRichRTTI ACBP=A9
+ 0002:00000454 00000006 C=ICODE    S=.itext   G=(none)   M=frxCross ACBP=A9
+ 0002:0000045C 00000006 C=ICODE    S=.itext   G=(none)   M=frxCrossRTTI ACBP=A9
+ 0002:00000464 00000006 C=ICODE    S=.itext   G=(none)   M=frxCrossEditor ACBP=A9
+ 0002:0000046C 00000006 C=ICODE    S=.itext   G=(none)   M=frxChBox ACBP=A9
+ 0002:00000474 00000006 C=ICODE    S=.itext   G=(none)   M=frxChBoxRTTI ACBP=A9
+ 0002:0000047C 00000006 C=ICODE    S=.itext   G=(none)   M=frxChart ACBP=A9
+ 0002:00000484 00000006 C=ICODE    S=.itext   G=(none)   M=TeCanvas ACBP=A9
+ 0002:0000048C 00000006 C=ICODE    S=.itext   G=(none)   M=TeeConst ACBP=A9
+ 0002:00000494 00000006 C=ICODE    S=.itext   G=(none)   M=TeeHtml  ACBP=A9
+ 0002:0000049C 00000006 C=ICODE    S=.itext   G=(none)   M=TeeProcs ACBP=A9
+ 0002:000004A4 00000006 C=ICODE    S=.itext   G=(none)   M=Chart    ACBP=A9
+ 0002:000004AC 00000006 C=ICODE    S=.itext   G=(none)   M=TeEngine ACBP=A9
+ 0002:000004B4 00000006 C=ICODE    S=.itext   G=(none)   M=frxChartEditor ACBP=A9
+ 0002:000004BC 00000006 C=ICODE    S=.itext   G=(none)   M=TeeGally ACBP=A9
+ 0002:000004C4 00000006 C=ICODE    S=.itext   G=(none)   M=TeeGalleryPanel ACBP=A9
+ 0002:000004CC 00000006 C=ICODE    S=.itext   G=(none)   M=frxChartHelpers ACBP=A9
+ 0002:000004D4 00000006 C=ICODE    S=.itext   G=(none)   M=ArrowCha ACBP=A9
+ 0002:000004DC 00000006 C=ICODE    S=.itext   G=(none)   M=BubbleCh ACBP=A9
+ 0002:000004E4 00000006 C=ICODE    S=.itext   G=(none)   M=TeeShape ACBP=A9
+ 0002:000004EC 00000006 C=ICODE    S=.itext   G=(none)   M=GanttCh  ACBP=A9
+ 0002:000004F4 00000006 C=ICODE    S=.itext   G=(none)   M=frxChartRTTI ACBP=A9
+ 0002:000004FC 00000006 C=ICODE    S=.itext   G=(none)   M=fs_ichartrtti ACBP=A9
+ 0002:00000504 00000006 C=ICODE    S=.itext   G=(none)   M=DBXCommon ACBP=A9
+ 0002:0000050C 00000006 C=ICODE    S=.itext   G=(none)   M=ClassRegistry ACBP=A9
+ 0002:00000514 00000006 C=ICODE    S=.itext   G=(none)   M=SqlExpr  ACBP=A9
+ 0002:0000051C 00000006 C=ICODE    S=.itext   G=(none)   M=DBXSybaseASEReadOnlyMetaData ACBP=A9
+ 0002:00000524 00000006 C=ICODE    S=.itext   G=(none)   M=DBXSybaseASAReadOnlyMetaData ACBP=A9
+ 0002:0000052C 00000006 C=ICODE    S=.itext   G=(none)   M=DBXOracleReadOnlyMetaData ACBP=A9
+ 0002:00000534 00000006 C=ICODE    S=.itext   G=(none)   M=DBXMySqlReadOnlyMetaData ACBP=A9
+ 0002:0000053C 00000006 C=ICODE    S=.itext   G=(none)   M=DBXMsSqlReadOnlyMetaData ACBP=A9
+ 0002:00000544 00000006 C=ICODE    S=.itext   G=(none)   M=DBXDb2ReadOnlyMetaData ACBP=A9
+ 0002:0000054C 00000006 C=ICODE    S=.itext   G=(none)   M=DBXInterbaseReadOnlyMetaData ACBP=A9
+ 0002:00000554 00000006 C=ICODE    S=.itext   G=(none)   M=DBXInformixReadOnlyMetaData ACBP=A9
+ 0002:0000055C 00000006 C=ICODE    S=.itext   G=(none)   M=DBXDynalink ACBP=A9
+ 0002:00000564 00000006 C=ICODE    S=.itext   G=(none)   M=DBXClient ACBP=A9
+ 0002:0000056C 00000006 C=ICODE    S=.itext   G=(none)   M=DBXJSonStreamWriter ACBP=A9
+ 0002:00000574 00000006 C=ICODE    S=.itext   G=(none)   M=DBXDataStoreReadOnlyMetaData ACBP=A9
+ 0002:0000057C 00000006 C=ICODE    S=.itext   G=(none)   M=DBXPool  ACBP=A9
+ 0002:00000584 00000006 C=ICODE    S=.itext   G=(none)   M=DBXTrace ACBP=A9
+ 0002:0000058C 00000008 C=ICODE    S=.itext   G=(none)   M=BisCmxMsSqlConnection ACBP=A9
+ 0002:00000594 00000008 C=ICODE    S=.itext   G=(none)   M=BisCmxMssql ACBP=A9
+ 0002:0000059C 00000005 C=ICODE    S=.itext   G=(none)   M=.cmxmssql ACBP=A9
+ 0003:00000000 0000002C C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0004:00000000 0000000C C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:0000000C 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000014 00000004 C=BSS      S=.bss     G=DGROUP   M=BisCmxMsSqlConnection ACBP=A9
+ 0004:00000018 00000004 C=BSS      S=.bss     G=DGROUP   M=BisCmxMssql ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:0000059C       .cmxmssql..cmxmssql
+ 0001:00002920       .cmxmssql.@GetPackageInfoTable
+ 0001:00002928       .cmxmssql.@PackageLoad
+ 0001:00002934       .cmxmssql.@PackageUnload
+ 0004:00000018       BisCmxMssql..1
+ 0002:00000594       BisCmxMssql.BisCmxMssql
+ 0001:000019F8       BisCmxMssql.Finalization
+ 0001:000019E4       BisCmxMssql.InitConnectionModule
+ 0004:00000014       BisCmxMsSqlConnection..4
+ 0001:00000BC4       BisCmxMsSqlConnection..TBisCmxMsSqlConnection
+ 0001:00000A30       BisCmxMsSqlConnection..TBisCmxMsSqlSession
+ 0001:00000B0C       BisCmxMsSqlConnection..TBisCmxMsSqlSessions
+ 0002:0000058C       BisCmxMsSqlConnection.BisCmxMsSqlConnection
+ 0001:000019B4       BisCmxMsSqlConnection.Finalization
+ 0001:00001710       BisCmxMsSqlConnection.TBisCmxMsSqlConnection.Create
+ 0001:000019AC       BisCmxMsSqlConnection.TBisCmxMsSqlConnection.GetSessionsClass
+ 0001:00000D4C       BisCmxMsSqlConnection.TBisCmxMsSqlSession.Create
+ 0001:00001690       BisCmxMsSqlConnection.TBisCmxMsSqlSessions.Create
+ 0001:00001708       BisCmxMsSqlConnection.TBisCmxMsSqlSessions.GetSessionClass
+ 0001:000001D0       SysInit.@InitPkg
+ 0001:00000234       SysInit.@PackageLoad
+ 0001:00000240       SysInit.@PackageUnload
+ 0001:000000C0       SysInit.AllocTlsBuffer
+ 0001:0000017C       SysInit.ExitProcessTLS
+ 0001:00000144       SysInit.ExitThreadTLS
+ 0001:00000088       SysInit.FreeLibrary
+ 0001:000000CC       SysInit.GetTlsSize
+ 0004:00000004       SysInit.HInstance
+ 0001:000001A0       SysInit.InitializeModule
+ 0001:00000118       SysInit.InitProcessTLS
+ 0001:000000D4       SysInit.InitThreadTLS
+ 0001:00000090       SysInit.LocalAlloc
+ 0001:00000098       SysInit.LocalFree
+ 0003:00000004       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0001:000000A0       SysInit.TlsAlloc
+ 0004:00000008       SysInit.tlsBuffer
+ 0001:000000A8       SysInit.TlsFree
+ 0001:000000B0       SysInit.TlsGetValue
+ 0003:00000000       SysInit.TlsIndex
+ 0005:00000000       SysInit.TlsLast
+ 0003:0000001C       SysInit.TlsProc
+ 0001:000000B8       SysInit.TlsSetValue
+ 0001:000001AC       SysInit.UninitializeModule
+ 0004:0000000C       Windows..3
+ 0001:000002DC       Windows.Finalization
+ 0001:000002D4       Windows.FreeLibrary
+ 0004:00000010       Windows.HtmlHelpModule
+ 0002:00000010       Windows.Windows
+
+
+  Address             Publics by Value
+
+ 0001:00000088       SysInit.FreeLibrary
+ 0001:00000090       SysInit.LocalAlloc
+ 0001:00000098       SysInit.LocalFree
+ 0001:000000A0       SysInit.TlsAlloc
+ 0001:000000A8       SysInit.TlsFree
+ 0001:000000B0       SysInit.TlsGetValue
+ 0001:000000B8       SysInit.TlsSetValue
+ 0001:000000C0       SysInit.AllocTlsBuffer
+ 0001:000000CC       SysInit.GetTlsSize
+ 0001:000000D4       SysInit.InitThreadTLS
+ 0001:00000118       SysInit.InitProcessTLS
+ 0001:00000144       SysInit.ExitThreadTLS
+ 0001:0000017C       SysInit.ExitProcessTLS
+ 0001:000001A0       SysInit.InitializeModule
+ 0001:000001AC       SysInit.UninitializeModule
+ 0001:000001D0       SysInit.@InitPkg
+ 0001:00000234       SysInit.@PackageLoad
+ 0001:00000240       SysInit.@PackageUnload
+ 0001:000002D4       Windows.FreeLibrary
+ 0001:000002DC       Windows.Finalization
+ 0001:00000A30       BisCmxMsSqlConnection..TBisCmxMsSqlSession
+ 0001:00000B0C       BisCmxMsSqlConnection..TBisCmxMsSqlSessions
+ 0001:00000BC4       BisCmxMsSqlConnection..TBisCmxMsSqlConnection
+ 0001:00000D4C       BisCmxMsSqlConnection.TBisCmxMsSqlSession.Create
+ 0001:00001690       BisCmxMsSqlConnection.TBisCmxMsSqlSessions.Create
+ 0001:00001708       BisCmxMsSqlConnection.TBisCmxMsSqlSessions.GetSessionClass
+ 0001:00001710       BisCmxMsSqlConnection.TBisCmxMsSqlConnection.Create
+ 0001:000019AC       BisCmxMsSqlConnection.TBisCmxMsSqlConnection.GetSessionsClass
+ 0001:000019B4       BisCmxMsSqlConnection.Finalization
+ 0001:000019E4       BisCmxMssql.InitConnectionModule
+ 0001:000019F8       BisCmxMssql.Finalization
+ 0001:00002920       .cmxmssql.@GetPackageInfoTable
+ 0001:00002928       .cmxmssql.@PackageLoad
+ 0001:00002934       .cmxmssql.@PackageUnload
+ 0002:00000010       Windows.Windows
+ 0002:0000058C       BisCmxMsSqlConnection.BisCmxMsSqlConnection
+ 0002:00000594       BisCmxMssql.BisCmxMssql
+ 0002:0000059C       .cmxmssql..cmxmssql
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.Module
+ 0003:0000001C       SysInit.TlsProc
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       SysInit.tlsBuffer
+ 0004:0000000C       Windows..3
+ 0004:00000010       Windows.HtmlHelpModule
+ 0004:00000014       BisCmxMsSqlConnection..4
+ 0004:00000018       BisCmxMssql..1
+ 0005:00000000       SysInit.TlsLast
+
+
+Line numbers for BisCmxMsSqlConnection(cmxmssql.bpl\BisCmxMsSqlConnection.pas) segment .text
+
+    33 0001:00000D4C    34 0001:00000D5E    35 0001:00000D67    36 0001:00000D77
+    37 0001:00000D87    39 0001:00000D94    40 0001:00000DA4    41 0001:00000DB4
+    44 0001:00000DC4    45 0001:00000DD4    46 0001:00000DE4    47 0001:00000DF4
+    57 0001:00000E04    58 0001:00000E14    59 0001:00000E24    68 0001:00000E34
+    69 0001:00000E44    70 0001:00000E54    71 0001:00000E64    76 0001:00001690
+    77 0001:000016A2    78 0001:000016AB    79 0001:000016B8    80 0001:000016C5
+    84 0001:00001708    85 0001:0000170D    90 0001:00001710    91 0001:00001722
+    92 0001:0000172B    94 0001:0000173B    99 0001:0000174B   100 0001:0000175B
+   101 0001:0000176B   102 0001:0000177B   103 0001:0000178B   104 0001:0000179B
+   108 0001:000019AC   109 0001:000019B1
+
+Line numbers for BisCmxMsSqlConnection(cmxmssql.bpl\BisCmxMsSqlConnection.pas) segment .itext
+
+   110 0002:0000058C
+
+Line numbers for BisCmxMssql(cmxmssql.bpl\BisCmxMsSql.pas) segment .text
+
+    17 0001:000019E4    18 0001:000019E7    19 0001:000019F2
+
+Line numbers for BisCmxMssql(cmxmssql.bpl\BisCmxMsSql.pas) segment .itext
+
+    21 0002:00000594
+
+Line numbers for .cmxmssql(cmxmssql.dpk) segment .itext
+
+    35 0002:0000059C
+
+Bound resource files
+
+cmxmssql.res
+cmxmssql.drf
+
+
+Program entry point at 0002:0000059C

@@ -1,0 +1,625 @@
+object SipClientForm: TSipClientForm
+  Left = 0
+  Top = 0
+  Caption = 'SIP Client'
+  ClientHeight = 622
+  ClientWidth = 869
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  DesignSize = (
+    869
+    622)
+  PixelsPerInch = 96
+  TextHeight = 13
+  object LabelCount: TLabel
+    Left = 343
+    Top = 117
+    Width = 28
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Lines:'
+  end
+  object LabelLifeTime: TLabel
+    Left = 567
+    Top = 117
+    Width = 44
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Life time:'
+  end
+  object LabelOffset: TLabel
+    Left = 443
+    Top = 117
+    Width = 35
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Offset:'
+  end
+  object LabelBuffer: TLabel
+    Left = 337
+    Top = 142
+    Width = 34
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Buffer:'
+  end
+  object LabelBufferCount: TLabel
+    Left = 436
+    Top = 142
+    Width = 33
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Count:'
+  end
+  object GroupBoxRegister: TGroupBox
+    Left = 8
+    Top = 5
+    Width = 321
+    Height = 152
+    Caption = ' Register '
+    TabOrder = 0
+    object LabelRemoteHost: TLabel
+      Left = 15
+      Top = 46
+      Width = 66
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Remote Host:'
+    end
+    object LabelRemotePort: TLabel
+      Left = 217
+      Top = 46
+      Width = 24
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Port:'
+    end
+    object LabelUserName: TLabel
+      Left = 29
+      Top = 73
+      Width = 52
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Username:'
+    end
+    object LabelPassword: TLabel
+      Left = 158
+      Top = 73
+      Width = 50
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Password:'
+    end
+    object LabelLocalHost: TLabel
+      Left = 28
+      Top = 19
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Local Host:'
+    end
+    object LabelLocalPort: TLabel
+      Left = 217
+      Top = 19
+      Width = 24
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Port:'
+    end
+    object LabelExpires: TLabel
+      Left = 210
+      Top = 129
+      Width = 39
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Expires:'
+      FocusControl = EditExpires
+    end
+    object LabelProvider: TLabel
+      Left = 15
+      Top = 102
+      Width = 44
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Provider:'
+      FocusControl = ComboBoxProviders
+    end
+    object EditRemoteHost: TEdit
+      Left = 87
+      Top = 43
+      Width = 121
+      Height = 21
+      TabOrder = 0
+    end
+    object EditRemotePort: TEdit
+      Left = 247
+      Top = 43
+      Width = 64
+      Height = 21
+      TabOrder = 1
+    end
+    object EditUserName: TEdit
+      Left = 87
+      Top = 70
+      Width = 62
+      Height = 21
+      TabOrder = 2
+    end
+    object EditPassword: TEdit
+      Left = 214
+      Top = 70
+      Width = 97
+      Height = 21
+      TabOrder = 3
+    end
+    object ButtonConnect: TButton
+      Left = 155
+      Top = 97
+      Width = 53
+      Height = 25
+      Caption = 'Connect'
+      TabOrder = 5
+      OnClick = ButtonConnectClick
+    end
+    object ButtonDisconnect: TButton
+      Left = 214
+      Top = 97
+      Width = 64
+      Height = 25
+      Caption = 'Disconnect'
+      Enabled = False
+      TabOrder = 6
+      OnClick = ButtonDisconnectClick
+    end
+    object ComboBoxProviders: TComboBox
+      Left = 65
+      Top = 99
+      Width = 84
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 0
+      TabOrder = 4
+      OnChange = ComboBoxProvidersChange
+    end
+    object CheckBoxUseRport: TCheckBox
+      Left = 15
+      Top = 128
+      Width = 69
+      Height = 17
+      Caption = 'Use Rport'
+      TabOrder = 7
+      OnClick = CheckBoxUseRportClick
+    end
+    object CheckBoxUseReceived: TCheckBox
+      Left = 90
+      Top = 128
+      Width = 84
+      Height = 17
+      Caption = 'Use Received'
+      TabOrder = 8
+      OnClick = CheckBoxUseReceivedClick
+    end
+    object EditLocalHost: TEdit
+      Left = 87
+      Top = 16
+      Width = 121
+      Height = 21
+      TabOrder = 9
+    end
+    object EditLocalPort: TEdit
+      Left = 247
+      Top = 16
+      Width = 64
+      Height = 21
+      TabOrder = 10
+    end
+    object EditExpires: TEdit
+      Left = 255
+      Top = 126
+      Width = 40
+      Height = 21
+      TabOrder = 11
+      Text = '100'
+    end
+    object UpDownExpires: TUpDown
+      Left = 295
+      Top = 126
+      Width = 17
+      Height = 21
+      Associate = EditExpires
+      Min = 1
+      Max = 3600
+      Increment = 10
+      Position = 100
+      TabOrder = 12
+      Thousands = False
+    end
+    object ButtonTerminate: TButton
+      Left = 284
+      Top = 97
+      Width = 27
+      Height = 25
+      Hint = 'Terminate'
+      Caption = 'T'
+      Enabled = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 13
+      OnClick = ButtonTerminateClick
+    end
+  end
+  object GroupBoxCall: TGroupBox
+    Left = 335
+    Top = 5
+    Width = 337
+    Height = 105
+    Caption = ' Call '
+    TabOrder = 1
+    object LabelNumber: TLabel
+      Left = 10
+      Top = 18
+      Width = 41
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Number:'
+    end
+    object ButtonDial: TButton
+      Left = 9
+      Top = 42
+      Width = 75
+      Height = 25
+      Caption = 'Dial'
+      Enabled = False
+      TabOrder = 0
+      OnClick = ButtonDialClick
+    end
+    object ButtonHangup: TButton
+      Left = 90
+      Top = 42
+      Width = 75
+      Height = 25
+      Caption = 'Hangup'
+      Enabled = False
+      TabOrder = 1
+      OnClick = ButtonHangupClick
+    end
+    object ButtonAnswer: TButton
+      Left = 171
+      Top = 42
+      Width = 75
+      Height = 25
+      Caption = 'Answer'
+      Enabled = False
+      TabOrder = 2
+      OnClick = ButtonAnswerClick
+    end
+    object ButtonPlay: TButton
+      Left = 171
+      Top = 73
+      Width = 75
+      Height = 25
+      Caption = 'Play'
+      Enabled = False
+      TabOrder = 3
+      OnClick = ButtonPlayClick
+    end
+    object ButtonClear: TButton
+      Left = 9
+      Top = 73
+      Width = 75
+      Height = 25
+      Caption = 'Clear'
+      TabOrder = 4
+      OnClick = ButtonClearClick
+    end
+    object ButtonHold: TButton
+      Left = 91
+      Top = 73
+      Width = 75
+      Height = 25
+      Caption = 'Hold'
+      Enabled = False
+      TabOrder = 5
+      OnClick = ButtonHoldClick
+    end
+    object CheckBoxAccept: TCheckBox
+      Left = 160
+      Top = 18
+      Width = 97
+      Height = 17
+      Caption = 'Accept'
+      Checked = True
+      State = cbChecked
+      TabOrder = 6
+    end
+    object ButtonTimers: TButton
+      Left = 252
+      Top = 73
+      Width = 75
+      Height = 25
+      Caption = 'Stop timers'
+      Enabled = False
+      TabOrder = 7
+      OnClick = ButtonTimersClick
+    end
+    object ComboBoxPhones: TComboBox
+      Left = 57
+      Top = 15
+      Width = 97
+      Height = 21
+      ItemHeight = 0
+      TabOrder = 8
+    end
+    object CheckBoxTimers: TCheckBox
+      Left = 216
+      Top = 18
+      Width = 49
+      Height = 17
+      Caption = 'Timers'
+      TabOrder = 9
+      OnClick = CheckBoxTimersClick
+    end
+    object ComboBoxAnswer: TComboBox
+      Left = 252
+      Top = 44
+      Width = 75
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      ItemIndex = 0
+      TabOrder = 10
+      Text = 'Voice'
+      Items.Strings = (
+        'Voice'
+        'Music'
+        'Dtmf')
+    end
+  end
+  object GroupBoxLog: TGroupBox
+    Left = 8
+    Top = 164
+    Width = 853
+    Height = 450
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Caption = '                '
+    TabOrder = 2
+    object MemoLog: TMemo
+      AlignWithMargins = True
+      Left = 7
+      Top = 15
+      Width = 839
+      Height = 428
+      Margins.Left = 5
+      Margins.Top = 0
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Align = alClient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Fixedsys'
+      Font.Style = []
+      ParentFont = False
+      ScrollBars = ssBoth
+      TabOrder = 0
+      WordWrap = False
+    end
+    object CheckBoxLog: TCheckBox
+      Left = 12
+      Top = -1
+      Width = 42
+      Height = 16
+      Caption = 'Log'
+      Checked = True
+      State = cbChecked
+      TabOrder = 1
+    end
+  end
+  object ButtonGroupLines: TButtonGroup
+    Left = 678
+    Top = 10
+    Width = 183
+    Height = 148
+    Anchors = [akLeft, akTop, akRight]
+    BorderWidth = 2
+    ButtonOptions = [gboFullSize, gboGroupStyle, gboShowCaptions]
+    Items = <>
+    TabOrder = 3
+    OnButtonClicked = ButtonGroupLinesButtonClicked
+  end
+  object EditDtmf: TEdit
+    Left = 572
+    Top = 139
+    Width = 62
+    Height = 21
+    TabOrder = 4
+  end
+  object EditCount: TEdit
+    Left = 377
+    Top = 114
+    Width = 33
+    Height = 21
+    ReadOnly = True
+    TabOrder = 5
+    Text = '1'
+  end
+  object UpDownCount: TUpDown
+    Left = 410
+    Top = 114
+    Width = 17
+    Height = 21
+    Associate = EditCount
+    Min = 1
+    Position = 1
+    TabOrder = 6
+    Thousands = False
+  end
+  object EditLifeTime: TEdit
+    Left = 617
+    Top = 114
+    Width = 38
+    Height = 21
+    ReadOnly = True
+    TabOrder = 7
+    Text = '10'
+  end
+  object UpDownLifetime: TUpDown
+    Left = 655
+    Top = 114
+    Width = 17
+    Height = 21
+    Associate = EditLifeTime
+    Min = 1
+    Max = 1000
+    Position = 10
+    TabOrder = 8
+    Thousands = False
+  end
+  object EditOffset: TEdit
+    Left = 484
+    Top = 114
+    Width = 37
+    Height = 21
+    ReadOnly = True
+    TabOrder = 9
+    Text = '1000'
+  end
+  object UpDownOffset: TUpDown
+    Left = 521
+    Top = 114
+    Width = 17
+    Height = 21
+    Associate = EditOffset
+    Min = 10
+    Max = 20000
+    Increment = 100
+    Position = 1000
+    TabOrder = 10
+    Thousands = False
+  end
+  object CheckBoxDtmf: TCheckBox
+    Left = 520
+    Top = 141
+    Width = 46
+    Height = 17
+    Caption = 'Dtmf:'
+    Checked = True
+    State = cbChecked
+    TabOrder = 11
+  end
+  object EditBuffer: TEdit
+    Left = 377
+    Top = 139
+    Width = 33
+    Height = 21
+    Hint = 'Buffer in milliseconds'
+    ParentShowHint = False
+    ReadOnly = True
+    ShowHint = True
+    TabOrder = 12
+    Text = '50'
+  end
+  object UpDownBuffer: TUpDown
+    Left = 410
+    Top = 139
+    Width = 16
+    Height = 21
+    Associate = EditBuffer
+    Min = 50
+    Max = 900
+    Increment = 10
+    Position = 50
+    TabOrder = 13
+    Thousands = False
+  end
+  object EditBufferCount: TEdit
+    Left = 475
+    Top = 139
+    Width = 20
+    Height = 21
+    Hint = 'Buffer count'
+    ParentShowHint = False
+    ReadOnly = True
+    ShowHint = True
+    TabOrder = 14
+    Text = '2'
+  end
+  object UpDownBufferCount: TUpDown
+    Left = 495
+    Top = 139
+    Width = 16
+    Height = 21
+    Associate = EditBufferCount
+    Min = 1
+    Max = 99
+    Position = 2
+    TabOrder = 15
+    Thousands = False
+  end
+  object Button1: TButton
+    Left = 688
+    Top = 151
+    Width = 75
+    Height = 25
+    Caption = 'Start'
+    TabOrder = 16
+    Visible = False
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 769
+    Top = 151
+    Width = 75
+    Height = 25
+    Caption = 'Button2'
+    TabOrder = 17
+    Visible = False
+    OnClick = Button2Click
+  end
+  object ButtonSendDtmf: TButton
+    Left = 634
+    Top = 139
+    Width = 38
+    Height = 21
+    Caption = 'Send'
+    TabOrder = 18
+    OnClick = ButtonSendDtmfClick
+  end
+  object TimerExpires: TTimer
+    Enabled = False
+    OnTimer = TimerExpiresTimer
+    Left = 352
+    Top = 296
+  end
+  object TimerCounter: TTimer
+    Enabled = False
+    OnTimer = TimerCounterTimer
+    Left = 280
+    Top = 296
+  end
+  object TimerHangup: TTimer
+    Enabled = False
+    OnTimer = TimerHangupTimer
+    Left = 520
+    Top = 296
+  end
+  object TimerDial: TTimer
+    Enabled = False
+    OnTimer = TimerDialTimer
+    Left = 616
+    Top = 296
+  end
+  object TimerUpdateItems: TTimer
+    Enabled = False
+    Interval = 50
+    OnTimer = TimerUpdateItemsTimer
+    Left = 432
+    Top = 296
+  end
+end

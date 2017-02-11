@@ -1,0 +1,116 @@
+inherited BisLotoTiragePrizeEditForm: TBisLotoTiragePrizeEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisLotoTiragePrizeEditForm'
+  ClientHeight = 134
+  ClientWidth = 334
+  ExplicitWidth = 342
+  ExplicitHeight = 168
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 96
+    Width = 334
+    ExplicitTop = 96
+    ExplicitWidth = 334
+    inherited ButtonOk: TButton
+      Left = 155
+      ExplicitLeft = 155
+    end
+    inherited ButtonCancel: TButton
+      Left = 251
+      ExplicitLeft = 251
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 334
+    Height = 96
+    ExplicitWidth = 334
+    ExplicitHeight = 96
+    object LabelName: TLabel
+      Left = 14
+      Top = 40
+      Width = 79
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077':'
+      FocusControl = EditName
+    end
+    object LabelPriority: TLabel
+      Left = 219
+      Top = 67
+      Width = 47
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1055#1086#1088#1103#1076#1086#1082':'
+      FocusControl = EditPriority
+    end
+    object LabelRoundNum: TLabel
+      Left = 72
+      Top = 13
+      Width = 21
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1058#1091#1088':'
+      FocusControl = ComboBoxRoundNum
+    end
+    object LabelCost: TLabel
+      Left = 35
+      Top = 67
+      Width = 58
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1057#1090#1086#1080#1084#1086#1089#1090#1100':'
+      FocusControl = EditCost
+    end
+    object EditName: TEdit
+      Left = 99
+      Top = 37
+      Width = 220
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 1
+    end
+    object EditPriority: TEdit
+      Left = 272
+      Top = 64
+      Width = 47
+      Height = 21
+      Hint = #1055#1086#1088#1103#1076#1086#1082' '#1088#1086#1079#1099#1075#1088#1099#1096#1072
+      Anchors = [akTop, akRight]
+      MaxLength = 100
+      TabOrder = 3
+    end
+    object EditCost: TEdit
+      Left = 99
+      Top = 64
+      Width = 102
+      Height = 21
+      Anchors = [akTop, akRight]
+      Constraints.MaxWidth = 300
+      TabOrder = 2
+    end
+    object ComboBoxRoundNum: TComboBox
+      Left = 99
+      Top = 10
+      Width = 62
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      ItemIndex = 2
+      TabOrder = 0
+      Text = '3'
+      Items.Strings = (
+        '1'
+        '2'
+        '3'
+        '4')
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 200
+    Top = 8
+  end
+end

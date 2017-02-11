@@ -1,0 +1,94 @@
+unit BisCallcHbookInterfacesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, DB,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList, DBCtrls,
+  BisFieldNames, BisControls;
+
+type
+  TBiCallcHbookInterfacesForm = class(TBisDataGridForm)
+    PanelControls: TPanel;
+    GroupBoxControls: TGroupBox;
+    PanelDescription: TPanel;
+    DBMemoDescription: TDBMemo;
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookInterfacesFormIface=class(TBisDataGridFormIface)
+  private
+    function GetInterfaceTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BiCallcHbookInterfacesForm: TBiCallcHbookInterfacesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHbookInterfaceEditFm;
+
+{ TBisCallcHbookInterfacesFormIface }
+
+constructor TBisCallcHbookInterfacesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBiCallcHbookInterfacesForm;
+  InsertClass:=TBisCallcHbookInterfaceInsertFormIface;
+  UpdateClass:=TBisCallcHbookInterfaceUpdateFormIface;
+  DeleteClass:=TBisCallcHbookInterfaceDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_INTERFACES';
+  with FieldNames do begin
+    AddKey('INTERFACE_ID');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('INTERNAL');
+    AddInvisible('INTERFACE_TYPE');
+    AddInvisible('MODULE_NAME');
+    AddInvisible('MODULE_INTERFACE');
+    Add('NAME','Наименование',250);
+    AddCalculate('INTERFACE_TYPE_NAME','Тип интерфейса',GetInterfaceTypeName,ftString,100,100);
+  end;
+  Orders.Add('INTERFACE_TYPE');
+  Orders.Add('NAME');
+end;
+
+function TBisCallcHbookInterfacesFormIface.GetInterfaceTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S: String;
+begin
+  Result:=Null;
+  S:=GetInterfaceTypeByIndex(DataSet.FieldByName('INTERFACE_TYPE').AsInteger);
+  if Trim(S)<>'' then
+    Result:=S;
+end;
+
+{ TBiCallcHbookInterfacesForm }
+
+constructor TBiCallcHbookInterfacesForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  ComboBoxType.Clear;
+  PData:=nil;
+  PInfo:=TypeInfo(TBisInterfaceType);
+  if Assigned(PInfo) then
+    PData:=GetTypeData(PInfo);
+  if Assigned(PData) then
+    for i:=PData.MinValue to PData.MaxValue do begin
+      ComboBoxType.Items.Add(GetInterfaceTypeByIndex(i));
+    end;
+  
+  if Assigned(DataFrame) then begin
+    DBMemoDescription.DataSource:=DataFrame.DataSource;
+  end;
+end;
+
+end.

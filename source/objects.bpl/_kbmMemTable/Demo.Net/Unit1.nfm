@@ -1,0 +1,1388 @@
+object Form1: TForm1
+  Caption = 
+    'kbmMemTable demo. Created by Components4Developers (www.componen' +
+    'ts4developers.com)'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -10
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  Height = 592
+  Width = 770
+  Left = 187
+  Top = 98
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+    Left = 235
+    Top = 0
+    Width = 527
+    Height = 534
+    object DBGrid1: TDBGrid
+      Align = alClient
+      DataSource = DataSource1
+      Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -10
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Left = 0
+      Top = 0
+      Width = 527
+      Height = 383
+    end
+    object DBNavigator1: TDBNavigator
+      DataSource = DataSource1
+      Align = alBottom
+      TabOrder = 1
+      Left = 0
+      Top = 512
+      Width = 527
+      Height = 22
+    end
+    object Panel2: TPanel
+      Align = alBottom
+      BevelOuter = bvNone
+      TabOrder = 2
+      Left = 0
+      Top = 383
+      Width = 527
+      Height = 129
+      object DBImage1: TDBImage
+        Align = alLeft
+        DataSource = DataSource1
+        QuickDraw = False
+        Stretch = True
+        TabOrder = 0
+        Left = 0
+        Top = 0
+        Width = 138
+        Height = 129
+      end
+      object DBMemo1: TDBMemo
+        Align = alClient
+        TabOrder = 1
+        Left = 138
+        Top = 0
+        Width = 204
+        Height = 129
+      end
+      object Panel6: TPanel
+        Align = alRight
+        BevelOuter = bvNone
+        TabOrder = 2
+        Left = 342
+        Top = 0
+        Width = 185
+        Height = 129
+        object Label34: TLabel
+          Caption = 'BytesField'
+          Left = 8
+          Top = 8
+          Width = 48
+          Height = 13
+        end
+        object DBEdit1: TDBEdit
+          TabOrder = 0
+          Left = 8
+          Top = 24
+          Width = 121
+          Height = 21
+        end
+        object Button22: TButton
+          Caption = 'Clear Memo'
+          TabOrder = 1
+          Left = 8
+          Top = 56
+          Width = 75
+          Height = 25
+          OnClick = Button22Click
+        end
+      end
+    end
+  end
+  object PageControl1: TPageControl
+    ActivePage = TabSheet2
+    Align = alLeft
+    MultiLine = True
+    TabOrder = 1
+    Left = 0
+    Top = 0
+    Width = 235
+    Height = 534
+    object TabSheet1: TTabSheet
+      Caption = 'Basic functionality'
+      object Label6: TLabel
+        AutoSize = False
+        Caption = 'Define some fields programatically'
+        WordWrap = True
+        Left = 7
+        Top = 7
+        Width = 117
+        Height = 26
+      end
+      object Label7: TLabel
+        AutoSize = False
+        Caption = 'Open the memorytable'
+        WordWrap = True
+        Left = 7
+        Top = 52
+        Width = 130
+        Height = 20
+      end
+      object Label8: TLabel
+        AutoSize = False
+        Caption = 'Close the memorytable'
+        WordWrap = True
+        Left = 7
+        Top = 85
+        Width = 137
+        Height = 26
+      end
+      object Label9: TLabel
+        AutoSize = False
+        Caption = 'Generate sample data'
+        WordWrap = True
+        Left = 7
+        Top = 229
+        Width = 124
+        Height = 20
+      end
+      object Label25: TLabel
+        AutoSize = False
+        Caption = 'Number of records in sample data'
+        WordWrap = True
+        Left = 8
+        Top = 112
+        Width = 129
+        Height = 33
+      end
+      object Label26: TLabel
+        Caption = 'Recordnumber'
+        Left = 8
+        Top = 432
+        Width = 70
+        Height = 13
+      end
+      object lRecNo: TLabel
+        Caption = '-'
+        Left = 112
+        Top = 432
+        Width = 3
+        Height = 13
+      end
+      object Label35: TLabel
+        Caption = 'Old VALUE'
+        Left = 8
+        Top = 408
+        Width = 54
+        Height = 13
+      end
+      object lOldValue: TLabel
+        Caption = '.'
+        Left = 112
+        Top = 408
+        Width = 3
+        Height = 13
+      end
+      object Button6: TButton
+        Caption = 'Def. Fields'
+        TabOrder = 0
+        Left = 156
+        Top = 7
+        Width = 61
+        Height = 20
+        OnClick = Button6Click
+      end
+      object Button7: TButton
+        Caption = 'Open'
+        TabOrder = 1
+        Left = 156
+        Top = 52
+        Width = 61
+        Height = 20
+        OnClick = Button7Click
+      end
+      object Button8: TButton
+        Caption = 'Close'
+        TabOrder = 2
+        Left = 156
+        Top = 85
+        Width = 61
+        Height = 20
+        OnClick = Button8Click
+      end
+      object Button1: TButton
+        Caption = 'Generate'
+        TabOrder = 3
+        Left = 156
+        Top = 221
+        Width = 61
+        Height = 20
+        OnClick = Button1Click
+      end
+      object eRecordCount: TEdit
+        TabOrder = 4
+        Text = '100'
+        Left = 156
+        Top = 112
+        Width = 61
+        Height = 21
+      end
+      object chbEnableIndexes: TCheckBox
+        Caption = 'Update indexes'
+        Checked = True
+        State = cbChecked
+        TabOrder = 5
+        Left = 8
+        Top = 152
+        Width = 137
+        Height = 17
+        OnClick = chbEnableIndexesClick
+      end
+      object chbRandomColor: TCheckBox
+        Caption = 'Random COLOR data'
+        Checked = True
+        State = cbChecked
+        TabOrder = 6
+        Left = 8
+        Top = 176
+        Width = 97
+        Height = 17
+      end
+      object chbGenerateMemos: TCheckBox
+        Caption = 'Generate memos'
+        Checked = True
+        State = cbChecked
+        TabOrder = 7
+        Left = 8
+        Top = 200
+        Width = 129
+        Height = 17
+      end
+      object Button13: TButton
+        Caption = 'AppendRecord'
+        TabOrder = 8
+        Left = 128
+        Top = 253
+        Width = 89
+        Height = 20
+        OnClick = Button13Click
+      end
+      object Button10: TButton
+        Caption = 'Goto 10'
+        TabOrder = 9
+        Left = 144
+        Top = 296
+        Width = 75
+        Height = 17
+        OnClick = Button10Click
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Load/Save'
+      object Label19: TLabel
+        AutoSize = False
+        Caption = 
+          'Check this, press the save above, after always with this checked' +
+          ' press Load'
+        WordWrap = True
+        Left = 13
+        Top = 259
+        Width = 210
+        Height = 30
+      end
+      object lblLZH: TLabel
+        Caption = ' '
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Left = 12
+        Top = 294
+        Width = 5
+        Height = 13
+      end
+      object PageControl2: TPageControl
+        ActivePage = TabSheet5
+        Align = alClient
+        TabOrder = 0
+        TabPosition = tpBottom
+        Left = 0
+        Top = 72
+        Width = 227
+        Height = 380
+        object TabSheet5: TTabSheet
+          Caption = 'Copy, Save, Load'
+          object Label1: TLabel
+            AutoSize = False
+            Caption = 'Copy structur and data from another datasource.'
+            WordWrap = True
+            Left = 7
+            Top = 92
+            Width = 137
+            Height = 26
+          end
+          object Label2: TLabel
+            AutoSize = False
+            Caption = 'Save contents in a file, incl. blobs'
+            WordWrap = True
+            Left = 7
+            Top = 229
+            Width = 137
+            Height = 26
+          end
+          object Label3: TLabel
+            AutoSize = False
+            Caption = 'Load data from a file'
+            WordWrap = True
+            Left = 7
+            Top = 268
+            Width = 137
+            Height = 26
+          end
+          object Label20: TLabel
+            AutoSize = False
+            Caption = 
+              'Check Blob InMemory Compression before loading the table and the' +
+              ' Blob fIelds will be transparently de/compressed using less memo' +
+              'ry'
+            WordWrap = True
+            Left = 6
+            Top = 21
+            Width = 209
+            Height = 61
+          end
+          object Button9: TButton
+            Caption = 'Copy'
+            TabOrder = 0
+            Left = 156
+            Top = 92
+            Width = 61
+            Height = 19
+            OnClick = Button9Click
+          end
+          object Button2: TButton
+            Caption = 'Save'
+            TabOrder = 1
+            Left = 156
+            Top = 229
+            Width = 61
+            Height = 19
+            OnClick = Button2Click
+          end
+          object Button3: TButton
+            Caption = 'Load'
+            TabOrder = 2
+            Left = 156
+            Top = 268
+            Width = 61
+            Height = 19
+            OnClick = Button3Click
+          end
+          object BlobCompression: TCheckBox
+            Caption = 'Blob InMemory Compression'
+            TabOrder = 3
+            Left = 6
+            Top = -1
+            Width = 204
+            Height = 17
+          end
+          object BinarySave: TCheckBox
+            Caption = 'Save/Load as binary'
+            TabOrder = 4
+            Left = 7
+            Top = 130
+            Width = 143
+            Height = 14
+            OnClick = BinarySaveClick
+          end
+          object chbSaveIndexDef: TCheckBox
+            Caption = 'Save index definitions too'
+            TabOrder = 5
+            Left = 8
+            Top = 152
+            Width = 201
+            Height = 17
+          end
+          object chbSaveDeltas: TCheckBox
+            Caption = 'Save deltas too (only if binary checked)'
+            Enabled = False
+            TabOrder = 6
+            Left = 8
+            Top = 176
+            Width = 209
+            Height = 17
+          end
+          object chbNoQuotes: TCheckBox
+            Caption = 'No quotes'
+            TabOrder = 7
+            Left = 8
+            Top = 200
+            Width = 97
+            Height = 17
+          end
+        end
+        object TabSheet6: TTabSheet
+          Caption = 'CommaText'
+          object Label4: TLabel
+            AutoSize = False
+            Caption = 
+              'Save contents in CSV format in the memo. Note that Blobs doesnt ' +
+              'get saved.'
+            WordWrap = True
+            Left = 7
+            Top = 7
+            Width = 111
+            Height = 59
+          end
+          object Label5: TLabel
+            AutoSize = False
+            Caption = 'Load contents from CSV formatted memo.'
+            WordWrap = True
+            Left = 7
+            Top = 79
+            Width = 111
+            Height = 32
+          end
+          object Button4: TButton
+            Caption = 'Get CommaText'
+            TabOrder = 0
+            Left = 124
+            Top = 27
+            Width = 91
+            Height = 19
+            OnClick = Button4Click
+          end
+          object Button5: TButton
+            Caption = 'Set CommaText'
+            TabOrder = 1
+            Left = 124
+            Top = 85
+            Width = 91
+            Height = 20
+            OnClick = Button5Click
+          end
+          object Memo1: TMemo
+            Align = alBottom
+            TabOrder = 2
+            Left = 0
+            Top = 222
+            Width = 219
+            Height = 132
+          end
+        end
+      end
+      object Panel4: TPanel
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 1
+        Left = 0
+        Top = 0
+        Width = 227
+        Height = 72
+        object Label21: TLabel
+          AutoSize = False
+          Caption = 
+            'Remember to check this before loading from a compressed file or ' +
+            'before saving to a file with compression.'
+          WordWrap = True
+          Left = 7
+          Top = 23
+          Width = 215
+          Height = 43
+        end
+        object LZHCompressed: TCheckBox
+          Caption = '(De)Compress CSV file/CommaText'
+          TabOrder = 0
+          Left = 6
+          Top = 3
+          Width = 204
+          Height = 17
+        end
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Sorting/Searching'
+      OnEnter = TabSheet3Enter
+      object Label10: TLabel
+        AutoSize = False
+        Caption = 'Sort the table on'
+        WordWrap = True
+        Left = 7
+        Top = 1
+        Width = 124
+        Height = 13
+      end
+      object Label12: TLabel
+        AutoSize = False
+        Caption = 'What to search for'
+        WordWrap = True
+        Left = 7
+        Top = 100
+        Width = 137
+        Height = 20
+      end
+      object Label13: TLabel
+        AutoSize = False
+        Caption = 'Locate for PERIOD'
+        WordWrap = True
+        Left = 7
+        Top = 126
+        Width = 91
+        Height = 26
+      end
+      object Label14: TLabel
+        AutoSize = False
+        Caption = 'Locate for VALUE. If sorted will do binary locate.'
+        WordWrap = True
+        Left = 7
+        Top = 163
+        Width = 91
+        Height = 40
+      end
+      object Label15: TLabel
+        AutoSize = False
+        Caption = 'Locate for CALC'
+        WordWrap = True
+        Left = 7
+        Top = 214
+        Width = 91
+        Height = 26
+      end
+      object Label16: TLabel
+        AutoSize = False
+        Caption = 'Lookup for PERIOD'
+        WordWrap = True
+        Left = 7
+        Top = 307
+        Width = 91
+        Height = 27
+      end
+      object Label17: TLabel
+        AutoSize = False
+        Caption = 'What has been looked up'
+        WordWrap = True
+        Left = 7
+        Top = 340
+        Width = 137
+        Height = 20
+      end
+      object Label24: TLabel
+        Caption = 'FindNearest VALUE'
+        Left = 8
+        Top = 248
+        Width = 95
+        Height = 13
+      end
+      object Label47: TLabel
+        Caption = 'FindKey VALUE'
+        Left = 8
+        Top = 280
+        Width = 76
+        Height = 13
+      end
+      object Button11: TButton
+        Caption = 'Sort'
+        TabOrder = 0
+        Left = 152
+        Top = 15
+        Width = 61
+        Height = 20
+        OnClick = Button11Click
+      end
+      object btnLocatePeriod: TButton
+        Caption = 'Locate Period'
+        TabOrder = 5
+        Left = 111
+        Top = 125
+        Width = 102
+        Height = 21
+        OnClick = btnLocatePeriodClick
+      end
+      object eSearch: TEdit
+        TabOrder = 4
+        Left = 156
+        Top = 100
+        Width = 57
+        Height = 21
+      end
+      object btnLocateValue: TButton
+        Caption = 'Locate Value'
+        TabOrder = 6
+        Left = 111
+        Top = 169
+        Width = 102
+        Height = 22
+        OnClick = btnLocateValueClick
+      end
+      object chbCaseInsensitive: TCheckBox
+        Caption = 'CaseInsensitive'
+        TabOrder = 2
+        Left = 7
+        Top = 54
+        Width = 162
+        Height = 17
+      end
+      object chbPartialKey: TCheckBox
+        Caption = 'PartialKey'
+        Checked = True
+        State = cbChecked
+        TabOrder = 3
+        Left = 7
+        Top = 74
+        Width = 97
+        Height = 17
+      end
+      object btnLookupCalc: TButton
+        Caption = 'Period->Calc'
+        TabOrder = 8
+        Left = 111
+        Top = 305
+        Width = 102
+        Height = 22
+        OnClick = btnLookupCalcClick
+      end
+      object btnLocateCalc: TButton
+        Caption = 'Locate CALC'
+        TabOrder = 7
+        Left = 111
+        Top = 206
+        Width = 102
+        Height = 21
+        OnClick = btnLocateCalcClick
+      end
+      object eResult: TEdit
+        TabOrder = 9
+        Left = 156
+        Top = 333
+        Width = 57
+        Height = 21
+      end
+      object chbDescending: TCheckBox
+        Caption = 'Descending'
+        TabOrder = 1
+        Left = 7
+        Top = 39
+        Width = 78
+        Height = 14
+      end
+      object cbSortField: TComboBox
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 10
+        Left = 7
+        Top = 13
+        Width = 91
+        Height = 21
+      end
+      object btnFindNearest: TButton
+        Caption = 'FindNearest'
+        TabOrder = 11
+        Left = 111
+        Top = 240
+        Width = 102
+        Height = 21
+        OnClick = btnFindNearestClick
+      end
+      object Button23: TButton
+        Caption = 'FindKey'
+        TabOrder = 12
+        Left = 111
+        Top = 272
+        Width = 102
+        Height = 21
+        OnClick = Button23Click
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'Master/Detail'
+      object DBGrid2: TDBGrid
+        Align = alClient
+        DataSource = dsMaster
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -10
+        TitleFont.Name = 'MS Sans Serif'
+        TitleFont.Style = []
+        Left = 0
+        Top = 144
+        Width = 227
+        Height = 264
+      end
+      object Panel3: TPanel
+        Align = alTop
+        BevelOuter = bvLowered
+        TabOrder = 1
+        Left = 0
+        Top = 0
+        Width = 227
+        Height = 144
+        object Label18: TLabel
+          AutoSize = False
+          Caption = 
+            'This shows masterdetail relations, by using a TTable as master, ' +
+            'and copying the contents of another TTable into the memory table' +
+            ' and then specifying mastersource/fields and indexfields on the ' +
+            'memory table.'
+          WordWrap = True
+          Left = 7
+          Top = 7
+          Width = 215
+          Height = 91
+        end
+        object Button12: TButton
+          Caption = 'Open Master/Detail'
+          TabOrder = 0
+          Left = 39
+          Top = 111
+          Width = 150
+          Height = 20
+          OnClick = Button12Click
+        end
+      end
+      object Panel5: TPanel
+        Align = alBottom
+        BevelOuter = bvLowered
+        TabOrder = 2
+        Left = 0
+        Top = 433
+        Width = 227
+        Height = 19
+        object Label27: TLabel
+          Caption = 'Rec.no'
+          Left = 8
+          Top = 4
+          Width = 35
+          Height = 13
+        end
+        object lMasterRecNo: TLabel
+          Caption = '-'
+          Left = 88
+          Top = 4
+          Width = 3
+          Height = 13
+        end
+      end
+      object DBNavigator2: TDBNavigator
+        DataSource = dsMaster
+        Align = alBottom
+        TabOrder = 3
+        Left = 0
+        Top = 408
+        Width = 227
+        Height = 25
+      end
+    end
+    object TabSheet7: TTabSheet
+      Caption = 'Bookmarks'
+      ImageIndex = 4
+      object Label11: TLabel
+        AutoSize = False
+        Caption = 
+          'Gets a bookmark which can be used to reposition to the same plac' +
+          'e later'
+        WordWrap = True
+        Left = 104
+        Top = 0
+        Width = 121
+        Height = 57
+      end
+      object Label29: TLabel
+        AutoSize = False
+        Caption = 'Goto the bookmark retrieved by Get Bookmark'
+        WordWrap = True
+        Left = 104
+        Top = 56
+        Width = 121
+        Height = 65
+      end
+      object btnGetBookmark: TButton
+        Caption = 'Get bookmark'
+        TabOrder = 0
+        Left = 8
+        Top = 8
+        Width = 89
+        Height = 25
+        OnClick = btnGetBookmarkClick
+      end
+      object btnGotoBookmark: TButton
+        Caption = 'Goto bookmark'
+        TabOrder = 1
+        Left = 8
+        Top = 56
+        Width = 89
+        Height = 25
+        OnClick = btnGotoBookmarkClick
+      end
+    end
+    object TabSheet8: TTabSheet
+      Caption = 'Indexes'
+      ImageIndex = 5
+      OnEnter = TabSheet8Enter
+      object Label30: TLabel
+        AutoSize = False
+        Caption = 'Rebuild all defined indexes.'
+        WordWrap = True
+        Left = 104
+        Top = 16
+        Width = 113
+        Height = 25
+      end
+      object Label31: TLabel
+        AutoSize = False
+        Caption = 'Specify index to use.'
+        WordWrap = True
+        Left = 8
+        Top = 56
+        Width = 121
+        Height = 17
+      end
+      object Label32: TLabel
+        AutoSize = False
+        Caption = 'Add COLOR index.'
+        WordWrap = True
+        Left = 120
+        Top = 160
+        Width = 105
+        Height = 17
+      end
+      object Label33: TLabel
+        AutoSize = False
+        Caption = 'Delete COLOR index.'
+        WordWrap = True
+        Left = 120
+        Top = 224
+        Width = 105
+        Height = 17
+      end
+      object Label48: TLabel
+        AutoSize = False
+        Caption = 'Add index Period<70'
+        WordWrap = True
+        Left = 120
+        Top = 192
+        Width = 105
+        Height = 17
+      end
+      object btnRebuildIdx: TButton
+        Caption = 'Rebuild'
+        TabOrder = 0
+        Left = 8
+        Top = 16
+        Width = 75
+        Height = 25
+        OnClick = btnRebuildIdxClick
+      end
+      object cbIndexes: TComboBox
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 1
+        Left = 8
+        Top = 72
+        Width = 201
+        Height = 21
+        OnChange = cbIndexesChange
+      end
+      object btnAddIndex: TButton
+        Caption = 'Add Index'
+        TabOrder = 2
+        Left = 8
+        Top = 152
+        Width = 75
+        Height = 25
+        OnClick = btnAddIndexClick
+      end
+      object btnDeleteIndex: TButton
+        Caption = 'Delete Index'
+        TabOrder = 3
+        Left = 8
+        Top = 216
+        Width = 75
+        Height = 25
+        OnClick = btnDeleteIndexClick
+      end
+      object chbColorUnique: TCheckBox
+        Caption = 'Unique index'
+        Checked = True
+        State = cbChecked
+        TabOrder = 4
+        Left = 8
+        Top = 104
+        Width = 97
+        Height = 17
+      end
+      object chbColorDescending: TCheckBox
+        Caption = 'Descending'
+        Checked = True
+        State = cbChecked
+        TabOrder = 5
+        Left = 8
+        Top = 128
+        Width = 97
+        Height = 17
+      end
+      object Button24: TButton
+        Caption = 'Add filtered Index'
+        TabOrder = 6
+        Left = 8
+        Top = 184
+        Width = 97
+        Height = 25
+        OnClick = Button24Click
+      end
+    end
+    object TabSheet10: TTabSheet
+      Caption = 'Versioning'
+      ImageIndex = 7
+      object Label36: TLabel
+        AutoSize = False
+        Caption = 
+          'Define the base for versioning. Only changes from this checkpoin' +
+          't will be versioned.'
+        WordWrap = True
+        Left = 96
+        Top = 16
+        Width = 121
+        Height = 57
+      end
+      object Label37: TLabel
+        AutoSize = False
+        Caption = 'Save versioning delta to the file '#39'c:\deltas.dat'#39'.'
+        WordWrap = True
+        Left = 96
+        Top = 144
+        Width = 129
+        Height = 41
+      end
+      object Label38: TLabel
+        AutoSize = False
+        Caption = 
+          'If checked keep all versions of a record, otherwise keep only ne' +
+          'west and original.'
+        WordWrap = True
+        Left = 96
+        Top = 192
+        Width = 129
+        Height = 65
+      end
+      object Label39: TLabel
+        AutoSize = False
+        Caption = 'Using the TDemoDeltaHandler resolves all changes.'
+        WordWrap = True
+        Left = 96
+        Top = 80
+        Width = 121
+        Height = 57
+      end
+      object Button14: TButton
+        Caption = 'Checkpoint'
+        TabOrder = 0
+        Left = 8
+        Top = 16
+        Width = 75
+        Height = 25
+        OnClick = Button14Click
+      end
+      object chbVersionAll: TCheckBox
+        TabOrder = 1
+        Left = 8
+        Top = 200
+        Width = 73
+        Height = 17
+        OnClick = chbVersionAllClick
+      end
+      object Button15: TButton
+        Caption = 'Save'
+        TabOrder = 2
+        Left = 8
+        Top = 144
+        Width = 75
+        Height = 25
+        OnClick = Button15Click
+      end
+      object Button16: TButton
+        Caption = 'Resolve'
+        TabOrder = 3
+        Left = 8
+        Top = 80
+        Width = 75
+        Height = 25
+        OnClick = Button16Click
+      end
+    end
+    object TabSheet11: TTabSheet
+      Caption = 'Snapshots'
+      ImageIndex = 8
+      object Label40: TLabel
+        AutoSize = False
+        Caption = 'Get a snapshot into a variant variable.'
+        WordWrap = True
+        Left = 128
+        Top = 16
+        Width = 97
+        Height = 49
+      end
+      object Label41: TLabel
+        AutoSize = False
+        Caption = 'Set the table contents from a snapshot.'
+        WordWrap = True
+        Left = 128
+        Top = 72
+        Width = 97
+        Height = 49
+      end
+      object Button17: TButton
+        Caption = 'Save to snapshot'
+        TabOrder = 0
+        Left = 8
+        Top = 16
+        Width = 113
+        Height = 25
+        OnClick = Button17Click
+      end
+      object Button18: TButton
+        Caption = 'Load from snapshot'
+        TabOrder = 1
+        Left = 8
+        Top = 72
+        Width = 113
+        Height = 25
+        OnClick = Button18Click
+      end
+    end
+    object TabSheet12: TTabSheet
+      Caption = 'Transactions'
+      ImageIndex = 9
+      object Label42: TLabel
+        Caption = 'Transaction level'
+        Left = 8
+        Top = 416
+        Width = 81
+        Height = 13
+      end
+      object lTransactionLevel: TLabel
+        Caption = 'N/A'
+        Left = 128
+        Top = 416
+        Width = 20
+        Height = 13
+      end
+      object Label43: TLabel
+        AutoSize = False
+        Caption = 
+          'Starts a new transaction (several transactions can be active at ' +
+          'the same time but remember to commit or rollback as many times a' +
+          's you have started a transaction.'
+        WordWrap = True
+        Left = 120
+        Top = 8
+        Width = 105
+        Height = 153
+      end
+      object Label44: TLabel
+        AutoSize = False
+        Caption = 'Keep the changes made since last start transaction.'
+        WordWrap = True
+        Left = 122
+        Top = 168
+        Width = 105
+        Height = 65
+      end
+      object Label45: TLabel
+        AutoSize = False
+        Caption = 'Discard all changes made since start transaction.'
+        WordWrap = True
+        Left = 122
+        Top = 240
+        Width = 105
+        Height = 57
+      end
+      object Button19: TButton
+        Caption = 'Start transaction'
+        TabOrder = 0
+        Left = 8
+        Top = 8
+        Width = 97
+        Height = 25
+        OnClick = Button19Click
+      end
+      object Button20: TButton
+        Caption = 'Commit'
+        TabOrder = 1
+        Left = 8
+        Top = 168
+        Width = 75
+        Height = 25
+        OnClick = Button20Click
+      end
+      object Button21: TButton
+        Caption = 'Rollback'
+        TabOrder = 2
+        Left = 8
+        Top = 240
+        Width = 75
+        Height = 25
+        OnClick = Button21Click
+      end
+    end
+    object TabSheet13: TTabSheet
+      Caption = 'Filtering/Ranges'
+      ImageIndex = 10
+      object Label28: TLabel
+        Caption = 'Filter'
+        Left = 8
+        Top = 8
+        Width = 22
+        Height = 13
+      end
+      object Label22: TLabel
+        AutoSize = False
+        Caption = 'Set range where 50<Period<70'
+        WordWrap = True
+        Left = 8
+        Top = 72
+        Width = 97
+        Height = 33
+      end
+      object Label23: TLabel
+        Caption = 'Cancel range'
+        Left = 8
+        Top = 112
+        Width = 63
+        Height = 13
+      end
+      object eFilter: TEdit
+        TabOrder = 0
+        Text = 'PERIOD>10'
+        Left = 52
+        Top = 8
+        Width = 161
+        Height = 21
+      end
+      object TableFilteredCheckBox: TCheckBox
+        Caption = 'Use Filter'
+        TabOrder = 1
+        Visible = False
+        Left = 7
+        Top = 35
+        Width = 82
+        Height = 17
+        OnClick = TableFilteredCheckBoxClick
+      end
+      object btnSetFilter: TButton
+        Caption = 'Set filter'
+        TabOrder = 2
+        Left = 116
+        Top = 32
+        Width = 97
+        Height = 21
+        OnClick = btnSetFilterClick
+      end
+      object btnSetRange: TButton
+        Caption = 'Set range'
+        TabOrder = 3
+        Left = 136
+        Top = 72
+        Width = 75
+        Height = 22
+        OnClick = btnSetRangeClick
+      end
+      object btnCancelRange: TButton
+        Caption = 'Cancel range'
+        TabOrder = 4
+        Left = 136
+        Top = 104
+        Width = 75
+        Height = 22
+        OnClick = btnCancelRangeClick
+      end
+    end
+  end
+  object Panel7: TPanel
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 2
+    Left = 0
+    Top = 534
+    Width = 762
+    Height = 31
+    object Label46: TLabel
+      Caption = 'Progress:'
+      Left = 8
+      Top = 8
+      Width = 44
+      Height = 13
+    end
+    object lProgress: TLabel
+      Caption = 'N/A'
+      Left = 64
+      Top = 8
+      Width = 20
+      Height = 13
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = kbmMemTable1
+    Left = 296
+    Top = 352
+  end
+  object kbmMemTable1: TkbmMemTable
+    DesignActivation = True
+    AttachedAutoRefresh = True
+    AttachMaxCount = 1
+    AutoIncMinValue = -1
+    FieldDefs = <>
+    AutoReposition = True
+    IndexDefs = <>
+    SortOptions = []
+    PersistentFile = 'testfil.txt'
+    PersistentBackup = False
+    ProgressFlags = [mtpcLoad, mtpcSave, mtpcCopy]
+    LoadedCompletely = False
+    SavedCompletely = False
+    EnableVersioning = True
+    VersioningMode = mtvmAllSinceCheckPoint
+    FilterOptions = [foNoPartialCompare]
+    Version = '5.00 beta'
+    LanguageID = 0
+    SortID = 0
+    SubLanguageID = 1
+    LocaleID = 1024
+    CommaTextFormat = sfCSV
+    OnProgress = kbmMemTable1Progress
+    OnCompressBlobStream = kbmMemTable1CompressBlobStream
+    OnDecompressBlobStream = kbmMemTable1DecompressBlobStream
+    AfterEdit = kbmMemTable1AfterEdit
+    AfterPost = kbmMemTable1AfterScroll
+    AfterScroll = kbmMemTable1AfterScroll
+    OnCalcFields = MemTable1CalcFields
+    OnFilterRecord = kbmMemTable1FilterRecord
+    Left = 296
+    Top = 384
+  end
+  object Table1: TTable
+    TableName = 'BIOLIFE.DB'
+    DatabaseName = 'DBDEMOS'
+    SessionName = 'Default'
+    Left = 328
+    Top = 384
+  end
+  object tMaster: TTable
+    TableName = 'customer.db'
+    DatabaseName = 'DBDEMOS'
+    AfterScroll = tMasterAfterScroll
+    Left = 296
+    Top = 288
+  end
+  object dsMaster: TDataSource
+    DataSet = tMaster
+    Left = 328
+    Top = 288
+  end
+  object tDetailTemplate: TTable
+    TableName = 'orders.db'
+    DatabaseName = 'DBDEMOS'
+    Left = 296
+    Top = 320
+  end
+  object sfBinary: TkbmBinaryStreamFormat
+    Version = '3.00'
+    sfUsingIndex = [sfSaveUsingIndex]
+    sfData = [sfSaveData, sfLoadData]
+    sfCalculated = []
+    sfLookup = []
+    sfNonVisible = [sfSaveNonVisible, sfLoadNonVisible]
+    sfBlobs = [sfSaveBlobs, sfLoadBlobs]
+    sfDef = [sfSaveDef, sfLoadDef]
+    sfIndexDef = [sfSaveIndexDef, sfLoadIndexDef]
+    sfFiltered = [sfSaveFiltered]
+    sfIgnoreRange = [sfSaveIgnoreRange]
+    sfIgnoreMasterDetail = [sfSaveIgnoreMasterDetail]
+    sfDeltas = []
+    sfDontFilterDeltas = []
+    sfAppend = []
+    sfFieldKind = [sfSaveFieldKind]
+    sfFromStart = [sfLoadFromStart]
+    sfDataTypeHeader = [sfSaveDataTypeHeader, sfLoadDataTypeHeader]
+    BufferSize = 16384
+    OnCompress = sfBinaryCompress
+    OnDeCompress = sfBinaryDeCompress
+    Left = 299
+    Top = 415
+  end
+  object sfCSV: TkbmCSVStreamFormat
+    CSVQuote = '"'
+    CSVFieldDelimiter = ','
+    CSVRecordDelimiter = ','
+    CSVTrueString = 'True'
+    CSVFalseString = 'False'
+    sfLocalFormat = []
+    sfQuoteOnlyStrings = []
+    sfNoHeader = []
+    Version = '3.00'
+    sfData = [sfSaveData, sfLoadData]
+    sfCalculated = []
+    sfLookup = []
+    sfNonVisible = [sfSaveNonVisible, sfLoadNonVisible]
+    sfBlobs = [sfSaveBlobs, sfLoadBlobs]
+    sfDef = [sfSaveDef, sfLoadDef]
+    sfIndexDef = [sfSaveIndexDef, sfLoadIndexDef]
+    sfPlaceHolders = []
+    sfFiltered = [sfSaveFiltered]
+    sfIgnoreRange = [sfSaveIgnoreRange]
+    sfIgnoreMasterDetail = [sfSaveIgnoreMasterDetail]
+    sfDeltas = []
+    sfDontFilterDeltas = []
+    sfAppend = []
+    sfFieldKind = [sfSaveFieldKind]
+    sfFromStart = [sfLoadFromStart]
+    OnCompress = sfBinaryCompress
+    OnDeCompress = sfBinaryDeCompress
+    Left = 331
+    Top = 415
+  end
+  object sfBinaryWithDeltas: TkbmBinaryStreamFormat
+    Version = '3.00'
+    sfUsingIndex = [sfSaveUsingIndex]
+    sfData = [sfSaveData, sfLoadData]
+    sfCalculated = []
+    sfLookup = []
+    sfNonVisible = [sfSaveNonVisible, sfLoadNonVisible]
+    sfBlobs = [sfSaveBlobs, sfLoadBlobs]
+    sfDef = [sfSaveDef, sfLoadDef]
+    sfIndexDef = [sfSaveIndexDef, sfLoadIndexDef]
+    sfFiltered = [sfSaveFiltered]
+    sfIgnoreRange = [sfSaveIgnoreRange]
+    sfIgnoreMasterDetail = [sfSaveIgnoreMasterDetail]
+    sfDeltas = [sfSaveDeltas]
+    sfDontFilterDeltas = []
+    sfAppend = []
+    sfFieldKind = [sfSaveFieldKind]
+    sfFromStart = [sfLoadFromStart]
+    sfDataTypeHeader = [sfSaveDataTypeHeader, sfLoadDataTypeHeader]
+    BufferSize = 16384
+    OnCompress = sfBinaryCompress
+    OnDeCompress = sfBinaryDeCompress
+    Left = 363
+    Top = 415
+  end
+  object ClientDataSet1: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 368
+    Top = 288
+  end
+end

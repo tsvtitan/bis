@@ -1,0 +1,75 @@
+unit BisServer;
+
+interface
+
+uses Classes,
+     BisServerModules, BisIfaceModules, BisModules,
+     BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitServerModule(AModule: TBisServerModule); stdcall;
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+
+exports
+  InitServerModule,
+  InitIfaceModule;
+
+implementation
+
+uses BisServerHttpServer, BisServerMainFm, BisDataSet, BisCore, BisServerConsts;
+
+procedure InitServerModule(AModule: TBisServerModule); stdcall;
+var
+  DSServers: TBisDataSet;
+  DSParams: TBisDataSet;
+  Core: TBisCore;
+  Stream: TMemoryStream;
+  ParamName: String;
+  AConnection: TBisServerHttpServer;
+begin
+  Core:=TBisCore(AModule.CoreObject);
+  if Core.LocalBase.BaseLoaded then begin
+    DSServers:=TBisDataSet.Create(nil);
+    Stream:=TMemoryStream.Create;
+    try
+      ParamName:=Core.Config.Read(AModule.Name,SParamConnections,SMySqlConnections);
+      if Core.LocalBase.ReadParam(ParamName,Stream) then begin
+        DSConnections.LoadFromStream(Stream);
+        if DSConnections.Active and not DSConnections.IsEmpty then begin
+          DSConnections.First;
+          while not DSConnections.Eof do begin
+            Stream.Clear;
+            if DSConnections.FieldByName(SFieldParams).IsBlob and
+               not VarIsNull(DSConnections.FieldByName(SFieldParams).Value) and
+               Boolean(DSConnections.FieldByName(SFieldEnable).AsInteger) then begin
+              DSParams:=TBisDataSet.Create(nil);
+              try
+                TBlobField(DSConnections.FieldByName(SFieldParams)).SaveToStream(Stream);
+                DSParams.LoadFromStream(Stream);
+                if DSParams.Active and not DSParams.IsEmpty then begin
+                  AConnection:=TBisMysqlConnection.Create;
+                  AConnection.Name:=DSConnections.FieldByName(SFieldName).AsString;
+                  AConnection.InitDefaultParams(DSParams);
+                  AModule.Connections.AddConnection(AConnection);
+                end;  
+              finally
+                DSParams.Free;
+              end;
+            end;
+            DSConnections.Next;
+          end;
+        end;
+      end;
+    finally
+      Stream.Free;
+      DSConnections.Free;
+    end;
+  end;
+end;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  AModule.Ifaces.AddClass(TBisServerMainFormIface);
+end;
+
+end.

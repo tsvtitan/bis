@@ -1,0 +1,43 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = Demo.exe dws2IdeDialogRuntime50.bpl SymbolsInTreeView.exe \
+  ClassCompletion.exe dws2UnitEditorSynPkg.bpl Advanced.exe \
+  SymDictContextMapDemo.exe dcldws2IdeDialog50.bpl
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+Demo.exe: Demo\Demo.dpr
+  $(DCC)
+
+SymbolsInTreeView.exe: ..\..\dws2\Demos\IDEDemos\CodeTreeView\SymbolsInTreeView.dpr
+  $(DCC)
+
+ClassCompletion.exe: ..\..\dws2\Demos\IDEDemos\ClassCompletion\ClassCompletion.dpr
+  $(DCC)
+
+dws2UnitEditorSynPkg.bpl: ..\UnitCompEditor\Delphi5\dws2UnitEditorSynPkg50.dpk
+  $(DCC)
+
+dws2IdeDialogRuntime50.bpl: Delphi5\dws2IdeDialogRuntime50.dpk
+  $(DCC)
+
+Advanced.exe: ..\..\dws2\Demos\IDEDemos\CodeInsight\Advanced.dpr
+  $(DCC)
+
+SymDictContextMapDemo.exe: ..\..\dws2\Demos\SymDictContextMap\SymDictContextMapDemo.dpr
+  $(DCC)
+
+dcldws2IdeDialog50.bpl: Delphi5\dcldws2IdeDialog50.dpk
+  $(DCC)
+
+

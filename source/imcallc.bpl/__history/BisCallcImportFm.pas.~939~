@@ -1,0 +1,1037 @@
+unit BisCallcImportFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ExtCtrls, StdCtrls, DB, Grids, DBGrids, DBCtrls,
+  Menus, ActnPopup,
+  BisFm, BisProvider, BisControls;
+
+type
+  TBisCallcImportForm = class(TBisForm)
+    StatusBar: TStatusBar;
+    PanelControls: TPanel;
+    PanelPreview: TPanel;
+    GroupBoxControls: TGroupBox;
+    GroupBoxPreview: TGroupBox;
+    LabelAgreement: TLabel;
+    EditAgreement: TEdit;
+    ButtonAgreement: TButton;
+    LabelPlan: TLabel;
+    EditPlan: TEdit;
+    ButtonPlan: TButton;
+    LabelGroup: TLabel;
+    EditGroup: TEdit;
+    ButtonGroup: TButton;
+    LabelDateIssue: TLabel;
+    DateTimePickerIssue: TDateTimePicker;
+    Grid: TDBGrid;
+    PanelFile: TPanel;
+    LabelFile: TLabel;
+    EditFile: TEdit;
+    ButtonFile: TButton;
+    ButtonImport: TButton;
+    DataSource: TDataSource;
+    PanelDetail: TPanel;
+    Splitter: TSplitter;
+    OpenDialog: TOpenDialog;
+    LabelDealNum: TLabel;
+    EditDealNum: TEdit;
+    SplitterValue: TSplitter;
+    PanelValue: TPanel;
+    DBMemoValue: TDBMemo;
+    PanelValueLabel: TPanel;
+    PanelPayments: TPanel;
+    PanelPaymetsLabel: TPanel;
+    GridPayments: TDBGrid;
+    DataSourcePayments: TDataSource;
+    PopupActionBar: TPopupActionBar;
+    MenuItemClear: TMenuItem;
+    MenuItemDelete: TMenuItem;
+    N1: TMenuItem;
+    MenuItemRefresh: TMenuItem;
+    N2: TMenuItem;
+    MenuItemImport: TMenuItem;
+    N3: TMenuItem;
+    MenuItemSave: TMenuItem;
+    MenuItemLoad: TMenuItem;
+    SaveDialogTemp: TSaveDialog;
+    OpenDialogTemp: TOpenDialog;
+    EditDealPrefix: TEdit;
+    LabelDealPrefix: TLabel;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure GridColEnter(Sender: TObject);
+    procedure GridColExit(Sender: TObject);
+    procedure DBMemoValueExit(Sender: TObject);
+    procedure ButtonFileClick(Sender: TObject);
+    procedure ButtonAgreementClick(Sender: TObject);
+    procedure ButtonGroupClick(Sender: TObject);
+    procedure ButtonPlanClick(Sender: TObject);
+    procedure ButtonImportClick(Sender: TObject);
+    procedure MenuItemRefreshClick(Sender: TObject);
+    procedure PopupActionBarPopup(Sender: TObject);
+    procedure MenuItemDeleteClick(Sender: TObject);
+    procedure MenuItemClearClick(Sender: TObject);
+    procedure MenuItemSaveClick(Sender: TObject);
+    procedure MenuItemLoadClick(Sender: TObject);
+  private
+    FProvider: TBisProvider;
+    FProviderPayments: TBisProvider;
+    FAgreementId: Variant;
+    FGroupId: Variant;
+    FPlanId: Variant;
+
+    procedure CreateFields;
+    procedure CreateFieldsPayaments;
+    procedure LoadFromXml(const FileName: String; WithClear: Boolean);
+    procedure LoadFromExcel(const FileName: String; WithClear: Boolean);
+    procedure ProviderAfterInsert(DataSet: TDataSet);
+    function CheckGrid: Boolean;
+    procedure Bias(InSurName, InName, InPatronymic: String);
+    procedure Import;
+    procedure UpdateImportButton;
+    procedure UpdateStatusBar;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
+  TBisCallcImportFormIface=class(TBisFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcImportForm: TBisCallcImportForm;
+
+implementation
+
+uses DateUtils, ActiveX, ComObj, 
+     BisCore, BisFilterGroups, BisUtils, BisParam, BisFieldNames,
+     BisXmlDocument, BisLogger, BisCallcHbookAgreementsFm,
+     BisCallcHbookGroupsFm, BisCallcHbookPlansFm, BisDialogs, BisConsts,
+     BisCallcBiasFIO, BisCallcConsts;
+
+{$R *.dfm}
+
+{ TBisCallcImportFormIface }
+
+constructor TBisCallcImportFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcImportForm;
+  Available:=true;
+  Permissions.Enabled:=true;
+  OnlyOneForm:=false;
+end;
+
+{ TBisCallcImportForm }
+
+constructor TBisCallcImportForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FProvider:=TBisProvider.Create(Self);
+  CreateFields;
+  FProvider.AfterInsert:=ProviderAfterInsert;
+  FProvider.AfterDelete:=ProviderAfterInsert;
+  DataSource.DataSet:=FProvider;
+
+  FProviderPayments:=TBisProvider.Create(Self);
+  FProviderPayments.IndexDefs.Add(SFieldId,SFieldId,[]);
+  CreateFieldsPayaments;
+  DataSourcePayments.DataSet:=FProviderPayments;
+  FProviderPayments.MasterSource:=DataSource;
+
+  FAgreementId:=Null;
+  FGroupId:=Null;
+  FPlanId:=Null;
+  DateTimePickerIssue.Date:=DateOf(Date);
+end;
+
+destructor TBisCallcImportForm.Destroy;
+begin
+  DataSource.DataSet:=nil;
+  DataSourcePayments.DataSet:=nil;
+  FProviderPayments.Free;
+  FProvider.Free;
+  inherited Destroy;
+end;
+
+procedure TBisCallcImportForm.UpdateImportButton;
+begin
+  ButtonImport.Enabled:=FProvider.Active and not FProvider.IsEmpty;
+end;
+
+procedure TBisCallcImportForm.PopupActionBarPopup(Sender: TObject);
+begin
+  MenuItemImport.Enabled:=FProvider.Active and not FProvider.IsEmpty;
+  MenuItemClear.Enabled:=FProvider.Active;
+  MenuItemDelete.Enabled:=FProvider.Active and not FProvider.IsEmpty;
+  MenuItemRefresh.Enabled:=FProvider.Active;
+  MenuItemSave.Enabled:=FProvider.Active and not FProvider.IsEmpty;
+  MenuItemLoad.Enabled:=FProvider.Active;
+end;
+
+procedure TBisCallcImportForm.ProviderAfterInsert(DataSet: TDataSet);
+begin
+  UpdateImportButton;
+end;
+
+procedure TBisCallcImportForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:=caFree;
+  inherited;
+end;
+
+procedure TBisCallcImportForm.GridColEnter(Sender: TObject);
+var
+  Field: TField;
+begin
+  GridColExit(nil);
+  Field:=Grid.SelectedField;
+  if Assigned(Field) then begin
+    DBMemoValue.DataField:=Field.FieldName;
+  end else DBMemoValue.DataField:='';
+
+  PanelValueLabel.Caption:='Значение';
+  if Grid.SelectedIndex<>-1 then
+    PanelValueLabel.Caption:=Grid.Columns[Grid.SelectedIndex].Title.Caption;
+  
+end;
+
+procedure TBisCallcImportForm.GridColExit(Sender: TObject);
+begin
+  if FProvider.State in [dsEdit,dsInsert] then
+    FProvider.Post;
+end;
+
+procedure TBisCallcImportForm.DBMemoValueExit(Sender: TObject);
+begin
+  GridColExit(nil);
+end;
+
+procedure TBisCallcImportForm.CreateFields;
+
+  function Required(Flag: Boolean): Pointer;
+  begin
+    Result:=Pointer(Integer(Flag));
+  end;
+
+var
+  P: TBisProvider;
+  i: Integer;
+  Item: TBisFieldName;
+  Column: TColumn;
+begin
+  Grid.Columns.Clear;
+  FProvider.Close;
+  P:=TBisProvider.Create(nil);
+  try
+    P.ProviderName:='S_DEALS';
+    with P.FieldNames do begin
+      Add('DEAL_NUM','Номер дела',77).Data:=Required(true);
+      Add('ACCOUNT_NUM','Номер счета',100).Data:=Required(true);
+      Add('ARREAR_PERIOD','Период задолжности',45).Data:=Required(true);
+      with Add('INITIAL_DEBT','Сумма долга',76) do begin
+        Data:=Required(true);
+        DisplayFormat:=SDisplayFormatFloat;
+      end;
+      Add('DEBTOR_NUM','Номер договора',100).Data:=Required(true);
+      Add('DEBTOR_DATE','Дата договора',95).Data:=Required(true);
+      Add('DEBTOR_TYPE','Тип должника',25).Data:=Required(true);
+      Add('SURNAME','Фамилия',85).Data:=Required(true);
+      Add('NAME','Имя',70).Data:=Required(true);
+      Add('PATRONYMIC','Отчество',85).Data:=Required(true);
+      Add('PASSPORT','Паспортные данные',150).Data:=Required(true);
+      Add('SEX','Пол',30).Data:=Required(true);
+      Add('DATE_BIRTH','Дата рождения',95).Data:=Required(true);
+      Add('PLACE_BIRTH','Место рождения',150).Data:=Required(true);
+      Add('ADDRESS_RESIDENCE','Адрес прописки',150).Data:=Required(false);
+      Add('INDEX_RESIDENCE','Индекс прописки',102).Data:=Required(false);
+      Add('ADDRESS_ACTUAL','Адрес фактический',150).Data:=Required(false);
+      Add('INDEX_ACTUAL','Индекс фактический',125).Data:=Required(false);
+      Add('ADDRESS_ADDITIONAL','Адрес дополнительный',150).Data:=Required(false);
+      Add('INDEX_ADDITIONAL','Индекс дополнительный',138).Data:=Required(false);
+      Add('PLACE_WORK','Место работы',150).Data:=Required(false);
+      Add('JOB_TITLE','Должность',100).Data:=Required(false);
+      Add('ADDRESS_WORK','Адрес работы',150).Data:=Required(false);
+      Add('INDEX_WORK','Индекс работы',90).Data:=Required(false);
+      Add('PHONE_HOME','Телефон домашний',109).Data:=Required(false);
+      Add('PHONE_WORK','Телефон рабочий',99).Data:=Required(false);
+      Add('PHONE_MOBILE','Телефон мобильный',120).Data:=Required(false);
+      Add('PHONE_OTHER1','Телефон другой 1',106).Data:=Required(false);
+      Add('PHONE_OTHER2','Телефон другой 2',106).Data:=Required(false);
+      Add('DEBT_INFORMATION','Информация по долгу',125).Data:=Required(true);
+      Add('GUARANTORS','Поручители',100).Data:=Required(false);
+      Add('FOUNDERS','Учредители',100).Data:=Required(false);
+    end;
+    P.FetchCount:=0;
+    P.Open;
+    if P.Active then begin
+      FProvider.FieldNames.CopyFrom(P.FieldNames,true);
+      FProvider.CreateStructure(P);
+      FProvider.FieldDefs.Add(SFieldID,ftString,32);
+      FProvider.Open;
+      for i:=0 to FProvider.FieldNames.Count-1 do begin
+        Item:=FProvider.FieldNames.Items[i];
+        Column:=Grid.Columns.Add;
+        Column.Title.Caption:=Item.Caption;
+        Column.FieldName:=Item.FieldName;
+        Column.Width:=Item.Width;
+      end;
+    end;
+  finally
+    P.Free;
+  end;
+end;
+
+procedure TBisCallcImportForm.CreateFieldsPayaments;
+var
+  P: TBisProvider;
+  i: Integer;
+  Item: TBisFieldName;
+  Column: TColumn;
+begin
+  GridPayments.Columns.Clear;
+  FProviderPayments.Close;
+  P:=TBisProvider.Create(nil);
+  try
+    P.ProviderName:='S_PAYMENTS';
+    with P.FieldNames do begin
+      Add('DATE_PAYMENT','Дата платежа',80);
+      Add('AMOUNT','Сумма платежа',90);
+      Add('PERIOD','Период платежа',90);
+    end;
+    P.FetchCount:=0;
+    P.Open;
+    if P.Active then begin
+      FProviderPayments.FieldNames.CopyFrom(P.FieldNames,true);
+      FProviderPayments.CreateStructure(P);
+      FProviderPayments.FieldDefs.Add(SFieldId,ftString,32);
+      FProviderPayments.MasterFields:=SFieldId;
+      FProviderPayments.IndexFieldNames:=SFieldId;
+      FProviderPayments.Open;
+      for i:=0 to FProviderPayments.FieldNames.Count-1 do begin
+        Item:=FProviderPayments.FieldNames.Items[i];
+        Column:=GridPayments.Columns.Add;
+        Column.Title.Caption:=Item.Caption;
+        Column.FieldName:=Item.FieldName;
+        Column.Width:=Item.Width;
+      end;
+    end;
+  finally
+    P.Free;
+  end;
+end;
+
+procedure TBisCallcImportForm.ButtonAgreementClick(Sender: TObject);
+var
+  Iface: TBisCallcHbookAgreementsFormIface;
+  P: TBisProvider;
+begin
+  Iface:=TBisCallcHbookAgreementsFormIface.Create(nil);
+  P:=TBisProvider.Create(nil);
+  try
+    Iface.LocateFields:='AGREEMENT_ID';
+    Iface.LocateValues:=FAgreementId;
+    if Iface.SelectInto(P) then begin
+      if P.Active and not P.IsEmpty then begin
+        FAgreementId:=P.FieldByName('AGREEMENT_ID').Value;
+        EditAgreement.Text:=FormatEx('%s от %s %s',[P.FieldByName('NUM').AsString,
+                                                    P.FieldByName('DATE_BEGIN').AsString,
+                                                    P.FieldByName('FIRM_SMALL_NAME').AsString]);
+      end;
+    end;
+  finally
+    P.Free;
+    Iface.Free;
+  end;
+end;
+
+procedure TBisCallcImportForm.ButtonGroupClick(Sender: TObject);
+var
+  Iface: TBisCallcHbookGroupsFormIface;
+  P: TBisProvider;
+begin
+  Iface:=TBisCallcHbookGroupsFormIface.Create(nil);
+  P:=TBisProvider.Create(nil);
+  try
+    Iface.LocateFields:='GROUP_ID';
+    Iface.LocateValues:=FGroupId;
+    if Iface.SelectInto(P) then begin
+      if P.Active and not P.IsEmpty then begin
+        FGroupId:=P.FieldByName('GROUP_ID').Value;
+        EditGroup.Text:=P.FieldByName('NAME').AsString;
+      end;
+    end;
+  finally
+    P.Free;
+    Iface.Free;
+  end;
+end;
+
+procedure TBisCallcImportForm.ButtonPlanClick(Sender: TObject);
+var
+  Iface: TBisCallcHbookPlansFormIface;
+  P: TBisProvider;
+begin
+  Iface:=TBisCallcHbookPlansFormIface.Create(nil);
+  P:=TBisProvider.Create(nil);
+  try
+    Iface.LocateFields:='PLAN_ID';
+    Iface.LocateValues:=FPlanId;
+    if Iface.SelectInto(P) then begin
+      if P.Active and not P.IsEmpty then begin
+        FPlanId:=P.FieldByName('PLAN_ID').Value;
+        EditPlan.Text:=P.FieldByName('NAME').AsString;
+      end;
+    end;
+  finally
+    P.Free;
+    Iface.Free;
+  end;
+end;
+
+procedure TBisCallcImportForm.ButtonFileClick(Sender: TObject);
+begin
+  if FProvider.Active and OpenDialog.Execute then begin
+    case OpenDialog.FilterIndex of
+      1,3: LoadFromXml(OpenDialog.FileName,false);
+      2: LoadFromExcel(OpenDialog.FileName,false);
+    end;
+    EditFile.Text:=OpenDialog.FileName;
+    UpdateImportButton;
+    UpdateStatusBar;
+    GridColEnter(nil);
+  end;
+end;
+
+
+procedure TBisCallcImportForm.MenuItemClearClick(Sender: TObject);
+begin
+  if ShowQuestion('Удалить все записи?',mbNo)=mrYes then begin
+    FProvider.EmptyTable;
+    FProviderPayments.EmptyTable;
+    UpdateStatusBar;
+  end;
+end;
+
+procedure TBisCallcImportForm.MenuItemDeleteClick(Sender: TObject);
+begin
+  if ShowQuestion('Удалить текущую запись?')=mrYes then begin
+    FProvider.Delete;
+    UpdateStatusBar;
+  end;
+end;
+
+procedure TBisCallcImportForm.MenuItemRefreshClick(Sender: TObject);
+begin
+  if FProvider.Active then begin
+    case OpenDialog.FilterIndex of
+      1,3: LoadFromXml(OpenDialog.FileName,true);
+      2: LoadFromExcel(OpenDialog.FileName,true);
+    end;
+    UpdateImportButton;
+    UpdateStatusBar;
+    GridColEnter(nil);
+  end;
+end;
+
+function TBisCallcImportForm.CheckGrid: Boolean;
+var
+  i: Integer;
+  Column: TColumn;
+  FieldName: TBisFieldName;
+  Value: Variant;
+  Flag: Boolean;
+begin
+  Result:=true;
+  if FProvider.Active then begin
+    FProvider.DisableControls;
+    try
+      Flag:=false;
+      FProvider.First;
+      while not FProvider.Eof do begin
+        for i:=0 to Grid.Columns.Count-1 do begin
+          Column:=Grid.Columns[i];
+          FieldName:=FProvider.FieldNames.Find(Column.FieldName);
+          if Assigned(FieldName) and Boolean(Integer(FieldName.Data)) then begin
+            if Assigned(Column.Field) then begin
+              Value:=Column.Field.Value;
+              if VarIsNull(Value) then begin
+                ShowError(FormatEx('Значение поля %s не может быть пустым.',[Column.Title.Caption]));
+                Grid.SelectedIndex:=Column.Index;
+                Grid.SetFocus; 
+                Flag:=true;
+                break;
+              end;
+            end;
+          end;
+        end;
+        if Flag then
+          break;
+        FProvider.Next;
+      end;
+      Result:=not Flag;
+    finally
+      FProvider.EnableControls;
+    end;
+  end;
+end;
+
+procedure TBisCallcImportForm.ButtonImportClick(Sender: TObject);
+begin
+  if Trim(EditAgreement.Text)='' then begin
+    ShowError('Выберите договор.');
+    EditAgreement.SetFocus;
+    exit;     
+  end;
+  if Trim(EditGroup.Text)='' then begin
+    ShowError('Выберите группу.');
+    EditGroup.SetFocus;
+    exit;
+  end;
+  if Trim(EditPlan.Text)='' then begin
+    if ShowQuestion('Не выбран план по умолчанию. Продолжить?',mbNo)=mrNo then begin
+      EditPlan.SetFocus;
+      exit;
+    end;
+  end;
+
+  if not FProvider.Active or (FProvider.Active and FProvider.IsEmpty) then begin
+    ShowError('Нет данных по должникам.');
+    Grid.SetFocus;
+    exit;
+  end;
+
+  if CheckGrid then begin
+    Import;
+    UpdateImportButton;
+  end;
+end;
+
+procedure TBisCallcImportForm.Bias(InSurName, InName, InPatronymic: String);
+var
+  P: TBisProvider;
+  OutSurName, OutName, OutPatronymic: String;
+begin
+  P:=TBisProvider.Create(nil);
+  try
+    P.WithWaitCursor:=false;
+    P.ProviderName:='IMPORT_CASE';
+    with P.Params do begin
+      AddKeyValue('SURNAME_IP',InSurName);
+      AddKeyValue('NAME_IP',InName);
+      AddKeyValue('PATRONYMIC_IP',InPatronymic);
+
+      GetGenitiveCase(InSurName,InName,InPatronymic,OutSurName,OutName,OutPatronymic);
+      AddInvisible('SURNAME_RP').Value:=OutSurName;
+      AddInvisible('NAME_RP').Value:=OutName;
+      AddInvisible('PATRONYMIC_RP').Value:=OutPatronymic;
+
+      GetDativeCase(InSurName,InName,InPatronymic,OutSurName,OutName,OutPatronymic);
+      AddInvisible('SURNAME_DP').Value:=OutSurName;
+      AddInvisible('NAME_DP').Value:=OutName;
+      AddInvisible('PATRONYMIC_DP').Value:=OutPatronymic;
+
+      GetAccusativeCase(InSurName,InName,InPatronymic,OutSurName,OutName,OutPatronymic);
+      AddInvisible('SURNAME_VP').Value:=OutSurName;
+      AddInvisible('NAME_VP').Value:=OutName;
+      AddInvisible('PATRONYMIC_VP').Value:=OutPatronymic;
+
+      GetInstrumentalCase(InSurName,InName,InPatronymic,OutSurName,OutName,OutPatronymic);
+      AddInvisible('SURNAME_TP').Value:=OutSurName;
+      AddInvisible('NAME_TP').Value:=OutName;
+      AddInvisible('PATRONYMIC_TP').Value:=OutPatronymic;
+
+      GetPrepositionalCase(InSurName,InName,InPatronymic,OutSurName,OutName,OutPatronymic);
+      AddInvisible('SURNAME_PP').Value:=OutSurName;
+      AddInvisible('NAME_PP').Value:=OutName;
+      AddInvisible('PATRONYMIC_PP').Value:=OutPatronymic;
+    end;
+    try
+      P.Execute;
+    except
+      On E: Exception do
+        LoggerWrite(E.Message,ltError);
+    end;
+  finally
+    P.Free;
+  end;
+end;
+
+procedure TBisCallcImportForm.Import;
+var
+  P, P2: TBisProvider;
+  OldCursor: TCursor;
+  i: Integer;
+  Field: TField;
+  ImportCount: Integer;
+  DealId: Variant;
+  Breaked: Boolean;
+  Position: Integer;
+  ID: String;
+  Max: Integer;
+begin
+  if FProvider.Active and not FProvider.IsEmpty then begin
+    OldCursor:=Screen.Cursor;
+    Screen.Cursor:=crHourGlass;
+    FProvider.DisableControls;
+    FProvider.AfterInsert:=nil;
+    FProvider.AfterDelete:=nil;
+    FProviderPayments.DisableControls;
+    Progress(0,0,0,Breaked);
+    try
+
+      Max:=FProvider.RecordCount;
+      ImportCount:=0;
+      Position:=0;
+      FProvider.First;
+      while not FProvider.Eof do begin
+        ID:=FProvider.FieldByName(SFieldId).AsString;
+
+        Bias(FProvider.FieldByName('SURNAME').AsString,
+             FProvider.FieldByName('NAME').AsString,
+             FProvider.FieldByName('PATRONYMIC').AsString);
+
+        P:=TBisProvider.Create(nil);
+        try
+          P.WithWaitCursor:=false;
+          P.StopException:=true;
+          P.ProviderName:='IMPORT_DEBTOR';
+          with P.Params do begin
+            AddInvisible('DEAL_ID',ptOutput);
+            AddInvisible('AGREEMENT_ID').Value:=FAgreementId;
+            AddInvisible('GROUP_ID').Value:=FGroupId;
+            AddInvisible('PLAN_ID').Value:=FPlanId;
+            AddInvisible('DATE_ISSUE').Value:=DateOf(DateTimePickerIssue.Date);
+          end;
+          for i:=0 to FProvider.Fields.Count-1 do begin
+            Field:=FProvider.Fields[i];
+            P.Params.AddInvisible(Field.FieldName).Value:=Field.Value;
+          end;
+
+          P.Execute;
+
+          if P.Success then begin
+            DealId:=P.Params.ParamByName('DEAL_ID').Value;
+            if not VarIsNull(DealId) then begin
+              FProviderPayments.Filter:=Format('%s=%s',[SFieldId,QuotedStr(ID)]);
+              FProviderPayments.Filtered:=true;
+              try
+                FProviderPayments.First;
+                while not FProviderPayments.Eof do begin
+                  P2:=TBisProvider.Create(nil);
+                  try
+                    P2.ProviderName:='I_PAYMENT';
+                    P2.WithWaitCursor:=false;
+                    P2.Reset;
+                    with P2.Params do begin
+                      AddKey('PAYMENT_ID');
+                      AddInvisible('ACCOUNT_ID').Value:=Core.AccountId;
+                      AddInvisible('DEAL_ID').Value:=DealId;
+                      AddInvisible('STATE').Value:=0;
+                    end;
+                    for i:=0 to FProviderPayments.Fields.Count-1 do begin
+                      Field:=FProviderPayments.Fields[i];
+                      P2.Params.AddInvisible(Field.FieldName).Value:=Field.Value;
+                    end;
+                    P2.Execute;
+                  finally
+                    P2.Free;
+                  end;
+                  FProviderPayments.Next;
+                end;
+              finally
+                FProviderPayments.Filter:='';
+                FProviderPayments.Filtered:=false;
+              end;
+
+              FProvider.Delete;
+              Inc(ImportCount);
+            end;
+          end else
+            FProvider.Next;
+
+          Inc(Position);
+          Progress(0,Max,Position,Breaked);
+        finally
+          P.Free;
+        end;
+      end;
+      ShowInfo(FormatEx('Импортировано: %d',[ImportCount]));
+    finally
+      Progress(0,0,0,Breaked);
+      FProviderPayments.EnableControls;
+      FProvider.AfterInsert:=ProviderAfterInsert;
+      FProvider.AfterDelete:=ProviderAfterInsert;
+      FProvider.EnableControls;
+      Screen.Cursor:=OldCursor;
+    end;
+  end;
+end;
+
+procedure TBisCallcImportForm.LoadFromXml(const FileName: String; WithClear: Boolean);
+var
+  i,j,x,y: Integer;
+  FXmlDocument: TBisXmlDocument;
+  Node, Item, Item2, Item3, Item4: TBisXmlDocumentNode;
+  Field: TField;
+  DealNum: Integer;
+  ID: String;
+  OldCursor: TCursor;
+  Breaked: Boolean;
+begin
+  if FProvider.Active then begin
+    OldCursor:=Screen.Cursor;
+    Screen.Cursor:=crHourGlass;
+    DBMemoValue.DataSource:=nil;
+    FProvider.BeginUpdate(true);
+    FProviderPayments.BeginUpdate;
+    FXmlDocument:=TBisXmlDocument.Create(nil);
+    try
+
+      if WithClear then begin
+        FProvider.EmptyTable;
+        FProviderPayments.EmptyTable;
+      end;
+
+      FXmlDocument.LoadFromFile(FileName);
+      Node:=nil;
+      if not FXmlDocument.Empty then begin
+        for i:=0 to FXmlDocument.Nodes.Count-1 do begin
+          Item:=FXmlDocument.Nodes.Items[i];
+          if AnsiSameText(Item.NodeName,'DEBTORS') then begin
+            Node:=Item;
+            break;
+          end;
+        end;
+      end;
+
+      if Assigned(Node) then begin
+        DealNum:=0;
+        TryStrToInt(Trim(EditDealNum.Text),DealNum);
+        Progress(0,0,0,Breaked);
+        try
+          for i:=0 to Node.ChildNodes.Count-1 do begin
+            Item:=Node.ChildNodes.Items[i];
+            Inc(DealNum);
+            if AnsiSameText(Item.NodeName,'ROW') then begin
+              try
+                ID:=GetUniqueID;
+                FProvider.Append;
+                FProvider.FieldByName('ID').AsString:=ID;
+                FProvider.FieldByName('DEAL_NUM').Value:=DealNum;
+
+                for j:=0 to Item.ChildNodes.Count-1 do begin
+                  Item2:=Item.ChildNodes.Items[j];
+                  if AnsiSameText(Item2.NodeName,'PAYMENTS') then begin
+
+                    for x:=0 to Item2.ChildNodes.Count-1 do begin
+                      Item3:=Item2.ChildNodes.Items[x];
+                      if AnsiSameText(Item3.NodeName,'ROW') then begin
+                        FProviderPayments.Append;
+                        FProviderPayments.FieldByName('ID').AsString:=ID;
+
+                        for y:=0 to Item3.ChildNodes.Count-1 do begin
+                          Item4:=Item3.ChildNodes.Items[y];
+                          Field:=FProviderPayments.FindField(Item4.NodeName);
+                          if Assigned(Field) and not Item4.Empty then begin
+                            try
+                              Field.Value:=Item4.NodeValue;
+                            except
+                              on E: Exception do
+                                LoggerWrite(E.Message,ltError);
+                            end;
+                          end;
+                        end;
+
+                        FProviderPayments.Post;
+                      end;
+                    end;
+
+                  end else begin
+                    Field:=FProvider.FindField(Item2.NodeName);
+                    if Assigned(Field) and not Item2.Empty then begin
+                      try
+                        Field.Value:=Item2.NodeValue;
+                      except
+                        on E: Exception do
+                          LoggerWrite(E.Message,ltError);
+                      end;
+                    end;
+                  end;
+                end;
+
+                FProvider.Post;
+              except
+                on E: Exception do begin
+                  FProvider.Cancel;
+                  LoggerWrite(E.Message,ltError);
+                end;
+              end;
+              
+              Progress(0,Node.ChildNodes.Count,i+1,Breaked);
+            end;
+          end;
+        finally
+          Progress(0,0,0,Breaked);
+        end;
+
+      end;
+    finally
+      FXmlDocument.Free;
+      FProviderPayments.EndUpdate;
+      FProvider.EndUpdate;
+      DBMemoValue.DataSource:=DataSource;
+      FProvider.Next;
+      Screen.Cursor:=OldCursor;
+    end;
+  end;
+end;
+
+procedure TBisCallcImportForm.LoadFromExcel(const FileName: String;  WithClear: Boolean);
+var
+  Excel: OleVariant;
+  Wb: OleVariant;
+  Sh: OleVariant;
+  V: OleVariant;
+  S: OleVariant;
+  Data: OleVariant;
+  RowCount: Integer;
+  ColCount: Integer;
+  i,j: Integer;
+  Breaked: Boolean;
+  DealNum: Integer;
+  OldCursor: TCursor;
+  ID: String;
+  Str: TStringList;
+  S1: String;
+  D: TDateTime;
+  AP: Integer;
+  DebtInfo: String;
+const
+  SExcelOleObject='Excel.Application';
+begin
+  if FProvider.Active then begin
+    OldCursor:=Screen.Cursor;
+    Screen.Cursor:=crHourGlass;
+    CoInitialize(nil);
+    try
+      Update;
+      Excel:=CreateOleObject(SExcelOleObject);
+      Update;
+      Excel:=Excel.Application;
+      Excel.WorkBooks.Open(FileName);
+      Wb:=Excel.WorkBooks.Item[1];
+      Sh:=Wb.Sheets.Item[1];
+      S:=Excel.Selection;
+      if not VarIsEmpty(S) then begin
+        Update;
+        RowCount:=S.Rows.Count;
+        ColCount:=S.Columns.Count;
+        if (RowCount<>0) and (ColCount<>0) then begin
+          Data:=S.Value;
+
+          Progress(0,0,0,Breaked);
+          DBMemoValue.DataSource:=nil;
+          FProvider.BeginUpdate(true);
+          FProviderPayments.BeginUpdate;
+          try
+            if WithClear then begin
+              FProvider.EmptyTable;
+              FProviderPayments.EmptyTable;
+            end;
+            DealNum:=0;
+            TryStrToInt(Trim(EditDealNum.Text),DealNum);
+            for i:=1 to RowCount do begin
+              if Breaked then
+                break;
+              try
+                ID:=GetUniqueID;
+                Inc(DealNum);
+                FProvider.Append;
+                FProvider.FieldByName('ID').AsString:=ID;
+                FProvider.FieldByName('DEAL_NUM').Value:=DealNum;
+                FProvider.FieldByName('DEBTOR_TYPE').Value:=0;
+                FProvider.FieldByName('PLACE_BIRTH').Value:='Неизвестно';
+
+                DebtInfo:='';
+                for j:=1 to ColCount do begin
+                  V:=Data[i,j];
+                  if j=2 then begin
+                    FProvider.FieldByName('ACCOUNT_NUM').Value:=V;
+                    FProvider.FieldByName('DEBTOR_NUM').Value:=V;
+                  end;
+                  if j=3 then begin
+                    Str:=TStringList.Create;
+                    try
+                      GetStringsByString(VarToStrdef(V,''),' ',Str);
+                      if Str.Count>0 then FProvider.FieldByName('SURNAME').Value:=Str[0];
+                      if Str.Count>1 then FProvider.FieldByName('NAME').Value:=Str[1];
+                      if Str.Count>2 then begin
+                        FProvider.FieldByName('PATRONYMIC').Value:=Str[2];
+                        FProvider.FieldByName('SEX').Value:=Integer(IsFeminine(Str[2]));
+                      end;
+                    finally
+                      Str.Free;
+                    end;
+                  end;
+                  if j=4 then FProvider.FieldByName('PASSPORT').Value:=V;
+                  if j=5 then FProvider.FieldByName('DATE_BIRTH').Value:=V;
+                  if j=6 then begin
+                    S1:=VarToStrDef(V,'');
+                    if Trim(S1)='' then
+                      V:=FProvider.FieldByName('PLACE_BIRTH').Value;
+                    FProvider.FieldByName('PLACE_BIRTH').Value:=V;
+                  end;
+                  if j=7 then begin
+                    S1:=Trim(VarToStrDef(V,''));
+                    if Length(S1)=7 then begin
+                      S1:='01.'+S1;
+                      if TryStrToDate(S1,D) then begin
+                        AP:=0;
+                        if Date>D then
+                          AP:=DaysBetween(D,Date);
+                        FProvider.FieldByName('ARREAR_PERIOD').Value:=AP;
+                        FProvider.FieldByName('DEBTOR_DATE').Value:=D;
+                      end;
+                    end;
+                  end;
+                  if j=8 then begin
+                    FProvider.FieldByName('ADDRESS_RESIDENCE').Value:=V;
+                    FProvider.FieldByName('ADDRESS_ACTUAL').Value:=V;
+                  end;
+                  if j=9 then FProvider.FieldByName('PHONE_HOME').Value:=V;
+                  if j=10 then DebtInfo:='Тип владения квартирой: '+VarToStrDef(V,'');
+                  if j=11 then FProvider.FieldByName('DEBT_INFORMATION').Value:=DebtInfo+#13#10+'Количество комнат в квартире: '+VarToStrDef(V,'');
+                  if j=12 then FProvider.FieldByName('INITIAL_DEBT').Value:=V;
+                end;
+                FProvider.Post;
+              except
+                on E: Exception do begin
+                  LoggerWrite(E.Message,ltError);
+                  FProvider.Cancel;
+                end;
+              end;
+              Progress(0,RowCount,i,Breaked);
+            end;
+          finally
+            FProviderPayments.EndUpdate;
+            FProvider.EndUpdate;
+            DBMemoValue.DataSource:=DataSource;
+            FProvider.Next;
+            Progress(0,0,0,Breaked);
+          end;
+        end;
+      end;
+    finally
+      if not VarIsEmpty(Excel) then
+        Excel.Quit;
+      CoUninitialize;
+      Screen.Cursor:=OldCursor;
+    end;
+  end;
+end;
+
+procedure TBisCallcImportForm.UpdateStatusBar;
+var
+  AllCount: Integer;
+begin
+  AllCount:=0;
+  if FProvider.Active then
+    AllCount:=FProvider.RecordCount;
+  StatusBar.Panels[0].Text:='Всего: '+IntToStr(AllCount);
+end;
+
+type
+  TTempRecord=record
+    DebtorDataSize: Int64;
+    PaymentsDataSize: Int64;
+  end;
+
+procedure TBisCallcImportForm.MenuItemSaveClick(Sender: TObject);
+var
+  OldCursor: TCursor;
+  T: TTempRecord;
+  Stream1, Stream2: TMemoryStream;
+  FileStream: TFileStream;
+begin
+  if SaveDialogTemp.Execute then begin
+    OldCursor:=Screen.Cursor;
+    Screen.Cursor:=crHourGlass;
+    Stream1:=TMemoryStream.Create;
+    Stream2:=TMemoryStream.Create;
+    try
+      FProvider.SaveToStream(Stream1);
+      FProviderPayments.SaveToStream(Stream2);
+      T.DebtorDataSize:=Stream1.Size;
+      T.PaymentsDataSize:=Stream2.Size;
+      FileStream:=TFileStream.Create(SaveDialogTemp.FileName,fmCreate or fmOpenWrite);
+      try
+        FileStream.WriteBuffer(T,SizeOf(T));
+        Stream1.Position:=0;
+        FileStream.CopyFrom(Stream1,Stream1.Size);
+        Stream2.Position:=0;
+        FileStream.CopyFrom(Stream2,Stream2.Size);
+      finally
+        FileStream.Free;
+      end;
+    finally
+      Stream2.Free;
+      Stream1.Free;
+      Screen.Cursor:=OldCursor;
+    end;
+  end;
+end;
+
+procedure TBisCallcImportForm.MenuItemLoadClick(Sender: TObject);
+var
+  P: TBisProvider;
+  OldCursor: TCursor;
+  Stream1, Stream2: TMemoryStream;
+  T: TTempRecord;
+begin
+  if OpenDialogTemp.Execute then begin
+    OldCursor:=Screen.Cursor;
+    Screen.Cursor:=crHourGlass;
+    P:=TBisProvider.Create(nil);
+    Stream1:=TMemoryStream.Create;
+    Stream2:=TMemoryStream.Create;
+    FProvider.BeginUpdate;
+    FProviderPayments.BeginUpdate;
+    try
+      FProvider.EmptyTable;
+      FProviderPayments.EmptyTable;
+      Stream1.LoadFromFile(OpenDialogTemp.FileName);
+      Stream1.Position:=0;
+      Stream1.ReadBuffer(T,SizeOf(T));
+      Stream2.CopyFrom(Stream1,T.DebtorDataSize);
+      Stream2.Position:=0;
+      P.LoadFromStream(Stream2);
+      FProvider.CopyRecords(P);
+      Stream2.Clear;
+      Stream2.CopyFrom(Stream1,T.PaymentsDataSize);
+      Stream2.Position:=0;
+      P.LoadFromStream(Stream2);
+      FProviderPayments.CopyRecords(P);
+      FProvider.First;
+      UpdateImportButton;
+      UpdateStatusBar;
+      GridColEnter(nil);
+    finally
+      FProviderPayments.EndUpdate;
+      FProvider.EndUpdate;
+      Stream2.Free;
+      Stream1.Free;
+      P.Free;
+      Screen.Cursor:=OldCursor;
+    end;
+  end;
+end;
+
+
+
+end.

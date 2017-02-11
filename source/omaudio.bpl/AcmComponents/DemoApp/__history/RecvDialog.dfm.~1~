@@ -1,0 +1,54 @@
+object RecvDlg: TRecvDlg
+  Left = 744
+  Top = 605
+  Width = 365
+  Height = 105
+  ActiveControl = PortEdit
+  Caption = 'Receive stream'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 2
+    Top = 8
+    Width = 60
+    Height = 13
+    Alignment = taRightJustify
+    AutoSize = False
+    Caption = 'Port:'
+  end
+  object Button1: TButton
+    Left = 8
+    Top = 32
+    Width = 75
+    Height = 25
+    Caption = 'Start'
+    ModalResult = 1
+    TabOrder = 0
+  end
+  object Button2: TButton
+    Left = 88
+    Top = 32
+    Width = 75
+    Height = 25
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object PortEdit: TEdit
+    Left = 70
+    Top = 5
+    Width = 275
+    Height = 21
+    TabOrder = 2
+    Text = '10000'
+  end
+end

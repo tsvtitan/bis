@@ -1,0 +1,25 @@
+program smpp;
+
+uses
+  Forms,
+  BisMainFm in 'BisMainFm.pas' {BisMainForm},
+  BisSmppClient in 'BisSmppClient.pas',
+  IdTCPServer in '..\..\omnet.bpl\Indy\Core\IdTCPServer.pas',
+  IdObjs in '..\..\omnet.bpl\Indy\System\IdObjs.pas',
+  IdGlobal in '..\..\omnet.bpl\Indy\System\IdGlobal.pas',
+  IdException in '..\..\omnet.bpl\Indy\System\IdException.pas',
+  IdSys in '..\..\omnet.bpl\Indy\System\IdSys.pas',
+  IdSysWin32 in '..\..\omnet.bpl\Indy\System\IdSysWin32.pas',
+  IdSysNativeVCL in '..\..\omnet.bpl\Indy\System\IdSysNativeVCL.pas',
+  IdSysVCL in '..\..\omnet.bpl\Indy\System\IdSysVCL.pas',
+  IdSysBase in '..\..\omnet.bpl\Indy\System\IdSysBase.pas',
+  IdResourceStrings in '..\..\omnet.bpl\Indy\System\IdResourceStrings.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TBisMainForm, BisMainForm);
+  Application.Run;
+end.

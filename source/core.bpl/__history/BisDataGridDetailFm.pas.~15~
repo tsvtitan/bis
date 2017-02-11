@@ -1,0 +1,44 @@
+unit BisDataGridDetailFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ActnList, StdCtrls, ExtCtrls, ComCtrls,
+  BisFm, BisDataFrm, BisDataGridFm, BisDataGridDetailFrm;
+
+type
+  TBisDataGridDetailForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  public
+    { Public declarations }
+  end;
+
+  TBisDataGridDetailFormIface=class(TBisDataGridFormIface)
+  protected
+    class function GetFormClass: TBisFormClass; override;
+  end;
+
+var
+  BisDataGridDetailForm: TBisDataGridDetailForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisDataGridDetailFormIface }
+
+class function TBisDataGridDetailFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisDataGridDetailForm;
+end;
+
+{ TBisDataGridDetailForm }
+
+class function TBisDataGridDetailForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisDataGridDetailFrame;
+end;
+
+end.

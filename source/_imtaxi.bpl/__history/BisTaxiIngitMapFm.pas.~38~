@@ -1,0 +1,98 @@
+unit BisTaxiIngitMapFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ExtCtrls,
+  BisFm, BisTaxiIngitMapFrm;
+
+type
+  TBisTaxiIngitMapForm = class(TBisForm)
+    PanelFrame: TPanel;
+    StatusBar: TStatusBar;
+  private
+    FMapFileName: String;
+    FMapFrame: TBisTaxiIngitMapFrame;
+  protected
+    procedure CreateWnd; override;  
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+  end;
+
+  TBisTaxiIngitMapFormIface=class(TBisFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+    function CanShow: Boolean; override;
+  end;
+
+var
+  BisTaxiIngitMapForm: TBisTaxiIngitMapForm;
+
+implementation
+
+uses
+     BisCore,
+     BisTaxiConsts;
+
+{$R *.dfm}
+
+{ TBisTaxiIngitMapFormIface }
+
+constructor TBisTaxiIngitMapFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiIngitMapForm;
+  Permissions.Enabled:=true;
+  OnlyOneForm:=false;
+  ShowType:=stMdiChild;
+end;
+
+function TBisTaxiIngitMapFormIface.CanShow: Boolean;
+begin
+
+end;
+
+{ TBisTaxiIngitMapForm }
+
+constructor TBisTaxiIngitMapForm.Create(AOwner: TComponent);
+var
+  Buffer: String;
+begin
+  inherited Create(AOwner);
+  CloseMode:=cmFree;
+  SizesStored:=true;
+
+  FMapFileName:='';
+  if Core.LocalBase.ReadParam(SParamMapFileName,Buffer) then
+    FMapFileName:=Buffer;
+  
+  FMapFrame:=TBisTaxiIngitMapFrame.Create(Self);
+  FMapFrame.Parent:=PanelFrame;
+  FMapFrame.Align:=alClient;
+  FMapFrame.LoadFromFile(FMapFileName);
+  
+end;
+
+destructor TBisTaxiIngitMapForm.Destroy;
+begin
+  FMapFrame.Free;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiIngitMapForm.Init;
+begin
+  inherited Init;
+  FMapFrame.Init;
+end;
+
+procedure TBisTaxiIngitMapForm.CreateWnd;
+begin
+  inherited CreateWnd;
+  if Assigned(FMapFrame) then
+    FMapFrame.PrepareMap;
+end;
+
+end.

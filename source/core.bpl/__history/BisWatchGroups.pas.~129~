@@ -1,0 +1,269 @@
+unit BisWatchGroups;
+
+interface
+
+uses Classes, Contnrs;
+
+type
+  TBisWatch=class(TObject)
+  private
+    FName: String;
+  protected
+    function GetValue: Variant; virtual;
+    procedure SetValue(const Value: Variant); virtual;
+  public
+    constructor Create(const AName: String); virtual;
+
+    procedure Reset;
+    function Empty: Boolean;
+
+    function AsString: String;
+    function AsInteger: Integer;
+
+    property Name: String read FName;
+    property Value: Variant read GetValue write SetValue;
+  end;
+
+  TBisStaticWatch=class(TBisWatch)
+  private
+    FValue: Variant;
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const Value: Variant); override;
+  public
+    constructor Create(const AName: String); override;
+  end;
+
+  TBisWatchOnGetValueEvent=function(Watch: TBisWatch): Variant of object;
+
+  TBisDynamicWatch=class(TBisWatch)
+  private
+    FOnGetValue: TBisWatchOnGetValueEvent; 
+  protected
+    function GetValue: Variant; override;
+  public
+    constructor Create(const AName: String); override;
+  end;
+
+  TBisWatches=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisWatch;
+  public
+    function Find(const Name: String): TBisWatch; overload;
+    function Find(Watch: TBisStaticWatch): Boolean; overload;
+
+    function Add(Watch: TBisStaticWatch): Boolean; reintroduce; overload;
+    function Add(const Name: String; Value: Variant): TBisStaticWatch; reintroduce; overload;
+    function Add(const Name: String; OnGetValue: TBisWatchOnGetValueEvent): TBisDynamicWatch; reintroduce; overload;
+
+    procedure Reset;
+
+    property Items[Index: Integer]: TBisWatch read GetItem; default;
+  end;
+
+  TBisWatchGroup=class(TObject)
+  private
+    FName: String;
+    FWatches: TBisWatches;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    property Name: String read FName;
+    property Watches: TBisWatches read FWatches;
+  end;
+
+  TBisWatchGroups=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisWatchGroup;
+  public
+    function Find(const Name: String): TBisWatchGroup;
+    function Add(const Name: String): TBisWatchGroup;
+
+    property Items[Index: Integer]: TBisWatchGroup read GetItem; default;
+  end;
+
+implementation
+
+uses SysUtils, Variants, BisUtils;
+
+{ TBisWatch }
+
+constructor TBisWatch.Create(const AName: String);
+begin
+  inherited Create;
+  FName:=AName;
+end;
+
+function TBisWatch.Empty: Boolean;
+begin
+  Result:=VarIsNull(Value) or VarIsEmpty(Value);
+end;
+
+function TBisWatch.GetValue: Variant;
+begin
+  Result:=Null;
+end;
+
+procedure TBisWatch.Reset;
+begin
+  Value:=Null;
+end;
+
+procedure TBisWatch.SetValue(const Value: Variant);
+begin
+  //
+end;
+
+function TBisWatch.AsInteger: Integer;
+begin
+  Result:=VarToIntDef(Value,0);
+end;
+
+function TBisWatch.AsString: String;
+begin
+  Result:=VarToStrDef(Value,'');
+end;
+
+{ TBisStaticWatch }
+
+constructor TBisStaticWatch.Create(const AName: String);
+begin
+  inherited Create(AName);
+  FValue:=Null;
+end;
+
+function TBisStaticWatch.GetValue: Variant;
+begin
+  Result:=FValue;
+end;
+
+procedure TBisStaticWatch.SetValue(const Value: Variant);
+begin
+  FValue:=Value;
+end;
+
+{ TBisDynamicWatch }
+
+constructor TBisDynamicWatch.Create(const AName: String);
+begin
+  inherited Create(AName);
+  FOnGetValue:=nil;
+end;
+
+function TBisDynamicWatch.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FOnGetValue) then
+    Result:=FOnGetValue(Self);
+end;
+
+{ TBisWatches }
+
+function TBisWatches.GetItem(Index: Integer): TBisWatch;
+begin
+  Result:=TBisWatch(inherited Items[Index]);
+end;
+
+function TBisWatches.Find(const Name: String): TBisWatch;
+var
+  i: Integer;
+  Item: TBisWatch;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.Name,Name) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisWatches.Find(Watch: TBisStaticWatch): Boolean;
+begin
+  Result:=IndexOf(Watch)>-1;
+end;
+
+function TBisWatches.Add(Watch: TBisStaticWatch): Boolean;
+begin
+  Result:=false;
+  if not Find(Watch) then
+    Result:=inherited Add(Watch)>-1;
+end;
+
+function TBisWatches.Add(const Name: String; Value: Variant): TBisStaticWatch;
+begin
+  Result:=nil;
+  if not Assigned(Find(Name)) then begin
+    Result:=TBisStaticWatch.Create(Name);
+    Result.Value:=Value;
+    inherited Add(Result);
+  end;
+end;
+
+function TBisWatches.Add(const Name: String; OnGetValue: TBisWatchOnGetValueEvent): TBisDynamicWatch;
+begin
+  Result:=nil;
+  if not Assigned(Find(Name)) then begin
+    Result:=TBisDynamicWatch.Create(Name);
+    Result.FOnGetValue:=OnGetValue;
+    inherited Add(Result);
+  end;
+end;
+
+procedure TBisWatches.Reset;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do
+    Items[i].Reset;
+end;
+
+{ TBisWatchGroup }
+
+constructor TBisWatchGroup.Create;
+begin
+  inherited Create;
+  FWatches:=TBisWatches.Create;
+end;
+
+destructor TBisWatchGroup.Destroy;
+begin
+  FWatches.Free;
+  inherited Destroy;
+end;
+
+{ TBisWatchGroups }
+
+function TBisWatchGroups.GetItem(Index: Integer): TBisWatchGroup;
+begin
+  Result:=TBisWatchGroup(inherited Items[Index]);
+end;
+
+function TBisWatchGroups.Find(const Name: String): TBisWatchGroup;
+var
+  i: Integer;
+  Item: TBisWatchGroup;
+begin
+  Result:=nil;
+  for i:=0 to Count-1 do begin
+    Item:=Items[i];
+    if AnsiSameText(Item.Name,Name) then begin
+      Result:=Item;
+      exit;
+    end;
+  end;
+end;
+
+function TBisWatchGroups.Add(const Name: String): TBisWatchGroup;
+begin
+  Result:=Find(Name);
+  if not Assigned(Result) then begin
+    Result:=TBisWatchGroup.Create;
+    Result.FName:=Name;
+    inherited Add(Result);
+  end;
+end;
+
+end.

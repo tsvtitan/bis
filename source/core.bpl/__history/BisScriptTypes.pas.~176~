@@ -1,0 +1,116 @@
+unit BisScriptTypes;
+
+interface
+
+uses
+     BisScriptSymbols, BisScriptType, BisScriptMethod, BisScriptClass;
+
+type
+
+  TBisScriptTypes=class(TBisScriptSymbols)
+  private
+    function GetItem(Index: Integer): TBisScriptType;
+  protected
+    function GetScriptSymbolClass: TBisScriptSymbolClass; override;
+  public
+    function Find(Name: String): TBisScriptType; reintroduce;
+    function Add(Name: String; AClass: TBisScriptTypeClass; Ancestor: String=''): TBisScriptType; reintroduce;
+    function AddInteger(Name: String; Ancestor: String=''): TBisScriptInteger;
+    function AddFloat(Name: String; Ancestor: String=''): TBisScriptFloat;
+    function AddString(Name: String; Ancestor: String=''): TBisScriptString;
+    function AddDateTime(Name: String; Ancestor: String=''): TBisScriptDateTime;
+    function AddBoolean(Name: String; Ancestor: String=''): TBisScriptBoolean;
+    function AddVariant(Name: String; Ancestor: String=''): TBisScriptVariant;
+
+    function AddMethodProc(Name: String): TBisScriptMethod;
+    function AddMethodFunc(Name: String; ResultType: String): TBisScriptMethod;
+
+    function AddClass(Name: String; Value: TClass; Ancestor: String=''): TBisScriptTypeClass;
+
+    property Items[Index: Integer]: TBisScriptType read GetItem;
+  end;
+
+
+implementation
+
+{ TBisScriptTypes }
+
+function TBisScriptTypes.Find(Name: String): TBisScriptType;
+begin
+  Result:=TBisScriptType(inherited Find(Name));
+end;
+
+function TBisScriptTypes.GetItem(Index: Integer): TBisScriptType;
+begin
+  Result:=TBisScriptType(inherited Items[Index]);
+end;
+
+function TBisScriptTypes.GetScriptSymbolClass: TBisScriptSymbolClass;
+begin
+  Result:=TBisScriptType;
+end;
+
+function TBisScriptTypes.Add(Name: String; AClass: TBisScriptTypeClass; Ancestor: String=''): TBisScriptType;
+begin
+  Result:=TBisScriptType(inherited AddClass(Name,AClass));
+  if Assigned(Result) then begin
+    Result.Ancestor:=Ancestor;
+  end;
+end;
+
+function TBisScriptTypes.AddInteger(Name, Ancestor: String): TBisScriptInteger;
+begin
+  Result:=TBisScriptInteger(Add(Name,TBisScriptInteger,Ancestor));
+end;
+
+function TBisScriptTypes.AddFloat(Name: String; Ancestor: String=''): TBisScriptFloat;
+begin
+  Result:=TBisScriptFloat(Add(Name,TBisScriptFloat,Ancestor));
+end;
+
+function TBisScriptTypes.AddString(Name: String; Ancestor: String=''): TBisScriptString;
+begin
+  Result:=TBisScriptString(Add(Name,TBisScriptString,Ancestor));
+end;
+
+function TBisScriptTypes.AddDateTime(Name: String; Ancestor: String=''): TBisScriptDateTime;
+begin
+  Result:=TBisScriptDateTime(Add(Name,TBisScriptDateTime,Ancestor));
+end;
+
+function TBisScriptTypes.AddBoolean(Name: String; Ancestor: String=''): TBisScriptBoolean;
+begin
+  Result:=TBisScriptBoolean(Add(Name,TBisScriptBoolean,Ancestor));
+end;
+
+function TBisScriptTypes.AddVariant(Name: String; Ancestor: String=''): TBisScriptVariant;
+begin
+  Result:=TBisScriptVariant(Add(Name,TBisScriptVariant,Ancestor));
+end;
+
+function TBisScriptTypes.AddMethodProc(Name: String): TBisScriptMethod;
+begin
+  Result:=TBisScriptMethod(Add(Name,TBisScriptMethod,''));
+  if Assigned(Result) then begin
+    Result.MethodKind:=smtkProcedure;
+  end;
+end;
+
+function TBisScriptTypes.AddMethodFunc(Name, ResultType: String): TBisScriptMethod;
+begin
+  Result:=TBisScriptMethod(Add(Name,TBisScriptMethod,''));
+  if Assigned(Result) then begin
+    Result.ResultType:=ResultType;
+    Result.MethodKind:=smtkFunction;
+  end;
+end;
+
+function TBisScriptTypes.AddClass(Name: String; Value: TClass; Ancestor: String): TBisScriptClass;
+begin
+  Result:=TBisScriptClass(Add(Name,TBisScriptClass,Ancestor));
+  if Assigned(Result) then begin
+    Result.Value:=Value;
+  end;
+end;
+
+end.

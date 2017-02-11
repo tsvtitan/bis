@@ -1,0 +1,5 @@
+inherited BisSmsServerMainForm: TBisSmsServerMainForm
+  Caption = 'Sms '#1057#1077#1088#1074#1077#1088
+  PixelsPerInch = 96
+  TextHeight = 13
+end

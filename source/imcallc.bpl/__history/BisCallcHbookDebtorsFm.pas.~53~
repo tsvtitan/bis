@@ -1,0 +1,90 @@
+unit BisCallcHbookDebtorsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList, DB, 
+  Dialogs, BisDataGridFm, BisFieldNames;
+
+type
+  TBisCallcHbookDebtorsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookDebtorsFormIface=class(TBisDataGridFormIface)
+  private
+    function GetDebtorTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookDebtorsForm: TBisCallcHbookDebtorsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisCallcHbookDebtorEditFm;
+
+{ TBisCallcHbookDebtorsFormIface }
+
+constructor TBisCallcHbookDebtorsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookDebtorsForm;
+  InsertClass:=TBisCallcHbookDebtorInsertFormIface;
+  UpdateClass:=TBisCallcHbookDebtorUpdateFormIface;
+  DeleteClass:=TBisCallcHbookDebtorDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_DEBTORS';
+  with FieldNames do begin
+    AddKey('DEBTOR_ID');
+    AddInvisible('DEBTOR_TYPE');
+    AddInvisible('PASSPORT');
+    AddInvisible('SEX');
+    AddInvisible('PLACE_BIRTH');
+    AddInvisible('ADDRESS_RESIDENCE');
+    AddInvisible('INDEX_RESIDENCE');
+    AddInvisible('ADDRESS_ACTUAL');
+    AddInvisible('INDEX_ACTUAL');
+    AddInvisible('ADDRESS_ADDITIONAL');
+    AddInvisible('INDEX_ADDITIONAL');
+    AddInvisible('JOB_TITLE');
+    AddInvisible('PLACE_WORK');
+    AddInvisible('ADDRESS_WORK');
+    AddInvisible('INDEX_WORK');
+    AddInvisible('PHONE_HOME');
+    AddInvisible('PHONE_WORK');
+    AddInvisible('PHONE_MOBILE');
+    AddInvisible('PHONE_OTHER1');
+    AddInvisible('PHONE_OTHER2');
+    AddInvisible('FOUNDERS');
+    AddCalculate('SEX_NAME','',GetSexName,ftString,10);
+    Add('SURNAME','Фамилия',130);
+    Add('NAME','Имя',100);
+    Add('PATRONYMIC','Отчество',130);
+    Add('DATE_BIRTH','Дата рождения',90);
+    AddCalculate('DEBTOR_TYPE_NAME','Тип должника',GetDebtorTypeName,ftString,100,100);
+  end;
+  Orders.Add('SURNAME');
+  Orders.Add('NAME');
+  Orders.Add('PATRONYMIC');
+  Orders.Add('DATE_BIRTH');
+end;
+
+function TBisCallcHbookDebtorsFormIface.GetDebtorTypeName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  S: String;
+begin
+  Result:=Null;
+  S:=GetDebtorTypeByIndex(DataSet.FieldByName('DEBTOR_TYPE').AsInteger);
+  if Trim(S)<>'' then
+    Result:=S;
+end;
+
+end.

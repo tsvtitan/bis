@@ -1,0 +1,14 @@
+// ---------------------------------------------------------------------
+// the following program raise an access violation.
+// Used to test the catch of errors
+// ---------------------------------------------------------------------
+
+procedure RaiseError;
+var aString: string;
+begin
+  aString := UpperCase(aString[3])+UpperCase(aString[4]);
+end;
+
+// call procedure
+RaiseError;
+

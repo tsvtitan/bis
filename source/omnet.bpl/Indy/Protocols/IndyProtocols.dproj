@@ -1,0 +1,290 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{fa53f356-2f36-48b6-bf61-80d16ce1990f}</ProjectGuid>
+    <MainSource>IndyProtocols.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>C:\Documents and Settings\All Users.WINDOWS\Документы\RAD Studio\5.0\Bpl\IndyProtocols.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_Alignment>0</DCC_Alignment>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_IntegerOverflowCheck>True</DCC_IntegerOverflowCheck>
+    <DCC_RangeChecking>True</DCC_RangeChecking>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_Alignment>0</DCC_Alignment>
+    <DCC_IntegerOverflowCheck>True</DCC_IntegerOverflowCheck>
+    <DCC_RangeChecking>True</DCC_RangeChecking>
+    <DCC_Define>DEBUG</DCC_Define>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject xmlns=""> <Delphi.Personality>   <Parameters>
+      <Parameters Name="UseLauncher">False</Parameters>
+      <Parameters Name="LoadAllSymbols">True</Parameters>
+      <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+    </Parameters>
+    <Package_Options>
+      <Package_Options Name="PackageDescription">Indy 10 Protocols Runtime Package</Package_Options>
+      <Package_Options Name="ImplicitBuild">False</Package_Options>
+      <Package_Options Name="DesigntimeOnly">False</Package_Options>
+      <Package_Options Name="RuntimeOnly">True</Package_Options>
+    </Package_Options>
+    <VersionInfo>
+      <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+      <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+      <VersionInfo Name="MajorVer">1</VersionInfo>
+      <VersionInfo Name="MinorVer">0</VersionInfo>
+      <VersionInfo Name="Release">0</VersionInfo>
+      <VersionInfo Name="Build">0</VersionInfo>
+      <VersionInfo Name="Debug">False</VersionInfo>
+      <VersionInfo Name="PreRelease">False</VersionInfo>
+      <VersionInfo Name="Special">False</VersionInfo>
+      <VersionInfo Name="Private">False</VersionInfo>
+      <VersionInfo Name="DLL">False</VersionInfo>
+      <VersionInfo Name="Locale">1049</VersionInfo>
+      <VersionInfo Name="CodePage">1251</VersionInfo>
+    </VersionInfo>
+    <VersionInfoKeys>
+      <VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
+      <VersionInfoKeys Name="FileDescription"></VersionInfoKeys>
+      <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+      <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
+      <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+      <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
+      <VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys>
+      <VersionInfoKeys Name="ProductName"></VersionInfoKeys>
+      <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+      <VersionInfoKeys Name="Comments"></VersionInfoKeys>
+    </VersionInfoKeys>
+    <Source>
+      <Source Name="MainSource">IndyProtocols.dpk</Source>
+    </Source>
+  </Delphi.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <ItemGroup />
+  <ItemGroup>
+    <DelphiCompile Include="IndyProtocols.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="Borland.Delphi.dcp" />
+    <DCCReference Include="Borland.VclRtl.dcp" />
+    <DCCReference Include="IdAllFTPListParsers.pas" />
+    <DCCReference Include="IdASN1Util.pas" />
+    <DCCReference Include="IdAttachment.pas" />
+    <DCCReference Include="IdAttachmentFile.pas" />
+    <DCCReference Include="IdAttachmentMemory.pas" />
+    <DCCReference Include="IdAuthentication.pas" />
+    <DCCReference Include="IdAuthenticationDigest.pas" />
+    <DCCReference Include="IdAuthenticationManager.pas" />
+    <DCCReference Include="IdChargenServer.pas" />
+    <DCCReference Include="IdChargenUDPServer.pas" />
+    <DCCReference Include="IdCharsets.pas" />
+    <DCCReference Include="IdCoder.pas" />
+    <DCCReference Include="IdCoder00E.pas" />
+    <DCCReference Include="IdCoder3to4.pas" />
+    <DCCReference Include="IdCoderBinHex4.pas" />
+    <DCCReference Include="IdCoderHeader.pas" />
+    <DCCReference Include="IdCoderMIME.pas" />
+    <DCCReference Include="IdCoderQuotedPrintable.pas" />
+    <DCCReference Include="IdCoderUUE.pas" />
+    <DCCReference Include="IdCoderXXE.pas" />
+    <DCCReference Include="IdConnectThroughHttpProxy.pas" />
+    <DCCReference Include="IdContainers.pas" />
+    <DCCReference Include="IdCookie.pas" />
+    <DCCReference Include="IdCookieManager.pas" />
+    <DCCReference Include="IdCustomHTTPServer.pas" />
+    <DCCReference Include="IdDateTimeStamp.pas" />
+    <DCCReference Include="IdDayTime.pas" />
+    <DCCReference Include="IdDayTimeServer.pas" />
+    <DCCReference Include="IdDayTimeUDP.pas" />
+    <DCCReference Include="IdDayTimeUDPServer.pas" />
+    <DCCReference Include="IdDICT.pas" />
+    <DCCReference Include="IdDICTCommon.pas" />
+    <DCCReference Include="IdDICTServer.pas" />
+    <DCCReference Include="IdDiscardServer.pas" />
+    <DCCReference Include="IdDiscardUDPServer.pas" />
+    <DCCReference Include="IdDNSCommon.pas" />
+    <DCCReference Include="IdDNSResolver.pas" />
+    <DCCReference Include="IdDNSServer.pas" />
+    <DCCReference Include="IdEcho.pas" />
+    <DCCReference Include="IdEchoServer.pas" />
+    <DCCReference Include="IdEchoUDP.pas" />
+    <DCCReference Include="IdEchoUDPServer.pas" />
+    <DCCReference Include="IdEMailAddress.pas" />
+    <DCCReference Include="IdExplicitTLSClientServerBase.pas" />
+    <DCCReference Include="IdFinger.pas" />
+    <DCCReference Include="IdFingerServer.pas" />
+    <DCCReference Include="IdFSP.pas" />
+    <DCCReference Include="IdFTP.pas" />
+    <DCCReference Include="IdFTPBaseFileSystem.pas" />
+    <DCCReference Include="IdFTPCommon.pas" />
+    <DCCReference Include="IdFTPList.pas" />
+    <DCCReference Include="IdFTPListOutput.pas" />
+    <DCCReference Include="IdFTPListParseAS400.pas" />
+    <DCCReference Include="IdFTPListParseBase.pas" />
+    <DCCReference Include="IdFTPListParseBullGCOS7.pas" />
+    <DCCReference Include="IdFTPListParseBullGCOS8.pas" />
+    <DCCReference Include="IdFTPListParseChameleonNewt.pas" />
+    <DCCReference Include="IdFTPListParseCiscoIOS.pas" />
+    <DCCReference Include="IdFTPListParseDistinctTCPIP.pas" />
+    <DCCReference Include="IdFTPListParseEPLF.pas" />
+    <DCCReference Include="IdFTPListParseHellSoft.pas" />
+    <DCCReference Include="IdFTPListParseKA9Q.pas" />
+    <DCCReference Include="IdFTPListParseMicrowareOS9.pas" />
+    <DCCReference Include="IdFTPListParseMPEiX.pas" />
+    <DCCReference Include="IdFTPListParseMusic.pas" />
+    <DCCReference Include="IdFTPListParseMVS.pas" />
+    <DCCReference Include="IdFTPListParseNCSAForDOS.pas" />
+    <DCCReference Include="IdFTPListParseNCSAForMACOS.pas" />
+    <DCCReference Include="IdFTPListParseNovellNetware.pas" />
+    <DCCReference Include="IdFTPListParseNovellNetwarePSU.pas" />
+    <DCCReference Include="IdFTPListParseOS2.pas" />
+    <DCCReference Include="IdFTPListParsePCNFSD.pas" />
+    <DCCReference Include="IdFTPListParseStercomOS390Exp.pas" />
+    <DCCReference Include="IdFTPListParseStercomUnixEnt.pas" />
+    <DCCReference Include="IdFTPListParseStratusVOS.pas" />
+    <DCCReference Include="IdFTPListParseSuperTCP.pas" />
+    <DCCReference Include="IdFTPListParseTandemGuardian.pas" />
+    <DCCReference Include="IdFTPListParseTOPS20.pas" />
+    <DCCReference Include="IdFTPListParseTSXPlus.pas" />
+    <DCCReference Include="IdFTPListParseUnisysClearPath.pas" />
+    <DCCReference Include="IdFTPListParseUnix.pas" />
+    <DCCReference Include="IdFTPListParseVM.pas" />
+    <DCCReference Include="IdFTPListParseVMS.pas" />
+    <DCCReference Include="IdFTPListParseVSE.pas" />
+    <DCCReference Include="IdFTPListParseVxWorks.pas" />
+    <DCCReference Include="IdFTPListParseWfFTP.pas" />
+    <DCCReference Include="IdFTPListParseWindowsNT.pas" />
+    <DCCReference Include="IdFTPListParseWinQVTNET.pas" />
+    <DCCReference Include="IdFTPListParseXecomMicroRTOS.pas" />
+    <DCCReference Include="IdFTPListTypes.pas" />
+    <DCCReference Include="IdFTPServer.pas" />
+    <DCCReference Include="IdFTPServerContextBase.pas" />
+    <DCCReference Include="IdGlobalProtocols.pas" />
+    <DCCReference Include="IdGopher.pas" />
+    <DCCReference Include="IdGopherConsts.pas" />
+    <DCCReference Include="IdGopherServer.pas" />
+    <DCCReference Include="IdHash.pas" />
+    <DCCReference Include="IdHashCRC.pas" />
+    <DCCReference Include="IdHashElf.pas" />
+    <DCCReference Include="IdHashMessageDigest.pas" />
+    <DCCReference Include="IdHashSHA1.pas" />
+    <DCCReference Include="IdHeaderList.pas" />
+    <DCCReference Include="IdHL7.pas" />
+    <DCCReference Include="IdHTTP.pas" />
+    <DCCReference Include="IdHTTPHeaderInfo.pas" />
+    <DCCReference Include="IdHTTPProxyServer.pas" />
+    <DCCReference Include="IdHTTPServer.pas" />
+    <DCCReference Include="IdIdent.pas" />
+    <DCCReference Include="IdIdentServer.pas" />
+    <DCCReference Include="IdIMAP4.pas" />
+    <DCCReference Include="IdIMAP4Server.pas" />
+    <DCCReference Include="IdIPAddrMon.pas" />
+    <DCCReference Include="IdIPWatch.pas" />
+    <DCCReference Include="IdIRC.pas" />
+    <DCCReference Include="IdIrcServer.pas" />
+    <DCCReference Include="IdLPR.pas" />
+    <DCCReference Include="IdMailBox.pas" />
+    <DCCReference Include="IdMappedFTP.pas" />
+    <DCCReference Include="IdMappedPOP3.pas" />
+    <DCCReference Include="IdMappedPortTCP.pas" />
+    <DCCReference Include="IdMappedPortUDP.pas" />
+    <DCCReference Include="IdMappedTelnet.pas" />
+    <DCCReference Include="IdMessage.pas" />
+    <DCCReference Include="IdMessageClient.pas" />
+    <DCCReference Include="IdMessageCoder.pas" />
+    <DCCReference Include="IdMessageCoderMIME.pas" />
+    <DCCReference Include="IdMessageCoderQuotedPrintable.pas" />
+    <DCCReference Include="IdMessageCoderUUE.pas" />
+    <DCCReference Include="IdMessageCoderXXE.pas" />
+    <DCCReference Include="IdMessageCoderYenc.pas" />
+    <DCCReference Include="IdMessageCollection.pas" />
+    <DCCReference Include="IdMessageParts.pas" />
+    <DCCReference Include="IdMIMETypes.pas" />
+    <DCCReference Include="IdMultipartFormData.pas" />
+    <DCCReference Include="IdNetworkCalculator.pas" />
+    <DCCReference Include="IdNNTP.pas" />
+    <DCCReference Include="IdNNTPServer.pas" />
+    <DCCReference Include="IdOSFileName.pas" />
+    <DCCReference Include="IdOTPCalculator.pas" />
+    <DCCReference Include="IdPOP3.pas" />
+    <DCCReference Include="IdPOP3Server.pas" />
+    <DCCReference Include="IdQotd.pas" />
+    <DCCReference Include="IdQotdServer.pas" />
+    <DCCReference Include="IdQOTDUDP.pas" />
+    <DCCReference Include="IdQOTDUDPServer.pas" />
+    <DCCReference Include="IdRemoteCMDClient.pas" />
+    <DCCReference Include="IdRemoteCMDServer.pas" />
+    <DCCReference Include="IdReplyFTP.pas" />
+    <DCCReference Include="IdReplyIMAP4.pas" />
+    <DCCReference Include="IdReplyPOP3.pas" />
+    <DCCReference Include="IdReplySMTP.pas" />
+    <DCCReference Include="IdResourceStringsProtocols.pas" />
+    <DCCReference Include="IdRexec.pas" />
+    <DCCReference Include="IdRexecServer.pas" />
+    <DCCReference Include="IdRSH.pas" />
+    <DCCReference Include="IdRSHServer.pas" />
+    <DCCReference Include="IdSASL.pas" />
+    <DCCReference Include="IdSASLAnonymous.pas" />
+    <DCCReference Include="IdSASLCollection.pas" />
+    <DCCReference Include="IdSASLExternal.pas" />
+    <DCCReference Include="IdSASLLogin.pas" />
+    <DCCReference Include="IdSASLOTP.pas" />
+    <DCCReference Include="IdSASLPlain.pas" />
+    <DCCReference Include="IdSASLSKey.pas" />
+    <DCCReference Include="IdSASLUserPass.pas" />
+    <DCCReference Include="IdSASL_CRAM_MD5.pas" />
+    <DCCReference Include="IdServerInterceptLogBase.pas" />
+    <DCCReference Include="IdServerInterceptLogEvent.pas" />
+    <DCCReference Include="IdServerInterceptLogFile.pas" />
+    <DCCReference Include="IdSMTP.pas" />
+    <DCCReference Include="IdSMTPBase.pas" />
+    <DCCReference Include="IdSMTPRelay.pas" />
+    <DCCReference Include="IdSMTPServer.pas" />
+    <DCCReference Include="IdSNPP.pas" />
+    <DCCReference Include="IdSSL.pas" />
+    <DCCReference Include="IdStrings.pas" />
+    <DCCReference Include="IdSysLog.pas" />
+    <DCCReference Include="IdSysLogMessage.pas" />
+    <DCCReference Include="IdSysLogServer.pas" />
+    <DCCReference Include="IdSystat.pas" />
+    <DCCReference Include="IdSystatServer.pas" />
+    <DCCReference Include="IdSystatUDP.pas" />
+    <DCCReference Include="IdSystatUDPServer.pas" />
+    <DCCReference Include="IdTelnet.pas" />
+    <DCCReference Include="IdTelnetServer.pas" />
+    <DCCReference Include="IdText.pas" />
+    <DCCReference Include="IdTime.pas" />
+    <DCCReference Include="IdTimeServer.pas" />
+    <DCCReference Include="IdTimeUDP.pas" />
+    <DCCReference Include="IdTimeUDPServer.pas" />
+    <DCCReference Include="IdTrivialFTP.pas" />
+    <DCCReference Include="IdTrivialFTPBase.pas" />
+    <DCCReference Include="IdTrivialFTPServer.pas" />
+    <DCCReference Include="IdUnixTime.pas" />
+    <DCCReference Include="IdUnixTimeServer.pas" />
+    <DCCReference Include="IdUnixTimeUDP.pas" />
+    <DCCReference Include="IdUnixTimeUDPServer.pas" />
+    <DCCReference Include="IdURI.pas" />
+    <DCCReference Include="IdUserAccounts.pas" />
+    <DCCReference Include="IdUserPassProvider.pas" />
+    <DCCReference Include="IdVCard.pas" />
+    <DCCReference Include="IdWhois.pas" />
+    <DCCReference Include="IdWhoIsServer.pas" />
+    <DCCReference Include="IdZLibCompressorBase.pas" />
+    <DCCReference Include="IndyCore.dcp" />
+    <DCCReference Include="IndySystem.dcp" />
+    <DCCReference Include="System.Windows.Forms.dcp" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+</Project>

@@ -1,0 +1,51 @@
+unit BisCallcHbookResultsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataTreeFm, StdCtrls, ExtCtrls, ComCtrls, BisDataGridFm, ActnList;
+
+type
+  TBisCallcHbookResultsForm = class(TBisDataTreeForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookResultsFormIface=class(TBisDataTreeFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookResultsForm: TBisCallcHbookResultsForm;
+
+implementation
+
+uses BisCallcHbookResultEditFm;
+
+{$R *.dfm}
+
+{ TBisCallcHbookResultsFormIface }
+
+constructor TBisCallcHbookResultsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookResultsForm;
+  InsertClass:=TBisCallcHbookResultInsertFormIface;
+  UpdateClass:=TBisCallcHbookResultUpdateFormIface;
+  DeleteClass:=TBisCallcHbookResultDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_RESULTS';
+  with FieldNames do begin
+    AddKey('RESULT_ID');
+    AddInvisible('ACTION_ID');
+    Add('NAME','Наименование',150);
+    Add('ACTION_NAME','Действие',100);
+    Add('DESCRIPTION','Описание',200);
+  end;
+end;
+
+end.

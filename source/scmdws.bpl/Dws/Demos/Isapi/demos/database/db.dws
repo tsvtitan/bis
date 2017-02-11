@@ -1,0 +1,31 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Database Demonstration</title>
+</head>
+
+<body>
+<h1>Database Demonstration</h1>
+<%
+
+var
+  Query: TQuery;
+
+Query := TQuery.Create('DbDemos', 'select * from Customer');
+
+Query.First;
+
+while not Query.Eof do
+begin
+  Send(Query.FieldByName('Company'));
+  SendLn('<br>');
+  Query.Next;
+end;
+
+//TQuery.Execute('DbDemos', 'insert into Customer (CustNo, Company) values (2000, ''IBM'')');
+
+%>
+</body
+</html>

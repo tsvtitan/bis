@@ -1,0 +1,55 @@
+package imball;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  omcom,
+  vcl,
+  rtl;
+
+contains
+  BisBall in 'imball.bpl\BisBall.pas',
+  BisBallConsts in 'imball.bpl\BisBallConsts.pas',
+  BisBallMainFm in 'imball.bpl\BisBallMainFm.pas' {BisBallMainForm},
+  BisBallDataDealersFm in 'imball.bpl\BisBallDataDealersFm.pas' {BisBallDataDealersForm},
+  BisBallDataDealerEditFm in 'imball.bpl\BisBallDataDealerEditFm.pas' {BisBallDataDealerEditForm},
+  BisBallDataTiragesFm in 'imball.bpl\BisBallDataTiragesFm.pas' {BisBallDataTiragesForm},
+  BisBallDataTirageEditFm in 'imball.bpl\BisBallDataTirageEditFm.pas' {BisBallDataTirageEditForm},
+  BisBallImportTicketsFm in 'imball.bpl\BisBallImportTicketsFm.pas' {BisBallImportTicketsForm},
+  BisBallManageTicketFm in 'imball.bpl\BisBallManageTicketFm.pas' {BisBallManageTicketForm},
+  BisBallLotteryFm in 'imball.bpl\BisBallLotteryFm.pas' {BisBallLotteryForm},
+  BisBallBarrelFrm in 'imball.bpl\BisBallBarrelFrm.pas' {BisBallBarrelFrame: TFrame},
+  BisBallFirstRoundFrm in 'imball.bpl\BisBallFirstRoundFrm.pas' {BisBallFirstRoundFrame: TFrame},
+  BisBallSecondRoundFrm in 'imball.bpl\BisBallSecondRoundFrm.pas' {BisBallSecondRoundFrame: TFrame},
+  BisBallThirdRoundFrm in 'imball.bpl\BisBallThirdRoundFrm.pas' {BisBallThirdRoundFrame: TFrame},
+  BisBallFourthRoundFrm in 'imball.bpl\BisBallFourthRoundFrm.pas' {BisBallFourthRoundFrame: TFrame},
+  BisBallDistrTicketsFm in 'imball.bpl\BisBallDistrTicketsFm.pas' {BisBallDistrTicketsForm},
+  BisBallTirageSubroundsFrm in 'imball.bpl\BisBallTirageSubroundsFrm.pas' {BisBallTirageSubroundsFrame: T},
+  BisBallTirageSubroundEditFm in 'imball.bpl\BisBallTirageSubroundEditFm.pas' {BisBallTirageSubroundEditForm},
+  BisBallExportFm in 'imball.bpl\BisBallExportFm.pas' {BisBallExportForm};
+
+end.

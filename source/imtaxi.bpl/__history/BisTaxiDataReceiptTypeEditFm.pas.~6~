@@ -1,0 +1,109 @@
+unit BisTaxiDataReceiptTypeEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ImgList,
+  BisDataEditFm, BisParam, BisControls;
+
+type
+  TBisTaxiDataReceiptTypeEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelSum: TLabel;
+    EditSum: TEdit;
+    CheckBoxVisible: TCheckBox;
+    CheckBoxVirtual: TCheckBox;
+  private
+  public
+  end;
+
+  TBisTaxiDataReceiptTypeEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataReceiptTypeFilterFormIface=class(TBisTaxiDataReceiptTypeEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataReceiptTypeInsertFormIface=class(TBisTaxiDataReceiptTypeEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataReceiptTypeUpdateFormIface=class(TBisTaxiDataReceiptTypeEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisTaxiDataReceiptTypeDeleteFormIface=class(TBisTaxiDataReceiptTypeEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataReceiptTypeEditForm: TBisTaxiDataReceiptTypeEditForm;
+
+implementation
+
+uses BisUtils;
+
+{$R *.dfm}
+
+{ TBisTaxiDataReceiptTypeEditFormIface }
+
+constructor TBisTaxiDataReceiptTypeEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataReceiptTypeEditForm;
+  with Params do begin
+    AddKey('RECEIPT_TYPE_ID').Older('OLD_RECEIPT_TYPE_ID');
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+    AddEditFloat('SUM_RECEIPT','EditSum','LabelSum');
+    AddCheckBox('','').Value:=0;
+    AddCheckBox('','').Value:=1;
+  end;
+end;
+
+{ TBisTaxiDataReceiptTypeFilterFormIface }
+
+constructor TBisTaxiDataReceiptTypeFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Caption:='Фильтр видов поступлений';
+end;
+
+{ TBisTaxiDataReceiptTypeInsertFormIface }
+
+constructor TBisTaxiDataReceiptTypeInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_RECEIPT_TYPE';
+  Caption:='Создать вид поступления';
+end;
+
+{ TBisTaxiDataReceiptTypeUpdateFormIface }
+
+constructor TBisTaxiDataReceiptTypeUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_RECEIPT_TYPE';
+  Caption:='Изменить вид поступления';
+end;
+
+{ TBisTaxiDataReceiptTypeDeleteFormIface }
+
+constructor TBisTaxiDataReceiptTypeDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_RECEIPT_TYPE';
+  Caption:='Удалить вид поступления';
+end;
+
+end.

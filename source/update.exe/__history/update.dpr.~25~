@@ -1,0 +1,43 @@
+program update;
+
+uses
+  Forms,
+  Windows,
+  BisUpdateFm in 'BisUpdateFm.pas' {BisUpdateForm},
+  BisCrypter in '..\core.bpl\BisCrypter.pas';
+
+{$R *.res}
+
+var
+  MutexHandle: THandle;
+  
+function Exists: Boolean;
+var
+  Ret: DWord;
+  S: String;
+  Crypter: TBisCrypter;
+begin
+  Crypter:=TBisCrypter.Create(nil);
+  try
+    S:=Crypter.HashString(Application.ExeName);
+    MutexHandle:=CreateMutex(nil,false,PChar(S));
+    Ret:=GetLastError;
+    Result:=Ret=ERROR_ALREADY_EXISTS;
+  finally
+    Crypter.Free;
+  end;
+end;
+
+begin
+  if not Exists then begin
+    try
+      Application.Initialize;
+      Application.MainFormOnTaskbar := True;
+      Application.CreateForm(TBisUpdateForm, BisUpdateForm);
+      Application.Run;
+    finally
+      if MutexHandle<>0 then
+        CloseHandle(MutexHandle);
+    end;
+  end;
+end.

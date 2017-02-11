@@ -1,0 +1,1223 @@
+unit BisSipHeaders;
+
+interface
+
+uses Classes, Contnrs;
+
+type
+
+  TBisSipHeader=class(TObject)
+  protected
+    class function GetName: String; virtual;
+    procedure Parse(const Body: String); virtual;
+    function AsString: String; virtual;
+    procedure CopyFrom(Source: TBisSipHeader); virtual;
+    function Empty: Boolean; virtual;
+    function NameEqual: String; virtual;
+  public
+    constructor Create;
+
+    property Name: String read GetName;
+  end;
+
+  TBisSipHeaderClass=class of TBisSipHeader;
+
+  TBisSipSimple=class(TBisSipHeader)
+  private
+    FValue: String;
+  public
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+    procedure CopyFrom(Source: TBisSipHeader); override;
+
+    property Value: String read FValue;
+  end;
+
+  TBisSipVia=class(TBisSipHeader)
+  private
+    FProtocol, FTransport, FHost, FPort: String;
+    FRport, FBranch, FReceived: String;
+  protected
+    class function GetName: String; override;
+  public
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+    procedure CopyFrom(Source: TBisSipHeader); override;
+
+    property Branch: String read FBranch write FBranch;
+  end;
+
+  TBisSipFrom=class(TBisSipHeader)
+  private
+    FDisplay, FScheme, FUser, FHost, FPort: String;
+    FTag, FExpires, FQ: String;
+    FUriUser, FUriCpc: String;
+    function HeadersAsString: String;
+  protected
+    class function GetName: String; override;
+  public
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+    procedure CopyFrom(Source: TBisSipHeader); override;
+    function Empty: Boolean; override;
+  end;
+
+  TBisSipTo=class(TBisSipFrom)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipContact=class(TBisSipFrom)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipPAssertedIdentity=class(TBisSipFrom)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipCallID=class(TBisSipSimple)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipPrivacy=class(TBisSipSimple)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipCSeq=class(TBisSipHeader)
+  private
+    FNum, FRequestName: String;
+  protected
+    class function GetName: String; override;
+  public
+    procedure Parse(const Body: String); override;
+    function AsString: String; override;
+    procedure CopyFrom(Source: TBisSipHeader); override;
+
+    property Num: String read FNum write FNum;
+    property RequestName: String read FRequestName;
+  end;
+
+  TBisSipReason=class(TBisSipHeader)
+  private
+    FValue, FCause, FText: String;
+  protected
+    class function GetName: String; override;
+  public
+    procedure Parse(const Body: String); override;
+    procedure CopyFrom(Source: TBisSipHeader); override;
+  end;
+
+  TBisSipOrganization=class(TBisSipSimple)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipUserAgent=class(TBisSipSimple)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipSubject=class(TBisSipSimple)
+  protected
+    class function GetName: String; override;
+  end;
+  
+  TBisSipAllowType=(atINVITE,atACK,atBYE,atCANCEL,atINFO,atMESSAGE,atPRACK,atUPDATE,atOPTIONS,atREGISTER,atREFER,atSUBSCRIBE);
+  TBisSipAllowTypes=set of TBisSipAllowType;
+
+  TBisSipAllow=class(TBisSipHeader)
+  private
+    FTypes: TBisSipAllowTypes;
+    function GetStringByType(AllowType: TBisSipAllowType): String;
+  protected
+    class function GetName: String; override;
+  public
+    function AsString: String; override;
+  end;
+
+  TBisSipMaxForwards=class(TBisSipSimple)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipExpires=class(TBisSipSimple)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipContentTypeValue=(ctvUnknown,ctvApplicationSdp);
+
+  TBisSipContentType=class(TBisSipSimple)
+  private
+    function GetValue: TBisSipContentTypeValue;
+  protected
+    class function GetName: String; override;
+  published
+  public
+    property Value: TBisSipContentTypeValue read GetValue;  
+  end;
+
+  TBisSipContentLength=class(TBisSipSimple)
+  protected
+    class function GetName: String; override;
+  end;
+
+  TBisSipContentDisposition=class(TBisSipHeader)
+  private
+    FValue, FHandling: String;
+  protected
+    class function GetName: String; override;
+  public
+    procedure Parse(const Body: String); override;
+    procedure CopyFrom(Source: TBisSipHeader); override;
+  end;
+
+  TBisSipWWWAuthenticate=class(TBisSipHeader)
+  private
+    FAuthorization, FRealm, FNonce, FOpaque, FQop: String;
+  protected
+    class function GetName: String; override;
+  public
+    procedure Parse(const Body: String); override;
+    procedure CopyFrom(Source: TBisSipHeader); override;
+  end;
+
+  TBisSipAuthorizationAlgorithm=(aaMD5);
+
+  TBisSipAuthorization=class(TBisSipHeader)
+  private
+    FUsername, FPassword, FRequestName, FUri: String;
+    FAuthorization, FRealm, FNonce: String;
+    FQop, FCnonce, FOpaque: String;
+    FAlgorithm: TBisSipAuthorizationAlgorithm;
+    function GetStringByAlgorithm(Algorithm: TBisSipAuthorizationAlgorithm): String;
+  protected
+    class function GetName: String; override;
+  public
+    procedure CopyFrom(Source: TBisSipHeader); override;
+    function AsString: String; override;
+  end;
+
+  TBisSipProxyAuthorization=class(TBisSipAuthorization)
+  protected
+    class function GetName: String; override;
+  end;
+
+
+  TBisSipHeaders=class(TObjectList)
+  private
+    function GetItem(Index: Integer): TBisSipHeader;
+  public
+    function Find(AClass: TBisSipHeaderClass): TBisSipHeader; overload;
+    procedure GetStrings(Strings: TStrings);
+
+    function Add(AClass: TBisSipHeaderClass): TBisSipHeader;
+    function AddVia(Protocol, Transport, Host, Port, Branch, RPort, Received: String): TBisSipVia;
+    function AddFrom(Display, Scheme, User, Host, Port, Tag: String): TBisSipFrom;
+    function AddTo(Display, Scheme, User, Host, Port, Tag: String): TBisSipTo;
+    function AddContact(Display, Scheme, User, Host, Port, Tag, Expires, Q: String): TBisSipContact; overload;
+    function AddContact: TBisSipContact; overload;
+    function AddCallID(Value: String): TBisSipCallID;
+    function AddCSeq(Num, RequestName: String): TBisSipCSeq;
+    function AddUserAgent(Value: String): TBisSipUserAgent;
+    function AddAllow(Types: TBisSipAllowTypes): TBisSipAllow;
+    function AddMaxForwards(Value: String): TBisSipMaxForwards;
+    function AddExpires(Value: String): TBisSipExpires;
+    function AddContentType(Value: String): TBisSipContentType;
+    function AddContentLength(Value: String): TBisSipContentLength;
+    function AddAuthorization(Username, Password, RequestName, Uri: String): TBisSipAuthorization;
+//    function AddProxyAuthorization(Scheme, Username, Password, Host, RequestName: String): TBisSipAuthorization;
+
+    function ParseHeader(const Line: String): TBisSipHeader;
+
+    procedure CopyFrom(Source: TBisSipHeaders; WithClear: Boolean=true);
+
+    property Items[Index: Integer]: TBisSipHeader read GetItem; default;
+  end;
+
+implementation
+
+uses Windows, SysUtils, TypInfo,
+     BisUtils;
+
+var
+  FHeaderClasses: TClassList=nil;
+
+function FindHeaderClass(const AName: String): TBisSipHeaderClass;
+var
+  i: Integer;
+  AClass: TBisSipHeaderClass;
+begin
+  Result:=nil;
+  if Assigned(FHeaderClasses) then begin
+    for i:=0 to FHeaderClasses.Count-1 do begin
+      AClass:=TBisSipHeaderClass(FHeaderClasses[i]);
+      if AnsiSameText(AClass.GetName,AName) then begin
+        Result:=AClass;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+{ TBisSipHeader }
+
+constructor TBisSipHeader.Create;
+begin
+  inherited Create;
+end;
+
+function TBisSipHeader.Empty: Boolean;
+begin
+  Result:=AsString='';
+end;
+
+function TBisSipHeader.AsString: String;
+begin
+  Result:='';
+end;
+
+procedure TBisSipHeader.CopyFrom(Source: TBisSipHeader);
+begin
+end;
+
+class function TBisSipHeader.GetName: String;
+begin
+  Result:='';
+end;
+
+function TBisSipHeader.NameEqual: String;
+begin
+  Result:=GetName;
+  Result:=iff(Result<>'',Result+':','');
+end;
+
+procedure TBisSipHeader.Parse(const Body: String);
+begin
+end;
+
+{ TBisSipSimple }
+
+function TBisSipSimple.AsString: String;
+var
+  S: String;
+begin
+  S:=Format('%s %s',[NameEqual,FValue]);
+  Result:=Trim(S);
+end;
+
+procedure TBisSipSimple.CopyFrom(Source: TBisSipHeader);
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisSipSimple) then
+    FValue:=TBisSipSimple(Source).FValue;
+end;
+
+procedure TBisSipSimple.Parse(const Body: String);
+begin
+  FValue:=Body;
+end;
+
+{ TBisSipVia }
+
+procedure TBisSipVia.CopyFrom(Source: TBisSipHeader);
+var
+  ViaSource: TBisSipVia;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisSipVia) then begin
+    ViaSource:=TBisSipVia(Source);
+
+    FProtocol:=ViaSource.FProtocol;
+    FTransport:=ViaSource.FTransport;
+    FHost:=ViaSource.FHost;
+    FPort:=ViaSource.FPort;
+    FRport:=ViaSource.FRport;
+    FBranch:=ViaSource.FBranch;
+    FReceived:=ViaSource.FReceived;
+  end;
+end;
+
+class function TBisSipVia.GetName: String;
+begin
+  Result:='Via';
+end;
+
+procedure TBisSipVia.Parse(const Body: String);
+
+  procedure ParseProtocolHost(S: String);
+  var
+    AProtocolTransport,AHostPort: String;
+    Temp: TStringList;
+  begin
+    S:=Trim(S);
+    if ParseName(S,' ',AProtocolTransport,AHostPort) then begin
+      Temp:=TStringList.Create;
+      try
+        GetStringsByString(AProtocolTransport,'/',Temp);
+        if Temp.Count>1 then begin
+          FProtocol:=Temp[0]+'/'+Temp[1];
+          if Temp.Count>2 then begin
+            FTransport:=Temp[2];
+          end;
+        end;
+        ParseName(AHostPort,':',FHost,FPort);
+      finally
+        Temp.Free;
+      end;
+    end;
+  end;
+
+  procedure ParseOther(S: String);
+  var
+    AName, AValue: String;
+  begin
+    if ParseName(S,'=',AName,AValue) then begin
+      if AnsiSameText(AName,'received') then FReceived:=AValue;
+      if AnsiSameText(AName,'branch') then FBranch:=AValue;
+      if AnsiSameText(AName,'rport') then FRport:=AValue;
+    end;
+  end;
+
+var
+  Strings: TStringList;
+  i: Integer;
+begin
+  Strings:=TStringList.Create;
+  try
+    GetStringsByString(Body,';',Strings);
+    if Strings.Count>0 then begin
+      ParseProtocolHost(Strings[0]);
+      if Strings.Count>1 then begin
+        for i:=1 to Strings.Count-1 do
+          ParseOther(Strings[i]);
+      end;
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+function TBisSipVia.AsString: String;
+var
+  S: String;
+begin
+  S:=Format('%s %s%s %s%s%s%s%s',[NameEqual,
+                                  iff(FProtocol<>'',FProtocol,''),
+                                  iff(FTransport<>'','/'+FTransport,''),
+                                  iff(FHost<>'',FHost,''),
+                                  iff(FPort<>'',':'+FPort,''),
+                                  iff(FRport<>'',';rport='+FRport,';rport'),
+                                  iff(FBranch<>'',';branch='+FBranch,''),
+                                  iff(FReceived<>'',';received='+FReceived,'')]);
+  Result:=Trim(S);
+end;
+
+{ TBisSipFrom }
+
+procedure TBisSipFrom.CopyFrom(Source: TBisSipHeader);
+var
+  FromSource: TBisSipFrom;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisSipFrom) then begin
+    FromSource:=TBisSipFrom(Source);
+
+    FDisplay:=FromSource.FDisplay;
+    FScheme:=FromSource.FScheme;
+    FUser:=FromSource.FUser;
+    FHost:=FromSource.FHost;
+    FPort:=FromSource.FPort;
+    FTag:=FromSource.FTag;
+    FExpires:=FromSource.FExpires;
+    FQ:=FromSource.FQ;
+    FUriUser:=FromSource.FUriUser;
+    FUriCpc:=FromSource.FUriCpc;
+  end;
+end;
+
+class function TBisSipFrom.GetName: String;
+begin
+  Result:='From';
+end;
+
+procedure TBisSipFrom.Parse(const Body: String);
+
+  procedure ParseUriOther(S: String);
+  var
+    AName, AValue: String;
+  begin
+    if ParseName(S,'=',AName,AValue) then begin
+      if AnsiSameText(AName,'user') then FUriUser:=AValue;
+      if AnsiSameText(AName,'cpc') then FUriCpc:=AValue;
+    end;
+  end;
+
+  procedure ParseUri(S: String);
+  var
+    ADisplay, AUriRaw, AUri: String;
+    ASchemeUser, AHostPort: String;
+    Temp: TStringList;
+    i: Integer;
+  begin
+    if ParseName(S,' ',ADisplay,AUriRaw) then begin
+      if AUriRaw='' then begin
+        AUriRaw:=ADisplay;
+        ADisplay:='';
+      end;
+      ParseBetween(ADisplay,'"','"',FDisplay);
+      if ParseBetween(AUriRaw,'<','>',AUri) then begin
+        Temp:=TStringList.Create;
+        try
+          GetStringsByString(AUri,';',Temp);
+          if Temp.Count>0 then begin
+            if ParseName(Temp[0],'@',ASchemeUser,AHostPort) then begin
+              ParseName(ASchemeUser,':',FScheme,FUser);
+              ParseName(AHostPort,':',FHost,FPort);
+            end;
+            if Temp.Count>1 then begin
+              for i:=1 to Temp.Count-1 do
+                ParseUriOther(Temp[i]);
+            end;
+          end;
+        finally
+          Temp.Free;
+        end;
+      end;
+    end;
+  end;
+
+  procedure ParseOther(S: String);
+  var
+    AName, AValue: String;
+  begin
+    if ParseName(S,'=',AName,AValue) then begin
+      if AnsiSameText(AName,'tag') then FTag:=AValue;
+      if AnsiSameText(AName,'expires') then FExpires:=AValue;
+      if AnsiSameText(AName,'q') then FQ:=AValue;
+    end;
+  end;
+
+var
+  Strings: TStringList;
+  i: Integer;
+begin
+  Strings:=TStringList.Create;
+  try
+    GetStringsByString(Body,';',Strings);
+    if Strings.Count>0 then begin
+      ParseUri(Strings[0]);
+      if Strings.Count>1 then begin
+        for i:=1 to Strings.Count-1 do
+          ParseOther(Strings[i]);
+      end;
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+function TBisSipFrom.Empty: Boolean;
+begin
+  Result:=HeadersAsString='<>';
+end;
+
+function TBisSipFrom.HeadersAsString: String;
+begin
+  Result:=Format('%s<%s%s%s%s>%s%s%s',[iff(FDisplay<>'','"'+FDisplay+'" ',''),
+                                       iff(FScheme<>'',FScheme+':',''),
+                                       iff(FUser<>'',FUser+'@',''),
+                                       iff(FHost<>'',FHost,''),
+                                       iff(FPort<>'',':'+FPort,''),
+                                       iff(FTag<>'',';tag='+FTag,''),
+                                       iff(FExpires<>'',';expires='+FExpires,''),
+                                       iff(FQ<>'',';q='+FQ,'')]);
+  Result:=Trim(Result);                                       
+end;
+
+function TBisSipFrom.AsString: String;
+var
+  S: String;
+  S1: String;
+begin
+  S1:=HeadersAsString;
+
+  if S1='<>' then
+    S1:='*';
+
+  S:=Format('%s %s',[NameEqual,S1]);
+  Result:=Trim(S);
+end;
+
+{ TBisSipTo }
+
+class function TBisSipTo.GetName: String;
+begin
+  Result:='To';
+end;
+
+{ TBisSipContact }
+
+class function TBisSipContact.GetName: String;
+begin
+  Result:='Contact';
+end;
+
+{ TBisSipPAssertedIdentity }
+
+class function TBisSipPAssertedIdentity.GetName: String;
+begin
+  Result:='P-Asserted-Identity';
+end;
+
+{ TBisSipCallID }
+
+class function TBisSipCallID.GetName: String;
+begin
+  Result:='Call-ID';
+end;
+
+{ TBisSipCSeq }
+
+procedure TBisSipCSeq.CopyFrom(Source: TBisSipHeader);
+var
+  CSeqSource: TBisSipCSeq;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisSipCSeq) then begin
+    CSeqSource:=TBisSipCSeq(Source);
+
+    FNum:=CSeqSource.FNum;
+    FRequestName:=CSeqSource.FRequestName;
+  end;
+end;
+
+class function TBisSipCSeq.GetName: String;
+begin
+  Result:='CSeq';
+end;
+
+procedure TBisSipCSeq.Parse(const Body: String);
+begin
+  ParseName(Body,' ',FNum,FRequestName);
+end;
+
+function TBisSipCSeq.AsString: String;
+var
+  S: String;
+begin
+  S:=Format('%s %s %s',[NameEqual,
+                        iff(FNum<>'',FNum,''),
+                        iff(FRequestName<>'',FRequestName,'')]);
+  Result:=Trim(S);
+end;
+
+{ TBisSipReason }
+
+procedure TBisSipReason.CopyFrom(Source: TBisSipHeader);
+var
+  Reason: TBisSipReason;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisSipReason) then begin
+    Reason:=TBisSipReason(Source);
+
+    FValue:=Reason.FValue;
+    FCause:=Reason.FCause;
+    FText:=Reason.FText;
+  end;
+end;
+
+class function TBisSipReason.GetName: String;
+begin
+  Result:='Reason';
+end;
+
+procedure TBisSipReason.Parse(const Body: String);
+
+  procedure ParseOther(S: String);
+  var
+    AName, AValue: String;
+  begin
+    if ParseName(S,'=',AName,AValue) then begin
+      if AnsiSameText(AName,'cause') then FCause:=AValue;
+      if AnsiSameText(AName,'text') then begin
+        ParseBetween(AValue,'"','"',FText);
+      end;
+    end;
+  end;
+
+var
+  Strings: TStringList;
+  i: Integer;
+begin
+  Strings:=TStringList.Create;
+  try
+    GetStringsByString(Body,';',Strings);
+    if Strings.Count>0 then begin
+      FValue:=Strings[0];
+      if Strings.Count>1 then begin
+        for i:=1 to Strings.Count-1 do
+          ParseOther(Strings[i]);
+      end;
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+{ TBisSipOrganization }
+
+class function TBisSipOrganization.GetName: String;
+begin
+  Result:='Organization';
+end;
+
+{ TBisSipUserAgent }
+
+class function TBisSipUserAgent.GetName: String;
+begin
+  Result:='User-Agent';
+end;
+
+{ TBisSipSubject }
+
+class function TBisSipSubject.GetName: String;
+begin
+  Result:='Subject';
+end;
+
+{ TBisSipAllow }
+
+class function TBisSipAllow.GetName: String;
+begin
+  Result:='Allow';
+end;
+
+function TBisSipAllow.GetStringByType(AllowType: TBisSipAllowType): String;
+var
+  S: String;
+begin
+  S:=GetEnumName(TypeInfo(TBisSipAllowType),Integer(AllowType));
+  Result:=Copy(S,3,Length(S));
+end;
+
+function TBisSipAllow.AsString: String;
+var
+  S: String;
+  Ident: String;
+  i: TBisSipAllowType;
+begin
+  S:='';
+
+  for i:=atInvite to atMessage do begin
+    Ident:=GetStringByType(i);
+    if i in FTypes then
+      S:=Iff(S='',Ident,S+', '+Ident);
+  end;
+
+  if S<>'' then
+    S:=Format('%s %s',[NameEqual,S]);
+
+  Result:=Trim(S);
+end;
+
+{ TBisSipMaxForwards }
+
+class function TBisSipMaxForwards.GetName: String;
+begin
+  Result:='Max-Forwards';
+end;
+
+{ TBisSipExpires }
+
+class function TBisSipExpires.GetName: String;
+begin
+  Result:='Expires';
+end;
+
+{ TBisSipContentType }
+
+class function TBisSipContentType.GetName: String;
+begin
+  Result:='Content-Type';
+end;
+
+function TBisSipContentType.GetValue: TBisSipContentTypeValue;
+begin
+  Result:=ctvUnknown;
+  if AnsiSameText(FValue,'application/sdp') then
+    Result:=ctvApplicationSdp;
+end;
+
+{ TBisSipContentLength }
+
+class function TBisSipContentLength.GetName: String;
+begin
+  Result:='Content-Length';
+end;
+
+{ TBisSipContentDisposition }
+
+procedure TBisSipContentDisposition.CopyFrom(Source: TBisSipHeader);
+var
+  ContentDisposition: TBisSipContentDisposition;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisSipContentDisposition) then begin
+    ContentDisposition:=TBisSipContentDisposition(Source);
+
+    FValue:=ContentDisposition.FValue;
+    FHandling:=ContentDisposition.FHandling;
+  end;
+end;
+
+class function TBisSipContentDisposition.GetName: String;
+begin
+  Result:='Content-Disposition';
+end;
+
+procedure TBisSipContentDisposition.Parse(const Body: String);
+
+  procedure ParseOther(S: String);
+  var
+    AName, AValue: String;
+  begin
+    if ParseName(S,'=',AName,AValue) then begin
+      if AnsiSameText(AName,'handling') then FHandling:=AValue;
+    end;
+  end;
+
+var
+  Strings: TStringList;
+  i: Integer;
+begin
+  Strings:=TStringList.Create;
+  try
+    GetStringsByString(Body,';',Strings);
+    if Strings.Count>0 then begin
+      FValue:=Strings[0];
+      if Strings.Count>1 then begin
+        for i:=1 to Strings.Count-1 do
+          ParseOther(Strings[i]);
+      end;
+    end;
+  finally
+    Strings.Free;
+  end;
+end;
+
+{ TBisSipWWWAuthenticate }
+
+procedure TBisSipWWWAuthenticate.CopyFrom(Source: TBisSipHeader);
+var
+  AuthenticateSource: TBisSipWWWAuthenticate;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisSipWWWAuthenticate) then begin
+    AuthenticateSource:=TBisSipWWWAuthenticate(Source);
+
+    FAuthorization:=AuthenticateSource.FAuthorization;
+    FRealm:=AuthenticateSource.FRealm;
+    FNonce:=AuthenticateSource.FNonce;
+    FOpaque:=AuthenticateSource.FOpaque;
+    FQop:=AuthenticateSource.FQop;
+  end;
+end;
+
+class function TBisSipWWWAuthenticate.GetName: String;
+begin
+  Result:='WWW-Authenticate';
+end;
+
+procedure TBisSipWWWAuthenticate.Parse(const Body: String);
+var
+  AHeaders: String;
+  Strings: TStringList;
+  i: Integer;
+  AName,AValue: String;
+  S: String;
+begin
+  if ParseName(Body,' ',FAuthorization,AHeaders) then begin
+    Strings:=TStringList.Create;
+    try
+      GetStringsByString(AHeaders,',',Strings);
+      for i:=0 to Strings.Count-1 do begin
+        if ParseName(Strings[i],'=',AName,AValue) then begin
+          ParseBetween(AValue,'"','"',S);
+          if AnsiSameText(AName,'realm') then FRealm:=S;
+          if AnsiSameText(AName,'nonce') then FNonce:=S;
+          if AnsiSameText(AName,'opaque') then FOpaque:=S;
+          if AnsiSameText(AName,'qop') then FQop:=S;
+        end;
+      end;
+    finally
+      Strings.Free;
+    end;
+  end;
+end;
+
+{ TBisSipAuthorization }
+
+procedure TBisSipAuthorization.CopyFrom(Source: TBisSipHeader);
+var
+  AuthorizationSource: TBisSipAuthorization;
+  AuthenticateSource: TBisSipWWWAuthenticate;
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) then begin
+
+    if (Source is TBisSipAuthorization) then begin
+      AuthorizationSource:=TBisSipAuthorization(Source);
+
+      FUsername:=AuthorizationSource.FUsername;
+      FPassword:=AuthorizationSource.FPassword;
+      FUri:=AuthorizationSource.FUri;
+      FAuthorization:=AuthorizationSource.FAuthorization;
+      FRealm:=AuthorizationSource.FRealm;
+      FNonce:=AuthorizationSource.FNonce;
+      FQop:=AuthorizationSource.FQop;
+      FCnonce:=AuthorizationSource.FCnonce;
+      FOpaque:=AuthorizationSource.FOpaque;
+      FAlgorithm:=AuthorizationSource.FAlgorithm;
+    end;
+
+    if Source is TBisSipWWWAuthenticate then begin
+      AuthenticateSource:=TBisSipWWWAuthenticate(Source);
+
+      FAuthorization:=AuthenticateSource.FAuthorization;
+      FRealm:=AuthenticateSource.FRealm;
+      FNonce:=AuthenticateSource.FNonce;
+      FQop:=AuthenticateSource.FQop;
+      FCnonce:=AuthenticateSource.FOpaque;
+      FOpaque:=AuthenticateSource.FOpaque;
+    end;
+
+  end;
+end;
+
+class function TBisSipAuthorization.GetName: String;
+begin
+  Result:='Authorization';
+end;
+
+function TBisSipAuthorization.GetStringByAlgorithm(Algorithm: TBisSipAuthorizationAlgorithm): String;
+var
+  S: String;
+begin
+  S:=GetEnumName(TypeInfo(TBisSipAuthorizationAlgorithm),Integer(Algorithm));
+  Result:=Copy(S,3,Length(S));
+end;
+
+function TBisSipAuthorization.AsString: String;
+
+  function GetResponse(Nc: String): String;
+  var
+    A1, A2: String;
+  begin
+    Result:='';
+    case FAlgorithm of
+      aaMD5: begin
+        A1:=Format('%s:%s:%s',[FUsername,FRealm,FPassword]);
+        A1:=AnsiLowerCase(MD5(A1));
+        A2:=Format('%s:%s',[FRequestName,FUri]);
+        A2:=AnsiLowerCase(MD5(A2));
+        Result:=Format('%s:%s:%s:%s:auth:%s',[A1,FNonce,Nc,FOpaque,A2]);
+        Result:=AnsiLowerCase(MD5(Result));
+      end;
+    end;
+  end;
+
+var
+  S: String;
+  Nc: String;
+  Response: String;
+  Algorithm: String;
+begin
+  Nc:='00000001';
+  Response:=GetResponse(Nc);
+  Algorithm:=GetStringByAlgorithm(FAlgorithm);
+  S:=Format('%s %s %s%s%s%s%s%s%s%s%s%s',[NameEqual,
+                                          iff(FAuthorization<>'',FAuthorization,''),
+                                          iff(FUsername<>'','username="'+FUsername+'"',''),
+                                          iff(FRealm<>'',',realm="'+FRealm+'"',''),
+                                          iff(FNonce<>'',',nonce="'+FNonce+'"',''),
+                                          iff(FUri<>'',',uri="'+FUri+'"',''),
+                                          iff(Response<>'',',response="'+Response+'"',''),
+                                          iff(FQop<>'',',qop="'+FQop+'"',''),
+                                          iff(FCnonce<>'',',cnonce="'+FCnonce+'"',''),
+                                          iff(Nc<>'',',nc='+Nc,''),
+                                          iff(FOpaque<>'',',opaque="'+FOpaque+'"',''),
+                                          iff(Algorithm<>'',',algorithm='+Algorithm,'')]);
+  Result:=Trim(S);
+end;
+
+{ TBisSipProxyAuthorization }
+
+class function TBisSipProxyAuthorization.GetName: String;
+begin
+  Result:='Proxy-Authorization';
+end;
+
+{ TBisSipHeaders }
+
+function TBisSipHeaders.Find(AClass: TBisSipHeaderClass): TBisSipHeader;
+var
+  i: Integer;
+  Item: TBisSipHeader;
+begin
+  Result:=nil;
+  if Assigned(AClass) then begin
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      if IsClassParent(Item.ClassType,AClass) then begin
+        Result:=Item;
+        exit;
+      end;
+    end;
+  end;
+end;
+
+function TBisSipHeaders.GetItem(Index: Integer): TBisSipHeader;
+begin
+  Result:=TBisSipHeader(inherited Items[Index]);
+end;
+
+procedure TBisSipHeaders.GetStrings(Strings: TStrings);
+var
+  i: Integer;
+  S: String;
+  Item: TBisSipHeader;
+begin
+  if Assigned(Strings) then begin
+    for i:=0 to Count-1 do begin
+      Item:=Items[i];
+      S:=Item.AsString;
+      if Trim(S)<>'' then
+        Strings.Add(S);
+    end;
+  end;
+end;
+
+function TBisSipHeaders.Add(AClass: TBisSipHeaderClass): TBisSipHeader;
+begin
+  Result:=nil;
+  if Assigned(AClass) then begin
+    Result:=Find(AClass);
+    if not Assigned(Result) then begin
+      Result:=AClass.Create;
+      inherited Add(Result);
+    end;
+  end;
+end;
+
+function TBisSipHeaders.AddVia(Protocol, Transport, Host, Port, Branch, RPort, Received: String): TBisSipVia;
+begin
+  Result:=TBisSipVia(Add(TBisSipVia));
+  if Assigned(Result) then begin
+    Result.FProtocol:=Protocol;
+    Result.FTransport:=Transport;
+    Result.FHost:=Host;
+    Result.FPort:=Port;
+    Result.FBranch:=Branch;
+    Result.FRport:=RPort;
+    Result.FReceived:=Received;
+  end;
+end;
+
+function TBisSipHeaders.AddFrom(Display, Scheme, User, Host, Port, Tag: String): TBisSipFrom;
+begin
+  Result:=TBisSipFrom(Add(TBisSipFrom));
+  if Assigned(Result) then begin
+    Result.FDisplay:=Display;
+    Result.FScheme:=Scheme;
+    Result.FUser:=User;
+    Result.FHost:=Host;
+    Result.FPort:=Port;
+    Result.FTag:=Tag;
+  end;
+end;
+
+function TBisSipHeaders.AddTo(Display, Scheme, User, Host, Port, Tag: String): TBisSipTo;
+begin
+  Result:=TBisSipTo(Add(TBisSipTo));
+  if Assigned(Result) then begin
+    Result.FDisplay:=Display;
+    Result.FScheme:=Scheme;
+    Result.FUser:=User;
+    Result.FHost:=Host;
+    Result.FPort:=Port;
+    Result.FTag:=Tag;
+  end;
+end;
+
+function TBisSipHeaders.AddContact(Display, Scheme, User, Host, Port, Tag, Expires, Q: String): TBisSipContact;
+begin
+  Result:=AddContact;
+  if Assigned(Result) then begin
+    Result.FDisplay:=Display;
+    Result.FScheme:=Scheme;
+    Result.FUser:=User;
+    Result.FHost:=Host;
+    Result.FPort:=Port;
+    Result.FTag:=Tag;
+    Result.FExpires:=Expires;
+    Result.FQ:=Q;
+  end;
+end;
+
+function TBisSipHeaders.AddContact: TBisSipContact;
+begin
+  Result:=TBisSipContact(Add(TBisSipContact));
+end;
+
+function TBisSipHeaders.AddCallID(Value: String): TBisSipCallID;
+begin
+  Result:=TBisSipCallID(Add(TBisSipCallID));
+  if Assigned(Result) then begin
+    Result.FValue:=Value;
+  end;
+end;
+
+function TBisSipHeaders.AddCSeq(Num, RequestName: String): TBisSipCSeq;
+begin
+  Result:=TBisSipCSeq(Add(TBisSipCSeq));
+  if Assigned(Result) then begin
+    Result.FNum:=Num;
+    Result.FRequestName:=RequestName;
+  end;
+end;
+
+function TBisSipHeaders.AddUserAgent(Value: String): TBisSipUserAgent;
+begin
+  Result:=TBisSipUserAgent(Add(TBisSipUserAgent));
+  if Assigned(Result) then begin
+    Result.FValue:=Value;
+  end;
+end;
+
+function TBisSipHeaders.AddAllow(Types: TBisSipAllowTypes): TBisSipAllow;
+begin
+  Result:=TBisSipAllow(Add(TBisSipAllow));
+  if Assigned(Result) then begin
+    Result.FTypes:=Types;
+  end;
+end;
+
+function TBisSipHeaders.AddMaxForwards(Value: String): TBisSipMaxForwards;
+begin
+  Result:=TBisSipMaxForwards(Add(TBisSipMaxForwards));
+  if Assigned(Result) then begin
+    Result.FValue:=Value;
+  end;
+end;
+
+function TBisSipHeaders.AddExpires(Value: String): TBisSipExpires;
+begin
+  Result:=TBisSipExpires(Add(TBisSipExpires));
+  if Assigned(Result) then begin
+    Result.FValue:=Value;
+  end;
+end;
+
+function TBisSipHeaders.AddContentType(Value: String): TBisSipContentType;
+begin
+  Result:=TBisSipContentType(Add(TBisSipContentType));
+  if Assigned(Result) then begin
+    Result.FValue:=Value;
+  end;
+end;
+
+function TBisSipHeaders.AddContentLength(Value: String): TBisSipContentLength;
+begin
+  Result:=TBisSipContentLength(Add(TBisSipContentLength));
+  if Assigned(Result) then begin
+    Result.FValue:=Value;
+  end;
+end;
+
+function TBisSipHeaders.AddAuthorization(Username, Password, RequestName, Uri: String): TBisSipAuthorization;
+begin
+  Result:=TBisSipAuthorization(Add(TBisSipAuthorization));
+  if Assigned(Result) then begin
+    Result.FUsername:=Username;
+    Result.FPassword:=Password;
+    Result.FRequestName:=RequestName;
+    Result.FUri:=Uri;
+  end;
+end;
+
+function TBisSipHeaders.ParseHeader(const Line: String): TBisSipHeader;
+var
+  Name, Body: String;
+  AClass: TBisSipHeaderClass;
+begin
+  Result:=nil;
+  if ParseName(Line,':',Name,Body) then begin
+    AClass:=FindHeaderClass(Name);
+    if Assigned(AClass) then begin
+      Result:=AClass.Create;
+      Result.Parse(Trim(Body));
+      inherited Add(Result);
+    end;
+  end;
+end;
+
+procedure TBisSipHeaders.CopyFrom(Source: TBisSipHeaders; WithClear: Boolean);
+var
+  i: Integer;
+  Header: TBisSipHeader;
+  NewHeader: TBisSipHeader;
+begin
+  if WithClear then
+    Clear;
+  if Assigned(Source) then begin
+    for i:=0 to Source.Count-1 do begin
+      Header:=Source[i];
+      NewHeader:=Add(TBisSipHeaderClass(Header.ClassType));
+      if Assigned(NewHeader) then
+        NewHeader.CopyFrom(Header);
+    end;
+  end;
+end;
+
+{ TBisSipPrivacy }
+
+class function TBisSipPrivacy.GetName: String;
+begin
+  Result:='Privacy';
+end;
+
+initialization
+  FHeaderClasses:=TClassList.Create;
+  with FHeaderClasses do begin
+    Add(TBisSipVia);
+    Add(TBisSipFrom);
+    Add(TBisSipTo);
+    Add(TBisSipContact);
+    Add(TBisSipPAssertedIdentity);
+    Add(TBisSipCallID);
+    Add(TBisSipCSeq);
+    Add(TBisSipReason);
+    Add(TBisSipOrganization);
+    Add(TBisSipUserAgent);
+    Add(TBisSipSubject);
+    Add(TBisSipAllow);
+    Add(TBisSipMaxForwards);
+    Add(TBisSipExpires);
+    Add(TBisSipContentType);
+    Add(TBisSipContentLength);
+    Add(TBisSipContentDisposition);
+    Add(TBisSipWWWAuthenticate);
+    Add(TBisSipAuthorization);
+    Add(TBisSipProxyAuthorization);
+  end;
+
+finalization
+  FHeaderClasses.Free;
+
+end.

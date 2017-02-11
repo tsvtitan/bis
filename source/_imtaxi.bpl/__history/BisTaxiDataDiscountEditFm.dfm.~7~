@@ -1,0 +1,129 @@
+inherited BisTaxiDataDiscountEditForm: TBisTaxiDataDiscountEditForm
+  Left = 513
+  Top = 212
+  Caption = 'BisTaxiDataDiscountEditForm'
+  ClientHeight = 285
+  ClientWidth = 356
+  ExplicitWidth = 364
+  ExplicitHeight = 319
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 247
+    Width = 356
+    ExplicitTop = 247
+    ExplicitWidth = 311
+    inherited ButtonOk: TButton
+      Left = 177
+      ExplicitLeft = 132
+    end
+    inherited ButtonCancel: TButton
+      Left = 273
+      ExplicitLeft = 228
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 356
+    Height = 247
+    ExplicitWidth = 311
+    ExplicitHeight = 247
+    object LabelNum: TLabel
+      Left = 56
+      Top = 15
+      Width = 35
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1053#1086#1084#1077#1088':'
+      FocusControl = EditNum
+    end
+    object LabelPriority: TLabel
+      Left = 43
+      Top = 218
+      Width = 48
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akLeft, akBottom]
+      Caption = #1055#1086#1088#1103#1076#1086#1082':'
+      FocusControl = EditPriority
+    end
+    object LabelDiscountType: TLabel
+      Left = 18
+      Top = 42
+      Width = 73
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1058#1080#1087' '#1076#1080#1089#1082#1086#1085#1090#1072':'
+      FocusControl = EditDiscountType
+    end
+    object LabelClient: TLabel
+      Left = 50
+      Top = 69
+      Width = 41
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1050#1083#1080#1077#1085#1090':'
+      FocusControl = EditClient
+    end
+    object EditNum: TEdit
+      Left = 97
+      Top = 12
+      Width = 245
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Constraints.MaxWidth = 300
+      TabOrder = 0
+      ExplicitWidth = 200
+    end
+    object EditPriority: TEdit
+      Left = 97
+      Top = 215
+      Width = 54
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      Constraints.MaxWidth = 300
+      TabOrder = 1
+    end
+    object EditDiscountType: TEdit
+      Left = 97
+      Top = 39
+      Width = 206
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object ButtonDiscountType: TButton
+      Left = 309
+      Top = 39
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1090#1080#1087' '#1076#1080#1089#1082#1086#1085#1090#1072
+      Caption = '...'
+      TabOrder = 3
+    end
+    object EditClient: TEdit
+      Left = 97
+      Top = 66
+      Width = 206
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 4
+    end
+    object ButtonClient: TButton
+      Left = 309
+      Top = 66
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
+      Caption = '...'
+      TabOrder = 5
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 32
+    Top = 112
+  end
+end

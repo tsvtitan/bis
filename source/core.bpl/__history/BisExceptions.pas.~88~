@@ -1,0 +1,63 @@
+unit BisExceptions;
+
+interface
+
+uses SysUtils,
+     BisVariants;
+
+type
+
+  EBisException=class(Exception)
+  private
+    FErrorCode: Integer;
+    FArgs: TBisVariants;
+    function GetMessage: String;
+  public
+    constructor Create(ErrorCode: Integer; const Msg: string);
+    constructor CreateFmt(ErrorCode: Integer; const Msg: string; const Args: array of const);
+    destructor Destroy; override;
+
+    property ErrorCode: Integer read FErrorCode write FErrorCode;
+    property Message: String read GetMessage;
+  end;
+
+  EBisConnectionException=class(EBisException)
+  end;
+
+implementation
+
+uses StrUtils,
+     BisUtils;
+
+{ EBisException }
+
+constructor EBisException.Create(ErrorCode: Integer; const Msg: string);
+begin
+  inherited Create(Msg);
+  FArgs:=TBisVariants.Create;
+  FErrorCode:=ErrorCode;
+end;
+
+destructor EBisException.Destroy;
+begin
+  FreeAndNil(FArgs);
+  inherited Destroy;
+end;
+
+constructor EBisException.CreateFmt(ErrorCode: Integer; const Msg: string; const Args: array of const);
+begin
+  Create(ErrorCode,Msg);
+  FArgs.Clear;
+  FArgs.AssignArray(Args);
+end;
+
+function EBisException.GetMessage: String;
+begin
+  Result:=FormatEx(inherited Message,FArgs);
+end;
+
+initialization
+
+finalization
+
+end.

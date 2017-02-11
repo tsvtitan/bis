@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TBisFastReport Version="4.1.40" DotMatrixReport="False" IniFile="\Software\Fast Reports" OldStyleProgress="True" PreviewOptions.Buttons="1535" PreviewOptions.Zoom="1" PreviewOptions.ZoomMode="zmPageWidth" PrintOptions.Printer="�� ���������" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="39921,7252774074" ReportOptions.Description.Text="" ReportOptions.LastChange="39921,7252774074" ScriptLanguage="PascalScript" ScriptText.Text="begin&#13;&#10;&#13;&#10;end." PropData="08446174617365747301010C2C00000020446174615365743D2250726F7669646572312220446174615365744E616D653D2250726F766964657231220000095661726961626C65730100055374796C650100">
+  <TfrxDataPage Name="Data" Height="1000" Left="0" Top="0" Width="1000">
+    <TBisProvider Name="Provider1" UserName="Provider1" CloseDataSource="True" FieldAliases.Text="" ProviderName="S_CODE_MESSAGES" FetchCount="-1" OpenMode="omOpen" PropData="05704C65667402700470546F700248"/>
+  </TfrxDataPage>
+  <TfrxReportPage Name="Page1" PaperWidth="210" PaperHeight="297" PaperSize="9" LeftMargin="10" RightMargin="10" TopMargin="10" BottomMargin="10" ColumnWidth="0" ColumnPositions.Text="" HGuides.Text="" VGuides.Text="">
+    <TfrxReportTitle Name="ReportTitle1" Height="34,01577" Left="0" Top="16" Width="718,1107">
+      <TfrxMemoView Name="Memo1" Left="234,33086" Top="0" Width="294,80334" Height="26,45671" DisplayFormat.DecimalSeparator="," Font.Charset="1" Font.Color="-16777208" Font.Height="-19" Font.Name="tahoma" Font.Style="0" HAlign="haCenter" ParentFont="False" Text="Коды сообщений и команд"/>
+    </TfrxReportTitle>
+    <TfrxHeader Name="Header1" Height="37,7953" Left="0" Top="72" Width="718,1107">
+      <TfrxMemoView Name="Memo2" Left="0" Top="0" Width="188,9765" Height="18,89765" DisplayFormat.DecimalSeparator="," Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Tahoma" Font.Style="1" Frame.Typ="15" HAlign="haCenter" ParentFont="False" Text="Код"/>
+      <TfrxMemoView Name="Memo3" Left="188,9765" Top="0" Width="529,1342" Height="37,7953" DisplayFormat.DecimalSeparator="," Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Tahoma" Font.Style="1" Frame.Typ="15" HAlign="haCenter" ParentFont="False" VAlign="vaCenter" Text="Описание"/>
+      <TfrxMemoView Name="Memo6" Left="0" Top="18,89765" Width="56,69295" Height="18,89765" DisplayFormat.DecimalSeparator="," Font.Charset="1" Font.Color="-16777208" Font.Height="-9" Font.Name="Tahoma" Font.Style="1" Frame.Typ="15" HAlign="haCenter" ParentFont="False" VAlign="vaCenter" Text="Основной"/>
+      <TfrxMemoView Name="Memo7" Left="56,69295" Top="18,89765" Width="132,28355" Height="18,89765" DisplayFormat.DecimalSeparator="," Font.Charset="1" Font.Color="-16777208" Font.Height="-9" Font.Name="Tahoma" Font.Style="1" Frame.Typ="15" HAlign="haCenter" ParentFont="False" VAlign="vaCenter" Text="Дополнительный"/>
+    </TfrxHeader>
+    <TfrxMasterData Name="MasterData1" Height="18,89765" Left="0" Top="128" Width="718,1107" ColumnWidth="0" ColumnGap="0" DataSet="Provider1" DataSetName="Provider1" RowCount="0" Stretched="True">
+      <TfrxMemoView Name="Memo4" Left="0" Top="0" Width="56,69295" Height="18,89765" DataSet="Provider1" DataSetName="Provider1" DisplayFormat.DecimalSeparator="," Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Tahoma" Font.Style="0" Frame.Typ="15" HAlign="haCenter" ParentFont="False" Text="[Copy(&#60;Provider1.&#34;CODE&#34;&#62;,1,Pos(';',&#60;Provider1.&#34;CODE&#34;&#62;)-1)]"/>
+      <TfrxMemoView Name="Memo5" Left="188,9765" Top="0" Width="529,1342" Height="18,89765" DataField="DESCRIPTION" DataSet="Provider1" DataSetName="Provider1" DisplayFormat.DecimalSeparator="," Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Tahoma" Font.Style="0" Frame.Typ="15" ParentFont="False" Text="[Provider1.&#34;DESCRIPTION&#34;]"/>
+      <TfrxMemoView Name="Memo8" Left="56,69295" Top="0" Width="132,28355" Height="18,89765" DataSet="Provider1" DataSetName="Provider1" DisplayFormat.DecimalSeparator="," Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Tahoma" Font.Style="0" Frame.Typ="15" HAlign="haCenter" ParentFont="False" Text="[Copy(&#60;Provider1.&#34;CODE&#34;&#62;,Pos(';',&#60;Provider1.&#34;CODE&#34;&#62;)+1,1000)]"/>
+    </TfrxMasterData>
+  </TfrxReportPage>
+</TBisFastReport>

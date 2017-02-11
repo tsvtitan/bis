@@ -1,0 +1,71 @@
+unit Unit3;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TForm3 = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form3: TForm3;
+
+implementation
+
+{$R *.dfm}
+
+function AddConn: TSQLConnection;
+begin
+
+  Result:=TSQLConnection.Create(nil);
+  with FConnection1 do begin
+    LoadParamsOnConnect:=false;
+    AutoClone:=false;
+
+    DriverName := 'Interbase';
+    GetDriverFunc := 'getSQLDriverINTERBASE';
+    LibraryName := 'dbxint30.dll';
+    VendorLib := 'gds32.dll';
+
+{    DriverName:='Firebird';
+    GetDriverFunc := 'getSQLDriverFIREBIRD';
+    LibraryName := 'dbxfb40.dll';
+    VendorLib := 'gds32.dll'; }
+
+    Params.Add('User_Name=SYSDBA');
+    Params.Add('Password=masterkey');
+    Params.Add(Format('Database=%s',[GetDatabaseName]));
+    Params.Add('RoleName=');
+    Params.Add('ServerCharSet=');
+    Params.Add('SQLDialect=3');
+    Params.Add('BlobSize=-1');
+    Params.Add('ErrorResourceFile=');
+    Params.Add('LocaleCode=0000');
+    Params.Add('CommitRetain=False');
+    Params.Add('WaitOnLock=True');
+    Params.Add('Interbase TransIsolation=ReadCommited');
+    Params.Add('Trim Char=False');
+    ParamsLoaded:=true;
+    Open;
+  end;
+
+{  FConnection2:=TIBDataBase.Create(nil);
+  with FConnection2 do begin
+    DatabaseName:=GetDatabaseName;
+    LoginPrompt:=false;
+    Params.Add('User_Name=SYSDBA');
+    Params.Add('Password=masterkey');
+    Open;
+  end;}
+  
+end;
+
+
+end.

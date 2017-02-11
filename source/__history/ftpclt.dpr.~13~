@@ -1,0 +1,22 @@
+program ftpclt;
+
+uses
+  ComServ,
+  BisLoader in 'loader.exe\BisLoader.pas',
+  BisObject in 'core.bpl\BisObject.pas',
+  BisObjectIntf in 'core.bpl\BisObjectIntf.pas',
+  BisLoaderCmdLine in 'loader.exe\BisLoaderCmdLine.pas',
+  BisCoreIntf in 'core.bpl\BisCoreIntf.pas',
+  BisLoaderInfo in 'loader.exe\BisLoaderInfo.pas';
+
+{$R *.res}
+                                
+
+begin
+  //Application.Initialize;
+  ConfigFileName:='config.ini'; 
+  InitLoader;
+//  DestroyComponentsApp;
+    
+
+end.

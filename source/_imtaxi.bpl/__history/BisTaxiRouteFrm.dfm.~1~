@@ -1,0 +1,122 @@
+inherited BisTaxiRouteFrame: TBisTaxiRouteFrame
+  Width = 635
+  Height = 86
+  ExplicitWidth = 635
+  ExplicitHeight = 86
+  DesignSize = (
+    635
+    86)
+  inherited LabelLocality: TLabel
+    Top = 8
+    ExplicitTop = 8
+  end
+  inherited LabelStreet: TLabel
+    Top = 8
+    ExplicitTop = 8
+  end
+  object LabelDistance: TLabel [6]
+    Left = 198
+    Top = 61
+    Width = 85
+    Height = 13
+    Alignment = taRightJustify
+    Anchors = [akTop, akRight]
+    Caption = #1056#1072#1089#1089#1090#1086#1103#1085#1080#1077' ('#1082#1084'):'
+    FocusControl = EditDistance
+    Transparent = True
+  end
+  object LabelPeriod: TLabel [7]
+    Left = 365
+    Top = 61
+    Width = 63
+    Height = 13
+    Alignment = taRightJustify
+    Anchors = [akTop, akRight]
+    Caption = #1042#1088#1077#1084#1103' ('#1084#1080#1085'):'
+    FocusControl = EditPeriod
+    Transparent = True
+  end
+  object LabelAmount: TLabel [8]
+    Left = 44
+    Top = 61
+    Width = 68
+    Height = 13
+    Alignment = taRightJustify
+    Caption = #1050#1086#1083'-'#1074#1086' ('#1095#1077#1083'):'
+    FocusControl = EditAmount
+    Transparent = True
+    Visible = False
+  end
+  object LabelCost: TLabel [9]
+    Left = 485
+    Top = 61
+    Width = 58
+    Height = 13
+    Alignment = taRightJustify
+    Anchors = [akTop, akRight]
+    Caption = #1057#1090#1086#1080#1084#1086#1089#1090#1100':'
+    FocusControl = EditCost
+    Transparent = True
+    ExplicitLeft = 496
+  end
+  inherited ComboBoxZone: TComboBox
+    Width = 98
+    ExplicitWidth = 98
+  end
+  inherited ComboBoxStreet: TComboBox
+    Width = 234
+    ExplicitWidth = 234
+  end
+  object EditDistance: TEdit [17]
+    Left = 289
+    Top = 58
+    Width = 50
+    Height = 21
+    Anchors = [akTop, akRight]
+    Constraints.MaxWidth = 300
+    TabOrder = 9
+    OnChange = EditPeriodChange
+  end
+  object EditPeriod: TEdit [18]
+    Left = 434
+    Top = 58
+    Width = 39
+    Height = 21
+    Anchors = [akTop, akRight]
+    Constraints.MaxWidth = 300
+    TabOrder = 10
+    OnChange = EditPeriodChange
+  end
+  object EditAmount: TEdit [19]
+    Left = 118
+    Top = 58
+    Width = 50
+    Height = 21
+    Constraints.MaxWidth = 300
+    TabOrder = 8
+    Visible = False
+  end
+  object EditCost: TEdit [20]
+    Left = 549
+    Top = 58
+    Width = 77
+    Height = 21
+    Anchors = [akTop, akRight]
+    Constraints.MaxWidth = 300
+    TabOrder = 11
+    OnChange = EditPeriodChange
+  end
+  inherited TimerChangeAddress: TTimer
+    Left = 512
+  end
+  inherited ImageList: TImageList
+    Left = 552
+  end
+  object TimerRefreshCost: TTimer
+    Enabled = False
+    Interval = 500
+    OnTimer = TimerRefreshCostTimer
+    Left = 24
+    Top = 32
+  end
+end

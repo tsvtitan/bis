@@ -1,0 +1,429 @@
+========================= Packet 0 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+REGISTER sip:voip.intertax.net;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 192.168.1.3:5060;branch=z9hG4bK-d8754z-27153f1ad6eb76cd-1---d8754z-;rport
+Max-Forwards: 70
+Contact: <sip:2904021@192.168.1.3:5060;rinstance=f064636c00558a35;transport=UDP>
+To: <sip:2904021@voip.intertax.net;transport=UDP>
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=c14d5846
+Call-ID: MmQwN2VhMWRlZDk5ODViYWFkYTM1MzY1ODc1YmVhZjE.
+CSeq: 1 REGISTER
+Expires: 3600
+Allow: INVITE, ACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
+Supported: replaces, norefersub, extended-refer, X-cisco-serviceuri
+User-Agent: Zoiper rev.10106
+Allow-Events: presence, kpml
+Content-Length: 0
+
+========================= Packet 1 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 401 Unauthorized
+Via: SIP/2.0/UDP 192.168.1.3:5060;branch=z9hG4bK-d8754z-27153f1ad6eb76cd-1---d8754z-;rport=5060;received=95.188.95.231
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=c14d5846
+To: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1D4yZDc0e84tc
+Call-ID: MmQwN2VhMWRlZDk5ODViYWFkYTM1MzY1ODc1YmVhZjE.
+CSeq: 1 REGISTER
+User-Agent: JSC Intertax SIP Server
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, UPDATE, INFO, REGISTER, REFER, NOTIFY
+Supported: timer, precondition, path, replaces
+WWW-Authenticate: Digest realm="voip.intertax.net", nonce="72586321-78a5-47c9-c247-dee8fcef8b75", algorithm=MD5, qop="auth"
+Content-Length: 0
+
+========================= Packet 2 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+REGISTER sip:voip.intertax.net;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 192.168.1.3:5060;branch=z9hG4bK-d8754z-47df0acd24317d9d-1---d8754z-;rport
+Max-Forwards: 70
+Contact: <sip:2904021@192.168.1.3:5060;rinstance=f064636c00558a35;transport=UDP>
+To: <sip:2904021@voip.intertax.net;transport=UDP>
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=c14d5846
+Call-ID: MmQwN2VhMWRlZDk5ODViYWFkYTM1MzY1ODc1YmVhZjE.
+CSeq: 2 REGISTER
+Expires: 3600
+Allow: INVITE, ACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
+Supported: replaces, norefersub, extended-refer, X-cisco-serviceuri
+User-Agent: Zoiper rev.10106
+Authorization: Digest username="2904021",realm="voip.intertax.net",nonce="72586321-78a5-47c9-c247-dee8fcef8b75",uri="sip:voip.intertax.net;transport=UDP",response="540ce0818c73a2f1511acb9faf5d7a49",cnonce="ccae82d9eebe0e9e6f30f7576f517642",nc=00000001,qop=auth,algorithm=MD5
+Allow-Events: presence, kpml
+Content-Length: 0
+
+========================= Packet 3 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 192.168.1.3:5060;branch=z9hG4bK-d8754z-47df0acd24317d9d-1---d8754z-;rport=5060;received=95.188.95.231
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=c14d5846
+To: <sip:2904021@voip.intertax.net;transport=UDP>;tag=2pXQ18v3BHUDr
+Call-ID: MmQwN2VhMWRlZDk5ODViYWFkYTM1MzY1ODc1YmVhZjE.
+CSeq: 2 REGISTER
+Contact: <sip:2904021@192.168.1.3:5060;rinstance=f064636c00558a35;transport=UDP>;expires=30
+Date: Thu, 13 Jan 2011 14:39:04 GMT
+User-Agent: JSC Intertax SIP Server
+Allow: INVITE, ACK, BYE, CANCEL,OPTIONS, MESSAGE, UPDATE, INFO,REGISTER, REFER, NOTIFY
+Supported: timer, precondition, path, replaces
+Content-Length: 0
+
+========================= Packet 4 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+REGISTER sip:voip.intertax.net;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-3b97b94546b8079c-1---d8754z-;rport
+Max-Forwards: 70
+Contact: <sip:2904021@192.168.1.3:5060;rinstance=f064636c00558a35;transport=UDP>;expires=0
+To: <sip:2904021@voip.intertax.net;transport=UDP>
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=c14d5846
+Call-ID: MmQwN2VhMWRlZDk5ODViYWFkYTM1MzY1ODc1YmVhZjE.
+CSeq: 3 REGISTER
+Allow: INVITE, ACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
+Supported: replaces, norefersub, extended-refer, X-cisco-serviceuri
+User-Agent: Zoiper rev.10106
+Authorization: Digest username="2904021",realm="voip.intertax.net",nonce="72586321-78a5-47c9-c247-dee8fcef8b75",uri="sip:voip.intertax.net;transport=UDP",response="13f08ede9620c69d720c2cdb8070b352",cnonce="4be63e9cb39d4755637ec74d9dbc8980",nc=00000002,qop=auth,algorithm=MD5
+Allow-Events: presence, kpml
+Content-Length: 0
+
+========================= Packet 5 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-3b97b94546b8079c-1---d8754z-;rport=5060
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=c14d5846
+To: <sip:2904021@voip.intertax.net;transport=UDP>;tag=3Zpg33D78SH0K
+Call-ID: MmQwN2VhMWRlZDk5ODViYWFkYTM1MzY1ODc1YmVhZjE.
+CSeq: 3 REGISTER
+Contact: <sip:2904021@192.168.1.3:5060;rinstance=f064636c00558a35;transport=UDP>;expires=0
+Date: Thu, 13 Jan 2011 14:39:05 GMT
+User-Agent: JSC Intertax SIP Server
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, UPDATE, INFO, REGISTER, REFER, NOTIFY
+Supported: timer, precondition, path, replaces
+Content-Length: 0
+
+========================= Packet 6 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+REGISTER sip:voip.intertax.net;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-08e4ee3ee077488c-1---d8754z-;rport
+Max-Forwards: 70
+Contact: <sip:2904021@95.188.95.231:5060;rinstance=f16bfa667946e1f7;transport=UDP>
+To: <sip:2904021@voip.intertax.net;transport=UDP>
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=273a272a
+Call-ID: ZTkwMGJhNzU1ZjM0NjQ2NGM0OWRlZGJkNTAzMTdlYzE.
+CSeq: 1 REGISTER
+Expires: 3600
+Allow: INVITE, ACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
+Supported: replaces, norefersub, extended-refer, X-cisco-serviceuri
+User-Agent: Zoiper rev.10106
+Allow-Events: presence, kpml
+Content-Length: 0
+
+========================= Packet 7 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 401 Unauthorized
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-08e4ee3ee077488c-1---d8754z-;rport=5060
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=273a272a
+To: <sip:2904021@voip.intertax.net;transport=UDP>;tag=48F94yya627jF
+Call-ID: ZTkwMGJhNzU1ZjM0NjQ2NGM0OWRlZGJkNTAzMTdlYzE.
+CSeq: 1 REGISTER
+User-Agent: JSC Intertax SIP Server
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, UPDATE, INFO, REGISTER, REFER, NOTIFY
+Supported: timer, precondition, path, replaces
+WWW-Authenticate: Digest realm="voip.intertax.net",nonce="99f56c32-1f5d-4606-c155-af57fb319ab4", algorithm=MD5, qop="auth"
+Content-Length: 0
+
+========================= Packet 8 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+REGISTER sip:voip.intertax.net;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-670c83211151c09e-1---d8754z-;rport
+Max-Forwards: 70
+Contact: <sip:2904021@95.188.95.231:5060;rinstance=f16bfa667946e1f7;transport=UDP>
+To: <sip:2904021@voip.intertax.net;transport=UDP>
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=273a272a
+Call-ID: ZTkwMGJhNzU1ZjM0NjQ2NGM0OWRlZGJkNTAzMTdlYzE.
+CSeq: 2 REGISTER
+Expires: 3600
+Allow: INVITE, ACK, CANCEL, BYE, NOTIFY,REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
+Supported: replaces, norefersub, extended-refer, X-cisco-serviceuri
+User-Agent: Zoiper rev.10106
+Authorization: Digest username="2904021",realm="voip.intertax.net",nonce="99f56c32-1f5d-4606-c155-af57fb319ab4",uri="sip:voip.intertax.net;transport=UDP",response="c7210479eb286115ac87b73bc5302294",cnonce="2c71c114abc05010c4f19c5ca14f41ee",nc=00000001,qop=auth,algorithm=MD5
+Allow-Events: presence, kpml
+Content-Length: 0
+
+========================= Packet 9 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-670c83211151c09e-1---d8754z-;rport=5060
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=273a272a
+To: <sip:2904021@voip.intertax.net;transport=UDP>;tag=5H916SFe3By5a
+Call-ID: ZTkwMGJhNzU1ZjM0NjQ2NGM0OWRlZGJkNTAzMTdlYzE.
+CSeq: 2 REGISTER
+Contact: <sip:2904021@95.188.95.231:5060;rinstance=f16bfa667946e1f7;transport=UDP>;expires=30
+Date: Thu, 13 Jan 2011 14:39:05 GMT
+User-Agent: JSC Intertax SIP Server
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, UPDATE, INFO, REGISTER, REFER, NOTIFY
+Supported: timer, precondition, path, replaces
+Content-Length: 0
+
+========================= Packet 10 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+INVITE sip:2374863@voip.intertax.net;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-701d20801252b726-1---d8754z-;rport
+Max-Forwards: 70
+Contact: <sip:2904021@95.188.95.231:5060;transport=UDP>
+To: <sip:2374863@voip.intertax.net;transport=UDP>
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 1 INVITE
+Allow: INVITE, ACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
+Content-Type: application/sdp
+Supported: replaces, norefersub, extended-refer, X-cisco-serviceuri
+User-Agent: Zoiper rev.10106
+Allow-Events: presence, kpml
+Content-Length: 255
+
+v=0
+o=Zoiper_user 0 0 IN IP4 95.188.95.231
+s=Zoiper_session
+c=IN IP4 95.188.95.231
+t=0 0
+m=audio 8000 RTP/AVP 8 0 3 101
+a=rtpmap:8 PCMA/8000
+a=rtpmap:0 PCMU/8000
+a=rtpmap:3 GSM/8000
+a=rtpmap:101 telephone-event/8000
+a=fmtp:101 0-15
+a=sendrecv
+
+========================= Packet 11 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 100 Trying
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-701d20801252b726-1---d8754z-;rport=5060
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+To: <sip:2374863@voip.intertax.net;transport=UDP>
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 1 INVITE
+User-Agent: JSC Intertax SIPServer
+Content-Length: 0
+
+========================= Packet 12 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 407 Proxy Authentication Required
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-701d20801252b726-1---d8754z-;rport=5060
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+To: <sip:2374863@voip.intertax.net;transport=UDP>;tag=6t2t8m0H0mmrp
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 1 INVITE
+User-Agent: JSC Intertax SIP Server
+Accept: application/sdp
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, UPDATE, INFO, REGISTER, REFER, NOTIFY
+Supported: timer, precondition, path, replaces
+Allow-Events: talk, refer
+Proxy-Authenticate: Digest realm="voip.intertax.net", nonce="43261379-2ef4-c1df-8c3d-d022f8572333", algorithm=MD5, qop="auth"
+Content-Length: 0
+
+========================= Packet 13 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+ACK sip:2374863@voip.intertax.net;transport=UDPSIP/2.0
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-701d20801252b726-1---d8754z-;rport
+Max-Forwards: 70
+To: <sip:2374863@voip.intertax.net;transport=UDP>;tag=6t2t8m0H0mmrp
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 1 ACK
+Content-Length: 0
+
+========================= Packet 14 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+INVITE sip:2374863@voip.intertax.net;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-284048db87017db7-1---d8754z-;rport
+Max-Forwards: 70
+Contact: <sip:2904021@95.188.95.231:5060;transport=UDP>
+To: <sip:2374863@voip.intertax.net;transport=UDP>
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 2 INVITE
+Allow: INVITE, ACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
+Content-Type: application/sdp
+Proxy-Authorization: Digest username="2904021",realm="voip.intertax.net",nonce="43261379-2ef4-c1df-8c3d-d022f8572333",uri="sip:2374863@voip.intertax.net;transport=UDP",response="6c2e97e171fc62c531083dbc0ad7d1c0",cnonce="93f414f0f4e10ff9f1a380ae5e54f898",nc=00000001,qop=auth,algorithm=MD5
+Supported: replaces, norefersub, extended-refer, X-cisco-serviceuri
+User-Agent: Zoiper rev.10106
+Allow-Events: presence, kpml
+Content-Length: 255
+
+v=0
+o=Zoiper_user 0 0 IN IP4 95.188.95.231
+s=Zoiper_session
+c=IN IP4 95.188.95.231
+t=0 0
+m=audio 8000 RTP/AVP8 0 3 101
+a=rtpmap:8 PCMA/8000
+a=rtpmap:0 PCMU/8000
+a=rtpmap:3 GSM/8000
+a=rtpmap:101 telephone-event/8000
+a=fmtp:101 0-15
+a=sendrecv
+
+========================= Packet 15 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 100 Trying
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-284048db87017db7-1---d8754z-;rport=5060
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+To: <sip:2374863@voip.intertax.net;transport=UDP>
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 2 INVITE
+User-Agent: JSC Intertax SIPServer
+Content-Length: 0
+
+========================= Packet 16 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 183 Session Progress
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-284048db87017db7-1---d8754z-;rport=5060
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+To: <sip:2374863@voip.intertax.net;transport=UDP>;tag=73UKagHNXXaBj
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 2 INVITE
+Contact: <sip:2374863@217.74.160.33:5060;transport=udp>
+User-Agent: JSC Intertax SIP Server
+Accept: application/sdp
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, UPDATE, INFO, REGISTER, REFER, NOTIFY
+Supported: timer, precondition,path, replaces
+Allow-Events: talk, refer
+Content-Type: application/sdp
+Content-Disposition: session
+Content-Length: 249
+Remote-Party-ID: "2374863" <sip:2374863@217.74.160.33>;party=calling;privacy=off;screen=no
+
+v=0
+o=FreeSWITCH 1294906615 1294906616 IN IP4 217.74.160.33
+s=FreeSWITCH
+c=IN IP4 217.74.160.33
+t=0 0
+m=audio 22946 RTP/AVP 8 101
+a=rtpmap:8 PCMA/8000
+a=rtpmap:101 telephone-event/8000
+a=fmtp:101 0-16
+a=silenceSupp:off - - - -
+a=ptime:20
+
+========================= Packet 17 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-284048db87017db7-1---d8754z-;rport=5060
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+To: <sip:2374863@voip.intertax.net;transport=UDP>;tag=73UKagHNXXaBj
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 2 INVITE
+Contact: <sip:2374863@217.74.160.33:5060;transport=udp>
+User-Agent: JSC Intertax SIP Server
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, UPDATE, INFO, REGISTER, REFER, NOTIFY
+Supported: timer, precondition, path, replaces
+Allow-Events: talk, refer
+Session-Expires: 120;refresher=uas
+Min-SE: 120
+Content-Type: application/sdp
+Content-Disposition: session
+Content-Length: 249
+Remote-Party-ID: "2374863" <sip:2374863@217.74.160.33>;party=calling;privacy=off;screen=no
+
+v=0
+o=FreeSWITCH 1294906615 1294906616 IN IP4 217.74.160.33
+s=FreeSWITCH
+c=IN IP4 217.74.160.33
+t=0 0
+m=audio 22946 RTP/AVP 8 101
+a=rtpmap:8 PCMA/8000
+a=rtpmap:101 telephone-event/8000
+a=fmtp:101 0-16
+a=silenceSupp:off - - - -
+a=ptime:20
+
+========================= Packet 18 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+ACK sip:2374863@217.74.160.33:5060;transport=udp SIP/2.0
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-7d962d28cd0d407a-1---d8754z-;rport
+Max-Forwards: 70
+Contact: <sip:2904021@95.188.95.231:5060;transport=UDP>
+To: <sip:2374863@voip.intertax.net;transport=UDP>;tag=73UKagHNXXaBj
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 2 ACK
+Proxy-Authorization: Digest username="2904021",realm="voip.intertax.net",nonce="43261379-2ef4-c1df-8c3d-d022f8572333",uri="sip:2374863@voip.intertax.net;transport=UDP",response="6c2e97e171fc62c531083dbc0ad7d1c0",cnonce="93f414f0f4e10ff9f1a380ae5e54f898",nc=00000001,qop=auth,algorithm=MD5
+User-Agent: Zoiper rev.10106
+Content-Length: 0
+
+========================= Packet 19 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+BYE sip:2904021@95.188.95.231:5060;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 217.74.160.33;rport;branch=z9hG4bKv33p8K6pK7g1S
+Max-Forwards: 70
+From: <sip:2374863@voip.intertax.net;transport=UDP>;tag=73UKagHNXXaBj
+To: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 7128720 BYE
+Contact: <sip:2374863@217.74.160.33:5060;transport=udp>
+User-Agent: JSC Intertax SIP Server
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, UPDATE, INFO, REGISTER, REFER, NOTIFY
+Supported: timer, precondition, path, replaces
+Reason: Q.850;cause=16;text="NORMAL_CLEARING"
+Content-Length: 0
+
+========================= Packet 20 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 217.74.160.33;rport=5060;branch=z9hG4bKv33p8K6pK7g1S
+Contact: <sip:2904021@95.188.95.231:5060;transport=UDP>
+To: <sip:2904021@voip.intertax.net;transport=UDP>;tag=1547295f
+From: <sip:2374863@voip.intertax.net;transport=UDP>;tag=73UKagHNXXaBj
+Call-ID: YzBmMDc0ZTE5MTg1OTEwMjY4YzE4NGZjNTQ2OTQ1NTA.
+CSeq: 7128720 BYE
+User-Agent: Zoiper rev.10106
+Content-Length: 0
+
+========================= Packet 21 =========================
+UDP: Source = 0.0.0.0:5060, Destination = 217.74.160.33:5060
+
+REGISTER sip:voip.intertax.net;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-28baf778a93992a9-1---d8754z-;rport
+Max-Forwards: 70
+Contact: <sip:2904021@95.188.95.231:5060;rinstance=f16bfa667946e1f7;transport=UDP>;expires=0
+To: <sip:2904021@voip.intertax.net;transport=UDP>
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=273a272a
+Call-ID: ZTkwMGJhNzU1ZjM0NjQ2NGM0OWRlZGJkNTAzMTdlYzE.
+CSeq: 3 REGISTER
+Allow: INVITE, ACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
+Supported: replaces, norefersub, extended-refer, X-cisco-serviceuri
+User-Agent: Zoiper rev.10106
+Authorization: Digest username="2904021",realm="voip.intertax.net",nonce="99f56c32-1f5d-4606-c155-af57fb319ab4",uri="sip:voip.intertax.net;transport=UDP",response="ee297b8328a54849e660628c938d9341",cnonce="20588aa380535d2f64f2b4f53913ed37",nc=00000002,qop=auth,algorithm=MD5
+Allow-Events: presence, kpml
+Content-Length: 0
+
+========================= Packet 22 =========================
+UDP: Source = 217.74.160.33:5060, Destination = 0.0.0.0:5060
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 95.188.95.231:5060;branch=z9hG4bK-d8754z-28baf778a93992a9-1---d8754z-;rport=5060
+From: <sip:2904021@voip.intertax.net;transport=UDP>;tag=273a272a
+To: <sip:2904021@voip.intertax.net;transport=UDP>;tag=8cNccB2rt60XD
+Call-ID: ZTkwMGJhNzU1ZjM0NjQ2NGM0OWRlZGJkNTAzMTdlYzE.
+CSeq: 3 REGISTER
+Contact: <sip:2904021@95.188.95.231:5060;rinstance=f16bfa667946e1f7;transport=UDP>;expires=0
+Date: Thu, 13 Jan 2011 14:39:28 GMT
+User-Agent: JSC Intertax SIP Server
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, UPDATE, INFO, REGISTER, REFER, NOTIFY
+Supported: timer, precondition, path, replaces
+Content-Length: 0

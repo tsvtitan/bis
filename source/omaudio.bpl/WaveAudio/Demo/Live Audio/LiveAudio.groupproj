@@ -1,0 +1,54 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{3be6ab75-4ed0-4c3b-a350-80e42c15757b}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="Broadcaster\Broadcaster.dproj" />
+    <Projects Include="ReceiverFile\ReceiverFile.dproj" />
+    <Projects Include="Receiver\Receiver.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="Broadcaster">
+    <MSBuild Projects="Broadcaster\Broadcaster.dproj" Targets="" />
+  </Target>
+  <Target Name="Broadcaster:Clean">
+    <MSBuild Projects="Broadcaster\Broadcaster.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="Broadcaster:Make">
+    <MSBuild Projects="Broadcaster\Broadcaster.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Receiver">
+    <MSBuild Projects="Receiver\Receiver.dproj" Targets="" />
+  </Target>
+  <Target Name="Receiver:Clean">
+    <MSBuild Projects="Receiver\Receiver.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="Receiver:Make">
+    <MSBuild Projects="Receiver\Receiver.dproj" Targets="Make" />
+  </Target>
+  <Target Name="ReceiverFile">
+    <MSBuild Projects="ReceiverFile\ReceiverFile.dproj" Targets="" />
+  </Target>
+  <Target Name="ReceiverFile:Clean">
+    <MSBuild Projects="ReceiverFile\ReceiverFile.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="ReceiverFile:Make">
+    <MSBuild Projects="ReceiverFile\ReceiverFile.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="Broadcaster;Receiver;ReceiverFile" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="Broadcaster:Clean;Receiver:Clean;ReceiverFile:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="Broadcaster:Make;Receiver:Make;ReceiverFile:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

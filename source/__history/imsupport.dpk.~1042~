@@ -1,0 +1,42 @@
+package imsupport;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  omnet;
+
+contains
+  BisSupportInit in 'imsupport.bpl\BisSupportInit.pas',
+  BisSupportFm in 'imsupport.bpl\BisSupportFm.pas' {BisSupportForm},
+  BisSupportMainFm in 'imsupport.bpl\BisSupportMainFm.pas' {BisSupportMainForm},
+  BisSupportConsts in 'imsupport.bpl\BisSupportConsts.pas',
+  BisSupportConnection in 'imsupport.bpl\BisSupportConnection.pas',
+  BisSupportTypes in 'imsupport.bpl\BisSupportTypes.pas',
+  BisSupportReasonsFm in 'imsupport.bpl\BisSupportReasonsFm.pas' {BisSupportReasonsForm},
+  BisSupportPasswordFm in 'imsupport.bpl\BisSupportPasswordFm.pas' {SupportPasswordForm};
+
+end.

@@ -1,0 +1,89 @@
+unit BisHttpServerList;
+
+interface
+
+uses Classes, Contnrs,
+     BisServers;
+
+type
+  TBisHttpServerList=class(TObjectList)
+  private
+    function GetItems(Index: Integer): TBisServer;
+    function GetActive: Boolean;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure Start;
+    procedure Stop;
+    procedure Restart;
+
+    property Items[Index: Integer]: TBisServer read GetItems;
+    property Active: Boolean read GetActive;
+  end;
+
+var
+  ServerList: TBisHttpServerList;
+  
+implementation
+
+{ TBisHttpServerList }
+
+constructor TBisHttpServerList.Create;
+begin
+  inherited Create(false);
+end;
+
+destructor TBisHttpServerList.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TBisHttpServerList.GetActive: Boolean;
+var
+  i: Integer;
+begin
+  Result:=false;
+  for i:=0 to Count-1 do begin
+    Result:=Items[i].Active;
+    if Result then
+      break;
+  end;
+end;
+
+function TBisHttpServerList.GetItems(Index: Integer): TBisServer;
+begin
+  Result:=TBisServer(inherited Items[Index]);
+end;
+
+procedure TBisHttpServerList.Start;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    Items[i].Start;
+  end;
+end;
+
+procedure TBisHttpServerList.Stop;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    Items[i].Stop;
+  end;
+end;
+
+procedure TBisHttpServerList.Restart;
+begin
+  Stop;
+  Start;
+end;
+
+initialization
+  ServerList:=TBisHttpServerList.Create;
+
+finalization
+  ServerList.Free;
+
+
+end.

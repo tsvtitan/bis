@@ -1,0 +1,80 @@
+unit UnitThread;
+
+interface
+
+uses Classes;
+
+type
+  IConnectionThreadForm=interface
+  ['{1BA85C62-9BBB-420C-877C-D08374B950D6}']
+    procedure IncCounter;
+    function IsBreaked: Boolean;
+  end;
+
+  TConnectionThread=class(TThread)
+  private
+    FForm: IConnectionThreadForm;
+    procedure SetCounter;
+  public
+    procedure Execute; override;
+
+    property Form: IConnectionThreadForm read FForm write FForm;
+  end;
+
+
+procedure InitThread;
+procedure DoenThread;
+
+implementation
+
+uses Windows,
+     UnitConn;
+
+var
+  FThread: TConnectionThread;
+
+{ TConnectionThread }
+
+procedure TConnectionThread.SetCounter;
+begin
+  if Assigned(FForm) then
+    FForm.IncCounter;
+end;
+
+procedure TConnectionThread.Execute;
+begin
+  if Assigned(FForm) then begin
+
+    try
+      while not FForm.IsBreaked do begin
+        Sleep(1);
+
+        try
+
+          ExecuteSqlStoredProc;
+       //   ExecuteIBStoredProc;
+      //    ExecuteSqlQuery;
+       //   ExecuteIBQuery;
+
+          Synchronize(SetCounter);
+        finally
+          
+        end;
+      end;
+    finally
+
+    end;
+  end;
+end;
+
+procedure InitThread;
+begin
+
+end;
+
+procedure DoenThread;
+begin
+
+end;
+
+end.

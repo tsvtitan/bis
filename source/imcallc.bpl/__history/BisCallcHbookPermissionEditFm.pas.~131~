@@ -1,0 +1,149 @@
+unit BisCallcHbookPermissionEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls, BisParam;
+
+type
+  TBisCallcHbookPermissionEditForm = class(TBisDataEditForm)
+    LabelAccount: TLabel;
+    EditAccount: TEdit;
+    ButtonAccount: TButton;
+    LabelInterface: TLabel;
+    EditInterface: TEdit;
+    ButtonInterface: TButton;
+    LabelRightAccess: TLabel;
+    ComboBoxRightAccess: TComboBox;
+    LabelValue: TLabel;
+    ComboBoxValue: TComboBox;
+  private
+  public
+    procedure ChangeParam(Param: TBisParam); override;
+    procedure Execute; override;
+  end;
+
+  TBisCallcHbookPermissionEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookPermissionInsertFormIface=class(TBisCallcHbookPermissionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookPermissionUpdateFormIface=class(TBisCallcHbookPermissionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookPermissionDeleteFormIface=class(TBisCallcHbookPermissionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookPermissionEditForm: TBisCallcHbookPermissionEditForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisCallcHbookRolesAndAccountsFm, BisCallcHbookInterfacesFm,
+     BisDataSet, BisCore, BisInterfaces, BisIfaces, BisPermissions;
+
+{ TBisCallcHbookPermissionEditFormIface }
+
+constructor TBisCallcHbookPermissionEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookPermissionEditForm;
+  with Params do begin
+    AddKey('PERMISSION_ID').Older('OLD_PERMISSION_ID');
+    AddEditDataSelect('ACCOUNT_ID','EditAccount','LabelAccount','ButtonAccount',
+                      TBisCallcHbookRolesAndAccountsFormIface,'USER_NAME',true);
+    AddEditDataSelect('INTERFACE_ID','EditInterface','LabelInterface','ButtonInterface',
+                      TBisCallcHbookInterfacesFormIface,'INTERFACE_NAME',true,false,'','NAME');
+    AddComboBoxTextIndex('RIGHT_ACCESS','ComboBoxRightAccess','LabelRightAccess',true);                
+    AddComboBoxTextIndex('VALUE','ComboBoxValue','LabelValue',true);                
+  end;
+end;
+
+{ TBisCallcHbookPermissionInsertFormIface }
+
+constructor TBisCallcHbookPermissionInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_PERMISSION';
+end;
+
+{ TBisCallcHbookPermissionUpdateFormIface }
+
+constructor TBisCallcHbookPermissionUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_PERMISSION';
+end;
+
+{ TBisCallcHbookPermissionDeleteFormIface }
+
+constructor TBisCallcHbookPermissionDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_PERMISSION';
+end;
+
+{ TBisCallcHbookPermissionEditForm }
+
+procedure TBisCallcHbookPermissionEditForm.Execute;
+begin
+  inherited Execute;
+  Core.RefreshPermissions;
+  Core.ReloadInterfaces;
+end;
+
+procedure TBisCallcHbookPermissionEditForm.ChangeParam(Param: TBisParam);
+var
+  i: Integer;
+  AInterface: TBisInterface;
+  Iface: TBisIface;
+  Perm: TBisPermission;
+  Param2: TBisParam;
+begin
+  inherited ChangeParam(Param);
+
+  if AnsiSameText(Param.ParamName,'INTERFACE_NAME') then begin
+    Param2:=DataSet.Params.Find('INTERFACE_ID');
+    ComboBoxRightAccess.Clear;
+    ComboBoxValue.Clear;
+    AInterface:=Core.Interfaces.FindById(VarToStrDef(Param2.Value,''));
+    if Assigned(AInterface) then begin
+      Iface:=AInterface.Iface;
+      if Assigned(Iface) then begin
+        for i:=0 to Iface.Permissions.Count-1 do begin
+          Perm:=Iface.Permissions.Items[i];
+          ComboBoxRightAccess.Items.AddObject(Perm.ObjectName,Perm);
+        end;
+      end;
+    end;
+  end;
+
+  if AnsiSameText(Param.ParamName,'RIGHT_ACCESS') then begin
+    if ComboBoxRightAccess.ItemIndex<>-1 then begin
+      ComboBoxValue.Clear;
+      Perm:=TBisPermission(ComboBoxRightAccess.Items.Objects[ComboBoxRightAccess.ItemIndex]);
+      if Assigned(Perm) then begin
+        for i:=0 to Perm.Values.Count-1 do begin
+          ComboBoxValue.Items.Add(Perm.Values[i]);
+        end;
+      end;
+    end else
+      ComboBoxValue.Clear;
+  end;
+
+end;
+
+end.

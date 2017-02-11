@@ -1,0 +1,89 @@
+unit BisHttpServerHandlerMap;
+
+interface
+
+uses Classes,
+     HTTPApp,
+     BisDataSet,
+     BisHttpServerHandlerModules, BisHttpServerHandlers,
+     BisHttpServerHandlerMapWm;
+
+type
+
+  TBisHttpServerHandlerMap=class(TBisHttpServerHandler)
+  private
+    FWebModule: TBisHttpServerHandlerMapWebModule;
+    FServers: TBisHttpServerHandlerMapServers;
+    FServersTimeout: Cardinal;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    function HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean; override;
+    procedure CopyFrom(Source: TBisHttpServerHandler); override;
+
+  end;
+
+procedure InitHttpServerHandlerModule(AModule: TBisHttpServerHandlerModule); stdcall;
+
+exports
+  InitHttpServerHandlerModule;
+
+implementation
+
+uses SysUtils,
+     BisCore, BisUtils, BisConsts, BisDataParams,
+     BisHttpServerHandlerMapConsts;
+
+procedure InitHttpServerHandlerModule(AModule: TBisHttpServerHandlerModule); stdcall;
+begin
+  AModule.HandlerClass:=TBisHttpServerHandlerMap;
+end;
+
+{ TBisHttpServerHandlerMap }
+
+constructor TBisHttpServerHandlerMap.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FWebModule:=TBisHttpServerHandlerMapWebModule.Create(Self);
+  FWebModule.Handler:=Self;
+
+  FServers:=TBisHttpServerHandlerMapServers.Create;
+  FServersTimeout:=1000;
+end;
+
+destructor TBisHttpServerHandlerMap.Destroy;
+begin
+  FServers.Free;
+  FWebModule.Free;
+  inherited Destroy;
+end;
+
+procedure TBisHttpServerHandlerMap.Init;
+begin
+  inherited Init;
+  with Params do begin
+    FServers.CopyFromDataSet(AsString(SParamDistanceServers));
+    FServersTimeout:=AsInteger(SParamDistanceTimeout);
+  end;
+end;
+
+function TBisHttpServerHandlerMap.HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean;
+begin
+  if FWebModule is TBisHttpServerHandlerMapWebModule then begin
+    TBisHttpServerHandlerMapWebModule(FWebModule).DistanceServers.CopyFrom(FDistanceServers);
+    TBisHttpServerHandlerMapWebModule(FWebModule).DistanceTimeout:=FDistanceTimeout;
+  end;
+  Result:=IWebRequestHandler(FWebModule).HandleRequest(Request,Response);
+end;
+
+procedure TBisHttpServerHandlerMap.CopyFrom(Source: TBisHttpServerHandler);
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) and (Source is TBisHttpServerHandlerMap) then begin
+    FDistanceServers.CopyFrom(TBisHttpServerHandlerMap(Source).FDistanceServers);
+    FDistanceTimeout:=TBisHttpServerHandlerMap(Source).FDistanceTimeout;
+  end;
+end;
+
+end.

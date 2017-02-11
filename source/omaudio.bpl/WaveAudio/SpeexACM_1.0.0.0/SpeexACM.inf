@@ -1,0 +1,78 @@
+[Version]
+Signature = "$CHICAGO$"
+Class = MEDIA
+
+[SourceDisksNames]
+1="Speex Voice Audio CODEC Install Disk",, 0001
+
+[SourceDisksFiles]
+speex32.acm=1
+SpeexACM.inf=1
+
+[Installable.Drivers]
+speex32 = 1:speex32.acm, "msacm.speex32" , "Speex Voice Audio CODEC" , , , 
+
+[DefaultInstall]
+CopyFiles=SPEEXACM.Copy,SPEEXACM.Copy.Inf
+Updateinis = SPEEXACM.Updateini
+addreg = SPEEXACM.AddReg,SPEEXACM.AddReg9x
+MediaType = SOFTWARE
+
+[DefaultInstall.ntx86]
+CopyFiles=SPEEXACM.Copy,SPEEXACM.Copy.Inf
+addreg = SPEEXACM.AddReg,SPEEXACM.AddRegNT
+MediaType = SOFTWARE
+
+[Remove_SpeexACM]
+DelReg = SPEEXACM.DelReg
+DelFiles = SPEEXACM.Copy,SPEEXACM.Copy.Inf
+UpdateInis = SPEEXACM.DelIni
+
+[SPEEXACM.Copy]
+speex32.acm
+
+[SPEEXACM.Copy.Inf]
+SpeexACM.inf
+
+[SPEEXACM.UpdateIni]
+system.ini, drivers32,,"msacm.speex32=speex32.acm"
+
+[SPEEXACM.DelIni]
+system.ini, drivers32,"msacm.speex32=speex32.acm"
+
+[SPEEXACM.AddReg]
+
+[SPEEXACM.AddReg9x]
+HKLM,SYSTEM\CurrentControlSet\Control\MediaResources\acm\msacm.speex32,Description,,%SpeexAudio%
+HKLM,SYSTEM\CurrentControlSet\Control\MediaResources\acm\msacm.speex32,Driver,,speex32.acm
+HKLM,SYSTEM\CurrentControlSet\Control\MediaResources\acm\msacm.speex32,FriendlyName,,%SpeexAudio%
+
+HKLM,%UnInstallPath%,DisplayName,,%UninstallDispName%
+HKLM,%UnInstallPath%,UninstallString,,"%10%\rundll.exe setupx.dll,InstallHinfSection Remove_SpeexACM 132 %17%\%InfFile%"
+
+[SPEEXACM.AddRegNT]
+HKLM,SOFTWARE\Microsoft\Windows NT\CurrentVersion\drivers.desc,speex32.acm,,%SpeexAudio%
+HKLM,SOFTWARE\Microsoft\Windows NT\CurrentVersion\drivers32,msacm.speex32,,speex32.acm
+
+HKLM,%UnInstallPath%,DisplayName,,%UninstallDispName%
+HKLM,%UnInstallPath%,UninstallString,,"%11%\rundll32.exe setupapi,InstallHinfSection Remove_SpeexACM 132 %17%\%InfFile%"
+
+[SPEEXACM.DelReg]
+HKLM,SYSTEM\CurrentControlSet\Control\MediaResources\acm\msacm.speex32
+
+HKLM,SOFTWARE\Microsoft\Windows NT\CurrentVersion\drivers.desc,speex32.acm,,""
+HKLM,SOFTWARE\Microsoft\Windows NT\CurrentVersion\drivers32,msacm.speex32,,""
+HKLM,%UnInstallPath%
+
+[DestinationDirs]
+DefaultDestDir = 11	; LDID_SYS
+SPEEXACM.Copy = 11
+SPEEXACM.Copy.Inf = 17
+
+[Strings]
+SpeexAudio="Speex Voice Audio CODEC"
+InfFile="SpeexACM.inf"
+UninstallDispName="Speex Voice Audio CODEC"
+UnInstallPath="Software\Microsoft\Windows\CurrentVersion\Uninstall\SpeexACM"
+MediaClassName="Media Devices"
+mfgname="No more money !"

@@ -1,0 +1,14 @@
+program Client;
+
+uses
+  Forms,
+  ClientFmpas in 'ClientFmpas.pas' {ClientForm};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TClientForm, ClientForm);
+  Application.Run;
+end.

@@ -1,0 +1,36 @@
+unit BisBase64;
+
+interface
+
+function Base64ToStr(S: String): String;
+function StrToBase64(S: String): String;
+
+implementation
+
+uses DIMime;
+
+function Base64ToStr(S: String): String;
+begin
+  try
+    Result:=MimeEncodeString(S);
+  except
+  end;
+end;
+
+function StrToBase64(S: String): String;
+var
+  Encoder: TBisBase64Encoder;
+begin
+  Encoder:=TBisBase64Encoder.Create(nil);
+  try
+    try
+      Result:=Encoder.Encode(S);
+    except
+    end;  
+  finally
+    Encoder.Free;
+  end;
+end;
+
+
+end.

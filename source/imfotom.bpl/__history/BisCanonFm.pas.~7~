@@ -1,0 +1,75 @@
+unit BisCanonFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StdCtrls,
+  ComCtrls, ExtCtrls,
+  BisFm, BisIfaces;
+
+type
+
+  TBisCanonForm = class(TBisForm)
+    procedure Button3Click(Sender: TObject);
+  private
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCanonFormIface=class(TBisFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCanonForm: TBisCanonForm;
+
+var
+  TestIface: TBisIface=nil;
+
+implementation
+
+uses BisCore, BisInterfaces, BisDataFm, BisProvider, BisIfaceModules, BisUtils,
+     BisPeriodFm;
+
+{$R *.dfm}
+
+{ TBisCanonFormIface }
+
+constructor TBisCanonFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCanonForm;
+end;
+
+{ TBisCanontForm }
+
+constructor TBisCanonForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FreeOnClose:=true;
+end;
+
+procedure TBisCanonForm.Button3Click(Sender: TObject);
+var
+  Iface: TBisPeriodFormIface;
+  D1, D2: TDate;
+  PeriodType: TBisPeriodType;
+begin
+  Iface:=TBisPeriodFormIface.Create(nil);
+  try
+    Iface.Init;
+    PeriodType:=ptYear;
+    D1:=DateTimePicker1.Date;
+    D2:=DateTimePicker2.Date;
+    if Iface.Select(PeriodType,D1,D2) then begin
+      DateTimePicker1.Date:=D1;
+      DateTimePicker2.Date:=D2;
+    end;
+  finally
+    Iface.Free;
+  end;
+
+end;
+
+end.

@@ -1,0 +1,94 @@
+unit BisCallcHbookActionReportEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisCallcHbookActionReportEditForm = class(TBisDataEditForm)
+    LabelAction: TLabel;
+    EditAction: TEdit;
+    ButtonAction: TButton;
+    LabelReport: TLabel;
+    EditReport: TEdit;
+    ButtonReport: TButton;
+    LabelPriority: TLabel;
+    EditPriority: TEdit;
+  private
+    { Private declarations }
+  public
+  end;
+
+  TBisCallcHbookActionReportEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookActionReportInsertFormIface=class(TBisCallcHbookActionReportEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookActionReportUpdateFormIface=class(TBisCallcHbookActionReportEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookActionReportDeleteFormIface=class(TBisCallcHbookActionReportEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookActionReportEditForm: TBisCallcHbookActionReportEditForm;
+
+implementation
+
+uses BisCallcHbookReportsFm, BisCallcHbookActionsFm;
+
+{$R *.dfm}
+
+{ TBisCallcHbookActionReportEditFormIface }
+
+constructor TBisCallcHbookActionReportEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookActionReportEditForm;
+  with Params do begin
+    AddEditDataSelect('ACTION_ID','EditAction','LabelAction','ButtonAction',
+                      TBisCallcHbookActionsFormIface,'ACTION_NAME',true,true,'','NAME').Older('OLD_ACTION_ID');
+    AddEditDataSelect('Report_ID','EditReport','LabelReport','ButtonReport',
+                      TBisCallcHbookReportsFormIface,'Report_NAME',true,true,'','NAME').Older('OLD_Report_ID');
+    AddEditInteger('PRIORITY','EditPriority','LabelPriority',true);                      
+  end;
+end;
+
+{ TBisCallcHbookActionReportInsertFormIface }
+
+constructor TBisCallcHbookActionReportInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_ACTION_REPORT';
+end;
+
+{ TBisCallcHbookActionReportUpdateFormIface }
+
+constructor TBisCallcHbookActionReportUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_ACTION_REPORT';
+end;
+
+{ TBisCallcHbookActionReportDeleteFormIface }
+
+constructor TBisCallcHbookActionReportDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_ACTION_REPORT';
+end;
+
+
+end.

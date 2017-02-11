@@ -1,0 +1,196 @@
+inherited BisKrieltObjectParamEditForm: TBisKrieltObjectParamEditForm
+  Left = 721
+  Top = 256
+  Caption = 'BisKrieltObjectParamEditForm'
+  ClientHeight = 331
+  ClientWidth = 366
+  ExplicitWidth = 374
+  ExplicitHeight = 365
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 293
+    Width = 366
+    ExplicitTop = 219
+    ExplicitWidth = 302
+    inherited ButtonOk: TButton
+      Left = 187
+      ExplicitLeft = 123
+    end
+    inherited ButtonCancel: TButton
+      Left = 284
+      ExplicitLeft = 220
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 366
+    Height = 293
+    ExplicitLeft = -64
+    ExplicitTop = -1
+    ExplicitWidth = 501
+    ExplicitHeight = 385
+    object LabelParam: TLabel
+      Left = 36
+      Top = 16
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1072#1088#1072#1084#1077#1090#1088':'
+      FocusControl = EditParam
+    end
+    object LabelAccount: TLabel
+      Left = 92
+      Top = 241
+      Width = 61
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1050#1090#1086' '#1089#1086#1079#1076#1072#1083':'
+      FocusControl = EditAccount
+      ExplicitTop = 344
+    end
+    object LabelDateCreate: TLabel
+      Left = 73
+      Top = 267
+      Width = 80
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1044#1072#1090#1072' '#1089#1086#1079#1076#1072#1085#1080#1103':'
+      FocusControl = DateTimePickerCreate
+      ExplicitTop = 370
+    end
+    object LabelExport: TLabel
+      Left = 23
+      Top = 145
+      Width = 46
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1069#1082#1089#1087#1086#1088#1090':'
+      FocusControl = EditExport
+      ExplicitTop = 248
+    end
+    object LabelDescription: TLabel
+      Left = 16
+      Top = 169
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akRight, akBottom]
+      Caption = #1054#1087#1080#1089#1072#1085#1080#1077':'
+      FocusControl = MemoDescription
+      ExplicitTop = 272
+    end
+    object EditParam: TEdit
+      Left = 95
+      Top = 13
+      Width = 231
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonParam: TButton
+      Left = 332
+      Top = 13
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1087#1072#1088#1072#1084#1077#1090#1088
+      Caption = '...'
+      TabOrder = 1
+    end
+    object EditAccount: TEdit
+      Left = 159
+      Top = 238
+      Width = 167
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 5
+      ExplicitTop = 341
+    end
+    object ButtonAccount: TButton
+      Left = 332
+      Top = 238
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1091#1095#1077#1090#1085#1091#1102' '#1079#1072#1087#1080#1089#1100' ('#1088#1086#1083#1100')'
+      Anchors = [akRight, akBottom]
+      Caption = '...'
+      TabOrder = 6
+      ExplicitTop = 341
+    end
+    object DateTimePickerCreate: TDateTimePicker
+      Left = 159
+      Top = 265
+      Width = 88
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Checked = False
+      TabOrder = 7
+      ExplicitTop = 368
+    end
+    object DateTimePickerCreateTime: TDateTimePicker
+      Left = 253
+      Top = 265
+      Width = 73
+      Height = 21
+      Anchors = [akRight, akBottom]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 8
+      ExplicitTop = 368
+    end
+    object GroupBoxValue: TGroupBox
+      Left = 11
+      Top = 38
+      Width = 342
+      Height = 95
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      Caption = ' '#1047#1085#1072#1095#1077#1085#1080#1077' '
+      TabOrder = 2
+      ExplicitHeight = 198
+      object PanelFrame: TPanel
+        AlignWithMargins = True
+        Left = 5
+        Top = 18
+        Width = 332
+        Height = 72
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 0
+        ExplicitLeft = -132
+        ExplicitTop = -60
+        ExplicitWidth = 317
+        ExplicitHeight = 165
+      end
+    end
+    object EditExport: TEdit
+      Left = 75
+      Top = 142
+      Width = 278
+      Height = 21
+      Anchors = [akRight, akBottom]
+      TabOrder = 3
+      ExplicitTop = 245
+    end
+    object MemoDescription: TMemo
+      Left = 75
+      Top = 169
+      Width = 278
+      Height = 63
+      Anchors = [akRight, akBottom]
+      TabOrder = 4
+      ExplicitTop = 272
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 104
+    Top = 104
+  end
+end

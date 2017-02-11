@@ -1,0 +1,64 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{2506a063-bd4f-4503-b779-634c8ca559e6}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="ClassCompletion\ClassCompletion.dproj" />
+    <Projects Include="CodeInsight\Advanced.dproj" />
+    <Projects Include="CodeInsight\Optimized.dproj" />
+    <Projects Include="CodeInsight\Simple.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="Simple">
+    <MSBuild Projects="CodeInsight\Simple.dproj" Targets="" />
+  </Target>
+  <Target Name="Simple:Clean">
+    <MSBuild Projects="CodeInsight\Simple.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="Simple:Make">
+    <MSBuild Projects="CodeInsight\Simple.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Optimized">
+    <MSBuild Projects="CodeInsight\Optimized.dproj" Targets="" />
+  </Target>
+  <Target Name="Optimized:Clean">
+    <MSBuild Projects="CodeInsight\Optimized.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="Optimized:Make">
+    <MSBuild Projects="CodeInsight\Optimized.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Advanced">
+    <MSBuild Projects="CodeInsight\Advanced.dproj" Targets="" />
+  </Target>
+  <Target Name="Advanced:Clean">
+    <MSBuild Projects="CodeInsight\Advanced.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="Advanced:Make">
+    <MSBuild Projects="CodeInsight\Advanced.dproj" Targets="Make" />
+  </Target>
+  <Target Name="ClassCompletion">
+    <MSBuild Projects="ClassCompletion\ClassCompletion.dproj" Targets="" />
+  </Target>
+  <Target Name="ClassCompletion:Clean">
+    <MSBuild Projects="ClassCompletion\ClassCompletion.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="ClassCompletion:Make">
+    <MSBuild Projects="ClassCompletion\ClassCompletion.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="Simple;Optimized;Advanced;ClassCompletion" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="Simple:Clean;Optimized:Clean;Advanced:Clean;ClassCompletion:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="Simple:Make;Optimized:Make;Advanced:Make;ClassCompletion:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

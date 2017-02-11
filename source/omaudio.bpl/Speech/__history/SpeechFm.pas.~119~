@@ -1,0 +1,187 @@
+unit SpeechFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, WideStrings, FMTBcd, DB, SqlExpr, ComCtrls,
+  IBDatabase, IBCustomDataSet, IBQuery,
+  WaveUtils,
+  BisSpeech, BisAudioWave;
+
+type
+  TSpeechForm = class(TForm)
+    Label1: TLabel;
+    Memo1: TMemo;
+    Button1: TButton;
+    Button2: TButton;
+    SQLConnection1: TSQLConnection;
+    SQLQuery1: TSQLQuery;
+    Button3: TButton;
+    IBQuery1: TIBQuery;
+    IBDatabase1: TIBDatabase;
+    IBTransaction1: TIBTransaction;
+    TrackBar1: TTrackBar;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+  private
+    FSpeech: TBisSpeech;
+    FPlayer: TBisStockAudioPlayer;
+    FPlayStream: TMemoryStream;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+  end;
+
+var
+  SpeechForm: TSpeechForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TSpeechForm }
+
+constructor TSpeechForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  
+  FSpeech:=TBisSpeech.Create(nil);
+  FSpeech.Async:=false;
+  FSpeech.DeviceID:=0;
+
+  FPlayStream:=TMemoryStream.Create;
+
+  FPlayer:=TBisStockAudioPlayer.Create(nil);
+  FPlayer.DeviceID:=0;
+  FPlayer.Async:=false;
+
+end;
+
+destructor TSpeechForm.Destroy;
+begin
+  FPlayer.Free;
+  FPlayStream.Free;
+  FSpeech.Free;
+
+  inherited Destroy;
+end;
+
+procedure TSpeechForm.Button1Click(Sender: TObject);
+var
+  Sample: TBisSampleVoice;
+  Stream: TMemoryStream;
+begin
+  Button2Click(nil);
+  SQLConnection1.Connected:=true;
+  Stream:=TMemoryStream.Create;
+  try
+    SQLQuery1.Open;
+    if SQLQuery1.Active then begin
+      FSpeech.Samples.Clear;
+      SQLQuery1.First;
+      while not SQLQuery1.Eof do begin
+        Sample:=FSpeech.Samples.AddSample(TBisSampleVoiceType(SQLQuery1.FieldByName('TYPE_SAMPLE').AsInteger),
+                                          SQLQuery1.FieldByName('SAMPLE_TEXT').AsString);
+        if Assigned(Sample) then begin
+          Stream.Clear;
+          TBlobField(SQLQuery1.FieldByName('VOICE_DATA')).SaveToStream(Stream);
+          Stream.Position:=0;
+          Sample.Wave.LoadFromStream(Stream);
+        end;
+        SQLQuery1.Next;
+      end;
+      FSpeech.Play(Trim(Memo1.Lines.Text));
+    end;
+  finally
+    Stream.Free;
+    SQLConnection1.Connected:=false;
+  end;
+end;
+
+procedure TSpeechForm.Button2Click(Sender: TObject);
+begin
+  FPlayer.Stop;
+  FSpeech.Stop;
+end;
+
+procedure TSpeechForm.Button3Click(Sender: TObject);
+var
+  Stream: TMemoryStream;
+  Wave,Temp: TBisWave;
+  Data: Pointer;
+  Size: Cardinal;
+  Field: TField;
+  Converter: TBisWaveConverter;
+begin
+  Button2Click(nil);
+  IBDatabase1.Connected:=true;
+  IBTransaction1.Active:=true;
+  Stream:=TMemoryStream.Create;
+  Wave:=TBisWave.Create;
+  Temp:=TBisWave.Create;
+  try
+    IBQuery1.Params.ParamByName('IN_TEXT').AsString:=Trim(Memo1.Lines.Text);
+    IBQuery1.Open;
+    if IBQuery1.Active then begin
+
+      FPlayStream.Clear;
+
+      Wave.BeginRewritePCM(Mono16bit22050Hz);
+
+      IBQuery1.First;
+      while not IBQuery1.Eof do begin
+
+        Stream.Clear;
+        Field:=IBQuery1.FieldByName('VOICE_DATA');
+        TBlobField(Field).SaveToStream(Stream);
+        Stream.Position:=0;
+
+        Temp.Clear;
+        Temp.LoadFromStream(Stream);
+        if Temp.ConvertToPCM(Mono16bit22050Hz) then begin
+          Temp.Stream.Position:=Temp.DataOffset;
+          Size:=Temp.Stream.Size-Temp.Stream.Position;
+          GetMem(Data,Size);
+          try
+            Temp.Stream.Read(Data^,Size);
+            Wave.Write(Data^,Size)
+          finally
+            FreeMem(Data,Size);
+          end;
+        end else begin
+         { Size:=Trunc(1*WaveFormat.nSamplesPerSec*WaveFormat.wBitsPerSample*0.100);
+          GetMem(Data,Size);
+          try
+            if SilenceWaveAudio(Data,Size,WaveFormat) then
+              Wave.Write(Data^,Size);
+          finally
+            FreeMem(Data,Size);
+          end; }
+        end;
+
+        IBQuery1.Next;
+      end;
+
+//      MakeStream(Text,FPCMFormat,FPlayStream);
+
+      Wave.EndRewrite;
+      Wave.SaveToStream(FPlayStream);
+
+      FPlayStream.SaveToFile('c:\!!!.wav');
+
+      FPlayStream.Position:=0;
+      FPlayer.SpeedFactor:=TrackBar1.Position*0.01+0.5; 
+      FPlayer.PlayStream(FPlayStream,1);
+    end;
+  finally
+    Temp.Free;
+    Wave.Free;
+    Stream.Free;
+    IBDatabase1.Connected:=false;
+  end;
+end;
+
+end.

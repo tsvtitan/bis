@@ -1,0 +1,1101 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 00009478H .text                   CODE
+ 0002:0040B000 00000334H .itext                  ICODE
+ 0003:0040C000 000002C8H .data                   DATA
+ 0004:0040D000 0000002CH .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 0000013E C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000140 000001C3 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:00000304 00000076 C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:0000037C 0000006C C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:000003E8 00000006 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:000003F0 00000026 C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:00000418 0000003E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000458 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000460 0000000E C=CODE     S=.text    G=(none)   M=BisObject ACBP=A9
+ 0001:00000470 00000006 C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000478 00000036 C=CODE     S=.text    G=(none)   M=BisCoreObjects ACBP=A9
+ 0001:000004B0 00000006 C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:000004B8 000000FE C=CODE     S=.text    G=(none)   M=BisFm    ACBP=A9
+ 0001:000005B8 00000006 C=CODE     S=.text    G=(none)   M=DECUtil  ACBP=A9
+ 0001:000005C0 00000006 C=CODE     S=.text    G=(none)   M=Hash     ACBP=A9
+ 0001:000005C8 00000006 C=CODE     S=.text    G=(none)   M=Cipher   ACBP=A9
+ 0001:000005D0 00000006 C=CODE     S=.text    G=(none)   M=Cipher1  ACBP=A9
+ 0001:000005D8 00000006 C=CODE     S=.text    G=(none)   M=BisParams ACBP=A9
+ 0001:000005E0 00000006 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:000005E8 00000006 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:000005F0 00000006 C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:000005F8 00000006 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000600 00000006 C=CODE     S=.text    G=(none)   M=Themes   ACBP=A9
+ 0001:00000608 000001F6 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000800 00000006 C=CODE     S=.text    G=(none)   M=UxTheme  ACBP=A9
+ 0001:00000808 00000006 C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000810 00000006 C=CODE     S=.text    G=(none)   M=DwmApi   ACBP=A9
+ 0001:00000818 00000146 C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000960 00000006 C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000968 00000006 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000970 00000006 C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000978 00000006 C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000980 00000006 C=CODE     S=.text    G=(none)   M=GraphUtil ACBP=A9
+ 0001:00000988 00000006 C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000990 00000006 C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000998 000002C6 C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:00000C60 00000006 C=CODE     S=.text    G=(none)   M=WideStrings ACBP=A9
+ 0001:00000C68 00000006 C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:00000C70 00000006 C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:00000C78 00000016 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:00000C90 00000006 C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00000C98 00000006 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00000CA0 00000006 C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00000CA8 00000006 C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00000CB0 00000006 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00000CB8 00000006 C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00000CC0 00000006 C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00000CC8 00000006 C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00000CD0 00000006 C=CODE     S=.text    G=(none)   M=rxToolEdit ACBP=A9
+ 0001:00000CD8 00000006 C=CODE     S=.text    G=(none)   M=rxDateUtil ACBP=A9
+ 0001:00000CE0 00000006 C=CODE     S=.text    G=(none)   M=RXCtrls  ACBP=A9
+ 0001:00000CE8 00000006 C=CODE     S=.text    G=(none)   M=RxHook   ACBP=A9
+ 0001:00000CF0 00000006 C=CODE     S=.text    G=(none)   M=RXConst  ACBP=A9
+ 0001:00000CF8 00000006 C=CODE     S=.text    G=(none)   M=rxVclutils ACBP=A9
+ 0001:00000D00 00000006 C=CODE     S=.text    G=(none)   M=RXProps  ACBP=A9
+ 0001:00000D08 00000006 C=CODE     S=.text    G=(none)   M=rxAppUtils ACBP=A9
+ 0001:00000D10 00000006 C=CODE     S=.text    G=(none)   M=RxPrgrss ACBP=A9
+ 0001:00000D18 00000006 C=CODE     S=.text    G=(none)   M=rxCurrEdit ACBP=A9
+ 0001:00000D20 00000006 C=CODE     S=.text    G=(none)   M=ThemedDBGrid ACBP=A9
+ 0001:00000D28 00000006 C=CODE     S=.text    G=(none)   M=RxRichEd ACBP=A9
+ 0001:00000D30 00000006 C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:00000D38 00000006 C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00000D40 0000000E C=CODE     S=.text    G=(none)   M=BisUtils ACBP=A9
+ 0001:00000D50 00000006 C=CODE     S=.text    G=(none)   M=BisParam ACBP=A9
+ 0001:00000D58 00000046 C=CODE     S=.text    G=(none)   M=BisFrm   ACBP=A9
+ 0001:00000DA0 00000006 C=CODE     S=.text    G=(none)   M=GIFImage ACBP=A9
+ 0001:00000DA8 00000006 C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:00000DB0 00000006 C=CODE     S=.text    G=(none)   M=BisCore  ACBP=A9
+ 0001:00000DB8 0000002E C=CODE     S=.text    G=(none)   M=BisIfaces ACBP=A9
+ 0001:00000DE8 0000004E C=CODE     S=.text    G=(none)   M=BisDataSet ACBP=A9
+ 0001:00000E38 00000036 C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:00000E70 000000DE C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:00000F50 00000006 C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00000F58 00000006 C=CODE     S=.text    G=(none)   M=BisLocalbase ACBP=A9
+ 0001:00000F60 00000286 C=CODE     S=.text    G=(none)   M=kbmMemTable ACBP=A9
+ 0001:000011E8 00000006 C=CODE     S=.text    G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0001:000011F0 00000006 C=CODE     S=.text    G=(none)   M=ActnMan  ACBP=A9
+ 0001:000011F8 00000006 C=CODE     S=.text    G=(none)   M=ActnMenus ACBP=A9
+ 0001:00001200 00000006 C=CODE     S=.text    G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0001:00001208 0000002E C=CODE     S=.text    G=(none)   M=BisProvider ACBP=A9
+ 0001:00001238 00000006 C=CODE     S=.text    G=(none)   M=SynEditHighlighter ACBP=A9
+ 0001:00001240 00000006 C=CODE     S=.text    G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0001:00001248 00000006 C=CODE     S=.text    G=(none)   M=SynRegExpr ACBP=A9
+ 0001:00001250 00000006 C=CODE     S=.text    G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0001:00001258 00000006 C=CODE     S=.text    G=(none)   M=SynEdit  ACBP=A9
+ 0001:00001260 00000006 C=CODE     S=.text    G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0001:00001268 00000006 C=CODE     S=.text    G=(none)   M=SynTextDrawer ACBP=A9
+ 0001:00001270 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_Routines ACBP=A9
+ 0001:00001278 00000006 C=CODE     S=.text    G=(none)   M=MSI_Processes ACBP=A9
+ 0001:00001280 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0001:00001288 00000006 C=CODE     S=.text    G=(none)   M=MSI_Devices ACBP=A9
+ 0001:00001290 00000006 C=CODE     S=.text    G=(none)   M=MSI_CPU  ACBP=A9
+ 0001:00001298 00000006 C=CODE     S=.text    G=(none)   M=JclDebug ACBP=A9
+ 0001:000012A0 00000006 C=CODE     S=.text    G=(none)   M=JclSysInfo ACBP=A9
+ 0001:000012A8 00000006 C=CODE     S=.text    G=(none)   M=JclStrings ACBP=A9
+ 0001:000012B0 00000006 C=CODE     S=.text    G=(none)   M=JclSysUtils ACBP=A9
+ 0001:000012B8 00000006 C=CODE     S=.text    G=(none)   M=JclWideStrings ACBP=A9
+ 0001:000012C0 00000006 C=CODE     S=.text    G=(none)   M=JclShell ACBP=A9
+ 0001:000012C8 00000006 C=CODE     S=.text    G=(none)   M=JclRegistry ACBP=A9
+ 0001:000012D0 00000006 C=CODE     S=.text    G=(none)   M=JclHookExcept ACBP=A9
+ 0001:000012D8 00000006 C=CODE     S=.text    G=(none)   M=BisProviders ACBP=A9
+ 0001:000012E0 0000004E C=CODE     S=.text    G=(none)   M=BisMapFm ACBP=A9
+ 0001:00001330 00000106 C=CODE     S=.text    G=(none)   M=BisMapFrm ACBP=A9
+ 0001:00001438 00000006 C=CODE     S=.text    G=(none)   M=BisCoreThreads ACBP=A9
+ 0001:00001440 00000006 C=CODE     S=.text    G=(none)   M=AsyncCalls ACBP=A9
+ 0001:00001448 00000006 C=CODE     S=.text    G=(none)   M=BisServiceApplication ACBP=A9
+ 0001:00001450 00000006 C=CODE     S=.text    G=(none)   M=BisSvcMgr ACBP=A9
+ 0001:00001458 00000006 C=CODE     S=.text    G=(none)   M=BisCryptUtils ACBP=A9
+ 0001:00001460 00000006 C=CODE     S=.text    G=(none)   M=SvcMgr   ACBP=A9
+ 0001:00001468 0000036E C=CODE     S=.text    G=(none)   M=BisIngitMapFm ACBP=A9
+ 0001:000017D8 000053E6 C=CODE     S=.text    G=(none)   M=GWXLib_TLB ACBP=A9
+ 0001:00006BC0 0000166A C=CODE     S=.text    G=(none)   M=BisIngitMapFrm ACBP=A9
+ 0001:0000822C 0000071E C=CODE     S=.text    G=(none)   M=BisIngitMapGetRouteDistancePrv ACBP=A9
+ 0001:0000894C 0000005A C=CODE     S=.text    G=(none)   M=BisIngit ACBP=A9
+ 0001:000089A8 00000ACF C=CODE     S=.text    G=(none)   M=.mpmingit ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:00000010 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=IniFiles ACBP=A9
+ 0002:0000004C 00000006 C=ICODE    S=.itext   G=(none)   M=BisFm    ACBP=A9
+ 0002:00000054 00000006 C=ICODE    S=.itext   G=(none)   M=DECUtil  ACBP=A9
+ 0002:0000005C 00000006 C=ICODE    S=.itext   G=(none)   M=Hash     ACBP=A9
+ 0002:00000064 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher   ACBP=A9
+ 0002:0000006C 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher1  ACBP=A9
+ 0002:00000074 00000006 C=ICODE    S=.itext   G=(none)   M=Menus    ACBP=A9
+ 0002:0000007C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnList ACBP=A9
+ 0002:00000084 00000006 C=ICODE    S=.itext   G=(none)   M=Graphics ACBP=A9
+ 0002:0000008C 00000006 C=ICODE    S=.itext   G=(none)   M=Registry ACBP=A9
+ 0002:00000094 00000006 C=ICODE    S=.itext   G=(none)   M=Themes   ACBP=A9
+ 0002:0000009C 00000006 C=ICODE    S=.itext   G=(none)   M=Controls ACBP=A9
+ 0002:000000A4 00000006 C=ICODE    S=.itext   G=(none)   M=UxTheme  ACBP=A9
+ 0002:000000AC 00000006 C=ICODE    S=.itext   G=(none)   M=MultiMon ACBP=A9
+ 0002:000000B4 00000006 C=ICODE    S=.itext   G=(none)   M=DwmApi   ACBP=A9
+ 0002:000000BC 00000006 C=ICODE    S=.itext   G=(none)   M=Forms    ACBP=A9
+ 0002:000000C4 00000006 C=ICODE    S=.itext   G=(none)   M=HelpIntfs ACBP=A9
+ 0002:000000CC 00000006 C=ICODE    S=.itext   G=(none)   M=Dialogs  ACBP=A9
+ 0002:000000D4 00000006 C=ICODE    S=.itext   G=(none)   M=Printers ACBP=A9
+ 0002:000000DC 00000006 C=ICODE    S=.itext   G=(none)   M=ExtCtrls ACBP=A9
+ 0002:000000E4 00000006 C=ICODE    S=.itext   G=(none)   M=GraphUtil ACBP=A9
+ 0002:000000EC 00000006 C=ICODE    S=.itext   G=(none)   M=Clipbrd  ACBP=A9
+ 0002:000000F4 00000006 C=ICODE    S=.itext   G=(none)   M=FlatSB   ACBP=A9
+ 0002:000000FC 00000006 C=ICODE    S=.itext   G=(none)   M=DB       ACBP=A9
+ 0002:00000104 00000006 C=ICODE    S=.itext   G=(none)   M=WideStrings ACBP=A9
+ 0002:0000010C 00000006 C=ICODE    S=.itext   G=(none)   M=FMTBcd   ACBP=A9
+ 0002:00000114 00000006 C=ICODE    S=.itext   G=(none)   M=SqlTimSt ACBP=A9
+ 0002:0000011C 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:00000124 00000006 C=ICODE    S=.itext   G=(none)   M=DBCtrls  ACBP=A9
+ 0002:0000012C 00000006 C=ICODE    S=.itext   G=(none)   M=ComCtrls ACBP=A9
+ 0002:00000134 00000006 C=ICODE    S=.itext   G=(none)   M=ExtActns ACBP=A9
+ 0002:0000013C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtDlgs  ACBP=A9
+ 0002:00000144 00000006 C=ICODE    S=.itext   G=(none)   M=Buttons  ACBP=A9
+ 0002:0000014C 00000006 C=ICODE    S=.itext   G=(none)   M=Mapi     ACBP=A9
+ 0002:00000154 00000006 C=ICODE    S=.itext   G=(none)   M=DBPWDlg  ACBP=A9
+ 0002:0000015C 00000006 C=ICODE    S=.itext   G=(none)   M=DBLogDlg ACBP=A9
+ 0002:00000164 00000006 C=ICODE    S=.itext   G=(none)   M=rxToolEdit ACBP=A9
+ 0002:0000016C 00000006 C=ICODE    S=.itext   G=(none)   M=rxDateUtil ACBP=A9
+ 0002:00000174 00000006 C=ICODE    S=.itext   G=(none)   M=RXCtrls  ACBP=A9
+ 0002:0000017C 00000006 C=ICODE    S=.itext   G=(none)   M=RxHook   ACBP=A9
+ 0002:00000184 00000006 C=ICODE    S=.itext   G=(none)   M=RXConst  ACBP=A9
+ 0002:0000018C 00000006 C=ICODE    S=.itext   G=(none)   M=rxVclutils ACBP=A9
+ 0002:00000194 00000006 C=ICODE    S=.itext   G=(none)   M=RXProps  ACBP=A9
+ 0002:0000019C 00000006 C=ICODE    S=.itext   G=(none)   M=rxAppUtils ACBP=A9
+ 0002:000001A4 00000006 C=ICODE    S=.itext   G=(none)   M=RxPrgrss ACBP=A9
+ 0002:000001AC 00000006 C=ICODE    S=.itext   G=(none)   M=rxCurrEdit ACBP=A9
+ 0002:000001B4 00000006 C=ICODE    S=.itext   G=(none)   M=ThemedDBGrid ACBP=A9
+ 0002:000001BC 00000006 C=ICODE    S=.itext   G=(none)   M=RxRichEd ACBP=A9
+ 0002:000001C4 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtnrs ACBP=A9
+ 0002:000001CC 00000006 C=ICODE    S=.itext   G=(none)   M=CheckLst ACBP=A9
+ 0002:000001D4 00000006 C=ICODE    S=.itext   G=(none)   M=BisUtils ACBP=A9
+ 0002:000001DC 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImage ACBP=A9
+ 0002:000001E4 00000006 C=ICODE    S=.itext   G=(none)   M=jpeg     ACBP=A9
+ 0002:000001EC 00000006 C=ICODE    S=.itext   G=(none)   M=BisCore  ACBP=A9
+ 0002:000001F4 00000006 C=ICODE    S=.itext   G=(none)   M=OleServer ACBP=A9
+ 0002:000001FC 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtrls ACBP=A9
+ 0002:00000204 00000006 C=ICODE    S=.itext   G=(none)   M=AxCtrls  ACBP=A9
+ 0002:0000020C 00000006 C=ICODE    S=.itext   G=(none)   M=kbmMemTable ACBP=A9
+ 0002:00000214 00000006 C=ICODE    S=.itext   G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0002:0000021C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMan  ACBP=A9
+ 0002:00000224 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMenus ACBP=A9
+ 0002:0000022C 00000006 C=ICODE    S=.itext   G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0002:00000234 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditHighlighter ACBP=A9
+ 0002:0000023C 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0002:00000244 00000006 C=ICODE    S=.itext   G=(none)   M=SynRegExpr ACBP=A9
+ 0002:0000024C 00000006 C=ICODE    S=.itext   G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0002:00000254 00000006 C=ICODE    S=.itext   G=(none)   M=SynEdit  ACBP=A9
+ 0002:0000025C 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0002:00000264 00000006 C=ICODE    S=.itext   G=(none)   M=SynTextDrawer ACBP=A9
+ 0002:0000026C 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_Routines ACBP=A9
+ 0002:00000274 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Processes ACBP=A9
+ 0002:0000027C 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0002:00000284 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Devices ACBP=A9
+ 0002:0000028C 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_CPU  ACBP=A9
+ 0002:00000294 00000006 C=ICODE    S=.itext   G=(none)   M=JclDebug ACBP=A9
+ 0002:0000029C 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysInfo ACBP=A9
+ 0002:000002A4 00000006 C=ICODE    S=.itext   G=(none)   M=JclStrings ACBP=A9
+ 0002:000002AC 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysUtils ACBP=A9
+ 0002:000002B4 00000006 C=ICODE    S=.itext   G=(none)   M=JclWideStrings ACBP=A9
+ 0002:000002BC 00000006 C=ICODE    S=.itext   G=(none)   M=JclShell ACBP=A9
+ 0002:000002C4 00000006 C=ICODE    S=.itext   G=(none)   M=JclRegistry ACBP=A9
+ 0002:000002CC 00000006 C=ICODE    S=.itext   G=(none)   M=JclHookExcept ACBP=A9
+ 0002:000002D4 00000006 C=ICODE    S=.itext   G=(none)   M=BisCoreThreads ACBP=A9
+ 0002:000002DC 00000006 C=ICODE    S=.itext   G=(none)   M=AsyncCalls ACBP=A9
+ 0002:000002E4 00000006 C=ICODE    S=.itext   G=(none)   M=BisServiceApplication ACBP=A9
+ 0002:000002EC 00000006 C=ICODE    S=.itext   G=(none)   M=BisSvcMgr ACBP=A9
+ 0002:000002F4 00000006 C=ICODE    S=.itext   G=(none)   M=BisCryptUtils ACBP=A9
+ 0002:000002FC 00000006 C=ICODE    S=.itext   G=(none)   M=SvcMgr   ACBP=A9
+ 0002:00000304 00000008 C=ICODE    S=.itext   G=(none)   M=BisIngitMapFm ACBP=A9
+ 0002:0000030C 00000008 C=ICODE    S=.itext   G=(none)   M=GWXLib_TLB ACBP=A9
+ 0002:00000314 00000008 C=ICODE    S=.itext   G=(none)   M=BisIngitMapFrm ACBP=A9
+ 0002:0000031C 00000008 C=ICODE    S=.itext   G=(none)   M=BisIngitMapGetRouteDistancePrv ACBP=A9
+ 0002:00000324 00000008 C=ICODE    S=.itext   G=(none)   M=BisIngit ACBP=A9
+ 0002:0000032C 00000005 C=ICODE    S=.itext   G=(none)   M=.mpmingit ACBP=A9
+ 0003:00000000 0000002C C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0003:0000002C 00000298 C=DATA     S=.data    G=DGROUP   M=GWXLib_TLB ACBP=A9
+ 0004:00000000 0000000C C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:0000000C 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000014 00000008 C=BSS      S=.bss     G=DGROUP   M=BisIngitMapFm ACBP=A9
+ 0004:0000001C 00000004 C=BSS      S=.bss     G=DGROUP   M=GWXLib_TLB ACBP=A9
+ 0004:00000020 00000004 C=BSS      S=.bss     G=DGROUP   M=BisIngitMapFrm ACBP=A9
+ 0004:00000024 00000004 C=BSS      S=.bss     G=DGROUP   M=BisIngitMapGetRouteDistancePrv ACBP=A9
+ 0004:00000028 00000004 C=BSS      S=.bss     G=DGROUP   M=BisIngit ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:0000032C       .mpmingit..mpmingit
+ 0001:00009458       .mpmingit.@GetPackageInfoTable
+ 0001:00009460       .mpmingit.@PackageLoad
+ 0001:0000946C       .mpmingit.@PackageUnload
+ 0004:00000028       BisIngit..1
+ 0002:00000324       BisIngit.BisIngit
+ 0001:00008978       BisIngit.Finalization
+ 0001:0000894C       BisIngit.InitMapModule
+ 0001:00008960       BisIngit.InitProviderModule
+ 0004:00000018       BisIngitMapFm..3
+ 0001:00001468       BisIngitMapFm..TBisIngitMapForm
+ 0001:00001658       BisIngitMapFm..TBisIngitMapFormIface
+ 0002:00000304       BisIngitMapFm.BisIngitMapFm
+ 0004:00000014       BisIngitMapFm.BisIngitMapForm
+ 0001:000017A8       BisIngitMapFm.Finalization
+ 0001:000017A4       BisIngitMapFm.TBisIngitMapForm.GetMapFrameClass
+ 0001:0000179C       BisIngitMapFm.TBisIngitMapFormIface.GetFormClass
+ 0004:00000020       BisIngitMapFrm..2
+ 0001:00006BC0       BisIngitMapFrm..TBisIngitMapFrame
+ 0002:00000314       BisIngitMapFrm.BisIngitMapFrm
+ 0001:000081FC       BisIngitMapFrm.Finalization
+ 0001:00006E08       BisIngitMapFrm.TBisIngitMapFrame.Create
+ 0001:00006F24       BisIngitMapFrm.TBisIngitMapFrame.Destroy
+ 0001:000073C4       BisIngitMapFrm.TBisIngitMapFrame.DistanceMap
+ 0001:00007040       BisIngitMapFrm.TBisIngitMapFrame.GetCurrentLat
+ 0001:00007088       BisIngitMapFrm.TBisIngitMapFrame.GetCurrentLon
+ 0001:000074D4       BisIngitMapFrm.TBisIngitMapFrame.GetRouteDistance
+ 0001:0000741C       BisIngitMapFrm.TBisIngitMapFrame.GetRouteDistance
+ 0001:00006F6C       BisIngitMapFrm.TBisIngitMapFrame.LoadFromFile
+ 0001:00006F98       BisIngitMapFrm.TBisIngitMapFrame.MapExists
+ 0001:000071A4       BisIngitMapFrm.TBisIngitMapFrame.MapKeyboardAction
+ 0001:00007018       BisIngitMapFrm.TBisIngitMapFrame.MapLoaded
+ 0001:000070D0       BisIngitMapFrm.TBisIngitMapFrame.MapMouseAction
+ 0001:00007334       BisIngitMapFrm.TBisIngitMapFrame.MoveMap
+ 0001:000071F4       BisIngitMapFrm.TBisIngitMapFrame.OpenMap
+ 0001:000072F4       BisIngitMapFrm.TBisIngitMapFrame.OverviewMap
+ 0001:00007314       BisIngitMapFrm.TBisIngitMapFrame.PrepareMap
+ 0001:000073CC       BisIngitMapFrm.TBisIngitMapFrame.RouteMap
+ 0001:000076B0       BisIngitMapFrm.TBisIngitMapFrame.ScaleRoute
+ 0001:000073F8       BisIngitMapFrm.TBisIngitMapFrame.TranslateLength
+ 0001:000078F4       BisIngitMapFrm.TBisIngitMapFrame.VisibleRoute
+ 0001:00007364       BisIngitMapFrm.TBisIngitMapFrame.ZoomInMap
+ 0001:00007394       BisIngitMapFrm.TBisIngitMapFrame.ZoomOutMap
+ 0004:00000024       BisIngitMapGetRouteDistancePrv..2
+ 0001:0000822C       BisIngitMapGetRouteDistancePrv..TBisIngitMapGetRouteDistanceProvider
+ 0002:0000031C       BisIngitMapGetRouteDistancePrv.BisIngitMapGetRouteDistancePrv
+ 0001:0000891C       BisIngitMapGetRouteDistancePrv.Finalization
+ 0001:000085F4       BisIngitMapGetRouteDistancePrv.TBisIngitMapGetRouteDistanceProvider.Create
+ 0001:00008708       BisIngitMapGetRouteDistancePrv.TBisIngitMapGetRouteDistanceProvider.Destroy
+ 0001:00008744       BisIngitMapGetRouteDistancePrv.TBisIngitMapGetRouteDistanceProvider.Handle
+ 0004:0000001C       GWXLib_TLB..21
+ 0001:00002620       GWXLib_TLB..CoGWGraphics
+ 0001:00002A38       GWXLib_TLB..CoGWObject
+ 0001:00002780       GWXLib_TLB..CoGWRoute
+ 0001:000028D4       GWXLib_TLB..CoGWStringList
+ 0001:000024CC       GWXLib_TLB..CoGWTable
+ 0001:00001E2C       GWXLib_TLB..TGWControl
+ 0001:000026A8       GWXLib_TLB..TGWGraphics
+ 0001:00002AB8       GWXLib_TLB..TGWObject
+ 0001:00002800       GWXLib_TLB..TGWRoute
+ 0001:0000295C       GWXLib_TLB..TGWStringList
+ 0001:0000254C       GWXLib_TLB..TGWTable
+ 0003:00000144       GWXLib_TLB.CControlData
+ 0003:0000012C       GWXLib_TLB.CEventDispIDs
+ 0003:000000CC       GWXLib_TLB.CLASS_GWControl
+ 0003:000000EC       GWXLib_TLB.CLASS_GWGraphics
+ 0003:0000011C       GWXLib_TLB.CLASS_GWObject
+ 0003:000000FC       GWXLib_TLB.CLASS_GWRoute
+ 0003:0000010C       GWXLib_TLB.CLASS_GWStringList
+ 0003:000000DC       GWXLib_TLB.CLASS_GWTable
+ 0001:000048DC       GWXLib_TLB.CoGWGraphics.Create
+ 0001:00004940       GWXLib_TLB.CoGWGraphics.CreateRemote
+ 0001:000060E8       GWXLib_TLB.CoGWObject.Create
+ 0001:0000614C       GWXLib_TLB.CoGWObject.CreateRemote
+ 0001:00004CF4       GWXLib_TLB.CoGWRoute.Create
+ 0001:00004D58       GWXLib_TLB.CoGWRoute.CreateRemote
+ 0001:00005C58       GWXLib_TLB.CoGWStringList.Create
+ 0001:00005CBC       GWXLib_TLB.CoGWStringList.CreateRemote
+ 0001:00003E08       GWXLib_TLB.CoGWTable.Create
+ 0001:00003E6C       GWXLib_TLB.CoGWTable.CreateRemote
+ 0003:00000198       GWXLib_TLB.CServerData
+ 0003:000001D4       GWXLib_TLB.CServerData
+ 0003:00000288       GWXLib_TLB.CServerData
+ 0003:0000024C       GWXLib_TLB.CServerData
+ 0003:00000210       GWXLib_TLB.CServerData
+ 0003:0000005C       GWXLib_TLB.DIID__IGWControlEvents
+ 0001:00002BB8       GWXLib_TLB.DoCreate
+ 0001:00006B90       GWXLib_TLB.Finalization
+ 0002:0000030C       GWXLib_TLB.GWXLib_TLB
+ 0003:0000009C       GWXLib_TLB.IID_IGWControl
+ 0003:0000008C       GWXLib_TLB.IID_IGWGraphics
+ 0003:0000004C       GWXLib_TLB.IID_IGWObject
+ 0003:000000AC       GWXLib_TLB.IID_IGWProjection
+ 0003:000000BC       GWXLib_TLB.IID_IGWProjectionAcc
+ 0003:0000007C       GWXLib_TLB.IID_IGWRoute
+ 0003:0000003C       GWXLib_TLB.IID_IGWStringList
+ 0003:0000006C       GWXLib_TLB.IID_IGWTable
+ 0003:0000002C       GWXLib_TLB.LIBID_GWXLib
+ 0001:00006ADC       GWXLib_TLB.Register
+ 0001:00003918       GWXLib_TLB.TGWControl.AddMap
+ 0001:00002C3C       GWXLib_TLB.TGWControl.CreateControl
+ 0001:00003B8C       GWXLib_TLB.TGWControl.CreateGWRoute
+ 0001:00003B2C       GWXLib_TLB.TGWControl.CreateGWTable
+ 0001:00002E44       GWXLib_TLB.TGWControl.DBF2Map
+ 0001:00002EB0       GWXLib_TLB.TGWControl.DeleteDBF
+ 0001:000038B0       GWXLib_TLB.TGWControl.Dev2Geo
+ 0001:00003828       GWXLib_TLB.TGWControl.Dev2GeoString
+ 0001:0000363C       GWXLib_TLB.TGWControl.exploreApply
+ 0001:00003700       GWXLib_TLB.TGWControl.exploreDbApply
+ 0001:00003C70       GWXLib_TLB.TGWControl.FindNearestAddress
+ 0001:000037BC       GWXLib_TLB.TGWControl.Geo2Dev
+ 0001:000031C0       GWXLib_TLB.TGWControl.getAliasAttributes
+ 0001:00003164       GWXLib_TLB.TGWControl.getAliasCodes
+ 0001:00003A50       GWXLib_TLB.TGWControl.GetAvailableLookups
+ 0001:0000355C       GWXLib_TLB.TGWControl.getBitmap
+ 0001:00002C5C       GWXLib_TLB.TGWControl.GetControlInterface
+ 0001:00003BF0       GWXLib_TLB.TGWControl.GetDistancePath
+ 0001:000035DC       GWXLib_TLB.TGWControl.getExplore
+ 0001:000036A0       GWXLib_TLB.TGWControl.getExploreDb
+ 0001:00002D98       GWXLib_TLB.TGWControl.GetGeoCenter
+ 0001:00002F04       GWXLib_TLB.TGWControl.GetInfo
+ 0001:000034CC       GWXLib_TLB.TGWControl.GetInfoPolygon
+ 0001:00003040       GWXLib_TLB.TGWControl.GetInfoRect
+ 0001:000032D8       GWXLib_TLB.TGWControl.getMapInfo
+ 0001:00003378       GWXLib_TLB.TGWControl.getMeasure
+ 0001:0000327C       GWXLib_TLB.TGWControl.getModulePath
+ 0001:0000321C       GWXLib_TLB.TGWControl.getObject
+ 0001:00003CDC       GWXLib_TLB.TGWControl.getObjectTable
+ 0001:00003404       GWXLib_TLB.TGWControl.getUnloaderDBF
+ 0001:00002C7C       GWXLib_TLB.TGWControl.Get_DBFLoadedList
+ 0001:00002CD8       GWXLib_TLB.TGWControl.Get_LoadedMaps
+ 0001:00002B9C       GWXLib_TLB.TGWControl.InitControlData
+ 0001:00003D9C       GWXLib_TLB.TGWControl.ModifyTable
+ 0001:00002DF4       GWXLib_TLB.TGWControl.Overview
+ 0001:00003114       GWXLib_TLB.TGWControl.Refresh
+ 0001:00003988       GWXLib_TLB.TGWControl.RemoveMap
+ 0001:00002F70       GWXLib_TLB.TGWControl.Search
+ 0001:00002FD0       GWXLib_TLB.TGWControl.SearchAddress
+ 0001:000030B8       GWXLib_TLB.TGWControl.selectObject
+ 0001:00002D38       GWXLib_TLB.TGWControl.SetGeoCenter
+ 0001:000039E0       GWXLib_TLB.TGWControl.SetLookup
+ 0001:00003D40       GWXLib_TLB.TGWControl.setObjectVisibility
+ 0001:00003764       GWXLib_TLB.TGWControl.setPassWord
+ 0001:00003464       GWXLib_TLB.TGWControl.showAddress
+ 0001:00003AB4       GWXLib_TLB.TGWControl.Table2Map
+ 0001:000049CC       GWXLib_TLB.TGWGraphics.Connect
+ 0001:00004A34       GWXLib_TLB.TGWGraphics.ConnectTo
+ 0001:00004B90       GWXLib_TLB.TGWGraphics.Create
+ 0001:00004BC8       GWXLib_TLB.TGWGraphics.Destroy
+ 0001:00004A88       GWXLib_TLB.TGWGraphics.Disconnect
+ 0001:00004A9C       GWXLib_TLB.TGWGraphics.GetDefaultInterface
+ 0001:00004C98       GWXLib_TLB.TGWGraphics.getTable
+ 0001:000049C0       GWXLib_TLB.TGWGraphics.InitServerData
+ 0001:00004BF0       GWXLib_TLB.TGWGraphics.load
+ 0001:00004C44       GWXLib_TLB.TGWGraphics.write
+ 0001:000061D8       GWXLib_TLB.TGWObject.Connect
+ 0001:00006240       GWXLib_TLB.TGWObject.ConnectTo
+ 0001:0000639C       GWXLib_TLB.TGWObject.Create
+ 0001:000063D4       GWXLib_TLB.TGWObject.Destroy
+ 0001:00006294       GWXLib_TLB.TGWObject.Disconnect
+ 0001:000062A8       GWXLib_TLB.TGWObject.GetDefaultInterface
+ 0001:00006A7C       GWXLib_TLB.TGWObject.getLinks
+ 0001:000064BC       GWXLib_TLB.TGWObject.Get_Acronym
+ 0001:00006634       GWXLib_TLB.TGWObject.Get_Attributes
+ 0001:00006914       GWXLib_TLB.TGWObject.Get_Contoured
+ 0001:000063FC       GWXLib_TLB.TGWObject.Get_ID
+ 0001:00006690       GWXLib_TLB.TGWObject.Get_Length
+ 0001:00006750       GWXLib_TLB.TGWObject.Get_Links
+ 0001:00006860       GWXLib_TLB.TGWObject.Get_Marked
+ 0001:00006578       GWXLib_TLB.TGWObject.Get_Metrics
+ 0001:00006518       GWXLib_TLB.TGWObject.Get_MetricsType
+ 0001:000066F0       GWXLib_TLB.TGWObject.Get_Square
+ 0001:000069C8       GWXLib_TLB.TGWObject.Get_Twinkling
+ 0001:0000645C       GWXLib_TLB.TGWObject.Get_type_
+ 0001:000067AC       GWXLib_TLB.TGWObject.Get_Visible
+ 0001:000061CC       GWXLib_TLB.TGWObject.InitServerData
+ 0001:00006974       GWXLib_TLB.TGWObject.Set_Contoured
+ 0001:000068C0       GWXLib_TLB.TGWObject.Set_Marked
+ 0001:00006A28       GWXLib_TLB.TGWObject.Set_Twinkling
+ 0001:0000680C       GWXLib_TLB.TGWObject.Set_Visible
+ 0001:00005A70       GWXLib_TLB.TGWRoute.AddPoint
+ 0001:00005ADC       GWXLib_TLB.TGWRoute.CalculateRoute
+ 0001:00004DE4       GWXLib_TLB.TGWRoute.Connect
+ 0001:00004E4C       GWXLib_TLB.TGWRoute.ConnectTo
+ 0001:00004FA8       GWXLib_TLB.TGWRoute.Create
+ 0001:00005A20       GWXLib_TLB.TGWRoute.DeletePoints
+ 0001:00004FE0       GWXLib_TLB.TGWRoute.Destroy
+ 0001:00004EA0       GWXLib_TLB.TGWRoute.Disconnect
+ 0001:00004EB4       GWXLib_TLB.TGWRoute.GetDefaultInterface
+ 0001:000059B4       GWXLib_TLB.TGWRoute.GetPointName
+ 0001:00005B3C       GWXLib_TLB.TGWRoute.GetRoute
+ 0001:00005B98       GWXLib_TLB.TGWRoute.GetVariants
+ 0001:00005BF8       GWXLib_TLB.TGWRoute.GetVariantsTable
+ 0001:000050C4       GWXLib_TLB.TGWRoute.Get_Height
+ 0001:000053D8       GWXLib_TLB.TGWRoute.Get_OptimizeByTime
+ 0001:000058F0       GWXLib_TLB.TGWRoute.Get_OptimizePriorityRatio
+ 0001:0000582C       GWXLib_TLB.TGWRoute.Get_OptimizeTimeRatio
+ 0001:00005770       GWXLib_TLB.TGWRoute.Get_Priority
+ 0001:00005540       GWXLib_TLB.TGWRoute.Get_ProgressDelay
+ 0001:0000548C       GWXLib_TLB.TGWRoute.Get_ReorderPoints
+ 0001:000056B0       GWXLib_TLB.TGWRoute.Get_RouteDuration
+ 0001:00005650       GWXLib_TLB.TGWRoute.Get_RouteLength
+ 0001:00005710       GWXLib_TLB.TGWRoute.Get_RoutePointsCount
+ 0001:0000531C       GWXLib_TLB.TGWRoute.Get_StartTime
+ 0001:0000523C       GWXLib_TLB.TGWRoute.Get_VehicleType
+ 0001:000055F4       GWXLib_TLB.TGWRoute.Get_VehicleTypes
+ 0001:00005180       GWXLib_TLB.TGWRoute.Get_Weight
+ 0001:00005008       GWXLib_TLB.TGWRoute.Get_Width
+ 0001:00004DD8       GWXLib_TLB.TGWRoute.InitServerData
+ 0001:00005128       GWXLib_TLB.TGWRoute.Set_Height
+ 0001:00005438       GWXLib_TLB.TGWRoute.Set_OptimizeByTime
+ 0001:00005958       GWXLib_TLB.TGWRoute.Set_OptimizePriorityRatio
+ 0001:00005894       GWXLib_TLB.TGWRoute.Set_OptimizeTimeRatio
+ 0001:000057D4       GWXLib_TLB.TGWRoute.Set_Priority
+ 0001:000055A0       GWXLib_TLB.TGWRoute.Set_ProgressDelay
+ 0001:000054EC       GWXLib_TLB.TGWRoute.Set_ReorderPoints
+ 0001:00005380       GWXLib_TLB.TGWRoute.Set_StartTime
+ 0001:00005298       GWXLib_TLB.TGWRoute.Set_VehicleType
+ 0001:000051E4       GWXLib_TLB.TGWRoute.Set_Weight
+ 0001:0000506C       GWXLib_TLB.TGWRoute.Set_Width
+ 0001:00005D48       GWXLib_TLB.TGWStringList.Connect
+ 0001:00005DB0       GWXLib_TLB.TGWStringList.ConnectTo
+ 0001:00005F0C       GWXLib_TLB.TGWStringList.Create
+ 0001:00005F44       GWXLib_TLB.TGWStringList.Destroy
+ 0001:00005E04       GWXLib_TLB.TGWStringList.Disconnect
+ 0001:00005E18       GWXLib_TLB.TGWStringList.GetDefaultInterface
+ 0001:00005FCC       GWXLib_TLB.TGWStringList.Get_Item
+ 0001:00005F6C       GWXLib_TLB.TGWStringList.Get_ItemCount
+ 0001:00005D3C       GWXLib_TLB.TGWStringList.InitServerData
+ 0001:00006028       GWXLib_TLB.TGWStringList.MoveFirst
+ 0001:00006088       GWXLib_TLB.TGWStringList.MoveNext
+ 0001:00004808       GWXLib_TLB.TGWTable.addColumn
+ 0001:0000411C       GWXLib_TLB.TGWTable.addNew
+ 0001:0000417C       GWXLib_TLB.TGWTable.colCount
+ 0001:000047A8       GWXLib_TLB.TGWTable.colDescription
+ 0001:000041DC       GWXLib_TLB.TGWTable.colName
+ 0001:0000423C       GWXLib_TLB.TGWTable.colType
+ 0001:00003EF8       GWXLib_TLB.TGWTable.Connect
+ 0001:00003F60       GWXLib_TLB.TGWTable.ConnectTo
+ 0001:000040BC       GWXLib_TLB.TGWTable.Create
+ 0001:000040F4       GWXLib_TLB.TGWTable.Destroy
+ 0001:00003FB4       GWXLib_TLB.TGWTable.Disconnect
+ 0001:00003FC8       GWXLib_TLB.TGWTable.GetDefaultInterface
+ 0001:0000429C       GWXLib_TLB.TGWTable.getIndex
+ 0001:00004698       GWXLib_TLB.TGWTable.getTable
+ 0001:000046F8       GWXLib_TLB.TGWTable.getText
+ 0001:000042FC       GWXLib_TLB.TGWTable.getValue
+ 0001:00004878       GWXLib_TLB.TGWTable.IndexOf
+ 0001:00003EEC       GWXLib_TLB.TGWTable.InitServerData
+ 0001:0000447C       GWXLib_TLB.TGWTable.move
+ 0001:0000435C       GWXLib_TLB.TGWTable.MoveFirst
+ 0001:000043BC       GWXLib_TLB.TGWTable.moveLast
+ 0001:0000441C       GWXLib_TLB.TGWTable.MoveNext
+ 0001:00004758       GWXLib_TLB.TGWTable.remove
+ 0001:00004638       GWXLib_TLB.TGWTable.rowCount
+ 0001:0000454C       GWXLib_TLB.TGWTable.setValue
+ 0001:000045D8       GWXLib_TLB.TGWTable.sort
+ 0001:00000288       SysInit.@InitPkg
+ 0001:000002EC       SysInit.@PackageLoad
+ 0001:000002F8       SysInit.@PackageUnload
+ 0001:00000178       SysInit.AllocTlsBuffer
+ 0001:00000234       SysInit.ExitProcessTLS
+ 0001:000001FC       SysInit.ExitThreadTLS
+ 0001:00000140       SysInit.FreeLibrary
+ 0001:00000184       SysInit.GetTlsSize
+ 0004:00000004       SysInit.HInstance
+ 0001:00000258       SysInit.InitializeModule
+ 0001:000001D0       SysInit.InitProcessTLS
+ 0001:0000018C       SysInit.InitThreadTLS
+ 0001:00000148       SysInit.LocalAlloc
+ 0001:00000150       SysInit.LocalFree
+ 0003:00000004       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0001:00000158       SysInit.TlsAlloc
+ 0004:00000008       SysInit.tlsBuffer
+ 0001:00000160       SysInit.TlsFree
+ 0001:00000168       SysInit.TlsGetValue
+ 0003:00000000       SysInit.TlsIndex
+ 0005:00000000       SysInit.TlsLast
+ 0003:0000001C       SysInit.TlsProc
+ 0001:00000170       SysInit.TlsSetValue
+ 0001:00000264       SysInit.UninitializeModule
+ 0004:0000000C       Windows..3
+ 0001:0000037C       Windows.DeleteCriticalSection
+ 0001:00000384       Windows.EnterCriticalSection
+ 0001:000003A4       Windows.Finalization
+ 0001:0000038C       Windows.FreeLibrary
+ 0004:00000010       Windows.HtmlHelpModule
+ 0001:00000394       Windows.InitializeCriticalSection
+ 0001:0000039C       Windows.LeaveCriticalSection
+ 0002:00000010       Windows.Windows
+
+
+  Address             Publics by Value
+
+ 0001:00000140       SysInit.FreeLibrary
+ 0001:00000148       SysInit.LocalAlloc
+ 0001:00000150       SysInit.LocalFree
+ 0001:00000158       SysInit.TlsAlloc
+ 0001:00000160       SysInit.TlsFree
+ 0001:00000168       SysInit.TlsGetValue
+ 0001:00000170       SysInit.TlsSetValue
+ 0001:00000178       SysInit.AllocTlsBuffer
+ 0001:00000184       SysInit.GetTlsSize
+ 0001:0000018C       SysInit.InitThreadTLS
+ 0001:000001D0       SysInit.InitProcessTLS
+ 0001:000001FC       SysInit.ExitThreadTLS
+ 0001:00000234       SysInit.ExitProcessTLS
+ 0001:00000258       SysInit.InitializeModule
+ 0001:00000264       SysInit.UninitializeModule
+ 0001:00000288       SysInit.@InitPkg
+ 0001:000002EC       SysInit.@PackageLoad
+ 0001:000002F8       SysInit.@PackageUnload
+ 0001:0000037C       Windows.DeleteCriticalSection
+ 0001:00000384       Windows.EnterCriticalSection
+ 0001:0000038C       Windows.FreeLibrary
+ 0001:00000394       Windows.InitializeCriticalSection
+ 0001:0000039C       Windows.LeaveCriticalSection
+ 0001:000003A4       Windows.Finalization
+ 0001:00001468       BisIngitMapFm..TBisIngitMapForm
+ 0001:00001658       BisIngitMapFm..TBisIngitMapFormIface
+ 0001:0000179C       BisIngitMapFm.TBisIngitMapFormIface.GetFormClass
+ 0001:000017A4       BisIngitMapFm.TBisIngitMapForm.GetMapFrameClass
+ 0001:000017A8       BisIngitMapFm.Finalization
+ 0001:00001E2C       GWXLib_TLB..TGWControl
+ 0001:000024CC       GWXLib_TLB..CoGWTable
+ 0001:0000254C       GWXLib_TLB..TGWTable
+ 0001:00002620       GWXLib_TLB..CoGWGraphics
+ 0001:000026A8       GWXLib_TLB..TGWGraphics
+ 0001:00002780       GWXLib_TLB..CoGWRoute
+ 0001:00002800       GWXLib_TLB..TGWRoute
+ 0001:000028D4       GWXLib_TLB..CoGWStringList
+ 0001:0000295C       GWXLib_TLB..TGWStringList
+ 0001:00002A38       GWXLib_TLB..CoGWObject
+ 0001:00002AB8       GWXLib_TLB..TGWObject
+ 0001:00002B9C       GWXLib_TLB.TGWControl.InitControlData
+ 0001:00002BB8       GWXLib_TLB.DoCreate
+ 0001:00002C3C       GWXLib_TLB.TGWControl.CreateControl
+ 0001:00002C5C       GWXLib_TLB.TGWControl.GetControlInterface
+ 0001:00002C7C       GWXLib_TLB.TGWControl.Get_DBFLoadedList
+ 0001:00002CD8       GWXLib_TLB.TGWControl.Get_LoadedMaps
+ 0001:00002D38       GWXLib_TLB.TGWControl.SetGeoCenter
+ 0001:00002D98       GWXLib_TLB.TGWControl.GetGeoCenter
+ 0001:00002DF4       GWXLib_TLB.TGWControl.Overview
+ 0001:00002E44       GWXLib_TLB.TGWControl.DBF2Map
+ 0001:00002EB0       GWXLib_TLB.TGWControl.DeleteDBF
+ 0001:00002F04       GWXLib_TLB.TGWControl.GetInfo
+ 0001:00002F70       GWXLib_TLB.TGWControl.Search
+ 0001:00002FD0       GWXLib_TLB.TGWControl.SearchAddress
+ 0001:00003040       GWXLib_TLB.TGWControl.GetInfoRect
+ 0001:000030B8       GWXLib_TLB.TGWControl.selectObject
+ 0001:00003114       GWXLib_TLB.TGWControl.Refresh
+ 0001:00003164       GWXLib_TLB.TGWControl.getAliasCodes
+ 0001:000031C0       GWXLib_TLB.TGWControl.getAliasAttributes
+ 0001:0000321C       GWXLib_TLB.TGWControl.getObject
+ 0001:0000327C       GWXLib_TLB.TGWControl.getModulePath
+ 0001:000032D8       GWXLib_TLB.TGWControl.getMapInfo
+ 0001:00003378       GWXLib_TLB.TGWControl.getMeasure
+ 0001:00003404       GWXLib_TLB.TGWControl.getUnloaderDBF
+ 0001:00003464       GWXLib_TLB.TGWControl.showAddress
+ 0001:000034CC       GWXLib_TLB.TGWControl.GetInfoPolygon
+ 0001:0000355C       GWXLib_TLB.TGWControl.getBitmap
+ 0001:000035DC       GWXLib_TLB.TGWControl.getExplore
+ 0001:0000363C       GWXLib_TLB.TGWControl.exploreApply
+ 0001:000036A0       GWXLib_TLB.TGWControl.getExploreDb
+ 0001:00003700       GWXLib_TLB.TGWControl.exploreDbApply
+ 0001:00003764       GWXLib_TLB.TGWControl.setPassWord
+ 0001:000037BC       GWXLib_TLB.TGWControl.Geo2Dev
+ 0001:00003828       GWXLib_TLB.TGWControl.Dev2GeoString
+ 0001:000038B0       GWXLib_TLB.TGWControl.Dev2Geo
+ 0001:00003918       GWXLib_TLB.TGWControl.AddMap
+ 0001:00003988       GWXLib_TLB.TGWControl.RemoveMap
+ 0001:000039E0       GWXLib_TLB.TGWControl.SetLookup
+ 0001:00003A50       GWXLib_TLB.TGWControl.GetAvailableLookups
+ 0001:00003AB4       GWXLib_TLB.TGWControl.Table2Map
+ 0001:00003B2C       GWXLib_TLB.TGWControl.CreateGWTable
+ 0001:00003B8C       GWXLib_TLB.TGWControl.CreateGWRoute
+ 0001:00003BF0       GWXLib_TLB.TGWControl.GetDistancePath
+ 0001:00003C70       GWXLib_TLB.TGWControl.FindNearestAddress
+ 0001:00003CDC       GWXLib_TLB.TGWControl.getObjectTable
+ 0001:00003D40       GWXLib_TLB.TGWControl.setObjectVisibility
+ 0001:00003D9C       GWXLib_TLB.TGWControl.ModifyTable
+ 0001:00003E08       GWXLib_TLB.CoGWTable.Create
+ 0001:00003E6C       GWXLib_TLB.CoGWTable.CreateRemote
+ 0001:00003EEC       GWXLib_TLB.TGWTable.InitServerData
+ 0001:00003EF8       GWXLib_TLB.TGWTable.Connect
+ 0001:00003F60       GWXLib_TLB.TGWTable.ConnectTo
+ 0001:00003FB4       GWXLib_TLB.TGWTable.Disconnect
+ 0001:00003FC8       GWXLib_TLB.TGWTable.GetDefaultInterface
+ 0001:000040BC       GWXLib_TLB.TGWTable.Create
+ 0001:000040F4       GWXLib_TLB.TGWTable.Destroy
+ 0001:0000411C       GWXLib_TLB.TGWTable.addNew
+ 0001:0000417C       GWXLib_TLB.TGWTable.colCount
+ 0001:000041DC       GWXLib_TLB.TGWTable.colName
+ 0001:0000423C       GWXLib_TLB.TGWTable.colType
+ 0001:0000429C       GWXLib_TLB.TGWTable.getIndex
+ 0001:000042FC       GWXLib_TLB.TGWTable.getValue
+ 0001:0000435C       GWXLib_TLB.TGWTable.MoveFirst
+ 0001:000043BC       GWXLib_TLB.TGWTable.moveLast
+ 0001:0000441C       GWXLib_TLB.TGWTable.MoveNext
+ 0001:0000447C       GWXLib_TLB.TGWTable.move
+ 0001:0000454C       GWXLib_TLB.TGWTable.setValue
+ 0001:000045D8       GWXLib_TLB.TGWTable.sort
+ 0001:00004638       GWXLib_TLB.TGWTable.rowCount
+ 0001:00004698       GWXLib_TLB.TGWTable.getTable
+ 0001:000046F8       GWXLib_TLB.TGWTable.getText
+ 0001:00004758       GWXLib_TLB.TGWTable.remove
+ 0001:000047A8       GWXLib_TLB.TGWTable.colDescription
+ 0001:00004808       GWXLib_TLB.TGWTable.addColumn
+ 0001:00004878       GWXLib_TLB.TGWTable.IndexOf
+ 0001:000048DC       GWXLib_TLB.CoGWGraphics.Create
+ 0001:00004940       GWXLib_TLB.CoGWGraphics.CreateRemote
+ 0001:000049C0       GWXLib_TLB.TGWGraphics.InitServerData
+ 0001:000049CC       GWXLib_TLB.TGWGraphics.Connect
+ 0001:00004A34       GWXLib_TLB.TGWGraphics.ConnectTo
+ 0001:00004A88       GWXLib_TLB.TGWGraphics.Disconnect
+ 0001:00004A9C       GWXLib_TLB.TGWGraphics.GetDefaultInterface
+ 0001:00004B90       GWXLib_TLB.TGWGraphics.Create
+ 0001:00004BC8       GWXLib_TLB.TGWGraphics.Destroy
+ 0001:00004BF0       GWXLib_TLB.TGWGraphics.load
+ 0001:00004C44       GWXLib_TLB.TGWGraphics.write
+ 0001:00004C98       GWXLib_TLB.TGWGraphics.getTable
+ 0001:00004CF4       GWXLib_TLB.CoGWRoute.Create
+ 0001:00004D58       GWXLib_TLB.CoGWRoute.CreateRemote
+ 0001:00004DD8       GWXLib_TLB.TGWRoute.InitServerData
+ 0001:00004DE4       GWXLib_TLB.TGWRoute.Connect
+ 0001:00004E4C       GWXLib_TLB.TGWRoute.ConnectTo
+ 0001:00004EA0       GWXLib_TLB.TGWRoute.Disconnect
+ 0001:00004EB4       GWXLib_TLB.TGWRoute.GetDefaultInterface
+ 0001:00004FA8       GWXLib_TLB.TGWRoute.Create
+ 0001:00004FE0       GWXLib_TLB.TGWRoute.Destroy
+ 0001:00005008       GWXLib_TLB.TGWRoute.Get_Width
+ 0001:0000506C       GWXLib_TLB.TGWRoute.Set_Width
+ 0001:000050C4       GWXLib_TLB.TGWRoute.Get_Height
+ 0001:00005128       GWXLib_TLB.TGWRoute.Set_Height
+ 0001:00005180       GWXLib_TLB.TGWRoute.Get_Weight
+ 0001:000051E4       GWXLib_TLB.TGWRoute.Set_Weight
+ 0001:0000523C       GWXLib_TLB.TGWRoute.Get_VehicleType
+ 0001:00005298       GWXLib_TLB.TGWRoute.Set_VehicleType
+ 0001:0000531C       GWXLib_TLB.TGWRoute.Get_StartTime
+ 0001:00005380       GWXLib_TLB.TGWRoute.Set_StartTime
+ 0001:000053D8       GWXLib_TLB.TGWRoute.Get_OptimizeByTime
+ 0001:00005438       GWXLib_TLB.TGWRoute.Set_OptimizeByTime
+ 0001:0000548C       GWXLib_TLB.TGWRoute.Get_ReorderPoints
+ 0001:000054EC       GWXLib_TLB.TGWRoute.Set_ReorderPoints
+ 0001:00005540       GWXLib_TLB.TGWRoute.Get_ProgressDelay
+ 0001:000055A0       GWXLib_TLB.TGWRoute.Set_ProgressDelay
+ 0001:000055F4       GWXLib_TLB.TGWRoute.Get_VehicleTypes
+ 0001:00005650       GWXLib_TLB.TGWRoute.Get_RouteLength
+ 0001:000056B0       GWXLib_TLB.TGWRoute.Get_RouteDuration
+ 0001:00005710       GWXLib_TLB.TGWRoute.Get_RoutePointsCount
+ 0001:00005770       GWXLib_TLB.TGWRoute.Get_Priority
+ 0001:000057D4       GWXLib_TLB.TGWRoute.Set_Priority
+ 0001:0000582C       GWXLib_TLB.TGWRoute.Get_OptimizeTimeRatio
+ 0001:00005894       GWXLib_TLB.TGWRoute.Set_OptimizeTimeRatio
+ 0001:000058F0       GWXLib_TLB.TGWRoute.Get_OptimizePriorityRatio
+ 0001:00005958       GWXLib_TLB.TGWRoute.Set_OptimizePriorityRatio
+ 0001:000059B4       GWXLib_TLB.TGWRoute.GetPointName
+ 0001:00005A20       GWXLib_TLB.TGWRoute.DeletePoints
+ 0001:00005A70       GWXLib_TLB.TGWRoute.AddPoint
+ 0001:00005ADC       GWXLib_TLB.TGWRoute.CalculateRoute
+ 0001:00005B3C       GWXLib_TLB.TGWRoute.GetRoute
+ 0001:00005B98       GWXLib_TLB.TGWRoute.GetVariants
+ 0001:00005BF8       GWXLib_TLB.TGWRoute.GetVariantsTable
+ 0001:00005C58       GWXLib_TLB.CoGWStringList.Create
+ 0001:00005CBC       GWXLib_TLB.CoGWStringList.CreateRemote
+ 0001:00005D3C       GWXLib_TLB.TGWStringList.InitServerData
+ 0001:00005D48       GWXLib_TLB.TGWStringList.Connect
+ 0001:00005DB0       GWXLib_TLB.TGWStringList.ConnectTo
+ 0001:00005E04       GWXLib_TLB.TGWStringList.Disconnect
+ 0001:00005E18       GWXLib_TLB.TGWStringList.GetDefaultInterface
+ 0001:00005F0C       GWXLib_TLB.TGWStringList.Create
+ 0001:00005F44       GWXLib_TLB.TGWStringList.Destroy
+ 0001:00005F6C       GWXLib_TLB.TGWStringList.Get_ItemCount
+ 0001:00005FCC       GWXLib_TLB.TGWStringList.Get_Item
+ 0001:00006028       GWXLib_TLB.TGWStringList.MoveFirst
+ 0001:00006088       GWXLib_TLB.TGWStringList.MoveNext
+ 0001:000060E8       GWXLib_TLB.CoGWObject.Create
+ 0001:0000614C       GWXLib_TLB.CoGWObject.CreateRemote
+ 0001:000061CC       GWXLib_TLB.TGWObject.InitServerData
+ 0001:000061D8       GWXLib_TLB.TGWObject.Connect
+ 0001:00006240       GWXLib_TLB.TGWObject.ConnectTo
+ 0001:00006294       GWXLib_TLB.TGWObject.Disconnect
+ 0001:000062A8       GWXLib_TLB.TGWObject.GetDefaultInterface
+ 0001:0000639C       GWXLib_TLB.TGWObject.Create
+ 0001:000063D4       GWXLib_TLB.TGWObject.Destroy
+ 0001:000063FC       GWXLib_TLB.TGWObject.Get_ID
+ 0001:0000645C       GWXLib_TLB.TGWObject.Get_type_
+ 0001:000064BC       GWXLib_TLB.TGWObject.Get_Acronym
+ 0001:00006518       GWXLib_TLB.TGWObject.Get_MetricsType
+ 0001:00006578       GWXLib_TLB.TGWObject.Get_Metrics
+ 0001:00006634       GWXLib_TLB.TGWObject.Get_Attributes
+ 0001:00006690       GWXLib_TLB.TGWObject.Get_Length
+ 0001:000066F0       GWXLib_TLB.TGWObject.Get_Square
+ 0001:00006750       GWXLib_TLB.TGWObject.Get_Links
+ 0001:000067AC       GWXLib_TLB.TGWObject.Get_Visible
+ 0001:0000680C       GWXLib_TLB.TGWObject.Set_Visible
+ 0001:00006860       GWXLib_TLB.TGWObject.Get_Marked
+ 0001:000068C0       GWXLib_TLB.TGWObject.Set_Marked
+ 0001:00006914       GWXLib_TLB.TGWObject.Get_Contoured
+ 0001:00006974       GWXLib_TLB.TGWObject.Set_Contoured
+ 0001:000069C8       GWXLib_TLB.TGWObject.Get_Twinkling
+ 0001:00006A28       GWXLib_TLB.TGWObject.Set_Twinkling
+ 0001:00006A7C       GWXLib_TLB.TGWObject.getLinks
+ 0001:00006ADC       GWXLib_TLB.Register
+ 0001:00006B90       GWXLib_TLB.Finalization
+ 0001:00006BC0       BisIngitMapFrm..TBisIngitMapFrame
+ 0001:00006E08       BisIngitMapFrm.TBisIngitMapFrame.Create
+ 0001:00006F24       BisIngitMapFrm.TBisIngitMapFrame.Destroy
+ 0001:00006F6C       BisIngitMapFrm.TBisIngitMapFrame.LoadFromFile
+ 0001:00006F98       BisIngitMapFrm.TBisIngitMapFrame.MapExists
+ 0001:00007018       BisIngitMapFrm.TBisIngitMapFrame.MapLoaded
+ 0001:00007040       BisIngitMapFrm.TBisIngitMapFrame.GetCurrentLat
+ 0001:00007088       BisIngitMapFrm.TBisIngitMapFrame.GetCurrentLon
+ 0001:000070D0       BisIngitMapFrm.TBisIngitMapFrame.MapMouseAction
+ 0001:000071A4       BisIngitMapFrm.TBisIngitMapFrame.MapKeyboardAction
+ 0001:000071F4       BisIngitMapFrm.TBisIngitMapFrame.OpenMap
+ 0001:000072F4       BisIngitMapFrm.TBisIngitMapFrame.OverviewMap
+ 0001:00007314       BisIngitMapFrm.TBisIngitMapFrame.PrepareMap
+ 0001:00007334       BisIngitMapFrm.TBisIngitMapFrame.MoveMap
+ 0001:00007364       BisIngitMapFrm.TBisIngitMapFrame.ZoomInMap
+ 0001:00007394       BisIngitMapFrm.TBisIngitMapFrame.ZoomOutMap
+ 0001:000073C4       BisIngitMapFrm.TBisIngitMapFrame.DistanceMap
+ 0001:000073CC       BisIngitMapFrm.TBisIngitMapFrame.RouteMap
+ 0001:000073F8       BisIngitMapFrm.TBisIngitMapFrame.TranslateLength
+ 0001:0000741C       BisIngitMapFrm.TBisIngitMapFrame.GetRouteDistance
+ 0001:000074D4       BisIngitMapFrm.TBisIngitMapFrame.GetRouteDistance
+ 0001:000076B0       BisIngitMapFrm.TBisIngitMapFrame.ScaleRoute
+ 0001:000078F4       BisIngitMapFrm.TBisIngitMapFrame.VisibleRoute
+ 0001:000081FC       BisIngitMapFrm.Finalization
+ 0001:0000822C       BisIngitMapGetRouteDistancePrv..TBisIngitMapGetRouteDistanceProvider
+ 0001:000085F4       BisIngitMapGetRouteDistancePrv.TBisIngitMapGetRouteDistanceProvider.Create
+ 0001:00008708       BisIngitMapGetRouteDistancePrv.TBisIngitMapGetRouteDistanceProvider.Destroy
+ 0001:00008744       BisIngitMapGetRouteDistancePrv.TBisIngitMapGetRouteDistanceProvider.Handle
+ 0001:0000891C       BisIngitMapGetRouteDistancePrv.Finalization
+ 0001:0000894C       BisIngit.InitMapModule
+ 0001:00008960       BisIngit.InitProviderModule
+ 0001:00008978       BisIngit.Finalization
+ 0001:00009458       .mpmingit.@GetPackageInfoTable
+ 0001:00009460       .mpmingit.@PackageLoad
+ 0001:0000946C       .mpmingit.@PackageUnload
+ 0002:00000010       Windows.Windows
+ 0002:00000304       BisIngitMapFm.BisIngitMapFm
+ 0002:0000030C       GWXLib_TLB.GWXLib_TLB
+ 0002:00000314       BisIngitMapFrm.BisIngitMapFrm
+ 0002:0000031C       BisIngitMapGetRouteDistancePrv.BisIngitMapGetRouteDistancePrv
+ 0002:00000324       BisIngit.BisIngit
+ 0002:0000032C       .mpmingit..mpmingit
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.Module
+ 0003:0000001C       SysInit.TlsProc
+ 0003:0000002C       GWXLib_TLB.LIBID_GWXLib
+ 0003:0000003C       GWXLib_TLB.IID_IGWStringList
+ 0003:0000004C       GWXLib_TLB.IID_IGWObject
+ 0003:0000005C       GWXLib_TLB.DIID__IGWControlEvents
+ 0003:0000006C       GWXLib_TLB.IID_IGWTable
+ 0003:0000007C       GWXLib_TLB.IID_IGWRoute
+ 0003:0000008C       GWXLib_TLB.IID_IGWGraphics
+ 0003:0000009C       GWXLib_TLB.IID_IGWControl
+ 0003:000000AC       GWXLib_TLB.IID_IGWProjection
+ 0003:000000BC       GWXLib_TLB.IID_IGWProjectionAcc
+ 0003:000000CC       GWXLib_TLB.CLASS_GWControl
+ 0003:000000DC       GWXLib_TLB.CLASS_GWTable
+ 0003:000000EC       GWXLib_TLB.CLASS_GWGraphics
+ 0003:000000FC       GWXLib_TLB.CLASS_GWRoute
+ 0003:0000010C       GWXLib_TLB.CLASS_GWStringList
+ 0003:0000011C       GWXLib_TLB.CLASS_GWObject
+ 0003:0000012C       GWXLib_TLB.CEventDispIDs
+ 0003:00000144       GWXLib_TLB.CControlData
+ 0003:00000198       GWXLib_TLB.CServerData
+ 0003:000001D4       GWXLib_TLB.CServerData
+ 0003:00000210       GWXLib_TLB.CServerData
+ 0003:0000024C       GWXLib_TLB.CServerData
+ 0003:00000288       GWXLib_TLB.CServerData
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       SysInit.tlsBuffer
+ 0004:0000000C       Windows..3
+ 0004:00000010       Windows.HtmlHelpModule
+ 0004:00000014       BisIngitMapFm.BisIngitMapForm
+ 0004:00000018       BisIngitMapFm..3
+ 0004:0000001C       GWXLib_TLB..21
+ 0004:00000020       BisIngitMapFrm..2
+ 0004:00000024       BisIngitMapGetRouteDistancePrv..2
+ 0004:00000028       BisIngit..1
+ 0005:00000000       SysInit.TlsLast
+
+
+Line numbers for IpRtrMib(objects.bpl\IPHlpApi\Pas\IpRtrMib.pas) segment .text
+
+  1062 0001:00000000
+
+Line numbers for IpExport(objects.bpl\IPHlpApi\Pas\IpExport.pas) segment .text
+
+   343 0001:00000000
+
+Line numbers for IpTypes(objects.bpl\IPHlpApi\Pas\IpTypes.pas) segment .text
+
+   228 0001:00000000
+
+Line numbers for IpHlpApi(objects.bpl\IPHlpApi\Pas\IpHlpApi.pas) segment .text
+
+   752 0001:00000000
+
+Line numbers for MiTeC_ToolHelp32(MiTeC_ToolHelp32.pas) segment .text
+
+   438 0001:00000000
+
+Line numbers for BisIngitMapFm(mpmingit.bpl\BisIngitMapFm.pas) segment .text
+
+    37 0001:0000179C    38 0001:000017A1    44 0001:000017A4    45 0001:000017A6
+
+Line numbers for BisIngitMapFm(mpmingit.bpl\BisIngitMapFm.pas) segment .itext
+
+    47 0002:00000304
+
+Line numbers for GWXLib_TLB(mpmingit.bpl\GWXLib_TLB.pas) segment .text
+
+  1369 0001:00002B9C  1370 0001:00002BA7  1371 0001:00002BB5  1376 0001:00002BB8
+  1377 0001:00002BD0  1378 0001:00002C01  1380 0001:00002C3C  1381 0001:00002C43
+  1382 0001:00002C56  1385 0001:00002C5C  1386 0001:00002C62  1387 0001:00002C69
+  1388 0001:00002C76  1391 0001:00002C7C  1392 0001:00002C95  1393 0001:00002CB5
+  1396 0001:00002CD8  1397 0001:00002CF1  1398 0001:00002D14  1401 0001:00002D38
+  1402 0001:00002D4E  1403 0001:00002D72  1406 0001:00002D98  1407 0001:00002DB4
+  1408 0001:00002DCE  1411 0001:00002DF4  1412 0001:00002E0A  1413 0001:00002E22
+  1416 0001:00002E44  1417 0001:00002E66  1418 0001:00002E87  1421 0001:00002EB0
+  1422 0001:00002EC9  1423 0001:00002EE2  1426 0001:00002F04  1427 0001:00002F1D
+  1428 0001:00002F49  1431 0001:00002F70  1432 0001:00002F8C  1433 0001:00002FAD
+  1436 0001:00002FD0  1437 0001:00002FF2  1438 0001:00003017  1441 0001:00003040
+  1442 0001:00003059  1443 0001:00003091  1446 0001:000030B8  1447 0001:000030D4
+  1448 0001:000030EE  1451 0001:00003114  1452 0001:0000312A  1453 0001:00003142
+  1456 0001:00003164  1457 0001:0000317D  1458 0001:0000319D  1461 0001:000031C0
+  1462 0001:000031D9  1463 0001:000031F9  1466 0001:0000321C  1467 0001:00003238
+  1468 0001:00003259  1471 0001:0000327C  1472 0001:00003295  1473 0001:000032B5
+  1477 0001:000032D8  1478 0001:00003322  1479 0001:00003351  1482 0001:00003378
+  1483 0001:000033A7  1484 0001:000033D5  1487 0001:00003404  1488 0001:0000341D
+  1489 0001:00003440  1492 0001:00003464  1493 0001:00003483  1494 0001:000034A6
+  1497 0001:000034CC  1498 0001:000034FD  1499 0001:0000352E  1504 0001:0000355C
+  1505 0001:00003578  1506 0001:000035B5  1509 0001:000035DC  1510 0001:000035F5
+  1511 0001:00003618  1514 0001:0000363C  1515 0001:00003658  1516 0001:00003679
+  1519 0001:000036A0  1520 0001:000036B9  1521 0001:000036DC  1524 0001:00003700
+  1525 0001:0000371C  1526 0001:0000373D  1529 0001:00003764  1530 0001:0000377D
+  1531 0001:00003799  1534 0001:000037BC  1535 0001:000037D8  1536 0001:00003801
+  1539 0001:00003828  1540 0001:0000385A  1541 0001:00003889  1544 0001:000038B0
+  1545 0001:000038CC  1546 0001:000038F1  1549 0001:00003918  1550 0001:0000393B
+  1551 0001:00003962  1554 0001:00003988  1555 0001:000039A1  1556 0001:000039BD
+  1559 0001:000039E0  1560 0001:00003A03  1561 0001:00003A2A  1564 0001:00003A50
+  1565 0001:00003A6C  1566 0001:00003A90  1570 0001:00003AB4  1571 0001:00003AD7
+  1572 0001:00003B02  1575 0001:00003B2C  1576 0001:00003B45  1577 0001:00003B68
+  1580 0001:00003B8C  1581 0001:00003BA8  1582 0001:00003BCC  1586 0001:00003BF0
+  1587 0001:00003C0C  1588 0001:00003C48  1591 0001:00003C70  1592 0001:00003C89
+  1593 0001:00003CB8  1596 0001:00003CDC  1597 0001:00003CF8  1598 0001:00003D1C
+  1601 0001:00003D40  1602 0001:00003D5C  1603 0001:00003D79  1606 0001:00003D9C
+  1607 0001:00003DBE  1608 0001:00003DE2  1611 0001:00003E08  1612 0001:00003E1E
+  1613 0001:00003E3A  1616 0001:00003E6C  1617 0001:00003E87  1618 0001:00003EB0
+  1629 0001:00003EEC  1630 0001:00003EF4  1635 0001:00003EF8  1636 0001:00003F0E
+  1638 0001:00003F14  1639 0001:00003F1E  1641 0001:00003F2E  1644 0001:00003F60
+  1645 0001:00003F80  1646 0001:00003F87  1647 0001:00003F92  1650 0001:00003FB4
+  1651 0001:00003FB7  1653 0001:00003FBD  1655 0001:00003FC5  1658 0001:00003FC8
+  1659 0001:00003FCE  1660 0001:00003FD4  1661 0001:00003FDB  1662 0001:00003FF5
+  1663 0001:00003FFF  1666 0001:000040BC  1667 0001:000040CE  1671 0001:000040D7
+  1674 0001:000040F4  1678 0001:000040FF  1679 0001:0000410B  1689 0001:0000411C
+  1690 0001:00004138  1691 0001:00004157  1694 0001:0000417C  1695 0001:00004198
+  1696 0001:000041B7  1699 0001:000041DC  1700 0001:000041F8  1701 0001:00004219
+  1704 0001:0000423C  1705 0001:00004258  1706 0001:00004279  1709 0001:0000429C
+  1710 0001:000042B8  1711 0001:000042D7  1714 0001:000042FC  1715 0001:00004318
+  1716 0001:00004339  1719 0001:0000435C  1720 0001:00004378  1721 0001:00004397
+  1724 0001:000043BC  1725 0001:000043D8  1726 0001:000043F7  1729 0001:0000441C
+  1730 0001:00004438  1731 0001:00004457  1734 0001:0000447C  1735 0001:000044CE
+  1736 0001:00004511  1739 0001:0000454C  1740 0001:0000457D  1741 0001:000045A9
+  1744 0001:000045D8  1745 0001:000045F4  1746 0001:00004612  1749 0001:00004638
+  1750 0001:00004654  1751 0001:00004673  1754 0001:00004698  1755 0001:000046B4
+  1756 0001:000046D5  1759 0001:000046F8  1760 0001:00004714  1761 0001:00004735
+  1764 0001:00004758  1765 0001:0000476E  1766 0001:00004786  1769 0001:000047A8
+  1770 0001:000047C4  1771 0001:000047E5  1775 0001:00004808  1776 0001:0000482A
+  1777 0001:0000484F  1780 0001:00004878  1781 0001:00004897  1782 0001:000048B7
+  1799 0001:000048DC  1800 0001:000048F2  1801 0001:0000490E  1804 0001:00004940
+  1805 0001:0000495B  1806 0001:00004984  1817 0001:000049C0  1818 0001:000049C8
+  1823 0001:000049CC  1824 0001:000049E2  1826 0001:000049E8  1827 0001:000049F2
+  1829 0001:00004A02  1832 0001:00004A34  1833 0001:00004A54  1834 0001:00004A5B
+  1835 0001:00004A66  1838 0001:00004A88  1839 0001:00004A8B  1841 0001:00004A91
+  1843 0001:00004A99  1846 0001:00004A9C  1847 0001:00004AA2  1848 0001:00004AA8
+  1849 0001:00004AAF  1850 0001:00004AC9  1851 0001:00004AD3  1854 0001:00004B90
+  1855 0001:00004BA2  1859 0001:00004BAB  1862 0001:00004BC8  1866 0001:00004BD3
+  1867 0001:00004BDF  1877 0001:00004BF0  1878 0001:00004C09  1879 0001:00004C22
+  1882 0001:00004C44  1883 0001:00004C5D  1884 0001:00004C76  1887 0001:00004C98
+  1888 0001:00004CB1  1889 0001:00004CD1  1906 0001:00004CF4  1907 0001:00004D0A
+  1908 0001:00004D26  1911 0001:00004D58  1912 0001:00004D73  1913 0001:00004D9C
+  1924 0001:00004DD8  1925 0001:00004DE0  1930 0001:00004DE4  1931 0001:00004DFA
+  1933 0001:00004E00  1934 0001:00004E0A  1936 0001:00004E1A  1939 0001:00004E4C
+  1940 0001:00004E6C  1941 0001:00004E73  1942 0001:00004E7E  1945 0001:00004EA0
+  1946 0001:00004EA3  1948 0001:00004EA9  1950 0001:00004EB1  1953 0001:00004EB4
+  1954 0001:00004EBA  1955 0001:00004EC0  1956 0001:00004EC7  1957 0001:00004EE1
+  1958 0001:00004EEB  1961 0001:00004FA8  1962 0001:00004FBA  1966 0001:00004FC3
+  1969 0001:00004FE0  1973 0001:00004FEB  1974 0001:00004FF7  1984 0001:00005008
+  1985 0001:00005024  1986 0001:00005047  1989 0001:0000506C  1990 0001:00005082
+  1991 0001:000050A0  1994 0001:000050C4  1995 0001:000050E0  1996 0001:00005103
+  1999 0001:00005128  2000 0001:0000513E  2001 0001:0000515C  2004 0001:00005180
+  2005 0001:0000519C  2006 0001:000051BF  2009 0001:000051E4  2010 0001:000051FA
+  2011 0001:00005218  2014 0001:0000523C  2015 0001:00005255  2016 0001:00005275
+  2024 0001:00005298  2025 0001:000052B6  2026 0001:000052CB  2027 0001:000052DF
+  2030 0001:0000531C  2031 0001:00005338  2032 0001:0000535B  2035 0001:00005380
+  2036 0001:00005396  2037 0001:000053B4  2040 0001:000053D8  2041 0001:000053F4
+  2042 0001:00005413  2045 0001:00005438  2046 0001:00005451  2047 0001:0000546A
+  2050 0001:0000548C  2051 0001:000054A8  2052 0001:000054C7  2055 0001:000054EC
+  2056 0001:00005505  2057 0001:0000551E  2060 0001:00005540  2061 0001:0000555C
+  2062 0001:0000557B  2065 0001:000055A0  2066 0001:000055B9  2067 0001:000055D2
+  2070 0001:000055F4  2071 0001:0000560D  2072 0001:0000562D  2075 0001:00005650
+  2076 0001:0000566C  2077 0001:0000568B  2080 0001:000056B0  2081 0001:000056CC
+  2082 0001:000056EB  2085 0001:00005710  2086 0001:0000572C  2087 0001:0000574B
+  2090 0001:00005770  2091 0001:0000578C  2092 0001:000057AE  2095 0001:000057D4
+  2096 0001:000057ED  2097 0001:00005809  2100 0001:0000582C  2101 0001:00005848
+  2102 0001:0000586E  2105 0001:00005894  2106 0001:000058AA  2107 0001:000058CB
+  2110 0001:000058F0  2111 0001:0000590C  2112 0001:00005932  2115 0001:00005958
+  2116 0001:0000596E  2117 0001:0000598F  2120 0001:000059B4  2121 0001:000059CD
+  2122 0001:000059F9  2125 0001:00005A20  2126 0001:00005A36  2127 0001:00005A4E
+  2131 0001:00005A70  2132 0001:00005A8C  2133 0001:00005AB6  2136 0001:00005ADC
+  2137 0001:00005AF8  2138 0001:00005B17  2141 0001:00005B3C  2142 0001:00005B55
+  2143 0001:00005B75  2146 0001:00005B98  2147 0001:00005BB1  2148 0001:00005BD4
+  2151 0001:00005BF8  2152 0001:00005C11  2153 0001:00005C34  2306 0001:00005C58
+  2307 0001:00005C6E  2308 0001:00005C8A  2311 0001:00005CBC  2312 0001:00005CD7
+  2313 0001:00005D00  2324 0001:00005D3C  2325 0001:00005D44  2330 0001:00005D48
+  2331 0001:00005D5E  2333 0001:00005D64  2334 0001:00005D6E  2336 0001:00005D7E
+  2339 0001:00005DB0  2340 0001:00005DD0  2341 0001:00005DD7  2342 0001:00005DE2
+  2345 0001:00005E04  2346 0001:00005E07  2348 0001:00005E0D  2350 0001:00005E15
+  2353 0001:00005E18  2354 0001:00005E1E  2355 0001:00005E24  2356 0001:00005E2B
+  2357 0001:00005E45  2358 0001:00005E4F  2361 0001:00005F0C  2362 0001:00005F1E
+  2366 0001:00005F27  2369 0001:00005F44  2373 0001:00005F4F  2374 0001:00005F5B
+  2384 0001:00005F6C  2385 0001:00005F88  2386 0001:00005FA7  2389 0001:00005FCC
+  2390 0001:00005FE5  2391 0001:00006005  2394 0001:00006028  2395 0001:00006044
+  2396 0001:00006063  2399 0001:00006088  2400 0001:000060A4  2401 0001:000060C3
+  2428 0001:000060E8  2429 0001:000060FE  2430 0001:0000611A  2433 0001:0000614C
+  2434 0001:00006167  2435 0001:00006190  2446 0001:000061CC  2447 0001:000061D4
+  2452 0001:000061D8  2453 0001:000061EE  2455 0001:000061F4  2456 0001:000061FE
+  2458 0001:0000620E  2461 0001:00006240  2462 0001:00006260  2463 0001:00006267
+  2464 0001:00006272  2467 0001:00006294  2468 0001:00006297  2470 0001:0000629D
+  2472 0001:000062A5  2475 0001:000062A8  2476 0001:000062AE  2477 0001:000062B4
+  2478 0001:000062BB  2479 0001:000062D5  2480 0001:000062DF  2483 0001:0000639C
+  2484 0001:000063AE  2488 0001:000063B7  2491 0001:000063D4  2495 0001:000063DF
+  2496 0001:000063EB  2506 0001:000063FC  2507 0001:00006418  2508 0001:00006437
+  2511 0001:0000645C  2512 0001:00006478  2513 0001:00006497  2516 0001:000064BC
+  2517 0001:000064D5  2518 0001:000064F5  2521 0001:00006518  2522 0001:00006534
+  2523 0001:00006553  2528 0001:00006578  2529 0001:000065BA  2530 0001:000065CF
+  2531 0001:000065F2  2534 0001:00006634  2535 0001:0000664D  2536 0001:0000666D
+  2539 0001:00006690  2540 0001:000066AC  2541 0001:000066CB  2544 0001:000066F0
+  2545 0001:0000670C  2546 0001:0000672B  2549 0001:00006750  2550 0001:00006769
+  2551 0001:00006789  2554 0001:000067AC  2555 0001:000067C8  2556 0001:000067E7
+  2559 0001:0000680C  2560 0001:00006825  2561 0001:0000683E  2564 0001:00006860
+  2565 0001:0000687C  2566 0001:0000689B  2569 0001:000068C0  2570 0001:000068D9
+  2571 0001:000068F2  2574 0001:00006914  2575 0001:00006930  2576 0001:0000694F
+  2579 0001:00006974  2580 0001:0000698D  2581 0001:000069A6  2584 0001:000069C8
+  2585 0001:000069E4  2586 0001:00006A03  2589 0001:00006A28  2590 0001:00006A41
+  2591 0001:00006A5A  2594 0001:00006A7C  2595 0001:00006A98  2596 0001:00006AB9
+  2701 0001:00006ADC  2702 0001:00006AF8  2703 0001:00006B1B  2705 0001:00006B65
+
+Line numbers for GWXLib_TLB(mpmingit.bpl\GWXLib_TLB.pas) segment .itext
+
+  2707 0002:0000030C
+
+Line numbers for BisIngitMapFrm(mpmingit.bpl\BisIngitMapFrm.pas) segment .text
+
+    62 0001:00006E08    63 0001:00006E23    64 0001:00006E2D    65 0001:00006E3B
+    66 0001:00006E55    67 0001:00006E65    68 0001:00006E75    69 0001:00006E95
+    70 0001:00006EAC    71 0001:00006EBB    74 0001:00006EEB    76 0001:00006F02
+    79 0001:00006F24    80 0001:00006F2F    81 0001:00006F39    82 0001:00006F45
+    83 0001:00006F50    84 0001:00006F5C    87 0001:00006F6C    88 0001:00006F72
+    89 0001:00006F7D    90 0001:00006F8A    92 0001:00006F94    95 0001:00006F98
+    96 0001:00006FB1    97 0001:00006FE9   100 0001:00007018   101 0001:0000701C
+   102 0001:0000703D   105 0001:00007040   106 0001:00007046   107 0001:00007051
+   108 0001:0000705F   109 0001:0000707E   112 0001:00007088   113 0001:0000708E
+   114 0001:00007099   115 0001:000070A7   116 0001:000070C6   122 0001:000070D0
+   123 0001:000070DD   125 0001:000070EF   126 0001:000070F4   127 0001:0000710D
+   128 0001:00007117   129 0001:00007121   130 0001:00007127   131 0001:0000712D
+   132 0001:0000714A   135 0001:0000715B   136 0001:00007160   137 0001:00007179
+   138 0001:00007183   141 0001:0000718D   143 0001:00007198   152 0001:0000719B
+   157 0001:000071A4   158 0001:000071AD   159 0001:000071B3   160 0001:000071B8
+   161 0001:000071BD   162 0001:000071DA   164 0001:000071EB   167 0001:000071F4
+   168 0001:00007213   169 0001:00007224   170 0001:00007234   171 0001:00007249
+   172 0001:00007257   174 0001:00007299   175 0001:0000729B   176 0001:000072A8
+   180 0001:000072C1   181 0001:000072CE   184 0001:000072F4   185 0001:000072F7
+   186 0001:00007305   187 0001:00007310   190 0001:00007314   191 0001:00007317
+   192 0001:0000731E   193 0001:00007328   194 0001:00007330   197 0001:00007334
+   198 0001:00007337   199 0001:00007345   200 0001:0000734C   202 0001:00007361
+   205 0001:00007364   206 0001:00007367   207 0001:00007375   208 0001:0000737C
+   210 0001:00007391   213 0001:00007394   214 0001:00007397   215 0001:000073A5
+   216 0001:000073AC   218 0001:000073C1   222 0001:000073C4   224 0001:000073C9
+   227 0001:000073CC   228 0001:000073CF   229 0001:000073DD   230 0001:000073E4
+   232 0001:000073F6   235 0001:000073F8   236 0001:000073FE   237 0001:00007412
+   242 0001:0000741C   243 0001:00007425   244 0001:00007431   245 0001:00007443
+   246 0001:00007452   247 0001:00007460   248 0001:0000747E   249 0001:0000749C
+   251 0001:000074BA   254 0001:000074CA   263 0001:000074D4   264 0001:00007501
+   265 0001:0000750D   266 0001:00007528   267 0001:0000754B   268 0001:00007555
+   270 0001:00007563   271 0001:00007575   273 0001:00007580   274 0001:00007584
+   275 0001:0000758D   276 0001:00007595   277 0001:0000759E   279 0001:000075A5
+   280 0001:000075DB   281 0001:00007611   270 0001:00007612   283 0001:0000761B
+   284 0001:00007633   289 0001:0000765B   300 0001:000076B0   301 0001:000076BB
+   302 0001:000076D5   303 0001:000076DE   304 0001:000076E8   305 0001:000076F2
+   306 0001:000076FC   307 0001:0000770B   308 0001:00007716   309 0001:0000771A
+   310 0001:00007721   311 0001:00007729   312 0001:00007731   315 0001:0000773B
+   316 0001:00007747   318 0001:0000774E   319 0001:0000775B   321 0001:00007763
+   322 0001:00007770   324 0001:00007778   325 0001:00007785   328 0001:0000778D
+   306 0001:0000778E   330 0001:00007795   331 0001:000077A7   333 0001:000077BA
+   334 0001:000077C5   336 0001:000077E8   337 0001:000077EF   339 0001:000077F5
+   340 0001:000077FC   342 0001:00007802   343 0001:00007817   344 0001:0000781E
+   346 0001:0000783C   347 0001:00007851   348 0001:00007858   350 0001:00007876
+   351 0001:00007886   353 0001:000078A0   355 0001:000078CB   357 0001:000078E6
+   373 0001:000078F4   374 0001:0000792D   376 0001:0000794C   377 0001:0000795C
+   379 0001:0000796C   383 0001:00007983   384 0001:00007993   386 0001:0000799A
+   387 0001:000079C0   388 0001:000079CA   390 0001:000079D8   391 0001:000079F3
+   393 0001:00007A02   394 0001:00007A06   395 0001:00007A12   396 0001:00007A20
+   397 0001:00007A2C   399 0001:00007A36   401 0001:00007A96   402 0001:00007AD2
+   404 0001:00007B11   408 0001:00007B91   390 0001:00007B92   409 0001:00007B9E
+   411 0001:00007BB3   412 0001:00007BE0   414 0001:00007BF9   415 0001:00007C03
+   416 0001:00007C15   417 0001:00007C23   418 0001:00007C3E   419 0001:00007C46
+   420 0001:00007C7A   421 0001:00007CAE   422 0001:00007CE1   423 0001:00007D10
+   424 0001:00007D1A   425 0001:00007D35   426 0001:00007D3D   427 0001:00007D71
+   428 0001:00007DA5   429 0001:00007DD8   425 0001:00007DF3   432 0001:00007DFB
+   418 0001:00007E16   434 0001:00007E1E   436 0001:00007E38   442 0001:00007E4B
+
+Line numbers for BisIngitMapFrm(mpmingit.bpl\BisIngitMapFrm.pas) segment .itext
+
+   446 0002:00000314
+
+Line numbers for BisIngitMapGetRouteDistancePrv(mpmingit.bpl\BisIngitMapGetRouteDistancePrv.pas) segment .text
+
+    29 0001:000085F4    30 0001:00008620    31 0001:00008629    32 0001:00008635
+    34 0001:00008645    35 0001:0000864D    37 0001:00008664    38 0001:0000867A
+    39 0001:00008687    40 0001:00008695    43 0001:00008708    44 0001:00008713
+    45 0001:0000871E    46 0001:0000872A    47 0001:00008736    53 0001:00008744
+    54 0001:0000876D    55 0001:0000877B    56 0001:00008789    57 0001:000087AA
+    58 0001:000087B0    59 0001:000087C7    60 0001:000087DE    61 0001:000087F5
+    63 0001:0000880C    64 0001:0000886D    67 0001:0000888F    69 0001:000088A5
+
+Line numbers for BisIngitMapGetRouteDistancePrv(mpmingit.bpl\BisIngitMapGetRouteDistancePrv.pas) segment .itext
+
+    71 0002:0000031C
+
+Line numbers for BisIngit(mpmingit.bpl\BisIngit.pas) segment .text
+
+    20 0001:0000894C    21 0001:0000894F    22 0001:0000895A    25 0001:00008960
+    26 0001:00008963    27 0001:00008974
+
+Line numbers for BisIngit(mpmingit.bpl\BisIngit.pas) segment .itext
+
+    29 0002:00000324
+
+Line numbers for .mpmingit(mpmingit.dpk) segment .itext
+
+    40 0002:0000032C
+
+Bound resource files
+
+BisIngitMapFm.dfm
+BisIngitMapFrm.dfm
+mpmingit.res
+mpmingit.drf
+
+
+Program entry point at 0002:0000032C

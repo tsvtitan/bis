@@ -1,0 +1,206 @@
+unit BisStatusFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ComCtrls, StdCtrls,
+  ImgList,
+  BisFm;
+
+type
+  TBisStatusForm = class(TBisForm)
+    PanelProgress: TPanel;
+    StatusBar: TStatusBar;
+    PanelList: TPanel;
+    ProgressBar: TProgressBar;
+    ButtonRunStop: TButton;
+    ListView: TListView;
+    ImageList: TImageList;
+    procedure ListViewChange(Sender: TObject; Item: TListItem;
+      Change: TItemChange);
+    procedure FormResize(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  private
+    FBreaked: Boolean;
+    FSButtonCaptionClose: String;
+    FSButtonCaptionStop: String;
+    FSColumnDate: String;
+    FSColumnDescription: String;
+    procedure ButtonStopClick(Sender: TObject);
+    procedure ButtonCloseClick(Sender: TObject);
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Init; override;
+    procedure ModeClose;
+    procedure ModeStop;
+
+    property Breaked: Boolean read FBreaked write FBreaked;
+  published  
+    property SButtonCaptionClose: String read FSButtonCaptionClose write FSButtonCaptionClose; 
+    property SButtonCaptionStop: String read FSButtonCaptionStop write FSButtonCaptionStop;
+    property SColumnDate: String read FSColumnDate write FSColumnDate;
+    property SColumnDescription: String read FSColumnDescription write FSColumnDescription;  
+  end;
+
+  TBisStatusIface=class(TBisFormIface)
+  private
+    FBreaked: Boolean;
+    FSFormatDateTime: String;
+    function GetLastForm: TBisStatusForm;
+  protected
+    class function GetFormClass: TBisFormClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Write(const Message: String; ImageIndex: TImageIndex=-1);
+    procedure Progress(const Min,Max,Position: Integer; var Breaked: Boolean); override; 
+    procedure ModeClose;
+    procedure ModeStop;
+
+    property LastForm: TBisStatusForm read GetLastForm;
+    property Breaked: Boolean read FBreaked;
+  published
+
+    property SFormatDateTime: String read FSFormatDateTime write FSFormatDateTime;
+  end;
+
+
+var
+  BisStatusForm: TBisStatusForm;
+
+
+implementation
+
+{$R *.dfm}
+
+uses BisConsts, BisLogger;
+
+{ TBisStatusIface }
+
+constructor TBisStatusIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FSFormatDateTime:='dd.mm.yy hh:nn:ss.zzz';
+end;
+
+function TBisStatusIface.GetLastForm: TBisStatusForm;
+begin
+  Result:=TBisStatusForm(inherited LastForm);
+end;
+
+class function TBisStatusIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisStatusForm;
+end;
+
+procedure TBisStatusIface.Write(const Message: String; ImageIndex: TImageIndex=-1);
+var
+  Li: TListItem;
+begin
+  LoggerWrite(Message,ltInformation,ObjectName);
+  if Assigned(LastForm) then begin
+    with LastForm do begin
+      Li:=ListView.Items.Add;
+      Li.Caption:=FormatDateTime(FSFormatDateTime,Now);
+      Li.SubItems.Add(Message);
+      Li.ImageIndex:=ImageIndex;
+      Li.Selected:=true;
+      Li.MakeVisible(true);
+      ListView.Columns[1].Width:=ListView.ClientWidth-ListView.Columns[0].Width-30;
+      Update;
+    end;
+    FBreaked:=LastForm.Breaked;
+  end;
+end;
+
+procedure TBisStatusIface.Progress(const Min,Max,Position: Integer; var Breaked: Boolean);
+begin
+  if Assigned(LastForm) then begin
+    LastForm.ProgressBar.Min:=Min;
+    LastForm.ProgressBar.Max:=Max;
+    LastForm.ProgressBar.Position:=Position;
+    LastForm.ProgressBar.Visible:=(Position>Min) or (Position<Max);
+    LastForm.Update;
+    FBreaked:=LastForm.Breaked;
+    Breaked:=FBreaked;
+  end;
+end;
+
+procedure TBisStatusIface.ModeClose;
+begin
+  if Assigned(LastForm) then
+    LastForm.ModeClose;
+end;
+
+procedure TBisStatusIface.ModeStop;
+begin
+  if Assigned(LastForm) then
+    LastForm.ModeStop;
+end;
+
+{ TBisStatusForm }
+
+constructor TBisStatusForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FSButtonCaptionClose:='Закрыть';
+  FSButtonCaptionStop:=ButtonRunStop.Caption;
+
+  FSColumnDate:='Дата и время';
+  FSColumnDescription:='Описание';
+
+  ModeStop;
+end;
+
+procedure TBisStatusForm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+  if Key=VK_ESCAPE then
+     FBreaked:=true; 
+end;
+
+procedure TBisStatusForm.FormResize(Sender: TObject);
+begin
+  inherited;
+  ListView.Columns[1].Width:=ListView.ClientWidth-ListView.Columns[0].Width-30;
+end;
+
+procedure TBisStatusForm.Init;
+begin
+  inherited Init;
+end;
+
+procedure TBisStatusForm.ListViewChange(Sender: TObject; Item: TListItem;
+  Change: TItemChange);
+begin
+  if Assigned(Item) and (Change=ctState) then begin
+    StatusBar.SimpleText:=Item.SubItems.Strings[0];
+    StatusBar.Update;
+  end;
+end;
+
+procedure TBisStatusForm.ModeClose;
+begin
+  ButtonRunStop.Caption:=FSButtonCaptionClose;
+  ButtonRunStop.OnClick:=ButtonCloseClick;
+end;
+
+procedure TBisStatusForm.ModeStop;
+begin
+  ButtonRunStop.Caption:=FSButtonCaptionStop;
+  ButtonRunStop.OnClick:=ButtonStopClick;
+  FBreaked:=false;
+end;
+
+procedure TBisStatusForm.ButtonStopClick(Sender: TObject);
+begin
+  FBreaked:=true;
+end;
+
+procedure TBisStatusForm.ButtonCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

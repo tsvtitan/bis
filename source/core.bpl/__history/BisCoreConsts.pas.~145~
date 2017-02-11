@@ -1,0 +1,119 @@
+unit BisCoreConsts;
+
+interface
+
+const
+  CountStartDelim=50;
+  MaxFieldNameSize=100;
+  MaxFieldDescriptionSize=250;
+  SplashSleepTime=1000;
+  LoginSleepTime=500;
+
+resourcestring
+  SParamConfig='config';
+  SParamLog='log';
+  SParamBase='base';
+  SParamService='service';
+  SParamInstall='install';
+  SParamUninstall='uninstall';
+
+  SParamCryptHash='CryptHash';
+  SParamSplash='Splash';
+  SParamIcon='Icon';
+  SParamTitle='Title';
+  SParamName='Name';
+  SParamDescription='Description';
+  SParamId='Id';
+  SParamDefaultLanguage='DefaultLanguage';
+  SParamLanguages='Languages';
+  SParamSite='Site';
+
+  SFieldName='NAME';
+  SFieldWidth='WIDTH';
+  SFieldDescription='DESCRIPTION';
+  SFieldDataType='DATA_TYPE';
+  SFieldType='TYPE';
+  SFieldValue='VALUE';
+  SFieldSize='SIZE';
+  SFieldPrecision='PRECISION';
+  SFieldString='STRING';
+  SFieldTranslation='TRANSLATION';
+  SFieldLanguage='LANGUAGE';
+  SFieldEnabled='ENABLED';
+  SFieldFileName='FILE_NAME';
+
+  SFileName='FileName';
+  SMode='Mode';
+  SEnabled='Enabled';
+  SSleepTime='SleepTime';
+  SDescription='Description';
+  SStacked='Stacked';
+  SEncoded='Encoded';
+  SUserName='UserName';
+  SPassword='Password';
+  SAutoConnect='AutoConnect';
+  SStatusVisible='StatusVisible';
+  SLoginRetry='LoginRetry';
+  SConnectionRetry='ConnectionRetry';
+  SLastConnection='LastConnection';
+  SSecondaryLogin='SecondaryLogin';
+
+  SLogInformation='Information';
+  SLogWarning='Warning';
+  SLogError='Error';
+  SLogUnknown='Unknown';
+  SLogFormatMessage='FormatMessage';
+  SLogFormatDateTime='FormatDateTime';
+  SLogFormatObjectName='FormatObjectName';
+  SLogDelim='Delim';
+
+  SIniExtension='.ini';
+  SLogExtension='.log';
+  SBisExtension='.bis';
+
+  SNameConfig='Config';
+  SNameLogger='Logger';
+  SNameLocalBase='Local Base';
+  SNameCoreModules='Core Modules';
+  SNameCoreIfaces='Core Interfaces';
+
+  SReturn=#13#10;
+
+  SCoreStartDelim='StartDelim';
+  SCoreStartDir='StartDir';
+  SCoreStartCmd='StartCmd';
+  SCoreStartMode='StartMode';
+  SCoreStartAction='StartAction';
+  SCoreStartModuleInfo='StartModuleInfo';
+  SCoreStartConfigFileName='StartConfigFileName';
+  SCoreStartLoggerFileName='StartLoggerFileName';
+  SCoreStartConfigText='StartConfigText';
+  SCoreBeginSnapshot='BeginSnapshot';
+  SCoreEndSnapshot='EndSnapshot';
+
+  SLocalBaseLoadFromFileSuccess='LoadFromFileSuccess';
+  SLocalBaseLoadFromFileFailed='LoadFromFileFailed';
+  SLocalBaseSaveToFileSuccess='SaveToFileSuccess';
+  SLocalBaseSaveToFileFailed='SaveToFileFailed';
+
+  STBisCryptInfo='TBISCRYPTINFO';
+  SBisInfo='BISINFO';
+  
+  SInitConnectionModule='InitConnectionModule';
+  SInitIfaceModule='InitIfaceModule';
+  SInitServerModule='InitServerModule';
+
+  SUnknownImageFormat='Unknown image format';
+  SMutexFormat='%s %s %s';
+
+{  
+  SPermissionNameInsert: String='Вставка';
+  SPermissionNameUpdate: String='Изменение';
+  SPermissionNameDelete: String='Удаление';
+  SPermissionNameDetail: String='Подробнее';
+  SPermissionNameInfo: String='Информация';}
+
+
+implementation
+
+end.

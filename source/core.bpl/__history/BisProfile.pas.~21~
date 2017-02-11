@@ -1,0 +1,30 @@
+unit BisProfile;
+
+interface
+
+uses BisObject, BisConfig, BisConnections;
+
+type
+
+  TBisProfile=class(TBisConfig)
+  private
+    FConnection: TBisConnection;
+  public
+    procedure Load; override;
+
+    property Connection: TBisConnection read FConnection write FConnection;
+    property Session: String read FSession write FSession; 
+  end;
+
+implementation
+
+{ TBisProfile }
+
+procedure TBisProfile.Load;
+begin
+  if Assigned(FConnection) then begin
+    Text:=FConnection.GetProfile()
+  end;
+end;
+
+end.

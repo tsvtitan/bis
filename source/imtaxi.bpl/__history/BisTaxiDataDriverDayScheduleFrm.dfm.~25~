@@ -1,0 +1,175 @@
+inherited BisTaxiDataDriverDayScheduleFrame: TBisTaxiDataDriverDayScheduleFrame
+  Height = 186
+  ParentFont = False
+  ExplicitHeight = 186
+  inherited PanelData: TPanel
+    Top = 61
+    Height = 125
+    TabOrder = 1
+    ExplicitTop = 61
+    ExplicitHeight = 125
+    inherited GridPattern: TDBGrid
+      Height = 102
+    end
+    object PanelBottom: TPanel
+      Left = 0
+      Top = 102
+      Width = 450
+      Height = 23
+      Align = alBottom
+      BevelOuter = bvNone
+      TabOrder = 1
+      object LabelSum: TLabel
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 437
+        Height = 17
+        Margins.Right = 10
+        Align = alClient
+        Alignment = taRightJustify
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Layout = tlCenter
+        ExplicitLeft = 433
+        ExplicitWidth = 7
+        ExplicitHeight = 13
+      end
+    end
+  end
+  inherited ControlBar: TControlBar
+    Top = 32
+    TabOrder = 2
+    ExplicitTop = 32
+    inherited ToolBarRefresh: TToolBar
+      inherited ToolButtonRefresh: TToolButton
+        ExplicitWidth = 36
+      end
+      inherited ToolButtonFilter: TToolButton
+        ExplicitWidth = 36
+      end
+      inherited ToolButtonReport: TToolButton
+        ExplicitWidth = 36
+      end
+    end
+    inherited ToolBarEdit: TToolBar
+      Visible = False
+      inherited ToolButtonInsert: TToolButton
+        ExplicitWidth = 36
+      end
+    end
+  end
+  object PanelTop: TPanel [2]
+    Left = 0
+    Top = 0
+    Width = 450
+    Height = 32
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 0
+    object LabelWorkDays: TLabel
+      Left = 6
+      Top = 8
+      Width = 74
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1056#1072#1073#1086#1095#1080#1093' '#1076#1085#1077#1081':'
+      FocusControl = EditWorkDays
+    end
+    object LabelRestDays: TLabel
+      Left = 151
+      Top = 8
+      Width = 85
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1042#1099#1093#1086#1076#1085#1099#1093' '#1076#1085#1077#1081':'
+      FocusControl = EditRestDays
+    end
+    object EditWorkDays: TEdit
+      Left = 86
+      Top = 5
+      Width = 34
+      Height = 21
+      ReadOnly = True
+      TabOrder = 0
+      Text = '1'
+      OnChange = EditWorkDaysChange
+    end
+    object UpDownWorkDays: TUpDown
+      Left = 120
+      Top = 5
+      Width = 16
+      Height = 21
+      Associate = EditWorkDays
+      Min = 1
+      Max = 99
+      Position = 1
+      TabOrder = 1
+      Thousands = False
+    end
+    object EditRestDays: TEdit
+      Left = 242
+      Top = 5
+      Width = 34
+      Height = 21
+      ReadOnly = True
+      TabOrder = 2
+      Text = '0'
+      OnChange = EditWorkDaysChange
+    end
+    object UpDownRestDays: TUpDown
+      Left = 276
+      Top = 5
+      Width = 16
+      Height = 21
+      Associate = EditRestDays
+      Max = 99
+      TabOrder = 3
+      Thousands = False
+    end
+  end
+  inherited ActionList: TActionList
+    inherited ActionFilter: TAction
+      Visible = False
+    end
+    inherited ActionView: TAction
+      Visible = False
+    end
+    inherited ActionInsert: TAction
+      Visible = False
+    end
+    inherited ActionDuplicate: TAction
+      Visible = False
+    end
+    inherited ActionUpdate: TAction
+      Visible = False
+    end
+    inherited ActionDelete: TAction
+      Visible = False
+    end
+    object ActionClear: TAction
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1076#1077#1085#1100
+      Hint = #1054#1095#1080#1089#1090#1080#1090#1100' '#1076#1077#1085#1100
+      OnExecute = ActionClearExecute
+      OnUpdate = ActionClearUpdate
+    end
+    object ActionClearAll: TAction
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1074#1089#1077
+      Hint = #1054#1095#1080#1089#1090#1080#1090#1100' '#1074#1077#1089#1100' '#1075#1088#1072#1092#1080#1082
+      OnUpdate = ActionClearAllUpdate
+    end
+  end
+  inherited Popup: TPopupActionBar
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemClear: TMenuItem
+      Action = ActionClear
+    end
+  end
+end

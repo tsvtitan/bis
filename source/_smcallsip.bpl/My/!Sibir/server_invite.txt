@@ -1,0 +1,55 @@
+
+============================== SERVER ==============================
+
+INVITE sip:2026672@192.168.1.3:5075 SIP/2.0
+Via: SIP/2.0/UDP 195.112.242.242:5060;branch=z9hG4bKgtsgj92008sgkf04t6s1.1
+Accept: application/sdp
+Allow: INVITE,ACK,CANCEL,BYE,INFO,PRACK,UPDATE,OPTIONS,REGISTER,REFER,SUBSCRIBE
+Call-ID: SDnitcb01-ba6a97da7919da059e1d5daeff776c93-a86o3f0
+Contact: "9029232332" <sip:9029232332@195.112.242.242:5060;user=phone;transport=udp>
+CSeq: 102 INVITE
+Expires: 3600
+From: "9029232332" <sip:9029232332@195.112.242.242:5060;user=phone;cpc=ordinary>;tag=SDnitcb01-0ls37wm35p
+To: "2026672" <sip:2026672@195.112.242.242:5060>
+Organization: IskraTel
+User-Agent: SI3000
+Max-Forwards: 69
+Subject: Call from SI3000
+P-Asserted-Identity: "9029232332" <sip:9029232332@10.25.60.4:5060;user=phone>
+Privacy: none
+Content-Length: 191
+Content-Type: application/sdp
+Content-Disposition: session;handling=required
+
+v=0
+o=- 4810571 1136576 IN IP4 195.112.242.242
+s=-
+c=IN IP4 195.112.242.242
+b=AS:64
+t=0 0
+m=audio 16098 RTP/AVP 8 0
+a=rtpmap:8 PCMA/8000
+a=rtpmap:0 PCMU/8000
+a=ptime:20
+a=sendrecv
+
+
+============================== CLIENT ==============================
+
+SIP/2.0 100 Trying
+Via: SIP/2.0/UDP 195.112.242.242:5060;branch=z9hG4bKgtsgj92008sgkf04t6s1.1
+To: "2026672" <sip:2026672@195.112.242.242:5060>;tag=CFBCF893D
+From: "9029232332" <sip:9029232332@195.112.242.242:5060;user=phone;cpc=ordinary>;tag=SDnitcb01-0ls37wm35p
+Call-ID: SDnitcb01-ba6a97da7919da059e1d5daeff776c93-a86o3f0
+CSeq: 102 INVITE
+Content-Length: 0
+
+============================== CLIENT ==============================
+
+SIP/2.0 180 Ringing
+Via: SIP/2.0/UDP 195.112.242.242:5060;branch=z9hG4bKgtsgj92008sgkf04t6s1.1
+To: "2026672" <sip:2026672@195.112.242.242:5060>;tag=CFBCF893D
+From: "9029232332" <sip:9029232332@195.112.242.242:5060;user=phone;cpc=ordinary>;tag=SDnitcb01-0ls37wm35p
+Call-ID: SDnitcb01-ba6a97da7919da059e1d5daeff776c93-a86o3f0
+CSeq: 102 INVITE
+Content-Length: 0

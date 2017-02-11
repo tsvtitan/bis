@@ -1,0 +1,625 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 00005138H .text                   CODE
+ 0002:00407000 00000404H .itext                  ICODE
+ 0003:00408000 0000004CH .data                   DATA
+ 0004:00409000 00000030H .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 00000126 C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000128 000001C3 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:000002EC 00000096 C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:00000384 0000004C C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:000003D0 00000006 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:000003D8 0000003E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:00000418 0000004E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000468 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000470 00000016 C=CODE     S=.text    G=(none)   M=BisObject ACBP=A9
+ 0001:00000488 0000002E C=CODE     S=.text    G=(none)   M=BisCoreObjects ACBP=A9
+ 0001:000004B8 0000001E C=CODE     S=.text    G=(none)   M=BisUtils ACBP=A9
+ 0001:000004D8 0000001E C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:000004F8 00000006 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000500 00000006 C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000508 00000006 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000510 00000006 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000518 00000006 C=CODE     S=.text    G=(none)   M=Themes   ACBP=A9
+ 0001:00000520 000000FE C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000620 00000006 C=CODE     S=.text    G=(none)   M=UxTheme  ACBP=A9
+ 0001:00000628 00000006 C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000630 00000006 C=CODE     S=.text    G=(none)   M=DwmApi   ACBP=A9
+ 0001:00000638 0000011E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000758 00000006 C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000760 00000006 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000768 00000006 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:00000770 00000006 C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000778 00000006 C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000780 00000006 C=CODE     S=.text    G=(none)   M=GraphUtil ACBP=A9
+ 0001:00000788 00000006 C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000790 00000006 C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000798 00000006 C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:000007A0 00000006 C=CODE     S=.text    G=(none)   M=WideStrings ACBP=A9
+ 0001:000007A8 00000006 C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:000007B0 00000006 C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:000007B8 00000006 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:000007C0 0000000E C=CODE     S=.text    G=(none)   M=BisDialogs ACBP=A9
+ 0001:000007D0 0000018E C=CODE     S=.text    G=(none)   M=BisFm    ACBP=A9
+ 0001:00000960 00000006 C=CODE     S=.text    G=(none)   M=BisThreads ACBP=A9
+ 0001:00000968 00000006 C=CODE     S=.text    G=(none)   M=BisLocks ACBP=A9
+ 0001:00000970 0000001E C=CODE     S=.text    G=(none)   M=BisCrypter ACBP=A9
+ 0001:00000990 00000006 C=CODE     S=.text    G=(none)   M=DECUtil  ACBP=A9
+ 0001:00000998 00000006 C=CODE     S=.text    G=(none)   M=Hash     ACBP=A9
+ 0001:000009A0 00000006 C=CODE     S=.text    G=(none)   M=Cipher   ACBP=A9
+ 0001:000009A8 00000006 C=CODE     S=.text    G=(none)   M=Cipher1  ACBP=A9
+ 0001:000009B0 0000000E C=CODE     S=.text    G=(none)   M=BisBase64 ACBP=A9
+ 0001:000009C0 00000006 C=CODE     S=.text    G=(none)   M=BisCryptUtils ACBP=A9
+ 0001:000009C8 00000006 C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:000009D0 00000006 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:000009D8 00000006 C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:000009E0 00000006 C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:000009E8 00000006 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:000009F0 00000006 C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:000009F8 00000006 C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00000A00 00000006 C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00000A08 00000006 C=CODE     S=.text    G=(none)   M=rxToolEdit ACBP=A9
+ 0001:00000A10 00000006 C=CODE     S=.text    G=(none)   M=rxDateUtil ACBP=A9
+ 0001:00000A18 00000006 C=CODE     S=.text    G=(none)   M=RXCtrls  ACBP=A9
+ 0001:00000A20 00000006 C=CODE     S=.text    G=(none)   M=RxHook   ACBP=A9
+ 0001:00000A28 00000006 C=CODE     S=.text    G=(none)   M=RXConst  ACBP=A9
+ 0001:00000A30 00000006 C=CODE     S=.text    G=(none)   M=rxVclutils ACBP=A9
+ 0001:00000A38 00000006 C=CODE     S=.text    G=(none)   M=RXProps  ACBP=A9
+ 0001:00000A40 00000006 C=CODE     S=.text    G=(none)   M=rxAppUtils ACBP=A9
+ 0001:00000A48 00000006 C=CODE     S=.text    G=(none)   M=RxPrgrss ACBP=A9
+ 0001:00000A50 00000006 C=CODE     S=.text    G=(none)   M=SynEdit  ACBP=A9
+ 0001:00000A58 00000006 C=CODE     S=.text    G=(none)   M=SynEditHighlighter ACBP=A9
+ 0001:00000A60 00000006 C=CODE     S=.text    G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0001:00000A68 00000006 C=CODE     S=.text    G=(none)   M=SynRegExpr ACBP=A9
+ 0001:00000A70 00000006 C=CODE     S=.text    G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0001:00000A78 00000006 C=CODE     S=.text    G=(none)   M=SynTextDrawer ACBP=A9
+ 0001:00000A80 00000006 C=CODE     S=.text    G=(none)   M=rxCurrEdit ACBP=A9
+ 0001:00000A88 00000006 C=CODE     S=.text    G=(none)   M=ThemedDBGrid ACBP=A9
+ 0001:00000A90 00000006 C=CODE     S=.text    G=(none)   M=RxRichEd ACBP=A9
+ 0001:00000A98 00000006 C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:00000AA0 00000006 C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00000AA8 00000006 C=CODE     S=.text    G=(none)   M=GIFImage ACBP=A9
+ 0001:00000AB0 00000006 C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:00000AB8 00000006 C=CODE     S=.text    G=(none)   M=BisCore  ACBP=A9
+ 0001:00000AC0 0000002E C=CODE     S=.text    G=(none)   M=BisIfaces ACBP=A9
+ 0001:00000AF0 00000006 C=CODE     S=.text    G=(none)   M=kbmMemTable ACBP=A9
+ 0001:00000AF8 00000006 C=CODE     S=.text    G=(none)   M=BisConnectionUtils ACBP=A9
+ 0001:00000B00 00000006 C=CODE     S=.text    G=(none)   M=BisLocalbase ACBP=A9
+ 0001:00000B08 00000006 C=CODE     S=.text    G=(none)   M=SynHighlighterXML ACBP=A9
+ 0001:00000B10 00000006 C=CODE     S=.text    G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0001:00000B18 00000006 C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:00000B20 00000006 C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:00000B28 00000006 C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00000B30 00000006 C=CODE     S=.text    G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0001:00000B38 00000006 C=CODE     S=.text    G=(none)   M=ActnMan  ACBP=A9
+ 0001:00000B40 00000006 C=CODE     S=.text    G=(none)   M=ActnMenus ACBP=A9
+ 0001:00000B48 00000006 C=CODE     S=.text    G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0001:00000B50 00000006 C=CODE     S=.text    G=(none)   M=GIFImg   ACBP=A9
+ 0001:00000B58 00000006 C=CODE     S=.text    G=(none)   M=BisAudit ACBP=A9
+ 0001:00000B60 00000006 C=CODE     S=.text    G=(none)   M=BisSystemUtils ACBP=A9
+ 0001:00000B68 00000016 C=CODE     S=.text    G=(none)   M=BisSizeGrip ACBP=A9
+ 0001:00000B80 00000016 C=CODE     S=.text    G=(none)   M=BisDialogFm ACBP=A9
+ 0001:00000B98 0000000E C=CODE     S=.text    G=(none)   M=BisSystemInfo ACBP=A9
+ 0001:00000BA8 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_Routines ACBP=A9
+ 0001:00000BB0 00000006 C=CODE     S=.text    G=(none)   M=MSI_Processes ACBP=A9
+ 0001:00000BB8 00000006 C=CODE     S=.text    G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0001:00000BC0 00000006 C=CODE     S=.text    G=(none)   M=MSI_Devices ACBP=A9
+ 0001:00000BC8 00000006 C=CODE     S=.text    G=(none)   M=MSI_CPU  ACBP=A9
+ 0001:00000BD0 00000006 C=CODE     S=.text    G=(none)   M=BisExceptNotifier ACBP=A9
+ 0001:00000BD8 00000006 C=CODE     S=.text    G=(none)   M=JclDebug ACBP=A9
+ 0001:00000BE0 00000006 C=CODE     S=.text    G=(none)   M=JclSysInfo ACBP=A9
+ 0001:00000BE8 00000006 C=CODE     S=.text    G=(none)   M=JclStrings ACBP=A9
+ 0001:00000BF0 00000006 C=CODE     S=.text    G=(none)   M=JclSysUtils ACBP=A9
+ 0001:00000BF8 00000006 C=CODE     S=.text    G=(none)   M=JclWideStrings ACBP=A9
+ 0001:00000C00 00000006 C=CODE     S=.text    G=(none)   M=JclShell ACBP=A9
+ 0001:00000C08 00000006 C=CODE     S=.text    G=(none)   M=JclRegistry ACBP=A9
+ 0001:00000C10 00000006 C=CODE     S=.text    G=(none)   M=JclHookExcept ACBP=A9
+ 0001:00000C18 00000006 C=CODE     S=.text    G=(none)   M=BisDeadlocks ACBP=A9
+ 0001:00000C20 00000006 C=CODE     S=.text    G=(none)   M=BisServiceApplication ACBP=A9
+ 0001:00000C28 00000006 C=CODE     S=.text    G=(none)   M=BisSvcMgr ACBP=A9
+ 0001:00000C30 00000006 C=CODE     S=.text    G=(none)   M=SvcMgr   ACBP=A9
+ 0001:00000C38 00000006 C=CODE     S=.text    G=(none)   M=AsyncCalls ACBP=A9
+ 0001:00000C40 0000000E C=CODE     S=.text    G=(none)   M=ZLib     ACBP=A9
+ 0001:00000C50 00000016 C=CODE     S=.text    G=(none)   M=IdHTTP   ACBP=A9
+ 0001:00000C68 00000006 C=CODE     S=.text    G=(none)   M=IdComponent ACBP=A9
+ 0001:00000C70 00000006 C=CODE     S=.text    G=(none)   M=IdStack  ACBP=A9
+ 0001:00000C78 00000006 C=CODE     S=.text    G=(none)   M=IdSysVCL ACBP=A9
+ 0001:00000C80 00000006 C=CODE     S=.text    G=(none)   M=IdGlobal ACBP=A9
+ 0001:00000C88 00000006 C=CODE     S=.text    G=(none)   M=IdWinSock2 ACBP=A9
+ 0001:00000C90 00000006 C=CODE     S=.text    G=(none)   M=IdWship6 ACBP=A9
+ 0001:00000C98 00000006 C=CODE     S=.text    G=(none)   M=IdStackWindows ACBP=A9
+ 0001:00000CA0 00000006 C=CODE     S=.text    G=(none)   M=IdBaseComponent ACBP=A9
+ 0001:00000CA8 00000006 C=CODE     S=.text    G=(none)   M=IdIOHandlerStack ACBP=A9
+ 0001:00000CB0 00000006 C=CODE     S=.text    G=(none)   M=IdIOHandler ACBP=A9
+ 0001:00000CB8 00000006 C=CODE     S=.text    G=(none)   M=IdGlobalProtocols ACBP=A9
+ 0001:00000CC0 00000006 C=CODE     S=.text    G=(none)   M=IdCharsets ACBP=A9
+ 0001:00000CC8 00000006 C=CODE     S=.text    G=(none)   M=IdURI    ACBP=A9
+ 0001:00000CD0 00000006 C=CODE     S=.text    G=(none)   M=IdAuthentication ACBP=A9
+ 0001:00000CD8 00000006 C=CODE     S=.text    G=(none)   M=IdCoderMIME ACBP=A9
+ 0001:00000CE0 00000006 C=CODE     S=.text    G=(none)   M=IdCookie ACBP=A9
+ 0001:00000CE8 00000006 C=CODE     S=.text    G=(none)   M=IdSSL    ACBP=A9
+ 0001:00000CF0 00000006 C=CODE     S=.text    G=(none)   M=IdThread ACBP=A9
+ 0001:00000CF8 0000006E C=CODE     S=.text    G=(none)   M=ALXmlDoc ACBP=A9
+ 0001:00000D68 00000006 C=CODE     S=.text    G=(none)   M=ALfcnString ACBP=A9
+ 0001:00000D70 00000006 C=CODE     S=.text    G=(none)   M=ALCPUID  ACBP=A9
+ 0001:00000D78 00000006 C=CODE     S=.text    G=(none)   M=ALFcnHTML ACBP=A9
+ 0001:00000D80 00000356 C=CODE     S=.text    G=(none)   M=BisRegCodeFm ACBP=A9
+ 0001:000010D8 0000037E C=CODE     S=.text    G=(none)   M=BisRegEmailFm ACBP=A9
+ 0001:00001458 00002F46 C=CODE     S=.text    G=(none)   M=BisRegFm ACBP=A9
+ 0001:000043A0 00000046 C=CODE     S=.text    G=(none)   M=BisRegInit ACBP=A9
+ 0001:000043E8 00000D4F C=CODE     S=.text    G=(none)   M=.imreg   ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:00000010 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=BisUtils ACBP=A9
+ 0002:0000004C 00000006 C=ICODE    S=.itext   G=(none)   M=Graphics ACBP=A9
+ 0002:00000054 00000006 C=ICODE    S=.itext   G=(none)   M=Registry ACBP=A9
+ 0002:0000005C 00000006 C=ICODE    S=.itext   G=(none)   M=IniFiles ACBP=A9
+ 0002:00000064 00000006 C=ICODE    S=.itext   G=(none)   M=Menus    ACBP=A9
+ 0002:0000006C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnList ACBP=A9
+ 0002:00000074 00000006 C=ICODE    S=.itext   G=(none)   M=Themes   ACBP=A9
+ 0002:0000007C 00000006 C=ICODE    S=.itext   G=(none)   M=Controls ACBP=A9
+ 0002:00000084 00000006 C=ICODE    S=.itext   G=(none)   M=UxTheme  ACBP=A9
+ 0002:0000008C 00000006 C=ICODE    S=.itext   G=(none)   M=MultiMon ACBP=A9
+ 0002:00000094 00000006 C=ICODE    S=.itext   G=(none)   M=DwmApi   ACBP=A9
+ 0002:0000009C 00000006 C=ICODE    S=.itext   G=(none)   M=Forms    ACBP=A9
+ 0002:000000A4 00000006 C=ICODE    S=.itext   G=(none)   M=HelpIntfs ACBP=A9
+ 0002:000000AC 00000006 C=ICODE    S=.itext   G=(none)   M=Dialogs  ACBP=A9
+ 0002:000000B4 00000006 C=ICODE    S=.itext   G=(none)   M=Printers ACBP=A9
+ 0002:000000BC 00000006 C=ICODE    S=.itext   G=(none)   M=ExtCtrls ACBP=A9
+ 0002:000000C4 00000006 C=ICODE    S=.itext   G=(none)   M=GraphUtil ACBP=A9
+ 0002:000000CC 00000006 C=ICODE    S=.itext   G=(none)   M=Clipbrd  ACBP=A9
+ 0002:000000D4 00000006 C=ICODE    S=.itext   G=(none)   M=FlatSB   ACBP=A9
+ 0002:000000DC 00000006 C=ICODE    S=.itext   G=(none)   M=DB       ACBP=A9
+ 0002:000000E4 00000006 C=ICODE    S=.itext   G=(none)   M=WideStrings ACBP=A9
+ 0002:000000EC 00000006 C=ICODE    S=.itext   G=(none)   M=FMTBcd   ACBP=A9
+ 0002:000000F4 00000006 C=ICODE    S=.itext   G=(none)   M=SqlTimSt ACBP=A9
+ 0002:000000FC 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:00000104 00000006 C=ICODE    S=.itext   G=(none)   M=BisFm    ACBP=A9
+ 0002:0000010C 00000006 C=ICODE    S=.itext   G=(none)   M=BisThreads ACBP=A9
+ 0002:00000114 00000006 C=ICODE    S=.itext   G=(none)   M=BisLocks ACBP=A9
+ 0002:0000011C 00000006 C=ICODE    S=.itext   G=(none)   M=DECUtil  ACBP=A9
+ 0002:00000124 00000006 C=ICODE    S=.itext   G=(none)   M=Hash     ACBP=A9
+ 0002:0000012C 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher   ACBP=A9
+ 0002:00000134 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher1  ACBP=A9
+ 0002:0000013C 00000006 C=ICODE    S=.itext   G=(none)   M=BisCryptUtils ACBP=A9
+ 0002:00000144 00000006 C=ICODE    S=.itext   G=(none)   M=DBCtrls  ACBP=A9
+ 0002:0000014C 00000006 C=ICODE    S=.itext   G=(none)   M=ComCtrls ACBP=A9
+ 0002:00000154 00000006 C=ICODE    S=.itext   G=(none)   M=ExtActns ACBP=A9
+ 0002:0000015C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtDlgs  ACBP=A9
+ 0002:00000164 00000006 C=ICODE    S=.itext   G=(none)   M=Buttons  ACBP=A9
+ 0002:0000016C 00000006 C=ICODE    S=.itext   G=(none)   M=Mapi     ACBP=A9
+ 0002:00000174 00000006 C=ICODE    S=.itext   G=(none)   M=DBPWDlg  ACBP=A9
+ 0002:0000017C 00000006 C=ICODE    S=.itext   G=(none)   M=DBLogDlg ACBP=A9
+ 0002:00000184 00000006 C=ICODE    S=.itext   G=(none)   M=rxToolEdit ACBP=A9
+ 0002:0000018C 00000006 C=ICODE    S=.itext   G=(none)   M=rxDateUtil ACBP=A9
+ 0002:00000194 00000006 C=ICODE    S=.itext   G=(none)   M=RXCtrls  ACBP=A9
+ 0002:0000019C 00000006 C=ICODE    S=.itext   G=(none)   M=RxHook   ACBP=A9
+ 0002:000001A4 00000006 C=ICODE    S=.itext   G=(none)   M=RXConst  ACBP=A9
+ 0002:000001AC 00000006 C=ICODE    S=.itext   G=(none)   M=rxVclutils ACBP=A9
+ 0002:000001B4 00000006 C=ICODE    S=.itext   G=(none)   M=RXProps  ACBP=A9
+ 0002:000001BC 00000006 C=ICODE    S=.itext   G=(none)   M=rxAppUtils ACBP=A9
+ 0002:000001C4 00000006 C=ICODE    S=.itext   G=(none)   M=RxPrgrss ACBP=A9
+ 0002:000001CC 00000006 C=ICODE    S=.itext   G=(none)   M=SynEdit  ACBP=A9
+ 0002:000001D4 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditHighlighter ACBP=A9
+ 0002:000001DC 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditMiscClasses ACBP=A9
+ 0002:000001E4 00000006 C=ICODE    S=.itext   G=(none)   M=SynRegExpr ACBP=A9
+ 0002:000001EC 00000006 C=ICODE    S=.itext   G=(none)   M=SynEditKeyCmds ACBP=A9
+ 0002:000001F4 00000006 C=ICODE    S=.itext   G=(none)   M=SynTextDrawer ACBP=A9
+ 0002:000001FC 00000006 C=ICODE    S=.itext   G=(none)   M=rxCurrEdit ACBP=A9
+ 0002:00000204 00000006 C=ICODE    S=.itext   G=(none)   M=ThemedDBGrid ACBP=A9
+ 0002:0000020C 00000006 C=ICODE    S=.itext   G=(none)   M=RxRichEd ACBP=A9
+ 0002:00000214 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtnrs ACBP=A9
+ 0002:0000021C 00000006 C=ICODE    S=.itext   G=(none)   M=CheckLst ACBP=A9
+ 0002:00000224 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImage ACBP=A9
+ 0002:0000022C 00000006 C=ICODE    S=.itext   G=(none)   M=jpeg     ACBP=A9
+ 0002:00000234 00000006 C=ICODE    S=.itext   G=(none)   M=BisCore  ACBP=A9
+ 0002:0000023C 00000006 C=ICODE    S=.itext   G=(none)   M=kbmMemTable ACBP=A9
+ 0002:00000244 00000006 C=ICODE    S=.itext   G=(none)   M=BisConnectionUtils ACBP=A9
+ 0002:0000024C 00000006 C=ICODE    S=.itext   G=(none)   M=SynHighlighterXML ACBP=A9
+ 0002:00000254 00000006 C=ICODE    S=.itext   G=(none)   M=SynHighlighterSQL ACBP=A9
+ 0002:0000025C 00000006 C=ICODE    S=.itext   G=(none)   M=OleServer ACBP=A9
+ 0002:00000264 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtrls ACBP=A9
+ 0002:0000026C 00000006 C=ICODE    S=.itext   G=(none)   M=AxCtrls  ACBP=A9
+ 0002:00000274 00000006 C=ICODE    S=.itext   G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0002:0000027C 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMan  ACBP=A9
+ 0002:00000284 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMenus ACBP=A9
+ 0002:0000028C 00000006 C=ICODE    S=.itext   G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0002:00000294 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImg   ACBP=A9
+ 0002:0000029C 00000006 C=ICODE    S=.itext   G=(none)   M=BisSystemUtils ACBP=A9
+ 0002:000002A4 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_Routines ACBP=A9
+ 0002:000002AC 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Processes ACBP=A9
+ 0002:000002B4 00000006 C=ICODE    S=.itext   G=(none)   M=MiTeC_PSAPI ACBP=A9
+ 0002:000002BC 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_Devices ACBP=A9
+ 0002:000002C4 00000006 C=ICODE    S=.itext   G=(none)   M=MSI_CPU  ACBP=A9
+ 0002:000002CC 00000006 C=ICODE    S=.itext   G=(none)   M=BisExceptNotifier ACBP=A9
+ 0002:000002D4 00000006 C=ICODE    S=.itext   G=(none)   M=JclDebug ACBP=A9
+ 0002:000002DC 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysInfo ACBP=A9
+ 0002:000002E4 00000006 C=ICODE    S=.itext   G=(none)   M=JclStrings ACBP=A9
+ 0002:000002EC 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysUtils ACBP=A9
+ 0002:000002F4 00000006 C=ICODE    S=.itext   G=(none)   M=JclWideStrings ACBP=A9
+ 0002:000002FC 00000006 C=ICODE    S=.itext   G=(none)   M=JclShell ACBP=A9
+ 0002:00000304 00000006 C=ICODE    S=.itext   G=(none)   M=JclRegistry ACBP=A9
+ 0002:0000030C 00000006 C=ICODE    S=.itext   G=(none)   M=JclHookExcept ACBP=A9
+ 0002:00000314 00000006 C=ICODE    S=.itext   G=(none)   M=BisDeadlocks ACBP=A9
+ 0002:0000031C 00000006 C=ICODE    S=.itext   G=(none)   M=BisServiceApplication ACBP=A9
+ 0002:00000324 00000006 C=ICODE    S=.itext   G=(none)   M=BisSvcMgr ACBP=A9
+ 0002:0000032C 00000006 C=ICODE    S=.itext   G=(none)   M=SvcMgr   ACBP=A9
+ 0002:00000334 00000006 C=ICODE    S=.itext   G=(none)   M=AsyncCalls ACBP=A9
+ 0002:0000033C 00000006 C=ICODE    S=.itext   G=(none)   M=IdHTTP   ACBP=A9
+ 0002:00000344 00000006 C=ICODE    S=.itext   G=(none)   M=IdComponent ACBP=A9
+ 0002:0000034C 00000006 C=ICODE    S=.itext   G=(none)   M=IdStack  ACBP=A9
+ 0002:00000354 00000006 C=ICODE    S=.itext   G=(none)   M=IdSysVCL ACBP=A9
+ 0002:0000035C 00000006 C=ICODE    S=.itext   G=(none)   M=IdGlobal ACBP=A9
+ 0002:00000364 00000006 C=ICODE    S=.itext   G=(none)   M=IdWinSock2 ACBP=A9
+ 0002:0000036C 00000006 C=ICODE    S=.itext   G=(none)   M=IdWship6 ACBP=A9
+ 0002:00000374 00000006 C=ICODE    S=.itext   G=(none)   M=IdStackWindows ACBP=A9
+ 0002:0000037C 00000006 C=ICODE    S=.itext   G=(none)   M=IdIOHandlerStack ACBP=A9
+ 0002:00000384 00000006 C=ICODE    S=.itext   G=(none)   M=IdIOHandler ACBP=A9
+ 0002:0000038C 00000006 C=ICODE    S=.itext   G=(none)   M=IdGlobalProtocols ACBP=A9
+ 0002:00000394 00000006 C=ICODE    S=.itext   G=(none)   M=IdCharsets ACBP=A9
+ 0002:0000039C 00000006 C=ICODE    S=.itext   G=(none)   M=IdAuthentication ACBP=A9
+ 0002:000003A4 00000006 C=ICODE    S=.itext   G=(none)   M=IdCoderMIME ACBP=A9
+ 0002:000003AC 00000006 C=ICODE    S=.itext   G=(none)   M=IdCookie ACBP=A9
+ 0002:000003B4 00000006 C=ICODE    S=.itext   G=(none)   M=IdSSL    ACBP=A9
+ 0002:000003BC 00000006 C=ICODE    S=.itext   G=(none)   M=IdThread ACBP=A9
+ 0002:000003C4 00000006 C=ICODE    S=.itext   G=(none)   M=ALfcnString ACBP=A9
+ 0002:000003CC 00000006 C=ICODE    S=.itext   G=(none)   M=ALCPUID  ACBP=A9
+ 0002:000003D4 00000006 C=ICODE    S=.itext   G=(none)   M=ALFcnHTML ACBP=A9
+ 0002:000003DC 00000008 C=ICODE    S=.itext   G=(none)   M=BisRegCodeFm ACBP=A9
+ 0002:000003E4 00000008 C=ICODE    S=.itext   G=(none)   M=BisRegEmailFm ACBP=A9
+ 0002:000003EC 00000008 C=ICODE    S=.itext   G=(none)   M=BisRegFm ACBP=A9
+ 0002:000003F4 00000008 C=ICODE    S=.itext   G=(none)   M=BisRegInit ACBP=A9
+ 0002:000003FC 00000005 C=ICODE    S=.itext   G=(none)   M=.imreg   ACBP=A9
+ 0003:00000000 0000002C C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0004:00000000 0000000C C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:0000000C 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000014 00000008 C=BSS      S=.bss     G=DGROUP   M=BisRegCodeFm ACBP=A9
+ 0004:0000001C 00000008 C=BSS      S=.bss     G=DGROUP   M=BisRegEmailFm ACBP=A9
+ 0004:00000024 00000008 C=BSS      S=.bss     G=DGROUP   M=BisRegFm ACBP=A9
+ 0004:0000002C 00000004 C=BSS      S=.bss     G=DGROUP   M=BisRegInit ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:000003FC       .imreg..imreg
+ 0001:00005118       .imreg.@GetPackageInfoTable
+ 0001:00005120       .imreg.@PackageLoad
+ 0001:0000512C       .imreg.@PackageUnload
+ 0004:00000018       BisRegCodeFm..2
+ 0001:00000D80       BisRegCodeFm..TBisRegCodeForm
+ 0002:000003DC       BisRegCodeFm.BisRegCodeFm
+ 0004:00000014       BisRegCodeFm.BisRegCodeForm
+ 0001:000010A8       BisRegCodeFm.Finalization
+ 0001:00000FFC       BisRegCodeFm.TBisRegCodeForm.MemoCodeChange
+ 0001:0000106C       BisRegCodeFm.TBisRegCodeForm.MemoCodeKeyDown
+ 0004:00000020       BisRegEmailFm..2
+ 0001:000010D8       BisRegEmailFm..TBisRegEmailForm
+ 0002:000003E4       BisRegEmailFm.BisRegEmailFm
+ 0004:0000001C       BisRegEmailFm.BisRegEmailForm
+ 0001:00001428       BisRegEmailFm.Finalization
+ 0001:0000138C       BisRegEmailFm.TBisRegEmailForm.Create
+ 0001:000013F8       BisRegEmailFm.TBisRegEmailForm.Destroy
+ 0004:00000028       BisRegFm..3
+ 0001:00001458       BisRegFm..TBisRegForm
+ 0001:00001A98       BisRegFm..TBisRegFormIface
+ 0002:000003EC       BisRegFm.BisRegFm
+ 0004:00000024       BisRegFm.BisRegForm
+ 0001:00002C84       BisRegFm.DelimStream
+ 0001:00003E30       BisRegFm.EmailExample
+ 0001:00003C7C       BisRegFm.EmailLinkOpen
+ 0001:00004370       BisRegFm.Finalization
+ 0001:00002BD4       BisRegFm.GetInfo
+ 0001:00003840       BisRegFm.GetTextStream
+ 0001:00002E00       BisRegFm.PackRequest
+ 0001:00003908       BisRegFm.RegisterDirect
+ 0001:00003F64       BisRegFm.RegisterManual
+ 0001:00002BAC       BisRegFm.TBisRegForm.ButtonOkClick
+ 0001:00002A88       BisRegFm.TBisRegForm.CheckFields
+ 0001:00001C10       BisRegFm.TBisRegForm.Create
+ 0001:000020D0       BisRegFm.TBisRegForm.Decode
+ 0001:000022FC       BisRegFm.TBisRegForm.Encode
+ 0001:0000202C       BisRegFm.TBisRegForm.Init
+ 0001:000024C8       BisRegFm.TBisRegForm.LabelProductNameClick
+ 0001:000024FC       BisRegFm.TBisRegForm.LabelProductNameMouseEnter
+ 0001:00002544       BisRegFm.TBisRegForm.LabelProductNameMouseLeave
+ 0001:000041A8       BisRegFm.TBisRegForm.Registration
+ 0001:00002590       BisRegFm.TBisRegForm.RestrictControls
+ 0001:00001BD0       BisRegFm.TBisRegFormIface.Create
+ 0001:00003524       BisRegFm.UnpackReponse
+ 0004:0000002C       BisRegInit..1
+ 0002:000003F4       BisRegInit.BisRegInit
+ 0001:000043B8       BisRegInit.Finalization
+ 0001:000043A0       BisRegInit.InitIfaceModule
+ 0001:00000768       ShellAPI.ShellExecute
+ 0001:00000270       SysInit.@InitPkg
+ 0001:000002D4       SysInit.@PackageLoad
+ 0001:000002E0       SysInit.@PackageUnload
+ 0001:00000160       SysInit.AllocTlsBuffer
+ 0001:0000021C       SysInit.ExitProcessTLS
+ 0001:000001E4       SysInit.ExitThreadTLS
+ 0001:00000128       SysInit.FreeLibrary
+ 0001:0000016C       SysInit.GetTlsSize
+ 0004:00000004       SysInit.HInstance
+ 0001:00000240       SysInit.InitializeModule
+ 0001:000001B8       SysInit.InitProcessTLS
+ 0001:00000174       SysInit.InitThreadTLS
+ 0001:00000130       SysInit.LocalAlloc
+ 0001:00000138       SysInit.LocalFree
+ 0003:00000004       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0001:00000140       SysInit.TlsAlloc
+ 0004:00000008       SysInit.tlsBuffer
+ 0001:00000148       SysInit.TlsFree
+ 0001:00000150       SysInit.TlsGetValue
+ 0003:00000000       SysInit.TlsIndex
+ 0005:00000000       SysInit.TlsLast
+ 0003:0000001C       SysInit.TlsProc
+ 0001:00000158       SysInit.TlsSetValue
+ 0001:0000024C       SysInit.UninitializeModule
+ 0004:0000000C       Windows..3
+ 0001:0000038C       Windows.Finalization
+ 0001:00000384       Windows.FreeLibrary
+ 0004:00000010       Windows.HtmlHelpModule
+ 0002:00000010       Windows.Windows
+
+
+  Address             Publics by Value
+
+ 0001:00000128       SysInit.FreeLibrary
+ 0001:00000130       SysInit.LocalAlloc
+ 0001:00000138       SysInit.LocalFree
+ 0001:00000140       SysInit.TlsAlloc
+ 0001:00000148       SysInit.TlsFree
+ 0001:00000150       SysInit.TlsGetValue
+ 0001:00000158       SysInit.TlsSetValue
+ 0001:00000160       SysInit.AllocTlsBuffer
+ 0001:0000016C       SysInit.GetTlsSize
+ 0001:00000174       SysInit.InitThreadTLS
+ 0001:000001B8       SysInit.InitProcessTLS
+ 0001:000001E4       SysInit.ExitThreadTLS
+ 0001:0000021C       SysInit.ExitProcessTLS
+ 0001:00000240       SysInit.InitializeModule
+ 0001:0000024C       SysInit.UninitializeModule
+ 0001:00000270       SysInit.@InitPkg
+ 0001:000002D4       SysInit.@PackageLoad
+ 0001:000002E0       SysInit.@PackageUnload
+ 0001:00000384       Windows.FreeLibrary
+ 0001:0000038C       Windows.Finalization
+ 0001:00000768       ShellAPI.ShellExecute
+ 0001:00000D80       BisRegCodeFm..TBisRegCodeForm
+ 0001:00000FFC       BisRegCodeFm.TBisRegCodeForm.MemoCodeChange
+ 0001:0000106C       BisRegCodeFm.TBisRegCodeForm.MemoCodeKeyDown
+ 0001:000010A8       BisRegCodeFm.Finalization
+ 0001:000010D8       BisRegEmailFm..TBisRegEmailForm
+ 0001:0000138C       BisRegEmailFm.TBisRegEmailForm.Create
+ 0001:000013F8       BisRegEmailFm.TBisRegEmailForm.Destroy
+ 0001:00001428       BisRegEmailFm.Finalization
+ 0001:00001458       BisRegFm..TBisRegForm
+ 0001:00001A98       BisRegFm..TBisRegFormIface
+ 0001:00001BD0       BisRegFm.TBisRegFormIface.Create
+ 0001:00001C10       BisRegFm.TBisRegForm.Create
+ 0001:0000202C       BisRegFm.TBisRegForm.Init
+ 0001:000020D0       BisRegFm.TBisRegForm.Decode
+ 0001:000022FC       BisRegFm.TBisRegForm.Encode
+ 0001:000024C8       BisRegFm.TBisRegForm.LabelProductNameClick
+ 0001:000024FC       BisRegFm.TBisRegForm.LabelProductNameMouseEnter
+ 0001:00002544       BisRegFm.TBisRegForm.LabelProductNameMouseLeave
+ 0001:00002590       BisRegFm.TBisRegForm.RestrictControls
+ 0001:00002A88       BisRegFm.TBisRegForm.CheckFields
+ 0001:00002BAC       BisRegFm.TBisRegForm.ButtonOkClick
+ 0001:00002BD4       BisRegFm.GetInfo
+ 0001:00002C84       BisRegFm.DelimStream
+ 0001:00002E00       BisRegFm.PackRequest
+ 0001:00003524       BisRegFm.UnpackReponse
+ 0001:00003840       BisRegFm.GetTextStream
+ 0001:00003908       BisRegFm.RegisterDirect
+ 0001:00003C7C       BisRegFm.EmailLinkOpen
+ 0001:00003E30       BisRegFm.EmailExample
+ 0001:00003F64       BisRegFm.RegisterManual
+ 0001:000041A8       BisRegFm.TBisRegForm.Registration
+ 0001:00004370       BisRegFm.Finalization
+ 0001:000043A0       BisRegInit.InitIfaceModule
+ 0001:000043B8       BisRegInit.Finalization
+ 0001:00005118       .imreg.@GetPackageInfoTable
+ 0001:00005120       .imreg.@PackageLoad
+ 0001:0000512C       .imreg.@PackageUnload
+ 0002:00000010       Windows.Windows
+ 0002:000003DC       BisRegCodeFm.BisRegCodeFm
+ 0002:000003E4       BisRegEmailFm.BisRegEmailFm
+ 0002:000003EC       BisRegFm.BisRegFm
+ 0002:000003F4       BisRegInit.BisRegInit
+ 0002:000003FC       .imreg..imreg
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.Module
+ 0003:0000001C       SysInit.TlsProc
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       SysInit.tlsBuffer
+ 0004:0000000C       Windows..3
+ 0004:00000010       Windows.HtmlHelpModule
+ 0004:00000014       BisRegCodeFm.BisRegCodeForm
+ 0004:00000018       BisRegCodeFm..2
+ 0004:0000001C       BisRegEmailFm.BisRegEmailForm
+ 0004:00000020       BisRegEmailFm..2
+ 0004:00000024       BisRegFm.BisRegForm
+ 0004:00000028       BisRegFm..3
+ 0004:0000002C       BisRegInit..1
+ 0005:00000000       SysInit.TlsLast
+
+
+Line numbers for MiTeC_ToolHelp32(MiTeC_ToolHelp32.pas) segment .text
+
+   438 0001:00000000
+
+Line numbers for IpRtrMib(objects.bpl\IPHlpApi\Pas\IpRtrMib.pas) segment .text
+
+  1062 0001:00000000
+
+Line numbers for IpExport(objects.bpl\IPHlpApi\Pas\IpExport.pas) segment .text
+
+   343 0001:00000000
+
+Line numbers for IpTypes(objects.bpl\IPHlpApi\Pas\IpTypes.pas) segment .text
+
+   228 0001:00000000
+
+Line numbers for IpHlpApi(objects.bpl\IPHlpApi\Pas\IpHlpApi.pas) segment .text
+
+   752 0001:00000000
+
+Line numbers for BisRegCodeFm(imreg.bpl\BisRegCodeFm.pas) segment .text
+
+    33 0001:00000FFC    34 0001:00001014    35 0001:0000103F    39 0001:0000106C
+    40 0001:00001076    41 0001:0000107C    43 0001:0000108B    44 0001:00001091
+    45 0001:000010A0
+
+Line numbers for BisRegCodeFm(imreg.bpl\BisRegCodeFm.pas) segment .itext
+
+    47 0002:000003DC
+
+Line numbers for BisRegEmailFm(imreg.bpl\BisRegEmailFm.pas) segment .text
+
+    39 0001:0000138C    40 0001:000013A3    41 0001:000013AC    42 0001:000013C2
+    43 0001:000013CB    44 0001:000013D8    47 0001:000013F8    48 0001:00001403
+    49 0001:0000140E    50 0001:0000141A
+
+Line numbers for BisRegEmailFm(imreg.bpl\BisRegEmailFm.pas) segment .itext
+
+    52 0002:000003E4
+
+Line numbers for BisRegFm(imreg.bpl\BisRegFm.pas) segment .text
+
+    99 0001:00001BD0   100 0001:00001BE2   101 0001:00001BEB   102 0001:00001BF3
+   109 0001:00001C10   110 0001:00001C43   111 0001:00001C4C   114 0001:00001C59
+   115 0001:00001C61   116 0001:00001C89   118 0001:00001CA2   119 0001:00001CAA
+   120 0001:00001CD2   122 0001:00001CEB   123 0001:00001CF3   124 0001:00001D1B
+   125 0001:00001D34   126 0001:00001D3D   130 0001:00001D4C   131 0001:00001D54
+   132 0001:00001D7C   134 0001:00001D95   135 0001:00001D9D   136 0001:00001DC5
+   138 0001:00001DDE   139 0001:00001DEE   140 0001:00001DFE   141 0001:00001E0E
+   142 0001:00001E1E   143 0001:00001E2E   144 0001:00001E3E   145 0001:00001E4E
+   146 0001:00001E5E   148 0001:00001E6E   149 0001:00001E7C   150 0001:00001E93
+   151 0001:00001EAA   152 0001:00001EBA   157 0001:0000202C   158 0001:00002036
+   159 0001:0000203E   160 0001:00002052   161 0001:00002060   162 0001:0000207F
+   164 0001:000020AE   166 0001:000020CA   284 0001:000020D0   285 0001:0000210E
+   286 0001:0000211D   287 0001:0000212C   288 0001:0000213A   289 0001:0000215E
+   290 0001:0000216F   291 0001:0000217B   292 0001:00002190   293 0001:0000219C
+   294 0001:000021B8   295 0001:000021D1   296 0001:000021DD   297 0001:000021F2
+   298 0001:000021FE   299 0001:00002210   301 0001:0000221E   302 0001:00002233
+   303 0001:00002243   305 0001:00002254   307 0001:00002264   308 0001:00002270
+   309 0001:0000227C   310 0001:00002290   312 0001:000022A9   313 0001:000022B1
+   315 0001:000022C1   323 0001:000022FC   324 0001:0000232D   325 0001:0000233C
+   326 0001:0000234B   327 0001:00002359   328 0001:00002377   329 0001:0000238C
+   330 0001:0000239A   331 0001:000023A6   333 0001:000023C7   335 0001:000023D7
+   336 0001:000023E8   337 0001:000023F4   338 0001:00002409   339 0001:0000241F
+   340 0001:00002435   341 0001:00002441   342 0001:0000244D   343 0001:00002462
+   345 0001:0000247B   346 0001:00002483   348 0001:00002493   351 0001:000024C8
+   352 0001:000024CB   353 0001:000024D4   354 0001:000024F2   357 0001:000024FC
+   358 0001:00002500   359 0001:00002509   360 0001:00002528   362 0001:0000253B
+   365 0001:00002544   366 0001:00002548   367 0001:00002551   368 0001:00002573
+   370 0001:00002586   375 0001:00002590   376 0001:000025B1   377 0001:000025B6
+   378 0001:000025C3   379 0001:000025D0   380 0001:000025DD   381 0001:000025EA
+   382 0001:00002630   383 0001:0000263D   384 0001:0000264A   385 0001:00002690
+   386 0001:0000269D   387 0001:000026AA   388 0001:000026B7   389 0001:00002703
+   390 0001:00002710   391 0001:0000271D   392 0001:0000272A   393 0001:00002782
+   394 0001:0000278F   395 0001:0000279C   396 0001:000027A9   397 0001:00002801
+   398 0001:0000280E   399 0001:0000281B   400 0001:00002873   401 0001:00002880
+   402 0001:0000288D   403 0001:000028E5   404 0001:000028F2   405 0001:000028FF
+   406 0001:00002957   407 0001:00002964   408 0001:00002971   409 0001:000029C9
+   410 0001:000029D6   411 0001:000029E3   412 0001:00002A3B   413 0001:00002A48
+   414 0001:00002A55   417 0001:00002A88   418 0001:00002AA5   419 0001:00002AA7
+   420 0001:00002AC6   421 0001:00002AD3   422 0001:00002AE1   424 0001:00002AE3
+   425 0001:00002B02   426 0001:00002B0F   427 0001:00002B1D   429 0001:00002B1F
+   430 0001:00002B3E   431 0001:00002B4B   432 0001:00002B59   434 0001:00002B5B
+   435 0001:00002B5D   438 0001:00002BAC   439 0001:00002BAF   440 0001:00002BBA
+   441 0001:00002BC5   443 0001:00002BCF   455 0001:00002BD4   456 0001:00002BDF
+   457 0001:00002BEE   458 0001:00002BFF   459 0001:00002C0D   460 0001:00002C14
+   461 0001:00002C22   464 0001:00002C33   466 0001:00002C4C   468 0001:00002C5E
+   469 0001:00002C66   471 0001:00002C76   476 0001:00002C84   477 0001:00002CAA
+   478 0001:00002CB9   479 0001:00002CC7   480 0001:00002CE5   481 0001:00002CED
+   483 0001:00002CFA   484 0001:00002D2B   485 0001:00002D3C   486 0001:00002D4B
+   482 0001:00002D60   488 0001:00002D8A   489 0001:00002D96   490 0001:00002DA1
+   491 0001:00002DB4   493 0001:00002DCC   495 0001:00002DDC   575 0001:00002E00
+   576 0001:00002E43   577 0001:00002E54   578 0001:00002E62   579 0001:00002E7A
+   580 0001:00002E87   581 0001:00002E96   582 0001:00002EBA   583 0001:00002EE3
+   584 0001:00002F22   585 0001:00002F61   586 0001:00002FA0   587 0001:00002FF1
+   588 0001:00003042   589 0001:00003093   590 0001:000030E4   591 0001:00003135
+   592 0001:00003186   593 0001:000031D7   594 0001:00003215   595 0001:0000321F
+   596 0001:0000322B   598 0001:00003249   600 0001:00003259   612 0001:00003524
+   613 0001:00003563   614 0001:00003577   615 0001:00003585   616 0001:00003595
+   617 0001:000035A2   618 0001:000035CC   619 0001:000035F9   620 0001:0000361E
+   621 0001:00003624   622 0001:00003642   623 0001:0000366B   624 0001:0000368C
+   625 0001:000036A9   626 0001:000036B0   627 0001:000036C0   628 0001:000036D8
+   630 0001:000036E9   631 0001:0000370A   632 0001:00003727   633 0001:00003739
+   635 0001:0000374C   621 0001:0000374D   637 0001:00003754   617 0001:0000375A
+   639 0001:00003773   641 0001:00003786   646 0001:00003840   647 0001:00003860
+   648 0001:00003866   649 0001:00003871   650 0001:0000387F   651 0001:0000388B
+   652 0001:0000389B   653 0001:000038AE   655 0001:000038CF   658 0001:000038E5
+   670 0001:00003908   671 0001:00003933   672 0001:00003937   673 0001:0000394A
+   674 0001:0000395B   675 0001:0000396A   676 0001:00003979   677 0001:00003987
+   678 0001:00003999   679 0001:000039A7   680 0001:000039C1   681 0001:000039FE
+   682 0001:00003A06   683 0001:00003A19   684 0001:00003A25   685 0001:00003A40
+   687 0001:00003A4B   688 0001:00003A63   689 0001:00003A6B   690 0001:00003A7C
+   691 0001:00003A8A   692 0001:00003A9C   693 0001:00003AB8   694 0001:00003AC0
+   695 0001:00003AD5   696 0001:00003AE1   697 0001:00003AF9   698 0001:00003B07
+   699 0001:00003B17   702 0001:00003B36   706 0001:00003B65   709 0001:00003B75
+   712 0001:00003BC5   713 0001:00003BC7   714 0001:00003BDC   718 0001:00003BF8
+   719 0001:00003C00   720 0001:00003C08   723 0001:00003C18   731 0001:00003C7C
+   732 0001:00003CA6   733 0001:00003CAA   734 0001:00003CE6   735 0001:00003CF0
+   736 0001:00003CFF   737 0001:00003D0D   738 0001:00003D18   739 0001:00003D25
+   740 0001:00003D37   741 0001:00003D5C   739 0001:00003D5D   743 0001:00003D6D
+   746 0001:00003D7D   747 0001:00003D8C   748 0001:00003DA7   750 0001:00003DAE
+   755 0001:00003E30   756 0001:00003E5A   757 0001:00003E6B   758 0001:00003E79
+   759 0001:00003EA9   760 0001:00003EC3   761 0001:00003EDD   762 0001:00003EF9
+   763 0001:00003F04   765 0001:00003F15   767 0001:00003F25   778 0001:00003F64
+   779 0001:00003F8C   780 0001:00003F90   781 0001:00003FA3   782 0001:00003FB2
+   783 0001:00003FC0   784 0001:00003FE6   785 0001:00003FEE   786 0001:00004001
+   787 0001:0000400C   788 0001:00004019   789 0001:0000401D   790 0001:0000402A
+   791 0001:00004032   792 0001:00004043   793 0001:00004051   794 0001:00004063
+   795 0001:0000407F   796 0001:00004087   797 0001:0000409C   798 0001:000040A8
+   799 0001:000040C0   800 0001:000040CE   801 0001:000040DE   804 0001:000040FD
+   808 0001:0000412C   812 0001:00004149   815 0001:00004159   819 0001:000041A8
+   820 0001:000041CA   821 0001:000041D9   822 0001:000041E9   823 0001:000041F3
+   824 0001:00004201   825 0001:0000420C   826 0001:00004210   827 0001:00004229
+   828 0001:00004242   829 0001:00004257   830 0001:0000425F   831 0001:00004279
+   832 0001:00004285   834 0001:0000428F   835 0001:00004295   836 0001:000042AD
+   837 0001:000042C0   838 0001:000042EC   839 0001:000042F8   842 0001:00004315
+   843 0001:0000431F   845 0001:00004337
+
+Line numbers for BisRegFm(imreg.bpl\BisRegFm.pas) segment .itext
+
+   847 0002:000003EC
+
+Line numbers for BisRegInit(imreg.bpl\BisRegInit.pas) segment .text
+
+    19 0001:000043A0    20 0001:000043A3    21 0001:000043A9    23 0001:000043B4
+
+Line numbers for BisRegInit(imreg.bpl\BisRegInit.pas) segment .itext
+
+    25 0002:000003F4
+
+Line numbers for .imreg(imreg.dpk) segment .itext
+
+    38 0002:000003FC
+
+Bound resource files
+
+BisRegCodeFm.dfm
+BisRegEmailFm.dfm
+BisRegFm.dfm
+imreg.res
+imreg.drf
+
+
+Program entry point at 0002:000003FC

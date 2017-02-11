@@ -1,0 +1,24 @@
+inherited BisFotomResultFrame: TBisFotomResultFrame
+  Height = 240
+  ExplicitHeight = 240
+  inherited PanelData: TPanel
+    Height = 210
+    ExplicitTop = 96
+    ExplicitHeight = 144
+    inherited GridPattern: TDBGrid
+      Height = 204
+    end
+  end
+  inherited ControlBar: TControlBar
+    inherited LabelCounter: TLabel
+      Left = 374
+      Width = 50
+      ExplicitLeft = 374
+      ExplicitWidth = 50
+    end
+    inherited ToolBarNavigate: TToolBar
+      Width = 96
+      ExplicitWidth = 96
+    end
+  end
+end

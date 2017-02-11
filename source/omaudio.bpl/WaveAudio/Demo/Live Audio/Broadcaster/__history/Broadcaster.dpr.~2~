@@ -1,0 +1,15 @@
+program Broadcaster;
+
+uses
+  Forms,
+  Main in 'Main.pas' {MainForm},
+  WaveACMDrivers in '..\..\..\WaveACMDrivers.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.Title := 'Audio Broadcaster (Server)';
+  Application.CreateForm(TMainForm, MainForm);
+  Application.Run;
+end.

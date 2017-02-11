@@ -1,0 +1,28 @@
+unit BisSmHttp;
+
+interface
+
+uses BisServerModules, BisIfaceModules;
+
+procedure InitServerModule(AModule: TBisServerModule); stdcall;
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+
+exports
+  InitServerModule,
+  InitIfaceModule;
+
+implementation
+
+uses BisSmHttpServer, BisSmHttpServerMainFm;
+
+procedure InitServerModule(AModule: TBisServerModule); stdcall;
+begin
+  AModule.ServerClass:=TBisSmHttpServer;
+end;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  AModule.Ifaces.AddClass(TBisSmHttpServerMainFormIface);
+end;
+
+end.

@@ -1,0 +1,339 @@
+inherited BisCallcTakeBellFrame: TBisCallcTakeBellFrame
+  Width = 600
+  Height = 396
+  ExplicitWidth = 600
+  ExplicitHeight = 396
+  inherited PanelData: TPanel
+    Top = 165
+    Width = 600
+    Height = 231
+    TabOrder = 1
+    ExplicitTop = 165
+    ExplicitWidth = 600
+    ExplicitHeight = 231
+    inherited GridPattern: TDBGrid
+      Width = 600
+      Height = 231
+    end
+  end
+  inherited ControlBar: TControlBar
+    Top = 136
+    Width = 600
+    TabOrder = 2
+    ExplicitTop = 136
+    ExplicitWidth = 600
+    inherited LabelCounter: TLabel
+      Left = 374
+      Width = 50
+      Visible = True
+      ExplicitLeft = 374
+      ExplicitWidth = 50
+    end
+    inherited ToolBarNavigate: TToolBar
+      Width = 96
+      ExplicitWidth = 96
+    end
+  end
+  object GroupBoxFilter: TGroupBox [2]
+    AlignWithMargins = True
+    Left = 0
+    Top = 0
+    Width = 600
+    Height = 133
+    Margins.Left = 0
+    Margins.Top = 0
+    Margins.Right = 0
+    Align = alTop
+    Caption = ' '#1060#1080#1083#1100#1090#1088' '
+    TabOrder = 0
+    DesignSize = (
+      600
+      133)
+    object LabelSurname: TLabel
+      Left = 19
+      Top = 50
+      Width = 48
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1060#1072#1084#1080#1083#1080#1103':'
+      FocusControl = EditSurname
+    end
+    object LabelName: TLabel
+      Left = 240
+      Top = 50
+      Width = 23
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1048#1084#1103':'
+      FocusControl = EditName
+    end
+    object LabelPatronymic: TLabel
+      Left = 413
+      Top = 50
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1054#1090#1095#1077#1089#1090#1074#1086':'
+      FocusControl = EditPatronymic
+    end
+    object LabelStatus: TLabel
+      Left = 27
+      Top = 23
+      Width = 40
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1057#1090#1072#1090#1091#1089':'
+      FocusControl = ComboBoxStatus
+    end
+    object LabelDealNum: TLabel
+      Left = 438
+      Top = 77
+      Width = 45
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #8470' '#1076#1077#1083#1072':'
+      FocusControl = EditDealNum
+    end
+    object LabelDebtorNum: TLabel
+      Left = 221
+      Top = 104
+      Width = 86
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1053#1086#1084#1077#1088' '#1076#1086#1075#1086#1074#1086#1088#1072':'
+      FocusControl = EditDebtorNum
+    end
+    object LabelDebtorDate: TLabel
+      Left = 413
+      Top = 104
+      Width = 81
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1044#1072#1090#1072' '#1076#1086#1075#1086#1074#1086#1088#1072':'
+      FocusControl = DateTimePickerDebtorDate
+    end
+    object LabelAddress: TLabel
+      Left = 32
+      Top = 77
+      Width = 35
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1040#1076#1088#1077#1089':'
+      FocusControl = EditAddress
+    end
+    object LabelAccountNum: TLabel
+      Left = 240
+      Top = 77
+      Width = 67
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1053#1086#1084#1077#1088' '#1089#1095#1077#1090#1072':'
+      FocusControl = EditAccountNum
+    end
+    object LabelFirm: TLabel
+      Left = 13
+      Top = 104
+      Width = 54
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1050#1088#1077#1076#1080#1090#1086#1088':'
+      FocusControl = EditFirm
+    end
+    object LabelDateCreateBegin: TLabel
+      Left = 275
+      Top = 23
+      Width = 98
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1044#1072#1090#1072'  '#1089#1086#1079#1076#1072#1085#1080#1103' '#1086#1090':'
+      FocusControl = DateTimePickerCreateBegin
+    end
+    object LabelDateCreateEnd: TLabel
+      Left = 477
+      Top = 23
+      Width = 17
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = #1076#1086':'
+      FocusControl = DateTimePickerDateCreateEnd
+    end
+    object EditSurname: TEdit
+      Left = 73
+      Top = 47
+      Width = 155
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 2
+      OnEnter = ComboBoxStatusEnter
+    end
+    object EditName: TEdit
+      Left = 269
+      Top = 47
+      Width = 132
+      Height = 21
+      Anchors = [akTop, akRight]
+      TabOrder = 3
+      OnEnter = ComboBoxStatusEnter
+    end
+    object EditPatronymic: TEdit
+      Left = 472
+      Top = 47
+      Width = 114
+      Height = 21
+      Anchors = [akTop, akRight]
+      TabOrder = 4
+      OnEnter = ComboBoxStatusEnter
+    end
+    object ComboBoxStatus: TComboBox
+      Left = 73
+      Top = 20
+      Width = 184
+      Height = 21
+      Style = csDropDownList
+      Anchors = [akLeft, akTop, akRight]
+      DropDownCount = 16
+      ItemHeight = 13
+      TabOrder = 0
+      OnChange = ComboBoxStatusChange
+      OnEnter = ComboBoxStatusEnter
+    end
+    object EditDealNum: TEdit
+      Left = 489
+      Top = 74
+      Width = 97
+      Height = 21
+      Anchors = [akTop, akRight]
+      TabOrder = 1
+      OnEnter = ComboBoxStatusEnter
+    end
+    object EditDebtorNum: TEdit
+      Left = 313
+      Top = 101
+      Width = 88
+      Height = 21
+      Anchors = [akTop, akRight]
+      TabOrder = 8
+      OnEnter = ComboBoxStatusEnter
+    end
+    object DateTimePickerDebtorDate: TDateTimePicker
+      Left = 500
+      Top = 101
+      Width = 86
+      Height = 21
+      Anchors = [akTop, akRight]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Checked = False
+      TabOrder = 9
+      OnEnter = ComboBoxStatusEnter
+    end
+    object EditAddress: TEdit
+      Left = 73
+      Top = 74
+      Width = 155
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 5
+      OnEnter = ComboBoxStatusEnter
+    end
+    object EditAccountNum: TEdit
+      Left = 313
+      Top = 74
+      Width = 111
+      Height = 21
+      Anchors = [akTop, akRight]
+      TabOrder = 6
+      OnEnter = ComboBoxStatusEnter
+    end
+    object EditFirm: TEdit
+      Left = 73
+      Top = 101
+      Width = 131
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 7
+      OnEnter = ComboBoxStatusEnter
+    end
+    object DateTimePickerCreateBegin: TDateTimePicker
+      Left = 379
+      Top = 20
+      Width = 86
+      Height = 21
+      Anchors = [akTop, akRight]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Checked = False
+      TabOrder = 10
+      OnEnter = ComboBoxStatusEnter
+    end
+    object DateTimePickerDateCreateEnd: TDateTimePicker
+      Left = 500
+      Top = 20
+      Width = 86
+      Height = 21
+      Anchors = [akTop, akRight]
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Checked = False
+      TabOrder = 11
+      OnEnter = ComboBoxStatusEnter
+    end
+  end
+  inherited DataSource: TDataSource
+    Left = 240
+    Top = 208
+  end
+  inherited ActionList: TActionList
+    Left = 232
+    Top = 256
+    object ActionApplyPlan: TAction
+      Caption = #1055#1083#1072#1085
+      Hint = #1055#1088#1080#1084#1077#1085#1080#1090#1100' '#1087#1083#1072#1085
+      OnExecute = ActionApplyPlanExecute
+      OnUpdate = ActionApplyPlanUpdate
+    end
+    object ActionApplyGroup: TAction
+      Caption = #1043#1088#1091#1087#1087#1072
+      Hint = #1055#1088#1080#1084#1077#1085#1080#1090#1100' '#1075#1088#1091#1087#1087#1091
+      OnExecute = ActionApplyGroupExecute
+      OnUpdate = ActionApplyGroupUpdate
+    end
+  end
+  inherited ImageList: TImageList
+    Left = 176
+    Top = 252
+  end
+  inherited Popup: TPopupActionBar
+    Left = 184
+    Top = 194
+    object N13: TMenuItem
+      Caption = '-'
+    end
+    object N15: TMenuItem
+      Action = ActionApplyPlan
+    end
+    object N16: TMenuItem
+      Action = ActionApplyGroup
+    end
+  end
+  inherited PopupFilter: TPopupActionBar
+    Left = 32
+    Top = 208
+  end
+  inherited PopupInsert: TPopupActionBar
+    Left = 112
+    Top = 200
+  end
+  inherited PopupExport: TPopupActionBar
+    Left = 400
+    Top = 200
+  end
+end

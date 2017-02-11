@@ -1,0 +1,89 @@
+unit BisOmStdDialogs;
+
+interface
+
+uses Classes,
+     BisScriptUnits, BisScriptTypes, BisScriptFuncs;
+
+type
+  TBisDialogsScriptUnit=class(TBisScriptUnit)
+  private
+    function FuncShowInfo(Func: TBisScriptFunc): Variant;
+    function FuncShowQuestion(Func: TBisScriptFunc): Variant;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+
+implementation
+
+uses SysUtils, Dialogs,
+     BisDialogs;
+
+{ TBisDialogsScriptUnit }
+
+constructor TBisDialogsScriptUnit.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  UnitName:='Dialogs';
+
+  Depends.Add('System');
+  Depends.Add('Classes');
+  Depends.Add('Controls');
+  Depends.Add('Forms');
+
+  Types.Add('TMsgDlgBtn',tkInteger,'Integer');
+
+  Consts.Add('mbYes',mbYes,'TMsgDlgBtn');
+  Consts.Add('mbNo',mbNo,'TMsgDlgBtn');
+  Consts.Add('mbOK',mbOK,'TMsgDlgBtn');
+  Consts.Add('mbCancel',mbCancel,'TMsgDlgBtn');
+  Consts.Add('mbAbort',mbAbort,'TMsgDlgBtn');
+  Consts.Add('mbRetry',mbRetry,'TMsgDlgBtn');
+  Consts.Add('mbIgnore',mbIgnore,'TMsgDlgBtn');
+  Consts.Add('mbAll',mbAll,'TMsgDlgBtn');
+  Consts.Add('mbNoToAll',mbNoToAll,'TMsgDlgBtn');
+  Consts.Add('mbYesToAll',mbYesToAll,'TMsgDlgBtn');
+  Consts.Add('mbHelp',mbHelp,'TMsgDlgBtn');
+
+  with Funcs.Add('ShowInfo',FuncShowInfo) do begin
+    Params.Add('Msg','String');
+    Params.Add('UseTimer','Boolean',True);
+  end;
+
+  with Funcs.Add('ShowError',FuncShowInfo) do begin
+    Params.Add('Msg','String');
+    Params.Add('UseTimer','Boolean',True);
+  end;
+
+  with Funcs.Add('ShowWarning',FuncShowInfo) do begin
+    Params.Add('Msg','String');
+    Params.Add('UseTimer','Boolean',True);
+  end;
+
+  with Funcs.Add('ShowQuestion',FuncShowQuestion,'Integer') do begin
+    Params.Add('Msg','String');
+    Params.Add('DefaultButton','TMsgDlgBtn',mbYes);
+    Params.Add('UseTimer','Boolean',True);
+  end;
+
+end;
+
+function TBisDialogsScriptUnit.FuncShowInfo(Func: TBisScriptFunc): Variant;
+begin
+  if AnsiSameText(Func.Name,'ShowInfo') then
+    ShowInfo(Func.Params[0].AsString,Func.Params[1].AsBoolean)
+  else if AnsiSameText(Func.Name,'ShowError') then
+    ShowError(Func.Params[0].AsString,Func.Params[1].AsBoolean)
+  else if AnsiSameText(Func.Name,'ShowWarning') then
+    ShowWarning(Func.Params[0].AsString,Func.Params[1].AsBoolean)
+end;
+
+function TBisDialogsScriptUnit.FuncShowQuestion(Func: TBisScriptFunc): Variant;
+begin
+  Result:=ShowQuestion(Func.Params[0].AsString,TMsgDlgBtn(Func.Params[1].AsInteger),Func.Params[2].AsBoolean);
+end;
+
+
+
+end.

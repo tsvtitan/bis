@@ -1,0 +1,2433 @@
+
+ Start         Length     Name                   Class
+ 0001:00401000 0001E67CH .text                   CODE
+ 0002:00420000 0000065CH .itext                  ICODE
+ 0003:00421000 00000054H .data                   DATA
+ 0004:00422000 00000138H .bss                    BSS
+ 0005:00000000 00000000H .tls                    TLS
+
+
+Detailed map of segments
+
+ 0001:00000000 0000011E C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000120 000001C3 C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:000002E4 00000006 C=CODE     S=.text    G=(none)   M=BisIfaceModules ACBP=A9
+ 0001:000002EC 00000006 C=CODE     S=.text    G=(none)   M=BisObjects ACBP=A9
+ 0001:000002F4 000000C6 C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:000003BC 00000054 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:00000410 0000000E C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:00000420 0000002E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:00000450 00000056 C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:000004A8 00000006 C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:000004B0 0000000E C=CODE     S=.text    G=(none)   M=BisObject ACBP=A9
+ 0001:000004C0 00000026 C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:000004E8 00000036 C=CODE     S=.text    G=(none)   M=BisCoreObjects ACBP=A9
+ 0001:00000520 00000006 C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000528 00000006 C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00000530 00000006 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000538 00000036 C=CODE     S=.text    G=(none)   M=BisUtils ACBP=A9
+ 0001:00000570 00000026 C=CODE     S=.text    G=(none)   M=BisCore  ACBP=A9
+ 0001:00000598 00000066 C=CODE     S=.text    G=(none)   M=BisDataFm ACBP=A9
+ 0001:00000600 00000006 C=CODE     S=.text    G=(none)   M=DECUtil  ACBP=A9
+ 0001:00000608 00000006 C=CODE     S=.text    G=(none)   M=Hash     ACBP=A9
+ 0001:00000610 00000006 C=CODE     S=.text    G=(none)   M=Cipher   ACBP=A9
+ 0001:00000618 00000006 C=CODE     S=.text    G=(none)   M=Cipher1  ACBP=A9
+ 0001:00000620 00000006 C=CODE     S=.text    G=(none)   M=BisCryptUtils ACBP=A9
+ 0001:00000628 00000066 C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:00000690 00000006 C=CODE     S=.text    G=(none)   M=WideStrings ACBP=A9
+ 0001:00000698 00000006 C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:000006A0 00000006 C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:000006A8 00000006 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:000006B0 0000001E C=CODE     S=.text    G=(none)   M=kbmMemTable ACBP=A9
+ 0001:000006D0 0000014E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000820 00000006 C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000828 00000006 C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000830 0000001E C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000850 00000006 C=CODE     S=.text    G=(none)   M=Themes   ACBP=A9
+ 0001:00000858 00000196 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:000009F0 0000000E C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000A00 00000006 C=CODE     S=.text    G=(none)   M=UxTheme  ACBP=A9
+ 0001:00000A08 00000006 C=CODE     S=.text    G=(none)   M=DwmApi   ACBP=A9
+ 0001:00000A10 0000000E C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000A20 00000006 C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:00000A28 00000006 C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000A30 00000006 C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000A38 00000006 C=CODE     S=.text    G=(none)   M=GraphUtil ACBP=A9
+ 0001:00000A40 00000006 C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000A48 00000006 C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000A50 00000036 C=CODE     S=.text    G=(none)   M=BisDataSet ACBP=A9
+ 0001:00000A88 00000046 C=CODE     S=.text    G=(none)   M=BisParam ACBP=A9
+ 0001:00000AD0 0000000E C=CODE     S=.text    G=(none)   M=BisFilterGroups ACBP=A9
+ 0001:00000AE0 0000007E C=CODE     S=.text    G=(none)   M=BisParams ACBP=A9
+ 0001:00000B60 00000006 C=CODE     S=.text    G=(none)   M=BisPicture ACBP=A9
+ 0001:00000B68 00000006 C=CODE     S=.text    G=(none)   M=GIFImage ACBP=A9
+ 0001:00000B70 00000006 C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:00000B78 00000006 C=CODE     S=.text    G=(none)   M=RxRichEd ACBP=A9
+ 0001:00000B80 00000006 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00000B88 00000006 C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00000B90 00000006 C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00000B98 00000006 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00000BA0 00000006 C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00000BA8 0000001E C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:00000BC8 00000006 C=CODE     S=.text    G=(none)   M=rxToolEdit ACBP=A9
+ 0001:00000BD0 00000006 C=CODE     S=.text    G=(none)   M=rxDateUtil ACBP=A9
+ 0001:00000BD8 00000006 C=CODE     S=.text    G=(none)   M=RXCtrls  ACBP=A9
+ 0001:00000BE0 00000006 C=CODE     S=.text    G=(none)   M=RxHook   ACBP=A9
+ 0001:00000BE8 00000006 C=CODE     S=.text    G=(none)   M=RXConst  ACBP=A9
+ 0001:00000BF0 00000006 C=CODE     S=.text    G=(none)   M=rxVclutils ACBP=A9
+ 0001:00000BF8 00000006 C=CODE     S=.text    G=(none)   M=RXProps  ACBP=A9
+ 0001:00000C00 00000006 C=CODE     S=.text    G=(none)   M=rxAppUtils ACBP=A9
+ 0001:00000C08 00000006 C=CODE     S=.text    G=(none)   M=RxPrgrss ACBP=A9
+ 0001:00000C10 0000000E C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00000C20 00000006 C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00000C28 00000006 C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00000C30 00000006 C=CODE     S=.text    G=(none)   M=BisOrders ACBP=A9
+ 0001:00000C38 0000002E C=CODE     S=.text    G=(none)   M=BisFieldNames ACBP=A9
+ 0001:00000C68 00000006 C=CODE     S=.text    G=(none)   M=BisConnections ACBP=A9
+ 0001:00000C70 0000000E C=CODE     S=.text    G=(none)   M=BisIfaces ACBP=A9
+ 0001:00000C80 0000000E C=CODE     S=.text    G=(none)   M=BisPermissions ACBP=A9
+ 0001:00000C90 0000008E C=CODE     S=.text    G=(none)   M=BisDataEditFm ACBP=A9
+ 0001:00000D20 000000E6 C=CODE     S=.text    G=(none)   M=BisFm    ACBP=A9
+ 0001:00000E08 000000F6 C=CODE     S=.text    G=(none)   M=BisDataFrm ACBP=A9
+ 0001:00000F00 0000003E C=CODE     S=.text    G=(none)   M=BisFrm   ACBP=A9
+ 0001:00000F40 00000016 C=CODE     S=.text    G=(none)   M=ActnMan  ACBP=A9
+ 0001:00000F58 00000006 C=CODE     S=.text    G=(none)   M=ActnMenus ACBP=A9
+ 0001:00000F60 00000006 C=CODE     S=.text    G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0001:00000F68 00000006 C=CODE     S=.text    G=(none)   M=DBGrids  ACBP=A9
+ 0001:00000F70 0000000E C=CODE     S=.text    G=(none)   M=BisDialogs ACBP=A9
+ 0001:00000F80 00000006 C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:00000F88 00000006 C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:00000F90 00000006 C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00000F98 00000006 C=CODE     S=.text    G=(none)   M=BisInterfaces ACBP=A9
+ 0001:00000FA0 00000006 C=CODE     S=.text    G=(none)   M=BisFastReportClasses ACBP=A9
+ 0001:00000FA8 00000006 C=CODE     S=.text    G=(none)   M=frxClass ACBP=A9
+ 0001:00000FB0 00000006 C=CODE     S=.text    G=(none)   M=fs_iinterpreter ACBP=A9
+ 0001:00000FB8 00000006 C=CODE     S=.text    G=(none)   M=fs_iconst ACBP=A9
+ 0001:00000FC0 00000006 C=CODE     S=.text    G=(none)   M=fs_itools ACBP=A9
+ 0001:00000FC8 00000006 C=CODE     S=.text    G=(none)   M=frxRes   ACBP=A9
+ 0001:00000FD0 00000006 C=CODE     S=.text    G=(none)   M=frxDMPClass ACBP=A9
+ 0001:00000FD8 00000006 C=CODE     S=.text    G=(none)   M=frxDsgnIntf ACBP=A9
+ 0001:00000FE0 00000006 C=CODE     S=.text    G=(none)   M=fs_iinirtti ACBP=A9
+ 0001:00000FE8 00000006 C=CODE     S=.text    G=(none)   M=fs_idialogsrtti ACBP=A9
+ 0001:00000FF0 00000006 C=CODE     S=.text    G=(none)   M=fs_iclassesrtti ACBP=A9
+ 0001:00000FF8 00000006 C=CODE     S=.text    G=(none)   M=fs_iformsrtti ACBP=A9
+ 0001:00001000 00000006 C=CODE     S=.text    G=(none)   M=fs_igraphicsrtti ACBP=A9
+ 0001:00001008 00000006 C=CODE     S=.text    G=(none)   M=fs_ijs   ACBP=A9
+ 0001:00001010 00000006 C=CODE     S=.text    G=(none)   M=fs_ibasic ACBP=A9
+ 0001:00001018 00000006 C=CODE     S=.text    G=(none)   M=fs_icpp  ACBP=A9
+ 0001:00001020 00000006 C=CODE     S=.text    G=(none)   M=fs_ipascal ACBP=A9
+ 0001:00001028 00000006 C=CODE     S=.text    G=(none)   M=frxClassRTTI ACBP=A9
+ 0001:00001030 00000006 C=CODE     S=.text    G=(none)   M=frxPrinter ACBP=A9
+ 0001:00001038 00000006 C=CODE     S=.text    G=(none)   M=frxPreview ACBP=A9
+ 0001:00001040 00000006 C=CODE     S=.text    G=(none)   M=frxSearchDialog ACBP=A9
+ 0001:00001048 00000006 C=CODE     S=.text    G=(none)   M=frxrcClass ACBP=A9
+ 0001:00001050 00000006 C=CODE     S=.text    G=(none)   M=frxGraphicUtils ACBP=A9
+ 0001:00001058 00000006 C=CODE     S=.text    G=(none)   M=frxChm   ACBP=A9
+ 0001:00001060 00000006 C=CODE     S=.text    G=(none)   M=frxDesgn ACBP=A9
+ 0001:00001068 00000006 C=CODE     S=.text    G=(none)   M=Tabs     ACBP=A9
+ 0001:00001070 00000006 C=CODE     S=.text    G=(none)   M=frxDataTree ACBP=A9
+ 0001:00001078 00000006 C=CODE     S=.text    G=(none)   M=frxrcInsp ACBP=A9
+ 0001:00001080 00000006 C=CODE     S=.text    G=(none)   M=frxUnicodeCtrls ACBP=A9
+ 0001:00001088 00000006 C=CODE     S=.text    G=(none)   M=frxrcDesgn ACBP=A9
+ 0001:00001090 00000006 C=CODE     S=.text    G=(none)   M=frxStdWizard ACBP=A9
+ 0001:00001098 00000016 C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:000010B0 00000006 C=CODE     S=.text    G=(none)   M=frxDesgnEditors ACBP=A9
+ 0001:000010B8 00000006 C=CODE     S=.text    G=(none)   M=frxEditFormat ACBP=A9
+ 0001:000010C0 00000006 C=CODE     S=.text    G=(none)   M=BisFastReportControls ACBP=A9
+ 0001:000010C8 0000000E C=CODE     S=.text    G=(none)   M=BisConnectionEditFm ACBP=A9
+ 0001:000010D8 00000006 C=CODE     S=.text    G=(none)   M=JclDebug ACBP=A9
+ 0001:000010E0 00000006 C=CODE     S=.text    G=(none)   M=JclSysInfo ACBP=A9
+ 0001:000010E8 00000006 C=CODE     S=.text    G=(none)   M=JclStrings ACBP=A9
+ 0001:000010F0 00000006 C=CODE     S=.text    G=(none)   M=JclSysUtils ACBP=A9
+ 0001:000010F8 00000006 C=CODE     S=.text    G=(none)   M=JclWideStrings ACBP=A9
+ 0001:00001100 00000006 C=CODE     S=.text    G=(none)   M=JclShell ACBP=A9
+ 0001:00001108 00000006 C=CODE     S=.text    G=(none)   M=JclRegistry ACBP=A9
+ 0001:00001110 00000006 C=CODE     S=.text    G=(none)   M=JclHookExcept ACBP=A9
+ 0001:00001118 00000006 C=CODE     S=.text    G=(none)   M=BisConnectionModules ACBP=A9
+ 0001:00001120 00000006 C=CODE     S=.text    G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0001:00001128 00000006 C=CODE     S=.text    G=(none)   M=BisServiceApplication ACBP=A9
+ 0001:00001130 00000006 C=CODE     S=.text    G=(none)   M=BisSvcMgr ACBP=A9
+ 0001:00001138 00000006 C=CODE     S=.text    G=(none)   M=SvcMgr   ACBP=A9
+ 0001:00001140 00000006 C=CODE     S=.text    G=(none)   M=BisFastReportComponents ACBP=A9
+ 0001:00001148 00000006 C=CODE     S=.text    G=(none)   M=frxCustomDB ACBP=A9
+ 0001:00001150 00000006 C=CODE     S=.text    G=(none)   M=frxCustomDBRTTI ACBP=A9
+ 0001:00001158 00000006 C=CODE     S=.text    G=(none)   M=fs_idbrtti ACBP=A9
+ 0001:00001160 00000006 C=CODE     S=.text    G=(none)   M=frxCustomDBEditor ACBP=A9
+ 0001:00001168 00000006 C=CODE     S=.text    G=(none)   M=frxConnWizard ACBP=A9
+ 0001:00001170 00000006 C=CODE     S=.text    G=(none)   M=frxrcExports ACBP=A9
+ 0001:00001178 00000006 C=CODE     S=.text    G=(none)   M=frxExportTXT ACBP=A9
+ 0001:00001180 00000006 C=CODE     S=.text    G=(none)   M=frxExportODF ACBP=A9
+ 0001:00001188 00000006 C=CODE     S=.text    G=(none)   M=frxNetUtils ACBP=A9
+ 0001:00001190 00000006 C=CODE     S=.text    G=(none)   M=frxGradient ACBP=A9
+ 0001:00001198 00000006 C=CODE     S=.text    G=(none)   M=frxGradientRTTI ACBP=A9
+ 0001:000011A0 00000006 C=CODE     S=.text    G=(none)   M=frxDCtrl ACBP=A9
+ 0001:000011A8 00000006 C=CODE     S=.text    G=(none)   M=frxDCtrlRTTI ACBP=A9
+ 0001:000011B0 00000006 C=CODE     S=.text    G=(none)   M=frxBarcode ACBP=A9
+ 0001:000011B8 00000006 C=CODE     S=.text    G=(none)   M=frxBarcod ACBP=A9
+ 0001:000011C0 00000006 C=CODE     S=.text    G=(none)   M=frxBarcodeRTTI ACBP=A9
+ 0001:000011C8 00000006 C=CODE     S=.text    G=(none)   M=frxBarcodeEditor ACBP=A9
+ 0001:000011D0 00000006 C=CODE     S=.text    G=(none)   M=frxOLE   ACBP=A9
+ 0001:000011D8 00000006 C=CODE     S=.text    G=(none)   M=frxOLEEditor ACBP=A9
+ 0001:000011E0 00000006 C=CODE     S=.text    G=(none)   M=frxOLERTTI ACBP=A9
+ 0001:000011E8 00000006 C=CODE     S=.text    G=(none)   M=frxRich  ACBP=A9
+ 0001:000011F0 00000006 C=CODE     S=.text    G=(none)   M=frxRichEdit ACBP=A9
+ 0001:000011F8 00000006 C=CODE     S=.text    G=(none)   M=frxRichEditor ACBP=A9
+ 0001:00001200 00000006 C=CODE     S=.text    G=(none)   M=frxRichRTTI ACBP=A9
+ 0001:00001208 00000006 C=CODE     S=.text    G=(none)   M=frxCross ACBP=A9
+ 0001:00001210 00000006 C=CODE     S=.text    G=(none)   M=frxCrossRTTI ACBP=A9
+ 0001:00001218 00000006 C=CODE     S=.text    G=(none)   M=frxCrossEditor ACBP=A9
+ 0001:00001220 00000006 C=CODE     S=.text    G=(none)   M=frxChBox ACBP=A9
+ 0001:00001228 00000006 C=CODE     S=.text    G=(none)   M=frxChBoxRTTI ACBP=A9
+ 0001:00001230 00000006 C=CODE     S=.text    G=(none)   M=frxChart ACBP=A9
+ 0001:00001238 00000006 C=CODE     S=.text    G=(none)   M=TeCanvas ACBP=A9
+ 0001:00001240 00000006 C=CODE     S=.text    G=(none)   M=TeeConst ACBP=A9
+ 0001:00001248 00000006 C=CODE     S=.text    G=(none)   M=TeeHtml  ACBP=A9
+ 0001:00001250 00000006 C=CODE     S=.text    G=(none)   M=TeeProcs ACBP=A9
+ 0001:00001258 00000006 C=CODE     S=.text    G=(none)   M=Chart    ACBP=A9
+ 0001:00001260 00000006 C=CODE     S=.text    G=(none)   M=TeEngine ACBP=A9
+ 0001:00001268 00000006 C=CODE     S=.text    G=(none)   M=frxChartEditor ACBP=A9
+ 0001:00001270 00000006 C=CODE     S=.text    G=(none)   M=TeeGally ACBP=A9
+ 0001:00001278 00000006 C=CODE     S=.text    G=(none)   M=TeeGalleryPanel ACBP=A9
+ 0001:00001280 00000006 C=CODE     S=.text    G=(none)   M=frxChartHelpers ACBP=A9
+ 0001:00001288 00000006 C=CODE     S=.text    G=(none)   M=ArrowCha ACBP=A9
+ 0001:00001290 00000006 C=CODE     S=.text    G=(none)   M=BubbleCh ACBP=A9
+ 0001:00001298 00000006 C=CODE     S=.text    G=(none)   M=TeeShape ACBP=A9
+ 0001:000012A0 00000006 C=CODE     S=.text    G=(none)   M=GanttCh  ACBP=A9
+ 0001:000012A8 00000006 C=CODE     S=.text    G=(none)   M=frxChartRTTI ACBP=A9
+ 0001:000012B0 00000006 C=CODE     S=.text    G=(none)   M=fs_ichartrtti ACBP=A9
+ 0001:000012B8 00000006 C=CODE     S=.text    G=(none)   M=AppEvnts ACBP=A9
+ 0001:000012C0 00000006 C=CODE     S=.text    G=(none)   M=CustomizeDlg ACBP=A9
+ 0001:000012C8 0000004E C=CODE     S=.text    G=(none)   M=BisMDIMainFm ACBP=A9
+ 0001:00001318 0000002E C=CODE     S=.text    G=(none)   M=BisDesignConsts ACBP=A9
+ 0001:00001348 0000068A C=CODE     S=.text    G=(none)   M=BisDesignMainFm ACBP=A9
+ 0001:000019D4 0000001E C=CODE     S=.text    G=(none)   M=BisDataGridFm ACBP=A9
+ 0001:000019F4 0000007E C=CODE     S=.text    G=(none)   M=BisDataGridFrm ACBP=A9
+ 0001:00001A74 00000056 C=CODE     S=.text    G=(none)   M=BisDBTree ACBP=A9
+ 0001:00001ACC 00000006 C=CODE     S=.text    G=(none)   M=VirtualDBTreeEx ACBP=A9
+ 0001:00001AD4 0000000E C=CODE     S=.text    G=(none)   M=VirtualTrees ACBP=A9
+ 0001:00001AE4 00000006 C=CODE     S=.text    G=(none)   M=VTAccessibilityFactory ACBP=A9
+ 0001:00001AEC 00000A9A C=CODE     S=.text    G=(none)   M=BisDesignHbookFirmTypeEditFm ACBP=A9
+ 0001:00002588 000004D6 C=CODE     S=.text    G=(none)   M=BisDesignHbookFirmTypesFm ACBP=A9
+ 0001:00002A60 0000001E C=CODE     S=.text    G=(none)   M=BisDataTreeFm ACBP=A9
+ 0001:00002A80 00001A4E C=CODE     S=.text    G=(none)   M=BisDesignHbookFirmEditFm ACBP=A9
+ 0001:000044D0 0000077E C=CODE     S=.text    G=(none)   M=BisDesignHbookFirmsFm ACBP=A9
+ 0001:00004C50 000023B6 C=CODE     S=.text    G=(none)   M=BisDesignHbookAccountEditFm ACBP=A9
+ 0001:00007008 000006E6 C=CODE     S=.text    G=(none)   M=BisDesignHbookAccountsFm ACBP=A9
+ 0001:000076F0 00000B1A C=CODE     S=.text    G=(none)   M=BisDesignHbookRoleEditFm ACBP=A9
+ 0001:0000820C 000005A6 C=CODE     S=.text    G=(none)   M=BisDesignHbookRolesFm ACBP=A9
+ 0001:000087B4 00000556 C=CODE     S=.text    G=(none)   M=BisDesignHbookRolesAndAccountsFm ACBP=A9
+ 0001:00008D0C 00000A9E C=CODE     S=.text    G=(none)   M=BisDesignHbookApplicationEditFm ACBP=A9
+ 0001:000097AC 000004E2 C=CODE     S=.text    G=(none)   M=BisDesignHbookApplicationsFm ACBP=A9
+ 0001:00009C90 0000115E C=CODE     S=.text    G=(none)   M=BisDesignHbookInterfaceEditFm ACBP=A9
+ 0001:0000ADF0 000006D2 C=CODE     S=.text    G=(none)   M=BisDesignHbookInterfacesFm ACBP=A9
+ 0001:0000B4C4 00000B22 C=CODE     S=.text    G=(none)   M=BisDesignHbookAccountRoleEditFm ACBP=A9
+ 0001:0000BFE8 000004E6 C=CODE     S=.text    G=(none)   M=BisDesignHbookAccountRolesFm ACBP=A9
+ 0001:0000C4D0 00000B52 C=CODE     S=.text    G=(none)   M=BisDesignHbookProfileEditFm ACBP=A9
+ 0001:0000D024 000004FA C=CODE     S=.text    G=(none)   M=BisDesignHbookProfilesFm ACBP=A9
+ 0001:0000D520 00000C3E C=CODE     S=.text    G=(none)   M=BisDesignHbookSessionsFm ACBP=A9
+ 0001:0000E160 00000EAA C=CODE     S=.text    G=(none)   M=BisDesignHbookPermissionEditFm ACBP=A9
+ 0001:0000F00C 0000059E C=CODE     S=.text    G=(none)   M=BisDesignHbookPermissionsFm ACBP=A9
+ 0001:0000F5AC 00000E02 C=CODE     S=.text    G=(none)   M=BisDesignHbookApplicationInterfaceEditFm ACBP=A9
+ 0001:000103B0 0000063A C=CODE     S=.text    G=(none)   M=BisDesignHbookApplicationInterfacesFm ACBP=A9
+ 0001:000109EC 0000210E C=CODE     S=.text    G=(none)   M=BisDesignHbookMenuEditFm ACBP=A9
+ 0001:00012AFC 000005A2 C=CODE     S=.text    G=(none)   M=BisDesignHbookMenusFm ACBP=A9
+ 0001:000130A0 000011CA C=CODE     S=.text    G=(none)   M=BisDesignHbookReportsFrm ACBP=A9
+ 0001:0001426C 00001CFA C=CODE     S=.text    G=(none)   M=BisDesignHbookReportEditFm ACBP=A9
+ 0001:00015F68 0000064E C=CODE     S=.text    G=(none)   M=BisDesignHbookReportsFm ACBP=A9
+ 0001:000165B8 00001402 C=CODE     S=.text    G=(none)   M=BisDesignExportFm ACBP=A9
+ 0001:000179BC 000017AE C=CODE     S=.text    G=(none)   M=BisDesignImportFm ACBP=A9
+ 0001:0001916C 0000108A C=CODE     S=.text    G=(none)   M=BisDesignJournalActionEditFm ACBP=A9
+ 0001:0001A1F8 000007FA C=CODE     S=.text    G=(none)   M=BisDesignJournalActionsFm ACBP=A9
+ 0001:0001A9F4 0000187A C=CODE     S=.text    G=(none)   M=BisDesignHbookDocumentEditFm ACBP=A9
+ 0001:0001C270 0000050A C=CODE     S=.text    G=(none)   M=BisDesignHbookDocumentsFm ACBP=A9
+ 0001:0001C77C 00000A26 C=CODE     S=.text    G=(none)   M=BisDesignHbookConstEditFm ACBP=A9
+ 0001:0001D1A4 000004D2 C=CODE     S=.text    G=(none)   M=BisDesignHbookConstsFm ACBP=A9
+ 0001:0001D678 0000014A C=CODE     S=.text    G=(none)   M=BisDesign ACBP=A9
+ 0001:0001D7C4 00000EB7 C=CODE     S=.text    G=(none)   M=.imdesign ACBP=A9
+ 0002:00000000 00000006 C=ICODE    S=.itext   G=(none)   M=System   ACBP=A9
+ 0002:00000008 00000006 C=ICODE    S=.itext   G=(none)   M=Classes  ACBP=A9
+ 0002:00000010 00000011 C=ICODE    S=.itext   G=(none)   M=Windows  ACBP=A9
+ 0002:00000024 00000006 C=ICODE    S=.itext   G=(none)   M=TypInfo  ACBP=A9
+ 0002:0000002C 00000006 C=ICODE    S=.itext   G=(none)   M=SysUtils ACBP=A9
+ 0002:00000034 00000006 C=ICODE    S=.itext   G=(none)   M=Variants ACBP=A9
+ 0002:0000003C 00000006 C=ICODE    S=.itext   G=(none)   M=VarUtils ACBP=A9
+ 0002:00000044 00000006 C=ICODE    S=.itext   G=(none)   M=IniFiles ACBP=A9
+ 0002:0000004C 00000006 C=ICODE    S=.itext   G=(none)   M=Graphics ACBP=A9
+ 0002:00000054 00000006 C=ICODE    S=.itext   G=(none)   M=Registry ACBP=A9
+ 0002:0000005C 00000006 C=ICODE    S=.itext   G=(none)   M=BisUtils ACBP=A9
+ 0002:00000064 00000006 C=ICODE    S=.itext   G=(none)   M=BisCore  ACBP=A9
+ 0002:0000006C 00000006 C=ICODE    S=.itext   G=(none)   M=DECUtil  ACBP=A9
+ 0002:00000074 00000006 C=ICODE    S=.itext   G=(none)   M=Hash     ACBP=A9
+ 0002:0000007C 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher   ACBP=A9
+ 0002:00000084 00000006 C=ICODE    S=.itext   G=(none)   M=Cipher1  ACBP=A9
+ 0002:0000008C 00000006 C=ICODE    S=.itext   G=(none)   M=BisCryptUtils ACBP=A9
+ 0002:00000094 00000006 C=ICODE    S=.itext   G=(none)   M=DB       ACBP=A9
+ 0002:0000009C 00000006 C=ICODE    S=.itext   G=(none)   M=WideStrings ACBP=A9
+ 0002:000000A4 00000006 C=ICODE    S=.itext   G=(none)   M=FMTBcd   ACBP=A9
+ 0002:000000AC 00000006 C=ICODE    S=.itext   G=(none)   M=SqlTimSt ACBP=A9
+ 0002:000000B4 00000006 C=ICODE    S=.itext   G=(none)   M=ComObj   ACBP=A9
+ 0002:000000BC 00000006 C=ICODE    S=.itext   G=(none)   M=kbmMemTable ACBP=A9
+ 0002:000000C4 00000006 C=ICODE    S=.itext   G=(none)   M=Forms    ACBP=A9
+ 0002:000000CC 00000006 C=ICODE    S=.itext   G=(none)   M=HelpIntfs ACBP=A9
+ 0002:000000D4 00000006 C=ICODE    S=.itext   G=(none)   M=MultiMon ACBP=A9
+ 0002:000000DC 00000006 C=ICODE    S=.itext   G=(none)   M=ActnList ACBP=A9
+ 0002:000000E4 00000006 C=ICODE    S=.itext   G=(none)   M=Themes   ACBP=A9
+ 0002:000000EC 00000006 C=ICODE    S=.itext   G=(none)   M=Controls ACBP=A9
+ 0002:000000F4 00000006 C=ICODE    S=.itext   G=(none)   M=Menus    ACBP=A9
+ 0002:000000FC 00000006 C=ICODE    S=.itext   G=(none)   M=UxTheme  ACBP=A9
+ 0002:00000104 00000006 C=ICODE    S=.itext   G=(none)   M=DwmApi   ACBP=A9
+ 0002:0000010C 00000006 C=ICODE    S=.itext   G=(none)   M=Dialogs  ACBP=A9
+ 0002:00000114 00000006 C=ICODE    S=.itext   G=(none)   M=Printers ACBP=A9
+ 0002:0000011C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtCtrls ACBP=A9
+ 0002:00000124 00000006 C=ICODE    S=.itext   G=(none)   M=GraphUtil ACBP=A9
+ 0002:0000012C 00000006 C=ICODE    S=.itext   G=(none)   M=Clipbrd  ACBP=A9
+ 0002:00000134 00000006 C=ICODE    S=.itext   G=(none)   M=FlatSB   ACBP=A9
+ 0002:0000013C 00000006 C=ICODE    S=.itext   G=(none)   M=GIFImage ACBP=A9
+ 0002:00000144 00000006 C=ICODE    S=.itext   G=(none)   M=jpeg     ACBP=A9
+ 0002:0000014C 00000006 C=ICODE    S=.itext   G=(none)   M=RxRichEd ACBP=A9
+ 0002:00000154 00000006 C=ICODE    S=.itext   G=(none)   M=ComCtrls ACBP=A9
+ 0002:0000015C 00000006 C=ICODE    S=.itext   G=(none)   M=ExtActns ACBP=A9
+ 0002:00000164 00000006 C=ICODE    S=.itext   G=(none)   M=ExtDlgs  ACBP=A9
+ 0002:0000016C 00000006 C=ICODE    S=.itext   G=(none)   M=Buttons  ACBP=A9
+ 0002:00000174 00000006 C=ICODE    S=.itext   G=(none)   M=Mapi     ACBP=A9
+ 0002:0000017C 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtnrs ACBP=A9
+ 0002:00000184 00000006 C=ICODE    S=.itext   G=(none)   M=rxToolEdit ACBP=A9
+ 0002:0000018C 00000006 C=ICODE    S=.itext   G=(none)   M=rxDateUtil ACBP=A9
+ 0002:00000194 00000006 C=ICODE    S=.itext   G=(none)   M=RXCtrls  ACBP=A9
+ 0002:0000019C 00000006 C=ICODE    S=.itext   G=(none)   M=RxHook   ACBP=A9
+ 0002:000001A4 00000006 C=ICODE    S=.itext   G=(none)   M=RXConst  ACBP=A9
+ 0002:000001AC 00000006 C=ICODE    S=.itext   G=(none)   M=rxVclutils ACBP=A9
+ 0002:000001B4 00000006 C=ICODE    S=.itext   G=(none)   M=RXProps  ACBP=A9
+ 0002:000001BC 00000006 C=ICODE    S=.itext   G=(none)   M=rxAppUtils ACBP=A9
+ 0002:000001C4 00000006 C=ICODE    S=.itext   G=(none)   M=RxPrgrss ACBP=A9
+ 0002:000001CC 00000006 C=ICODE    S=.itext   G=(none)   M=DBCtrls  ACBP=A9
+ 0002:000001D4 00000006 C=ICODE    S=.itext   G=(none)   M=DBPWDlg  ACBP=A9
+ 0002:000001DC 00000006 C=ICODE    S=.itext   G=(none)   M=DBLogDlg ACBP=A9
+ 0002:000001E4 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMan  ACBP=A9
+ 0002:000001EC 00000006 C=ICODE    S=.itext   G=(none)   M=ActnMenus ACBP=A9
+ 0002:000001F4 00000006 C=ICODE    S=.itext   G=(none)   M=XPStyleActnCtrls ACBP=A9
+ 0002:000001FC 00000006 C=ICODE    S=.itext   G=(none)   M=OleServer ACBP=A9
+ 0002:00000204 00000006 C=ICODE    S=.itext   G=(none)   M=OleCtrls ACBP=A9
+ 0002:0000020C 00000006 C=ICODE    S=.itext   G=(none)   M=AxCtrls  ACBP=A9
+ 0002:00000214 00000006 C=ICODE    S=.itext   G=(none)   M=BisFastReportClasses ACBP=A9
+ 0002:0000021C 00000006 C=ICODE    S=.itext   G=(none)   M=frxClass ACBP=A9
+ 0002:00000224 00000006 C=ICODE    S=.itext   G=(none)   M=fs_iinterpreter ACBP=A9
+ 0002:0000022C 00000006 C=ICODE    S=.itext   G=(none)   M=fs_iconst ACBP=A9
+ 0002:00000234 00000006 C=ICODE    S=.itext   G=(none)   M=fs_itools ACBP=A9
+ 0002:0000023C 00000006 C=ICODE    S=.itext   G=(none)   M=frxRes   ACBP=A9
+ 0002:00000244 00000006 C=ICODE    S=.itext   G=(none)   M=frxDMPClass ACBP=A9
+ 0002:0000024C 00000006 C=ICODE    S=.itext   G=(none)   M=frxDsgnIntf ACBP=A9
+ 0002:00000254 00000006 C=ICODE    S=.itext   G=(none)   M=fs_iinirtti ACBP=A9
+ 0002:0000025C 00000006 C=ICODE    S=.itext   G=(none)   M=fs_idialogsrtti ACBP=A9
+ 0002:00000264 00000006 C=ICODE    S=.itext   G=(none)   M=fs_iclassesrtti ACBP=A9
+ 0002:0000026C 00000006 C=ICODE    S=.itext   G=(none)   M=fs_iformsrtti ACBP=A9
+ 0002:00000274 00000006 C=ICODE    S=.itext   G=(none)   M=fs_igraphicsrtti ACBP=A9
+ 0002:0000027C 00000006 C=ICODE    S=.itext   G=(none)   M=fs_ijs   ACBP=A9
+ 0002:00000284 00000006 C=ICODE    S=.itext   G=(none)   M=fs_ibasic ACBP=A9
+ 0002:0000028C 00000006 C=ICODE    S=.itext   G=(none)   M=fs_icpp  ACBP=A9
+ 0002:00000294 00000006 C=ICODE    S=.itext   G=(none)   M=fs_ipascal ACBP=A9
+ 0002:0000029C 00000006 C=ICODE    S=.itext   G=(none)   M=frxClassRTTI ACBP=A9
+ 0002:000002A4 00000006 C=ICODE    S=.itext   G=(none)   M=frxPrinter ACBP=A9
+ 0002:000002AC 00000006 C=ICODE    S=.itext   G=(none)   M=frxPreview ACBP=A9
+ 0002:000002B4 00000006 C=ICODE    S=.itext   G=(none)   M=frxSearchDialog ACBP=A9
+ 0002:000002BC 00000006 C=ICODE    S=.itext   G=(none)   M=frxrcClass ACBP=A9
+ 0002:000002C4 00000006 C=ICODE    S=.itext   G=(none)   M=frxGraphicUtils ACBP=A9
+ 0002:000002CC 00000006 C=ICODE    S=.itext   G=(none)   M=frxChm   ACBP=A9
+ 0002:000002D4 00000006 C=ICODE    S=.itext   G=(none)   M=frxDesgn ACBP=A9
+ 0002:000002DC 00000006 C=ICODE    S=.itext   G=(none)   M=Tabs     ACBP=A9
+ 0002:000002E4 00000006 C=ICODE    S=.itext   G=(none)   M=frxDataTree ACBP=A9
+ 0002:000002EC 00000006 C=ICODE    S=.itext   G=(none)   M=frxrcInsp ACBP=A9
+ 0002:000002F4 00000006 C=ICODE    S=.itext   G=(none)   M=frxUnicodeCtrls ACBP=A9
+ 0002:000002FC 00000006 C=ICODE    S=.itext   G=(none)   M=frxrcDesgn ACBP=A9
+ 0002:00000304 00000006 C=ICODE    S=.itext   G=(none)   M=frxStdWizard ACBP=A9
+ 0002:0000030C 00000006 C=ICODE    S=.itext   G=(none)   M=CheckLst ACBP=A9
+ 0002:00000314 00000006 C=ICODE    S=.itext   G=(none)   M=frxDesgnEditors ACBP=A9
+ 0002:0000031C 00000006 C=ICODE    S=.itext   G=(none)   M=frxEditFormat ACBP=A9
+ 0002:00000324 00000006 C=ICODE    S=.itext   G=(none)   M=BisFastReportControls ACBP=A9
+ 0002:0000032C 00000006 C=ICODE    S=.itext   G=(none)   M=JclDebug ACBP=A9
+ 0002:00000334 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysInfo ACBP=A9
+ 0002:0000033C 00000006 C=ICODE    S=.itext   G=(none)   M=JclStrings ACBP=A9
+ 0002:00000344 00000006 C=ICODE    S=.itext   G=(none)   M=JclSysUtils ACBP=A9
+ 0002:0000034C 00000006 C=ICODE    S=.itext   G=(none)   M=JclWideStrings ACBP=A9
+ 0002:00000354 00000006 C=ICODE    S=.itext   G=(none)   M=JclShell ACBP=A9
+ 0002:0000035C 00000006 C=ICODE    S=.itext   G=(none)   M=JclRegistry ACBP=A9
+ 0002:00000364 00000006 C=ICODE    S=.itext   G=(none)   M=JclHookExcept ACBP=A9
+ 0002:0000036C 00000006 C=ICODE    S=.itext   G=(none)   M=BisTimedMsgFm ACBP=A9
+ 0002:00000374 00000006 C=ICODE    S=.itext   G=(none)   M=BisServiceApplication ACBP=A9
+ 0002:0000037C 00000006 C=ICODE    S=.itext   G=(none)   M=BisSvcMgr ACBP=A9
+ 0002:00000384 00000006 C=ICODE    S=.itext   G=(none)   M=SvcMgr   ACBP=A9
+ 0002:0000038C 00000006 C=ICODE    S=.itext   G=(none)   M=BisFastReportComponents ACBP=A9
+ 0002:00000394 00000006 C=ICODE    S=.itext   G=(none)   M=frxCustomDB ACBP=A9
+ 0002:0000039C 00000006 C=ICODE    S=.itext   G=(none)   M=frxCustomDBRTTI ACBP=A9
+ 0002:000003A4 00000006 C=ICODE    S=.itext   G=(none)   M=fs_idbrtti ACBP=A9
+ 0002:000003AC 00000006 C=ICODE    S=.itext   G=(none)   M=frxCustomDBEditor ACBP=A9
+ 0002:000003B4 00000006 C=ICODE    S=.itext   G=(none)   M=frxConnWizard ACBP=A9
+ 0002:000003BC 00000006 C=ICODE    S=.itext   G=(none)   M=frxrcExports ACBP=A9
+ 0002:000003C4 00000006 C=ICODE    S=.itext   G=(none)   M=frxExportTXT ACBP=A9
+ 0002:000003CC 00000006 C=ICODE    S=.itext   G=(none)   M=frxExportODF ACBP=A9
+ 0002:000003D4 00000006 C=ICODE    S=.itext   G=(none)   M=frxNetUtils ACBP=A9
+ 0002:000003DC 00000006 C=ICODE    S=.itext   G=(none)   M=frxGradient ACBP=A9
+ 0002:000003E4 00000006 C=ICODE    S=.itext   G=(none)   M=frxGradientRTTI ACBP=A9
+ 0002:000003EC 00000006 C=ICODE    S=.itext   G=(none)   M=frxDCtrl ACBP=A9
+ 0002:000003F4 00000006 C=ICODE    S=.itext   G=(none)   M=frxDCtrlRTTI ACBP=A9
+ 0002:000003FC 00000006 C=ICODE    S=.itext   G=(none)   M=frxBarcode ACBP=A9
+ 0002:00000404 00000006 C=ICODE    S=.itext   G=(none)   M=frxBarcod ACBP=A9
+ 0002:0000040C 00000006 C=ICODE    S=.itext   G=(none)   M=frxBarcodeRTTI ACBP=A9
+ 0002:00000414 00000006 C=ICODE    S=.itext   G=(none)   M=frxBarcodeEditor ACBP=A9
+ 0002:0000041C 00000006 C=ICODE    S=.itext   G=(none)   M=frxOLE   ACBP=A9
+ 0002:00000424 00000006 C=ICODE    S=.itext   G=(none)   M=frxOLEEditor ACBP=A9
+ 0002:0000042C 00000006 C=ICODE    S=.itext   G=(none)   M=frxOLERTTI ACBP=A9
+ 0002:00000434 00000006 C=ICODE    S=.itext   G=(none)   M=frxRich  ACBP=A9
+ 0002:0000043C 00000006 C=ICODE    S=.itext   G=(none)   M=frxRichEdit ACBP=A9
+ 0002:00000444 00000006 C=ICODE    S=.itext   G=(none)   M=frxRichEditor ACBP=A9
+ 0002:0000044C 00000006 C=ICODE    S=.itext   G=(none)   M=frxRichRTTI ACBP=A9
+ 0002:00000454 00000006 C=ICODE    S=.itext   G=(none)   M=frxCross ACBP=A9
+ 0002:0000045C 00000006 C=ICODE    S=.itext   G=(none)   M=frxCrossRTTI ACBP=A9
+ 0002:00000464 00000006 C=ICODE    S=.itext   G=(none)   M=frxCrossEditor ACBP=A9
+ 0002:0000046C 00000006 C=ICODE    S=.itext   G=(none)   M=frxChBox ACBP=A9
+ 0002:00000474 00000006 C=ICODE    S=.itext   G=(none)   M=frxChBoxRTTI ACBP=A9
+ 0002:0000047C 00000006 C=ICODE    S=.itext   G=(none)   M=frxChart ACBP=A9
+ 0002:00000484 00000006 C=ICODE    S=.itext   G=(none)   M=TeCanvas ACBP=A9
+ 0002:0000048C 00000006 C=ICODE    S=.itext   G=(none)   M=TeeConst ACBP=A9
+ 0002:00000494 00000006 C=ICODE    S=.itext   G=(none)   M=TeeHtml  ACBP=A9
+ 0002:0000049C 00000006 C=ICODE    S=.itext   G=(none)   M=TeeProcs ACBP=A9
+ 0002:000004A4 00000006 C=ICODE    S=.itext   G=(none)   M=Chart    ACBP=A9
+ 0002:000004AC 00000006 C=ICODE    S=.itext   G=(none)   M=TeEngine ACBP=A9
+ 0002:000004B4 00000006 C=ICODE    S=.itext   G=(none)   M=frxChartEditor ACBP=A9
+ 0002:000004BC 00000006 C=ICODE    S=.itext   G=(none)   M=TeeGally ACBP=A9
+ 0002:000004C4 00000006 C=ICODE    S=.itext   G=(none)   M=TeeGalleryPanel ACBP=A9
+ 0002:000004CC 00000006 C=ICODE    S=.itext   G=(none)   M=frxChartHelpers ACBP=A9
+ 0002:000004D4 00000006 C=ICODE    S=.itext   G=(none)   M=ArrowCha ACBP=A9
+ 0002:000004DC 00000006 C=ICODE    S=.itext   G=(none)   M=BubbleCh ACBP=A9
+ 0002:000004E4 00000006 C=ICODE    S=.itext   G=(none)   M=TeeShape ACBP=A9
+ 0002:000004EC 00000006 C=ICODE    S=.itext   G=(none)   M=GanttCh  ACBP=A9
+ 0002:000004F4 00000006 C=ICODE    S=.itext   G=(none)   M=frxChartRTTI ACBP=A9
+ 0002:000004FC 00000006 C=ICODE    S=.itext   G=(none)   M=fs_ichartrtti ACBP=A9
+ 0002:00000504 00000006 C=ICODE    S=.itext   G=(none)   M=AppEvnts ACBP=A9
+ 0002:0000050C 00000006 C=ICODE    S=.itext   G=(none)   M=CustomizeDlg ACBP=A9
+ 0002:00000514 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignConsts ACBP=A9
+ 0002:0000051C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignMainFm ACBP=A9
+ 0002:00000524 00000006 C=ICODE    S=.itext   G=(none)   M=VirtualTrees ACBP=A9
+ 0002:0000052C 00000006 C=ICODE    S=.itext   G=(none)   M=VTAccessibilityFactory ACBP=A9
+ 0002:00000534 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookFirmTypeEditFm ACBP=A9
+ 0002:0000053C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookFirmTypesFm ACBP=A9
+ 0002:00000544 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookFirmEditFm ACBP=A9
+ 0002:0000054C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookFirmsFm ACBP=A9
+ 0002:00000554 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookAccountEditFm ACBP=A9
+ 0002:0000055C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookAccountsFm ACBP=A9
+ 0002:00000564 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookRoleEditFm ACBP=A9
+ 0002:0000056C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookRolesFm ACBP=A9
+ 0002:00000574 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookRolesAndAccountsFm ACBP=A9
+ 0002:0000057C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookApplicationEditFm ACBP=A9
+ 0002:00000584 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookApplicationsFm ACBP=A9
+ 0002:0000058C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookInterfaceEditFm ACBP=A9
+ 0002:00000594 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookInterfacesFm ACBP=A9
+ 0002:0000059C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookAccountRoleEditFm ACBP=A9
+ 0002:000005A4 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookAccountRolesFm ACBP=A9
+ 0002:000005AC 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookProfileEditFm ACBP=A9
+ 0002:000005B4 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookProfilesFm ACBP=A9
+ 0002:000005BC 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookSessionsFm ACBP=A9
+ 0002:000005C4 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookPermissionEditFm ACBP=A9
+ 0002:000005CC 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookPermissionsFm ACBP=A9
+ 0002:000005D4 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookApplicationInterfaceEditFm ACBP=A9
+ 0002:000005DC 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookApplicationInterfacesFm ACBP=A9
+ 0002:000005E4 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookMenuEditFm ACBP=A9
+ 0002:000005EC 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookMenusFm ACBP=A9
+ 0002:000005F4 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookReportsFrm ACBP=A9
+ 0002:000005FC 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookReportEditFm ACBP=A9
+ 0002:00000604 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookReportsFm ACBP=A9
+ 0002:0000060C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignExportFm ACBP=A9
+ 0002:00000614 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignImportFm ACBP=A9
+ 0002:0000061C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignJournalActionEditFm ACBP=A9
+ 0002:00000624 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignJournalActionsFm ACBP=A9
+ 0002:0000062C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookDocumentEditFm ACBP=A9
+ 0002:00000634 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookDocumentsFm ACBP=A9
+ 0002:0000063C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookConstEditFm ACBP=A9
+ 0002:00000644 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesignHbookConstsFm ACBP=A9
+ 0002:0000064C 00000008 C=ICODE    S=.itext   G=(none)   M=BisDesign ACBP=A9
+ 0002:00000654 00000005 C=ICODE    S=.itext   G=(none)   M=.imdesign ACBP=A9
+ 0003:00000000 0000002C C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0003:0000002C 00000004 C=DATA     S=.data    G=DGROUP   M=BisDesignMainFm ACBP=A9
+ 0004:00000000 0000000C C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0004:0000000C 00000008 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0004:00000014 00000004 C=BSS      S=.bss     G=DGROUP   M=BisDesignConsts ACBP=A9
+ 0004:00000018 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignMainFm ACBP=A9
+ 0004:00000020 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookFirmTypeEditFm ACBP=A9
+ 0004:00000028 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookFirmTypesFm ACBP=A9
+ 0004:00000030 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookFirmEditFm ACBP=A9
+ 0004:00000038 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookFirmsFm ACBP=A9
+ 0004:00000040 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookAccountEditFm ACBP=A9
+ 0004:00000048 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookAccountsFm ACBP=A9
+ 0004:00000050 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookRoleEditFm ACBP=A9
+ 0004:00000058 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookRolesFm ACBP=A9
+ 0004:00000060 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookRolesAndAccountsFm ACBP=A9
+ 0004:00000068 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookApplicationEditFm ACBP=A9
+ 0004:00000070 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookApplicationsFm ACBP=A9
+ 0004:00000078 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookInterfaceEditFm ACBP=A9
+ 0004:00000080 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookInterfacesFm ACBP=A9
+ 0004:00000088 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookAccountRoleEditFm ACBP=A9
+ 0004:00000090 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookAccountRolesFm ACBP=A9
+ 0004:00000098 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookProfileEditFm ACBP=A9
+ 0004:000000A0 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookProfilesFm ACBP=A9
+ 0004:000000A8 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookSessionsFm ACBP=A9
+ 0004:000000B0 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookPermissionEditFm ACBP=A9
+ 0004:000000B8 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookPermissionsFm ACBP=A9
+ 0004:000000C0 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookApplicationInterfaceEditFm ACBP=A9
+ 0004:000000C8 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookApplicationInterfacesFm ACBP=A9
+ 0004:000000D0 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookMenuEditFm ACBP=A9
+ 0004:000000D8 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookMenusFm ACBP=A9
+ 0004:000000E0 00000004 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookReportsFrm ACBP=A9
+ 0004:000000E4 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookReportEditFm ACBP=A9
+ 0004:000000EC 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookReportsFm ACBP=A9
+ 0004:000000F4 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignExportFm ACBP=A9
+ 0004:000000FC 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignImportFm ACBP=A9
+ 0004:00000104 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignJournalActionEditFm ACBP=A9
+ 0004:0000010C 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignJournalActionsFm ACBP=A9
+ 0004:00000114 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookDocumentEditFm ACBP=A9
+ 0004:0000011C 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookDocumentsFm ACBP=A9
+ 0004:00000124 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookConstEditFm ACBP=A9
+ 0004:0000012C 00000008 C=BSS      S=.bss     G=DGROUP   M=BisDesignHbookConstsFm ACBP=A9
+ 0004:00000134 00000004 C=BSS      S=.bss     G=DGROUP   M=BisDesign ACBP=A9
+
+
+  Address             Publics by Name
+
+ 0002:00000654       .imdesign..imdesign
+ 0001:0001E65C       .imdesign.@GetPackageInfoTable
+ 0001:0001E664       .imdesign.@PackageLoad
+ 0001:0001E670       .imdesign.@PackageUnload
+ 0004:00000134       BisDesign..1
+ 0002:0000064C       BisDesign.BisDesign
+ 0001:0001D794       BisDesign.Finalization
+ 0001:0001D678       BisDesign.InitIfaceModule
+ 0004:00000014       BisDesignConsts..1
+ 0002:00000514       BisDesignConsts.BisDesignConsts
+ 0001:00001318       BisDesignConsts.Finalization
+ 0004:000000F8       BisDesignExportFm..3
+ 0001:000165B8       BisDesignExportFm..TBisDesignExportForm
+ 0001:00016A1C       BisDesignExportFm..TBisDesignExportFormIface
+ 0002:0000060C       BisDesignExportFm.BisDesignExportFm
+ 0004:000000F4       BisDesignExportFm.BisDesignExportForm
+ 0001:0001798C       BisDesignExportFm.Finalization
+ 0001:000178E0       BisDesignExportFm.TBisDesignExportForm.ActionConnectionExecute
+ 0001:00017170       BisDesignExportFm.TBisDesignExportForm.ActionConnectionUpdate
+ 0001:000172F8       BisDesignExportFm.TBisDesignExportForm.ActionExportExecute
+ 0001:00017120       BisDesignExportFm.TBisDesignExportForm.ActionExportUpdate
+ 0001:000171D8       BisDesignExportFm.TBisDesignExportForm.ActionLoadExecute
+ 0001:000171C0       BisDesignExportFm.TBisDesignExportForm.ActionLoadUpdate
+ 0001:00016B8C       BisDesignExportFm.TBisDesignExportForm.Create
+ 0001:00016F0C       BisDesignExportFm.TBisDesignExportForm.DataSetNewRecord
+ 0001:00016ED0       BisDesignExportFm.TBisDesignExportForm.Destroy
+ 0001:00017728       BisDesignExportFm.TBisDesignExportForm.GridClick
+ 0001:000178B0       BisDesignExportFm.TBisDesignExportForm.GridKeyDown
+ 0001:00016FAC       BisDesignExportFm.TBisDesignExportForm.RefreshConnections
+ 0001:00016B40       BisDesignExportFm.TBisDesignExportFormIface.Create
+ 0004:00000044       BisDesignHbookAccountEditFm..6
+ 0001:00005688       BisDesignHbookAccountEditFm..TBisDesignHbookAccountDeleteFormIface
+ 0001:00004C50       BisDesignHbookAccountEditFm..TBisDesignHbookAccountEditForm
+ 0001:000052B4       BisDesignHbookAccountEditFm..TBisDesignHbookAccountEditFormIface
+ 0001:000053F8       BisDesignHbookAccountEditFm..TBisDesignHbookAccountInsertFormIface
+ 0001:00005540       BisDesignHbookAccountEditFm..TBisDesignHbookAccountUpdateFormIface
+ 0001:000057D0       BisDesignHbookAccountEditFm..TBisRoleInfo
+ 0002:00000554       BisDesignHbookAccountEditFm.BisDesignHbookAccountEditFm
+ 0004:00000040       BisDesignHbookAccountEditFm.BisDesignHbookAccountEditForm
+ 0001:00006FD8       BisDesignHbookAccountEditFm.Finalization
+ 0001:00005F84       BisDesignHbookAccountEditFm.TBisDesignHbookAccountDeleteFormIface.Create
+ 0001:00006054       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.BeforeShow
+ 0001:000061B4       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.ButtonPhotoClick
+ 0001:000061FC       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.ChangeParam
+ 0001:000063BC       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.ChangesArePresent
+ 0001:000063E4       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.CheckBoxProfileClick
+ 0001:000063EC       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.CheckListBoxRolesClickCheck
+ 0001:00005FDC       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.Create
+ 0001:000063FC       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.DeleteAccountRoles
+ 0001:00006F24       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.Execute
+ 0001:000065E0       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.InsertAccountRoles
+ 0001:00006C18       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.InsertProfile
+ 0001:00006D90       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.MenuItemClearPhotoClick
+ 0001:00006DC0       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.MenuItemLoadPhotoClick
+ 0001:00006E44       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.MenuItemSavePhotoClick
+ 0001:00006EC8       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.PopupActionBarPhotoPopup
+ 0001:0000678C       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.RefreshAccountRoles
+ 0001:000069C0       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.RefreshRoles
+ 0001:0000583C       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditFormIface.Create
+ 0001:00005ED4       BisDesignHbookAccountEditFm.TBisDesignHbookAccountInsertFormIface.Create
+ 0001:00005F2C       BisDesignHbookAccountEditFm.TBisDesignHbookAccountUpdateFormIface.Create
+ 0004:0000008C       BisDesignHbookAccountRoleEditFm..6
+ 0001:0000BB68       BisDesignHbookAccountRoleEditFm..TBisDesignHbookAccountRoleDeleteFormIface
+ 0001:0000B4C4       BisDesignHbookAccountRoleEditFm..TBisDesignHbookAccountRoleEditForm
+ 0001:0000B770       BisDesignHbookAccountRoleEditFm..TBisDesignHbookAccountRoleEditFormIface
+ 0001:0000B8C0       BisDesignHbookAccountRoleEditFm..TBisDesignHbookAccountRoleInsertFormIface
+ 0001:0000BA14       BisDesignHbookAccountRoleEditFm..TBisDesignHbookAccountRoleUpdateFormIface
+ 0002:0000059C       BisDesignHbookAccountRoleEditFm.BisDesignHbookAccountRoleEditFm
+ 0004:00000088       BisDesignHbookAccountRoleEditFm.BisDesignHbookAccountRoleEditForm
+ 0001:0000BFB8       BisDesignHbookAccountRoleEditFm.Finalization
+ 0001:0000BF24       BisDesignHbookAccountRoleEditFm.TBisDesignHbookAccountRoleDeleteFormIface.Create
+ 0001:0000BF80       BisDesignHbookAccountRoleEditFm.TBisDesignHbookAccountRoleEditForm.Execute
+ 0001:0000BCBC       BisDesignHbookAccountRoleEditFm.TBisDesignHbookAccountRoleEditFormIface.Create
+ 0001:0000BE6C       BisDesignHbookAccountRoleEditFm.TBisDesignHbookAccountRoleInsertFormIface.Create
+ 0001:0000BEC8       BisDesignHbookAccountRoleEditFm.TBisDesignHbookAccountRoleUpdateFormIface.Create
+ 0004:00000094       BisDesignHbookAccountRolesFm..3
+ 0001:0000BFE8       BisDesignHbookAccountRolesFm..TBisDesignHbookAccountRolesForm
+ 0001:0000C1E8       BisDesignHbookAccountRolesFm..TBisDesignHbookAccountRolesFormIface
+ 0004:00000090       BisDesignHbookAccountRolesFm.BiDesignHbookAccountRolesForm
+ 0002:000005A4       BisDesignHbookAccountRolesFm.BisDesignHbookAccountRolesFm
+ 0001:0000C4A0       BisDesignHbookAccountRolesFm.Finalization
+ 0001:0000C330       BisDesignHbookAccountRolesFm.TBisDesignHbookAccountRolesFormIface.Create
+ 0004:0000004C       BisDesignHbookAccountsFm..3
+ 0001:00007008       BisDesignHbookAccountsFm..TBisDesignHbookAccountsForm
+ 0001:000071FC       BisDesignHbookAccountsFm..TBisDesignHbookAccountsFormIface
+ 0004:00000048       BisDesignHbookAccountsFm.BiDesignHbookAccountsForm
+ 0002:0000055C       BisDesignHbookAccountsFm.BisDesignHbookAccountsFm
+ 0001:000076C0       BisDesignHbookAccountsFm.Finalization
+ 0001:00007338       BisDesignHbookAccountsFm.TBisDesignHbookAccountsFormIface.Create
+ 0004:0000006C       BisDesignHbookApplicationEditFm..6
+ 0001:00009398       BisDesignHbookApplicationEditFm..TBisDesignHbookApplicationDeleteFormIface
+ 0001:00008D0C       BisDesignHbookApplicationEditFm..TBisDesignHbookApplicationEditForm
+ 0001:00008FA0       BisDesignHbookApplicationEditFm..TBisDesignHbookApplicationEditFormIface
+ 0001:000090F0       BisDesignHbookApplicationEditFm..TBisDesignHbookApplicationInsertFormIface
+ 0001:00009244       BisDesignHbookApplicationEditFm..TBisDesignHbookApplicationUpdateFormIface
+ 0002:0000057C       BisDesignHbookApplicationEditFm.BisDesignHbookApplicationEditFm
+ 0004:00000068       BisDesignHbookApplicationEditFm.BisDesignHbookApplicationEditForm
+ 0001:0000977C       BisDesignHbookApplicationEditFm.Finalization
+ 0001:00009720       BisDesignHbookApplicationEditFm.TBisDesignHbookApplicationDeleteFormIface.Create
+ 0001:000094EC       BisDesignHbookApplicationEditFm.TBisDesignHbookApplicationEditFormIface.Create
+ 0001:00009668       BisDesignHbookApplicationEditFm.TBisDesignHbookApplicationInsertFormIface.Create
+ 0001:000096C4       BisDesignHbookApplicationEditFm.TBisDesignHbookApplicationUpdateFormIface.Create
+ 0004:000000C4       BisDesignHbookApplicationInterfaceEditFm..6
+ 0001:0000FD58       BisDesignHbookApplicationInterfaceEditFm..TBisDesignHbookApplicationInterfaceDeleteFormIface
+ 0001:0000F5AC       BisDesignHbookApplicationInterfaceEditFm..TBisDesignHbookApplicationInterfaceEditForm
+ 0001:0000F90C       BisDesignHbookApplicationInterfaceEditFm..TBisDesignHbookApplicationInterfaceEditFormIface
+ 0001:0000FA78       BisDesignHbookApplicationInterfaceEditFm..TBisDesignHbookApplicationInterfaceInsertFormIface
+ 0001:0000FBE8       BisDesignHbookApplicationInterfaceEditFm..TBisDesignHbookApplicationInterfaceUpdateFormIface
+ 0002:000005D4       BisDesignHbookApplicationInterfaceEditFm.BisDesignHbookApplicationInterfaceEditFm
+ 0004:000000C0       BisDesignHbookApplicationInterfaceEditFm.BisDesignHbookApplicationInterfaceEditForm
+ 0001:00010380       BisDesignHbookApplicationInterfaceEditFm.Finalization
+ 0001:000102E4       BisDesignHbookApplicationInterfaceEditFm.TBisDesignHbookApplicationInterfaceDeleteFormIface.Create
+ 0001:00010348       BisDesignHbookApplicationInterfaceEditFm.TBisDesignHbookApplicationInterfaceEditForm.Execute
+ 0001:0000FEC8       BisDesignHbookApplicationInterfaceEditFm.TBisDesignHbookApplicationInterfaceEditFormIface.Create
+ 0001:0001021C       BisDesignHbookApplicationInterfaceEditFm.TBisDesignHbookApplicationInterfaceInsertFormIface.Create
+ 0001:00010280       BisDesignHbookApplicationInterfaceEditFm.TBisDesignHbookApplicationInterfaceUpdateFormIface.Create
+ 0004:000000CC       BisDesignHbookApplicationInterfacesFm..3
+ 0001:000103B0       BisDesignHbookApplicationInterfacesFm..TBisDesignHbookApplicationInterfacesForm
+ 0001:000105CC       BisDesignHbookApplicationInterfacesFm..TBisDesignHbookApplicationInterfacesFormIface
+ 0004:000000C8       BisDesignHbookApplicationInterfacesFm.BiDesignHbookApplicationInterfacesForm
+ 0002:000005DC       BisDesignHbookApplicationInterfacesFm.BisDesignHbookApplicationInterfacesFm
+ 0001:000109BC       BisDesignHbookApplicationInterfacesFm.Finalization
+ 0001:00010730       BisDesignHbookApplicationInterfacesFm.TBisDesignHbookApplicationInterfacesFormIface.Create
+ 0004:00000074       BisDesignHbookApplicationsFm..3
+ 0001:000097AC       BisDesignHbookApplicationsFm..TBisDesignHbookApplicationsForm
+ 0001:000099AC       BisDesignHbookApplicationsFm..TBisDesignHbookApplicationsFormIface
+ 0002:00000584       BisDesignHbookApplicationsFm.BisDesignHbookApplicationsFm
+ 0004:00000070       BisDesignHbookApplicationsFm.BisDesignHbookApplicationsForm
+ 0001:00009C60       BisDesignHbookApplicationsFm.Finalization
+ 0001:00009AF4       BisDesignHbookApplicationsFm.TBisDesignHbookApplicationsFormIface.Create
+ 0004:00000128       BisDesignHbookConstEditFm..6
+ 0001:0001CDC8       BisDesignHbookConstEditFm..TBisDesignHbookConstDeleteFormIface
+ 0001:0001C77C       BisDesignHbookConstEditFm..TBisDesignHbookConstEditForm
+ 0001:0001CA08       BisDesignHbookConstEditFm..TBisDesignHbookConstEditFormIface
+ 0001:0001CB48       BisDesignHbookConstEditFm..TBisDesignHbookConstInsertFormIface
+ 0001:0001CC88       BisDesignHbookConstEditFm..TBisDesignHbookConstUpdateFormIface
+ 0002:0000063C       BisDesignHbookConstEditFm.BisDesignHbookConstEditFm
+ 0004:00000124       BisDesignHbookConstEditFm.BisDesignHbookConstEditForm
+ 0001:0001D174       BisDesignHbookConstEditFm.Finalization
+ 0001:0001D120       BisDesignHbookConstEditFm.TBisDesignHbookConstDeleteFormIface.Create
+ 0001:0001CF08       BisDesignHbookConstEditFm.TBisDesignHbookConstEditFormIface.Create
+ 0001:0001D078       BisDesignHbookConstEditFm.TBisDesignHbookConstInsertFormIface.Create
+ 0001:0001D0CC       BisDesignHbookConstEditFm.TBisDesignHbookConstUpdateFormIface.Create
+ 0004:00000130       BisDesignHbookConstsFm..3
+ 0001:0001D1A4       BisDesignHbookConstsFm..TBisDesignHbookConstsForm
+ 0001:0001D394       BisDesignHbookConstsFm..TBisDesignHbookConstsFormIface
+ 0002:00000644       BisDesignHbookConstsFm.BisDesignHbookConstsFm
+ 0004:0000012C       BisDesignHbookConstsFm.BisDesignHbookConstsForm
+ 0001:0001D648       BisDesignHbookConstsFm.Finalization
+ 0001:0001D610       BisDesignHbookConstsFm.TBisDesignHbookConstsForm.Create
+ 0001:0001D4C8       BisDesignHbookConstsFm.TBisDesignHbookConstsFormIface.Create
+ 0004:00000118       BisDesignHbookDocumentEditFm..6
+ 0001:0001B170       BisDesignHbookDocumentEditFm..TBisDesignHbookDocumentDeleteFormIface
+ 0001:0001A9F4       BisDesignHbookDocumentEditFm..TBisDesignHbookDocumentEditForm
+ 0001:0001AD90       BisDesignHbookDocumentEditFm..TBisDesignHbookDocumentEditFormIface
+ 0001:0001AED8       BisDesignHbookDocumentEditFm..TBisDesignHbookDocumentInsertFormIface
+ 0001:0001B024       BisDesignHbookDocumentEditFm..TBisDesignHbookDocumentUpdateFormIface
+ 0002:0000062C       BisDesignHbookDocumentEditFm.BisDesignHbookDocumentEditFm
+ 0004:00000114       BisDesignHbookDocumentEditFm.BisDesignHbookDocumentEditForm
+ 0001:0001C240       BisDesignHbookDocumentEditFm.Finalization
+ 0001:0001B624       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentDeleteFormIface.Create
+ 0001:0001B6DC       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.BeforeShow
+ 0001:0001C144       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.ButtonClearClick
+ 0001:0001BECC       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.ButtonLoadClick
+ 0001:0001C020       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.ButtonSaveClick
+ 0001:0001B92C       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.ChangeParam
+ 0001:0001C178       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.CheckParam
+ 0001:0001B67C       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.Create
+ 0001:0001B6B4       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.Destroy
+ 0001:0001B830       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.EditDocumentChange
+ 0001:0001BE1C       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.GetOleClass
+ 0001:0001B2BC       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditFormIface.Create
+ 0001:0001B574       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentInsertFormIface.Create
+ 0001:0001B5CC       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentUpdateFormIface.Create
+ 0004:00000120       BisDesignHbookDocumentsFm..3
+ 0001:0001C270       BisDesignHbookDocumentsFm..TBisDesignHbookDocumentsForm
+ 0001:0001C468       BisDesignHbookDocumentsFm..TBisDesignHbookDocumentsFormIface
+ 0002:00000634       BisDesignHbookDocumentsFm.BisDesignHbookDocumentsFm
+ 0004:0000011C       BisDesignHbookDocumentsFm.BisDesignHbookDocumentsForm
+ 0001:0001C74C       BisDesignHbookDocumentsFm.Finalization
+ 0001:0001C714       BisDesignHbookDocumentsFm.TBisDesignHbookDocumentsForm.Create
+ 0001:0001C5A8       BisDesignHbookDocumentsFm.TBisDesignHbookDocumentsFormIface.Create
+ 0004:00000034       BisDesignHbookFirmEditFm..7
+ 0001:00003540       BisDesignHbookFirmEditFm..TBisDesignHbookFirmDeleteFormIface
+ 0001:00002A80       BisDesignHbookFirmEditFm..TBisDesignHbookFirmEditForm
+ 0001:0000303C       BisDesignHbookFirmEditFm..TBisDesignHbookFirmEditFormIface
+ 0001:000032B8       BisDesignHbookFirmEditFm..TBisDesignHbookFirmInsertChildFormIface
+ 0001:00003178       BisDesignHbookFirmEditFm..TBisDesignHbookFirmInsertFormIface
+ 0001:00003400       BisDesignHbookFirmEditFm..TBisDesignHbookFirmUpdateFormIface
+ 0002:00000544       BisDesignHbookFirmEditFm.BisDesignHbookFirmEditFm
+ 0004:00000030       BisDesignHbookFirmEditFm.BisDesignHbookFirmEditForm
+ 0001:000044A0       BisDesignHbookFirmEditFm.Finalization
+ 0001:0000438C       BisDesignHbookFirmEditFm.TBisDesignHbookFirmDeleteFormIface.Create
+ 0001:000043E0       BisDesignHbookFirmEditFm.TBisDesignHbookFirmEditForm.EditSmallNameExit
+ 0001:00003680       BisDesignHbookFirmEditFm.TBisDesignHbookFirmEditFormIface.Create
+ 0001:00004160       BisDesignHbookFirmEditFm.TBisDesignHbookFirmInsertChildFormIface.Create
+ 0001:000041E8       BisDesignHbookFirmEditFm.TBisDesignHbookFirmInsertChildFormIface.CreateForm
+ 0001:00003FAC       BisDesignHbookFirmEditFm.TBisDesignHbookFirmInsertFormIface.Create
+ 0001:00004000       BisDesignHbookFirmEditFm.TBisDesignHbookFirmInsertFormIface.CreateForm
+ 0001:00004338       BisDesignHbookFirmEditFm.TBisDesignHbookFirmUpdateFormIface.Create
+ 0004:0000003C       BisDesignHbookFirmsFm..3
+ 0001:000044D0       BisDesignHbookFirmsFm..TBisDesignHbookFirmsForm
+ 0001:000046BC       BisDesignHbookFirmsFm..TBisDesignHbookFirmsFormIface
+ 0002:0000054C       BisDesignHbookFirmsFm.BisDesignHbookFirmsFm
+ 0004:00000038       BisDesignHbookFirmsFm.BisDesignHbookFirmsForm
+ 0001:00004C20       BisDesignHbookFirmsFm.Finalization
+ 0001:000047F0       BisDesignHbookFirmsFm.TBisDesignHbookFirmsFormIface.Create
+ 0004:00000024       BisDesignHbookFirmTypeEditFm..6
+ 0001:00002168       BisDesignHbookFirmTypeEditFm..TBisDesignHbookFirmTypeDeleteFormIface
+ 0001:00001AEC       BisDesignHbookFirmTypeEditFm..TBisDesignHbookFirmTypeEditForm
+ 0001:00001D88       BisDesignHbookFirmTypeEditFm..TBisDesignHbookFirmTypeEditFormIface
+ 0001:00001ED0       BisDesignHbookFirmTypeEditFm..TBisDesignHbookFirmTypeInsertFormIface
+ 0001:0000201C       BisDesignHbookFirmTypeEditFm..TBisDesignHbookFirmTypeUpdateFormIface
+ 0002:00000534       BisDesignHbookFirmTypeEditFm.BisDesignHbookFirmTypeEditFm
+ 0004:00000020       BisDesignHbookFirmTypeEditFm.BisDesignHbookFirmTypeEditForm
+ 0001:00002558       BisDesignHbookFirmTypeEditFm.Finalization
+ 0001:00002500       BisDesignHbookFirmTypeEditFm.TBisDesignHbookFirmTypeDeleteFormIface.Create
+ 0001:000022B4       BisDesignHbookFirmTypeEditFm.TBisDesignHbookFirmTypeEditFormIface.Create
+ 0001:00002450       BisDesignHbookFirmTypeEditFm.TBisDesignHbookFirmTypeInsertFormIface.Create
+ 0001:000024A8       BisDesignHbookFirmTypeEditFm.TBisDesignHbookFirmTypeUpdateFormIface.Create
+ 0004:0000002C       BisDesignHbookFirmTypesFm..3
+ 0001:00002588       BisDesignHbookFirmTypesFm..TBisDesignHbookFirmTypesForm
+ 0001:00002780       BisDesignHbookFirmTypesFm..TBisDesignHbookFirmTypesFormIface
+ 0002:0000053C       BisDesignHbookFirmTypesFm.BisDesignHbookFirmTypesFm
+ 0004:00000028       BisDesignHbookFirmTypesFm.BisDesignHbookFirmTypesForm
+ 0001:00002A30       BisDesignHbookFirmTypesFm.Finalization
+ 0001:000028C0       BisDesignHbookFirmTypesFm.TBisDesignHbookFirmTypesFormIface.Create
+ 0004:0000007C       BisDesignHbookInterfaceEditFm..6
+ 0001:0000A3AC       BisDesignHbookInterfaceEditFm..TBisDesignHbookInterfaceDeleteFormIface
+ 0001:00009C90       BisDesignHbookInterfaceEditFm..TBisDesignHbookInterfaceEditForm
+ 0001:00009FC8       BisDesignHbookInterfaceEditFm..TBisDesignHbookInterfaceEditFormIface
+ 0001:0000A114       BisDesignHbookInterfaceEditFm..TBisDesignHbookInterfaceInsertFormIface
+ 0001:0000A260       BisDesignHbookInterfaceEditFm..TBisDesignHbookInterfaceUpdateFormIface
+ 0002:0000058C       BisDesignHbookInterfaceEditFm.BisDesignHbookInterfaceEditFm
+ 0004:00000078       BisDesignHbookInterfaceEditFm.BisDesignHbookInterfaceEditForm
+ 0001:0000ADC0       BisDesignHbookInterfaceEditFm.Finalization
+ 0001:0000A4F8       BisDesignHbookInterfaceEditFm.GetInterfaceTypeByIndex
+ 0001:0000A8BC       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceDeleteFormIface.Create
+ 0001:0000AA44       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceEditForm.ChangeParam
+ 0001:0000AC54       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceEditForm.CheckParams
+ 0001:0000A914       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceEditForm.Create
+ 0001:0000AD88       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceEditForm.Execute
+ 0001:0000A59C       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceEditFormIface.Create
+ 0001:0000A80C       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceInsertFormIface.Create
+ 0001:0000A864       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceUpdateFormIface.Create
+ 0004:00000084       BisDesignHbookInterfacesFm..3
+ 0001:0000ADF0       BisDesignHbookInterfacesFm..TBisDesignHbookInterfacesForm
+ 0001:0000B058       BisDesignHbookInterfacesFm..TBisDesignHbookInterfacesFormIface
+ 0002:00000594       BisDesignHbookInterfacesFm.BisDesignHbookInterfacesFm
+ 0004:00000080       BisDesignHbookInterfacesFm.BisDesignHbookInterfacesForm
+ 0001:0000B494       BisDesignHbookInterfacesFm.Finalization
+ 0001:0000B43C       BisDesignHbookInterfacesFm.TBisDesignHbookInterfacesForm.Create
+ 0001:0000B198       BisDesignHbookInterfacesFm.TBisDesignHbookInterfacesFormIface.Create
+ 0001:0000B394       BisDesignHbookInterfacesFm.TBisDesignHbookInterfacesFormIface.GetInterfaceTypeName
+ 0004:000000D4       BisDesignHbookMenuEditFm..7
+ 0001:000114B4       BisDesignHbookMenuEditFm..TBisApplicationInfo
+ 0001:00011374       BisDesignHbookMenuEditFm..TBisDesignHbookMenuDeleteFormIface
+ 0001:000109EC       BisDesignHbookMenuEditFm..TBisDesignHbookMenuEditForm
+ 0001:00010E70       BisDesignHbookMenuEditFm..TBisDesignHbookMenuEditFormIface
+ 0001:000110EC       BisDesignHbookMenuEditFm..TBisDesignHbookMenuInsertChildFormIface
+ 0001:00010FAC       BisDesignHbookMenuEditFm..TBisDesignHbookMenuInsertFormIface
+ 0001:00011234       BisDesignHbookMenuEditFm..TBisDesignHbookMenuUpdateFormIface
+ 0002:000005E4       BisDesignHbookMenuEditFm.BisDesignHbookMenuEditFm
+ 0004:000000D0       BisDesignHbookMenuEditFm.BisDesignHbookMenuEditForm
+ 0001:00012ACC       BisDesignHbookMenuEditFm.Finalization
+ 0001:00011DCC       BisDesignHbookMenuEditFm.TBisDesignHbookMenuDeleteFormIface.Create
+ 0001:00012078       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.BeforeShow
+ 0001:000120B4       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.ButtonClearClick
+ 0001:000120F0       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.ButtonLoadClick
+ 0001:00012184       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.ButtonSaveClick
+ 0001:00011E70       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.ChangeParam
+ 0001:00012048       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.ChangesArePresent
+ 0001:00012068       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.CheckListBoxApplicationsClickCheck
+ 0001:00011E20       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.Create
+ 0001:00012680       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.DeleteApplicationMenus
+ 0001:00012A24       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.Execute
+ 0001:00012870       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.InsertApplicationMenus
+ 0001:00012434       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.RefreshApplicationMenus
+ 0001:0001223C       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.RefreshApplications
+ 0001:00011528       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditFormIface.Create
+ 0001:0001188C       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditFormIface.PictureIdChange
+ 0001:00011BBC       BisDesignHbookMenuEditFm.TBisDesignHbookMenuInsertChildFormIface.Create
+ 0001:00011C3C       BisDesignHbookMenuEditFm.TBisDesignHbookMenuInsertChildFormIface.CreateForm
+ 0001:00011A1C       BisDesignHbookMenuEditFm.TBisDesignHbookMenuInsertFormIface.Create
+ 0001:00011A70       BisDesignHbookMenuEditFm.TBisDesignHbookMenuInsertFormIface.CreateForm
+ 0001:00011D78       BisDesignHbookMenuEditFm.TBisDesignHbookMenuUpdateFormIface.Create
+ 0004:000000DC       BisDesignHbookMenusFm..3
+ 0001:00012AFC       BisDesignHbookMenusFm..TBisDesignHbookMenusForm
+ 0001:00012CE8       BisDesignHbookMenusFm..TBisDesignHbookMenusFormIface
+ 0002:000005EC       BisDesignHbookMenusFm.BisDesignHbookMenusFm
+ 0004:000000D8       BisDesignHbookMenusFm.BisDesignHbookMenusForm
+ 0001:00013070       BisDesignHbookMenusFm.Finalization
+ 0001:00012E1C       BisDesignHbookMenusFm.TBisDesignHbookMenusFormIface.Create
+ 0004:000000B4       BisDesignHbookPermissionEditFm..6
+ 0001:0000E870       BisDesignHbookPermissionEditFm..TBisDesignHbookPermissionDeleteFormIface
+ 0001:0000E160       BisDesignHbookPermissionEditFm..TBisDesignHbookPermissionEditForm
+ 0001:0000E47C       BisDesignHbookPermissionEditFm..TBisDesignHbookPermissionEditFormIface
+ 0001:0000E5C8       BisDesignHbookPermissionEditFm..TBisDesignHbookPermissionInsertFormIface
+ 0001:0000E71C       BisDesignHbookPermissionEditFm..TBisDesignHbookPermissionUpdateFormIface
+ 0002:000005C4       BisDesignHbookPermissionEditFm.BisDesignHbookPermissionEditFm
+ 0004:000000B0       BisDesignHbookPermissionEditFm.BisDesignHbookPermissionEditForm
+ 0001:0000EFDC       BisDesignHbookPermissionEditFm.Finalization
+ 0001:0000ED1C       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionDeleteFormIface.Create
+ 0001:0000EDB0       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionEditForm.ChangeParam
+ 0001:0000ED78       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionEditForm.Execute
+ 0001:0000E9C4       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionEditFormIface.Create
+ 0001:0000EC64       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionInsertFormIface.Create
+ 0001:0000ECC0       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionUpdateFormIface.Create
+ 0004:000000BC       BisDesignHbookPermissionsFm..3
+ 0001:0000F00C       BisDesignHbookPermissionsFm..TBisDesignHbookPermissionsForm
+ 0001:0000F208       BisDesignHbookPermissionsFm..TBisDesignHbookPermissionsFormIface
+ 0004:000000B8       BisDesignHbookPermissionsFm.BiDesignHbookPermissionsForm
+ 0002:000005CC       BisDesignHbookPermissionsFm.BisDesignHbookPermissionsFm
+ 0001:0000F57C       BisDesignHbookPermissionsFm.Finalization
+ 0001:0000F34C       BisDesignHbookPermissionsFm.TBisDesignHbookPermissionsFormIface.Create
+ 0004:0000009C       BisDesignHbookProfileEditFm..6
+ 0001:0000CB68       BisDesignHbookProfileEditFm..TBisDesignHbookProfileDeleteFormIface
+ 0001:0000C4D0       BisDesignHbookProfileEditFm..TBisDesignHbookProfileEditForm
+ 0001:0000C794       BisDesignHbookProfileEditFm..TBisDesignHbookProfileEditFormIface
+ 0001:0000C8D8       BisDesignHbookProfileEditFm..TBisDesignHbookProfileInsertFormIface
+ 0001:0000CA20       BisDesignHbookProfileEditFm..TBisDesignHbookProfileUpdateFormIface
+ 0002:000005AC       BisDesignHbookProfileEditFm.BisDesignHbookProfileEditFm
+ 0004:00000098       BisDesignHbookProfileEditFm.BisDesignHbookProfileEditForm
+ 0001:0000CFF4       BisDesignHbookProfileEditFm.Finalization
+ 0001:0000CF9C       BisDesignHbookProfileEditFm.TBisDesignHbookProfileDeleteFormIface.Create
+ 0001:0000CCB0       BisDesignHbookProfileEditFm.TBisDesignHbookProfileEditFormIface.Create
+ 0001:0000CEEC       BisDesignHbookProfileEditFm.TBisDesignHbookProfileInsertFormIface.Create
+ 0001:0000CF44       BisDesignHbookProfileEditFm.TBisDesignHbookProfileUpdateFormIface.Create
+ 0004:000000A4       BisDesignHbookProfilesFm..3
+ 0001:0000D024       BisDesignHbookProfilesFm..TBisDesignHbookProfilesForm
+ 0001:0000D218       BisDesignHbookProfilesFm..TBisDesignHbookProfilesFormIface
+ 0004:000000A0       BisDesignHbookProfilesFm.BiDesignHbookProfilesForm
+ 0002:000005B4       BisDesignHbookProfilesFm.BisDesignHbookProfilesFm
+ 0001:0000D4F0       BisDesignHbookProfilesFm.Finalization
+ 0001:0000D354       BisDesignHbookProfilesFm.TBisDesignHbookProfilesFormIface.Create
+ 0004:000000E8       BisDesignHbookReportEditFm..6
+ 0001:000149F4       BisDesignHbookReportEditFm..TBisDesignHbookReportDeleteFormIface
+ 0001:0001426C       BisDesignHbookReportEditFm..TBisDesignHbookReportEditForm
+ 0001:00014624       BisDesignHbookReportEditFm..TBisDesignHbookReportEditFormIface
+ 0001:00014764       BisDesignHbookReportEditFm..TBisDesignHbookReportInsertFormIface
+ 0001:000148AC       BisDesignHbookReportEditFm..TBisDesignHbookReportUpdateFormIface
+ 0002:000005FC       BisDesignHbookReportEditFm.BisDesignHbookReportEditFm
+ 0004:000000E4       BisDesignHbookReportEditFm.BisDesignHbookReportEditForm
+ 0001:00015F38       BisDesignHbookReportEditFm.Finalization
+ 0001:00014B3C       BisDesignHbookReportEditFm.GetReportTypeByIndex
+ 0001:00015090       BisDesignHbookReportEditFm.TBisDesignHbookReportDeleteFormIface.Create
+ 0001:000151BC       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.BeforeShow
+ 0001:00015AC0       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.ButtonClearClick
+ 0001:00015BC0       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.ButtonEditorClick
+ 0001:00015850       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.ButtonLoadClick
+ 0001:00015948       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.ButtonSaveClick
+ 0001:00015458       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.ChangeParam
+ 0001:00015AFC       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.CheckParam
+ 0001:000150E8       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.Create
+ 0001:0001518C       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.Destroy
+ 0001:00015BE8       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.EditorCloseFree
+ 0001:00015BF4       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.EditorSaveChanges
+ 0001:00015360       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.EditReportChange
+ 0001:00015BC8       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.GetReportEditorClass
+ 0001:00015D4C       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.RunEditor
+ 0001:00014B74       BisDesignHbookReportEditFm.TBisDesignHbookReportEditFormIface.Create
+ 0001:00014E38       BisDesignHbookReportEditFm.TBisDesignHbookReportEditFormIface.ReportIdChange
+ 0001:00014FE0       BisDesignHbookReportEditFm.TBisDesignHbookReportInsertFormIface.Create
+ 0001:00015038       BisDesignHbookReportEditFm.TBisDesignHbookReportUpdateFormIface.Create
+ 0004:000000F0       BisDesignHbookReportsFm..3
+ 0001:00015F68       BisDesignHbookReportsFm..TBisDesignHbookReportsForm
+ 0001:00016158       BisDesignHbookReportsFm..TBisDesignHbookReportsFormIface
+ 0002:00000604       BisDesignHbookReportsFm.BisDesignHbookReportsFm
+ 0004:000000EC       BisDesignHbookReportsFm.BisDesignHbookReportsForm
+ 0001:00016588       BisDesignHbookReportsFm.Finalization
+ 0001:0001653C       BisDesignHbookReportsFm.TBisDesignHbookReportsForm.Create
+ 0001:00016574       BisDesignHbookReportsFm.TBisDesignHbookReportsForm.GetDataFrame
+ 0001:00016580       BisDesignHbookReportsFm.TBisDesignHbookReportsForm.GetDataFrameClass
+ 0001:0001652C       BisDesignHbookReportsFm.TBisDesignHbookReportsFormIface.CanEditor
+ 0001:00016290       BisDesignHbookReportsFm.TBisDesignHbookReportsFormIface.Create
+ 0001:000164DC       BisDesignHbookReportsFm.TBisDesignHbookReportsFormIface.CreateForm
+ 0001:000164D0       BisDesignHbookReportsFm.TBisDesignHbookReportsFormIface.GetLastForm
+ 0001:00016430       BisDesignHbookReportsFm.TBisDesignHbookReportsFormIface.GetReportTypeName
+ 0004:000000E0       BisDesignHbookReportsFrm..4
+ 0001:00013240       BisDesignHbookReportsFrm..TBisDesignHbookReportsFrame
+ 0001:000130A0       BisDesignHbookReportsFrm..TBisDesignHbookReportsFrameEditors
+ 0001:00013170       BisDesignHbookReportsFrm..TBisDesignHbookReportsFrameReports
+ 0002:000005F4       BisDesignHbookReportsFrm.BisDesignHbookReportsFrm
+ 0001:0001423C       BisDesignHbookReportsFrm.Finalization
+ 0001:000137F4       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.ActionEditorExecute
+ 0001:000137B4       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.ActionEditorUpdate
+ 0001:000137D0       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.ActionPreviewExecute
+ 0001:000137D8       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.ActionPreviewUpdate
+ 0001:000137FC       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.CanEditor
+ 0001:00014070       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.CanPreview
+ 0001:0001371C       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.Create
+ 0001:00013778       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.Destroy
+ 0001:00013CDC       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.Editor
+ 0001:00013C08       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.EditorPreview
+ 0001:0001391C       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.EditorSaveChanges
+ 0001:000138B4       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.GetReportClass
+ 0001:0001384C       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.GetReportEditorClass
+ 0001:000140C0       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.Preview
+ 0001:000135A8       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrameEditors.FindByClass
+ 0001:00013650       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrameReports.FindByClass
+ 0004:00000054       BisDesignHbookRoleEditFm..6
+ 0001:00007D1C       BisDesignHbookRoleEditFm..TBisDesignHbookRoleDeleteFormIface
+ 0001:000076F0       BisDesignHbookRoleEditFm..TBisDesignHbookRoleEditForm
+ 0001:00007960       BisDesignHbookRoleEditFm..TBisDesignHbookRoleEditFormIface
+ 0001:00007A9C       BisDesignHbookRoleEditFm..TBisDesignHbookRoleInsertFormIface
+ 0001:00007BDC       BisDesignHbookRoleEditFm..TBisDesignHbookRoleUpdateFormIface
+ 0002:00000564       BisDesignHbookRoleEditFm.BisDesignHbookRoleEditFm
+ 0004:00000050       BisDesignHbookRoleEditFm.BisDesignHbookRoleEditForm
+ 0001:000081DC       BisDesignHbookRoleEditFm.Finalization
+ 0001:00008184       BisDesignHbookRoleEditFm.TBisDesignHbookRoleDeleteFormIface.Create
+ 0001:00007E5C       BisDesignHbookRoleEditFm.TBisDesignHbookRoleEditFormIface.Create
+ 0001:000080D4       BisDesignHbookRoleEditFm.TBisDesignHbookRoleInsertFormIface.Create
+ 0001:0000812C       BisDesignHbookRoleEditFm.TBisDesignHbookRoleUpdateFormIface.Create
+ 0004:00000064       BisDesignHbookRolesAndAccountsFm..3
+ 0001:000087B4       BisDesignHbookRolesAndAccountsFm..TBisDesignHbookRolesAndAccountsForm
+ 0001:000089C0       BisDesignHbookRolesAndAccountsFm..TBisDesignHbookRolesAndAccountsFormIface
+ 0002:00000574       BisDesignHbookRolesAndAccountsFm.BisDesignHbookRolesAndAccountsFm
+ 0004:00000060       BisDesignHbookRolesAndAccountsFm.BisDesignHbookRolesAndAccountsForm
+ 0001:00008CDC       BisDesignHbookRolesAndAccountsFm.Finalization
+ 0001:00008C48       BisDesignHbookRolesAndAccountsFm.TBisDesignHbookRolesAndAccountsForm.Create
+ 0001:00008B14       BisDesignHbookRolesAndAccountsFm.TBisDesignHbookRolesAndAccountsFormIface.Create
+ 0004:0000005C       BisDesignHbookRolesFm..3
+ 0001:0000820C       BisDesignHbookRolesFm..TBisDesignHbookRolesForm
+ 0001:000083F8       BisDesignHbookRolesFm..TBisDesignHbookRolesFormIface
+ 0002:0000056C       BisDesignHbookRolesFm.BisDesignHbookRolesFm
+ 0004:00000058       BisDesignHbookRolesFm.BisDesignHbookRolesForm
+ 0001:00008784       BisDesignHbookRolesFm.Finalization
+ 0001:0000874C       BisDesignHbookRolesFm.TBisDesignHbookRolesForm.Create
+ 0001:0000852C       BisDesignHbookRolesFm.TBisDesignHbookRolesFormIface.Create
+ 0004:000000AC       BisDesignHbookSessionsFm..5
+ 0001:0000D998       BisDesignHbookSessionsFm..TBisDesignHbookSessionDeleteFormIface
+ 0001:0000D520       BisDesignHbookSessionsFm..TBisDesignHbookSessionsForm
+ 0001:0000D714       BisDesignHbookSessionsFm..TBisDesignHbookSessionsFormIface
+ 0001:0000D850       BisDesignHbookSessionsFm..TBisDesignHbookSessionViewingFormIface
+ 0004:000000A8       BisDesignHbookSessionsFm.BiDesignHbookSessionsForm
+ 0002:000005BC       BisDesignHbookSessionsFm.BisDesignHbookSessionsFm
+ 0001:0000E130       BisDesignHbookSessionsFm.Finalization
+ 0001:0000DADC       BisDesignHbookSessionsFm.TBisDesignHbookSessionDeleteFormIface.Execute
+ 0001:0000E0B4       BisDesignHbookSessionsFm.TBisDesignHbookSessionsForm.Create
+ 0001:0000DE94       BisDesignHbookSessionsFm.TBisDesignHbookSessionsFormIface.Create
+ 0001:0000DC7C       BisDesignHbookSessionsFm.TBisDesignHbookSessionViewingFormIface.Execute
+ 0004:00000100       BisDesignImportFm..3
+ 0001:000179BC       BisDesignImportFm..TBisDesignImportForm
+ 0001:00017E8C       BisDesignImportFm..TBisDesignImportFormIface
+ 0002:00000614       BisDesignImportFm.BisDesignImportFm
+ 0004:000000FC       BisDesignImportFm.BisDesignImportForm
+ 0001:0001913C       BisDesignImportFm.Finalization
+ 0001:00019090       BisDesignImportFm.TBisDesignImportForm.ActionConnectionExecute
+ 0001:00018678       BisDesignImportFm.TBisDesignImportForm.ActionConnectionUpdate
+ 0001:000186E0       BisDesignImportFm.TBisDesignImportForm.ActionImportCurrentExecute
+ 0001:00018628       BisDesignImportFm.TBisDesignImportForm.ActionImportCurrentUpdate
+ 0001:00018A30       BisDesignImportFm.TBisDesignImportForm.ActionImportExecute
+ 0001:000185D8       BisDesignImportFm.TBisDesignImportForm.ActionImportUpdate
+ 0001:00018E50       BisDesignImportFm.TBisDesignImportForm.ActionLoadExecute
+ 0001:000186C8       BisDesignImportFm.TBisDesignImportForm.ActionLoadUpdate
+ 0001:00017FFC       BisDesignImportFm.TBisDesignImportForm.Create
+ 0001:0001836C       BisDesignImportFm.TBisDesignImportForm.DataSetNewRecord
+ 0001:00018330       BisDesignImportFm.TBisDesignImportForm.Destroy
+ 0001:00018F70       BisDesignImportFm.TBisDesignImportForm.GridDblClick
+ 0001:00018464       BisDesignImportFm.TBisDesignImportForm.RefreshConnections
+ 0001:00017FB0       BisDesignImportFm.TBisDesignImportFormIface.Create
+ 0004:00000108       BisDesignJournalActionEditFm..6
+ 0001:0001990C       BisDesignJournalActionEditFm..TBisDesignJournalActionDeleteFormIface
+ 0001:0001916C       BisDesignJournalActionEditFm..TBisDesignJournalActionEditForm
+ 0001:0001952C       BisDesignJournalActionEditFm..TBisDesignJournalActionEditFormIface
+ 0001:00019674       BisDesignJournalActionEditFm..TBisDesignJournalActionInsertFormIface
+ 0001:000197C0       BisDesignJournalActionEditFm..TBisDesignJournalActionUpdateFormIface
+ 0002:0000061C       BisDesignJournalActionEditFm.BisDesignJournalActionEditFm
+ 0004:00000104       BisDesignJournalActionEditFm.BisDesignJournalActionEditForm
+ 0001:0001A1C8       BisDesignJournalActionEditFm.Finalization
+ 0001:00019A58       BisDesignJournalActionEditFm.GetActionTypeByIndex
+ 0001:0001A00C       BisDesignJournalActionEditFm.TBisDesignJournalActionDeleteFormIface.Create
+ 0001:0001A140       BisDesignJournalActionEditFm.TBisDesignJournalActionEditForm.BeforeShow
+ 0001:0001A06C       BisDesignJournalActionEditFm.TBisDesignJournalActionEditForm.Create
+ 0001:00019ADC       BisDesignJournalActionEditFm.TBisDesignJournalActionEditFormIface.Create
+ 0001:00019F4C       BisDesignJournalActionEditFm.TBisDesignJournalActionInsertFormIface.Create
+ 0001:00019FAC       BisDesignJournalActionEditFm.TBisDesignJournalActionUpdateFormIface.Create
+ 0004:00000110       BisDesignJournalActionsFm..3
+ 0001:0001A1F8       BisDesignJournalActionsFm..TBisDesignJournalActionsForm
+ 0001:0001A458       BisDesignJournalActionsFm..TBisDesignJournalActionsFormIface
+ 0004:0000010C       BisDesignJournalActionsFm.BiDesignJournalActionsForm
+ 0002:00000624       BisDesignJournalActionsFm.BisDesignJournalActionsFm
+ 0001:0001A9C4       BisDesignJournalActionsFm.Finalization
+ 0001:0001A974       BisDesignJournalActionsFm.TBisDesignJournalActionsForm.Create
+ 0001:0001A598       BisDesignJournalActionsFm.TBisDesignJournalActionsFormIface.Create
+ 0001:0001A8D4       BisDesignJournalActionsFm.TBisDesignJournalActionsFormIface.GetActionTypeName
+ 0004:0000001C       BisDesignMainFm..3
+ 0001:00001348       BisDesignMainFm..TBisDesignMainForm
+ 0001:000015E4       BisDesignMainFm..TBisDesignMainFormIface
+ 0002:0000051C       BisDesignMainFm.BisDesignMainFm
+ 0004:00000018       BisDesignMainFm.BisDesignMainForm
+ 0001:000019A4       BisDesignMainFm.Finalization
+ 0003:0000002C       BisDesignMainFm.MainIface
+ 0001:00001740       BisDesignMainFm.TBisDesignMainForm.Create
+ 0001:0000177C       BisDesignMainFm.TBisDesignMainForm.RefreshMenus
+ 0001:00001700       BisDesignMainFm.TBisDesignMainFormIface.Create
+ 0001:00000268       SysInit.@InitPkg
+ 0001:000002CC       SysInit.@PackageLoad
+ 0001:000002D8       SysInit.@PackageUnload
+ 0001:00000158       SysInit.AllocTlsBuffer
+ 0001:00000214       SysInit.ExitProcessTLS
+ 0001:000001DC       SysInit.ExitThreadTLS
+ 0001:00000120       SysInit.FreeLibrary
+ 0001:00000164       SysInit.GetTlsSize
+ 0004:00000004       SysInit.HInstance
+ 0001:00000238       SysInit.InitializeModule
+ 0001:000001B0       SysInit.InitProcessTLS
+ 0001:0000016C       SysInit.InitThreadTLS
+ 0001:00000128       SysInit.LocalAlloc
+ 0001:00000130       SysInit.LocalFree
+ 0003:00000004       SysInit.Module
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0001:00000138       SysInit.TlsAlloc
+ 0004:00000008       SysInit.tlsBuffer
+ 0001:00000140       SysInit.TlsFree
+ 0001:00000148       SysInit.TlsGetValue
+ 0003:00000000       SysInit.TlsIndex
+ 0005:00000000       SysInit.TlsLast
+ 0003:0000001C       SysInit.TlsProc
+ 0001:00000150       SysInit.TlsSetValue
+ 0001:00000244       SysInit.UninitializeModule
+ 0004:0000000C       Windows..3
+ 0001:000003BC       Windows.CopyFile
+ 0001:000003CC       Windows.Finalization
+ 0001:000003C4       Windows.FreeLibrary
+ 0004:00000010       Windows.HtmlHelpModule
+ 0002:00000010       Windows.Windows
+
+
+  Address             Publics by Value
+
+ 0001:00000120       SysInit.FreeLibrary
+ 0001:00000128       SysInit.LocalAlloc
+ 0001:00000130       SysInit.LocalFree
+ 0001:00000138       SysInit.TlsAlloc
+ 0001:00000140       SysInit.TlsFree
+ 0001:00000148       SysInit.TlsGetValue
+ 0001:00000150       SysInit.TlsSetValue
+ 0001:00000158       SysInit.AllocTlsBuffer
+ 0001:00000164       SysInit.GetTlsSize
+ 0001:0000016C       SysInit.InitThreadTLS
+ 0001:000001B0       SysInit.InitProcessTLS
+ 0001:000001DC       SysInit.ExitThreadTLS
+ 0001:00000214       SysInit.ExitProcessTLS
+ 0001:00000238       SysInit.InitializeModule
+ 0001:00000244       SysInit.UninitializeModule
+ 0001:00000268       SysInit.@InitPkg
+ 0001:000002CC       SysInit.@PackageLoad
+ 0001:000002D8       SysInit.@PackageUnload
+ 0001:000003BC       Windows.CopyFile
+ 0001:000003C4       Windows.FreeLibrary
+ 0001:000003CC       Windows.Finalization
+ 0001:00001318       BisDesignConsts.Finalization
+ 0001:00001348       BisDesignMainFm..TBisDesignMainForm
+ 0001:000015E4       BisDesignMainFm..TBisDesignMainFormIface
+ 0001:00001700       BisDesignMainFm.TBisDesignMainFormIface.Create
+ 0001:00001740       BisDesignMainFm.TBisDesignMainForm.Create
+ 0001:0000177C       BisDesignMainFm.TBisDesignMainForm.RefreshMenus
+ 0001:000019A4       BisDesignMainFm.Finalization
+ 0001:00001AEC       BisDesignHbookFirmTypeEditFm..TBisDesignHbookFirmTypeEditForm
+ 0001:00001D88       BisDesignHbookFirmTypeEditFm..TBisDesignHbookFirmTypeEditFormIface
+ 0001:00001ED0       BisDesignHbookFirmTypeEditFm..TBisDesignHbookFirmTypeInsertFormIface
+ 0001:0000201C       BisDesignHbookFirmTypeEditFm..TBisDesignHbookFirmTypeUpdateFormIface
+ 0001:00002168       BisDesignHbookFirmTypeEditFm..TBisDesignHbookFirmTypeDeleteFormIface
+ 0001:000022B4       BisDesignHbookFirmTypeEditFm.TBisDesignHbookFirmTypeEditFormIface.Create
+ 0001:00002450       BisDesignHbookFirmTypeEditFm.TBisDesignHbookFirmTypeInsertFormIface.Create
+ 0001:000024A8       BisDesignHbookFirmTypeEditFm.TBisDesignHbookFirmTypeUpdateFormIface.Create
+ 0001:00002500       BisDesignHbookFirmTypeEditFm.TBisDesignHbookFirmTypeDeleteFormIface.Create
+ 0001:00002558       BisDesignHbookFirmTypeEditFm.Finalization
+ 0001:00002588       BisDesignHbookFirmTypesFm..TBisDesignHbookFirmTypesForm
+ 0001:00002780       BisDesignHbookFirmTypesFm..TBisDesignHbookFirmTypesFormIface
+ 0001:000028C0       BisDesignHbookFirmTypesFm.TBisDesignHbookFirmTypesFormIface.Create
+ 0001:00002A30       BisDesignHbookFirmTypesFm.Finalization
+ 0001:00002A80       BisDesignHbookFirmEditFm..TBisDesignHbookFirmEditForm
+ 0001:0000303C       BisDesignHbookFirmEditFm..TBisDesignHbookFirmEditFormIface
+ 0001:00003178       BisDesignHbookFirmEditFm..TBisDesignHbookFirmInsertFormIface
+ 0001:000032B8       BisDesignHbookFirmEditFm..TBisDesignHbookFirmInsertChildFormIface
+ 0001:00003400       BisDesignHbookFirmEditFm..TBisDesignHbookFirmUpdateFormIface
+ 0001:00003540       BisDesignHbookFirmEditFm..TBisDesignHbookFirmDeleteFormIface
+ 0001:00003680       BisDesignHbookFirmEditFm.TBisDesignHbookFirmEditFormIface.Create
+ 0001:00003FAC       BisDesignHbookFirmEditFm.TBisDesignHbookFirmInsertFormIface.Create
+ 0001:00004000       BisDesignHbookFirmEditFm.TBisDesignHbookFirmInsertFormIface.CreateForm
+ 0001:00004160       BisDesignHbookFirmEditFm.TBisDesignHbookFirmInsertChildFormIface.Create
+ 0001:000041E8       BisDesignHbookFirmEditFm.TBisDesignHbookFirmInsertChildFormIface.CreateForm
+ 0001:00004338       BisDesignHbookFirmEditFm.TBisDesignHbookFirmUpdateFormIface.Create
+ 0001:0000438C       BisDesignHbookFirmEditFm.TBisDesignHbookFirmDeleteFormIface.Create
+ 0001:000043E0       BisDesignHbookFirmEditFm.TBisDesignHbookFirmEditForm.EditSmallNameExit
+ 0001:000044A0       BisDesignHbookFirmEditFm.Finalization
+ 0001:000044D0       BisDesignHbookFirmsFm..TBisDesignHbookFirmsForm
+ 0001:000046BC       BisDesignHbookFirmsFm..TBisDesignHbookFirmsFormIface
+ 0001:000047F0       BisDesignHbookFirmsFm.TBisDesignHbookFirmsFormIface.Create
+ 0001:00004C20       BisDesignHbookFirmsFm.Finalization
+ 0001:00004C50       BisDesignHbookAccountEditFm..TBisDesignHbookAccountEditForm
+ 0001:000052B4       BisDesignHbookAccountEditFm..TBisDesignHbookAccountEditFormIface
+ 0001:000053F8       BisDesignHbookAccountEditFm..TBisDesignHbookAccountInsertFormIface
+ 0001:00005540       BisDesignHbookAccountEditFm..TBisDesignHbookAccountUpdateFormIface
+ 0001:00005688       BisDesignHbookAccountEditFm..TBisDesignHbookAccountDeleteFormIface
+ 0001:000057D0       BisDesignHbookAccountEditFm..TBisRoleInfo
+ 0001:0000583C       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditFormIface.Create
+ 0001:00005ED4       BisDesignHbookAccountEditFm.TBisDesignHbookAccountInsertFormIface.Create
+ 0001:00005F2C       BisDesignHbookAccountEditFm.TBisDesignHbookAccountUpdateFormIface.Create
+ 0001:00005F84       BisDesignHbookAccountEditFm.TBisDesignHbookAccountDeleteFormIface.Create
+ 0001:00005FDC       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.Create
+ 0001:00006054       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.BeforeShow
+ 0001:000061B4       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.ButtonPhotoClick
+ 0001:000061FC       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.ChangeParam
+ 0001:000063BC       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.ChangesArePresent
+ 0001:000063E4       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.CheckBoxProfileClick
+ 0001:000063EC       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.CheckListBoxRolesClickCheck
+ 0001:000063FC       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.DeleteAccountRoles
+ 0001:000065E0       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.InsertAccountRoles
+ 0001:0000678C       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.RefreshAccountRoles
+ 0001:000069C0       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.RefreshRoles
+ 0001:00006C18       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.InsertProfile
+ 0001:00006D90       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.MenuItemClearPhotoClick
+ 0001:00006DC0       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.MenuItemLoadPhotoClick
+ 0001:00006E44       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.MenuItemSavePhotoClick
+ 0001:00006EC8       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.PopupActionBarPhotoPopup
+ 0001:00006F24       BisDesignHbookAccountEditFm.TBisDesignHbookAccountEditForm.Execute
+ 0001:00006FD8       BisDesignHbookAccountEditFm.Finalization
+ 0001:00007008       BisDesignHbookAccountsFm..TBisDesignHbookAccountsForm
+ 0001:000071FC       BisDesignHbookAccountsFm..TBisDesignHbookAccountsFormIface
+ 0001:00007338       BisDesignHbookAccountsFm.TBisDesignHbookAccountsFormIface.Create
+ 0001:000076C0       BisDesignHbookAccountsFm.Finalization
+ 0001:000076F0       BisDesignHbookRoleEditFm..TBisDesignHbookRoleEditForm
+ 0001:00007960       BisDesignHbookRoleEditFm..TBisDesignHbookRoleEditFormIface
+ 0001:00007A9C       BisDesignHbookRoleEditFm..TBisDesignHbookRoleInsertFormIface
+ 0001:00007BDC       BisDesignHbookRoleEditFm..TBisDesignHbookRoleUpdateFormIface
+ 0001:00007D1C       BisDesignHbookRoleEditFm..TBisDesignHbookRoleDeleteFormIface
+ 0001:00007E5C       BisDesignHbookRoleEditFm.TBisDesignHbookRoleEditFormIface.Create
+ 0001:000080D4       BisDesignHbookRoleEditFm.TBisDesignHbookRoleInsertFormIface.Create
+ 0001:0000812C       BisDesignHbookRoleEditFm.TBisDesignHbookRoleUpdateFormIface.Create
+ 0001:00008184       BisDesignHbookRoleEditFm.TBisDesignHbookRoleDeleteFormIface.Create
+ 0001:000081DC       BisDesignHbookRoleEditFm.Finalization
+ 0001:0000820C       BisDesignHbookRolesFm..TBisDesignHbookRolesForm
+ 0001:000083F8       BisDesignHbookRolesFm..TBisDesignHbookRolesFormIface
+ 0001:0000852C       BisDesignHbookRolesFm.TBisDesignHbookRolesFormIface.Create
+ 0001:0000874C       BisDesignHbookRolesFm.TBisDesignHbookRolesForm.Create
+ 0001:00008784       BisDesignHbookRolesFm.Finalization
+ 0001:000087B4       BisDesignHbookRolesAndAccountsFm..TBisDesignHbookRolesAndAccountsForm
+ 0001:000089C0       BisDesignHbookRolesAndAccountsFm..TBisDesignHbookRolesAndAccountsFormIface
+ 0001:00008B14       BisDesignHbookRolesAndAccountsFm.TBisDesignHbookRolesAndAccountsFormIface.Create
+ 0001:00008C48       BisDesignHbookRolesAndAccountsFm.TBisDesignHbookRolesAndAccountsForm.Create
+ 0001:00008CDC       BisDesignHbookRolesAndAccountsFm.Finalization
+ 0001:00008D0C       BisDesignHbookApplicationEditFm..TBisDesignHbookApplicationEditForm
+ 0001:00008FA0       BisDesignHbookApplicationEditFm..TBisDesignHbookApplicationEditFormIface
+ 0001:000090F0       BisDesignHbookApplicationEditFm..TBisDesignHbookApplicationInsertFormIface
+ 0001:00009244       BisDesignHbookApplicationEditFm..TBisDesignHbookApplicationUpdateFormIface
+ 0001:00009398       BisDesignHbookApplicationEditFm..TBisDesignHbookApplicationDeleteFormIface
+ 0001:000094EC       BisDesignHbookApplicationEditFm.TBisDesignHbookApplicationEditFormIface.Create
+ 0001:00009668       BisDesignHbookApplicationEditFm.TBisDesignHbookApplicationInsertFormIface.Create
+ 0001:000096C4       BisDesignHbookApplicationEditFm.TBisDesignHbookApplicationUpdateFormIface.Create
+ 0001:00009720       BisDesignHbookApplicationEditFm.TBisDesignHbookApplicationDeleteFormIface.Create
+ 0001:0000977C       BisDesignHbookApplicationEditFm.Finalization
+ 0001:000097AC       BisDesignHbookApplicationsFm..TBisDesignHbookApplicationsForm
+ 0001:000099AC       BisDesignHbookApplicationsFm..TBisDesignHbookApplicationsFormIface
+ 0001:00009AF4       BisDesignHbookApplicationsFm.TBisDesignHbookApplicationsFormIface.Create
+ 0001:00009C60       BisDesignHbookApplicationsFm.Finalization
+ 0001:00009C90       BisDesignHbookInterfaceEditFm..TBisDesignHbookInterfaceEditForm
+ 0001:00009FC8       BisDesignHbookInterfaceEditFm..TBisDesignHbookInterfaceEditFormIface
+ 0001:0000A114       BisDesignHbookInterfaceEditFm..TBisDesignHbookInterfaceInsertFormIface
+ 0001:0000A260       BisDesignHbookInterfaceEditFm..TBisDesignHbookInterfaceUpdateFormIface
+ 0001:0000A3AC       BisDesignHbookInterfaceEditFm..TBisDesignHbookInterfaceDeleteFormIface
+ 0001:0000A4F8       BisDesignHbookInterfaceEditFm.GetInterfaceTypeByIndex
+ 0001:0000A59C       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceEditFormIface.Create
+ 0001:0000A80C       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceInsertFormIface.Create
+ 0001:0000A864       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceUpdateFormIface.Create
+ 0001:0000A8BC       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceDeleteFormIface.Create
+ 0001:0000A914       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceEditForm.Create
+ 0001:0000AA44       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceEditForm.ChangeParam
+ 0001:0000AC54       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceEditForm.CheckParams
+ 0001:0000AD88       BisDesignHbookInterfaceEditFm.TBisDesignHbookInterfaceEditForm.Execute
+ 0001:0000ADC0       BisDesignHbookInterfaceEditFm.Finalization
+ 0001:0000ADF0       BisDesignHbookInterfacesFm..TBisDesignHbookInterfacesForm
+ 0001:0000B058       BisDesignHbookInterfacesFm..TBisDesignHbookInterfacesFormIface
+ 0001:0000B198       BisDesignHbookInterfacesFm.TBisDesignHbookInterfacesFormIface.Create
+ 0001:0000B394       BisDesignHbookInterfacesFm.TBisDesignHbookInterfacesFormIface.GetInterfaceTypeName
+ 0001:0000B43C       BisDesignHbookInterfacesFm.TBisDesignHbookInterfacesForm.Create
+ 0001:0000B494       BisDesignHbookInterfacesFm.Finalization
+ 0001:0000B4C4       BisDesignHbookAccountRoleEditFm..TBisDesignHbookAccountRoleEditForm
+ 0001:0000B770       BisDesignHbookAccountRoleEditFm..TBisDesignHbookAccountRoleEditFormIface
+ 0001:0000B8C0       BisDesignHbookAccountRoleEditFm..TBisDesignHbookAccountRoleInsertFormIface
+ 0001:0000BA14       BisDesignHbookAccountRoleEditFm..TBisDesignHbookAccountRoleUpdateFormIface
+ 0001:0000BB68       BisDesignHbookAccountRoleEditFm..TBisDesignHbookAccountRoleDeleteFormIface
+ 0001:0000BCBC       BisDesignHbookAccountRoleEditFm.TBisDesignHbookAccountRoleEditFormIface.Create
+ 0001:0000BE6C       BisDesignHbookAccountRoleEditFm.TBisDesignHbookAccountRoleInsertFormIface.Create
+ 0001:0000BEC8       BisDesignHbookAccountRoleEditFm.TBisDesignHbookAccountRoleUpdateFormIface.Create
+ 0001:0000BF24       BisDesignHbookAccountRoleEditFm.TBisDesignHbookAccountRoleDeleteFormIface.Create
+ 0001:0000BF80       BisDesignHbookAccountRoleEditFm.TBisDesignHbookAccountRoleEditForm.Execute
+ 0001:0000BFB8       BisDesignHbookAccountRoleEditFm.Finalization
+ 0001:0000BFE8       BisDesignHbookAccountRolesFm..TBisDesignHbookAccountRolesForm
+ 0001:0000C1E8       BisDesignHbookAccountRolesFm..TBisDesignHbookAccountRolesFormIface
+ 0001:0000C330       BisDesignHbookAccountRolesFm.TBisDesignHbookAccountRolesFormIface.Create
+ 0001:0000C4A0       BisDesignHbookAccountRolesFm.Finalization
+ 0001:0000C4D0       BisDesignHbookProfileEditFm..TBisDesignHbookProfileEditForm
+ 0001:0000C794       BisDesignHbookProfileEditFm..TBisDesignHbookProfileEditFormIface
+ 0001:0000C8D8       BisDesignHbookProfileEditFm..TBisDesignHbookProfileInsertFormIface
+ 0001:0000CA20       BisDesignHbookProfileEditFm..TBisDesignHbookProfileUpdateFormIface
+ 0001:0000CB68       BisDesignHbookProfileEditFm..TBisDesignHbookProfileDeleteFormIface
+ 0001:0000CCB0       BisDesignHbookProfileEditFm.TBisDesignHbookProfileEditFormIface.Create
+ 0001:0000CEEC       BisDesignHbookProfileEditFm.TBisDesignHbookProfileInsertFormIface.Create
+ 0001:0000CF44       BisDesignHbookProfileEditFm.TBisDesignHbookProfileUpdateFormIface.Create
+ 0001:0000CF9C       BisDesignHbookProfileEditFm.TBisDesignHbookProfileDeleteFormIface.Create
+ 0001:0000CFF4       BisDesignHbookProfileEditFm.Finalization
+ 0001:0000D024       BisDesignHbookProfilesFm..TBisDesignHbookProfilesForm
+ 0001:0000D218       BisDesignHbookProfilesFm..TBisDesignHbookProfilesFormIface
+ 0001:0000D354       BisDesignHbookProfilesFm.TBisDesignHbookProfilesFormIface.Create
+ 0001:0000D4F0       BisDesignHbookProfilesFm.Finalization
+ 0001:0000D520       BisDesignHbookSessionsFm..TBisDesignHbookSessionsForm
+ 0001:0000D714       BisDesignHbookSessionsFm..TBisDesignHbookSessionsFormIface
+ 0001:0000D850       BisDesignHbookSessionsFm..TBisDesignHbookSessionViewingFormIface
+ 0001:0000D998       BisDesignHbookSessionsFm..TBisDesignHbookSessionDeleteFormIface
+ 0001:0000DADC       BisDesignHbookSessionsFm.TBisDesignHbookSessionDeleteFormIface.Execute
+ 0001:0000DC7C       BisDesignHbookSessionsFm.TBisDesignHbookSessionViewingFormIface.Execute
+ 0001:0000DE94       BisDesignHbookSessionsFm.TBisDesignHbookSessionsFormIface.Create
+ 0001:0000E0B4       BisDesignHbookSessionsFm.TBisDesignHbookSessionsForm.Create
+ 0001:0000E130       BisDesignHbookSessionsFm.Finalization
+ 0001:0000E160       BisDesignHbookPermissionEditFm..TBisDesignHbookPermissionEditForm
+ 0001:0000E47C       BisDesignHbookPermissionEditFm..TBisDesignHbookPermissionEditFormIface
+ 0001:0000E5C8       BisDesignHbookPermissionEditFm..TBisDesignHbookPermissionInsertFormIface
+ 0001:0000E71C       BisDesignHbookPermissionEditFm..TBisDesignHbookPermissionUpdateFormIface
+ 0001:0000E870       BisDesignHbookPermissionEditFm..TBisDesignHbookPermissionDeleteFormIface
+ 0001:0000E9C4       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionEditFormIface.Create
+ 0001:0000EC64       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionInsertFormIface.Create
+ 0001:0000ECC0       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionUpdateFormIface.Create
+ 0001:0000ED1C       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionDeleteFormIface.Create
+ 0001:0000ED78       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionEditForm.Execute
+ 0001:0000EDB0       BisDesignHbookPermissionEditFm.TBisDesignHbookPermissionEditForm.ChangeParam
+ 0001:0000EFDC       BisDesignHbookPermissionEditFm.Finalization
+ 0001:0000F00C       BisDesignHbookPermissionsFm..TBisDesignHbookPermissionsForm
+ 0001:0000F208       BisDesignHbookPermissionsFm..TBisDesignHbookPermissionsFormIface
+ 0001:0000F34C       BisDesignHbookPermissionsFm.TBisDesignHbookPermissionsFormIface.Create
+ 0001:0000F57C       BisDesignHbookPermissionsFm.Finalization
+ 0001:0000F5AC       BisDesignHbookApplicationInterfaceEditFm..TBisDesignHbookApplicationInterfaceEditForm
+ 0001:0000F90C       BisDesignHbookApplicationInterfaceEditFm..TBisDesignHbookApplicationInterfaceEditFormIface
+ 0001:0000FA78       BisDesignHbookApplicationInterfaceEditFm..TBisDesignHbookApplicationInterfaceInsertFormIface
+ 0001:0000FBE8       BisDesignHbookApplicationInterfaceEditFm..TBisDesignHbookApplicationInterfaceUpdateFormIface
+ 0001:0000FD58       BisDesignHbookApplicationInterfaceEditFm..TBisDesignHbookApplicationInterfaceDeleteFormIface
+ 0001:0000FEC8       BisDesignHbookApplicationInterfaceEditFm.TBisDesignHbookApplicationInterfaceEditFormIface.Create
+ 0001:0001021C       BisDesignHbookApplicationInterfaceEditFm.TBisDesignHbookApplicationInterfaceInsertFormIface.Create
+ 0001:00010280       BisDesignHbookApplicationInterfaceEditFm.TBisDesignHbookApplicationInterfaceUpdateFormIface.Create
+ 0001:000102E4       BisDesignHbookApplicationInterfaceEditFm.TBisDesignHbookApplicationInterfaceDeleteFormIface.Create
+ 0001:00010348       BisDesignHbookApplicationInterfaceEditFm.TBisDesignHbookApplicationInterfaceEditForm.Execute
+ 0001:00010380       BisDesignHbookApplicationInterfaceEditFm.Finalization
+ 0001:000103B0       BisDesignHbookApplicationInterfacesFm..TBisDesignHbookApplicationInterfacesForm
+ 0001:000105CC       BisDesignHbookApplicationInterfacesFm..TBisDesignHbookApplicationInterfacesFormIface
+ 0001:00010730       BisDesignHbookApplicationInterfacesFm.TBisDesignHbookApplicationInterfacesFormIface.Create
+ 0001:000109BC       BisDesignHbookApplicationInterfacesFm.Finalization
+ 0001:000109EC       BisDesignHbookMenuEditFm..TBisDesignHbookMenuEditForm
+ 0001:00010E70       BisDesignHbookMenuEditFm..TBisDesignHbookMenuEditFormIface
+ 0001:00010FAC       BisDesignHbookMenuEditFm..TBisDesignHbookMenuInsertFormIface
+ 0001:000110EC       BisDesignHbookMenuEditFm..TBisDesignHbookMenuInsertChildFormIface
+ 0001:00011234       BisDesignHbookMenuEditFm..TBisDesignHbookMenuUpdateFormIface
+ 0001:00011374       BisDesignHbookMenuEditFm..TBisDesignHbookMenuDeleteFormIface
+ 0001:000114B4       BisDesignHbookMenuEditFm..TBisApplicationInfo
+ 0001:00011528       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditFormIface.Create
+ 0001:0001188C       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditFormIface.PictureIdChange
+ 0001:00011A1C       BisDesignHbookMenuEditFm.TBisDesignHbookMenuInsertFormIface.Create
+ 0001:00011A70       BisDesignHbookMenuEditFm.TBisDesignHbookMenuInsertFormIface.CreateForm
+ 0001:00011BBC       BisDesignHbookMenuEditFm.TBisDesignHbookMenuInsertChildFormIface.Create
+ 0001:00011C3C       BisDesignHbookMenuEditFm.TBisDesignHbookMenuInsertChildFormIface.CreateForm
+ 0001:00011D78       BisDesignHbookMenuEditFm.TBisDesignHbookMenuUpdateFormIface.Create
+ 0001:00011DCC       BisDesignHbookMenuEditFm.TBisDesignHbookMenuDeleteFormIface.Create
+ 0001:00011E20       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.Create
+ 0001:00011E70       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.ChangeParam
+ 0001:00012048       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.ChangesArePresent
+ 0001:00012068       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.CheckListBoxApplicationsClickCheck
+ 0001:00012078       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.BeforeShow
+ 0001:000120B4       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.ButtonClearClick
+ 0001:000120F0       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.ButtonLoadClick
+ 0001:00012184       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.ButtonSaveClick
+ 0001:0001223C       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.RefreshApplications
+ 0001:00012434       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.RefreshApplicationMenus
+ 0001:00012680       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.DeleteApplicationMenus
+ 0001:00012870       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.InsertApplicationMenus
+ 0001:00012A24       BisDesignHbookMenuEditFm.TBisDesignHbookMenuEditForm.Execute
+ 0001:00012ACC       BisDesignHbookMenuEditFm.Finalization
+ 0001:00012AFC       BisDesignHbookMenusFm..TBisDesignHbookMenusForm
+ 0001:00012CE8       BisDesignHbookMenusFm..TBisDesignHbookMenusFormIface
+ 0001:00012E1C       BisDesignHbookMenusFm.TBisDesignHbookMenusFormIface.Create
+ 0001:00013070       BisDesignHbookMenusFm.Finalization
+ 0001:000130A0       BisDesignHbookReportsFrm..TBisDesignHbookReportsFrameEditors
+ 0001:00013170       BisDesignHbookReportsFrm..TBisDesignHbookReportsFrameReports
+ 0001:00013240       BisDesignHbookReportsFrm..TBisDesignHbookReportsFrame
+ 0001:000135A8       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrameEditors.FindByClass
+ 0001:00013650       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrameReports.FindByClass
+ 0001:0001371C       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.Create
+ 0001:00013778       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.Destroy
+ 0001:000137B4       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.ActionEditorUpdate
+ 0001:000137D0       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.ActionPreviewExecute
+ 0001:000137D8       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.ActionPreviewUpdate
+ 0001:000137F4       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.ActionEditorExecute
+ 0001:000137FC       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.CanEditor
+ 0001:0001384C       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.GetReportEditorClass
+ 0001:000138B4       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.GetReportClass
+ 0001:0001391C       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.EditorSaveChanges
+ 0001:00013C08       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.EditorPreview
+ 0001:00013CDC       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.Editor
+ 0001:00014070       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.CanPreview
+ 0001:000140C0       BisDesignHbookReportsFrm.TBisDesignHbookReportsFrame.Preview
+ 0001:0001423C       BisDesignHbookReportsFrm.Finalization
+ 0001:0001426C       BisDesignHbookReportEditFm..TBisDesignHbookReportEditForm
+ 0001:00014624       BisDesignHbookReportEditFm..TBisDesignHbookReportEditFormIface
+ 0001:00014764       BisDesignHbookReportEditFm..TBisDesignHbookReportInsertFormIface
+ 0001:000148AC       BisDesignHbookReportEditFm..TBisDesignHbookReportUpdateFormIface
+ 0001:000149F4       BisDesignHbookReportEditFm..TBisDesignHbookReportDeleteFormIface
+ 0001:00014B3C       BisDesignHbookReportEditFm.GetReportTypeByIndex
+ 0001:00014B74       BisDesignHbookReportEditFm.TBisDesignHbookReportEditFormIface.Create
+ 0001:00014E38       BisDesignHbookReportEditFm.TBisDesignHbookReportEditFormIface.ReportIdChange
+ 0001:00014FE0       BisDesignHbookReportEditFm.TBisDesignHbookReportInsertFormIface.Create
+ 0001:00015038       BisDesignHbookReportEditFm.TBisDesignHbookReportUpdateFormIface.Create
+ 0001:00015090       BisDesignHbookReportEditFm.TBisDesignHbookReportDeleteFormIface.Create
+ 0001:000150E8       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.Create
+ 0001:0001518C       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.Destroy
+ 0001:000151BC       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.BeforeShow
+ 0001:00015360       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.EditReportChange
+ 0001:00015458       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.ChangeParam
+ 0001:00015850       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.ButtonLoadClick
+ 0001:00015948       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.ButtonSaveClick
+ 0001:00015AC0       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.ButtonClearClick
+ 0001:00015AFC       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.CheckParam
+ 0001:00015BC0       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.ButtonEditorClick
+ 0001:00015BC8       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.GetReportEditorClass
+ 0001:00015BE8       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.EditorCloseFree
+ 0001:00015BF4       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.EditorSaveChanges
+ 0001:00015D4C       BisDesignHbookReportEditFm.TBisDesignHbookReportEditForm.RunEditor
+ 0001:00015F38       BisDesignHbookReportEditFm.Finalization
+ 0001:00015F68       BisDesignHbookReportsFm..TBisDesignHbookReportsForm
+ 0001:00016158       BisDesignHbookReportsFm..TBisDesignHbookReportsFormIface
+ 0001:00016290       BisDesignHbookReportsFm.TBisDesignHbookReportsFormIface.Create
+ 0001:00016430       BisDesignHbookReportsFm.TBisDesignHbookReportsFormIface.GetReportTypeName
+ 0001:000164D0       BisDesignHbookReportsFm.TBisDesignHbookReportsFormIface.GetLastForm
+ 0001:000164DC       BisDesignHbookReportsFm.TBisDesignHbookReportsFormIface.CreateForm
+ 0001:0001652C       BisDesignHbookReportsFm.TBisDesignHbookReportsFormIface.CanEditor
+ 0001:0001653C       BisDesignHbookReportsFm.TBisDesignHbookReportsForm.Create
+ 0001:00016574       BisDesignHbookReportsFm.TBisDesignHbookReportsForm.GetDataFrame
+ 0001:00016580       BisDesignHbookReportsFm.TBisDesignHbookReportsForm.GetDataFrameClass
+ 0001:00016588       BisDesignHbookReportsFm.Finalization
+ 0001:000165B8       BisDesignExportFm..TBisDesignExportForm
+ 0001:00016A1C       BisDesignExportFm..TBisDesignExportFormIface
+ 0001:00016B40       BisDesignExportFm.TBisDesignExportFormIface.Create
+ 0001:00016B8C       BisDesignExportFm.TBisDesignExportForm.Create
+ 0001:00016ED0       BisDesignExportFm.TBisDesignExportForm.Destroy
+ 0001:00016F0C       BisDesignExportFm.TBisDesignExportForm.DataSetNewRecord
+ 0001:00016FAC       BisDesignExportFm.TBisDesignExportForm.RefreshConnections
+ 0001:00017120       BisDesignExportFm.TBisDesignExportForm.ActionExportUpdate
+ 0001:00017170       BisDesignExportFm.TBisDesignExportForm.ActionConnectionUpdate
+ 0001:000171C0       BisDesignExportFm.TBisDesignExportForm.ActionLoadUpdate
+ 0001:000171D8       BisDesignExportFm.TBisDesignExportForm.ActionLoadExecute
+ 0001:000172F8       BisDesignExportFm.TBisDesignExportForm.ActionExportExecute
+ 0001:00017728       BisDesignExportFm.TBisDesignExportForm.GridClick
+ 0001:000178B0       BisDesignExportFm.TBisDesignExportForm.GridKeyDown
+ 0001:000178E0       BisDesignExportFm.TBisDesignExportForm.ActionConnectionExecute
+ 0001:0001798C       BisDesignExportFm.Finalization
+ 0001:000179BC       BisDesignImportFm..TBisDesignImportForm
+ 0001:00017E8C       BisDesignImportFm..TBisDesignImportFormIface
+ 0001:00017FB0       BisDesignImportFm.TBisDesignImportFormIface.Create
+ 0001:00017FFC       BisDesignImportFm.TBisDesignImportForm.Create
+ 0001:00018330       BisDesignImportFm.TBisDesignImportForm.Destroy
+ 0001:0001836C       BisDesignImportFm.TBisDesignImportForm.DataSetNewRecord
+ 0001:00018464       BisDesignImportFm.TBisDesignImportForm.RefreshConnections
+ 0001:000185D8       BisDesignImportFm.TBisDesignImportForm.ActionImportUpdate
+ 0001:00018628       BisDesignImportFm.TBisDesignImportForm.ActionImportCurrentUpdate
+ 0001:00018678       BisDesignImportFm.TBisDesignImportForm.ActionConnectionUpdate
+ 0001:000186C8       BisDesignImportFm.TBisDesignImportForm.ActionLoadUpdate
+ 0001:000186E0       BisDesignImportFm.TBisDesignImportForm.ActionImportCurrentExecute
+ 0001:00018A30       BisDesignImportFm.TBisDesignImportForm.ActionImportExecute
+ 0001:00018E50       BisDesignImportFm.TBisDesignImportForm.ActionLoadExecute
+ 0001:00018F70       BisDesignImportFm.TBisDesignImportForm.GridDblClick
+ 0001:00019090       BisDesignImportFm.TBisDesignImportForm.ActionConnectionExecute
+ 0001:0001913C       BisDesignImportFm.Finalization
+ 0001:0001916C       BisDesignJournalActionEditFm..TBisDesignJournalActionEditForm
+ 0001:0001952C       BisDesignJournalActionEditFm..TBisDesignJournalActionEditFormIface
+ 0001:00019674       BisDesignJournalActionEditFm..TBisDesignJournalActionInsertFormIface
+ 0001:000197C0       BisDesignJournalActionEditFm..TBisDesignJournalActionUpdateFormIface
+ 0001:0001990C       BisDesignJournalActionEditFm..TBisDesignJournalActionDeleteFormIface
+ 0001:00019A58       BisDesignJournalActionEditFm.GetActionTypeByIndex
+ 0001:00019ADC       BisDesignJournalActionEditFm.TBisDesignJournalActionEditFormIface.Create
+ 0001:00019F4C       BisDesignJournalActionEditFm.TBisDesignJournalActionInsertFormIface.Create
+ 0001:00019FAC       BisDesignJournalActionEditFm.TBisDesignJournalActionUpdateFormIface.Create
+ 0001:0001A00C       BisDesignJournalActionEditFm.TBisDesignJournalActionDeleteFormIface.Create
+ 0001:0001A06C       BisDesignJournalActionEditFm.TBisDesignJournalActionEditForm.Create
+ 0001:0001A140       BisDesignJournalActionEditFm.TBisDesignJournalActionEditForm.BeforeShow
+ 0001:0001A1C8       BisDesignJournalActionEditFm.Finalization
+ 0001:0001A1F8       BisDesignJournalActionsFm..TBisDesignJournalActionsForm
+ 0001:0001A458       BisDesignJournalActionsFm..TBisDesignJournalActionsFormIface
+ 0001:0001A598       BisDesignJournalActionsFm.TBisDesignJournalActionsFormIface.Create
+ 0001:0001A8D4       BisDesignJournalActionsFm.TBisDesignJournalActionsFormIface.GetActionTypeName
+ 0001:0001A974       BisDesignJournalActionsFm.TBisDesignJournalActionsForm.Create
+ 0001:0001A9C4       BisDesignJournalActionsFm.Finalization
+ 0001:0001A9F4       BisDesignHbookDocumentEditFm..TBisDesignHbookDocumentEditForm
+ 0001:0001AD90       BisDesignHbookDocumentEditFm..TBisDesignHbookDocumentEditFormIface
+ 0001:0001AED8       BisDesignHbookDocumentEditFm..TBisDesignHbookDocumentInsertFormIface
+ 0001:0001B024       BisDesignHbookDocumentEditFm..TBisDesignHbookDocumentUpdateFormIface
+ 0001:0001B170       BisDesignHbookDocumentEditFm..TBisDesignHbookDocumentDeleteFormIface
+ 0001:0001B2BC       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditFormIface.Create
+ 0001:0001B574       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentInsertFormIface.Create
+ 0001:0001B5CC       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentUpdateFormIface.Create
+ 0001:0001B624       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentDeleteFormIface.Create
+ 0001:0001B67C       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.Create
+ 0001:0001B6B4       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.Destroy
+ 0001:0001B6DC       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.BeforeShow
+ 0001:0001B830       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.EditDocumentChange
+ 0001:0001B92C       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.ChangeParam
+ 0001:0001BE1C       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.GetOleClass
+ 0001:0001BECC       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.ButtonLoadClick
+ 0001:0001C020       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.ButtonSaveClick
+ 0001:0001C144       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.ButtonClearClick
+ 0001:0001C178       BisDesignHbookDocumentEditFm.TBisDesignHbookDocumentEditForm.CheckParam
+ 0001:0001C240       BisDesignHbookDocumentEditFm.Finalization
+ 0001:0001C270       BisDesignHbookDocumentsFm..TBisDesignHbookDocumentsForm
+ 0001:0001C468       BisDesignHbookDocumentsFm..TBisDesignHbookDocumentsFormIface
+ 0001:0001C5A8       BisDesignHbookDocumentsFm.TBisDesignHbookDocumentsFormIface.Create
+ 0001:0001C714       BisDesignHbookDocumentsFm.TBisDesignHbookDocumentsForm.Create
+ 0001:0001C74C       BisDesignHbookDocumentsFm.Finalization
+ 0001:0001C77C       BisDesignHbookConstEditFm..TBisDesignHbookConstEditForm
+ 0001:0001CA08       BisDesignHbookConstEditFm..TBisDesignHbookConstEditFormIface
+ 0001:0001CB48       BisDesignHbookConstEditFm..TBisDesignHbookConstInsertFormIface
+ 0001:0001CC88       BisDesignHbookConstEditFm..TBisDesignHbookConstUpdateFormIface
+ 0001:0001CDC8       BisDesignHbookConstEditFm..TBisDesignHbookConstDeleteFormIface
+ 0001:0001CF08       BisDesignHbookConstEditFm.TBisDesignHbookConstEditFormIface.Create
+ 0001:0001D078       BisDesignHbookConstEditFm.TBisDesignHbookConstInsertFormIface.Create
+ 0001:0001D0CC       BisDesignHbookConstEditFm.TBisDesignHbookConstUpdateFormIface.Create
+ 0001:0001D120       BisDesignHbookConstEditFm.TBisDesignHbookConstDeleteFormIface.Create
+ 0001:0001D174       BisDesignHbookConstEditFm.Finalization
+ 0001:0001D1A4       BisDesignHbookConstsFm..TBisDesignHbookConstsForm
+ 0001:0001D394       BisDesignHbookConstsFm..TBisDesignHbookConstsFormIface
+ 0001:0001D4C8       BisDesignHbookConstsFm.TBisDesignHbookConstsFormIface.Create
+ 0001:0001D610       BisDesignHbookConstsFm.TBisDesignHbookConstsForm.Create
+ 0001:0001D648       BisDesignHbookConstsFm.Finalization
+ 0001:0001D678       BisDesign.InitIfaceModule
+ 0001:0001D794       BisDesign.Finalization
+ 0001:0001E65C       .imdesign.@GetPackageInfoTable
+ 0001:0001E664       .imdesign.@PackageLoad
+ 0001:0001E670       .imdesign.@PackageUnload
+ 0002:00000010       Windows.Windows
+ 0002:00000514       BisDesignConsts.BisDesignConsts
+ 0002:0000051C       BisDesignMainFm.BisDesignMainFm
+ 0002:00000534       BisDesignHbookFirmTypeEditFm.BisDesignHbookFirmTypeEditFm
+ 0002:0000053C       BisDesignHbookFirmTypesFm.BisDesignHbookFirmTypesFm
+ 0002:00000544       BisDesignHbookFirmEditFm.BisDesignHbookFirmEditFm
+ 0002:0000054C       BisDesignHbookFirmsFm.BisDesignHbookFirmsFm
+ 0002:00000554       BisDesignHbookAccountEditFm.BisDesignHbookAccountEditFm
+ 0002:0000055C       BisDesignHbookAccountsFm.BisDesignHbookAccountsFm
+ 0002:00000564       BisDesignHbookRoleEditFm.BisDesignHbookRoleEditFm
+ 0002:0000056C       BisDesignHbookRolesFm.BisDesignHbookRolesFm
+ 0002:00000574       BisDesignHbookRolesAndAccountsFm.BisDesignHbookRolesAndAccountsFm
+ 0002:0000057C       BisDesignHbookApplicationEditFm.BisDesignHbookApplicationEditFm
+ 0002:00000584       BisDesignHbookApplicationsFm.BisDesignHbookApplicationsFm
+ 0002:0000058C       BisDesignHbookInterfaceEditFm.BisDesignHbookInterfaceEditFm
+ 0002:00000594       BisDesignHbookInterfacesFm.BisDesignHbookInterfacesFm
+ 0002:0000059C       BisDesignHbookAccountRoleEditFm.BisDesignHbookAccountRoleEditFm
+ 0002:000005A4       BisDesignHbookAccountRolesFm.BisDesignHbookAccountRolesFm
+ 0002:000005AC       BisDesignHbookProfileEditFm.BisDesignHbookProfileEditFm
+ 0002:000005B4       BisDesignHbookProfilesFm.BisDesignHbookProfilesFm
+ 0002:000005BC       BisDesignHbookSessionsFm.BisDesignHbookSessionsFm
+ 0002:000005C4       BisDesignHbookPermissionEditFm.BisDesignHbookPermissionEditFm
+ 0002:000005CC       BisDesignHbookPermissionsFm.BisDesignHbookPermissionsFm
+ 0002:000005D4       BisDesignHbookApplicationInterfaceEditFm.BisDesignHbookApplicationInterfaceEditFm
+ 0002:000005DC       BisDesignHbookApplicationInterfacesFm.BisDesignHbookApplicationInterfacesFm
+ 0002:000005E4       BisDesignHbookMenuEditFm.BisDesignHbookMenuEditFm
+ 0002:000005EC       BisDesignHbookMenusFm.BisDesignHbookMenusFm
+ 0002:000005F4       BisDesignHbookReportsFrm.BisDesignHbookReportsFrm
+ 0002:000005FC       BisDesignHbookReportEditFm.BisDesignHbookReportEditFm
+ 0002:00000604       BisDesignHbookReportsFm.BisDesignHbookReportsFm
+ 0002:0000060C       BisDesignExportFm.BisDesignExportFm
+ 0002:00000614       BisDesignImportFm.BisDesignImportFm
+ 0002:0000061C       BisDesignJournalActionEditFm.BisDesignJournalActionEditFm
+ 0002:00000624       BisDesignJournalActionsFm.BisDesignJournalActionsFm
+ 0002:0000062C       BisDesignHbookDocumentEditFm.BisDesignHbookDocumentEditFm
+ 0002:00000634       BisDesignHbookDocumentsFm.BisDesignHbookDocumentsFm
+ 0002:0000063C       BisDesignHbookConstEditFm.BisDesignHbookConstEditFm
+ 0002:00000644       BisDesignHbookConstsFm.BisDesignHbookConstsFm
+ 0002:0000064C       BisDesign.BisDesign
+ 0002:00000654       .imdesign..imdesign
+ 0003:00000000       SysInit.TlsIndex
+ 0003:00000004       SysInit.Module
+ 0003:0000001C       SysInit.TlsProc
+ 0003:0000002C       BisDesignMainFm.MainIface
+ 0004:00000000       SysInit.ModuleIsLib
+ 0004:00000001       SysInit.ModuleIsPackage
+ 0004:00000004       SysInit.HInstance
+ 0004:00000008       SysInit.tlsBuffer
+ 0004:0000000C       Windows..3
+ 0004:00000010       Windows.HtmlHelpModule
+ 0004:00000014       BisDesignConsts..1
+ 0004:00000018       BisDesignMainFm.BisDesignMainForm
+ 0004:0000001C       BisDesignMainFm..3
+ 0004:00000020       BisDesignHbookFirmTypeEditFm.BisDesignHbookFirmTypeEditForm
+ 0004:00000024       BisDesignHbookFirmTypeEditFm..6
+ 0004:00000028       BisDesignHbookFirmTypesFm.BisDesignHbookFirmTypesForm
+ 0004:0000002C       BisDesignHbookFirmTypesFm..3
+ 0004:00000030       BisDesignHbookFirmEditFm.BisDesignHbookFirmEditForm
+ 0004:00000034       BisDesignHbookFirmEditFm..7
+ 0004:00000038       BisDesignHbookFirmsFm.BisDesignHbookFirmsForm
+ 0004:0000003C       BisDesignHbookFirmsFm..3
+ 0004:00000040       BisDesignHbookAccountEditFm.BisDesignHbookAccountEditForm
+ 0004:00000044       BisDesignHbookAccountEditFm..6
+ 0004:00000048       BisDesignHbookAccountsFm.BiDesignHbookAccountsForm
+ 0004:0000004C       BisDesignHbookAccountsFm..3
+ 0004:00000050       BisDesignHbookRoleEditFm.BisDesignHbookRoleEditForm
+ 0004:00000054       BisDesignHbookRoleEditFm..6
+ 0004:00000058       BisDesignHbookRolesFm.BisDesignHbookRolesForm
+ 0004:0000005C       BisDesignHbookRolesFm..3
+ 0004:00000060       BisDesignHbookRolesAndAccountsFm.BisDesignHbookRolesAndAccountsForm
+ 0004:00000064       BisDesignHbookRolesAndAccountsFm..3
+ 0004:00000068       BisDesignHbookApplicationEditFm.BisDesignHbookApplicationEditForm
+ 0004:0000006C       BisDesignHbookApplicationEditFm..6
+ 0004:00000070       BisDesignHbookApplicationsFm.BisDesignHbookApplicationsForm
+ 0004:00000074       BisDesignHbookApplicationsFm..3
+ 0004:00000078       BisDesignHbookInterfaceEditFm.BisDesignHbookInterfaceEditForm
+ 0004:0000007C       BisDesignHbookInterfaceEditFm..6
+ 0004:00000080       BisDesignHbookInterfacesFm.BisDesignHbookInterfacesForm
+ 0004:00000084       BisDesignHbookInterfacesFm..3
+ 0004:00000088       BisDesignHbookAccountRoleEditFm.BisDesignHbookAccountRoleEditForm
+ 0004:0000008C       BisDesignHbookAccountRoleEditFm..6
+ 0004:00000090       BisDesignHbookAccountRolesFm.BiDesignHbookAccountRolesForm
+ 0004:00000094       BisDesignHbookAccountRolesFm..3
+ 0004:00000098       BisDesignHbookProfileEditFm.BisDesignHbookProfileEditForm
+ 0004:0000009C       BisDesignHbookProfileEditFm..6
+ 0004:000000A0       BisDesignHbookProfilesFm.BiDesignHbookProfilesForm
+ 0004:000000A4       BisDesignHbookProfilesFm..3
+ 0004:000000A8       BisDesignHbookSessionsFm.BiDesignHbookSessionsForm
+ 0004:000000AC       BisDesignHbookSessionsFm..5
+ 0004:000000B0       BisDesignHbookPermissionEditFm.BisDesignHbookPermissionEditForm
+ 0004:000000B4       BisDesignHbookPermissionEditFm..6
+ 0004:000000B8       BisDesignHbookPermissionsFm.BiDesignHbookPermissionsForm
+ 0004:000000BC       BisDesignHbookPermissionsFm..3
+ 0004:000000C0       BisDesignHbookApplicationInterfaceEditFm.BisDesignHbookApplicationInterfaceEditForm
+ 0004:000000C4       BisDesignHbookApplicationInterfaceEditFm..6
+ 0004:000000C8       BisDesignHbookApplicationInterfacesFm.BiDesignHbookApplicationInterfacesForm
+ 0004:000000CC       BisDesignHbookApplicationInterfacesFm..3
+ 0004:000000D0       BisDesignHbookMenuEditFm.BisDesignHbookMenuEditForm
+ 0004:000000D4       BisDesignHbookMenuEditFm..7
+ 0004:000000D8       BisDesignHbookMenusFm.BisDesignHbookMenusForm
+ 0004:000000DC       BisDesignHbookMenusFm..3
+ 0004:000000E0       BisDesignHbookReportsFrm..4
+ 0004:000000E4       BisDesignHbookReportEditFm.BisDesignHbookReportEditForm
+ 0004:000000E8       BisDesignHbookReportEditFm..6
+ 0004:000000EC       BisDesignHbookReportsFm.BisDesignHbookReportsForm
+ 0004:000000F0       BisDesignHbookReportsFm..3
+ 0004:000000F4       BisDesignExportFm.BisDesignExportForm
+ 0004:000000F8       BisDesignExportFm..3
+ 0004:000000FC       BisDesignImportFm.BisDesignImportForm
+ 0004:00000100       BisDesignImportFm..3
+ 0004:00000104       BisDesignJournalActionEditFm.BisDesignJournalActionEditForm
+ 0004:00000108       BisDesignJournalActionEditFm..6
+ 0004:0000010C       BisDesignJournalActionsFm.BiDesignJournalActionsForm
+ 0004:00000110       BisDesignJournalActionsFm..3
+ 0004:00000114       BisDesignHbookDocumentEditFm.BisDesignHbookDocumentEditForm
+ 0004:00000118       BisDesignHbookDocumentEditFm..6
+ 0004:0000011C       BisDesignHbookDocumentsFm.BisDesignHbookDocumentsForm
+ 0004:00000120       BisDesignHbookDocumentsFm..3
+ 0004:00000124       BisDesignHbookConstEditFm.BisDesignHbookConstEditForm
+ 0004:00000128       BisDesignHbookConstEditFm..6
+ 0004:0000012C       BisDesignHbookConstsFm.BisDesignHbookConstsForm
+ 0004:00000130       BisDesignHbookConstsFm..3
+ 0004:00000134       BisDesign..1
+ 0005:00000000       SysInit.TlsLast
+
+
+Line numbers for BisDesignConsts(imdesign.bpl\BisDesignConsts.pas) segment .itext
+
+     8 0002:00000514
+
+Line numbers for BisDesignMainFm(imdesign.bpl\BisDesignMainFm.pas) segment .text
+
+    51 0001:00001700    52 0001:00001712    53 0001:0000171B    54 0001:00001723
+    59 0001:00001740    60 0001:00001752    61 0001:0000175B    62 0001:00001762
+    76 0001:0000177C    77 0001:00001781    78 0001:00001789    80 0001:00001791
+    81 0001:000017A5    82 0001:000017AC    83 0001:000017B4    85 0001:000017BB
+    86 0001:000017D1    87 0001:000017D5    88 0001:000017EC    89 0001:000017F0
+    90 0001:000017FE    94 0001:0000180B    95 0001:00001821    96 0001:00001829
+    97 0001:00001840    98 0001:00001844    99 0001:00001852   101 0001:0000185F
+   102 0001:0000187A   103 0001:0000187E   104 0001:0000188C   106 0001:00001899
+   107 0001:000018B4   108 0001:000018B8   109 0001:000018C6   111 0001:000018D3
+   112 0001:000018EE   113 0001:000018F2   114 0001:00001900   118 0001:0000190D
+   121 0001:0000191B
+
+Line numbers for BisDesignMainFm(imdesign.bpl\BisDesignMainFm.pas) segment .itext
+
+   123 0002:0000051C
+
+Line numbers for BisDesignHbookFirmTypeEditFm(imdesign.bpl\BisDesignHbookFirmTypeEditFm.pas) segment .text
+
+    54 0001:000022B4    55 0001:000022C7    56 0001:000022D0    57 0001:000022D8
+    58 0001:000022DB    59 0001:000022F3    60 0001:0000230D    61 0001:00002325
+    63 0001:0000233D    68 0001:00002450    69 0001:00002462    70 0001:0000246B
+    71 0001:00002478    76 0001:000024A8    77 0001:000024BA    78 0001:000024C3
+    79 0001:000024D0    84 0001:00002500    85 0001:00002512    86 0001:0000251B
+    87 0001:00002528
+
+Line numbers for BisDesignHbookFirmTypeEditFm(imdesign.bpl\BisDesignHbookFirmTypeEditFm.pas) segment .itext
+
+    89 0002:00000534
+
+Line numbers for BisDesignHbookFirmTypesFm(imdesign.bpl\BisDesignHbookFirmTypesFm.pas) segment .text
+
+    34 0001:000028C0    35 0001:000028D7    36 0001:000028E0    37 0001:000028E8
+    38 0001:000028F5    39 0001:00002900    40 0001:0000290B    41 0001:00002912
+    42 0001:00002916    43 0001:00002926    44 0001:00002929    45 0001:00002935
+    46 0001:0000294B    47 0001:00002961    49 0001:0000296D    50 0001:0000297C
+
+Line numbers for BisDesignHbookFirmTypesFm(imdesign.bpl\BisDesignHbookFirmTypesFm.pas) segment .itext
+
+    52 0002:0000053C
+
+Line numbers for BisDesignHbookFirmEditFm(imdesign.bpl\BisDesignHbookFirmEditFm.pas) segment .text
+
+   108 0001:00003680   109 0001:00003693   110 0001:0000369C   111 0001:000036A4
+   112 0001:000036A7   113 0001:000036BF   115 0001:000036F3   116 0001:0000370D
+   118 0001:0000373E   119 0001:00003758   120 0001:00003772   121 0001:0000378C
+   122 0001:000037A6   123 0001:000037C0   124 0001:000037DA   125 0001:000037F4
+   126 0001:0000380E   127 0001:00003828   128 0001:00003842   129 0001:0000385C
+   130 0001:00003876   131 0001:00003890   132 0001:000038AA   133 0001:000038C4
+   134 0001:000038DE   135 0001:000038F8   136 0001:00003912   137 0001:0000392C
+   139 0001:00003946   144 0001:00003FAC   145 0001:00003FBE   146 0001:00003FC7
+   147 0001:00003FD4   150 0001:00004000   151 0001:00004020   152 0001:00004029
+   153 0001:00004031   154 0001:00004053   155 0001:00004060   156 0001:0000408F
+   160 0001:000040BE   165 0001:00004160   166 0001:00004172   167 0001:0000417B
+   168 0001:00004188   169 0001:00004195   172 0001:000041E8   173 0001:00004208
+   174 0001:00004211   175 0001:00004219   176 0001:0000423B   177 0001:00004248
+   178 0001:00004277   182 0001:000042A6   187 0001:00004338   188 0001:0000434A
+   189 0001:00004353   190 0001:00004360   195 0001:0000438C   196 0001:0000439E
+   197 0001:000043A7   198 0001:000043B4   203 0001:000043E0   204 0001:000043FB
+   206 0001:00004444   207 0001:00004460
+
+Line numbers for BisDesignHbookFirmEditFm(imdesign.bpl\BisDesignHbookFirmEditFm.pas) segment .itext
+
+   209 0002:00000544
+
+Line numbers for BisDesignHbookFirmsFm(imdesign.bpl\BisDesignHbookFirmsFm.pas) segment .text
+
+    34 0001:000047F0    35 0001:00004803    36 0001:0000480C    37 0001:00004814
+    38 0001:00004825    39 0001:00004836    40 0001:00004841    41 0001:0000484C
+    42 0001:00004853    43 0001:00004857    44 0001:00004867    45 0001:0000486A
+    46 0001:00004876    47 0001:00004882    48 0001:0000488E    49 0001:0000489A
+    50 0001:000048A6    51 0001:000048B2    52 0001:000048BE    53 0001:000048CA
+    54 0001:000048D6    55 0001:000048E2    56 0001:000048EE    57 0001:000048FA
+    58 0001:00004906    59 0001:00004912    60 0001:0000491E    61 0001:0000492A
+    62 0001:00004936    63 0001:00004942    64 0001:0000494E    65 0001:0000495A
+    66 0001:00004966    67 0001:00004972    68 0001:0000497E    69 0001:00004994
+    70 0001:000049A7    72 0001:000049BD
+
+Line numbers for BisDesignHbookFirmsFm(imdesign.bpl\BisDesignHbookFirmsFm.pas) segment .itext
+
+    74 0002:0000054C
+
+Line numbers for BisDesignHbookAccountEditFm(imdesign.bpl\BisDesignHbookAccountEditFm.pas) segment .text
+
+   116 0001:0000583C   117 0001:00005874   118 0001:00005880   119 0001:00005888
+   120 0001:0000588B   121 0001:00005899   123 0001:000058A3   124 0001:000058C7
+   125 0001:000058EB   126 0001:00005905   127 0001:0000591F   128 0001:0000593C
+   129 0001:00005956   130 0001:00005970   131 0001:00005983   132 0001:0000599D
+   133 0001:000059B7   134 0001:000059D1   135 0001:000059E9   136 0001:00005A03
+   137 0001:00005A1D   139 0001:00005A4E   141 0001:00005A77   146 0001:00005ED4
+   147 0001:00005EE6   148 0001:00005EEF   149 0001:00005EFC   154 0001:00005F2C
+   155 0001:00005F3E   156 0001:00005F47   157 0001:00005F54   162 0001:00005F84
+   163 0001:00005F96   164 0001:00005F9F   165 0001:00005FAC   170 0001:00005FDC
+   171 0001:00005FF3   172 0001:00005FFC   173 0001:00006003   174 0001:0000600A
+   175 0001:00006017   176 0001:00006029   177 0001:00006030   180 0001:00006054
+   181 0001:00006075   182 0001:0000607C   183 0001:00006093   184 0001:000060AA
+   185 0001:000060FB   186 0001:0000610F   187 0001:00006127   188 0001:00006132
+   189 0001:0000613E   192 0001:00006161   193 0001:00006168   194 0001:0000616F
+   199 0001:000061B4   200 0001:000061BB   201 0001:000061E4   202 0001:000061F6
+   207 0001:000061FC   208 0001:0000621F   209 0001:00006228   210 0001:0000624C
+   211 0001:0000625D   212 0001:0000626B   213 0001:0000627D   214 0001:00006290
+   215 0001:000062BD   216 0001:000062C5   217 0001:000062DD   218 0001:000062F5
+   222 0001:0000632C   225 0001:0000633C   228 0001:000063BC   229 0001:000063BF
+   230 0001:000063E2   234 0001:000063E4   235 0001:000063EB   240 0001:000063EC
+   241 0001:000063F3   242 0001:000063F8   250 0001:000063FC   251 0001:0000641A
+   252 0001:00006432   253 0001:00006449   254 0001:0000645A   255 0001:00006468
+   256 0001:0000647A   257 0001:00006484   258 0001:0000648D   259 0001:000064A5
+   260 0001:000064B5   261 0001:000064C1   264 0001:000064D5   265 0001:000064F5
+   266 0001:0000650B   267 0001:00006526   268 0001:0000652E   264 0001:00006531
+   270 0001:00006541   273 0001:00006551   281 0001:000065E0   282 0001:000065FE
+   283 0001:00006616   284 0001:0000662D   285 0001:0000663E   286 0001:0000664C
+   287 0001:0000665E   288 0001:00006668   289 0001:00006671   290 0001:0000667F
+   292 0001:000066A1   293 0001:000066BC   294 0001:000066CD   295 0001:000066E3
+   296 0001:00006701   298 0001:00006709   292 0001:0000670A   300 0001:0000671A
+   303 0001:0000672A   312 0001:0000678C   313 0001:000067AF   314 0001:000067CA
+   315 0001:000067E1   316 0001:000067F5   317 0001:00006806   318 0001:00006814
+   319 0001:00006826   320 0001:00006839   321 0001:00006866   322 0001:0000686E
+   323 0001:0000687E   325 0001:00006888   326 0001:0000689D   327 0001:000068BB
+   328 0001:000068D3   329 0001:000068E2   331 0001:000068F4   326 0001:000068F5
+   332 0001:000068F8   324 0001:00006900   336 0001:0000691D   337 0001:00006925
+   340 0001:00006941   346 0001:000069C0   347 0001:000069E2   348 0001:000069F6
+   349 0001:00006A0A   350 0001:00006A1B   351 0001:00006A29   352 0001:00006A3B
+   353 0001:00006A44   354 0001:00006A50   356 0001:00006A5C   357 0001:00006A8E
+   358 0001:00006AA3   359 0001:00006AAB   360 0001:00006AB7   362 0001:00006AC1
+   363 0001:00006ACF   364 0001:00006AEF   365 0001:00006B1D   361 0001:00006B25
+   369 0001:00006B3E   370 0001:00006B46   372 0001:00006B62   378 0001:00006C18
+   379 0001:00006C38   380 0001:00006C50   381 0001:00006C67   382 0001:00006C78
+   383 0001:00006C86   384 0001:00006C98   385 0001:00006CA2   386 0001:00006CAB
+   387 0001:00006CCD   389 0001:00006CFB   391 0001:00006D10   394 0001:00006D20
+   397 0001:00006D90   398 0001:00006D93   399 0001:00006DAE   403 0001:00006DC0
+   404 0001:00006DD6   405 0001:00006DE5   406 0001:00006E13   410 0001:00006E44
+   411 0001:00006E5A   412 0001:00006E69   413 0001:00006E97   419 0001:00006EC8
+   420 0001:00006ECC   421 0001:00006EE4   422 0001:00006EFB   423 0001:00006F10
+   428 0001:00006F24   429 0001:00006F2B   430 0001:00006F3A   431 0001:00006F4A
+   432 0001:00006F58   433 0001:00006F63   434 0001:00006F6A   435 0001:00006F71
+   436 0001:00006F7C   437 0001:00006F83   438 0001:00006F8E   439 0001:00006F95
+   440 0001:00006FA7   442 0001:00006FBB   444 0001:00006FD3
+
+Line numbers for BisDesignHbookAccountEditFm(imdesign.bpl\BisDesignHbookAccountEditFm.pas) segment .itext
+
+   447 0002:00000554
+
+Line numbers for BisDesignHbookAccountsFm(imdesign.bpl\BisDesignHbookAccountsFm.pas) segment .text
+
+    34 0001:00007338    35 0001:00007364    36 0001:0000736D    37 0001:00007375
+    38 0001:00007382    39 0001:0000738D    40 0001:00007398    41 0001:0000739F
+    42 0001:000073A3    43 0001:000073B3    44 0001:000073B6    45 0001:000073C2
+    46 0001:000073CE    47 0001:000073DA    48 0001:000073E6    49 0001:000073F2
+    50 0001:000073FE    51 0001:0000740A    52 0001:00007416    53 0001:00007422
+    54 0001:0000742E    55 0001:0000743A    56 0001:00007446    57 0001:00007459
+    58 0001:0000746C    59 0001:0000747F    60 0001:00007492    62 0001:000074A5
+    63 0001:000074CE    64 0001:000074DD
+
+Line numbers for BisDesignHbookAccountsFm(imdesign.bpl\BisDesignHbookAccountsFm.pas) segment .itext
+
+    66 0002:0000055C
+
+Line numbers for BisDesignHbookRoleEditFm(imdesign.bpl\BisDesignHbookRoleEditFm.pas) segment .text
+
+    52 0001:00007E5C    53 0001:00007E94    54 0001:00007EA0    55 0001:00007EA8
+    56 0001:00007EAB    57 0001:00007EC3    58 0001:00007EEA    59 0001:00007F0E
+    60 0001:00007F33    61 0001:00007F57    62 0001:00007F71    64 0001:00007F89
+    69 0001:000080D4    70 0001:000080E6    71 0001:000080EF    72 0001:000080FC
+    77 0001:0000812C    78 0001:0000813E    79 0001:00008147    80 0001:00008154
+    85 0001:00008184    86 0001:00008196    87 0001:0000819F    88 0001:000081AC
+
+Line numbers for BisDesignHbookRoleEditFm(imdesign.bpl\BisDesignHbookRoleEditFm.pas) segment .itext
+
+    90 0002:00000564
+
+Line numbers for BisDesignHbookRolesFm(imdesign.bpl\BisDesignHbookRolesFm.pas) segment .text
+
+    34 0001:0000852C    35 0001:0000855A    36 0001:00008563    37 0001:0000856B
+    38 0001:00008578    39 0001:00008583    40 0001:0000858E    41 0001:00008595
+    42 0001:00008599    43 0001:000085A9    44 0001:000085AC    45 0001:000085B8
+    46 0001:000085C4    47 0001:000085D0    48 0001:000085DC    49 0001:000085E8
+    50 0001:000085FE    52 0001:00008614    53 0001:00008640    54 0001:0000864F
+    59 0001:0000874C    60 0001:0000875E    61 0001:00008767
+
+Line numbers for BisDesignHbookRolesFm(imdesign.bpl\BisDesignHbookRolesFm.pas) segment .itext
+
+    63 0002:0000056C
+
+Line numbers for BisDesignHbookRolesAndAccountsFm(imdesign.bpl\BisDesignHbookRolesAndAccountsFm.pas) segment .text
+
+    34 0001:00008B14    35 0001:00008B2B    36 0001:00008B34    37 0001:00008B3C
+    38 0001:00008B43    39 0001:00008B47    40 0001:00008B57    41 0001:00008B5A
+    42 0001:00008B66    43 0001:00008B7C    45 0001:00008B8F    46 0001:00008B92
+    47 0001:00008BA0    49 0001:00008BAE    54 0001:00008C48    55 0001:00008C5F
+    56 0001:00008C68    57 0001:00008C73    58 0001:00008C7C    59 0001:00008C89
+    60 0001:00008C96    61 0001:00008CA3    62 0001:00008CB0    65 0001:00008CBD
+
+Line numbers for BisDesignHbookRolesAndAccountsFm(imdesign.bpl\BisDesignHbookRolesAndAccountsFm.pas) segment .itext
+
+    67 0002:00000574
+
+Line numbers for BisDesignHbookApplicationEditFm(imdesign.bpl\BisDesignHbookApplicationEditFm.pas) segment .text
+
+    53 0001:000094EC    54 0001:000094FF    55 0001:00009508    56 0001:00009510
+    57 0001:00009513    58 0001:0000952B    59 0001:00009545    60 0001:0000955D
+    62 0001:0000956E    67 0001:00009668    68 0001:0000967A    69 0001:00009683
+    70 0001:00009690    75 0001:000096C4    76 0001:000096D6    77 0001:000096DF
+    78 0001:000096EC    83 0001:00009720    84 0001:00009732    85 0001:0000973B
+    86 0001:00009748
+
+Line numbers for BisDesignHbookApplicationEditFm(imdesign.bpl\BisDesignHbookApplicationEditFm.pas) segment .itext
+
+    88 0002:0000057C
+
+Line numbers for BisDesignHbookApplicationsFm(imdesign.bpl\BisDesignHbookApplicationsFm.pas) segment .text
+
+    34 0001:00009AF4    35 0001:00009B0B    36 0001:00009B14    37 0001:00009B1C
+    38 0001:00009B29    39 0001:00009B34    40 0001:00009B3F    41 0001:00009B46
+    42 0001:00009B4A    43 0001:00009B5A    44 0001:00009B5D    45 0001:00009B69
+    46 0001:00009B7F    47 0001:00009B95    49 0001:00009BA1    50 0001:00009BB0
+
+Line numbers for BisDesignHbookApplicationsFm(imdesign.bpl\BisDesignHbookApplicationsFm.pas) segment .itext
+
+    52 0002:00000584
+
+Line numbers for BisDesignHbookInterfaceEditFm(imdesign.bpl\BisDesignHbookInterfaceEditFm.pas) segment .text
+
+    67 0001:0000A4F8    68 0001:0000A4FE    69 0001:0000A505    70 0001:0000A517
+    71 0001:0000A526    72 0001:0000A535    73 0001:0000A544    75 0001:0000A550
+    80 0001:0000A59C    81 0001:0000A5AF    82 0001:0000A5B8    83 0001:0000A5C0
+    84 0001:0000A5C3    85 0001:0000A5DB    86 0001:0000A5F3    87 0001:0000A60D
+    88 0001:0000A625    89 0001:0000A63D    91 0001:0000A655    96 0001:0000A80C
+    97 0001:0000A81E    98 0001:0000A827    99 0001:0000A834   104 0001:0000A864
+   105 0001:0000A876   106 0001:0000A87F   107 0001:0000A88C   112 0001:0000A8BC
+   113 0001:0000A8CE   114 0001:0000A8D7   115 0001:0000A8E4   125 0001:0000A914
+   126 0001:0000A942   128 0001:0000A94C   129 0001:0000A95D   130 0001:0000A95F
+   131 0001:0000A965   132 0001:0000A969   133 0001:0000A970   134 0001:0000A974
+   135 0001:0000A97F   136 0001:0000A9A0   134 0001:0000A9A1   138 0001:0000A9A4
+   139 0001:0000A9B5   140 0001:0000A9CE   141 0001:0000A9E1   142 0001:0000A9E7
+   143 0001:0000AA00   139 0001:0000AA01   145 0001:0000AA04   152 0001:0000AA44
+   153 0001:0000AA69   155 0001:0000AA72   156 0001:0000AA87   157 0001:0000AA9C
+   158 0001:0000AAAA   159 0001:0000AACA   160 0001:0000AAD0   161 0001:0000AAEB
+   162 0001:0000AAFB   163 0001:0000AB01   164 0001:0000AB17   160 0001:0000AB1A
+   167 0001:0000AB21   170 0001:0000AB2F   171 0001:0000AB44   172 0001:0000AB62
+   173 0001:0000ABB3   174 0001:0000ABC7   175 0001:0000ABD6   176 0001:0000ABE7
+   180 0001:0000ABF8   183 0001:0000AC54   184 0001:0000AC71   185 0001:0000AC7A
+   186 0001:0000AC82   187 0001:0000AC98   188 0001:0000ACA9   189 0001:0000ACDF
+   190 0001:0000ACED   191 0001:0000ACEF   193 0001:0000ACF1   194 0001:0000AD02
+   195 0001:0000AD38   196 0001:0000AD46   201 0001:0000AD48   204 0001:0000AD88
+   205 0001:0000AD8B   206 0001:0000AD92   207 0001:0000ADA4   208 0001:0000ADB0
+   210 0001:0000ADBC
+
+Line numbers for BisDesignHbookInterfaceEditFm(imdesign.bpl\BisDesignHbookInterfaceEditFm.pas) segment .itext
+
+   212 0002:0000058C
+
+Line numbers for BisDesignHbookInterfacesFm(imdesign.bpl\BisDesignHbookInterfacesFm.pas) segment .text
+
+    41 0001:0000B198    42 0001:0000B1AF    43 0001:0000B1B8    44 0001:0000B1C0
+    45 0001:0000B1CD    46 0001:0000B1D8    47 0001:0000B1E3    48 0001:0000B1EA
+    49 0001:0000B1EE    50 0001:0000B1FE    51 0001:0000B201    52 0001:0000B20D
+    53 0001:0000B219    54 0001:0000B225    55 0001:0000B231    56 0001:0000B23D
+    57 0001:0000B253    59 0001:0000B270    60 0001:0000B27F    61 0001:0000B28E
+    66 0001:0000B394    67 0001:0000B3B0    68 0001:0000B3B7    69 0001:0000B3D0
+    70 0001:0000B3E1    71 0001:0000B3EB    76 0001:0000B43C    77 0001:0000B44E
+    79 0001:0000B457    80 0001:0000B462    82 0001:0000B47A
+
+Line numbers for BisDesignHbookInterfacesFm(imdesign.bpl\BisDesignHbookInterfacesFm.pas) segment .itext
+
+    84 0002:00000594
+
+Line numbers for BisDesignHbookAccountRoleEditFm(imdesign.bpl\BisDesignHbookAccountRoleEditFm.pas) segment .text
+
+    57 0001:0000BCBC    58 0001:0000BCD3    59 0001:0000BCDC    60 0001:0000BCE4
+    62 0001:0000BCE7    63 0001:0000BD25    66 0001:0000BD5D    71 0001:0000BE6C
+    72 0001:0000BE7E    73 0001:0000BE87    74 0001:0000BE94    79 0001:0000BEC8
+    80 0001:0000BEDA    81 0001:0000BEE3    82 0001:0000BEF0    87 0001:0000BF24
+    88 0001:0000BF36    89 0001:0000BF3F    90 0001:0000BF4C    95 0001:0000BF80
+    96 0001:0000BF83    97 0001:0000BF8A    98 0001:0000BF9C    99 0001:0000BFA8
+   101 0001:0000BFB4
+
+Line numbers for BisDesignHbookAccountRoleEditFm(imdesign.bpl\BisDesignHbookAccountRoleEditFm.pas) segment .itext
+
+   103 0002:0000059C
+
+Line numbers for BisDesignHbookAccountRolesFm(imdesign.bpl\BisDesignHbookAccountRolesFm.pas) segment .text
+
+    34 0001:0000C330    35 0001:0000C347    36 0001:0000C350    37 0001:0000C358
+    38 0001:0000C365    39 0001:0000C370    40 0001:0000C37B    41 0001:0000C382
+    42 0001:0000C386    43 0001:0000C396    44 0001:0000C399    45 0001:0000C3A5
+    46 0001:0000C3B1    47 0001:0000C3C7    49 0001:0000C3DD    50 0001:0000C3EC
+    51 0001:0000C3FB
+
+Line numbers for BisDesignHbookAccountRolesFm(imdesign.bpl\BisDesignHbookAccountRolesFm.pas) segment .itext
+
+    53 0002:000005A4
+
+Line numbers for BisDesignHbookProfileEditFm(imdesign.bpl\BisDesignHbookProfileEditFm.pas) segment .text
+
+    58 0001:0000CCB0    59 0001:0000CCC7    60 0001:0000CCD0    61 0001:0000CCD8
+    63 0001:0000CCDB    64 0001:0000CD16    66 0001:0000CD4E    68 0001:0000CD66
+    73 0001:0000CEEC    74 0001:0000CEFE    75 0001:0000CF07    76 0001:0000CF14
+    81 0001:0000CF44    82 0001:0000CF56    83 0001:0000CF5F    84 0001:0000CF6C
+    89 0001:0000CF9C    90 0001:0000CFAE    91 0001:0000CFB7    92 0001:0000CFC4
+
+Line numbers for BisDesignHbookProfileEditFm(imdesign.bpl\BisDesignHbookProfileEditFm.pas) segment .itext
+
+    94 0002:000005AC
+
+Line numbers for BisDesignHbookProfilesFm(imdesign.bpl\BisDesignHbookProfilesFm.pas) segment .text
+
+    34 0001:0000D354    35 0001:0000D36B    36 0001:0000D374    37 0001:0000D37C
+    38 0001:0000D389    39 0001:0000D394    40 0001:0000D39F    41 0001:0000D3A6
+    42 0001:0000D3AA    43 0001:0000D3BA    44 0001:0000D3BD    45 0001:0000D3C9
+    46 0001:0000D3D5    47 0001:0000D3E1    48 0001:0000D3F7    50 0001:0000D40D
+    51 0001:0000D41C    52 0001:0000D42B
+
+Line numbers for BisDesignHbookProfilesFm(imdesign.bpl\BisDesignHbookProfilesFm.pas) segment .itext
+
+    54 0002:000005B4
+
+Line numbers for BisDesignHbookSessionsFm(imdesign.bpl\BisDesignHbookSessionsFm.pas) segment .text
+
+    47 0001:0000DADC    48 0001:0000DAF8    49 0001:0000DB22    50 0001:0000DB39
+    51 0001:0000DB4A    52 0001:0000DB58    53 0001:0000DB6A    54 0001:0000DB76
+    55 0001:0000DBAD    56 0001:0000DBB5    58 0001:0000DBCA    62 0001:0000DBDA
+    70 0001:0000DC7C    71 0001:0000DC9A    72 0001:0000DCC4    73 0001:0000DCD5
+    74 0001:0000DCE6    75 0001:0000DCF4    76 0001:0000DD06    77 0001:0000DD19
+    78 0001:0000DD51    79 0001:0000DD59    80 0001:0000DD71    81 0001:0000DD9D
+    82 0001:0000DDAD    83 0001:0000DDBA    85 0001:0000DDD2    86 0001:0000DDDA
+    89 0001:0000DDEA    94 0001:0000DE94    95 0001:0000DEAB    96 0001:0000DEB4
+    97 0001:0000DEBC    98 0001:0000DEC7    99 0001:0000DED2   100 0001:0000DED9
+   101 0001:0000DEDD   102 0001:0000DEED   103 0001:0000DEF0   104 0001:0000DEFC
+   105 0001:0000DF08   106 0001:0000DF14   107 0001:0000DF27   108 0001:0000DF3A
+   109 0001:0000DF4D   111 0001:0000DF60   112 0001:0000DF6F   113 0001:0000DF7E
+   114 0001:0000DF8D   119 0001:0000E0B4   120 0001:0000E0CB   121 0001:0000E0D4
+   122 0001:0000E0DF   123 0001:0000E0E8   124 0001:0000E0F5   125 0001:0000E102
+   128 0001:0000E10F
+
+Line numbers for BisDesignHbookSessionsFm(imdesign.bpl\BisDesignHbookSessionsFm.pas) segment .itext
+
+   130 0002:000005BC
+
+Line numbers for BisDesignHbookPermissionEditFm(imdesign.bpl\BisDesignHbookPermissionEditFm.pas) segment .text
+
+    62 0001:0000E9C4    63 0001:0000E9D7    64 0001:0000E9E0    65 0001:0000E9E8
+    66 0001:0000E9EB    67 0001:0000EA03    69 0001:0000EA31    71 0001:0000EA62
+    72 0001:0000EA7A    74 0001:0000EA92    79 0001:0000EC64    80 0001:0000EC76
+    81 0001:0000EC7F    82 0001:0000EC8C    87 0001:0000ECC0    88 0001:0000ECD2
+    89 0001:0000ECDB    90 0001:0000ECE8    95 0001:0000ED1C    96 0001:0000ED2E
+    97 0001:0000ED37    98 0001:0000ED44   103 0001:0000ED78   104 0001:0000ED7B
+   105 0001:0000ED82   106 0001:0000ED94   107 0001:0000EDA0   109 0001:0000EDAC
+   118 0001:0000EDB0   119 0001:0000EDD4   121 0001:0000EDDD   122 0001:0000EDF2
+   123 0001:0000EE0A   124 0001:0000EE18   125 0001:0000EE26   126 0001:0000EE4D
+   127 0001:0000EE51   128 0001:0000EE59   129 0001:0000EE5F   130 0001:0000EE7A
+   131 0001:0000EE8B   132 0001:0000EEA5   129 0001:0000EEA8   137 0001:0000EEAD
+   138 0001:0000EEC2   139 0001:0000EED3   140 0001:0000EEE1   141 0001:0000EF01
+   142 0001:0000EF07   143 0001:0000EF22   144 0001:0000EF47   142 0001:0000EF4A
+   147 0001:0000EF51   150 0001:0000EF5F
+
+Line numbers for BisDesignHbookPermissionEditFm(imdesign.bpl\BisDesignHbookPermissionEditFm.pas) segment .itext
+
+   152 0002:000005C4
+
+Line numbers for BisDesignHbookPermissionsFm(imdesign.bpl\BisDesignHbookPermissionsFm.pas) segment .text
+
+    34 0001:0000F34C    35 0001:0000F363    36 0001:0000F36C    37 0001:0000F374
+    38 0001:0000F381    39 0001:0000F38C    40 0001:0000F397    41 0001:0000F39E
+    42 0001:0000F3A2    43 0001:0000F3B2    44 0001:0000F3B5    45 0001:0000F3C1
+    46 0001:0000F3CD    47 0001:0000F3D9    48 0001:0000F3EC    49 0001:0000F402
+    50 0001:0000F415    52 0001:0000F428    53 0001:0000F437    54 0001:0000F446
+    55 0001:0000F455
+
+Line numbers for BisDesignHbookPermissionsFm(imdesign.bpl\BisDesignHbookPermissionsFm.pas) segment .itext
+
+    57 0002:000005CC
+
+Line numbers for BisDesignHbookApplicationInterfaceEditFm(imdesign.bpl\BisDesignHbookApplicationInterfaceEditFm.pas) segment .text
+
+    64 0001:0000FEC8    65 0001:0000FEDB    66 0001:0000FEE4    67 0001:0000FEEC
+    69 0001:0000FEEF    70 0001:0000FF2A    72 0001:0000FF62    74 0001:0000FF9D
+    75 0001:0000FFB5    77 0001:0000FFC6    82 0001:0001021C    83 0001:0001022E
+    84 0001:00010237    85 0001:00010244    90 0001:00010280    91 0001:00010292
+    92 0001:0001029B    93 0001:000102A8    98 0001:000102E4    99 0001:000102F6
+   100 0001:000102FF   101 0001:0001030C   106 0001:00010348   107 0001:0001034B
+   108 0001:00010352   109 0001:00010364   110 0001:00010370   112 0001:0001037C
+
+Line numbers for BisDesignHbookApplicationInterfaceEditFm(imdesign.bpl\BisDesignHbookApplicationInterfaceEditFm.pas) segment .itext
+
+   114 0002:000005D4
+
+Line numbers for BisDesignHbookApplicationInterfacesFm(imdesign.bpl\BisDesignHbookApplicationInterfacesFm.pas) segment .text
+
+    34 0001:00010730    35 0001:00010747    36 0001:00010750    37 0001:00010758
+    38 0001:00010765    39 0001:00010770    40 0001:0001077B    41 0001:00010782
+    42 0001:00010786    43 0001:00010796    44 0001:00010799    45 0001:000107A5
+    46 0001:000107B1    47 0001:000107BD    48 0001:000107D0    49 0001:000107E3
+    50 0001:000107F9    51 0001:0001080C    53 0001:0001081F    54 0001:0001082E
+    55 0001:0001083D    56 0001:0001084C
+
+Line numbers for BisDesignHbookApplicationInterfacesFm(imdesign.bpl\BisDesignHbookApplicationInterfacesFm.pas) segment .itext
+
+    58 0002:000005DC
+
+Line numbers for BisDesignHbookMenuEditFm(imdesign.bpl\BisDesignHbookMenuEditFm.pas) segment .text
+
+   104 0001:00011528   105 0001:00011540   106 0001:00011549   107 0001:00011551
+   108 0001:00011554   109 0001:00011564   110 0001:00011570   112 0001:0001157A
+   114 0001:000115AE   115 0001:000115C8   116 0001:000115E0   117 0001:000115F8
+   118 0001:00011610   120 0001:00011641   122 0001:0001164F   128 0001:0001188C
+   129 0001:000118B0   130 0001:000118BE   131 0001:000118C6   132 0001:000118D7
+   133 0001:000118E5   134 0001:000118F7   135 0001:0001190A   136 0001:00011937
+   137 0001:0001193F   138 0001:00011957   141 0001:0001198E   144 0001:0001199E
+   149 0001:00011A1C   150 0001:00011A2E   151 0001:00011A37   152 0001:00011A44
+   155 0001:00011A70   156 0001:00011A90   157 0001:00011A99   158 0001:00011AA1
+   159 0001:00011AC3   160 0001:00011AD0   161 0001:00011AFF   165 0001:00011B2E
+   170 0001:00011BBC   171 0001:00011BCE   172 0001:00011BD7   173 0001:00011BE4
+   174 0001:00011BF1   178 0001:00011C3C   179 0001:00011C5C   180 0001:00011C65
+   181 0001:00011C6D   182 0001:00011C8F   183 0001:00011C9C   184 0001:00011CCB
+   188 0001:00011CFA   193 0001:00011D78   194 0001:00011D8A   195 0001:00011D93
+   196 0001:00011DA0   201 0001:00011DCC   202 0001:00011DDE   203 0001:00011DE7
+   204 0001:00011DF4   209 0001:00011E20   210 0001:00011E32   211 0001:00011E3B
+   212 0001:00011E42   213 0001:00011E4F   214 0001:00011E56   221 0001:00011E70
+   222 0001:00011E99   223 0001:00011EA4   224 0001:00011EBC   225 0001:00011EC7
+   226 0001:00011ECD   228 0001:00011EE5   229 0001:00011EF4   230 0001:00011F02
+   231 0001:00011F0D   232 0001:00011F19   234 0001:00011F3D   237 0001:00011F4D
+   238 0001:00011F5F   239 0001:00011F74   241 0001:00011F92   242 0001:00011FA6
+   243 0001:00011FC1   244 0001:00011FD8   246 0001:00011FED   249 0001:00012048
+   250 0001:0001204B   251 0001:00012065   256 0001:00012068   257 0001:0001206F
+   258 0001:00012074   261 0001:00012078   262 0001:0001207B   263 0001:00012082
+   264 0001:0001208F   265 0001:0001209C   268 0001:000120A9   269 0001:000120B0
+   274 0001:000120B4   275 0001:000120B7   276 0001:000120CD   277 0001:000120D1
+   278 0001:000120D6   280 0001:000120DD   285 0001:000120F0   286 0001:00012107
+   287 0001:0001211F   288 0001:00012123   289 0001:00012132   290 0001:0001214A
+   293 0001:00012151   299 0001:00012184   300 0001:0001219D   301 0001:000121B5
+   302 0001:000121B9   303 0001:000121DA   304 0001:000121E9   306 0001:00012201
+   312 0001:0001223C   313 0001:0001225A   314 0001:0001226E   315 0001:00012282
+   316 0001:00012293   317 0001:000122A1   318 0001:000122B3   319 0001:000122BC
+   320 0001:000122C8   322 0001:000122D4   323 0001:000122DC   324 0001:000122E8
+   326 0001:000122F2   327 0001:00012300   328 0001:00012320   329 0001:0001234E
+   325 0001:00012356   333 0001:0001236F   334 0001:00012377   336 0001:00012393
+   345 0001:00012434   346 0001:00012457   347 0001:00012472   348 0001:00012489
+   349 0001:0001249D   350 0001:000124AE   351 0001:000124BC   352 0001:000124CE
+   353 0001:000124E1   354 0001:0001250E   355 0001:00012516   356 0001:00012526
+   358 0001:00012530   359 0001:00012545   360 0001:00012563   361 0001:0001257B
+   362 0001:0001258A   364 0001:0001259C   359 0001:0001259D   365 0001:000125A0
+   357 0001:000125A8   369 0001:000125C5   370 0001:000125CD   373 0001:000125E9
+   381 0001:00012680   382 0001:0001269E   383 0001:000126B6   384 0001:000126CD
+   385 0001:000126DE   386 0001:000126EC   387 0001:000126FE   388 0001:00012708
+   389 0001:00012711   390 0001:00012729   391 0001:00012739   392 0001:00012745
+   395 0001:00012759   396 0001:00012779   397 0001:0001278F   398 0001:000127AA
+   399 0001:000127B2   395 0001:000127B5   401 0001:000127C5   404 0001:000127D5
+   412 0001:00012870   413 0001:0001288E   414 0001:000128A6   415 0001:000128BD
+   416 0001:000128CE   417 0001:000128DC   418 0001:000128EE   419 0001:000128F8
+   420 0001:00012901   421 0001:0001290F   423 0001:00012931   424 0001:0001294C
+   425 0001:0001295D   426 0001:00012973   427 0001:00012991   429 0001:00012999
+   423 0001:0001299A   431 0001:000129AA   434 0001:000129BA   439 0001:00012A24
+   440 0001:00012A2B   441 0001:00012A3A   442 0001:00012A4A   443 0001:00012A58
+   444 0001:00012A5F   445 0001:00012A6A   446 0001:00012A71   447 0001:00012A7C
+   448 0001:00012A83   449 0001:00012A95   451 0001:00012AAE   453 0001:00012AC6
+
+Line numbers for BisDesignHbookMenuEditFm(imdesign.bpl\BisDesignHbookMenuEditFm.pas) segment .itext
+
+   455 0002:000005E4
+
+Line numbers for BisDesignHbookMenusFm(imdesign.bpl\BisDesignHbookMenusFm.pas) segment .text
+
+    34 0001:00012E1C    35 0001:00012E33    36 0001:00012E3C    37 0001:00012E44
+    38 0001:00012E55    39 0001:00012E66    40 0001:00012E71    41 0001:00012E7C
+    42 0001:00012E83    43 0001:00012E87    44 0001:00012E97    45 0001:00012E9A
+    46 0001:00012EA6    47 0001:00012EB2    48 0001:00012EBE    49 0001:00012ECA
+    50 0001:00012ED6    51 0001:00012EE2    52 0001:00012EF8    53 0001:00012F0E
+    55 0001:00012F21    56 0001:00012F30    57 0001:00012F3F
+
+Line numbers for BisDesignHbookMenusFm(imdesign.bpl\BisDesignHbookMenusFm.pas) segment .itext
+
+    59 0002:000005EC
+
+Line numbers for BisDesignHbookReportsFrm(imdesign.bpl\BisDesignHbookReportsFrm.pas) segment .text
+
+    70 0001:000135A8    71 0001:000135D0    72 0001:000135D5    73 0001:000135E3
+    74 0001:000135EF    75 0001:00013610    76 0001:0001361F    77 0001:00013622
+    80 0001:00013624    72 0001:00013625    81 0001:00013628    89 0001:00013650
+    90 0001:0001367D    91 0001:00013682    92 0001:00013690    93 0001:0001369C
+    94 0001:000136BD    95 0001:000136CE    96 0001:000136DD    97 0001:000136E0
+   100 0001:000136E2   101 0001:000136E5   104 0001:000136E7    91 0001:000136E8
+   105 0001:000136EB   111 0001:0001371C   112 0001:0001372E   113 0001:00013737
+   114 0001:00013749   115 0001:0001375B   118 0001:00013778   119 0001:00013783
+   120 0001:0001378E   121 0001:00013799   122 0001:000137A5   125 0001:000137B4
+   126 0001:000137B7   127 0001:000137CB   131 0001:000137D0   132 0001:000137D5
+   135 0001:000137D8   136 0001:000137DB   137 0001:000137EF   141 0001:000137F4
+   142 0001:000137F9   147 0001:000137FC   148 0001:00013800   149 0001:0001380C
+   150 0001:0001382C   151 0001:0001383A   153 0001:00013848   158 0001:0001384C
+   159 0001:0001384E   160 0001:00013850   161 0001:0001385A   162 0001:00013874
+   163 0001:0001388A   166 0001:00013890   171 0001:000138B4   172 0001:000138B6
+   173 0001:000138B8   174 0001:000138C2   175 0001:000138DC   176 0001:000138F2
+   179 0001:000138F8   188 0001:0001391C   189 0001:0001393F   190 0001:0001394A
+   192 0001:00013991   193 0001:000139A0   194 0001:000139B0   195 0001:000139BC
+   196 0001:000139CB   197 0001:000139DC   198 0001:000139EA   199 0001:00013A12
+   200 0001:00013A24   201 0001:00013A2D   202 0001:00013A45   203 0001:00013A53
+   204 0001:00013A61   205 0001:00013A6F   207 0001:00013A7D   208 0001:00013A93
+   209 0001:00013AA0   210 0001:00013AAC   212 0001:00013AC9   213 0001:00013AD6
+   214 0001:00013AE3   216 0001:00013B0B   219 0001:00013B20   220 0001:00013B28
+   221 0001:00013B30   222 0001:00013B3A   225 0001:00013B52   230 0001:00013C08
+   231 0001:00013C12   232 0001:00013C1F   234 0001:00013C5A   235 0001:00013C66
+   236 0001:00013C74   237 0001:00013C96   240 0001:00013CAA   243 0001:00013CBC
+   255 0001:00013CDC   256 0001:00013CFE   257 0001:00013D0D   258 0001:00013D19
+   259 0001:00013D3F   260 0001:00013D48   261 0001:00013D50   262 0001:00013D5F
+   263 0001:00013D70   264 0001:00013D75   265 0001:00013D83   266 0001:00013D97
+   267 0001:00013DAB   268 0001:00013DBE   269 0001:00013DC4   270 0001:00013DD0
+   271 0001:00013DDE   273 0001:00013DE6   274 0001:00013DF6   275 0001:00013E04
+   276 0001:00013E11   277 0001:00013E24   278 0001:00013E36   279 0001:00013E49
+   280 0001:00013E6C   281 0001:00013E74   282 0001:00013E94   283 0001:00013EA9
+   284 0001:00013EBD   286 0001:00013ED4   287 0001:00013F01   288 0001:00013F0D
+   291 0001:00013F18   292 0001:00013F24   293 0001:00013F32   294 0001:00013F3B
+   295 0001:00013F48   296 0001:00013F51   297 0001:00013F5B   300 0001:00013F70
+   301 0001:00013F78   302 0001:00013F7E   303 0001:00013F86   308 0001:00013F96
+   313 0001:00014070   314 0001:00014074   315 0001:00014080   316 0001:000140A0
+   317 0001:000140AE   319 0001:000140BC   327 0001:000140C0   328 0001:000140DE
+   329 0001:000140ED   330 0001:000140F9   331 0001:0001411F   332 0001:00014129
+   333 0001:00014133   334 0001:00014147   335 0001:0001415A   336 0001:0001415E
+   337 0001:0001416A   338 0001:00014171   339 0001:0001417E   341 0001:00014185
+   342 0001:00014190   343 0001:000141AF   344 0001:000141B9   345 0001:000141C2
+   346 0001:000141CB   350 0001:000141D2
+
+Line numbers for BisDesignHbookReportsFrm(imdesign.bpl\BisDesignHbookReportsFrm.pas) segment .itext
+
+   355 0002:000005F4
+
+Line numbers for BisDesignHbookReportEditFm(imdesign.bpl\BisDesignHbookReportEditFm.pas) segment .text
+
+    82 0001:00014B3C    83 0001:00014B42    84 0001:00014B49    85 0001:00014B4E
+    87 0001:00014B5A    92 0001:00014B74    93 0001:00014BA3    94 0001:00014BAC
+    95 0001:00014BB4    97 0001:00014BB7    98 0001:00014BED    99 0001:00014BF9
+   100 0001:00014C28   101 0001:00014C36   103 0001:00014C40   104 0001:00014C64
+   105 0001:00014C88   107 0001:00014C9A   113 0001:00014E38   114 0001:00014E5C
+   115 0001:00014E6F   116 0001:00014E7D   117 0001:00014E85   118 0001:00014E96
+   119 0001:00014EA4   120 0001:00014EB6   121 0001:00014EC9   122 0001:00014EF6
+   123 0001:00014EFE   124 0001:00014F16   127 0001:00014F4D   131 0001:00014F5D
+   135 0001:00014FE0   136 0001:00014FF2   137 0001:00014FFB   138 0001:00015008
+   143 0001:00015038   144 0001:0001504A   145 0001:00015053   146 0001:00015060
+   151 0001:00015090   152 0001:000150A2   153 0001:000150AB   154 0001:000150B8
+   159 0001:000150E8   160 0001:0001510D   161 0001:00015116   162 0001:00015124
+   163 0001:00015142   164 0001:00015152   167 0001:0001518C   168 0001:00015197
+   169 0001:000151A2   170 0001:000151AE   173 0001:000151BC   174 0001:000151DD
+   175 0001:000151E4   176 0001:00015200   177 0001:0001524D   179 0001:00015288
+   181 0001:000152C3   182 0001:000152DB   183 0001:000152F3   184 0001:0001530B
+   187 0001:00015360   188 0001:0001537C   189 0001:00015392   190 0001:000153A0
+   191 0001:000153AE   193 0001:000153FA   196 0001:0001541E   201 0001:00015458
+   202 0001:0001547C   203 0001:00015485   204 0001:00015496   208 0001:000154DC
+   209 0001:000154F1   210 0001:00015515   211 0001:00015562   214 0001:000155A8
+   215 0001:000155C0   216 0001:000155D8   217 0001:00015629   219 0001:0001564B
+   220 0001:00015660   221 0001:0001566A   222 0001:00015679   223 0001:000156D1
+   224 0001:000156FE   225 0001:00015715   226 0001:00015737   228 0001:0001574F
+   233 0001:00015850   234 0001:0001586E   235 0001:00015886   236 0001:0001588A
+   237 0001:000158A4   238 0001:000158AF   239 0001:000158BE   240 0001:000158D8
+   241 0001:000158FB   244 0001:00015902   249 0001:00015948   250 0001:00015967
+   251 0001:0001597F   252 0001:00015987   253 0001:000159A1   254 0001:000159C2
+   255 0001:000159D5   257 0001:000159E8   258 0001:000159F7   259 0001:00015A06
+   260 0001:00015A20   263 0001:00015A5E   268 0001:00015AC0   269 0001:00015AC3
+   270 0001:00015AD9   271 0001:00015ADD   272 0001:00015AE2   274 0001:00015AE9
+   277 0001:00015AFC   278 0001:00015B1E   279 0001:00015B2F   280 0001:00015B65
+   281 0001:00015B73   283 0001:00015B77   284 0001:00015B82   288 0001:00015BC0
+   289 0001:00015BC5   292 0001:00015BC8   293 0001:00015BC9   294 0001:00015BCB
+   295 0001:00015BDE   297 0001:00015BE4   301 0001:00015BE8   302 0001:00015BF0
+   310 0001:00015BF4   311 0001:00015C12   312 0001:00015C2A   313 0001:00015C32
+   314 0001:00015C41   315 0001:00015C50   316 0001:00015C60   317 0001:00015C6E
+   318 0001:00015C7D   319 0001:00015C8E   320 0001:00015C9A   322 0001:00015CA6
+   323 0001:00015CB7   324 0001:00015CC8   326 0001:00015CDD   328 0001:00015CF1
+   329 0001:00015D01   332 0001:00015D11   340 0001:00015D4C   341 0001:00015D6B
+   342 0001:00015D76   343 0001:00015D7F   344 0001:00015D97   345 0001:00015DA7
+   346 0001:00015DB6   347 0001:00015DC4   348 0001:00015DD3   349 0001:00015DEF
+   350 0001:00015E05   351 0001:00015E15   352 0001:00015E24   353 0001:00015E2C
+   355 0001:00015E38   356 0001:00015E4F   357 0001:00015E5B   360 0001:00015E66
+   361 0001:00015E72   362 0001:00015E83   363 0001:00015E94   364 0001:00015EA2
+   365 0001:00015EB5   366 0001:00015EBE   367 0001:00015ECA   369 0001:00015EE1
+   372 0001:00015EF1
+
+Line numbers for BisDesignHbookReportEditFm(imdesign.bpl\BisDesignHbookReportEditFm.pas) segment .itext
+
+   375 0002:000005FC
+
+Line numbers for BisDesignHbookReportsFm(imdesign.bpl\BisDesignHbookReportsFm.pas) segment .text
+
+    48 0001:00016290    49 0001:000162A7    50 0001:000162B0    51 0001:000162B8
+    52 0001:000162C5    53 0001:000162D0    54 0001:000162DB    55 0001:000162E2
+    56 0001:000162E6    57 0001:000162F6    58 0001:000162F9    59 0001:00016309
+    60 0001:00016315    61 0001:00016321    62 0001:00016337    64 0001:00016354
+    65 0001:00016363    70 0001:00016430    71 0001:0001644C    72 0001:00016453
+    73 0001:0001646C    74 0001:0001647D    75 0001:00016487    78 0001:000164D0
+    79 0001:000164D3    80 0001:000164DA    83 0001:000164DC    84 0001:000164E1
+    85 0001:000164EA    86 0001:00016505    87 0001:0001650E    90 0001:00016525
+    94 0001:0001652C    95 0001:0001653A   100 0001:0001653C   101 0001:0001654E
+   102 0001:00016557   105 0001:00016574   106 0001:00016577   107 0001:0001657E
+   111 0001:00016580   112 0001:00016585
+
+Line numbers for BisDesignHbookReportsFm(imdesign.bpl\BisDesignHbookReportsFm.pas) segment .itext
+
+   114 0002:00000604
+
+Line numbers for BisDesignExportFm(imdesign.bpl\BisDesignExportFm.pas) segment .text
+
+    76 0001:00016B40    77 0001:00016B52    78 0001:00016B5B    79 0001:00016B63
+    80 0001:00016B67    81 0001:00016B6E    82 0001:00016B72    87 0001:00016B8C
+    88 0001:00016BC1    89 0001:00016BCA    91 0001:00016BD1    92 0001:00016BE7
+    93 0001:00016BEA    94 0001:00016C07    95 0001:00016C24    96 0001:00016C44
+    97 0001:00016C61    98 0001:00016C7E   100 0001:00016C9B   101 0001:00016CA7
+   102 0001:00016CBE   103 0001:00016CE2   105 0001:00016D03   106 0001:00016D10
+   107 0001:00016D26   109 0001:00016D33   110 0001:00016D49   111 0001:00016D59
+   112 0001:00016D6E   113 0001:00016D7B   114 0001:00016D82   115 0001:00016D8F
+   116 0001:00016D9C   117 0001:00016DA9   118 0001:00016DB6   119 0001:00016DC3
+   120 0001:00016DD0   121 0001:00016DDD   122 0001:00016DF5   123 0001:00016E02
+   124 0001:00016E19   125 0001:00016E32   126 0001:00016E48   128 0001:00016E58
+   130 0001:00016E63   131 0001:00016E6A   134 0001:00016ED0   135 0001:00016EDB
+   136 0001:00016EE6   137 0001:00016EF1   138 0001:00016EFD   141 0001:00016F0C
+   142 0001:00016F29   143 0001:00016F6F   152 0001:00016FAC   153 0001:00016FB8
+   154 0001:00016FCC   155 0001:00016FDA   156 0001:00016FEE   157 0001:00016FF5
+   158 0001:00017018   159 0001:0001702D   160 0001:00017036   161 0001:00017050
+   162 0001:00017060   163 0001:00017066   164 0001:00017081   165 0001:00017091
+   167 0001:00017094   160 0001:00017097   169 0001:0001709A   157 0001:0001709D
+   170 0001:000170A6   171 0001:000170BE   172 0001:000170C4   174 0001:000170DA
+   178 0001:000170FA   180 0001:00017116   183 0001:00017120   184 0001:00017123
+   186 0001:0001716C   189 0001:00017170   190 0001:00017173   192 0001:000171BC
+   196 0001:000171C0   197 0001:000171D5   202 0001:000171D8   203 0001:000171F4
+   204 0001:0001720A   205 0001:0001721B   206 0001:00017229   207 0001:00017245
+   208 0001:00017253   209 0001:00017265   210 0001:00017273   211 0001:00017284
+   213 0001:0001729F   216 0001:000172C4   219 0001:000172D4   230 0001:000172F8
+   231 0001:0001731B   232 0001:00017341   233 0001:00017359   234 0001:0001737C
+   235 0001:00017386   236 0001:00017395   237 0001:000173A5   238 0001:000173AF
+   239 0001:000173BF   240 0001:000173D3   241 0001:000173E2   242 0001:000173F7
+   243 0001:00017405   244 0001:00017410   245 0001:00017420   246 0001:00017427
+   247 0001:0001744D   249 0001:00017460   250 0001:00017489   251 0001:00017491
+   252 0001:00017499   253 0001:000174A7   256 0001:00017537   257 0001:0001753A
+   261 0001:0001755A   262 0001:00017566   263 0001:00017574   264 0001:000175A5
+   267 0001:000175B6   268 0001:000175C4   269 0001:000175EC   248 0001:000175EF
+   271 0001:00017605   272 0001:00017627   275 0001:0001763F   276 0001:00017654
+   277 0001:0001765C   278 0001:0001767A   279 0001:0001768B   280 0001:0001769B
+   281 0001:000176A5   286 0001:000176BD   292 0001:00017728   293 0001:00017744
+   294 0001:00017770   295 0001:0001778D   296 0001:000177A7   297 0001:000177B9
+   298 0001:000177C7   299 0001:000177F7   300 0001:00017805   301 0001:0001783E
+   303 0001:0001785C   307 0001:00017874   310 0001:000178B0   311 0001:000178B9
+   312 0001:000178CB   314 0001:000178D4   320 0001:000178E0   321 0001:000178E8
+   322 0001:000178FD   323 0001:0001791C   324 0001:00017920   325 0001:00017931
+   326 0001:0001793F   327 0001:00017949   328 0001:00017957   332 0001:00017977
+   336 0001:00017987
+
+Line numbers for BisDesignExportFm(imdesign.bpl\BisDesignExportFm.pas) segment .itext
+
+   339 0002:0000060C
+
+Line numbers for BisDesignImportFm(imdesign.bpl\BisDesignImportFm.pas) segment .text
+
+    79 0001:00017FB0    80 0001:00017FC2    81 0001:00017FCB    82 0001:00017FD3
+    83 0001:00017FD7    84 0001:00017FDE    85 0001:00017FE2    90 0001:00017FFC
+    91 0001:00018031    92 0001:0001803A    94 0001:00018041    95 0001:00018057
+    96 0001:0001805A    97 0001:00018077    98 0001:00018094    99 0001:000180B4
+   100 0001:000180D1   101 0001:000180EE   103 0001:0001810B   104 0001:00018117
+   105 0001:0001812E   106 0001:0001814F   108 0001:00018173   109 0001:00018180
+   110 0001:00018196   112 0001:000181A3   113 0001:000181B9   114 0001:000181C9
+   115 0001:000181DE   116 0001:000181EB   117 0001:000181F2   118 0001:000181FF
+   119 0001:0001820C   120 0001:00018219   121 0001:00018226   122 0001:00018233
+   123 0001:00018240   124 0001:0001824D   125 0001:0001825A   126 0001:00018272
+   127 0001:00018289   128 0001:000182A2   130 0001:000182B8   132 0001:000182C3
+   133 0001:000182CA   136 0001:00018330   137 0001:0001833B   138 0001:00018346
+   139 0001:00018351   140 0001:0001835D   143 0001:0001836C   144 0001:0001838D
+   145 0001:000183D3   146 0001:00018412   155 0001:00018464   156 0001:00018470
+   157 0001:00018484   158 0001:00018492   159 0001:000184A6   160 0001:000184AD
+   161 0001:000184D0   162 0001:000184E5   163 0001:000184EE   164 0001:00018508
+   165 0001:00018518   166 0001:0001851E   167 0001:00018539   168 0001:00018549
+   170 0001:0001854C   163 0001:0001854F   172 0001:00018552   160 0001:00018555
+   173 0001:0001855E   174 0001:00018576   175 0001:0001857C   177 0001:00018592
+   181 0001:000185B2   183 0001:000185CE   186 0001:000185D8   187 0001:000185DB
+   189 0001:00018624   192 0001:00018628   193 0001:0001862B   195 0001:00018674
+   198 0001:00018678   199 0001:0001867B   201 0001:000186C4   205 0001:000186C8
+   206 0001:000186DD   215 0001:000186E0   216 0001:00018704   217 0001:00018714
+   218 0001:0001872C   219 0001:0001874F   220 0001:00018759   221 0001:00018768
+   222 0001:00018778   223 0001:00018782   224 0001:00018792   225 0001:000187A4
+   226 0001:000187B3   227 0001:000187C1   228 0001:000187CC   229 0001:000187DC
+   230 0001:000187E4   231 0001:000187EC   232 0001:0001881D   233 0001:00018829
+   234 0001:0001882D   235 0001:0001883B   236 0001:00018879   238 0001:00018898
+   239 0001:0001889A   240 0001:000188A5   244 0001:000188B4   245 0001:000188C2
+   246 0001:00018906   247 0001:00018947   248 0001:00018958   251 0001:00018970
+   252 0001:00018978   253 0001:00018988   254 0001:00018998   255 0001:000189A2
+   260 0001:000189BA   272 0001:00018A30   273 0001:00018A53   274 0001:00018A63
+   275 0001:00018A7B   276 0001:00018A9E   277 0001:00018AA8   278 0001:00018AB7
+   279 0001:00018AC7   280 0001:00018AD1   281 0001:00018AE1   282 0001:00018AF5
+   283 0001:00018B04   284 0001:00018B19   285 0001:00018B27   286 0001:00018B32
+   287 0001:00018B42   288 0001:00018B49   289 0001:00018B6F   291 0001:00018B82
+   292 0001:00018B8A   293 0001:00018B92   294 0001:00018BC3   295 0001:00018BCF
+   296 0001:00018BD3   297 0001:00018BE1   298 0001:00018C1F   300 0001:00018C3E
+   301 0001:00018C40   305 0001:00018C50   306 0001:00018C5E   307 0001:00018CA2
+   308 0001:00018CE3   310 0001:00018CF4   311 0001:00018D02   312 0001:00018D2A
+   290 0001:00018D2D   314 0001:00018D43   317 0001:00018D5B   318 0001:00018D70
+   319 0001:00018D78   320 0001:00018D96   321 0001:00018DA7   322 0001:00018DB7
+   323 0001:00018DC1   328 0001:00018DD9   333 0001:00018E50   334 0001:00018E6C
+   335 0001:00018E82   336 0001:00018E93   337 0001:00018EA1   338 0001:00018EBD
+   339 0001:00018ECB   340 0001:00018EDD   341 0001:00018EEB   342 0001:00018EFC
+   344 0001:00018F17   347 0001:00018F3C   350 0001:00018F4C   356 0001:00018F70
+   357 0001:00018F8F   358 0001:00018FB5   359 0001:00018FC6   360 0001:00018FD5
+   361 0001:00018FE3   362 0001:00019011   363 0001:0001901D   364 0001:00019034
+   366 0001:0001904C   367 0001:00019054   370 0001:00019064   376 0001:00019090
+   377 0001:00019098   378 0001:000190AD   379 0001:000190CC   380 0001:000190D0
+   381 0001:000190E1   382 0001:000190EF   383 0001:000190F9   384 0001:00019107
+   388 0001:00019127   392 0001:00019137
+
+Line numbers for BisDesignImportFm(imdesign.bpl\BisDesignImportFm.pas) segment .itext
+
+   394 0002:00000614
+
+Line numbers for BisDesignJournalActionEditFm(imdesign.bpl\BisDesignJournalActionEditFm.pas) segment .text
+
+    71 0001:00019A58    72 0001:00019A5E    73 0001:00019A65    74 0001:00019A71
+    75 0001:00019A80    76 0001:00019A8F    78 0001:00019A9B    84 0001:00019ADC
+    85 0001:00019AEF    86 0001:00019AF8    87 0001:00019B00    88 0001:00019B03
+    89 0001:00019B1B    90 0001:00019B44    91 0001:00019B5C    93 0001:00019B8A
+    95 0001:00019BBB    96 0001:00019BD5    97 0001:00019BEF    98 0001:00019C09
+    99 0001:00019C23   101 0001:00019C3B   106 0001:00019F4C   107 0001:00019F5E
+   108 0001:00019F67   109 0001:00019F74   114 0001:00019FAC   115 0001:00019FBE
+   116 0001:00019FC7   117 0001:00019FD4   122 0001:0001A00C   123 0001:0001A01E
+   124 0001:0001A027   125 0001:0001A034   130 0001:0001A06C   131 0001:0001A095
+   132 0001:0001A09E   133 0001:0001A0BC   134 0001:0001A0DD   135 0001:0001A0FE
+   138 0001:0001A140   139 0001:0001A15B   140 0001:0001A167   142 0001:0001A18A
+   143 0001:0001A191
+
+Line numbers for BisDesignJournalActionEditFm(imdesign.bpl\BisDesignJournalActionEditFm.pas) segment .itext
+
+   145 0002:0000061C
+
+Line numbers for BisDesignJournalActionsFm(imdesign.bpl\BisDesignJournalActionsFm.pas) segment .text
+
+    41 0001:0001A598    42 0001:0001A5AB    43 0001:0001A5B4    44 0001:0001A5BC
+    45 0001:0001A5C9    46 0001:0001A5D4    47 0001:0001A5DF    48 0001:0001A5E6
+    49 0001:0001A5EA    50 0001:0001A5F1    51 0001:0001A601    52 0001:0001A604
+    53 0001:0001A610    54 0001:0001A61C    55 0001:0001A628    56 0001:0001A634
+    57 0001:0001A640    58 0001:0001A653    59 0001:0001A666    60 0001:0001A683
+    61 0001:0001A696    62 0001:0001A6A9    63 0001:0001A6BC    64 0001:0001A6CF
+    66 0001:0001A6E2    67 0001:0001A6F1    72 0001:0001A8D4    73 0001:0001A8F0
+    74 0001:0001A8F7    75 0001:0001A910    76 0001:0001A921    77 0001:0001A92B
+    83 0001:0001A974    84 0001:0001A986    85 0001:0001A98F    86 0001:0001A9A7
+
+Line numbers for BisDesignJournalActionsFm(imdesign.bpl\BisDesignJournalActionsFm.pas) segment .itext
+
+    88 0002:00000624
+
+Line numbers for BisDesignHbookDocumentEditFm(imdesign.bpl\BisDesignHbookDocumentEditFm.pas) segment .text
+
+    74 0001:0001B2BC    75 0001:0001B2EB    76 0001:0001B2F4    77 0001:0001B2FC
+    79 0001:0001B2FF    80 0001:0001B335    81 0001:0001B341    82 0001:0001B370
+    84 0001:0001B37E    85 0001:0001B3A2    86 0001:0001B3BC    88 0001:0001B3CE
+    93 0001:0001B574    94 0001:0001B586    95 0001:0001B58F    96 0001:0001B59C
+   101 0001:0001B5CC   102 0001:0001B5DE   103 0001:0001B5E7   104 0001:0001B5F4
+   109 0001:0001B624   110 0001:0001B636   111 0001:0001B63F   112 0001:0001B64C
+   117 0001:0001B67C   118 0001:0001B68E   119 0001:0001B697   122 0001:0001B6B4
+   123 0001:0001B6BF   124 0001:0001B6CB   127 0001:0001B6DC   128 0001:0001B6FD
+   129 0001:0001B704   130 0001:0001B720   131 0001:0001B76D   133 0001:0001B7A8
+   134 0001:0001B7C0   135 0001:0001B7D8   136 0001:0001B7F0   139 0001:0001B830
+   140 0001:0001B84C   141 0001:0001B862   142 0001:0001B870   143 0001:0001B87E
+   145 0001:0001B8CA   148 0001:0001B8EE   154 0001:0001B92C   155 0001:0001B951
+   157 0001:0001B95C   158 0001:0001B974   159 0001:0001B985   160 0001:0001B993
+   161 0001:0001B9A5   162 0001:0001B9B8   163 0001:0001B9E6   164 0001:0001B9EE
+   165 0001:0001BA06   167 0001:0001BA4B   171 0001:0001BA5B   172 0001:0001BA73
+   173 0001:0001BA9B   174 0001:0001BAEB   176 0001:0001BB19   177 0001:0001BB37
+   178 0001:0001BBA0   181 0001:0001BBC6   182 0001:0001BBDE   183 0001:0001BBE9
+   184 0001:0001BBFB   185 0001:0001BC59   186 0001:0001BC87   187 0001:0001BCA4
+   188 0001:0001BCCC   191 0001:0001BCEA   198 0001:0001BE1C   202 0001:0001BE41
+   203 0001:0001BE52   204 0001:0001BE60   205 0001:0001BE6A   206 0001:0001BE74
+   207 0001:0001BE81   209 0001:0001BE98   211 0001:0001BEA8   216 0001:0001BECC
+   217 0001:0001BEED   218 0001:0001BF05   219 0001:0001BF18   220 0001:0001BF27
+   221 0001:0001BF41   222 0001:0001BF64   223 0001:0001BF7C   225 0001:0001BFAC
+   230 0001:0001C020   231 0001:0001C03F   232 0001:0001C057   233 0001:0001C078
+   234 0001:0001C087   235 0001:0001C096   236 0001:0001C0B0   238 0001:0001C0EE
+   241 0001:0001C144   242 0001:0001C147   243 0001:0001C162   246 0001:0001C178
+   247 0001:0001C19A   248 0001:0001C1AB   249 0001:0001C1E1   250 0001:0001C1EF
+   252 0001:0001C1F3   253 0001:0001C1FE
+
+Line numbers for BisDesignHbookDocumentEditFm(imdesign.bpl\BisDesignHbookDocumentEditFm.pas) segment .itext
+
+   255 0002:0000062C
+
+Line numbers for BisDesignHbookDocumentsFm(imdesign.bpl\BisDesignHbookDocumentsFm.pas) segment .text
+
+    34 0001:0001C5A8    35 0001:0001C5BF    36 0001:0001C5C8    37 0001:0001C5D0
+    38 0001:0001C5DD    39 0001:0001C5E8    40 0001:0001C5F3    41 0001:0001C5FA
+    42 0001:0001C5FE    43 0001:0001C60E    44 0001:0001C611    45 0001:0001C621
+    46 0001:0001C62D    47 0001:0001C643    49 0001:0001C659    50 0001:0001C668
+    55 0001:0001C714    56 0001:0001C726    57 0001:0001C72F
+
+Line numbers for BisDesignHbookDocumentsFm(imdesign.bpl\BisDesignHbookDocumentsFm.pas) segment .itext
+
+    59 0002:00000634
+
+Line numbers for BisDesignHbookConstEditFm(imdesign.bpl\BisDesignHbookConstEditFm.pas) segment .text
+
+    54 0001:0001CF08    55 0001:0001CF1F    56 0001:0001CF28    57 0001:0001CF30
+    58 0001:0001CF33    59 0001:0001CF4D    60 0001:0001CF51    62 0001:0001CF5B
+    63 0001:0001CF73    65 0001:0001CF8B    70 0001:0001D078    71 0001:0001D08A
+    72 0001:0001D093    73 0001:0001D0A0    78 0001:0001D0CC    79 0001:0001D0DE
+    80 0001:0001D0E7    81 0001:0001D0F4    86 0001:0001D120    87 0001:0001D132
+    88 0001:0001D13B    89 0001:0001D148
+
+Line numbers for BisDesignHbookConstEditFm(imdesign.bpl\BisDesignHbookConstEditFm.pas) segment .itext
+
+    91 0002:0000063C
+
+Line numbers for BisDesignHbookConstsFm(imdesign.bpl\BisDesignHbookConstsFm.pas) segment .text
+
+    34 0001:0001D4C8    35 0001:0001D4DF    36 0001:0001D4E8    37 0001:0001D4F0
+    38 0001:0001D4FD    39 0001:0001D508    40 0001:0001D513    41 0001:0001D51A
+    42 0001:0001D51E    43 0001:0001D52E    44 0001:0001D531    45 0001:0001D54B
+    46 0001:0001D561    48 0001:0001D56D    49 0001:0001D57C    54 0001:0001D610
+    55 0001:0001D622    56 0001:0001D62B
+
+Line numbers for BisDesignHbookConstsFm(imdesign.bpl\BisDesignHbookConstsFm.pas) segment .itext
+
+    58 0002:00000644
+
+Line numbers for BisDesign(imdesign.bpl\BisDesign.pas) segment .text
+
+    23 0001:0001D678    24 0001:0001D67C    25 0001:0001D682    27 0001:0001D697
+    28 0001:0001D6A4    29 0001:0001D6B1    30 0001:0001D6BE    31 0001:0001D6CB
+    32 0001:0001D6D8    33 0001:0001D6E5    34 0001:0001D6F2    35 0001:0001D6FF
+    36 0001:0001D70C    37 0001:0001D719    38 0001:0001D726    39 0001:0001D733
+    40 0001:0001D740    41 0001:0001D74D    42 0001:0001D75A    44 0001:0001D767
+    45 0001:0001D774    47 0001:0001D781    49 0001:0001D78E
+
+Line numbers for BisDesign(imdesign.bpl\BisDesign.pas) segment .itext
+
+    51 0002:0000064C
+
+Line numbers for .imdesign(imdesign.dpk) segment .itext
+
+    75 0002:00000654
+
+Bound resource files
+
+c:\program files\codegear\rad studio\5.0\lib\WindowsXP.res
+u:\source\imdesign.bpl\BisDesignMainFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookFirmTypeEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookFirmTypesFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookFirmEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookFirmsFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookAccountEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookAccountsFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookRoleEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookRolesFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookRolesAndAccountsFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookApplicationEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookApplicationsFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookInterfaceEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookInterfacesFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookAccountRoleEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookAccountRolesFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookProfileEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookProfilesFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookSessionsFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookPermissionEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookPermissionsFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookApplicationInterfaceEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookApplicationInterfacesFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookMenuEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookMenusFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookReportsFrm.dfm
+u:\source\imdesign.bpl\BisDesignHbookReportEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookReportsFm.dfm
+u:\source\imdesign.bpl\BisDesignExportFm.dfm
+u:\source\imdesign.bpl\BisDesignImportFm.dfm
+u:\source\imdesign.bpl\BisDesignJournalActionEditFm.dfm
+u:\source\imdesign.bpl\BisDesignJournalActionsFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookDocumentEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookDocumentsFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookConstEditFm.dfm
+u:\source\imdesign.bpl\BisDesignHbookConstsFm.dfm
+imdesign.res
+imdesign.drf
+
+
+Program entry point at 0002:00000654

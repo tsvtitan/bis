@@ -1,0 +1,587 @@
+/* Создание таблицы билетов */
+
+CREATE TABLE /*PREFIX*/TICKETS
+(
+  TICKET_ID VARCHAR(32) NOT NULL,
+  DEALER_ID VARCHAR(32),
+  TIRAGE_ID VARCHAR(32) NOT NULL,
+  SERIES VARCHAR(3) NOT NULL,
+  NUM VARCHAR(8) NOT NULL,
+  USED INTEGER NOT NULL,
+  SURNAME VARCHAR(100),
+  NAME VARCHAR(100),
+  PATRONYMIC VARCHAR(100),
+  ADDRESS VARCHAR(250),
+  PHONE VARCHAR(100),
+
+  G1_PRIZE_1 VARCHAR(50),
+  G1_PRIZE_2 VARCHAR(50),
+  G1_MONEY_1 VARCHAR(50),
+  G1_MONEY_2 VARCHAR(50),
+  G1_CODE VARCHAR(50),
+
+  G2_11 VARCHAR(2),
+  G2_12 VARCHAR(2),
+  G2_13 VARCHAR(2),
+  G2_14 VARCHAR(2),
+  G2_15 VARCHAR(2),
+
+  G2_21 VARCHAR(2),
+  G2_22 VARCHAR(2),
+  G2_23 VARCHAR(2),
+  G2_24 VARCHAR(2),
+  G2_25 VARCHAR(2),
+
+  G2_31 VARCHAR(2),
+  G2_32 VARCHAR(2),
+  G2_33 VARCHAR(2),
+  G2_34 VARCHAR(2),
+  G2_35 VARCHAR(2),
+
+  G2_41 VARCHAR(2),
+  G2_42 VARCHAR(2),
+  G2_43 VARCHAR(2),
+  G2_44 VARCHAR(2),
+  G2_45 VARCHAR(2),
+
+  G2_51 VARCHAR(2),
+  G2_52 VARCHAR(2),
+  G2_53 VARCHAR(2),
+  G2_54 VARCHAR(2),
+  G2_55 VARCHAR(2),
+
+  G2_61 VARCHAR(2),
+  G2_62 VARCHAR(2),
+  G2_63 VARCHAR(2),
+  G2_64 VARCHAR(2),
+  G2_65 VARCHAR(2),
+
+  PRIMARY KEY (TICKET_ID),
+  FOREIGN KEY (DEALER_ID) REFERENCES /*PREFIX*/DEALERS (DEALER_ID),
+  FOREIGN KEY (TIRAGE_ID) REFERENCES /*PREFIX*/TIRAGES (TIRAGE_ID)
+)
+
+--
+
+/* Создание индекса на номер билета */
+
+CREATE INDEX IDX_TICKETS_NUM ON TICKETS (NUM)
+
+--
+
+/* Создание индекса на номер билета */
+
+CREATE INDEX IDX_TICKETS_SERIES ON TICKETS (SERIES)
+
+--
+
+/* Создание индекса на статус */
+
+CREATE INDEX IDX_TICKETS_USED ON TICKETS (USED)
+
+--
+
+/* Создание индекса на G1_PRIZE_1 */
+
+CREATE INDEX IDX_TICKETS_G1_PRIZE_1 ON TICKETS (G1_PRIZE_1)
+
+--
+
+/* Создание индекса на G1_PRIZE_2 */
+
+CREATE INDEX IDX_TICKETS_G1_PRIZE_2 ON TICKETS (G1_PRIZE_2)
+
+--
+
+/* Создание индекса на G1_MONEY_1 */
+
+CREATE INDEX IDX_TICKETS_G1_MONEY_1 ON TICKETS (G1_MONEY_1)
+
+--
+
+/* Создание индекса на G1_MONEY_2 */
+
+CREATE INDEX IDX_TICKETS_G1_MONEY_2 ON TICKETS (G1_MONEY_2)
+
+--
+
+/* Создание индекса на G1_CODE */
+
+CREATE INDEX IDX_TICKETS_G1_CODE ON TICKETS (G1_CODE)
+
+--
+
+/* Создание индекса на G2_11 */
+
+CREATE INDEX IDX_TICKETS_G2_11 ON TICKETS (G2_11)
+
+--
+
+/* Создание индекса на G2_12 */
+
+CREATE INDEX IDX_TICKETS_G2_12 ON TICKETS (G2_12)
+
+--
+
+/* Создание индекса на G2_13 */
+
+CREATE INDEX IDX_TICKETS_G2_13 ON TICKETS (G2_13)
+
+--
+
+/* Создание индекса на G2_14 */
+
+CREATE INDEX IDX_TICKETS_G2_14 ON TICKETS (G2_14)
+
+--
+
+/* Создание индекса на G2_15 */
+
+CREATE INDEX IDX_TICKETS_G2_15 ON TICKETS (G2_15)
+
+--
+
+/* Создание индекса на G2_21 */
+
+CREATE INDEX IDX_TICKETS_G2_21 ON TICKETS (G2_21)
+
+--
+
+/* Создание индекса на G2_22 */
+
+CREATE INDEX IDX_TICKETS_G2_22 ON TICKETS (G2_22)
+
+--
+
+/* Создание индекса на G2_23 */
+
+CREATE INDEX IDX_TICKETS_G2_23 ON TICKETS (G2_23)
+
+--
+
+/* Создание индекса на G2_24 */
+
+CREATE INDEX IDX_TICKETS_G2_24 ON TICKETS (G2_24)
+
+--
+
+/* Создание индекса на G2_25 */
+
+CREATE INDEX IDX_TICKETS_G2_25 ON TICKETS (G2_25)
+
+--
+
+/* Создание индекса на G2_31 */
+
+CREATE INDEX IDX_TICKETS_G2_31 ON TICKETS (G2_31)
+
+--
+
+/* Создание индекса на G2_32 */
+
+CREATE INDEX IDX_TICKETS_G2_32 ON TICKETS (G2_32)
+
+--
+
+/* Создание индекса на G2_33 */
+
+CREATE INDEX IDX_TICKETS_G2_33 ON TICKETS (G2_33)
+
+--
+
+/* Создание индекса на G2_34 */
+
+CREATE INDEX IDX_TICKETS_G2_34 ON TICKETS (G2_34)
+
+--
+
+/* Создание индекса на G2_35 */
+
+CREATE INDEX IDX_TICKETS_G2_35 ON TICKETS (G2_35)
+
+--
+
+/* Создание индекса на G2_41 */
+
+CREATE INDEX IDX_TICKETS_G2_41 ON TICKETS (G2_41)
+
+--
+
+/* Создание индекса на G2_42 */
+
+CREATE INDEX IDX_TICKETS_G2_42 ON TICKETS (G2_42)
+
+--
+
+/* Создание индекса на G2_43 */
+
+CREATE INDEX IDX_TICKETS_G2_43 ON TICKETS (G2_43)
+
+--
+
+/* Создание индекса на G2_44 */
+
+CREATE INDEX IDX_TICKETS_G2_44 ON TICKETS (G2_44)
+
+--
+
+/* Создание индекса на G2_45 */
+
+CREATE INDEX IDX_TICKETS_G2_45 ON TICKETS (G2_45)
+
+--
+
+/* Создание индекса на G2_51 */
+
+CREATE INDEX IDX_TICKETS_G2_51 ON TICKETS (G2_51)
+
+--
+
+/* Создание индекса на G2_52 */
+
+CREATE INDEX IDX_TICKETS_G2_52 ON TICKETS (G2_52)
+
+--
+
+/* Создание индекса на G2_53 */
+
+CREATE INDEX IDX_TICKETS_G2_53 ON TICKETS (G2_53)
+
+--
+
+/* Создание индекса на G2_54 */
+
+CREATE INDEX IDX_TICKETS_G2_54 ON TICKETS (G2_54)
+
+--
+
+/* Создание индекса на G2_55 */
+
+CREATE INDEX IDX_TICKETS_G2_55 ON TICKETS (G2_55)
+
+--
+
+/* Создание индекса на G2_61 */
+
+CREATE INDEX IDX_TICKETS_G2_61 ON TICKETS (G2_61)
+
+--
+
+/* Создание индекса на G2_62 */
+
+CREATE INDEX IDX_TICKETS_G2_62 ON TICKETS (G2_62)
+
+--
+
+/* Создание индекса на G2_63 */
+
+CREATE INDEX IDX_TICKETS_G2_63 ON TICKETS (G2_63)
+
+--
+
+/* Создание индекса на G2_64 */
+
+CREATE INDEX IDX_TICKETS_G2_64 ON TICKETS (G2_64)
+
+--
+
+/* Создание индекса на G2_65 */
+
+CREATE INDEX IDX_TICKETS_G2_65 ON TICKETS (G2_65)
+
+--
+
+/* Создание просмотра таблицы билетов */
+
+CREATE VIEW /*PREFIX*/S_TICKETS
+(
+  TICKET_ID,
+  DEALER_ID,
+  TIRAGE_ID,
+  SERIES,
+  NUM,
+  USED,
+  SURNAME,
+  NAME,
+  PATRONYMIC,
+  ADDRESS,
+  PHONE,
+
+  G1_PRIZE_1,
+  G1_PRIZE_2,
+  G1_MONEY_1,
+  G1_MONEY_2,
+  G1_CODE,
+
+  G2_11,
+  G2_12,
+  G2_13,
+  G2_14,
+  G2_15,
+
+  G2_21,
+  G2_22,
+  G2_23,
+  G2_24,
+  G2_25,
+
+  G2_31,
+  G2_32,
+  G2_33,
+  G2_34,
+  G2_35,
+
+  G2_41,
+  G2_42,
+  G2_43,
+  G2_44,
+  G2_45,
+
+  G2_51,
+  G2_52,
+  G2_53,
+  G2_54,
+  G2_55,
+
+  G2_61,
+  G2_62,
+  G2_63,
+  G2_64,
+  G2_65,
+
+  TIRAGE_NUM,
+  DEALER_NAME
+)
+AS
+  SELECT T.*,
+         TR.NUM AS TIRAGE_NUM,
+         F.SMALL_NAME AS DEALER_NAME
+    FROM /*PREFIX*/TICKETS T
+    JOIN /*PREFIX*/TIRAGES TR ON TR.TIRAGE_ID=T.TIRAGE_ID
+    LEFT JOIN /*PREFIX*/DEALERS D ON D.DEALER_ID=T.DEALER_ID
+    LEFT JOIN /*PREFIX*/FIRMS F ON F.FIRM_ID=D.DEALER_ID
+
+
+--
+
+/* Создание процедуры добавления билета */
+
+CREATE PROCEDURE /*PREFIX*/I_TICKET
+(
+  TICKET_ID VARCHAR(32),
+  DEALER_ID VARCHAR(32),
+  TIRAGE_ID VARCHAR(32),
+  SERIES VARCHAR(3),
+  NUM VARCHAR(8),
+  USED INTEGER,
+  SURNAME VARCHAR(100),
+  NAME VARCHAR(100),
+  PATRONYMIC VARCHAR(100),
+  ADDRESS VARCHAR(250),
+  PHONE VARCHAR(100),
+
+  G1_PRIZE_1 VARCHAR(50),
+  G1_PRIZE_2 VARCHAR(50),
+  G1_MONEY_1 VARCHAR(50),
+  G1_MONEY_2 VARCHAR(50),
+  G1_CODE VARCHAR(50),
+
+  G2_11 VARCHAR(2),
+  G2_12 VARCHAR(2),
+  G2_13 VARCHAR(2),
+  G2_14 VARCHAR(2),
+  G2_15 VARCHAR(2),
+
+  G2_21 VARCHAR(2),
+  G2_22 VARCHAR(2),
+  G2_23 VARCHAR(2),
+  G2_24 VARCHAR(2),
+  G2_25 VARCHAR(2),
+
+  G2_31 VARCHAR(2),
+  G2_32 VARCHAR(2),
+  G2_33 VARCHAR(2),
+  G2_34 VARCHAR(2),
+  G2_35 VARCHAR(2),
+
+  G2_41 VARCHAR(2),
+  G2_42 VARCHAR(2),
+  G2_43 VARCHAR(2),
+  G2_44 VARCHAR(2),
+  G2_45 VARCHAR(2),
+
+  G2_51 VARCHAR(2),
+  G2_52 VARCHAR(2),
+  G2_53 VARCHAR(2),
+  G2_54 VARCHAR(2),
+  G2_55 VARCHAR(2),
+
+  G2_61 VARCHAR(2),
+  G2_62 VARCHAR(2),
+  G2_63 VARCHAR(2),
+  G2_64 VARCHAR(2),
+  G2_65 VARCHAR(2)
+)
+AS
+BEGIN
+  INSERT INTO /*PREFIX*/TICKETS (TICKET_ID,DEALER_ID,TIRAGE_ID,SERIES,NUM,USED,
+                                 SURNAME,NAME,PATRONYMIC,ADDRESS,PHONE,
+                                 G1_PRIZE_1,G1_PRIZE_2,G1_MONEY_1,G1_MONEY_2,G1_CODE,
+                                 G2_11,G2_12,G2_13,G2_14,G2_15,
+                                 G2_21,G2_22,G2_23,G2_24,G2_25,
+                                 G2_31,G2_32,G2_33,G2_34,G2_35,
+                                 G2_41,G2_42,G2_43,G2_44,G2_45,
+                                 G2_51,G2_52,G2_53,G2_54,G2_55,
+                                 G2_61,G2_62,G2_63,G2_64,G2_65)
+       VALUES (:TICKET_ID,:DEALER_ID,:TIRAGE_ID,:SERIES,:NUM,:USED,
+               :SURNAME,:NAME,:PATRONYMIC,:ADDRESS,:PHONE,
+               :G1_PRIZE_1,:G1_PRIZE_2,:G1_MONEY_1,:G1_MONEY_2,:G1_CODE,
+               :G2_11,:G2_12,:G2_13,:G2_14,:G2_15,
+               :G2_21,:G2_22,:G2_23,:G2_24,:G2_25,
+               :G2_31,:G2_32,:G2_33,:G2_34,:G2_35,
+               :G2_41,:G2_42,:G2_43,:G2_44,:G2_45,
+               :G2_51,:G2_52,:G2_53,:G2_54,:G2_55,
+               :G2_61,:G2_62,:G2_63,:G2_64,:G2_65);
+END;
+
+--
+
+/* Создание процедуры изменения билета */
+
+CREATE OR ALTER PROCEDURE /*PREFIX*/U_TICKET
+(
+  TICKET_ID VARCHAR(32),
+  DEALER_ID VARCHAR(32),
+  TIRAGE_ID VARCHAR(32),
+  SERIES VARCHAR(3),
+  NUM VARCHAR(8),
+  USED INTEGER,
+  SURNAME VARCHAR(100),
+  NAME VARCHAR(100),
+  PATRONYMIC VARCHAR(100),
+  ADDRESS VARCHAR(250),
+  PHONE VARCHAR(100),
+
+  G1_PRIZE_1 VARCHAR(50),
+  G1_PRIZE_2 VARCHAR(50),
+  G1_MONEY_1 VARCHAR(50),
+  G1_MONEY_2 VARCHAR(50),
+  G1_CODE VARCHAR(50),
+
+  G2_11 VARCHAR(2),
+  G2_12 VARCHAR(2),
+  G2_13 VARCHAR(2),
+  G2_14 VARCHAR(2),
+  G2_15 VARCHAR(2),
+
+  G2_21 VARCHAR(2),
+  G2_22 VARCHAR(2),
+  G2_23 VARCHAR(2),
+  G2_24 VARCHAR(2),
+  G2_25 VARCHAR(2),
+
+  G2_31 VARCHAR(2),
+  G2_32 VARCHAR(2),
+  G2_33 VARCHAR(2),
+  G2_34 VARCHAR(2),
+  G2_35 VARCHAR(2),
+
+  G2_41 VARCHAR(2),
+  G2_42 VARCHAR(2),
+  G2_43 VARCHAR(2),
+  G2_44 VARCHAR(2),
+  G2_45 VARCHAR(2),
+
+  G2_51 VARCHAR(2),
+  G2_52 VARCHAR(2),
+  G2_53 VARCHAR(2),
+  G2_54 VARCHAR(2),
+  G2_55 VARCHAR(2),
+
+  G2_61 VARCHAR(2),
+  G2_62 VARCHAR(2),
+  G2_63 VARCHAR(2),
+  G2_64 VARCHAR(2),
+  G2_65 VARCHAR(2),
+
+  OLD_TICKET_ID VARCHAR(32)
+)
+AS
+BEGIN
+  UPDATE /*PREFIX*/TICKETS
+     SET TICKET_ID=:TICKET_ID,
+         DEALER_ID=:DEALER_ID,
+         TIRAGE_ID=:TIRAGE_ID,
+         SERIES=:SERIES,
+         NUM=:NUM,
+         USED=:USED,
+         SURNAME=:SURNAME,
+         NAME=:NAME,
+         PATRONYMIC=:PATRONYMIC,
+         ADDRESS=:ADDRESS,
+         PHONE=:PHONE,
+
+         G1_PRIZE_1=:G1_PRIZE_1,
+         G1_PRIZE_2=:G1_PRIZE_2,
+         G1_MONEY_1=:G1_MONEY_1,
+         G1_MONEY_2=:G1_MONEY_2,
+         G1_CODE=:G1_CODE,
+
+         G2_11=:G2_11,
+         G2_12=:G2_12,
+         G2_13=:G2_13,
+         G2_14=:G2_14,
+         G2_15=:G2_15,
+
+         G2_21=:G2_21,
+         G2_22=:G2_22,
+         G2_23=:G2_23,
+         G2_24=:G2_24,
+         G2_25=:G2_25,
+
+         G2_31=:G2_31,
+         G2_32=:G2_32,
+         G2_33=:G2_33,
+         G2_34=:G2_34,
+         G2_35=:G2_35,
+
+         G2_41=:G2_41,
+         G2_42=:G2_42,
+         G2_43=:G2_43,
+         G2_44=:G2_44,
+         G2_45=:G2_45,
+
+         G2_51=:G2_51,
+         G2_52=:G2_52,
+         G2_53=:G2_53,
+         G2_54=:G2_54,
+         G2_55=:G2_55,
+
+         G2_61=:G2_61,
+         G2_62=:G2_62,
+         G2_63=:G2_63,
+         G2_64=:G2_64,
+         G2_65=:G2_65
+
+   WHERE TICKET_ID=:OLD_TICKET_ID;
+END;
+
+--
+
+/* Создание процедуры удаления билета */
+
+CREATE PROCEDURE /*PREFIX*/D_TICKET
+(
+  OLD_TICKET_ID VARCHAR(32)
+)
+AS
+BEGIN
+  DELETE FROM /*PREFIX*/TICKETS
+        WHERE TICKET_ID=:OLD_TICKET_ID;
+END;
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

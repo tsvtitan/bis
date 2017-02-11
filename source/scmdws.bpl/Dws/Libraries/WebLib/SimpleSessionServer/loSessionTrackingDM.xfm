@@ -1,0 +1,27 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 362
+  Top = 336
+  Height = 245
+  Width = 479
+  object Sessions: TClientDataSet
+    Aggregates = <>
+    FieldDefs = <>
+    IndexDefs = <>
+    Params = <>
+    StoreDefs = True
+    Left = 24
+    Top = 16
+  end
+  object server: TIdTCPServer
+    Bindings = <>
+    DefaultPort = 9000
+    OnConnect = serverConnect
+    OnExecute = serverExecute
+    TerminateWaitTime = 500
+    Left = 328
+    Top = 88
+  end
+end

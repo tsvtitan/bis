@@ -1,0 +1,110 @@
+unit BisAudioFreq;
+
+interface
+
+uses Classes, mmSystem,
+     WaveUtils,
+     FftSpec;
+
+type
+
+  TBisAudioFreq=class(TObject)
+  private
+    FLowFreq: Word;
+    FSamplesPerSec: Integer;
+    FBitsPerSample: Integer;
+    FChannels: Integer;
+    FIndex: Integer; 	
+    FOnDetect: TNotifyEvent;
+    FThreshold: Word;
+
+    procedure Detect;
+  protected
+    procedure DoDetect; virtual;
+  public
+    constructor Create; virtual;
+    destructor Destroy; override;
+
+    function SetFormat(SamplesPerSec, BitsPerSample, Channels: Integer): Boolean; overload;
+    function SetFormat(Format: TPCMFormat): Boolean; overload;
+    function SetFormat(Format: PWaveFormatEx): Boolean; overload;
+
+    function Write(const Data: Pointer; Size: Cardinal): Boolean;
+
+    property LowFreq: Word read FLowFreq write FLowFreq;
+    property Threshold: Word read FThreshold write FThreshold;
+    property OnDetect: TNotifyEvent read FOnDetect write FOnDetect;
+  end;
+
+implementation
+
+{ TBisAudioFreq }
+
+constructor TBisAudioFreq.Create;
+begin
+  inherited Create;
+
+  FThreshold:=900;
+  FIndex:=0;
+end;
+
+destructor TBisAudioFreq.Destroy;
+begin
+  FFft.Free;
+  inherited Destroy;
+end;
+
+procedure TBisAudioFreq.DoDetect;
+begin
+  if Assigned(FOnDetect) then
+    FOnDetect(Self);
+end;
+
+function TBisAudioFreq.SetFormat(SamplesPerSec, BitsPerSample, Channels: Integer): Boolean;
+begin
+  Result:=false;
+  if ((SamplesPerSec>0) and (BitsPerSample>=8) and (Channels>=1)) then begin
+
+    FSamplesPerSec:=SamplesPerSec;
+    FBitsPerSample:=BitsPerSample;
+    FChannels:=Channels;
+
+    Result:=true;
+  end;
+end;
+
+function TBisAudioFreq.SetFormat(Format: PWaveFormatEx): Boolean;
+begin
+  Result:=false;
+  if Assigned(Format) then
+    Result:=SetFormat(Format.nSamplesPerSec,Format.wBitsPerSample,Format.nChannels);
+end;
+
+function TBisAudioFreq.SetFormat(Format: TPCMFormat): Boolean;
+var
+  F: TWaveFormatEx;
+begin
+  SetPCMAudioFormatS(@F,Format);
+  Result:=SetFormat(@F);
+end;
+
+procedure TBisAudioFreq.Detect;
+var
+  R,I: Double;
+begin
+  FFft.fft;
+  FFft.CalcMagnitude;
+  FFft.CalcFrequency(FIndex,R,I);
+  FFft.Clear;
+  FIndex:=0;
+end;
+
+function TBisAudioFreq.Write(const Data: Pointer; Size: Cardinal): Boolean;
+begin
+  Result:=false;
+  if Assigned(Data) and (Size>0) then begin
+
+  end;
+end;
+
+end.

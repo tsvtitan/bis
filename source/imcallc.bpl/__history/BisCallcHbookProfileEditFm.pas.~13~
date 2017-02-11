@@ -1,0 +1,91 @@
+unit BisCallcHbookProfileEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisCallcHbookProfileEditForm = class(TBisDataEditForm)
+    LabelApplication: TLabel;
+    EditApplication: TEdit;
+    ButtonApplication: TButton;
+    LabelLogin: TLabel;
+    EditLogin: TEdit;
+    ButtonLogin: TButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcHbookProfileEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookProfileInsertFormIface=class(TBisCallcHbookProfileEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookProfileUpdateFormIface=class(TBisCallcHbookProfileEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookProfileDeleteFormIface=class(TBisCallcHbookProfileEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookProfileEditForm: TBisCallcHbookProfileEditForm;
+
+implementation
+
+uses BisCallcHbookAccountsFm, BisCallcHbookApplicationsFm;
+
+{$R *.dfm}
+
+{ TBisCallcHbookProfileEditFormIface }
+
+constructor TBisCallcHbookProfileEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookProfileEditForm;
+  with Params do begin
+    AddEditData('APPLICATION_ID','EditApplication','LabelApplication','ButtonApplication',
+                TBisCallcHbookApplicationsFormIface,'APPLICATION_NAME',true,true,'','NAME').Older('OLD_APPLICATION_ID');
+    AddEditData('ACCOUNT_ID','EditLogin','LabelLogin','ButtonLogin',
+                TBisCallcHbookAccountsFormIface,'USER_NAME',true,true).Older('OLD_ACCOUNT_ID');
+  end;
+end;
+
+{ TBisCallcHbookProfileInsertFormIface }
+
+constructor TBisCallcHbookProfileInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_PROFILE';
+end;
+
+{ TBisCallcHbookProfileUpdateFormIface }
+
+constructor TBisCallcHbookProfileUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_PROFILE';
+end;
+
+{ TBisCallcHbookProfileDeleteFormIface }
+
+constructor TBisCallcHbookProfileDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_PROFILE';
+end;
+
+end.

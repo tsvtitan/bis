@@ -1,0 +1,27 @@
+unit BisHandbookFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisChildFm;
+
+type
+  TBisHandbookForm = class(TBisChildForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisHandbookIface=class(TBisChildIface)
+  end;
+
+var
+  BisHandbookForm: TBisHandbookForm;
+
+implementation
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,105 @@
+unit BisTaxiDataDiscountsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataFrm, BisDataGridFrm, BisDataGridFm, BisDataEditFm;
+
+type
+  TBisTaxiDataDiscountsFrame=class(TBisDataGridFrame)
+  private
+    FClientId: Variant;
+    FUserName: String;
+  protected
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property ClientId: Variant read FClientId write FClientId;
+    property UserName: String read FUserName write FUserName; 
+  end;
+
+  TBisTaxiDataDiscountsForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataDiscountsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataDiscountsForm: TBisTaxiDataDiscountsForm;
+
+implementation
+
+uses BisUtils, BisTaxiDataDiscountEditFm, BisConsts, BisParam;
+
+{$R *.dfm}
+
+{ TBisTaxiDataDiscountsFrame }
+
+constructor TBisTaxiDataDiscountsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FilterClass:=TBisTaxiDataDiscountFilterFormIface;
+  InsertClass:=TBisTaxiDataDiscountInsertFormIface;
+  UpdateClass:=TBisTaxiDataDiscountUpdateFormIface;
+  DeleteClass:=TBisTaxiDataDiscountDeleteFormIface;
+  with Provider do begin
+    ProviderName:='S_DISCOUNTS';
+    with FieldNames do begin
+      AddKey('DISCOUNT_ID');
+      AddInvisible('DISCOUNT_TYPE_ID');
+      AddInvisible('CLIENT_ID');
+      AddInvisible('PRIORITY');
+      Add('USER_NAME','Клиент',110);
+      Add('DISCOUNT_TYPE_NAME','Тип скидки',100);
+      Add('NUM','Номер',130);
+      Add('DATE_BEGIN','Дата начала',80);
+      Add('DATE_END','Дата окончания',80);
+    end;
+    Orders.Add('USER_NAME');
+    Orders.Add('PRIORITY');
+  end;
+
+  FClientId:=Null;
+end;
+
+procedure TBisTaxiDataDiscountsFrame.BeforeIfaceExecute(AIface: TBisDataEditFormIface);
+var
+  Param: TBisParam;
+begin
+  inherited BeforeIfaceExecute(AIface);
+  if Assigned(AIface) then begin
+    with AIface.Params do begin
+      ParamByName('USER_NAME').Value:=FUserName;
+      Param:=ParamByName('CLIENT_ID');
+      Param.Value:=FAccountId;
+      if not Param.Empty then
+        Param.ExcludeModes(AllParamEditModes);
+    end;
+  end;
+end;
+
+{ TBisTaxiDataDiscountsFormIface }
+
+constructor TBisTaxiDataDiscountsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataDiscountsForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+end;
+
+{ TBisTaxiDataDiscountsForm }
+
+class function TBisTaxiDataDiscountsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataDiscountsFrame;
+end;
+
+end.

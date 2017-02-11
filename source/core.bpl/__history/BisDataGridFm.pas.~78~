@@ -1,0 +1,86 @@
+unit BisDataGridFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls,
+  BisFm, BisDataFm, BisDataFrm, BisDataGridFrm, ActnList;
+
+type
+  TBisDataGridForm = class(TBisDataForm)
+  private
+    FOldGridDblClick: TNotifyEvent;
+    function GetDataFrame: TBisDataGridFrame;
+    procedure GridDblClick(Sender: TObject);
+  protected
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+    function GetDataFrameClass: TBisDataFrameClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property DataFrame: TBisDataGridFrame read GetDataFrame;
+  end;
+
+  TBisDataGridFormIface=class(TBisDataFormIface)
+  protected
+    function GetFormClass: TBisFormClass; override;
+  public
+    property   
+  end;
+
+var
+  BisDataGridForm: TBisDataGridForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisDataGridFormIface }
+
+function TBisDataGridFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisDataGridForm;
+end;
+
+{ TBisDataGridForm }
+
+constructor TBisDataGridForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  if Assigned(DataFrame) then begin
+    FOldGridDblClick:=DataFrame.Grid.OnDblClick;
+    DataFrame.Grid.OnDblClick:=GridDblClick;
+  end;
+end;
+
+function TBisDataGridForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisDataGridFrame;
+end;
+
+procedure TBisDataGridForm.GridDblClick(Sender: TObject);
+begin
+  if ActionOk.Visible and ActionOk.Enabled then begin
+    if Assigned(DataFrame) and Assigned(DataFrame.Provider) then begin
+      if DataFrame.Provider.Active and
+         not DataFrame.Provider.IsEmpty then
+        ModalResult:=mrOk;
+    end;
+  end else begin
+    if Assigned(FOldGridDblClick) then
+       FOldGridDblClick(Sender);
+  end;
+end;
+
+procedure TBisDataGridForm.KeyDown(var Key: Word; Shift: TShiftState);
+begin
+  inherited KeyDown(Key,Shift);
+end;
+
+function TBisDataGridForm.GetDataFrame: TBisDataGridFrame;
+begin
+  Result:=TBisDataGridFrame(inherited DataFrame);
+end;
+
+end.

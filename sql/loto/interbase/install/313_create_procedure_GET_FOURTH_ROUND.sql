@@ -1,0 +1,27 @@
+/* Создание процедуры получения четвертого раунда */
+
+CREATE PROCEDURE /*PREFIX*/GET_FOURTH_ROUND
+(
+  TIRAGE_ID VARCHAR(32),
+  PRIZE_ID VARCHAR(32)
+)
+RETURNS
+(
+  TICKET_COUNT INTEGER
+)
+AS
+BEGIN
+  TICKET_COUNT=0;
+
+  SELECT COUNT(*)
+    FROM /*PREFIX*/GET_TICKET_NUM(:TIRAGE_ID,:PRIZE_ID,4)
+    INTO :TICKET_COUNT;
+
+  SUSPEND;
+END;
+
+--
+
+/* Фиксация изменений */
+
+COMMIT

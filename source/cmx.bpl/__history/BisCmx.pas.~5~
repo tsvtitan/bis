@@ -1,0 +1,66 @@
+unit BisCmx;
+
+interface
+
+uses BisConnectionModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitConnectionModule(AModule: TBisConnectionModule); stdcall;
+
+exports
+  InitConnectionModule;
+
+implementation
+
+uses Classes, Variants, DB,
+     BisCmxConnection, BisDataSet, BisCore, BisCmxConsts;
+
+procedure InitConnectionModule(AModule: TBisConnectionModule); stdcall;
+var
+  DSConnections: TBisDataSet;
+  DSParams: TBisDataSet;
+  Stream: TMemoryStream;
+  ParamName: String;
+  AConnection: TBisCmxConnection;
+begin
+  if Core.LocalBase.BaseLoaded then begin
+    DSConnections:=TBisDataSet.Create(nil);
+    Stream:=TMemoryStream.Create;
+    try
+      ParamName:=Core.Config.Read(AModule.ObjectName,SParamConnections,SConnections);
+      if Core.LocalBase.ReadParam(ParamName,Stream) then begin
+        DSConnections.LoadFromStream(Stream);
+        if DSConnections.Active and not DSConnections.IsEmpty then begin
+          DSConnections.First;
+          while not DSConnections.Eof do begin
+            Stream.Clear;
+            if DSConnections.FieldByName(SFieldParams).IsBlob and
+               not VarIsNull(DSConnections.FieldByName(SFieldParams).Value) then begin
+              DSParams:=TBisDataSet.Create(nil);
+              try
+                TBlobField(DSConnections.FieldByName(SFieldParams)).SaveToStream(Stream);
+                DSParams.LoadFromStream(Stream);
+                if DSParams.Active and not DSParams.IsEmpty then begin
+                  AConnection:=TBisCmxConnection.Create(AModule.Connections);
+                  AConnection.Name:=DSConnections.FieldByName(SFieldName).AsString;
+                  AConnection.Description:=DSConnections.FieldByName(SFieldDescription).AsString;
+                  AConnection.Enabled:=Boolean(DSConnections.FieldByName(SFieldEnabled).AsInteger);
+                  AConnection.InitDefaultParams(DSParams);
+                  AModule.Connections.AddConnection(AConnection);
+                end;  
+              finally
+                DSParams.Free;
+              end;
+            end;
+            DSConnections.Next;
+          end;
+        end;
+      end;
+    finally
+      Stream.Free;
+      DSConnections.Free;
+    end;
+  end;
+end;
+
+end.

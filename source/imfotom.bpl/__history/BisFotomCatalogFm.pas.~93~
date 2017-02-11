@@ -1,0 +1,71 @@
+unit BisFotomCatalogFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ActnList, StdCtrls, ExtCtrls, ComCtrls, DB,
+  BisDataFm, BisDataGridFm, BisFieldNames;
+
+type
+  TBisFotomCatalogForm = class(TBisDataGridForm)
+  private
+    FFieldNameBarcode: TBisFieldName;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure BeforeShow; override;
+  end;
+
+var
+  BisFotomCatalogForm: TBisFotomCatalogForm;
+
+implementation
+
+uses BisFotomConsts, BisDialogs, BisOrders;
+
+{$R *.dfm}
+
+{ TBisFotomCatalogForm }
+
+constructor TBisFotomCatalogForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  with DataFrame do begin
+    ActionExport.Visible:=false;
+    ActionFilter.Visible:=false; 
+    ActionViewing.Visible:=false;
+    ActionInsert.Visible:=false;
+    ActionDuplicate.Visible:=false;
+    ActionUpdate.Visible:=false;
+    ActionDelete.Visible:=false;
+    ToolBarEdit.Visible:=false;
+    Grid.NumberVisible:=false;
+    Grid.ChessVisible:=true;
+    Grid.AutoResizeableColumns:=true;
+    Grid.SearchEnabled:=true;
+    with Provider.FieldNames do begin
+      AddKey(SFieldID);
+      AddInvisible(SFieldOwner);
+      FFieldNameBarcode:=Add(SFieldBarcode,'Штрих-код',90);
+      Add(SFieldCode,'Код',110);
+      Add(SFieldName,'Наименование',170);
+      Add(SFieldProducer,'Производитель',80);
+      Add(SFieldCountry,'Страна',60);
+    end;
+  end;
+end;
+
+destructor TBisFotomCatalogForm.Destroy;
+begin
+
+  inherited Destroy;
+end;
+
+procedure TBisFotomCatalogForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  DataFrame.Grid.OrderByFieldName(FFieldNameBarcode,otDesc);
+end;
+
+end.

@@ -1,0 +1,90 @@
+unit BisDocproManagementMasterEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisDocproManagementMasterEditForm = class(TBisDataEditForm)
+    LabelDateIssue: TLabel;
+    DateTimePickerDateIssue: TDateTimePicker;
+    DateTimePickerTimeIssue: TDateTimePicker;
+    GroupBoxDoc: TGroupBox;
+    LabelName: TLabel;
+    LabelNum: TLabel;
+    LabelDateDoc: TLabel;
+    EditName: TEdit;
+    EditNum: TEdit;
+    DateTimePickerDateDoc: TDateTimePicker;
+    LabelWhoFirm: TLabel;
+    EditWhoFirm: TEdit;
+    LabelWhoAccount: TLabel;
+    EditWhoAccount: TEdit;
+    GroupBoxDescription: TGroupBox;
+    MemoDescription: TMemo;
+    CheckBoxProcess: TCheckBox;
+    LabelDescription: TLabel;
+  private
+    { Private declarations }
+  public
+    procedure Execute; override;
+  end;
+
+  TBisDocproManagementMasterEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDocproManagementMasterUpdateFormIface=class(TBisDocproManagementMasterEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDocproManagementMasterEditForm: TBisDocproManagementMasterEditForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisDocproManagementMasterEditFormIface }
+
+constructor TBisDocproManagementMasterEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDocproManagementMasterEditForm;
+  with Params do begin
+    AddKey('MOTION_ID').Older('OLD_MOTION_ID');
+    AddEditDateTime('DATE_ISSUE','DateTimePickerDateIssue','DateTimePickerTimeIssue','LabelDateIssue',true).Enabled:=false;
+    AddEdit('WHO_FIRM','EditWhoFirm','LabelWhoFirm',true);
+    AddEdit('WHO_ACCOUNT','EditWhoAccount','LabelWhoAccount',true);
+    AddEdit('DOC_NUM','EditNum','LabelNum',true);
+    AddEditDate('DATE_DOC','DateTimePickerDateDoc','LabelDateDoc',true);
+    AddEdit('DOC_NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription');
+    AddCheckBox('STATUS','CheckBoxProcess');
+  end;
+end;
+
+{ TBisDocproManagementMasterUpdateFormIface }
+
+constructor TBisDocproManagementMasterUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_MANAGEMENT';
+
+end;
+
+{ TBisDocproManagementMasterEditForm }
+
+procedure TBisDocproManagementMasterEditForm.Execute;
+begin
+  inherited Execute;
+  if CheckBoxProcess.Checked then
+    Provider.DeleteFromParent;
+end;
+
+end.

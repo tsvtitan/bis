@@ -1,0 +1,376 @@
+========================= Packet 0 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+REGISTER sip:195.112.242.242 SIP/2.0
+Via: SIP/2.0/UDP 192.168.1.3:5075;rport;branch=z9hG4bK7FC99F1329
+From: <sip:2026672@195.112.242.242>;tag=28BE00FDE
+To: <sip:2026672@195.112.242.242>
+Call-ID: 796F338503804F61A1DA09631BAE59F3
+CSeq: 1 REGISTER
+Contact: <sip:2026672@192.168.1.3:5075>;expires=3000;q=0.90
+User-Agent: SipClient 2.97
+Allow: INVITE, ACK, BYE, CANCEL, INFO, MESSAGE
+Max-Forwards: 20
+Expires: 3000
+Content-Length: 0
+
+========================= Packet 1 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 401 Unauthorized
+Via: SIP/2.0/UDP 192.168.1.3:5075;received=95.188.95.231;branch=z9hG4bK7FC99F1329;rport=5075
+From: <sip:2026672@195.112.242.242>;tag=28BE00FDE
+To: <sip:2026672@195.112.242.242>;tag=SDfo0d899-kt71ni55lx
+Call-ID: 796F338503804F61A1DA09631BAE59F3
+CSeq: 1 REGISTER
+Contact: <sip:2026672-3c0npg3ud0i7f+uoig8aic7trgc@195.112.242.242:5060>;q=0.9;expires=3000
+Expires: 3000
+WWW-Authenticate: Digest realm="10.25.60.4",nonce="4d0b15e8b0365eb0563e8099269be0f0af062a3b",opaque="6a0bdcc29fd07c94a59b729a34356d4c",qop="auth"
+Content-Length: 0
+
+========================= Packet 2 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+REGISTER sip:195.112.242.242 SIP/2.0
+Via: SIP/2.0/UDP 192.168.1.3:5075;rport;branch=z9hG4bK215CFEAD0F
+From: <sip:2026672@195.112.242.242>;tag=AC7579D5E
+To: <sip:2026672@195.112.242.242>
+Call-ID: 796F338503804F61A1DA09631BAE59F3
+User-Agent: SipClient 2.97
+CSeq: 2 REGISTER
+Contact: <sip:2026672@192.168.1.3:5075>;expires=3000;q=0.90
+Authorization: Digest username="2026672",realm="10.25.60.4",nonce="4d0b15e8b0365eb0563e8099269be0f0af062a3b",uri="sip:195.112.242.242",response="d64276752b5dd0eff53cbf2a69c9b73f",qop="auth",cnonce="6a0bdcc29fd07c94a59b729a34356d4c",nc=00000001,opaque="6a0bdcc29fd07c94a59b729a34356d4c",algorithm=MD5
+Allow: INVITE, ACK, BYE, CANCEL, INFO, MESSAGE
+Max-Forwards: 20
+Expires: 3000
+Content-Length: 0
+
+========================= Packet 3 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 192.168.1.3:5075;received=95.188.95.231;branch=z9hG4bK215CFEAD0F;rport=5075
+From: <sip:2026672@195.112.242.242>;tag=AC7579D5E
+To: <sip:2026672@195.112.242.242>;tag=SDfo0d899-os3a4rmoh4
+Call-ID: 796F338503804F61A1DA09631BAE59F3
+CSeq: 2 REGISTER
+Contact: <sip:2026672@192.168.1.3:5075>;expires=30;q=0.9
+Content-Length: 0
+
+========================= Packet 4 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+INVITE sip:2932332@195.112.242.242 SIP/2.0
+From: <sip:2026672@195.112.242.242>;tag=21B0C0FE6
+To: <sip:2932332@195.112.242.242>..Via: SIP/2.0/UDP 192.168.1.3:5075;rport;branch=z9hG4bK406ADF9562
+CSeq: 3 INVITE
+Call-ID: 3FBED9A0404E4794BF1C2DF5626B0D23
+Allow: INVITE, ACK, CANCEL, BYE
+Contact: <sip:2026672@192.168.1.3:5075>
+Max-Forwards: 20
+Content-Type: application/sdp
+Content-Length: 198
+
+v=0
+o=- 2959 0 IN IP4 192.168.1.3
+s=Delphi SIP component
+c=IN IP4 192.168.1.3
+t=0 0
+m=audio 22002 RTP/AVP0 8 3 101
+a=rtpmap:101 telephone-event/8000
+a=fmtp:101 0-15
+a=ptime:20
+a=sendrecv
+
+========================= Packet 5 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 100 Tryi
+ng..From: <sip:2
+026672@195.112.2
+42.242>;tag=21B0
+C0FE6..To: <sip:
+2932332@195.112.
+242.242>..Via: S
+IP/2.0/UDP 192.1
+68.1.3:5075;rece
+ived=95.188.95.2
+31;branch=z9hG4b
+K406ADF9562;rpor
+t=5075..CSeq: 3
+INVITE..Call-ID:
+ 3FBED9A0404E479
+4BF1C2DF5626B0D2
+3......N.....Y..
+#....U.....&....
+.....
+
+========================= Packet 6 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 183 Sess
+ion Progress..Fr
+om: <sip:2026672
+@195.112.242.242
+>;tag=21B0C0FE6.
+.To: <sip:293233
+2@195.112.242.24
+2>;tag=SDmq11799
+-fpxebtivfp..Via
+: SIP/2.0/UDP 19
+2.168.1.3:5075;r
+eceived=95.188.9
+5.231;branch=z9h
+G4bK406ADF9562;r
+port=5075..CSeq:
+ 3 INVITE..Call-
+ID: 3FBED9A0404E
+4794BF1C2DF5626B
+0D23..Contact: <
+sip:2932332@195.
+112.242.242:5060
+;transport=udp>.
+.Content-Length:
+ 167..Content-Ty
+pe: application/
+sdp..Content-Dis
+position: sessio
+n;handling=requi
+red....v=0..o=-
+4368430 2730656
+IN IP4 195.112.2
+42.242..s=-..c=I
+N IP4 195.112.24
+2.242..b=AS:64..
+t=0 0..m=audio 1
+6588 RTP/AVP 8..
+a=rtpmap:8 PCMA/
+8000..a=ptime:20
+..a=sendrecv...&
+...`.X..........
+...x..........
+
+========================= Packet 7 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 180 Ring
+ing..From: <sip:
+2026672@195.112.
+242.242>;tag=21B
+0C0FE6..To: <sip
+:2932332@195.112
+.242.242>;tag=SD
+mq11799-fpxebtiv
+fp..Via: SIP/2.0
+/UDP 192.168.1.3
+:5075;received=9
+5.188.95.231;bra
+nch=z9hG4bK406AD
+F9562;rport=5075
+..CSeq: 3 INVITE
+..Call-ID: 3FBED
+9A0404E4794BF1C2
+DF5626B0D23..Con
+tact: <sip:29323
+32@195.112.242.2
+42:5060;transpor
+t=udp>..Content-
+Length: 0.......
+
+========================= Packet 8 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 200 OK..
+From: <sip:20266
+72@195.112.242.2
+42>;tag=21B0C0FE
+6..To: <sip:2932
+332@195.112.242.
+242>;tag=SDmq117
+99-fpxebtivfp..V
+ia: SIP/2.0/UDP
+192.168.1.3:5075
+;received=95.188
+.95.231;branch=z
+9hG4bK406ADF9562
+;rport=5075..CSe
+q: 3 INVITE..Cal
+l-ID: 3FBED9A040
+4E4794BF1C2DF562
+6B0D23..Accept:
+application/sdp.
+.Allow: INVITE,A
+CK,CANCEL,BYE,IN
+FO,PRACK,OPTIONS
+,REGISTER,REFER,
+SUBSCRIBE..Conta
+ct: <sip:2932332
+@195.112.242.242
+:5060;transport=
+udp>..Content-Le
+ngth: 167..Conte
+nt-Type: applica
+tion/sdp..Conten
+t-Disposition: s
+ession;handling=
+required....v=0.
+.o=- 4368430 273
+0656 IN IP4 195.
+112.242.242..s=-
+..c=IN IP4 195.1
+12.242.242..b=AS
+:64..t=0 0..m=au
+dio 16588 RTP/AV
+P 8..a=rtpmap:8
+PCMA/8000..a=pti
+me:20..a=sendrec
+v............X..
+.O.........&....
+.X.
+
+========================= Packet 9 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+ACK sip:2932332@
+195.112.242.242:
+5060 SIP/2.0..Vi
+a: SIP/2.0/UDP 1
+92.168.1.3:5075;
+rport;branch=z9h
+G4bK406ADF9562..
+To: <sip:2932332
+@195.112.242.242
+>;tag=SDmq11799-
+fpxebtivfp..From
+: <sip:2026672@1
+95.112.242.242>;
+tag=21B0C0FE6..C
+all-ID: 3FBED9A0
+404E4794BF1C2DF5
+626B0D23..CSeq:
+3 ACK..Max-Forwa
+rds: 20..Content
+-Length: 0......
+................
+..............
+
+========================= Packet 10 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+BYE sip:2932332@
+195.112.242.242:
+5060 SIP/2.0..Vi
+a: SIP/2.0/UDP 1
+92.168.1.3:5075;
+rport;branch=z9h
+G4bK7C23660737..
+To: <sip:2932332
+@195.112.242.242
+>;tag=SDmq11799-
+fpxebtivfp..From
+: <sip:2026672@1
+95.112.242.242>;
+tag=21B0C0FE6..C
+all-ID: 3FBED9A0
+404E4794BF1C2DF5
+626B0D23..Max-Fo
+rwards: 20..CSeq
+: 4 BYE..Contact
+: <sip:2026672@1
+92.168.1.3:5075>
+..Content-Length
+: 0.............
+................
+.......
+
+========================= Packet 11 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 200 OK..
+Via: SIP/2.0/UDP
+ 192.168.1.3:507
+5;received=95.18
+8.95.231;branch=
+z9hG4bK7C2366073
+7;rport=5075..To
+: <sip:2932332@1
+95.112.242.242>;
+tag=SDmq11799-fp
+xebtivfp..From:
+<sip:2026672@195
+.112.242.242>;ta
+g=21B0C0FE6..Cal
+l-ID: 3FBED9A040
+4E4794BF1C2DF562
+6B0D23..CSeq: 4
+BYE..Content-Len
+gth: 0..........
+................
+..........
+
+========================= Packet 12 =========================
+UDP: Source = 0.0.0.0:5075, Destination = 195.112.242.242:5060
+
+REGISTER sip:195
+.112.242.242 SIP
+/2.0..Via: SIP/2
+.0/UDP 192.168.1
+.3:5075;rport;br
+anch=z9hG4bKB6DA
+922477..From: <s
+ip:2026672@195.1
+12.242.242>;tag=
+AC7579D5E..To: <
+sip:2026672@195.
+112.242.242>..Ca
+ll-ID: 796F33850
+3804F61A1DA09631
+BAE59F3..CSeq: 5
+ REGISTER..Conta
+ct: *..Allow: IN
+VITE, ACK, BYE,
+CANCEL, INFO, ME
+SSAGE..Max-Forwa
+rds: 20..Expires
+: 0..Content-Len
+gth: 0....1R....
+................
+..........
+
+========================= Packet 13 =========================
+UDP: Source = 195.112.242.242:5060, Destination = 0.0.0.0:5075
+
+SIP/2.0 401 Unau
+thorized..Via: S
+IP/2.0/UDP 192.1
+68.1.3:5075;rece
+ived=95.188.95.2
+31;branch=z9hG4b
+KB6DA922477;rpor
+t=5075..From: <s
+ip:2026672@195.1
+12.242.242>;tag=
+AC7579D5E..To: <
+sip:2026672@195.
+112.242.242>;tag
+=SDfo0d899-0d4c9
+7kx5v..Call-ID:
+796F338503804F61
+A1DA09631BAE59F3
+..CSeq: 5 REGIST
+ER..Contact: *..
+Expires: 0..WWW-
+Authenticate: Di
+gest realm="10.2
+5.60.4",nonce="4
+d0b185ed01acc494
+8eacfbb23283adc5
+0082204",opaque=
+"f16be303804bd3a
+3e61fc15e6a1094e
+8",qop="auth"..C
+ontent-Length: 0
+....IND..R...R..
+...S1:1947 Send
+128
+

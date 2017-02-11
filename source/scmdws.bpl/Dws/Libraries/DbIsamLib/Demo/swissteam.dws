@@ -1,0 +1,77 @@
+<html>
+<head>
+<title>Swiss Team</title>
+<meta name=robots content="noindex, nofollow">
+<style>
+  body          { font-family: Verdana, Geneva, Arial, Helvetica; font-size: 10px; }
+  td            { font-family: Verdana, Geneva, Arial, Helvetica; font-size: 10px; }
+  a             { text-decoration: underline; background: transparent; }
+  tr.header     { color:white;
+                  font-size:9pt;
+                  line-height:1.5;
+                  background:#8FA8BE;   }
+  tr.odd        { color:black;
+                  font-size:9pt;
+                  background:white;   }
+  tr.even       { color:black;
+                  font-size:9pt;
+                  background:#d8d8d8; }
+</style>
+</head>
+<body>
+<h2>Meet Team Switzerland</h2>
+<img src="http://news.bbc.co.uk/olmedia/1820000/images/_1820303_swiss300.jpg">
+<p>
+<table width="80%" cellspacing=0 cellpadding=5>
+<tr><td><b>Number</b></td><td><b>Name</b></td><td><b>Club</b></td><td><b>Height</b></td><td><b>Weight</b></td><td><b>DOB</b></td></tr>
+<%
+  { Demo - How to use TDbIsamTable in DWS2. }
+
+   Const DbDir = 'D:\Sites\WebData';
+
+   Var Tbl : TDbIsamTable = TDbIsamTable.Create(DbDir, 'team.dat');
+   Var lastpos, desc : String;
+   Var n : Integer = 0;
+
+   Function OE(n : Integer) : String;
+
+   Begin
+     If n mod 2 = 1 Then
+       Result := 'odd'
+     Else
+       Result := 'even';
+   end;
+
+   Begin
+     Tbl.IndexName := 'ByPosition';
+     Tbl.First;
+     lastpos := '';
+     While not Tbl.EOF Do
+       Begin
+         If Tbl.AsString('position') <> lastpos Then
+           Begin
+             lastpos := Tbl.AsString('position');
+             If lastpos = 'DF' Then
+               desc := 'Defensemen'
+             Else If lastpos = 'FW' Then
+               desc := 'Forwards'
+             Else If lastpos = 'GK' Then
+               desc := 'Goaltenders'
+             Else
+               desc := '';
+             SendLn('<tr><td colspan=6>&nbsp;</td></tr>');
+             SendLn('<tr class=header><td colspan=6 align=center><b>'+desc+'</b></td></tr>');
+             SendLn('<tr><td colspan=6>&nbsp;</td></tr>');
+           end;
+         Inc(n);
+         SendLn('<tr class='+OE(n)+'><td>'+Tbl.AsString('Number')+'.</td><td>'+Tbl.AsString('Givenname')+
+           ' '+Tbl.AsString('Surname')+'</td><td>'+Tbl.AsString('Club')+
+           '</td><td>'+Tbl.AsString('Height')+'</td><td>'+Tbl.AsString('Weight')+
+           '</td><td>'+Tbl.AsString('Birthdate')+'</td></tr>');
+         Tbl.Next;
+       end;
+   end;
+%>
+</table>
+</body>
+</html>

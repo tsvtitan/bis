@@ -1,0 +1,90 @@
+unit BisDataInsertFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataEditFm, StdCtrls, ExtCtrls, Contnrs, BisFm;
+
+type
+  TBisDataInsertForm = class(TBisDataEditForm)
+  private
+    { Private declarations }
+  public
+    procedure Execute; override;
+  end;
+
+  TBisDataInsertFormIface=class(TBisDataEditFormIface)
+  protected
+    function GetFormClass: TBisFormClass; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDataInsertFormIfaceClass=class of TBisDataInsertFormIface;
+
+  TBisDataInsertFormIfaceClasses=class(TClassList)
+  private
+    function GetItem(Index: Integer): TBisDataInsertFormIfaceClass;
+    function GetFirstItem: TBisDataInsertFormIfaceClass;
+  public
+    procedure InsertToFirst(Value: TBisDataInsertFormIfaceClass);
+    procedure CopyFrom(Source: TBisDataInsertFormIfaceClasses; WithClear: Boolean=true);
+
+    property Items[Index: Integer]: TBisDataInsertFormIfaceClass read GetItem;
+    property FirstItem: TBisDataInsertFormIfaceClass read GetFirstItem;
+  end;
+  
+var
+  BisDataInsertForm: TBisDataInsertForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisDataInsertFormIface }
+
+constructor TBisDataInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+function TBisDataInsertFormIface.GetFormClass: TBisFormClass;
+begin
+  Result:=TBisDataInsertForm;
+end;
+
+{ TBisDataInsertFormIfaceClasses }
+
+procedure TBisDataInsertFormIfaceClasses.CopyFrom(Source: TBisDataInsertFormIfaceClasses; WithClear: Boolean);
+begin
+  if WithClear then
+    Clear;
+  Assign(Source);
+end;
+
+function TBisDataInsertFormIfaceClasses.GetFirstItem: TBisDataInsertFormIfaceClass;
+begin
+  Result:=nil;
+  if Count>0 then
+    Result:=Items[0];
+end;
+
+function TBisDataInsertFormIfaceClasses.GetItem(Index: Integer): TBisDataInsertFormIfaceClass;
+begin
+  Result:=TBisDataInsertFormIfaceClass(inherited Items[Index]);
+end;
+
+procedure TBisDataInsertFormIfaceClasses.InsertToFirst(Value: TBisDataInsertFormIfaceClass);
+begin
+  Insert(0,Value);
+end;
+
+{ TBisDataInsertForm }
+
+procedure TBisDataInsertForm.Execute;
+begin
+  DataSet.InsertIntoParent;
+end;
+
+end.

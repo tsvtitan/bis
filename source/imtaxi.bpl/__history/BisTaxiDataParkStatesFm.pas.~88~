@@ -1,0 +1,222 @@
+unit BisTaxiDataParkStatesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ActnList, DB, DBCtrls,
+  BisFm, BisDataFrm, BisDataGridFm, BisFieldNames, BisFilterGroups,
+  BisDataEditFm, BisDataGridFrm;                                                                          
+
+type
+  TBisTaxiDataParkStatesFrame=class(TBisDataGridFrame)
+  private
+    FGroupToday: String;
+    FGroupArchive: String;
+    FFilterMenuItemToday: TBisDataFrameFilterMenuItem;
+    FFilterMenuItemArchive: TBisDataFrameFilterMenuItem;
+    FDriverName: Variant;
+    FDriverId: Variant;
+    FParkId: Variant;
+    FParkName: String;
+    FDriverUserName: Variant;
+    FDriverPatronymic: Variant;
+    FDriverSurname: Variant;
+    function GetTimePark(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+  protected
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure OpenRecords; override;
+
+    property FilterMenuItemToday: TBisDataFrameFilterMenuItem read FFilterMenuItemToday;
+    property FilterMenuItemArchive: TBisDataFrameFilterMenuItem read FFilterMenuItemArchive;
+
+    property DriverId: Variant read FDriverId write FDriverId;
+    property DriverUserName: Variant read FDriverUserName write FDriverUserName;
+    property DriverSurname: Variant read FDriverSurname write FDriverSurname;
+    property DriverName: Variant read FDriverName write FDriverName;
+    property DriverPatronymic: Variant read FDriverPatronymic write FDriverPatronymic;
+
+    property ParkId: Variant read FParkId write FParkId;
+    property ParkName: String read FParkName write FParkName; 
+  end;
+
+  TBisTaxiDataParkStatesForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataParkStatesFormIface=class(TBisDataGridFormIface)
+  private
+    FParkId: Variant;
+    FParkName: String;
+  protected
+    function CreateForm: TBisForm; override;
+    procedure SetDataFrameProperties(DataFrame: TBisDataFrame); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property ParkId: Variant read FParkId write FParkId;
+    property ParkName: String read FParkName write FParkName;  
+  end;
+
+var
+  BisTaxiDataParkStatesForm: TBisTaxiDataParkStatesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses DateUtils,
+     BisUtils, BisOrders, BisCore, BisDialogs,
+     BisTaxiDataParkStateEditFm, BisTaxiDataParkStateFilterFm,
+     BisProvider, BisParam;
+
+{ TBisTaxiDataParkStatesFrame }
+
+constructor TBisTaxiDataParkStatesFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FilterClass:=TBisTaxiDataParkStateFilterFormIface;
+  InsertClass:=TBisTaxiDataParkStateInsertFormIface;
+  UpdateClass:=TBisTaxiDataParkStateUpdateFormIface;
+  DeleteClass:=TBisTaxiDataParkStateDeleteFormIface;
+  with Provider do begin
+    ProviderName:='S_PARK_STATES';
+    with FieldNames do begin
+      AddKey('PARK_STATE_ID');
+      AddInvisible('DRIVER_ID');
+      AddInvisible('CAR_ID');
+      AddInvisible('CAR_COLOR');
+      AddInvisible('CAR_BRAND');
+      AddInvisible('CAR_STATE_NUM');
+      AddInvisible('CAR_CALLSIGN');
+      AddInvisible('PARK_ID');
+      Add('PARK_NAME','Стоянка',100).Visible:=false;
+      Add('DATE_IN','Дата регистрации',110);
+      Add('DATE_OUT','Дата снятия',110);
+      AddCalculate('TIME_PARK','Время стоянки',GetTimePark,ftDateTime,0,60).DisplayFormat:='hh:nn.ss';
+      Add('DRIVER_USER_NAME','Водитель',180);
+    end;
+    Orders.Add('DATE_IN',otDesc);
+  end;
+
+  FGroupToday:=GetUniqueID;
+  FGroupArchive:=GetUniqueID;
+
+  FFilterMenuItemToday:=CreateFilterMenuItem('За сутки');
+  FFilterMenuItemToday.Checked:=true;
+
+  FFilterMenuItemArchive:=CreateFilterMenuItem('Архив');
+
+  FDriverId:=Null;
+  FDriverUserName:=Null;
+  FParkId:=Null;
+
+end;
+
+function TBisTaxiDataParkStatesFrame.GetTimePark(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  FieldDateIn: TField;
+  FieldDateOut: TField;
+begin
+  Result:=Null;
+  FieldDateIn:=DataSet.FieldByName('DATE_IN');
+  FieldDateOut:=DataSet.FieldByName('DATE_OUT');
+  if not VarIsNull(FieldDateIn.Value) then begin
+    if not VarIsNull(FieldDateOut.Value) then
+      Result:=FieldDateOut.AsDateTime-FieldDateIn.AsDateTime
+  end;
+end;
+
+procedure TBisTaxiDataParkStatesFrame.BeforeIfaceExecute(AIface: TBisDataEditFormIface);
+var
+  ParamDriver: TBisParam;
+  ParamPark: TBisParam;
+begin
+  inherited BeforeIfaceExecute(AIface);
+  if Assigned(AIface) then begin
+    with AIface.Params do begin
+      ParamByName('DRIVER_USER_NAME').Value:=FDriverUserName;
+      ParamDriver:=ParamByName('DRIVER_ID');
+      ParamDriver.Value:=FDriverId;
+      if not ParamDriver.Empty then
+        ParamDriver.ExcludeModes(AllParamEditModes);
+      ParamByName('PARK_NAME').Value:=FParkName;
+      ParamPark:=ParamByName('PARK_ID');
+      ParamPark.Value:=FParkId;
+      if not ParamPark.Empty then
+        ParamPark.ExcludeModes(AllParamEditModes);
+    end;
+  end;
+end;
+
+procedure TBisTaxiDataParkStatesFrame.OpenRecords;
+var
+  Group1, Group2: TBisFilterGroup;
+  D: TDateTime;
+begin
+
+  D:=Core.ServerDate;
+
+  with FFilterMenuItemToday do begin
+    Group1:=FilterGroups.Find(FGroupToday);
+    if Assigned(Group1) then
+      FilterGroups.Remove(Group1);
+    Group1:=FilterGroups.AddByName(FGroupToday,foAnd,True);
+    Group1.Filters.Add('DATE_IN',fcGreater,IncDay(D,-1));
+    Group1.Filters.Add('DATE_IN',fcEqualLess,D);
+  end;
+
+  with FFilterMenuItemArchive do begin
+    Group2:=FilterGroups.Find(FGroupArchive);
+    if Assigned(Group2) then
+      FilterGroups.Remove(Group2);
+    Group2:=FilterGroups.AddByName(FGroupArchive,foAnd,True);
+    Group2.Filters.Add('DATE_IN',fcEqualLess,IncDay(D,-1));
+  end;
+
+  inherited OpenRecords;
+end;
+
+
+{ TBisTaxiDataParkStatesFormIface }
+
+constructor TBisTaxiDataParkStatesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataParkStatesForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+end;
+
+function TBisTaxiDataParkStatesFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then begin
+    with TBisTaxiDataParkStatesForm(Result) do begin
+      TBisTaxiDataParkStatesFrame(DataFrame).ParkId:=FParkId;
+      TBisTaxiDataParkStatesFrame(DataFrame).ParkName:=FParkName;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDataParkStatesFormIface.SetDataFrameProperties(DataFrame: TBisDataFrame);
+begin
+  inherited SetDataFrameProperties(DataFrame);
+  if Assigned(DataFrame) then begin
+    with DataFrame do begin
+      Provider.FilterGroups.CopyFrom(FilterGroups);
+    end;
+  end;
+end;
+
+{ TBisTaxiDataParkStatesForm }
+
+class function TBisTaxiDataParkStatesForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataParkStatesFrame;
+end;
+
+end.

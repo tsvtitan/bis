@@ -1,0 +1,59 @@
+unit BisCallcHbookMenusFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataTreeFm, StdCtrls, ExtCtrls, ComCtrls, BisDataGridFm, ActnList;
+
+type
+  TBisCallcHbookMenusForm = class(TBisDataTreeForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisKrieltHbookMenusFormIface=class(TBisDataTreeFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcHbookMenusForm: TBisCallcHbookMenusForm;
+
+implementation
+
+uses BisKrieltHbookMenuEditFm;
+
+{$R *.dfm}
+
+{ TBisKrieltHbookMenusFormIface }
+
+constructor TBisKrieltHbookMenusFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltHbookMenusForm;
+  InsertClasses.Add(TBisKrieltHbookMenuInsertFormIface);
+  InsertClasses.Add(TBisKrieltHbookMenuInsertChildFormIface);
+  UpdateClass:=TBisKrieltHbookMenuUpdateFormIface;
+  DeleteClass:=TBisKrieltHbookMenuDeleteFormIface;
+  Permissions.Enabled:=true;
+  Available:=true;
+  ProviderName:='S_MENUS';
+  with FieldNames do begin
+    AddKey('MENU_ID');
+    AddParentKey('PARENT_ID');
+    AddInvisible('INTERFACE_ID');
+    AddInvisible('INTERFACE_NAME');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('SHORTCUT');
+    Add('NAME','Наименование',225);
+    Add('PARENT_NAME','Родитель',175);
+    Add('PRIORITY','Порядок',50);
+  end;
+  Orders.Add('LEVEL');
+  Orders.Add('PRIORITY');
+end;
+
+end.

@@ -1,0 +1,122 @@
+inherited BisKrieltObjectsDeleteForm: TBisKrieltObjectsDeleteForm
+  Left = 0
+  Top = 0
+  Caption = #1059#1076#1072#1083#1077#1085#1080#1077' '#1086#1073#1098#1077#1082#1090#1086#1074' '#1085#1077#1076#1074#1080#1078#1080#1084#1086#1089#1090#1080
+  ClientHeight = 106
+  ClientWidth = 358
+  ExplicitWidth = 366
+  ExplicitHeight = 140
+  PixelsPerInch = 96
+  TextHeight = 13
+  object LabelPublishing: TLabel
+    Left = 41
+    Top = 13
+    Width = 47
+    Height = 13
+    Alignment = taRightJustify
+    Caption = #1048#1079#1076#1072#1085#1080#1077':'
+    FocusControl = EditPublishing
+  end
+  object LabelDateBeginFrom: TLabel
+    Left = 11
+    Top = 41
+    Width = 77
+    Height = 13
+    Alignment = taRightJustify
+    Caption = #1044#1072#1090#1072' '#1085#1072#1095#1072#1083#1072' '#1089':'
+    FocusControl = DateTimePickerBeginFrom
+  end
+  object LabelDateBeginTo: TLabel
+    Left = 202
+    Top = 41
+    Width = 16
+    Height = 13
+    Alignment = taRightJustify
+    Caption = #1087#1086':'
+    FocusControl = DateTimePickerBeginTo
+  end
+  object EditPublishing: TEdit
+    Left = 94
+    Top = 10
+    Width = 199
+    Height = 21
+    Color = 15000804
+    MaxLength = 100
+    ReadOnly = True
+    TabOrder = 0
+  end
+  object ButtonPublishing: TButton
+    Left = 299
+    Top = 10
+    Width = 21
+    Height = 21
+    Hint = #1042#1099#1073#1088#1072#1090#1100' '#1080#1079#1076#1072#1085#1080#1077
+    Caption = '...'
+    TabOrder = 1
+    OnClick = ButtonPublishingClick
+  end
+  object DateTimePickerBeginFrom: TDateTimePicker
+    Left = 94
+    Top = 37
+    Width = 96
+    Height = 22
+    Date = 39467.616504444440000000
+    Time = 39467.616504444440000000
+    Checked = False
+    TabOrder = 2
+  end
+  object DateTimePickerBeginTo: TDateTimePicker
+    Left = 224
+    Top = 37
+    Width = 96
+    Height = 22
+    Date = 39467.616504444440000000
+    Time = 39467.616504444440000000
+    Checked = False
+    TabOrder = 3
+  end
+  object ButtonIssue: TButton
+    Left = 326
+    Top = 37
+    Width = 21
+    Height = 21
+    Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1099#1087#1091#1089#1082
+    Caption = '...'
+    TabOrder = 4
+    OnClick = ButtonIssueClick
+  end
+  object PanelBottom: TPanel
+    Left = 0
+    Top = 65
+    Width = 358
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 5
+    DesignSize = (
+      358
+      41)
+    object ButtonCancel: TButton
+      Left = 275
+      Top = 8
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Caption = #1054#1090#1084#1077#1085#1072
+      ModalResult = 2
+      TabOrder = 1
+      OnClick = ButtonCancelClick
+    end
+    object ButtonDelete: TButton
+      Left = 194
+      Top = 8
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Caption = #1059#1076#1072#1083#1080#1090#1100
+      Default = True
+      TabOrder = 0
+      OnClick = ButtonDeleteClick
+    end
+  end
+end

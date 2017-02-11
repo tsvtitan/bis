@@ -1,0 +1,133 @@
+unit BisCallcHbookSessionsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataGridFm, BisDataEditFm;
+
+type
+  TBisCallcHbookSessionsForm = class(TBisDataGridForm)
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookSessionsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcHbookSessionViewingFormIface=class(TBisDataEditFormIface)
+  public
+    procedure Execute; override;
+  end;
+
+  TBisCallcHbookSessionDeleteFormIface=class(TBisDataEditFormIface)
+  public
+    function Execute: Boolean; override;
+  end;
+
+var
+  BiCallcHbookSessionsForm: TBisCallcHbookSessionsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisDataSet, BisDialogs, BisParam, BisMemoFm, BisFilterGroups, BisOrders;
+
+{ TBisCallcHbookSessionDeleteFormIface }
+
+function TBisCallcHbookSessionDeleteFormIface.Execute: Boolean;
+var
+  DataSet: TBisDataSet;
+begin
+  Result:=false;
+  if Assigned(ParentDataSet) and ParentDataSet.Active and not ParentDataSet.IsEmpty then begin
+    if ShowQuestion('Удалить текущую сессию?',mbNo)=mrYes then begin
+      DataSet:=TBisDataSet.Create(Self);
+      try
+        DataSet.ProviderName:='D_SESSION';
+        DataSet.ParentDataSet:=ParentDataSet;
+        DataSet.Params.AddKeyValue('SESSION_ID',ParentDataSet.FieldByName('SESSION_ID').Value).Older('OLD_SESSION_ID');
+        DataSet.Execute;
+        DataSet.DeleteFromParent;
+        Result:=true;
+      finally
+        DataSet.Free;
+      end;
+    end;
+  end;
+end;
+
+{ TBisCallcHbookSessionViewingFormIface }
+
+function TBisCallcHbookSessionViewingFormIface.Execute: Boolean;
+var
+  Form: TBisMemoForm;
+  DataSet: TBisDataSet;
+begin
+  Result:=false;
+  if Assigned(ParentDataSet) and ParentDataSet.Active and not ParentDataSet.IsEmpty then begin
+    Form:=TBisMemoForm.Create(Self);
+    DataSet:=TBisDataSet.Create(Self);
+    try
+      DataSet.ProviderName:='S_SESSIONS';
+      DataSet.FieldNames.AddInvisible('PARAMS');
+      DataSet.FilterGroups.Add.Filters.Add('SESSION_ID',fcEqual,ParentDataSet.FieldByName('SESSION_ID').Value);
+      DataSet.Open;
+      if DataSet.Active and not DataSet.IsEmpty then
+        Form.Memo.Lines.Text:=DataSet.FieldByName('PARAMS').AsString;
+      Form.ButtonOk.Visible:=false;
+      Form.Caption:='Параметры';
+      Form.ShowModal;
+      Result:=true;
+    finally
+      DataSet.Free;
+      Form.Free;
+    end;
+  end;
+end;
+
+{ TBisCallcHbookSessionsFormIface }
+
+constructor TBisCallcHbookSessionsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcHbookSessionsForm;
+  ViewingClass:=TBisCallcHbookSessionViewingFormIface;
+  DeleteClass:=TBisCallcHbookSessionDeleteFormIface;
+  Permissions.Enabled:=true;
+  ProviderName:='S_SESSIONS';
+  with FieldNames do begin
+    AddKey('SESSION_ID');
+    AddInvisible('APPLICATION_ID');
+    AddInvisible('ACCOUNT_ID');
+    Add('APPLICATION_NAME','Приложение',100);
+    Add('USER_NAME','Учетная запись',100);
+    Add('DATE_CREATE','Дата создания',120);
+    Add('DATE_CHANGE','Дата изменения',120);
+  end;
+  Orders.Add('APPLICATION_NAME');
+  Orders.Add('USER_NAME');
+  Orders.Add('DATE_CHANGE',otDesc);
+end;
+
+{ TBisCallcHbookSessionsForm }
+
+constructor TBisCallcHbookSessionsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  if Assigned(DataFrame) then begin
+    with DataFrame do begin
+      ActionInsert.Visible:=false;
+      ActionDuplicate.Visible:=false;
+      ActionUpdate.Visible:=false;
+    end;
+  end;
+end;
+
+end.

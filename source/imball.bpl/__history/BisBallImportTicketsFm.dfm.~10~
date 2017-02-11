@@ -1,0 +1,367 @@
+inherited BisBallImportTicketsForm: TBisBallImportTicketsForm
+  Left = 0
+  Top = 0
+  Caption = #1048#1084#1087#1086#1088#1090' '#1073#1080#1083#1077#1090#1086#1074
+  ClientHeight = 425
+  ClientWidth = 291
+  ExplicitWidth = 299
+  ExplicitHeight = 459
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelControls: TPanel
+    Left = 0
+    Top = 0
+    Width = 291
+    Height = 425
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+    ExplicitHeight = 391
+    DesignSize = (
+      291
+      425)
+    object LabelFile: TLabel
+      Left = 20
+      Top = 43
+      Width = 30
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1060#1072#1081#1083':'
+      FocusControl = EditFile
+    end
+    object LabelTirage: TLabel
+      Left = 14
+      Top = 16
+      Width = 36
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1058#1080#1088#1072#1078':'
+      FocusControl = EditTirage
+    end
+    object LabelCounter: TLabel
+      Left = 14
+      Top = 371
+      Width = 94
+      Height = 13
+      Anchors = [akLeft, akBottom]
+      Caption = #1054#1073#1088#1072#1073#1086#1090#1072#1085#1086' 0 '#1080#1079' 0'
+      ExplicitTop = 203
+    end
+    object LabelDealer: TLabel
+      Left = 14
+      Top = 70
+      Width = 36
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1044#1080#1083#1077#1088':'
+      FocusControl = EditDealer
+    end
+    object EditTirage: TEdit
+      Left = 56
+      Top = 13
+      Width = 164
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonFile: TButton
+      Left = 255
+      Top = 40
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1092#1072#1081#1083
+      Anchors = [akTop, akRight]
+      Caption = '...'
+      TabOrder = 1
+      OnClick = ButtonFileClick
+    end
+    object EditFile: TEdit
+      Left = 56
+      Top = 40
+      Width = 193
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object GroupBoxAction: TGroupBox
+      Left = 14
+      Top = 94
+      Width = 262
+      Height = 126
+      Anchors = [akLeft, akTop, akRight]
+      Caption = ' '#1044#1077#1081#1089#1090#1074#1080#1077' '
+      TabOrder = 5
+      object RadioButtonReplace: TRadioButton
+        Left = 16
+        Top = 24
+        Width = 185
+        Height = 17
+        Caption = #1047#1072#1084#1077#1085#1072' '#1074#1089#1077#1093' '#1073#1080#1083#1077#1090#1086#1074' '#1074' '#1090#1080#1088#1072#1078#1077
+        Checked = True
+        TabOrder = 0
+        TabStop = True
+      end
+      object RadioButtonAppend: TRadioButton
+        Left = 16
+        Top = 47
+        Width = 193
+        Height = 17
+        Caption = #1044#1086#1073#1072#1074#1083#1077#1085#1080#1077' '#1073#1080#1083#1077#1090#1086#1074' '#1082' '#1090#1080#1088#1072#1078#1091
+        TabOrder = 1
+      end
+      object RadioButtonExclude: TRadioButton
+        Left = 16
+        Top = 70
+        Width = 225
+        Height = 17
+        Caption = #1048#1089#1082#1083#1102#1095#1077#1085#1080#1077' '#1073#1080#1083#1077#1090#1086#1074' '#1080#1079' '#1088#1086#1079#1099#1075#1088#1099#1096#1072
+        TabOrder = 2
+      end
+      object RadioButtonInclude: TRadioButton
+        Left = 16
+        Top = 93
+        Width = 233
+        Height = 17
+        Caption = #1042#1082#1083#1102#1095#1077#1085#1080#1077' '#1073#1080#1083#1077#1090#1086#1074' '#1074' '#1088#1086#1079#1099#1075#1088#1099#1096
+        TabOrder = 3
+      end
+    end
+    object ButtonTirage: TButton
+      Left = 226
+      Top = 13
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1090#1080#1088#1072#1078
+      Caption = '...'
+      TabOrder = 6
+      OnClick = ButtonTirageClick
+    end
+    object ProgressBar: TProgressBar
+      Left = 14
+      Top = 389
+      Width = 176
+      Height = 18
+      Anchors = [akLeft, akRight, akBottom]
+      TabOrder = 7
+      ExplicitTop = 355
+    end
+    object ButtonImport: TButton
+      Left = 201
+      Top = 385
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Caption = #1048#1084#1087#1086#1088#1090
+      Default = True
+      TabOrder = 8
+      OnClick = ButtonImportClick
+      ExplicitTop = 351
+    end
+    object GroupBoxStatistics: TGroupBox
+      Left = 14
+      Top = 226
+      Width = 262
+      Height = 139
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      Caption = ' '#1057#1090#1072#1090#1080#1089#1090#1080#1082#1072' '#1087#1086' '#1073#1080#1083#1077#1090#1072#1084' '
+      TabOrder = 9
+      ExplicitHeight = 105
+      object LabelTicketCount: TLabel
+        Left = 88
+        Top = 19
+        Width = 101
+        Height = 13
+        Alignment = taRightJustify
+        Caption = #1054#1073#1097#1077#1077' '#1082#1086#1083#1080#1095#1077#1089#1090#1074#1086':'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object LabelTicketManageCount: TLabel
+        Left = 109
+        Top = 38
+        Width = 80
+        Height = 13
+        Alignment = taRightJustify
+        Caption = #1054#1073#1088#1072#1073#1086#1090#1072#1085#1085#1099#1077':'
+        Color = clWindowText
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+      end
+      object LabelTicketUsedCount: TLabel
+        Left = 74
+        Top = 76
+        Width = 115
+        Height = 13
+        Alignment = taRightJustify
+        Caption = #1059#1095#1072#1089#1090#1074#1091#1102#1097#1080#1077' ('#1074#1089#1077#1075#1086'):'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object LabelTicketNotUsedCount: TLabel
+        Left = 59
+        Top = 57
+        Width = 130
+        Height = 13
+        Alignment = taRightJustify
+        Caption = #1053#1077' '#1091#1095#1072#1089#1090#1074#1091#1102#1097#1080#1077' ('#1074#1089#1077#1075#1086'):'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object LabelTicketCounter: TLabel
+        Left = 195
+        Top = 19
+        Width = 7
+        Height = 13
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object LabelTicketManageCounter: TLabel
+        Left = 195
+        Top = 38
+        Width = 7
+        Height = 13
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object LabelTicketNotUsedCounter: TLabel
+        Left = 195
+        Top = 57
+        Width = 7
+        Height = 13
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object LabelTicketUsedCounter: TLabel
+        Left = 195
+        Top = 76
+        Width = 7
+        Height = 13
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label1: TLabel
+        Left = 50
+        Top = 114
+        Width = 139
+        Height = 13
+        Alignment = taRightJustify
+        Caption = #1059#1095#1072#1089#1090#1074#1091#1102#1097#1080#1077' ('#1087#1086' '#1076#1080#1083#1077#1088#1091'):'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object LabelTicketNotUsedCountByDealer: TLabel
+        Left = 35
+        Top = 95
+        Width = 154
+        Height = 13
+        Alignment = taRightJustify
+        Caption = #1053#1077' '#1091#1095#1072#1089#1090#1074#1091#1102#1097#1080#1077' ('#1087#1086' '#1076#1080#1083#1077#1088#1091'):'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object LabelTicketNotUsedCounterByDealer: TLabel
+        Left = 195
+        Top = 95
+        Width = 7
+        Height = 13
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object LabelTicketUsedCounterByDealer: TLabel
+        Left = 195
+        Top = 114
+        Width = 7
+        Height = 13
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+    end
+    object EditDealer: TEdit
+      Left = 56
+      Top = 67
+      Width = 193
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 3
+    end
+    object ButtonDealer: TButton
+      Left = 255
+      Top = 67
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1076#1080#1083#1077#1088#1072
+      Anchors = [akTop, akRight]
+      Caption = '...'
+      TabOrder = 4
+      OnClick = ButtonDealerClick
+    end
+  end
+  object OpenDialog: TOpenDialog
+    Filter = 
+      'Xml '#1092#1072#1081#1083#1099' (*.xml)|*.xml|Txt '#1092#1072#1081#1083#1099' (*.txt)|*.txt|'#1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|' +
+      '*.*'
+    Options = [ofEnableSizing]
+    Left = 241
+    Top = 136
+  end
+end

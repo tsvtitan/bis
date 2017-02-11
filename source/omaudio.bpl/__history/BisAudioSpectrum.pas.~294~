@@ -1,0 +1,218 @@
+unit BisAudioSpectrum;
+
+interface
+
+uses Classes, mmSystem,
+     WaveUtils;
+
+type
+  TBisAudioSpectrum=class;
+
+  TBisAudioSpectrumDetectEvent=procedure (Sender: TBisAudioSpectrum; const Freq: Word; const Level: Integer) of object;
+
+  TBisAudioSpectrum=class(TObject)
+  private
+    FSamplesPerSec: Integer;
+    FBitsPerSample: Integer;
+    FChannels: Integer;
+    FLowFreq: Word;
+    FHighFreq: Word;
+    FThreshold: Word;
+    FOnDetect: TBisAudioSpectrumDetectEvent;
+    FWindowSize: Word;
+
+    function Valid: Boolean;
+    procedure Detect(Data: Pointer; Size: Cardinal);
+  protected
+    procedure DoDetect(const Freq: Word; const Level: Integer); virtual;
+  public
+    constructor Create; virtual;
+    destructor Destroy; override;
+
+    function SetFormat(SamplesPerSec, BitsPerSample, Channels: Integer): Boolean; overload;
+    function SetFormat(Format: TPCMFormat): Boolean; overload;
+    function SetFormat(Format: PWaveFormatEx): Boolean; overload;
+
+    function Write(const Data: Pointer; Size: Cardinal): Boolean;
+    function LoadFromStream(Stream: TStream): Boolean;
+
+    property LowFreq: Word read FLowFreq write FLowFreq;
+    property HighFreq: Word read FHighFreq write FHighFreq;
+    property Threshold: Word read FThreshold write FThreshold;
+    property WindowSize: Word read FWindowSize write FWindowSize;
+    property OnDetect: TBisAudioSpectrumDetectEvent read FOnDetect write FOnDetect;
+  end;
+
+implementation
+
+uses math, FftSpec,
+     BisAudioWave;
+
+{ TBisAudioSpectrum }
+
+constructor TBisAudioSpectrum.Create;
+begin
+  inherited Create;
+  FThreshold:=100;
+  FWindowSize:=1024;
+end;
+
+destructor TBisAudioSpectrum.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TBisAudioSpectrum.DoDetect(const Freq: Word; const Level: Integer);
+begin
+  if Assigned(FOnDetect) then
+    FOnDetect(Self,Freq,Level);
+end;
+
+function TBisAudioSpectrum.SetFormat(SamplesPerSec, BitsPerSample, Channels: Integer): Boolean;
+begin
+  Result:=false;
+  if ((SamplesPerSec>0) and (BitsPerSample>=8) and (Channels>=1)) then begin
+
+    FSamplesPerSec:=SamplesPerSec;
+    FBitsPerSample:=BitsPerSample;
+    FChannels:=Channels;
+
+    Result:=true;
+  end;
+end;
+
+function TBisAudioSpectrum.SetFormat(Format: PWaveFormatEx): Boolean;
+begin
+  Result:=false;
+  if Assigned(Format) then
+    Result:=SetFormat(Format.nSamplesPerSec,Format.wBitsPerSample,Format.nChannels);
+end;
+
+function TBisAudioSpectrum.SetFormat(Format: TPCMFormat): Boolean;
+var
+  F: TWaveFormatEx;
+begin
+  SetPCMAudioFormatS(@F,Format);
+  Result:=SetFormat(@F);
+end;
+
+function TBisAudioSpectrum.Valid: Boolean;
+begin
+  Result:=((FSamplesPerSec=8000) or (FSamplesPerSec=11025) or
+           (FSamplesPerSec=22050) or (FSamplesPerSec=44100) or (FSamplesPerSec=48000)) and
+           (FChannels=1) and ((FBitsPerSample=16) or (FBitsPerSample=8));
+end;
+
+procedure TBisAudioSpectrum.Detect(Data: Pointer; Size: Cardinal);
+var
+  FFTSize: Word;
+
+  function GetInRealSize: Integer;
+  var
+    MaxSize: Integer;
+  begin
+    MaxSize:=FFTSize*FChannels*(FBitsPerSample div 8);
+    if FBitsPerSample=8 then begin
+      Result:=Round(Size/Sizeof(Byte));
+      MaxSize:=Round(MaxSize/Sizeof(Byte));
+    end else begin
+      Result:=Round(Size/Sizeof(Smallint));
+      MaxSize:=Round(MaxSize/Sizeof(Byte));
+    end;
+    if Result>MaxSize then
+      Result:=MaxSize;
+  end;
+
+var  
+  InReal: PSingleArray;
+  InRealSize: Integer;
+  OutReal: PSingleArray;
+  OutRealSize: Integer;
+  FreqMult: Single;
+  MaxIndex: Word;
+  Max: Single;
+  Peak: Longint;
+  i: Smallint;
+  MaxHz: Single;
+  MaxOutput: Longint;
+const
+  MaxInput=$7FFF;
+begin
+  if Valid then begin
+    FFTSize:=FWindowSize;
+    CalcWindowFunctions(FFTSize);
+    OutRealSize:=FFTSize*Sizeof(Single);
+    GetMem(OutReal,OutRealSize);
+    InRealSize:=GetInRealSize;
+    GetMem(InReal,InRealSize);
+    try
+      FreqMult:=FSamplesPerSec/FFTSize;
+      MaxIndex:=Trunc((FSamplesPerSec div 2)/FreqMult);
+      MaxOutput:=(MaxInput*FFTSize) div 2;
+
+      for i:=0 to InRealSize-1 do begin
+        if FBitsPerSample=8 then
+          InReal[i]:=($7F - PByteArray(Data)[i]) shl 8
+        else
+          InReal[i]:=FSmallintArray(Data)[i];
+      end;
+
+      Spectrum(idRectangle,FFTSize,InReal,OutReal);
+
+      Max:=0;
+      Peak:=0;
+
+      for i:=3 to MaxIndex do begin
+        if OutReal^[i]>Max then begin
+          Max:=OutReal^[i];
+          Peak:=i;
+        end;
+      end;
+
+      MaxHz:=Peak*FreqMult;
+      Peak:=Round(MaxHz);
+      if (Peak>=FLowFreq) and (Peak<=HighFreq) then begin
+        MaxIndex:=Round(MaxOutput/Max);
+        if MaxIndex<=FThreshold then
+          DoDetect(Peak,Round(MaxIndex));
+      end;
+
+    finally
+      FreeMem(OutReal,OutRealSize);
+      FreeMem(InReal,InRealSize);
+    end;
+  end;
+end;
+
+function TBisAudioSpectrum.Write(const Data: Pointer; Size: Cardinal): Boolean;
+begin
+  Result:=false;
+  if Assigned(Data) and (Size>0) then begin
+    Detect(Data,Size);
+  end;
+end;
+
+function TBisAudioSpectrum.LoadFromStream(Stream: TStream): Boolean;
+var
+  Data: Pointer;
+  DataSize: Integer;
+  OldPos: Int64;
+begin
+  Result:=false;
+  if Assigned(Stream) then begin
+    DataSize:=Stream.Size-Stream.Position;
+    if DataSize>0 then begin
+      OldPos:=Stream.Position;
+      GetMem(Data,DataSize);
+      try
+        Stream.Read(Data^,DataSize);
+        Result:=Write(Data,DataSize);
+      finally
+        FreeMem(Data,DataSize);
+        Stream.Position:=OldPos;
+      end;
+    end;
+  end;
+end;
+
+end.

@@ -1,0 +1,1221 @@
+unit BisConnections;
+
+interface
+
+uses Classes, Contnrs,
+     BisObject, BisCoreObjects, BisProfile, BisInterfaces, BisDataSet,
+     BisFieldNames, BisParams, BisFilterGroups, BisOrders, BisConfig,
+     BisMenus, BisTasks, BisAlarmsFm, BisDataParams, 
+     BisConnectionModuleIntf;
+
+type
+  TBisConnection=class;
+
+  TBisConnectionParam=class(TBisDataValueParam)
+  end;
+
+  TBisConnectionParams=class(TBisDataValueParams)
+  private
+    function GetItem(Index: Integer): TBisConnectionParam;
+  protected
+    class function GetDataParamClass: TBisDataParamClass; override;
+  public
+    procedure CopyToDataSet(DataSet: TBisDataSet; OnlyVisible: Boolean=false);
+
+    property Items[Index: Integer]: TBisConnectionParam read GetItem; default; 
+  end;
+  
+ { TBisConnectionParam=class(TBisCoreObject)
+  private
+    FValue: String;
+    FVisible: Boolean;
+    function GetParamName: String;
+    procedure SetParamName(const Value: String);
+  public
+    property ParamName: String read GetParamName write SetParamName;
+    property Value: String read FValue write FValue;
+    property Visible: Boolean read FVisible write FVisible;
+  end;
+
+  TBisConnectionParams=class(TBisCoreObjects)
+  private
+    FOnChange: TNotifyEvent;
+    function GetItems(Index: Integer): TBisConnectionParam;
+    procedure DoChange;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    function Find(ParamName: String): TBisConnectionParam;
+    function Add(ParamName, Description, Value: String): TBisConnectionParam; reintroduce;
+    procedure CopyFrom(DataSet: TBisDataSet; IsClear: Boolean=true); overload;
+    procedure CopyFrom(Params: TBisConnectionParams; IsClear: Boolean=true); overload;
+    procedure CopyTo(DataSet: TBisDataSet; OnlyVisible: Boolean=false);
+
+    property Items[Index: Integer]: TBisConnectionParam read GetItems;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+  end;  }
+
+  TBisConnectionLoginParams=class(TObject)
+  private
+    FSessionParams: TBisConfig;
+    FIPList: TStringList;
+    FAccountId: Variant;
+    FFirmId: Variant;
+    FFirmSmallName: Variant;
+    FVersion: String;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure SaveToStream(Stream: TStream);
+    procedure LoadFromStream(Stream: TStream);
+
+    property SessionParams: TBisConfig read FSessionParams;
+    property IPList: TStringList read FIPList;
+
+    property AccountId: Variant read FAccountId write FAccountId;
+    property FirmId: Variant read FFirmId write FFirmId;
+    property FirmSmallName: Variant read FFirmSmallName write FFirmSmallName;
+    property Version: String read FVersion write FVersion;
+  end;
+
+  TBisConnectionExportParams=class(TObject)
+  private
+    FFromPosition: Integer;
+    FFetchCount: Integer;
+  public
+    procedure SaveToStream(Stream: TStream);
+    procedure LoadFromStream(Stream: TStream);
+
+    property FromPosition: Integer read FFromPosition write FFromPosition;
+    property FetchCount: Integer read FFetchCount write FFetchCount;
+  end;
+
+  TBisConnectionFilterGroupType=(fgtDefault,fgtWithin);
+
+  TBisConnectionImportType=(itUnknown,itScript,itTable,itFile);
+  TBisConnectionExportType=(etUnknown,etScript,etTable,etTableAsFiles);
+
+  TBisConnection=class(TBisCoreObject)
+  private
+//    FClones: TObjectList;
+    FEnabled: Boolean;
+    FParams: TBisConnectionParams;
+    FSLoadProfileFailed: String;
+    FSLogoutFailed: String;
+    FSLoadScriptFailed: String;
+    FSLoadReportFailed: String;
+    FSImportFailed: String;
+    FSExecuteFailed: String;
+    FSSaveProfileFailed: String;
+    FSSessionCreateFailed: String;
+    FSGetRecordsFailed: String;
+    FSRefreshPermissionsFailed: String;
+    FSConnectFailed: String;
+    FSInvalidSession: String;
+    FSLoadInterfacesFailed: String;
+    FSApplicationNotFoundOrLocked: String;
+    FSLoadMenusFailed: String;
+    FSAccountNotFoundOrLocked: String;
+    FSExportFailed: String;
+    FSDisconnectFailed: String;
+    FParentHandle: THandle;
+    FSGetAccountFailed: String;
+    FSLoginFailed: String;
+    FSLoadDocumentFailed: String;
+    FSGetServerDateFailed: String;
+    FModule: IBisConnectionModule;
+    FSUpper: String;
+    FSCheckFailed: String;
+    FSLoadTasksFailed: String;
+    FSSaveTaskFailed: String;
+    FSLoadAlarmsFailed: String;
+    FSUpdateFailed: String;
+    FSCancelFailed: String;
+//    function GetCloneCount: Integer;
+  protected
+    function GetConnected: Boolean; virtual;
+//    function GetWorking: Boolean; virtual;
+    function GetSessionCount: Integer; virtual;
+
+    function GetFieldNameQuote: String; virtual;
+    function GetRecordsFieldName(DataSet: TBisDataSet; FieldName: TBisFieldName): String; virtual;
+    function GetRecordsFieldNames(DataSet: TBisDataSet; FieldNames: TBisFieldNames): String; virtual;
+    function GetRecordsParams(DataSet: TBisDataSet; Params: TBisParams): String; virtual;
+    function GetRecordsFilterOperator(Operator: TBisFilterOperator): string; virtual;
+    function GetRecordsFilterCondition(Condition: TBisFilterCondition): String; overload; virtual;
+    function GetRecordsFilterCondition(Filter: TBisFilter): string; overload; virtual;
+    function GetRecordsFilterFieldName(FieldName: String; CheckCase: Boolean): string; virtual;
+    function GetRecordsFilterDateValue(Value: TDateTime): String; virtual;
+    function GetRecordsFilterValueInside(Filter: TBisFilter): String; virtual;
+    function GetRecordsFilterValue(Filter: TBisFilter; var FieldName: string; var Exists: Boolean): string; virtual;
+    function GetRecordsFilterGroupDefault(FilterGroup: TBisFilterGroup): string; virtual;
+    function GetRecordsFilterGroupWithIn(FilterGroup: TBisFilterGroup): string; virtual;
+    function GetRecordsFilterGroupType(FilterGroup: TBisFilterGroup): TBisConnectionFilterGroupType; virtual;
+    function GetRecordsFilterGroup(FilterGroup: TBisFilterGroup): String; virtual;
+    function GetRecordsFilterGroups(FilterGroups: TBisFilterGroups): String; virtual;
+    function GetRecordsGroups(DataSet: TBisDataSet; FieldNames: TBisFieldNames): string; virtual;
+    function GetRecordsOrderType(OrderType: TBisOrderType): string; virtual;
+    function GetRecordsOrders(Orders: TBisOrders): string; virtual;
+
+ //   property Clones: TObjectList read FClones;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure Connect; virtual;
+    procedure Disconnect; virtual;
+    procedure Import(ImportType: TBisConnectionImportType; Stream: TStream); virtual;
+    procedure Export(ExportType: TBisConnectionExportType; const Value: String;
+                     Stream: TStream; Params: TBisConnectionExportParams=nil); virtual;
+    function GetServerDate: TDateTime; virtual;
+
+    function Login(const ApplicationId: Variant; const UserName,Password: String; Params: TBisConnectionLoginParams=nil): Variant; virtual;
+    procedure Logout(const SessionId: Variant); virtual;
+    procedure Update(const SessionId: Variant; Params: TBisConfig=nil); virtual;
+    function Check(const SessionId: Variant; var ServerDate: TDateTime): Boolean; virtual;
+    procedure LoadProfile(const SessionId: Variant; Profile: TBisProfile); virtual;
+    procedure SaveProfile(const SessionId: Variant; Profile: TBisProfile); virtual;
+    procedure RefreshPermissions(const SessionId: Variant); virtual;
+    procedure LoadInterfaces(const SessionId: Variant; Interfaces: TBisInterfaces); virtual;
+    procedure GetRecords(const SessionId: Variant; DataSet: TBisDataSet); virtual;
+    procedure Execute(const SessionId: Variant; DataSet: TBisDataSet); virtual;
+    procedure LoadMenus(const SessionId: Variant; Menus: TBisMenus); virtual;
+    procedure LoadTasks(const SessionId: Variant; Tasks: TBisTasks); virtual;
+    procedure SaveTask(const SessionId: Variant; Task: TBisTask); virtual;
+    procedure LoadAlarms(const SessionId: Variant; Alarms: TBisAlarms); virtual;
+    procedure LoadScript(const SessionId: Variant; ScriptId: Variant; Stream: TStream); virtual;
+    procedure LoadReport(const SessionId: Variant; ReportId: Variant; Stream: TStream); virtual;
+    procedure LoadDocument(const SessionId: Variant; DocumentId: Variant; Stream: TStream); virtual;
+    procedure Cancel(const SessionId: Variant; DataSetCheckSum: String=''); virtual;
+    procedure CancelAll; virtual;
+
+    procedure SaveParams; virtual;
+//    function CloneConnection(const SessionId: Variant; WithDefault: Boolean=true): TBisConnection; virtual;
+//    procedure RemoveConnection(Connection: TBisConnection; const SessionId: Variant; IsLogout: Boolean); virtual;
+    procedure CheckSessions; virtual;
+    function SessionExists(const SessionId: Variant): Boolean; virtual;
+
+    property Connected: Boolean read GetConnected;
+    property Params: TBisConnectionParams read FParams;
+//    property Working: Boolean read GetWorking;
+    property SessionCount: Integer read GetSessionCount;
+//    property CloneCount: Integer read GetCloneCount;
+
+    property Enabled: Boolean read FEnabled write FEnabled;
+    property ParentHandle: THandle read FParentHandle write FParentHandle;
+    property Module: IBisConnectionModule read FModule write FModule;
+
+    property SUpper: String read FSUpper write FSUpper;
+  published
+    property SSessionCreateFailed: String read FSSessionCreateFailed write FSSessionCreateFailed;
+    property SInvalidSession: String read FSInvalidSession write FSInvalidSession;
+    property SApplicationNotFoundOrLocked: String read FSApplicationNotFoundOrLocked write FSApplicationNotFoundOrLocked;
+    property SAccountNotFoundOrLocked: String read FSAccountNotFoundOrLocked write FSAccountNotFoundOrLocked;
+    property SConnectFailed: String read FSConnectFailed write FSConnectFailed;
+    property SDisconnectFailed: String read FSDisconnectFailed write FSDisconnectFailed;
+    property SLoginFailed: String read FSLoginFailed write FSLoginFailed;
+    property SLogoutFailed: String read FSLogoutFailed write FSLogoutFailed;
+    property SCheckFailed: String read FSCheckFailed write FSCheckFailed;
+    property SUpdateFailed: String read FSUpdateFailed write FSUpdateFailed;
+    property SLoadProfileFailed: String read FSLoadProfileFailed write FSLoadProfileFailed;
+    property SSaveProfileFailed: String read FSSaveProfileFailed write FSSaveProfileFailed;
+    property SRefreshPermissionsFailed: String read FSRefreshPermissionsFailed write FSRefreshPermissionsFailed;
+    property SLoadInterfacesFailed: String read FSLoadInterfacesFailed write FSLoadInterfacesFailed;
+    property SGetRecordsFailed: String read FSGetRecordsFailed write FSGetRecordsFailed;
+    property SExecuteFailed: String read FSExecuteFailed write FSExecuteFailed;
+    property SLoadMenusFailed: String read FSLoadMenusFailed write FSLoadMenusFailed;
+    property SLoadTasksFailed: String read FSLoadTasksFailed write FSLoadTasksFailed;
+    property SSaveTaskFailed: String read FSSaveTaskFailed write FSSaveTaskFailed;
+    property SLoadAlarmsFailed: String read FSLoadAlarmsFailed write FSLoadAlarmsFailed; 
+    property SLoadScriptFailed: String read FSLoadScriptFailed write FSLoadScriptFailed;
+    property SLoadReportFailed: String read FSLoadReportFailed write FSLoadReportFailed;
+    property SLoadDocumentFailed: String read FSLoadDocumentFailed write FSLoadDocumentFailed;
+    property SCancelFailed: String read FSCancelFailed write FSCancelFailed;
+    property SExportFailed: String read FSExportFailed write FSExportFailed;
+    property SImportFailed: String read FSImportFailed write FSImportFailed;
+    property SGetAccountFailed: String read FSGetAccountFailed write FSGetAccountFailed;
+    property SGetServerDateFailed: String read FSGetServerDateFailed write FSGetServerDateFailed;
+
+  end;
+
+  TBisConnectionClass=class of TBisConnection;
+
+  TBisConnections=class(TBisCoreObjects)
+  private
+    function GetItems(Index: Integer): TBisConnection;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+    function AddClass(AClass: TBisConnectionClass; const ObjectName: String=''): TBisConnection;
+    function AddConnection(AConnection: TBisConnection): Boolean;
+    function Find(ObjectName: String): TBisConnection;
+    function FindByCaption(Caption: String): TBisConnection;
+    procedure Connect;
+    procedure CancelAll;
+
+    property Items[Index: Integer]: TBisConnection read GetItems;
+  end;
+
+implementation
+
+uses SysUtils, Variants, Strutils, DB,
+     BisUtils, BisConsts, BisLogger;
+
+{ TBisConnectionParam }
+
+{function TBisConnectionParam.GetParamName: String;
+begin
+  Result:=ObjectName;
+end;
+
+procedure TBisConnectionParam.SetParamName(const Value: String);
+begin
+  ObjectName:=Value;
+end;}
+
+{ TBisConnectionParams }
+
+class function TBisConnectionParams.GetDataParamClass: TBisDataParamClass;
+begin
+  Result:=TBisConnectionParam;
+end;
+
+function TBisConnectionParams.GetItem(Index: Integer): TBisConnectionParam;
+begin
+  Result:=TBisConnectionParam(inherited Items[Index]);
+end;
+
+procedure TBisConnectionParams.CopyToDataSet(DataSet: TBisDataSet; OnlyVisible: Boolean);
+var
+  i: Integer;
+  Param: TBisConnectionParam;
+  Flag: Boolean;
+  FName,FDecs,FValue,FVisible: TField;
+begin
+  if Assigned(DataSet) and DataSet.Active then begin
+    DataSet.BeginUpdate(false);
+    try
+      DataSet.EmptyTable;
+      for i:=0 to Count-1 do begin
+        Param:=Items[i];
+        Flag:=true;
+        if OnlyVisible then
+          Flag:=Param.Visible;
+
+        FName:=DataSet.FindField(SFieldName);
+        FDecs:=DataSet.FindField(SFieldDescription);
+        FValue:=DataSet.FindField(SFieldValue);
+        FVisible:=DataSet.FindField(SFieldVisible);
+
+        Flag:=Flag and (Assigned(FName) or Assigned(FDecs) or
+                        Assigned(FValue) or Assigned(FVisible));
+        if Flag then begin
+          DataSet.Append;
+          if Assigned(FName) then
+            FName.AsString:=Param.Name;
+
+          if Assigned(FDecs) then
+            FDecs.AsString:=Param.Description;
+
+          if Assigned(FValue) then
+            FValue.AsString:=Param.Value;
+
+          if Assigned(FVisible) then
+            FVisible.AsInteger:=Integer(Param.Visible);
+            
+          DataSet.Post;
+        end;
+      end;
+      DataSet.First;
+    finally
+      DataSet.EndUpdate();
+    end;
+  end;
+end;
+
+{function TBisConnectionParams.Add(ParamName, Description, Value: String): TBisConnectionParam;
+begin
+  Result:=TBisConnectionParam(inherited Add(ParamName));
+  if Assigned(Result) then begin
+    Result.Description:=Description;
+    Result.Value:=Value;
+  end;
+end;
+
+function TBisConnectionParams.Find(ParamName: String): TBisConnectionParam;
+begin
+  Result:=TBisConnectionParam(inherited Find(ParamName));
+end;
+
+function TBisConnectionParams.GetItems(Index: Integer): TBisConnectionParam;
+begin
+  Result:=TBisConnectionParam(inherited Items[Index]);
+end;
+
+function TBisConnectionParams.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisConnectionParam;
+end;
+
+procedure TBisConnectionParams.CopyFrom(DataSet: TBisDataSet; IsClear: Boolean);
+var
+  Param: TBisConnectionParam;
+begin
+  if IsClear then
+    Clear;
+  if Assigned(DataSet) then begin
+    DataSet.BeginUpdate(true);
+    try
+      DataSet.First;
+      while not DataSet.Eof do begin
+        Param:=Find(DataSet.FieldByName(SFieldName).AsString);
+        if not Assigned(Param) then begin
+          Param:=Add(DataSet.FieldByName(SFieldName).AsString,
+                     DataSet.FieldByName(SFieldDescription).AsString,
+                     DataSet.FieldByName(SFieldValue).AsString);
+        end else begin
+          Param.ParamName:=DataSet.FieldByName(SFieldName).AsString;
+          Param.Description:=DataSet.FieldByName(SFieldDescription).AsString;
+          Param.Value:=DataSet.FieldByName(SFieldValue).AsString;
+        end;
+        if Assigned(Param) then
+          Param.Visible:=Boolean(DataSet.FieldByName(SFieldVisible).AsInteger);
+
+        DataSet.Next;
+      end;
+      DoChange;
+    finally
+      DataSet.EndUpdate();
+    end;
+
+  end;
+end;
+
+procedure TBisConnectionParams.CopyFrom(Params: TBisConnectionParams; IsClear: Boolean);
+var
+  i: Integer;
+  Item: TBisConnectionParam;
+  Param: TBisConnectionParam;
+begin
+  if IsClear then
+    Clear;
+  if Assigned(Params) then begin
+    for i:=0 to Params.Count-1 do begin
+      Item:=Params.Items[i];
+      Param:=Find(Item.ParamName);
+      if not Assigned(Param) then
+        Param:=Add(Item.ParamName,Item.Description,Item.Value);
+      if Assigned(Param) then
+        Param.Visible:=Item.Visible;
+    end;
+  end;
+end;
+
+procedure TBisConnectionParams.CopyTo(DataSet: TBisDataSet; OnlyVisible: Boolean);
+var
+  i: Integer;
+  Param: TBisConnectionParam;
+  Flag: Boolean;
+begin
+  if Assigned(DataSet) and DataSet.Active then begin
+    DataSet.BeginUpdate(false);
+    try
+      DataSet.EmptyTable;
+      for i:=0 to Count-1 do begin
+        Param:=Items[i];
+        Flag:=true;
+        if OnlyVisible then
+          Flag:=Param.Visible;
+        if Flag then begin
+          DataSet.Append;
+          DataSet.FieldByName(SFieldName).AsString:=Param.ParamName;
+          DataSet.FieldByName(SFieldDescription).AsString:=Param.Description;
+          DataSet.FieldByName(SFieldValue).AsString:=Param.Value;
+          DataSet.FieldByName(SFieldVisible).AsInteger:=Integer(Param.Visible);
+          DataSet.Post;
+        end;
+      end;
+      DataSet.First;
+    finally
+      DataSet.EndUpdate();
+    end;
+  end;
+end;
+
+procedure TBisConnectionParams.DoChange;
+begin
+  if Assigned(FOnChange) then
+    FOnChange(Self);
+end;}
+
+{ TBisConnectionLoginParams }
+
+constructor TBisConnectionLoginParams.Create;
+begin
+  inherited Create;
+  FSessionParams:=TBisConfig.Create(nil);
+  FIPList:=TStringList.Create;
+end;
+
+destructor TBisConnectionLoginParams.Destroy;
+begin
+  FIPList.Free;
+  FSessionParams.Free;
+  inherited Destroy;
+end;
+
+procedure TBisConnectionLoginParams.LoadFromStream(Stream: TStream);
+var
+  Reader: TReader;
+begin
+  Reader:=TReader.Create(Stream,ReaderBufferSize);
+  try
+    FAccountId:=Reader.ReadVariant;
+    FFirmId:=Reader.ReadVariant;
+    FFirmSmallName:=Reader.ReadVariant;
+    FSessionParams.Text:=Reader.ReadString;
+    FIPList.Text:=Reader.ReadString;
+    FVersion:=Reader.ReadString;
+  finally
+    Reader.Free;
+  end;
+end;
+
+procedure TBisConnectionLoginParams.SaveToStream(Stream: TStream);
+var
+  Writer: TWriter;
+begin
+  Writer:=TWriter.Create(Stream,WriterBufferSize);
+  try
+    Writer.WriteVariant(FAccountId);
+    Writer.WriteVariant(FFirmId);
+    Writer.WriteVariant(FFirmSmallName);
+    Writer.WriteString(FSessionParams.Text);
+    Writer.WriteString(FIPList.Text);
+    Writer.WriteString(FVersion);
+  finally
+    Writer.Free;
+  end;
+end;
+
+{ TBisConnectionExportParams }
+
+procedure TBisConnectionExportParams.LoadFromStream(Stream: TStream);
+var
+  Reader: TReader;
+begin
+  Reader:=TReader.Create(Stream,ReaderBufferSize);
+  try
+    FFromPosition:=Reader.ReadInteger;
+    FFetchCount:=Reader.ReadInteger;
+  finally
+    Reader.Free;
+  end;
+end;
+
+procedure TBisConnectionExportParams.SaveToStream(Stream: TStream);
+var
+  Writer: TWriter;
+begin
+  Writer:=TWriter.Create(Stream,WriterBufferSize);
+  try
+    Writer.WriteInteger(FFromPosition);
+    Writer.WriteInteger(FFetchCount);
+  finally
+    Writer.Free;
+  end;
+end;
+
+{ TBisConnection }
+
+constructor TBisConnection.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+//  FClones:=TObjectList.Create;
+  FParams:=TBisConnectionParams.Create;
+
+  FSUpper:='UPPER';
+
+  FSSessionCreateFailed:='Неудачное создание сессии. %s';
+  FSInvalidSession:='Неверная сессия.';
+  FSApplicationNotFoundOrLocked:='Приложение не найдено, заблокировано или устарело.';
+  FSAccountNotFoundOrLocked:='Учетная запись %s не найдена или заблокирована.';
+  FSConnectFailed:='Неудачное соединение. %s';
+  FSDisconnectFailed:='Неудачный разрыв соединения. %s';
+  FSLoginFailed:='Неудачное открытие сессии. %s';
+  FSLogoutFailed:='Неудачное завершение сессии. %s';
+  FSCheckFailed:='Неудачная проверка сессии. %s';
+  FSUpdateFailed:='Неудачное обновление сессии. %s';
+  FSLoadProfileFailed:='Неудачная загрузка профиля. %s';
+  FSSaveProfileFailed:='Неудачное сохранение профиля. %s';
+  FSRefreshPermissionsFailed:='Неудачное обновление прав доступа. %s';
+  FSLoadInterfacesFailed:='Неудачная загрузка интерфейсов. %s';
+  FSGetRecordsFailed:='Неудачное получение записей. %s';
+  FSExecuteFailed:='Неудачное выполнение. %s';
+  FSLoadMenusFailed:='Неудачная загрузка меню. %s';
+  FSLoadTasksFailed:='Неудачная загрузка заданий. %s';
+  FSSaveTaskFailed:='Неудачное сохранение задания. %s';
+  FSLoadAlarmsFailed:='Неудачная загрузка оповещений. %s';
+  FSLoadScriptFailed:='Неудачная загрузка скрипта. %s';
+  FSLoadReportFailed:='Неудачная загрузка отчета. %s';
+  FSLoadDocumentFailed:='Неудачная загрузка документа. %s';
+  FSCancelFailed:='Неудачная отмена. %s';
+  FSExportFailed:='Неудачный экспорт. %s';
+  FSImportFailed:='Неудачный импорт. %s';
+  FSGetAccountFailed:='Неудачное получение информации об учетной записи. %s';
+  FSGetServerDateFailed:='Неудачное получение даты с сервера. %s';
+
+end;
+
+destructor TBisConnection.Destroy;
+begin
+  FParams.Free;
+//  FClones.Free;
+  inherited Destroy;
+end;
+
+{function TBisConnection.GetCloneCount: Integer;
+begin
+  Result:=FClones.Count;
+end;}
+
+function TBisConnection.GetConnected: Boolean;
+begin
+  Result:=False;
+end;
+
+{function TBisConnection.GetWorking: Boolean;
+begin
+  Result:=false;
+end;}
+
+procedure TBisConnection.RefreshPermissions(const SessionId: Variant);
+begin
+end;
+
+procedure TBisConnection.CheckSessions;
+begin
+end;
+
+{function TBisConnection.CloneConnection(const SessionId: Variant; WithDefault: Boolean=true): TBisConnection;
+begin
+  Result:=TBisConnectionClass(ClassType).Create(nil);
+  if Assigned(Result) then begin
+    Result.Params.CopyFrom(Params,true);
+    FClones.Add(Result);
+  end;
+end;}
+
+{procedure TBisConnection.RemoveConnection(Connection: TBisConnection; const SessionId: Variant; IsLogout: Boolean);
+begin
+  FClones.Remove(Connection);
+end;}
+
+procedure TBisConnection.Connect;
+begin
+end;
+
+procedure TBisConnection.Disconnect;
+begin
+end;
+
+procedure TBisConnection.Export(ExportType: TBisConnectionExportType; const Value: String;
+                                Stream: TStream; Params: TBisConnectionExportParams=nil);
+begin
+end;
+
+procedure TBisConnection.Import(ImportType: TBisConnectionImportType; Stream: TStream);
+begin
+end;
+
+function TBisConnection.Login(const ApplicationId: Variant; const UserName,Password: String; Params: TBisConnectionLoginParams=nil): Variant;
+begin
+  Result:=Null;
+end;
+
+procedure TBisConnection.Logout(const SessionId: Variant);
+begin
+end;
+
+procedure TBisConnection.Cancel(const SessionId: Variant; DataSetCheckSum: String='');
+begin
+end;
+
+procedure TBisConnection.CancelAll;
+begin
+  Cancel(Null);
+end;
+
+function TBisConnection.Check(const SessionId: Variant; var ServerDate: TDateTime): Boolean;
+begin
+  Result:=false;
+end;
+
+procedure TBisConnection.Update(const SessionId: Variant; Params: TBisConfig=nil);
+begin
+end;
+
+procedure TBisConnection.LoadProfile(const SessionId: Variant; Profile: TBisProfile);
+begin
+end;
+
+procedure TBisConnection.SaveParams;
+begin
+  if Assigned(FModule) then
+    FModule.SaveConnectionParams(Self);
+end;
+
+procedure TBisConnection.SaveProfile(const SessionId: Variant; Profile: TBisProfile);
+begin
+end;
+
+procedure TBisConnection.LoadDocument(const SessionId: Variant; DocumentId: Variant; Stream: TStream);
+begin
+end;
+
+procedure TBisConnection.LoadInterfaces(const SessionId: Variant; Interfaces: TBisInterfaces);
+begin
+end;
+
+procedure TBisConnection.LoadMenus(const SessionId: Variant; Menus: TBisMenus);
+begin
+end;
+
+procedure TBisConnection.LoadTasks(const SessionId: Variant; Tasks: TBisTasks);
+begin
+end;
+
+procedure TBisConnection.SaveTask(const SessionId: Variant; Task: TBisTask);
+begin
+end;
+
+function TBisConnection.SessionExists(const SessionId: Variant): Boolean;
+begin
+  Result:=false;
+end;
+
+procedure TBisConnection.LoadAlarms(const SessionId: Variant; Alarms: TBisAlarms);
+begin
+end;
+
+procedure TBisConnection.LoadScript(const SessionId: Variant; ScriptId: Variant; Stream: TStream);
+begin
+end;
+
+procedure TBisConnection.LoadReport(const SessionId: Variant; ReportId: Variant; Stream: TStream);
+begin
+end;
+
+procedure TBisConnection.GetRecords(const SessionId: Variant; DataSet: TBisDataSet);
+begin
+end;
+
+procedure TBisConnection.Execute(const SessionId: Variant; DataSet: TBisDataSet);
+begin
+end;
+
+function TBisConnection.GetFieldNameQuote: String;
+begin
+  Result:='';
+end;
+
+function TBisConnection.GetRecordsFieldName(DataSet: TBisDataSet; FieldName: TBisFieldName): String;
+var
+  AQuote: String;
+begin
+  Result:='';
+  if not FieldName.Calculated then begin
+    AQuote:=GetFieldNameQuote;
+    Result:=AQuote+FieldName.FieldName+AQuote;
+    case FieldName.FuncType of
+      ftSum: begin
+        Result:='SUM('+Result+') AS '+Result;
+      end;
+      ftDistinct: begin
+        Result:='DISTINCT('+Result+') AS '+Result;
+      end;
+    end;
+  end;
+end;
+
+function TBisConnection.GetRecordsFieldNames(DataSet: TBisDataSet; FieldNames: TBisFieldNames): String;
+var
+  i: Integer;
+  Flag: Boolean;
+  S: String;
+begin
+  Result:='';
+  Flag:=false;
+  if FieldNames.Count>0 then begin
+    for i:=0 to FieldNames.Count-1 do begin
+      S:=GetRecordsFieldName(DataSet,FieldNames.Items[i]);
+      if Trim(S)<>'' then begin
+        if not Flag then begin
+          Result:=S;
+          Flag:=true;
+        end else
+          Result:=Result+','+S;
+      end;
+    end;
+  end else begin
+    Result:=Format('%s.%s',[DataSet.ProviderName,SAsterisk]);
+  end;
+end;
+
+function TBisConnection.GetRecordsParams(DataSet: TBisDataSet; Params: TBisParams): String;
+var
+  i: Integer;
+begin
+  Result:='';
+  for i:=0 to Params.Count-1 do begin
+    if i=0 then
+      Result:=':'+Params.Items[i].ParamName
+    else
+      Result:=Result+',:'+Params.Items[i].ParamName;
+  end;
+  if Trim(Result)<>'' then
+    Result:='('+Result+')';
+end;
+
+function TBisConnection.GetServerDate: TDateTime;
+begin
+  Result:=Now;
+end;
+
+function TBisConnection.GetSessionCount: Integer;
+begin
+  Result:=0;
+end;
+
+function TBisConnection.GetRecordsFilterOperator(Operator: TBisFilterOperator): string;
+begin
+  Result:='';
+  case Operator of
+    foAnd: Result:='AND';
+    foOr: Result:='OR';
+  end;
+end;
+
+function TBisConnection.GetRecordsFilterCondition(Condition: TBisFilterCondition): String;
+begin
+  Result:='';
+  case Condition of
+    fcEqual: Result:='=';
+    fcGreater: Result:='>';
+    fcLess: Result:='<';
+    fcNotEqual: Result:='<>';
+    fcEqualGreater: Result:='>=';
+    fcEqualLess: Result:='<=';
+    fcLike: Result:='LIKE';
+    fcNotLike: Result:='NOT LIKE';
+    fcIsNull: Result:='IS NULL';
+    fcIsNotNull: Result:='IS NOT NULL';
+    fcInside: Result:='IN';
+  end;
+end;
+
+function TBisConnection.GetRecordsFilterCondition(Filter: TBisFilter): string;
+begin
+  Result:='';
+  if Assigned(Filter) then begin
+    Result:=GetRecordsFilterCondition(Filter.Condition);
+    case Filter.Condition of
+      fcEqual: begin
+        if VarIsNull(Filter.Value) then
+          Result:='IS NULL';
+      end;
+      fcNotEqual: begin
+        if VarIsNull(Filter.Value) then
+          Result:='IS NULL';
+      end;
+    end;
+  end;
+end;
+
+function TBisConnection.GetRecordsFilterFieldName(FieldName: String; CheckCase: Boolean): string;
+var
+  AQuote: String;
+begin
+  AQuote:=GetFieldNameQuote;
+  if CheckCase then
+    Result:=AQuote+FieldName+AQuote
+  else
+    Result:=FSUpper+'('+AQuote+FieldName+AQuote+')';
+end;
+
+function TBisConnection.GetRecordsFilterDateValue(Value: TDateTime): String;
+begin
+  Result:=QuotedStr(DateTimeToStr(Value));
+end;
+
+function TBisConnection.GetRecordsFilterValueInside(Filter: TBisFilter): String;
+var
+  InsideFieldName: String;
+  S: String;
+begin
+  Result:='';
+  if (Trim(Filter.FieldName)<>'') and (Trim(Filter.InsideProviderName)<>'') then begin
+    InsideFieldName:=GetRecordsFilterFieldName(Filter.FieldName,true);
+    if Trim(Filter.InsideFieldName)<>'' then
+      InsideFieldName:=GetRecordsFilterFieldName(Filter.InsideFieldName,true);
+
+    S:=GetRecordsFilterGroups(Filter.InsideFilterGroups);
+    Result:=FormatEx('SELECT %s FROM %s %s',[InsideFieldName,Filter.InsideProviderName,S]);
+    Result:='('+Trim(Result)+')';
+  end;
+end;
+
+function TBisConnection.GetRecordsFilterValue(Filter: TBisFilter; var FieldName: string; var Exists: Boolean): string;
+var
+  S: String;
+begin
+  Result:='';
+  FieldName:=GetRecordsFilterFieldName(Filter.FieldName,true);
+
+  if not (Filter.Condition in [fcIsNull,fcIsNotNull]) then begin
+    if Filter.Condition=fcInside then begin
+      Result:=GetRecordsFilterValueInside(Filter);
+      Exists:=Trim(Result)<>'';
+      exit;
+    end else begin
+      if (VarType(Filter.Value) in [varEmpty,varNull,varUnknown]) then begin
+        if (Filter.Condition in [fcEqual,fcNotEqual]) and (VarType(Filter.Value)=varNull) then begin
+          Exists:=true;
+          exit;
+        end else
+          exit;
+      end else Exists:=true;
+    end;
+  end else begin
+    Exists:=true;
+    exit;
+  end;
+
+  case VarType(Filter.Value) of
+    varSingle,varDouble,varCurrency: begin
+      S:=VarToStr(Filter.Value);
+      Result:=ReplaceText(S,',','.');
+    end;
+    varOleStr,varStrArg,varString: begin
+      Result:=VarToStr(Filter.Value);
+      FieldName:=GetRecordsFilterFieldName(Filter.FieldName,Filter.CheckCase);
+      if not Filter.CheckCase then
+        Result:=AnsiUpperCase(Result);
+      case Filter.Condition of
+        fcLike,fcNotLike: begin
+          if Filter.RightSide then
+            Result:='%'+Result;
+          if Filter.LeftSide then
+            Result:=Result+'%';
+          Result:=QuotedStr(Result);
+        end;
+      else
+        Result:=QuotedStr(Result);
+      end;
+    end;
+    varDate: begin
+      Result:=GetRecordsFilterDateValue(Filter.Value);
+    end;
+    else begin
+      Result:=VarToStr(Filter.Value);
+    end;
+  end;
+end;
+
+
+function TBisConnection.GetRecordsFilterGroupType(FilterGroup: TBisFilterGroup): TBisConnectionFilterGroupType;
+var
+  i: Integer;
+  Filter: TBisFilter;
+  OldFieldName: String;
+  FlagFieldName: Boolean;
+  FlagConditionEqual: Boolean;
+  FlagOperatorOr: Boolean;
+begin
+  Result:=fgtDefault;
+
+  if FilterGroup.Filters.Count>2 then begin
+    FlagFieldName:=true;
+    FlagConditionEqual:=true;
+    FlagOperatorOr:=true;
+    for i:=0 to FilterGroup.Filters.Count-1 do begin
+      Filter:=FilterGroup.Filters.Items[i];
+      if (i>0) and not AnsiSameText(Filter.FieldName,OldFieldName) then begin
+        FlagFieldName:=false;
+        break;
+      end;
+      if Filter.Condition<>fcEqual then begin
+        FlagConditionEqual:=false;
+        break;
+      end;
+      if (i>0) and (Filter.Operator<>foOr) then begin
+        FlagOperatorOr:=false;
+        break;
+      end;
+      OldFieldName:=Filter.FieldName;
+    end;
+
+    Result:=iff(FlagFieldName and FlagConditionEqual and FlagOperatorOr,fgtWithin,Result);
+  end;
+end;
+
+function TBisConnection.GetRecordsFilterGroupDefault(FilterGroup: TBisFilterGroup): string;
+var
+  i: Integer;
+  S: string;
+  FieldName: string;
+  Exists: Boolean;
+  FlagFirst: Boolean;
+  Filter: TBisFilter;
+begin
+  Result:='';
+  FlagFirst:=false;
+  for i:=0 to FilterGroup.Filters.Count-1 do begin
+    Filter:=FilterGroup.Filters.Items[i];
+    case Filter.FilterType of
+      ftFieldName: begin
+        Exists:=false;
+        S:=GetRecordsFilterValue(Filter,FieldName,Exists);
+        if Exists then
+          S:=Trim(FieldName+' '+GetRecordsFilterCondition(Filter)+' '+S);
+        if not FlagFirst then begin
+          Result:=S;
+          FlagFirst:=Trim(S)<>'';
+        end else
+          if Trim(S)<>'' then
+            Result:=Result+' '+GetRecordsFilterOperator(Filter.Operator)+' '+S;
+      end;
+      ftSQL: begin
+        Result:=Trim(VarToStrDef(Filter.Value,''));
+      end;
+    end;
+  end;
+end;
+
+function TBisConnection.GetRecordsFilterGroupWithIn(FilterGroup: TBisFilterGroup): string;
+var
+  i: Integer;
+  S: string;
+  FieldName: string;
+  Exists: Boolean;
+  FlagFirst: Boolean;
+  Filter: TBisFilter;
+begin
+  Result:='';
+  FlagFirst:=false;
+  for i:=0 to FilterGroup.Filters.Count-1 do begin
+    Filter:=FilterGroup.Filters.Items[i];
+    S:=GetRecordsFilterValue(Filter,FieldName,Exists);
+    if Exists then begin
+      if not FlagFirst then begin
+        Result:=S;
+        FlagFirst:=Trim(S)<>'';
+      end else
+        if Trim(S)<>'' then
+          Result:=Result+','+S;
+    end;
+  end;
+  if (Trim(Result)<>'') and (Trim(FieldName)<>'') then
+    Result:=FieldName+' '+GetRecordsFilterCondition(fcInside)+' ('+Trim(Result)+')';
+end;
+
+function TBisConnection.GetRecordsFilterGroup(FilterGroup: TBisFilterGroup): String;
+var
+  FilterGroupType: TBisConnectionFilterGroupType;
+begin
+  Result:='';
+  FilterGroupType:=GetRecordsFilterGroupType(FilterGroup);
+  case FilterGroupType of
+    fgtDefault: begin
+      Result:=GetRecordsFilterGroupDefault(FilterGroup);
+    end;
+    fgtWithin: begin
+      Result:=GetRecordsFilterGroupWithIn(FilterGroup);
+    end;
+  end;
+  if Trim(Result)<>'' then
+    Result:='('+Result+')';
+end;
+
+function TBisConnection.GetRecordsFilterGroups(FilterGroups: TBisFilterGroups): String;
+var
+  i: Integer;
+  S: String;
+  FlagFirst: Boolean;
+  Group: TBisFilterGroup;
+begin
+  Result:='';
+  FlagFirst:=false;
+  for i:=0 to FilterGroups.Count-1 do begin
+    Group:=FilterGroups.Items[i];
+    if Group.Enabled then begin
+      S:=GetRecordsFilterGroup(Group);
+      if not FlagFirst then begin
+        Result:=S;
+        FlagFirst:=Trim(S)<>'';
+      end else
+        if Trim(S)<>'' then
+          Result:=Result+' '+GetRecordsFilterOperator(Group.Operator)+' '+S;
+    end;          
+  end;
+  if Trim(Result)<>'' then
+    Result:='WHERE '+Trim(Result);
+end;
+
+function TBisConnection.GetRecordsGroups(DataSet: TBisDataSet; FieldNames: TBisFieldNames): string;
+
+  function GroupFunctionExists: Boolean;
+  var
+    i: Integer;
+    Item: TBisFieldName;
+  begin
+    Result:=false;
+    for i:=0 to FieldNames.Count-1 do begin
+      Item:=FieldNames.Items[i];
+      if not (Item.FuncType in [ftNone,ftDistinct]) then begin
+        Result:=true;
+        exit;
+      end;
+    end;  
+  end;
+
+var
+  i: Integer;
+  Item: TBisFieldName;
+  S: String;
+  FlagFirst: Boolean;
+begin
+  Result:='';
+  if GroupFunctionExists then begin
+    FlagFirst:=false;
+    for i:=0 to FieldNames.Count-1 do begin
+      Item:=FieldNames.Items[i];
+      if Item.FuncType in [ftNone] then begin
+        S:=GetRecordsFieldName(DataSet,Item);
+        if Trim(S)<>'' then begin
+          if not FlagFirst then begin
+            Result:=S;
+            FlagFirst:=true;
+          end else begin
+            Result:=Result+','+S;
+          end;
+        end;
+      end;
+    end;
+    if Trim(Result)<>'' then
+      Result:='GROUP BY '+Result;
+  end;     
+end;
+
+function TBisConnection.GetRecordsOrderType(OrderType: TBisOrderType): string;
+begin
+ Result:='';
+  case OrderType of
+    otAsc: Result:='ASC';
+    otDesc: Result:='DESC';
+  end;
+end;
+
+function TBisConnection.GetRecordsOrders(Orders: TBisOrders): string;
+var
+  i: Integer;
+  Flag: Boolean;
+  FieldName: String;
+  AQuote: String;
+begin
+  Result:='';
+  Flag:=false;
+  for i:=0 to Orders.Count-1 do begin
+    if Orders.Items[i].OrderType in [otAsc,otDesc] then begin
+      AQuote:=GetFieldNameQuote;
+      FieldName:=AQuote+Orders.Items[i].FieldName+AQuote;
+      if not Flag then
+        Result:=FieldName+' '+GetRecordsOrderType(Orders.Items[i].OrderType)
+      else
+        Result:=Result+','+FieldName+' '+GetRecordsOrderType(Orders.Items[i].OrderType);
+      Flag:=true;
+    end;
+  end;
+  if Trim(Result)<>'' then
+    Result:='ORDER BY '+Result;
+end;
+
+
+{ TBisConnections }
+
+function TBisConnections.GetItems(Index: Integer): TBisConnection;
+begin
+  Result:=TBisConnection(inherited Items[Index]);
+end;
+
+function TBisConnections.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisConnection;
+end;
+
+function TBisConnections.AddClass(AClass: TBisConnectionClass; const ObjectName: String): TBisConnection;
+begin
+  Result:=nil;
+  if Assigned(AClass) then begin
+    Result:=AClass.Create(Self);
+    if Trim(ObjectName)<>'' then
+      Result.ObjectName:=ObjectName;
+    if not Assigned(Find(Result.ObjectName)) then begin
+      AddObject(Result);
+    end else begin
+      FreeAndNilEx(Result);
+    end;
+  end;
+end;
+
+function TBisConnections.AddConnection(AConnection: TBisConnection): Boolean;
+begin
+  Result:=false;
+  if not Assigned(Find(AConnection.ObjectName)) then begin
+    AddObject(AConnection);
+    Result:=true;
+  end;
+end;
+
+function TBisConnections.Find(ObjectName: String): TBisConnection;
+begin
+  Result:=TBisConnection(inherited Find(ObjectName));
+end;
+
+function TBisConnections.FindByCaption(Caption: String): TBisConnection;
+begin
+  Result:=TBisConnection(inherited FindByCaption(Caption));
+end;
+
+procedure TBisConnections.CancelAll;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    if Items[i].Enabled and Items[i].Connected then begin
+      try
+        Items[i].CancelAll;
+      except
+        On E: Exception do
+          LoggerWrite(E.Message,ltError);
+      end;
+    end;
+  end;
+end;
+
+procedure TBisConnections.Connect;
+var
+  i: Integer;
+begin
+  for i:=0 to Count-1 do begin
+    if Items[i].Enabled then begin
+      try
+        Items[i].Connect;
+      except
+
+      end;
+    end;
+  end;
+end;
+
+end.

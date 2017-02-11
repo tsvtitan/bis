@@ -1,0 +1,217 @@
+unit BisTaxiOrderFilterFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, ExtCtrls, ImgList,
+  
+  BisDataEditFm, BisParam, BisTaxiAddressFrm, BisGradient, BisControls;
+
+type
+  TBisTaxiOrderFilterForm = class(TBisDataEditForm)
+    GroupBoxDateAccept: TGroupBox;
+    LabelPhone: TLabel;
+    EditPhone: TEdit;
+    GroupBoxDateArrival: TGroupBox;
+    GroupBoxAddressArrival: TGroupBox;
+    PanelAddressArrival: TPanel;
+    PanelDateAccept: TPanel;
+    DateTimePickerTimeAcceptTo: TDateTimePicker;
+    ButtonAccept: TButton;
+    DateTimePickerAcceptTo: TDateTimePicker;
+    LabelDateAcceptTo: TLabel;
+    DateTimePickerTimeAcceptFrom: TDateTimePicker;
+    DateTimePickerAcceptFrom: TDateTimePicker;
+    LabelDateAcceptFrom: TLabel;
+    LabelOrderNum: TLabel;
+    EditOrderNum: TEdit;
+    PanelDateArrival: TPanel;
+    LabelDateArrivalTo: TLabel;
+    LabelDateArrivalFrom: TLabel;
+    DateTimePickerTimeArrivalTo: TDateTimePicker;
+    ButtonArrival: TButton;
+    DateTimePickerArrivalTo: TDateTimePicker;
+    DateTimePickerTimeArrivalFrom: TDateTimePicker;
+    DateTimePickerArrivalFrom: TDateTimePicker;
+    LabelFirm: TLabel;
+    EditFirm: TEdit;
+    ButtonFirm: TButton;
+    procedure ButtonAcceptClick(Sender: TObject);
+    procedure ButtonArrivalClick(Sender: TObject);
+  private
+    FDefaultLocalityName: String;
+    FArrivalAddressFrame: TBisTaxiAddressFrame;
+    FGradientDateAccept: TBisGradient;
+    FGradientAddress: TBisGradient;
+    FGradientDateArrival: TBisGradient;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    function FindParamComponent(Param: TBisParam; ComponentName: String): TComponent; override;
+  end;
+
+  TBisTaxiOrderFilterFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+
+  end;
+
+var
+  BisTaxiOrderFilterForm: TBisTaxiOrderFilterForm;
+
+implementation
+
+uses DateUtils,
+     BisParamEditDataSelect, BisFilterGroups, BisPeriodFm, BisCore,
+     BisTaxiConsts;
+
+{$R *.dfm}
+
+{ TBisTaxiOrderFilterFormIface }
+
+constructor TBisTaxiOrderFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiOrderFilterForm;
+  with Params do begin
+    Unique:=false;
+    AddEdit('PHONE','EditPhone','LabelPhone');
+    AddEdit('ORDER_NUM','EditOrderNum','LabelOrderNum');
+    with AddEditDateTime('DATE_ACCEPT','DateTimePickerAcceptFrom','DateTimePickerTimeAcceptFrom','LabelDateAcceptFrom') do begin
+      FilterCondition:=fcEqualGreater;
+      FilterCaption:='Дата принятия с:';
+    end;
+    with AddEditDateTime('DATE_ACCEPT','DateTimePickerAcceptTo','DateTimePickerTimeAcceptTo','LabelDateAcceptTo') do begin
+      FilterCondition:=fcEqualLess;
+      FilterCaption:='Дата принятия по:';
+    end;
+    AddComboBoxText('LOCALITY_NAME','ComboBoxLocality','LabelLocality');
+    AddComboBoxText('STREET_NAME','ComboBoxStreet','LabelStreet');
+    AddEdit('HOUSE','EditHouse','LabelHouse');
+    AddEdit('FLAT','EditFlat','LabelFlat');
+    AddEdit('PORCH','EditPorch','LabelPorch');
+    with AddEditDateTime('DATE_ARRIVAL','DateTimePickerArrivalFrom','DateTimePickerTimeArrivalFrom','LabelDateArrivalFrom') do begin
+      FilterCondition:=fcEqualGreater;
+      FilterCaption:='Дата подачи с:';
+    end;
+    with AddEditDateTime('DATE_ARRIVAL','DateTimePickerArrivalTo','DateTimePickerTimeArrivalTo','LabelDateArrivalTo') do begin
+      FilterCondition:=fcEqualLess;
+      FilterCaption:='Дата подачи по:';
+    end;
+  end;
+  Caption:='Фильтр по заказам';
+end;
+
+{ TBisTaxiOrderFilterForm }
+
+constructor TBisTaxiOrderFilterForm.Create(AOwner: TComponent);
+var
+  Buffer: String;
+begin
+  inherited Create(AOwner);
+
+  FDefaultLocalityName:='';
+  if Core.LocalBase.ReadParam(SParamDefaultLocalityName,Buffer) then
+    FDefaultLocalityName:=Buffer;
+  
+  FArrivalAddressFrame:=TBisTaxiAddressFrame.Create(Self);
+  FArrivalAddressFrame.Parent:=PanelAddressArrival;
+  FArrivalAddressFrame.Align:=alClient;
+  FArrivalAddressFrame.ParentForm:=Self;
+  FArrivalAddressFrame.DefaultLocalityName:=FDefaultLocalityName;
+  FArrivalAddressFrame.LabelZone.Visible:=false;
+  FArrivalAddressFrame.ComboBoxZone.Visible:=false;
+  FArrivalAddressFrame.BitBtnCheckAddress.Visible:=false;
+  FArrivalAddressFrame.LabelPorch.Left:=FArrivalAddressFrame.LabelPorch.Left+15;
+  FArrivalAddressFrame.EditPorch.Left:=FArrivalAddressFrame.EditPorch.Left+15;
+  FArrivalAddressFrame.ImageAddress.Visible:=false;
+
+  FGradientDateAccept:=TBisGradient.Create(Self);
+  FGradientDateAccept.Parent:=PanelDateAccept;
+  FGradientDateAccept.Align:=alClient;
+  FGradientDateAccept.BeginColor:=PanelDateAccept.Color;
+  FGradientDateAccept.SendToBack;
+
+  FGradientAddress:=TBisGradient.Create(Self);
+  FGradientAddress.Parent:=FArrivalAddressFrame;
+  FGradientAddress.Align:=alClient;
+  FGradientAddress.BeginColor:=PanelAddressArrival.Color;
+  FGradientAddress.SendToBack;
+
+  FGradientDateArrival:=TBisGradient.Create(Self);
+  FGradientDateArrival.Parent:=PanelDateArrival;
+  FGradientDateArrival.Align:=alClient;
+  FGradientDateArrival.BeginColor:=PanelDateArrival.Color;
+  FGradientDateArrival.SendToBack;
+
+  FArrivalAddressFrame.RefreshAll;
+end;
+
+destructor TBisTaxiOrderFilterForm.Destroy;
+begin
+  FArrivalAddressFrame.Free;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiOrderFilterForm.Init;
+begin
+  inherited Init;
+  FArrivalAddressFrame.Init;
+end;
+
+procedure TBisTaxiOrderFilterForm.ButtonAcceptClick(Sender: TObject);
+var
+  AIface: TBisPeriodFormIface;
+  PeriodType: TBisPeriodType;
+  D1,D2: TDate;
+begin
+  AIface:=TBisPeriodFormIface.Create(nil);
+  try
+    PeriodType:=ptMonth;
+    D1:=DateOf(Provider.Params.ParamByName('DATE_ACCEPT').AsDateTime);
+    D2:=DateOf(Provider.Params.ParamByName('DATE_ACCEPT',1).AsDateTime);
+    if AIface.Select(PeriodType,D1,D2) then begin
+      Provider.Params.ParamByName('DATE_ACCEPT').Value:=D1;
+      Provider.Params.ParamByName('DATE_ACCEPT',1).Value:=D2;
+    end;
+  finally
+    AIface.Free;
+  end;
+end;
+
+procedure TBisTaxiOrderFilterForm.ButtonArrivalClick(Sender: TObject);
+var
+  AIface: TBisPeriodFormIface;
+  PeriodType: TBisPeriodType;
+  D1,D2: TDate;
+begin
+  AIface:=TBisPeriodFormIface.Create(nil);
+  try
+    PeriodType:=ptMonth;
+    D1:=DateOf(Provider.Params.ParamByName('DATE_ARRIVAL').AsDateTime);
+    D2:=DateOf(Provider.Params.ParamByName('DATE_ARRIVAL',1).AsDateTime);
+    if AIface.Select(PeriodType,D1,D2) then begin
+      Provider.Params.ParamByName('DATE_ARRIVAL').Value:=D1;
+      Provider.Params.ParamByName('DATE_ARRIVAL',1).Value:=D2;
+    end;
+  finally
+    AIface.Free;
+  end;
+end;
+
+function TBisTaxiOrderFilterForm.FindParamComponent(Param: TBisParam; ComponentName: String): TComponent;
+begin
+  Result:=inherited FindParamComponent(Param,ComponentName);
+  if Assigned(Param) then begin
+    if AnsiSameText(Param.ParamName,'LOCALITY_NAME') or
+       AnsiSameText(Param.ParamName,'STREET_NAME') or
+       AnsiSameText(Param.ParamName,'HOUSE') or
+       AnsiSameText(Param.ParamName,'FLAT') or
+       AnsiSameText(Param.ParamName,'PORCH') then
+      Result:=FArrivalAddressFrame.FindComponent(ComponentName);
+  end;
+end;
+
+end.

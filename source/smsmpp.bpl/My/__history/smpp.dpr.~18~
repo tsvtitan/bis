@@ -1,0 +1,18 @@
+program smpp;
+
+uses
+  Forms,
+  BisMainFm in 'BisMainFm.pas' {BisMainForm},
+  BisSmppClient in 'BisSmppClient.pas',
+  BisUtils in 'BisUtils.pas',
+  BisThread in 'BisThread.pas',
+  BisSmpp in 'BisSmpp.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TBisMainForm, BisMainForm);
+  Application.Run;
+end.

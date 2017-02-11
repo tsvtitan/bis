@@ -1,0 +1,163 @@
+unit BisParamEditDate;
+
+interface
+
+uses Classes, Controls, StdCtrls, DB,
+     BisParam, BisControls;
+
+type
+  TBisParamEditDate=class(TBisParam)
+  private
+    FEditDate: TEditDate;
+    FLabelEditDate: TLabel;
+    FDateTimePickerName: String;
+    FLabelName: String;
+    FOldEditDateChange: TNotifyEvent;
+    procedure EditDateChange(Sender: TObject);
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetEmpty: Boolean; override;
+    function GetSize: Integer; override;
+    procedure SetSize(const Value: Integer); override;
+    function GetCaption: String; override;
+    function GetControl: TWinControl; override;
+//    procedure SetEnabled(const Value: Boolean); override;
+    procedure GetControls(List: TList); override;
+  public  
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+    property DateTimePickerName: String read FDateTimePickerName write FDateTimePickerName;
+    property LabelName: String read FLabelName write FLabelName;
+    property EditDate: TEditDate read FEditDate write FEditDate;
+    property LabelEditDate: TLabel read FLabelEditDate;
+  end;
+
+
+implementation
+
+uses Variants, DateUtils, Graphics,
+     BisUtils, BisConsts;
+
+{ TBisParamEditDate }
+
+constructor TBisParamEditDate.Create;
+begin
+  inherited Create;
+  DataType:=ftDate;
+end;
+
+procedure TBisParamEditDate.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamEditDate) then begin
+    DateTimePickerName:=TBisParamEditDate(Source).DateTimePickerName;
+    LabelName:=TBisParamEditDate(Source).LabelName;
+  end;
+end;
+
+procedure TBisParamEditDate.LinkControls(Parent: TWinControl);
+var
+  Component: TComponent;
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    Component:=DoFindComponent(FDateTimePickerName);
+    if Assigned(Component) and (Component is TDateTimePicker) then
+      FEditDate:=ReplaceDateTimePickerToEditDate(TDateTimePicker(Component));
+    if Assigned(FEditDate) then begin
+      FOldEditDateChange:=FEditDate.OnChange;
+      FEditDate.OnChange:=EditDateChange;
+      FEditDate.MaxLength:=inherited GetSize;
+      FEditDate.Color:=iff(FEditDate.Color=clBtnFace,ColorControlReadOnly,FEditDate.Color);
+      FLabelEditDate:=TLabel(DoFindComponent(FLabelName));
+      if Assigned(FLabelEditDate) then
+        FLabelEditDate.FocusControls.Add(FEditDate);
+      Value:=TempValue;
+    end;
+  end;
+  inherited LinkControls(Parent);
+end;
+
+function TBisParamEditDate.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FEditDate) then
+    Result:=iff(Empty,Null,DateOf(FEditDate.Date));
+end;
+
+procedure TBisParamEditDate.SetValue(const AValue: Variant);
+begin
+  if not VarSameValue(Value,AValue) then begin
+    if Assigned(FEditDate) then begin
+      FEditDate.OnChange:=nil;
+      try
+        FEditDate.Date:=DateOf(VarToDateDef(AValue,NullDate));
+      finally
+        FEditDate.OnChange:=EditDateChange;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamEditDate.GetEmpty: Boolean;
+begin
+  Result:=inherited GetEmpty;
+  if Assigned(FEditDate) then
+    Result:=DateOf(FEditDate.Date)=DateOf(NullDate);
+end;
+
+function TBisParamEditDate.GetSize: Integer;
+begin
+  Result:=inherited GetSize;
+  if Assigned(FEditDate) then
+    Result:=FEditDate.MaxLength;
+end;
+
+procedure TBisParamEditDate.SetSize(const Value: Integer);
+begin
+  if Size<>Value then
+    if Assigned(FEditDate) then
+      FEditDate.MaxLength:=Value
+    else
+      inherited SetSize(Value);
+end;
+
+function TBisParamEditDate.GetControl: TWinControl;
+begin
+  Result:=FEditDate;
+end;
+
+procedure TBisParamEditDate.GetControls(List: TList);
+begin
+  inherited GetControls(List);
+  if Assigned(List) then
+    List.Add(FLabelEditDate);
+end;
+
+{procedure TBisParamEditDate.SetEnabled(const Value: Boolean);
+begin
+  inherited SetEnabled(Value);
+  if Assigned(FLabelEditDate) then
+    FLabelEditDate.Enabled:=Value;
+end;}
+
+function TBisParamEditDate.GetCaption: String;
+begin
+  Result:=inherited GetCaption;
+  if Assigned(FLabelEditDate) then
+    Result:=FLabelEditDate.Caption;
+end;
+
+procedure TBisParamEditDate.EditDateChange(Sender: TObject);
+begin
+  DoChange(Self);
+  if Assigned(FOldEditDateChange) then
+    FOldEditDateChange(Sender);
+end;
+
+end.

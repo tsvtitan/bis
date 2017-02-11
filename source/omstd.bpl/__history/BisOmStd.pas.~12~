@@ -1,0 +1,73 @@
+unit BisOmStd;
+
+interface
+
+uses BisObjectModules;
+
+procedure InitObjectModule(AModule: TBisObjectModule); stdcall;
+
+exports
+  InitObjectModule;
+
+implementation
+
+uses BisOmStdSystem, BisOmStdUtils, BisOmStdDialogs;
+
+procedure InitObjectModule(AModule: TBisObjectModule); stdcall;
+begin
+  with AModule.ScriptUnits do begin
+    AddClass(TBisSystemScriptUnit);
+    AddClass(TBisUtilsScriptUnit);
+    AddClass(TBisDialogsScriptUnit);
+  end;
+end;
+
+{ TBisStdScriptUnit }
+
+{constructor TBisStdScriptUnit.Create(AOwner: TComponent);
+var
+  V: Variant;
+begin
+  inherited Create(AOwner);
+  UnitName:='Std';
+
+  V:=Now;
+
+  Types.Add('String',tkString);
+  Types.Add('Boolean',tkBoolean);
+  Types.Add('Extended',tkFloat);
+  Types.Add('TDateTime',tkDate);
+  Types.Add('TDate',tkDate,'TDateTime');
+  Types.Add('TTime',tkDate,'TDateTime');
+  Types.Add('TBisStdScriptUnit',tkObject);
+
+  Consts.AddInteger('ConstInteger',1024);
+  Consts.AddFloat('ConstFloat',1.08);
+  Consts.AddString('ConstString','Привет');
+  Consts.AddDate('ConstDate',Now);
+  Consts.AddBoolean('ConstBoolean',True);
+  Consts.AddVariant('ConstVariant',V);
+  Consts.AddObject('ConstObject',Self);
+
+  Vars.AddInteger('VarInteger',1024);
+  Vars.AddFloat('VarFloat',1.08);
+  Vars.AddString('VarString','Привет');
+  Vars.AddDate('VarDate',Now);
+  Vars.AddBoolean('VarBoolean',True);
+  Vars.AddVariant('VarVariant',V);
+  Vars.AddObject('VarObject',Self);
+
+  with Funcs.Add('ShowInfo',ScriptShowInfo) do begin
+    Description:='процедура показывающая информационное окно';
+    Params.Add('Msg','String');
+    Params.Add('UseTimer','Boolean',True);
+  end;
+
+end;
+
+procedure TBisStdScriptUnit.ScriptShowInfo(Func: TBisScriptFunc);
+begin
+  ShowInfo(Func.Params[0].AsString,Func.Params[1].AsBoolean);
+end;}
+
+end.

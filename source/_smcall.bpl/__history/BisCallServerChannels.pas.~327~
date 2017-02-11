@@ -1,0 +1,439 @@
+unit BisCallServerChannels;
+
+interface
+
+uses Classes, SysUtils, mmSystem,
+     BisObject, BisCoreObjects,
+     BisConnections;
+
+type
+  TBisCallServerChannel=class;
+
+  TBisCallServerChannelAcceptorType=(catPhone,catAccount,catComputer,catSession);
+  TBisCallServerChannelLocation=(clUnknown,clInternal,clExternal);
+  TBisCallServerChannelDirection=(cdUnknown,cdIncoming,cdOutgoing);
+
+  TBisCallServerChannelEvent=procedure (Channel: TBisCallServerChannel) of object;
+  TBisCallServerChannelCheckEvent=function (Channel: TBisCallServerChannel): Boolean of object;
+  TBisCallServerChannelCodeEvent=procedure (Channel: TBisCallServerChannel; const Code: Char) of object;
+  TBisCallServerChannelDataEvent=procedure (Channel: TBisCallServerChannel; const Data: Pointer; const DataSize: Cardinal) of object;
+  TBisCallServerChannelErrorEvent=procedure (Channel: TBisCallServerChannel; const Error: String) of object;
+
+  TBisCallServerChannelState=(csReady,csRinning,csProcessing,csHolding,csFinished);
+
+  TBisCallServerChannel=class(TBisCoreObject)
+  private
+    FConnection: TBisConnection;
+    FConnectionSessionId: Variant;
+    FState: TBisCallServerChannelState; 
+    FOnCheck: TBisCallServerChannelCheckEvent;
+    FOnRing: TBisCallServerChannelEvent;
+    FOnConnect: TBisCallServerChannelEvent;
+    FOnDisconnect: TBisCallServerChannelEvent;
+    FOnCode: TBisCallServerChannelCodeEvent;
+    FOnData: TBisCallServerChannelDataEvent;
+    FOnHold: TBisCallServerChannelEvent;
+    FOnUnHold: TBisCallServerChannelEvent;
+    FOnPlayBegin: TBisCallServerChannelEvent;
+    FOnPlayEnd: TBisCallServerChannelEvent;
+    FOnError: TBisCallServerChannelErrorEvent;
+    FOnCancel: TBisCallServerChannelEvent;
+    FOnTimeout: TBisCallServerChannelEvent;
+  protected
+    function GetActive: Boolean; virtual;
+    function GetCallId: Variant; virtual;
+    function GetDirection: TBisCallServerChannelDirection; virtual;
+    procedure SetDirection(const Value: TBisCallServerChannelDirection); virtual;
+    function GetCallerId: Variant; virtual;
+    function GetCallerPhone: Variant; virtual;
+    function GetAcceptor: Variant; virtual;
+    function GetAcceptorType: TBisCallServerChannelAcceptorType; virtual;
+    function GetCreatorId: Variant; virtual;
+    function GetDateCreate: TDateTime; virtual;
+    function GetChannelName: String; virtual;
+    function GetInFormat: PWaveFormatEx; virtual;
+    function GetInDataSize: Integer; virtual;
+    function GetOutFormat: PWaveFormatEx; virtual;
+    procedure SetOutFormat(const Value: PWaveFormatEx); virtual;
+    function GetOutDataSize: Integer; virtual;
+    procedure SetOutDataSize(const Value: Integer); virtual;
+    function GetAcceptorId: Variant; virtual;
+    function GetLocation: TBisCallServerChannelLocation; virtual;
+    function GetVolume: Integer; virtual;
+    function GetListenThread: TThread; virtual;
+
+    function DoCheck: Boolean; virtual;
+    procedure DoRing; virtual;
+    procedure DoCancel; virtual;
+    procedure DoConnect; virtual;
+    procedure DoDisconnect; virtual;
+    procedure DoCode(const Code: Char); virtual;
+    procedure DoData(const Data: Pointer; const DataSize: Cardinal); virtual;
+    procedure DoHold; virtual;
+    procedure DoUnHold; virtual;
+    procedure DoPlayBegin; virtual;
+    procedure DoPlayEnd; virtual;
+    procedure DoError(Error: String); virtual;
+    procedure DoTimeout; virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    procedure Dial(Acceptor: Variant; AcceptorType: TBisCallServerChannelAcceptorType); virtual;
+    procedure Answer; virtual;
+    procedure Hangup; virtual;
+    procedure Hold; virtual;
+    procedure UnHold; virtual;
+    procedure PlayStart(Stream: TStream; LoopCount: Integer=MaxInt); virtual;
+    procedure PlayStop; virtual;
+    procedure SendStart; virtual;
+    procedure SendStop; virtual;
+    procedure Send(const Data: Pointer; const DataSize: Cardinal); virtual;
+
+    property Active: Boolean read GetActive;
+    property CallId: Variant read GetCallId;
+    property CallerId: Variant read GetCallerId;
+    property CallerPhone: Variant read GetCallerPhone; 
+    property Acceptor: Variant read GetAcceptor;
+    property AcceptorType: TBisCallServerChannelAcceptorType read GetAcceptorType;
+    property CreatorId: Variant read GetCreatorId;
+    property DateCreate: TDateTime read GetDateCreate;
+    property ChannelName: String read GetChannelName;
+    property InFormat: PWaveFormatEx read GetInFormat;
+    property InDataSize: Integer read GetInDataSize;
+    property AcceptorId: Variant read GetAcceptorId;
+    property Location: TBisCallServerChannelLocation read GetLocation;
+    property State: TBisCallServerChannelState read FState;
+    property Volume: Integer read GetVolume;
+    property ListenThread: TThread read GetListenThread;
+
+    property Direction: TBisCallServerChannelDirection read GetDirection write SetDirection;
+    property Connection: TBisConnection read FConnection write FConnection;
+    property ConnectionSessionId: Variant read FConnectionSessionId write FConnectionSessionId;
+    property OutFormat: PWaveFormatEx read GetOutFormat write SetOutFormat;
+    property OutDataSize: Integer read GetOutDataSize write SetOutDataSize;
+
+    property OnCheck: TBisCallServerChannelCheckEvent read FOnCheck write FOnCheck;
+    property OnRing: TBisCallServerChannelEvent read FOnRing write FOnRing;
+    property OnCancel: TBisCallServerChannelEvent read FOnCancel write FOnCancel;
+    property OnConnect: TBisCallServerChannelEvent read FOnConnect write FOnConnect;
+    property OnDisconnect: TBisCallServerChannelEvent read FOnDisconnect write FOnDisconnect;
+    property OnCode: TBisCallServerChannelCodeEvent read FOnCode write FOnCode;
+    property OnData: TBisCallServerChannelDataEvent read FOnData write FOnData;
+    property OnHold: TBisCallServerChannelEvent read FOnHold write FOnHold;
+    property OnUnHold: TBisCallServerChannelEvent read FOnUnHold write FOnUnHold; 
+    property OnPlayBegin: TBisCallServerChannelEvent read FOnPlayBegin write FOnPlayBegin;
+    property OnPlayEnd: TBisCallServerChannelEvent read FOnPlayEnd write FOnPlayEnd;
+    property OnError: TBisCallServerChannelErrorEvent read FOnError write FOnError;
+    property OnTimeout: TBisCallServerChannelEvent read FOnTimeout write FOnTimeout; 
+  end;
+
+  TBisCallServerChannelClass=class of TBisCallServerChannel;
+
+  TBisCallServerChannels=class;
+  
+  TBisCallServerChannelsCreateEvent=procedure(Channels: TBisCallServerChannels; Channel: TBisCallServerChannel) of object;
+  TBisCallServerChannelsDestroyEvent=TBisCallServerChannelsCreateEvent;
+
+  TBisCallServerChannels=class(TBisCoreObjects)
+  private
+    FOnCreateChannel: TBisCallServerChannelsCreateEvent;
+    FOnDestroyChannel: TBisCallServerChannelsDestroyEvent;
+    function GetItem(Index: Integer): TBisCallServerChannel;
+  protected
+    procedure RemoveNotify(Obj: TBisObject); override;
+    procedure DoCreateChannel(Channel: TBisCallServerChannel); virtual;
+    procedure DoDestroyChannel(Channel: TBisCallServerChannel); virtual;
+    function AddClass(AClass: TBisCallServerChannelClass; WithEvent: Boolean=true): TBisCallServerChannel;
+  public
+    procedure Remove(Channel: TBisCallServerChannel); 
+
+    property Items[Index: Integer]: TBisCallServerChannel read GetItem; default;
+
+    property OnCreateChannel: TBisCallServerChannelsCreateEvent read FOnCreateChannel write FOnCreateChannel;
+    property OnDestroyChannel: TBisCallServerChannelsDestroyEvent read FOnDestroyChannel write FOnDestroyChannel;  
+  end;
+
+  TBisCallServerChannelsClass=class of TBisCallServerChannels;
+
+implementation
+
+uses Variants;
+
+{ TBisCallServerChannel }
+
+constructor TBisCallServerChannel.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FConnectionSessionId:=Null;
+end;
+
+function TBisCallServerChannel.DoCheck: Boolean;
+begin
+  Result:=false;
+  if Assigned(FOnCheck) then
+    Result:=FOnCheck(Self);
+end;
+
+procedure TBisCallServerChannel.DoCancel;
+begin
+  if Assigned(FOnCancel) then
+    FOnCancel(Self);
+end;
+
+procedure TBisCallServerChannel.DoRing;
+begin
+  if Assigned(FOnRing) then
+    FOnRing(Self);
+  FState:=csRinning;
+end;
+
+procedure TBisCallServerChannel.DoTimeout;
+begin
+  if Assigned(FOnTimeout) then
+    FOnTimeout(Self);
+end;
+
+procedure TBisCallServerChannel.DoConnect;
+begin
+  if Assigned(FOnConnect) then
+    FOnConnect(Self);
+  FState:=csProcessing;
+end;
+
+procedure TBisCallServerChannel.DoDisconnect;
+begin
+  if Assigned(FOnDisconnect) then
+    FOnDisconnect(Self);
+  FState:=csFinished;
+end;
+
+procedure TBisCallServerChannel.DoHold;
+begin
+  if Assigned(FOnHold) then
+    FOnHold(Self);
+  FState:=csHolding;
+end;
+
+procedure TBisCallServerChannel.DoUnHold;
+begin
+  if Assigned(FOnUnHold) then
+    FOnUnHold(Self);
+  FState:=csProcessing;
+end;
+
+procedure TBisCallServerChannel.DoData(const Data: Pointer; const DataSize: Cardinal);
+begin
+  if Assigned(FOnData) then
+    FOnData(Self,Data,DataSize);
+end;
+
+procedure TBisCallServerChannel.DoCode(const Code: Char);
+begin
+  if Assigned(FOnCode) then
+    FOnCode(Self,Code);
+end;
+
+procedure TBisCallServerChannel.DoPlayBegin;
+begin
+  if Assigned(FOnPlayBegin) then
+    FOnPlayBegin(Self);
+end;
+
+procedure TBisCallServerChannel.DoPlayEnd;
+begin
+  if Assigned(FOnPlayEnd) then
+    FOnPlayEnd(Self);
+end;
+
+procedure TBisCallServerChannel.DoError(Error: String);
+begin
+  if Assigned(FOnError) then
+    FOnError(Self,Error);
+end;
+
+function TBisCallServerChannel.GetActive: Boolean;
+begin
+  Result:=false;
+end;
+
+function TBisCallServerChannel.GetCallerId: Variant;
+begin
+  Result:=Null;
+end;
+
+function TBisCallServerChannel.GetCallerPhone: Variant;
+begin
+  Result:=Null;
+end;
+
+function TBisCallServerChannel.GetCallId: Variant;
+begin
+  Result:=Null;
+end;
+
+function TBisCallServerChannel.GetChannelName: String;
+begin
+  Result:=ObjectName;
+end;
+
+function TBisCallServerChannel.GetCreatorId: Variant;
+begin
+  Result:=Null;
+end;
+
+function TBisCallServerChannel.GetDateCreate: TDateTime;
+begin
+  Result:=Now;
+end;
+
+function TBisCallServerChannel.GetDirection: TBisCallServerChannelDirection;
+begin
+  Result:=cdUnknown;
+end;
+
+function TBisCallServerChannel.GetInDataSize: Integer;
+begin
+  Result:=0;
+end;
+
+function TBisCallServerChannel.GetInFormat: PWaveFormatEx;
+begin
+  Result:=nil;
+end;
+
+function TBisCallServerChannel.GetListenThread: TThread;
+begin
+  Result:=nil;
+end;
+
+function TBisCallServerChannel.GetLocation: TBisCallServerChannelLocation;
+begin
+  Result:=clUnknown;
+end;
+
+function TBisCallServerChannel.GetOutDataSize: Integer;
+begin
+  Result:=0;;
+end;
+
+function TBisCallServerChannel.GetOutFormat: PWaveFormatEx;
+begin
+  Result:=nil;
+end;
+
+function TBisCallServerChannel.GetVolume: Integer;
+begin
+  Result:=100;
+end;
+
+function TBisCallServerChannel.GetAcceptor: Variant;
+begin
+  Result:=Null;
+end;
+
+function TBisCallServerChannel.GetAcceptorId: Variant;
+begin
+  Result:=Null;
+end;
+
+function TBisCallServerChannel.GetAcceptorType: TBisCallServerChannelAcceptorType;
+begin
+  Result:=catPhone;
+end;
+
+procedure TBisCallServerChannel.Send(const Data: Pointer; const DataSize: Cardinal);
+begin
+end;
+
+procedure TBisCallServerChannel.SetDirection(const Value: TBisCallServerChannelDirection);
+begin
+end;
+
+procedure TBisCallServerChannel.SetOutDataSize(const Value: Integer);
+begin
+
+end;
+
+procedure TBisCallServerChannel.SetOutFormat(const Value: PWaveFormatEx);
+begin
+end;
+
+procedure TBisCallServerChannel.Dial(Acceptor: Variant; AcceptorType: TBisCallServerChannelAcceptorType);
+begin
+end;
+
+procedure TBisCallServerChannel.Answer;
+begin
+end;
+
+procedure TBisCallServerChannel.Hangup;
+begin
+end;
+
+procedure TBisCallServerChannel.Hold;
+begin
+end;
+
+procedure TBisCallServerChannel.UnHold;
+begin
+end;
+
+procedure TBisCallServerChannel.PlayStart(Stream: TStream; LoopCount: Integer);
+begin
+end;
+
+procedure TBisCallServerChannel.PlayStop;
+begin
+end;
+
+procedure TBisCallServerChannel.SendStart;
+begin
+end;
+
+procedure TBisCallServerChannel.SendStop;
+begin
+end;
+
+{ TBisCallServerChannels }
+
+procedure TBisCallServerChannels.DoCreateChannel(Channel: TBisCallServerChannel);
+begin
+  if Assigned(FOnCreateChannel) then
+    FOnCreateChannel(Self,Channel);
+end;
+
+procedure TBisCallServerChannels.DoDestroyChannel(Channel: TBisCallServerChannel);
+begin
+  if Assigned(FOnDestroyChannel) then
+    FOnDestroyChannel(Self,Channel);
+end;
+
+function TBisCallServerChannels.AddClass(AClass: TBisCallServerChannelClass; WithEvent: Boolean): TBisCallServerChannel;
+begin
+  Result:=nil;
+  if Assigned(AClass) then begin
+    Result:=AClass.Create(Self);
+    AddObject(Result);
+    if WithEvent then
+      DoCreateChannel(Result);
+  end;
+end;
+
+function TBisCallServerChannels.GetItem(Index: Integer): TBisCallServerChannel;
+begin
+  Result:=TBisCallServerChannel(inherited Items[Index]);
+end;
+
+procedure TBisCallServerChannels.Remove(Channel: TBisCallServerChannel);
+begin
+  RemoveObject(Channel);
+end;
+
+procedure TBisCallServerChannels.RemoveNotify(Obj: TBisObject);
+begin
+  if Assigned(Obj) and (Obj is TBisCallServerChannel) then
+    DoDestroyChannel(TBisCallServerChannel(Obj));
+  inherited RemoveNotify(Obj);
+end;
+
+end.

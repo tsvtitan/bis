@@ -1,0 +1,144 @@
+unit BisKrieltDataQuestionEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ImgList, ComCtrls,
+  BisDataEditFm, BisControls;
+
+type
+  TBisKrieltDataQuestionEditForm = class(TBisDataEditForm)
+    LabelConsultant: TLabel;
+    LabelSubject: TLabel;
+    EditSubject: TEdit;
+    ButtonSubject: TButton;
+    ComboBoxConsultant: TComboBox;
+    LabelDateCreate: TLabel;
+    DateTimePickerCreate: TDateTimePicker;
+    DateTimePickerCreateTime: TDateTimePicker;
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelContact: TLabel;
+    EditContact: TEdit;
+    LabelText: TLabel;
+    MemoText: TMemo;
+    LabelNum: TLabel;
+    EditNum: TEdit;
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure BeforeShow; override;
+  end;
+
+  TBisKrieltDataQuestionEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataQuestionFilterFormIface=class(TBisKrieltDataQuestionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataQuestionInsertFormIface=class(TBisKrieltDataQuestionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataQuestionUpdateFormIface=class(TBisKrieltDataQuestionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataQuestionDeleteFormIface=class(TBisKrieltDataQuestionEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataQuestionEditForm: TBisKrieltDataQuestionEditForm;
+
+implementation
+
+uses BisParam, BisCore,
+     BisKrieltDataSubjectsFm, BisKrieltDataConsultantsFm;
+
+{$R *.dfm}
+
+{ TBisKrieltDataQuestionEditFormIface }
+
+constructor TBisKrieltDataQuestionEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataQuestionEditForm;
+  with Params do begin
+    AddKey('QUESTION_ID').Older('OLD_QUESTION_ID');
+    AddInvisible('CONSULTANT_SURNAME');
+    AddInvisible('CONSULTANT_NAME');
+    AddInvisible('CONSULTANT_PATRONYMIC');
+    AddEdit('NUM','EditNum','LabelNum',true);
+    AddEditDateTime('DATE_CREATE','DateTimePickerCreate','DateTimePickerCreateTime','LabelDateCreate',true).ExcludeModes([emFilter]);
+    AddEdit('NAME','EditName','LabelName',true);
+    AddEdit('CONTACT','EditContact','LabelContact',true);
+    AddEditDataSelect('SUBJECT_ID','EditSubject','LabelSubject','ButtonSubject',
+                      TBisKrieltDataSubjectsFormIface,'SUBJECT_NAME',true,false,'','NAME');
+    with AddComboBoxDataSelect('CONSULTANT_ID','ComboBoxConsultant','LabelConsultant','',
+                               TBisKrieltDataConsultantsFormIface,'CONSULTANT_SURNAME;CONSULTANT_NAME;CONSULTANT_PATRONYMIC',false,false,'','SURNAME;NAME;PATRONYMIC') do begin
+      DataAliasFormat:='%s %s %s';
+    end;
+    AddMemo('QUESTION_TEXT','MemoText','LabelText',true);
+  end;
+end;
+
+{ TBisKrieltDataQuestionFilterFormIface }
+
+constructor TBisKrieltDataQuestionFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+end;
+
+{ TBisKrieltDataQuestionInsertFormIface }
+
+constructor TBisKrieltDataQuestionInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_QUESTION';
+end;
+
+{ TBisKrieltDataQuestionUpdateFormIface }
+
+constructor TBisKrieltDataQuestionUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_QUESTION';
+end;
+
+{ TBisKrieltDataQuestionDeleteFormIface }
+
+constructor TBisKrieltDataQuestionDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_QUESTION';
+end;
+
+
+{ TBisKrieltDataQuestionEditForm }
+
+constructor TBisKrieltDataQuestionEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+procedure TBisKrieltDataQuestionEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  if Mode in [emInsert,emDuplicate] then begin
+    Provider.ParamByName('DATE_CREATE').SetNewValue(Core.ServerDate);
+  end;
+  UpdateButtonState;
+end;
+
+end.

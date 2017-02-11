@@ -1,0 +1,40 @@
+program AcmDemo;
+
+{******************************************************************************
+ *
+ *  ACMComponents
+ *
+ *
+ *  Copyright(C) 2004 Mattia Massimo dhalsimmax@tin.it
+ *  This file is part of ACMCOMPONENTS
+ *
+ *  ACMCOMPONENTS are free software; you can redistribute it and/or modify it
+ *  under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *****************************************************************************}
+
+uses
+  Forms,
+  Main in 'Main.pas' {MainFrm},
+  SendDialog in 'SendDialog.pas' {SendDlg},
+  RecvDialog in 'RecvDialog.pas' {RecvDlg},
+  Send in 'Send.pas' {SendFrm},
+  recv in 'recv.pas' {RecvFrm},
+  msacm in '..\msacm.pas',
+  WaveRecorders in '..\..\WaveAudio\WaveRecorders.pas',
+  WaveAcmDrivers in '..\WaveAcmDrivers.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TMainFrm, MainFrm);
+  Application.Run;
+end.

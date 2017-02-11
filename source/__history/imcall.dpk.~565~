@@ -1,0 +1,49 @@
+package imcall;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  core,
+  omaudio,
+  omnet,
+  imdesign,
+  imaudio;
+
+contains
+  BisCallInit in 'imcall.bpl\BisCallInit.pas',
+  BisCallConsts in 'imcall.bpl\BisCallConsts.pas',
+  BisCallResultFm in 'imcall.bpl\BisCallResultFm.pas' {BisCallResultForm},
+  BisCallPhoneFrm in 'imcall.bpl\BisCallPhoneFrm.pas' {BisCallPhoneFrame: TFrame},
+  BisCallPhoneFm in 'imcall.bpl\BisCallPhoneFm.pas' {BisCallPhoneForm},
+  BisCallDataCallResultEditFm in 'imcall.bpl\BisCallDataCallResultEditFm.pas' {BisCallDataCallResultEditForm},
+  BisCallDataCallResultsFm in 'imcall.bpl\BisCallDataCallResultsFm.pas' {BisCallDataCallResultsForm},
+  BisCallDataCallEditFm in 'imcall.bpl\BisCallDataCallEditFm.pas' {BisCallDataCallEditForm},
+  BisCallDataCallFilterFm in 'imcall.bpl\BisCallDataCallFilterFm.pas' {BisCallDataCallFilterForm},
+  BisCallDataCallsFrm in 'imcall.bpl\BisCallDataCallsFrm.pas' {BisCallDataCallsFrame: T},
+  BisCallDataCallsFm in 'imcall.bpl\BisCallDataCallsFm.pas' {BisCallDataCallsForm},
+  BisCallPhoneMessages in 'imcall.bpl\BisCallPhoneMessages.pas';
+
+end.

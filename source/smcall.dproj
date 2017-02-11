@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{464f08c4-a3cb-491c-8f96-8e28c1eb50c7}</ProjectGuid>
+    <MainSource>smcall.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\smcall.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_UnitSearchPath>U:\source\_dcp;U:\source\core.bpl;U:\source\core.bpl\imports\Indy\Core;U:\source\core.bpl\imports\Indy\Protocols;U:\source\core.bpl\imports\Indy\SuperCore;U:\source\core.bpl\imports\Indy\System;U:\source\core.bpl\imports\Cipher\Source;U:\source\core.bpl\imports\kbmMemTable\Source;U:\source\core.bpl\imports\Jcl;U:\source\core.bpl\imports\MsysInfo\Source;U:\source\core.bpl\imports\GifImage;U:\source\core.bpl\imports\hexedit\vcl;U:\source\core.bpl\imports\SynEdit\Source</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp;U:\source\core.bpl;U:\source\core.bpl\imports\Indy\Core;U:\source\core.bpl\imports\Indy\Protocols;U:\source\core.bpl\imports\Indy\SuperCore;U:\source\core.bpl\imports\Indy\System;U:\source\core.bpl\imports\Cipher\Source;U:\source\core.bpl\imports\kbmMemTable\Source;U:\source\core.bpl\imports\Jcl;U:\source\core.bpl\imports\MsysInfo\Source;U:\source\core.bpl\imports\GifImage;U:\source\core.bpl\imports\hexedit\vcl;U:\source\core.bpl\imports\SynEdit\Source</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp;U:\source\core.bpl;U:\source\core.bpl\imports\Indy\Core;U:\source\core.bpl\imports\Indy\Protocols;U:\source\core.bpl\imports\Indy\SuperCore;U:\source\core.bpl\imports\Indy\System;U:\source\core.bpl\imports\Cipher\Source;U:\source\core.bpl\imports\kbmMemTable\Source;U:\source\core.bpl\imports\Jcl;U:\source\core.bpl\imports\MsysInfo\Source;U:\source\core.bpl\imports\GifImage;U:\source\core.bpl\imports\hexedit\vcl;U:\source\core.bpl\imports\SynEdit\Source</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp;U:\source\core.bpl;U:\source\core.bpl\imports\Indy\Core;U:\source\core.bpl\imports\Indy\Protocols;U:\source\core.bpl\imports\Indy\SuperCore;U:\source\core.bpl\imports\Indy\System;U:\source\core.bpl\imports\Cipher\Source;U:\source\core.bpl\imports\kbmMemTable\Source;U:\source\core.bpl\imports\Jcl;U:\source\core.bpl\imports\MsysInfo\Source;U:\source\core.bpl\imports\GifImage;U:\source\core.bpl\imports\hexedit\vcl;U:\source\core.bpl\imports\SynEdit\Source</DCC_IncludePath>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+    <DCC_IMPLICIT_IMPORT>False</DCC_IMPLICIT_IMPORT>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_Define>EXCEPT_NOTIFIER_IGNORES</DCC_Define>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="HostApplication">U:\bin\taxi.exe</Parameters><Parameters Name="RunParams">/config smcall.ini /noupdate</Parameters><Parameters Name="DebugSourceDirs">U:\source\omnet.bpl\Indy\Core\;U:\source\omnet.bpl\Indy\System\</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">2</VersionInfo><VersionInfo Name="MinorVer">1</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">6</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">Call server module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">2.1.0.6</VersionInfoKeys><VersionInfoKeys Name="InternalName">smcall.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">smcall.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">2.1</VersionInfoKeys><VersionInfoKeys Name="Comments">Call server module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">smcall.dpk</Source></Source></Delphi.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="smcall.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="E:\Work\bis\source\core.dcp" />
+    <DCCReference Include="E:\Work\bis\source\omaudio.dcp" />
+    <DCCReference Include="E:\Work\bis\source\rtl.dcp" />
+    <DCCReference Include="smcall.bpl\BisCallServerChannels.pas" />
+    <DCCReference Include="smcall.bpl\BisCallServerConsts.pas" />
+    <DCCReference Include="smcall.bpl\BisCallServerHandlerModules.pas" />
+    <DCCReference Include="smcall.bpl\BisCallServerHandlers.pas" />
+    <DCCReference Include="smcall.bpl\BisCallServerInit.pas" />
+    <DCCReference Include="smcall.bpl\BisCallServerMainFm.pas">
+      <Form>BisCallServerMainForm</Form>
+    </DCCReference>
+    <DCCReference Include="smcall.bpl\BisCallServerScenarios.pas" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,27 @@
+unit BisFtpClient;
+
+interface
+
+uses BisModules, BisIfaceModules;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;                 
+
+exports
+  InitIfaceModule;
+
+{exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;  }
+  
+implementation
+
+uses BisFtpClientMainFm;
+
+procedure InitIfaceModule(AModule: TBisIfaceModule); stdcall;
+begin
+  MainIface:=AModule.Ifaces.AddClass(TBisFtpClientMainFormIface);
+end;
+
+end.

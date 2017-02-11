@@ -1,0 +1,60 @@
+unit BisConnectionProviders;
+
+interface
+
+uses Classes, Contnrs, DB, Graphics, Types, Variants,
+     BisObject, BisCoreObjects;
+
+type
+  TBisConnectionProvider=class(TBisCoreObject)
+  private
+    FProviderName: String;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property ProviderName: String read FProviderName write FProviderName;
+  end;
+
+  TBisConnectionProviders=class(TBisCoreObjects)
+  private
+    function GetItems(Index: Integer): TBisConnectionProvider;
+  protected
+    function GetObjectClass: TBisObjectClass; override;
+  public
+
+{    function AddClass(AClass: TBisIfaceClass): TBisIface;
+    function AddIface(AIface: TBisIface): Boolean;}
+
+    property Items[Index: Integer]: TBisConnectionProvider read GetItems;
+  end;
+
+implementation
+
+uses SysUtils;
+
+{ TBisConnectionProvider }
+
+constructor TBisConnectionProvider.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+destructor TBisConnectionProvider.Destroy;
+begin
+  inherited Destroy;
+end;
+
+{ TBisConnectionProviders }
+
+function TBisConnectionProviders.GetItems(Index: Integer): TBisConnectionProvider;
+begin
+  Result:=TBisConnectionProvider(inherited Items[Index]);
+end;
+
+function TBisConnectionProviders.GetObjectClass: TBisObjectClass;
+begin
+  Result:=TBisConnectionProvider;
+end;
+
+end.

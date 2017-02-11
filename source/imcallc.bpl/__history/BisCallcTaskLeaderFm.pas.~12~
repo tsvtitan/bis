@@ -1,0 +1,48 @@
+unit BisCallcTaskLeaderFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, 
+  BisCallcTaskFm;
+
+type
+  TBisCallcTaskLeaderForm = class(TBisCallcTaskForm)
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisCallcTaskLeaderFormIface=class(TBisCallcTaskFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcTaskLeaderForm: TBisCallcTaskLeaderForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisCallcTaskLeaderFormIface }
+
+constructor TBisCallcTaskLeaderFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisCallcTaskLeaderForm;
+  Available:=true;
+  Permissions.Enabled:=true;
+end;
+
+{ TBisCallcTaskLeaderForm }
+
+constructor TBisCallcTaskLeaderForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+end;
+
+end.

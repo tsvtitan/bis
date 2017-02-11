@@ -1,0 +1,282 @@
+inherited BisKrieltDataAdvertismentPageEditForm: TBisKrieltDataAdvertismentPageEditForm
+  Left = 495
+  Top = 201
+  Caption = 'BisKrieltDataAdvertismentPageEditForm'
+  ClientHeight = 328
+  ClientWidth = 334
+  ExplicitWidth = 342
+  ExplicitHeight = 362
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelButton: TPanel
+    Top = 290
+    Width = 334
+    ExplicitTop = 290
+    ExplicitWidth = 334
+    inherited ButtonOk: TButton
+      Left = 155
+      ExplicitLeft = 155
+    end
+    inherited ButtonCancel: TButton
+      Left = 252
+      ExplicitLeft = 252
+    end
+  end
+  inherited PanelControls: TPanel
+    Width = 334
+    Height = 290
+    ExplicitWidth = 334
+    ExplicitHeight = 290
+    object LabelPage: TLabel
+      Left = 62
+      Top = 48
+      Width = 51
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1057#1090#1088#1072#1085#1080#1094#1072':'
+      FocusControl = EditPage
+    end
+    object LabelAdvertisment: TLabel
+      Left = 65
+      Top = 21
+      Width = 48
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1056#1077#1082#1083#1072#1084#1072':'
+      FocusControl = EditAdvertisment
+    end
+    object LabelAccount: TLabel
+      Left = 29
+      Top = 75
+      Width = 84
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1059#1095#1077#1090#1085#1072#1103' '#1079#1072#1087#1080#1089#1100':'
+      FocusControl = EditAccount
+    end
+    object LabelPlace: TLabel
+      Left = 78
+      Top = 102
+      Width = 35
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1052#1077#1089#1090#1086':'
+      FocusControl = ComboBoxPlace
+    end
+    object LabelDateBegin: TLabel
+      Left = 46
+      Top = 129
+      Width = 67
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1044#1072#1090#1072' '#1085#1072#1095#1072#1083#1072':'
+      FocusControl = DateTimePickerBegin
+    end
+    object LabelDateEnd: TLabel
+      Left = 28
+      Top = 156
+      Width = 85
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1044#1072#1090#1072' '#1086#1082#1086#1085#1095#1072#1085#1080#1103':'
+      FocusControl = DateTimePickerEnd
+    end
+    object LabelWhoplaced: TLabel
+      Left = 34
+      Top = 237
+      Width = 79
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1050#1090#1086' '#1088#1072#1079#1084#1077#1089#1090#1080#1083':'
+      FocusControl = EditWhoplaced
+    end
+    object LabelDatePlaced: TLabel
+      Left = 16
+      Top = 264
+      Width = 97
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1044#1072#1090#1072' '#1088#1072#1079#1084#1077#1097#1077#1085#1080#1103':'
+      FocusControl = DateTimePickerDatePlacedDate
+    end
+    object LabelPriority: TLabel
+      Left = 66
+      Top = 183
+      Width = 47
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1055#1086#1088#1103#1076#1086#1082':'
+      FocusControl = EditPriority
+    end
+    object LabelCounter: TLabel
+      Left = 70
+      Top = 210
+      Width = 43
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #1057#1095#1077#1090#1095#1080#1082':'
+      FocusControl = EditCounter
+    end
+    object EditPage: TEdit
+      Left = 119
+      Top = 45
+      Width = 176
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object ButtonPage: TButton
+      Left = 301
+      Top = 45
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1089#1090#1088#1072#1085#1080#1094#1091
+      Caption = '...'
+      TabOrder = 3
+    end
+    object EditAdvertisment: TEdit
+      Left = 119
+      Top = 18
+      Width = 176
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ButtonAdvertisment: TButton
+      Left = 301
+      Top = 18
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1088#1077#1082#1083#1072#1084#1091
+      Caption = '...'
+      TabOrder = 1
+    end
+    object EditAccount: TEdit
+      Left = 119
+      Top = 72
+      Width = 176
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 4
+    end
+    object ButtonAccount: TButton
+      Left = 301
+      Top = 72
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1091#1095#1077#1090#1085#1091#1102' '#1079#1072#1087#1080#1089#1100' ('#1088#1086#1083#1100')'
+      Caption = '...'
+      TabOrder = 5
+    end
+    object ComboBoxPlace: TComboBox
+      Left = 119
+      Top = 99
+      Width = 88
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      TabOrder = 6
+      Items.Strings = (
+        #1085#1077#1090
+        'A1'
+        'A2'
+        'A3'
+        'A4'
+        'A5'
+        'A6'
+        'A7'
+        'A8'
+        'B1'
+        'B2'
+        'B3'
+        'B4'
+        'B5'
+        'B6'
+        'B7'
+        'B8'
+        'C1'
+        'C2'
+        'C3'
+        'C4'
+        'C5'
+        'C6'
+        'C7'
+        'C8')
+    end
+    object DateTimePickerBegin: TDateTimePicker
+      Left = 119
+      Top = 126
+      Width = 88
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      TabOrder = 7
+    end
+    object DateTimePickerEnd: TDateTimePicker
+      Left = 119
+      Top = 153
+      Width = 88
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Checked = False
+      TabOrder = 8
+    end
+    object EditWhoplaced: TEdit
+      Left = 119
+      Top = 234
+      Width = 176
+      Height = 21
+      Color = clBtnFace
+      MaxLength = 100
+      ReadOnly = True
+      TabOrder = 11
+    end
+    object ButtonWhoplaced: TButton
+      Left = 301
+      Top = 234
+      Width = 21
+      Height = 21
+      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1091#1095#1077#1090#1085#1091#1102' '#1079#1072#1087#1080#1089#1100
+      Caption = '...'
+      TabOrder = 12
+    end
+    object DateTimePickerDatePlacedDate: TDateTimePicker
+      Left = 119
+      Top = 261
+      Width = 88
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Checked = False
+      TabOrder = 13
+    end
+    object DateTimePickerDatePlacedTime: TDateTimePicker
+      Left = 213
+      Top = 261
+      Width = 73
+      Height = 21
+      Date = 39507.457070671300000000
+      Time = 39507.457070671300000000
+      Kind = dtkTime
+      TabOrder = 14
+    end
+    object EditPriority: TEdit
+      Left = 119
+      Top = 180
+      Width = 88
+      Height = 21
+      TabOrder = 9
+    end
+    object EditCounter: TEdit
+      Left = 119
+      Top = 207
+      Width = 88
+      Height = 21
+      TabOrder = 10
+    end
+  end
+end

@@ -1,0 +1,104 @@
+unit BisHttpServerHandlerFiles;
+
+interface
+
+uses Classes,
+     HTTPApp,
+     BisHttpServerHandlerModules, BisHttpServerHandlers,
+     BisHttpServerHandlerFilesWm;
+
+type
+
+  TBisHttpServerHandlerFiles=class(TBisHttpServerHandler)
+  private
+    FWebModule: TBisHttpServerHandlerFilesWebModule;
+    FDirectories: TStringList;
+    FFiles: TStringList;
+    FTypes: TStringList;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    function HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean; override;
+    procedure CopyFrom(Source: TBisHttpServerHandler); override;
+
+  end;
+
+procedure InitHttpServerHandlerModule(AModule: TBisHttpServerHandlerModule); stdcall;
+
+exports
+  InitHttpServerHandlerModule;
+
+implementation
+
+uses SysUtils,
+     BisCore, BisUtils, BisConsts, BisDataParams,
+     BisHttpServerHandlerFilesConsts;
+
+procedure InitHttpServerHandlerModule(AModule: TBisHttpServerHandlerModule); stdcall;
+begin
+  AModule.HandlerClass:=TBisHttpServerHandlerFiles;
+end;
+
+{ TBisHttpServerHandlerFiles }
+
+constructor TBisHttpServerHandlerFiles.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FWebModule:=TBisHttpServerHandlerFilesWebModule.Create(Self);
+  FWebModule.Handler:=Self;
+  FDirectories:=TStringList.Create;
+  FFiles:=TStringList.Create;
+  FTypes:=TStringList.Create;
+end;
+
+destructor TBisHttpServerHandlerFiles.Destroy;
+begin
+  FTypes.Free;
+  FFiles.Free;
+  FDirectories.Free;
+  FWebModule.Free;
+  inherited Destroy;
+end;
+
+procedure TBisHttpServerHandlerFiles.Init;
+var
+  i: Integer;
+  Param: TBisDataParam;
+begin
+  inherited Init;
+  for i:=0 to Params.Count-1 do begin
+    Param:=Params.Items[i];
+
+    if Param.Same(SParamDirectories) then
+      FDirectories.Text:=Trim(Param.AsString);
+
+    if Param.Same(SParamFiles) then
+      FFiles.Text:=Trim(Param.AsString);
+
+    if Param.Same(SParamTypes) then
+      FTypes.Text:=Trim(Param.AsString);
+  end;
+end;
+
+function TBisHttpServerHandlerFiles.HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean;
+begin
+  if FWebModule is TBisHttpServerHandlerFilesWebModule then begin
+    with TBisHttpServerHandlerFilesWebModule(FWebModule) do begin
+      Directories.Assign(FDirectories);
+    end;
+  end;
+  Result:=IWebRequestHandler(FWebModule).HandleRequest(Request,Response);
+end;
+
+procedure TBisHttpServerHandlerFiles.CopyFrom(Source: TBisHttpServerHandler);
+begin
+  inherited CopyFrom(Source);
+  if Assigned(Source) then begin
+    FDirectories.Assign(TBisHttpServerHandlerFiles(Source).FDirectories);
+    FFiles.Assign(TBisHttpServerHandlerFiles(Source).FFiles);
+    FTypes.Assign(TBisHttpServerHandlerFiles(Source).FTypes);
+  end;
+end;
+
+end.

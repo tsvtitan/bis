@@ -1,0 +1,99 @@
+unit BisTaxiDataPatternsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataFrm, BisDataGridFrm, BisDataGridFm, BisDataEditFm;
+
+type
+  TBisTaxiDataPatternsFrame=class(TBisDataGridFrame)
+  private
+    FExportId: Variant;
+    FExportName: String;
+  protected
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property ExportId: Variant read FExportId write FExportId;
+    property ExportName: String read FExportName write FExportName; 
+  end;
+
+  TBisTaxiDataPatternsForm = class(TBisDataGridForm)
+  protected
+    class function GetDataFrameClass: TBisDataFrameClass; override;
+  end;
+
+  TBisTaxiDataPatternsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataPatternsForm: TBisTaxiDataPatternsForm;
+
+implementation
+
+uses BisUtils, {BisTaxiDataPatternEditFm, }BisConsts, BisParam;
+
+{$R *.dfm}
+
+{ TBisTaxiDataPatternsFrame }
+
+constructor TBisTaxiDataPatternsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+{  FilterClass:=TBisTaxiDataPatternFilterFormIface;
+  InsertClass:=TBisTaxiDataPatternInsertFormIface;
+  UpdateClass:=TBisTaxiDataPatternUpdateFormIface;
+  DeleteClass:=TBisTaxiDataPatternDeleteFormIface;}
+  with Provider do begin
+    ProviderName:='S_PATTERNS';
+    with FieldNames do begin
+      AddKey('EXPORT_ID');
+      AddKey('DESIGN_ID');
+      Add('EXPORT_NAME','Ёкспорт',150);
+      Add('DESIGN_NAME','ќформление',150);
+    end;
+  end;
+
+  FExportId:=Null;
+end;
+
+procedure TBisTaxiDataPatternsFrame.BeforeIfaceExecute(AIface: TBisDataEditFormIface);
+var
+  Param: TBisParam;
+begin
+  inherited BeforeIfaceExecute(AIface);
+  if Assigned(AIface) then begin
+    with AIface.Params do begin
+      ParamByName('USER_NAME').Value:=FExportName;
+      Param:=ParamByName('EXPORT_ID');
+      Param.Value:=FExportId;
+      if not Param.Empty then
+        Param.ExcludeModes(AllParamEditModes);
+    end;
+  end;
+end;
+
+{ TBisTaxiDataPatternsFormIface }
+
+constructor TBisTaxiDataPatternsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataPatternsForm;
+  Permissions.Enabled:=true;
+  ChangeFrameProperties:=false;
+  ProviderName:='S_CLIENT_PHONES';
+end;
+
+{ TBisTaxiDataPatternsForm }
+
+class function TBisTaxiDataPatternsForm.GetDataFrameClass: TBisDataFrameClass;
+begin
+  Result:=TBisTaxiDataPatternsFrame;
+end;
+
+end.

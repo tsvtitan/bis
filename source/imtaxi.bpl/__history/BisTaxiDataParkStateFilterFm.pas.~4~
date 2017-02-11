@@ -1,0 +1,83 @@
+unit BisTaxiDataParkStateFilterFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, ImgList,
+  BisDataEditFm, BisParam, BisControls;
+
+type
+  TBisTaxiDataParkStateFilterForm = class(TBisDataEditForm)
+    GroupBoxDateIn: TGroupBox;
+    LabelDateInFrom: TLabel;
+    DateTimePickerInFrom: TDateTimePicker;
+    DateTimePickerInFromTime: TDateTimePicker;
+    DateTimePickerInToTime: TDateTimePicker;
+    DateTimePickerInTo: TDateTimePicker;
+    LabelDateInTo: TLabel;
+    LabelDriver: TLabel;
+    EditDriver: TEdit;
+    ButtonDriver: TButton;
+    GroupBoxDateOut: TGroupBox;
+    LabelDateOutFrom: TLabel;
+    LabelDateOutTo: TLabel;
+    DateTimePickerOutFrom: TDateTimePicker;
+    DateTimePickerOutFromTime: TDateTimePicker;
+    DateTimePickerOutToTime: TDateTimePicker;
+    DateTimePickerOutTo: TDateTimePicker;
+    EditPark: TEdit;
+    ButtonPark: TButton;
+    LabelPark: TLabel;
+  private
+  public
+
+  end;
+
+  TBisTaxiDataParkStateFilterFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataParkStateFilterForm: TBisTaxiDataParkStateFilterForm;
+
+implementation
+
+uses BisUtils, BisTaxiConsts, BisCore, BisFilterGroups, BisTaxiDataDriversFm;
+
+{$R *.dfm}
+
+{ TBisTaxiDataParkStateFilterFormIface }
+
+constructor TBisTaxiDataParkStateFilterFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataParkStateFilterForm;
+  Caption:='Фильтр по состоянию стоянки';
+  with Params do begin
+    Unique:=false;
+    AddEditDataSelect('PARK_ID','EditPark','LabelPark','ButtonPark',
+                       TBisTaxiDataParksFormIface,'PARK_NAME',false,false,'','NAME');
+    AddEditDataSelect('DRIVER_ID','EditDriver','LabelDriver','ButtonDriver',
+                       TBisTaxiDataDriversFormIface,'DRIVER_NAME',false,false,'','USER_NAME');
+    with AddEditDateTime('DATE_IN','DateTimePickerInFrom','DateTimePickerInFromTime','LabelDateInFrom') do begin
+      FilterCaption:='Дата регистрации с:';
+      FilterCondition:=fcEqualGreater;
+    end;
+    with AddEditDateTime('DATE_IN','DateTimePickerInTo','DateTimePickerInToTime','LabelDateInTo') do begin
+      FilterCaption:='Дата регистрации по:';
+      FilterCondition:=fcEqualLess;
+    end;
+    with AddEditDateTime('DATE_OUT','DateTimePickerOutFrom','DateTimePickerOutFromTime','LabelDateOutFrom') do begin
+      FilterCaption:='Дата снятия с:';
+      FilterCondition:=fcEqualGreater;
+    end;
+    with AddEditDateTime('DATE_OUT','DateTimePickerOutTo','DateTimePickerOutToTime','LabelDateOutTo') do begin
+      FilterCaption:='Дата снятия по:';
+      FilterCondition:=fcEqualLess;
+    end;
+  end;
+end;
+
+end.

@@ -1,0 +1,39 @@
+unit BisParamCalculate;
+
+interface
+
+uses Classes,
+     BisParam;
+
+type
+
+  TBisParamCalculateGetValueEvent=function (Param: TBisParam): Value; of object;
+
+  TBisParamCalculate=class(TBisParam)
+  protected
+    function UseTempValue: Boolean; override;
+  public
+    constructor Create; override;
+
+    property OnGetValue:
+  end;
+
+implementation
+
+uses Variants, Sysutils,
+     BisUtils;
+
+{ TBisParamVisible }
+
+constructor TBisParamVisible.Create;
+begin
+  inherited Create;
+  Visible:=true;
+end;
+
+function TBisParamVisible.UseTempValue: Boolean;
+begin
+  Result:=true;
+end;
+
+end.

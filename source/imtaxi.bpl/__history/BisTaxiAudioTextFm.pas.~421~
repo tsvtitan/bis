@@ -1,0 +1,350 @@
+unit BisTaxiAudioTextFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, Menus, ActnPopup, ActnList, ImgList, ToolWin, ExtCtrls,
+  StdCtrls, DB, CheckLst,
+  WaveUtils, 
+  BisFm, BisAudioWave,
+  BisAudioWaveFrm, BisControls;
+
+type
+  TCheckListBox=class(CheckLst.TCheckListBox)
+  end;
+
+  TBisTaxiAudioTextForm = class(TBisForm)
+    StatusBar: TStatusBar;
+    ImageList: TImageList;
+    ActionList: TActionList;
+    ActionLoad: TAction;
+    ActionImport: TAction;
+    ActionConnection: TAction;
+    ActionImportCurrent: TAction;
+    ActionInfo: TAction;
+    Popup: TPopupActionBar;
+    N1: TMenuItem;
+    N5: TMenuItem;
+    N2: TMenuItem;
+    N6: TMenuItem;
+    N3: TMenuItem;
+    N8: TMenuItem;
+    N7: TMenuItem;
+    N4: TMenuItem;
+    GroupBoxAudio: TGroupBox;
+    PanelAudio: TPanel;
+    GroupBoxText: TGroupBox;
+    PanelText: TPanel;
+    MemoText: TMemo;
+    GroupBoxSamples: TGroupBox;
+    PanelSamples: TPanel;
+    Timer: TTimer;
+    CheckListBoxSamples: TCheckListBox;
+    PanelOptions: TPanel;
+    LabelGap: TLabel;
+    EditGap: TEdit;
+    UpDownGap: TUpDown;
+    TrackBarSpeed: TTrackBar;
+    procedure TimerTimer(Sender: TObject);
+    procedure MemoTextChange(Sender: TObject);
+    procedure CheckListBoxSamplesClickCheck(Sender: TObject);
+    procedure EditGapChange(Sender: TObject);
+    procedure MemoTextKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  private
+    FOldText: String;
+    FAudioFrame: TBisAudioWaveFrame;
+    FPCMFormat: TPCMFormat;
+    procedure AudioFrameBeforePlay(Frame: TBisAudioWaveFrame);
+    procedure AudioFrameAfterPlay(Frame: TBisAudioWaveFrame);
+    procedure RefreshCheckListBox;
+    procedure BuildAudioStream;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Init; override;
+    procedure BeforeShow; override;
+  end;
+
+  TBisTaxiAudioTextFormIface=class(TBisFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiAudioTextForm: TBisTaxiAudioTextForm;
+
+implementation
+
+{$R *.dfm}
+
+uses MMSystem,
+     WaveStorage,
+     BisProvider, BisUtils;
+
+{ TBisTaxiAudioTextFormIface }
+
+constructor TBisTaxiAudioTextFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiAudioTextForm;
+  Permissions.Enabled:=true;
+  OnlyOneForm:=true;
+  ShowType:=stDefault;
+end;
+
+type
+  TBisTaxiAudioSampleType=(astSymbol,astSyllable,astWord,astPhrase);
+
+  TBisTaxiAudioSampleInfo=class(TObject)
+  private
+    FText: String;
+    FSampleType: TBisTaxiAudioSampleType;
+    FTransform: TBisWave;
+    FOriginal: TBisWave;
+    FConverted: Boolean;
+  public
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+{ TBisTaxiAudioSampleInfo }
+
+constructor TBisTaxiAudioSampleInfo.Create;
+begin
+  inherited Create;
+  FTransform:=TBisWave.Create;
+  FOriginal:=TBisWave.Create;
+end;
+
+destructor TBisTaxiAudioSampleInfo.Destroy;
+begin
+  FOriginal.Free;
+  FTransform.Free;
+  inherited Destroy;
+end;
+
+{ TBisTaxiAudioTextForm }
+
+constructor TBisTaxiAudioTextForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  CloseMode:=cmFree;
+  SizesStored:=true;
+
+  FAudioFrame:=TBisAudioWaveFrame.Create(nil);
+  with FAudioFrame do begin
+    Parent:=PanelAudio;
+    Align:=alClient;
+    OnBeforePlay:=AudioFrameBeforePlay;
+    OnAfterPlay:=AudioFrameAfterPlay;
+  end;
+
+  FPCMFormat:=FAudioFrame.PCMFormat;
+
+end;
+
+destructor TBisTaxiAudioTextForm.Destroy;
+begin
+  ClearStrings(CheckListBoxSamples.Items);
+  FAudioFrame.Free;
+  inherited Destroy;
+end;
+
+procedure TBisTaxiAudioTextForm.Init;
+begin
+  inherited Init;
+  FAudioFrame.Init;
+end;
+
+procedure TBisTaxiAudioTextForm.BeforeShow;
+begin
+  inherited BeforeShow;
+  FAudioFrame.BeforeShow;
+  FAudioFrame.Editable:=true;
+end;
+
+procedure TBisTaxiAudioTextForm.MemoTextChange(Sender: TObject);
+begin
+  Timer.Enabled:=false;
+  Timer.Enabled:=(Trim(MemoText.Lines.Text)<>'') and (FOldText<>MemoText.Lines.Text);
+  FOldText:=MemoText.Lines.Text;
+end;
+
+procedure TBisTaxiAudioTextForm.MemoTextKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  Timer.Enabled:=false;
+end;
+
+procedure TBisTaxiAudioTextForm.RefreshCheckListBox;
+var
+  P: TBisProvider;
+  Obj: TBisTaxiAudioSampleInfo;
+  Stream: TMemoryStream;
+  Index: Integer;
+begin
+  ClearStrings(CheckListBoxSamples.Items);
+  CheckListBoxSamples.Items.BeginUpdate;
+  P:=TBisProvider.Create(Self);
+  try
+    P.UseShowWait:=true;
+    P.UseWaitCursor:=true;
+    P.WaitInterval:=Timer.Interval;
+    P.WaitTimeout:=0;
+    P.WaitStatus:='Загрузка образцов';
+    P.ProviderName:='GET_SAMPLE_VOICES';
+    P.Params.AddInvisible('IN_TEXT').Value:=MemoText.Lines.Text;
+    P.OpenWithExecute;
+    if P.Active then begin
+      Stream:=TMemoryStream.Create;
+      try
+        P.First;
+        while not P.Eof do begin
+          Obj:=TBisTaxiAudioSampleInfo.Create;
+          Obj.FText:=P.FieldByName('SAMPLE_TEXT').AsString;
+          Obj.FSampleType:=TBisTaxiAudioSampleType(P.FieldByName('TYPE_SAMPLE').AsInteger);
+          Stream.Clear;
+          TBlobField(P.FieldByName('VOICE_DATA')).SaveToStream(Stream);
+          Stream.Position:=0;
+          Obj.FOriginal.LoadFromStream(Stream);
+          Index:=CheckListBoxSamples.Items.AddObject(Obj.FText,Obj);
+          CheckListBoxSamples.Checked[Index]:=true;
+          P.Next;
+        end;
+      finally
+        Stream.Free;
+      end;
+    end;
+  finally
+    P.Free;
+    CheckListBoxSamples.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisTaxiAudioTextForm.TimerTimer(Sender: TObject);
+begin
+  Timer.Enabled:=false;
+  RefreshCheckListBox;
+  BuildAudioStream;
+end;
+
+procedure TBisTaxiAudioTextForm.EditGapChange(Sender: TObject);
+begin
+  BuildAudioStream;
+end;
+
+procedure TBisTaxiAudioTextForm.AudioFrameAfterPlay(Frame: TBisAudioWaveFrame);
+begin
+  EnableControl(PanelOptions,true);
+{  MemoText.Enabled:=true;
+  CheckListBoxSamples.Enabled:=true;
+  LabelGap.Enabled:=true;
+  EditGap.Enabled:=true;
+  UpDownGap.Enabled:=true;}
+end;
+
+procedure TBisTaxiAudioTextForm.AudioFrameBeforePlay(Frame: TBisAudioWaveFrame);
+begin
+  EnableControl(PanelOptions,false);
+{  MemoText.Enabled:=false;
+  CheckListBoxSamples.Enabled:=false;
+  LabelGap.Enabled:=false;
+  EditGap.Enabled:=false;
+  UpDownGap.Enabled:=false;
+  TrackBarSpeed.Enabled:=false;}
+end;
+
+procedure TBisTaxiAudioTextForm.BuildAudioStream;
+var
+  AFormat: TPCMFormat;
+
+  procedure SetLowFormat(ParentWave: TBisWave);
+  var
+    Wave: TBisWave;
+    i: TPCMFormat;
+  begin
+    if not ParentWave.Empty then begin
+      Wave:=TBisWave.Create;
+      try
+        for i:=AFormat downto Mono8Bit8000Hz do begin
+          if i in FAudioFrame.AvailableFormats then begin
+            Wave.Assign(ParentWave);
+            if Wave.ConvertToPCM(i) then begin
+              if i<AFormat then
+                AFormat:=i;
+              exit;
+            end;
+          end;
+        end;
+      finally
+        Wave.Free;
+      end;
+    end;
+  end;
+
+var
+  i: Integer;
+  Obj: TBisTaxiAudioSampleInfo;
+  Wave: TBisWave;
+  List: TList;
+begin
+  FAudioFrame.Clear;
+  AFormat:=FPCMFormat;
+  for i:=0 to CheckListBoxSamples.Items.Count-1 do begin
+    Obj:=TBisTaxiAudioSampleInfo(CheckListBoxSamples.Items.Objects[i]);
+    if CheckListBoxSamples.Checked[i] then begin
+      SetLowFormat(Obj.FOriginal);
+    end;
+  end;
+  if AFormat>nonePCM then begin
+    Wave:=TBisWave.Create;
+    List:=TList.Create;
+    try
+      CheckListBoxSamples.Items.BeginUpdate;
+      CheckListBoxSamples.OnClickCheck:=nil;
+      try
+        for i:=0 to CheckListBoxSamples.Items.Count-1 do begin
+          Obj:=TBisTaxiAudioSampleInfo(CheckListBoxSamples.Items.Objects[i]);
+          if CheckListBoxSamples.Checked[i] then begin
+            Obj.FTransform.Assign(Obj.FOriginal);
+            Obj.FConverted:=Obj.FTransform.ConvertToPCM(AFormat);
+            CheckListBoxSamples.ItemEnabled[i]:=Obj.FConverted;
+            if Obj.FConverted then
+              List.Add(Obj)
+            else
+              CheckListBoxSamples.Checked[i]:=false;
+          end;
+        end;
+      finally
+        CheckListBoxSamples.OnClickCheck:=CheckListBoxSamplesClickCheck;
+        CheckListBoxSamples.Items.EndUpdate;
+      end;
+      if List.Count>0 then begin
+        Wave.BeginRewritePCM(AFormat);
+        Wave.EndRewrite;
+        if List.Count>0 then begin
+          for i:=0 to List.Count-1 do begin
+            Obj:=TBisTaxiAudioSampleInfo(List.Items[i]);
+            if i>0 then
+              Wave.InsertSilence(Wave.Position,UpDownGap.Position);
+            Wave.Insert(Wave.Position,Obj.FTransform);
+          end;
+        end;
+        Wave.Stream.Position:=0;
+        FAudioFrame.LoadFromStream(Wave.Stream);
+        FAudioFrame.SpeedFactor:=TrackBarSpeed.Position*0.1+0.5;
+      end;
+    finally
+      List.Free;
+      Wave.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiAudioTextForm.CheckListBoxSamplesClickCheck(Sender: TObject);
+begin
+  BuildAudioStream;
+end;
+
+end.
+

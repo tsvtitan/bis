@@ -1,0 +1,175 @@
+unit BisParamMemo;
+
+interface
+
+uses Windows, Classes, Controls, StdCtrls, DB,
+     BisParam, BisControls;
+
+type
+
+  TBisParamMemo=class(TBisParam)
+  private
+    FMemo: TMemo;
+    FLabelMemo: TLabel;
+    FMemoName: String;
+    FLabelName: String;
+    FOldMemoChange: TNotifyEvent;
+    FOldMemoKeyDown: TKeyEvent;
+
+    procedure MemoChange(Sender: TObject);
+    procedure MemoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  protected
+    function GetValue: Variant; override;
+    procedure SetValue(const AValue: Variant); override;
+    function GetEmpty: Boolean; override;
+    function GetSize: Integer; override;
+    procedure SetSize(const Value: Integer); override;
+    function GetCaption: String; override;
+    function GetControl: TWinControl; override;
+//    procedure SetEnabled(const Value: Boolean); override;
+    procedure GetControls(List: TList); override;
+  public
+    constructor Create; override;
+    procedure CopyFrom(Source: TBisParam; WithReset: Boolean=true); override;
+    procedure LinkControls(Parent: TWinControl); override;
+
+    property MemoName: String read FMemoName write FMemoName;
+    property LabelName: String read FLabelName write FLabelName;
+
+    property Memo: TMemo read FMemo write FMemo;
+    property LabelMemo: TLabel read FLabelMemo;
+  end;
+
+implementation
+
+uses Variants, Graphics,
+     BisUtils, BisConsts;
+
+
+{ TBisParamMemo }
+
+constructor TBisParamMemo.Create;
+begin
+  inherited Create;
+  DataType:=ftString;
+end;
+
+procedure TBisParamMemo.CopyFrom(Source: TBisParam; WithReset: Boolean);
+begin
+  inherited CopyFrom(Source,WithReset);
+  if Assigned(Source) and (Source is TBisParamMemo) then begin
+    MemoName:=TBisParamMemo(Source).MemoName;
+    LabelName:=TBisParamMemo(Source).LabelName;
+  end;
+end;
+
+procedure TBisParamMemo.LinkControls(Parent: TWinControl);
+var
+  TempValue: Variant;
+begin
+  if Assigned(Parent) then begin
+    TempValue:=Value;
+    FMemo:=TMemo(DoFindComponent(FMemoName));
+    if Assigned(FMemo) then begin
+      FOldMemoChange:=FMemo.OnChange;
+      FOldMemoKeyDown:=FMemo.OnKeyDown;
+      FMemo.OnChange:=MemoChange;
+      FMemo.OnKeyDown:=MemoKeyDown;
+      FMemo.MaxLength:=inherited GetSize;
+      FMemo.Color:=iff(FMemo.Color=clBtnFace,ColorControlReadOnly,FMemo.Color);
+      FLabelMemo:=TLabel(DoFindComponent(FLabelName));
+      if Assigned(FLabelMemo) then
+        FLabelMemo.FocusControl:=FMemo;
+    end;
+    Value:=TempValue;
+  end;
+  inherited LinkControls(Parent);
+
+end;
+
+function TBisParamMemo.GetValue: Variant;
+begin
+  Result:=inherited GetValue;
+  if Assigned(FMemo) then
+    Result:=iff(not Empty,FMemo.Lines.Text,Result);
+end;
+
+procedure TBisParamMemo.SetValue(const AValue: Variant);
+begin
+  if not VarSameValue(Value,AValue) then begin
+    if Assigned(FMemo) then begin
+      FMemo.OnChange:=nil;
+      try
+        FMemo.Lines.Text:=VarToStrDef(AValue,'');
+      finally
+        FMemo.OnChange:=MemoChange;
+      end;
+    end;
+    inherited SetValue(AValue);
+  end;
+end;
+
+function TBisParamMemo.GetCaption: String;
+begin
+  Result:=inherited GetCaption;
+  if Assigned(FLabelMemo) then
+    Result:=FLabelMemo.Caption;   
+end;
+
+function TBisParamMemo.GetControl: TWinControl;
+begin
+  Result:=FMemo;
+end;
+
+procedure TBisParamMemo.GetControls(List: TList);
+begin
+  inherited GetControls(List);
+  if Assigned(List) then
+    List.Add(FLabelMemo);
+end;
+
+function TBisParamMemo.GetEmpty: Boolean;
+begin
+  Result:=inherited GetEmpty;
+  if Assigned(FMemo) then
+    Result:=FMemo.Lines.Text='';
+end;
+
+function TBisParamMemo.GetSize: Integer;
+begin
+  Result:=inherited GetSize;
+  if Assigned(FMemo) then
+    Result:=FMemo.MaxLength;
+end;
+
+{procedure TBisParamMemo.SetEnabled(const Value: Boolean);
+begin
+  inherited SetEnabled(Value);
+  if Assigned(FLabelMemo) then
+    FLabelMemo.Enabled:=Value;
+end;}
+
+procedure TBisParamMemo.SetSize(const Value: Integer);
+begin
+  if Size<>Value then
+    if Assigned(FMemo) then
+      FMemo.MaxLength:=Value
+    else
+      inherited SetSize(Value);
+end;
+
+procedure TBisParamMemo.MemoChange(Sender: TObject);
+begin
+  DoChange(Self);
+  if Assigned(FOldMemoChange) then
+    FOldMemoChange(Sender);
+end;
+
+procedure TBisParamMemo.MemoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  DoKeyDown(Sender,Key,Shift);
+  if Assigned(FOldMemoKeyDown) then 
+    FOldMemoKeyDown(Sender,Key,Shift);
+end;
+
+end.

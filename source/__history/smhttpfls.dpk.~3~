@@ -1,0 +1,40 @@
+package smhttpfls;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  smhttp,
+  mpmingit,
+  rtl,
+  inet,
+  dbrtl;
+
+contains
+  BisHttpServerHandlerFilesWm in 'smhttpfls.bpl\BisHttpServerHandlerFilesWm.pas' {BisHttpServerHandlerMobileWebModule},
+  BisHttpServerHandlerFiles in 'smhttpfls.bpl\BisHttpServerHandlerFiles.pas',
+  BisHttpServerHandlerFilesConsts in 'smhttpfls.bpl\BisHttpServerHandlerFilesConsts.pas';
+
+end.

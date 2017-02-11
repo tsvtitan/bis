@@ -1,0 +1,23 @@
+unit BisIngit;
+
+interface
+
+uses BisMapModules, BisModules, BisCoreObjects,
+     BisCoreIntf;
+
+procedure InitMapModule(AModule: TBisMapModule); stdcall;
+procedure InitProviderModule(); stdcall;
+
+exports
+  InitMapModule;
+
+implementation
+
+uses BisIngitMapFm;
+
+procedure InitMapModule(AModule: TBisMapModule); stdcall;
+begin
+  AModule.MapClass:=TBisIngitMapFormIface;
+end;
+
+end.

@@ -1,0 +1,1 @@
+taxi.exe /config smcall.ini /noupdate /install /service name="$name$version" display="$title $version"

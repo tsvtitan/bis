@@ -1,0 +1,478 @@
+unit BisTaxiDataClientsFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ActnPopup, ImgList, ActnList, DB, ComCtrls, ToolWin, StdCtrls,
+  ExtCtrls, Grids, DBGrids,
+  VirtualTrees, VirtualDBTreeEx,
+  BisDataSet, BisFieldNames, BisDBTree, BisFm, BisDataFrm, BisDataTreeFrm, BisDataEditFm;
+
+type
+  TBisTaxiDataClientsFrame = class(TBisDataTreeFrame)
+    ActionMessages: TAction;
+    procedure ActionMessagesExecute(Sender: TObject);
+    procedure ActionMessagesUpdate(Sender: TObject);
+  private
+    function GetNewName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+    procedure TreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+                                var Ghosted: Boolean; var ImageIndex: Integer);
+    function CanMessages: Boolean;
+    procedure Messages;                                
+  protected
+    procedure BeforeIfaceExecute(AIface: TBisDataEditFormIface); override;
+    function GetCurrentDuplicateClass: TBisDataEditFormIfaceClass; override;
+    function GetCurrentUpdateClass: TBisDataEditFormIfaceClass; override;
+    function GetCurrentDeleteClass: TBisDataEditFormIfaceClass; override;
+    function GetCurrentViewClass: TBisDataEditFormIfaceClass; override;
+  public
+    function CanSelect: Boolean; override;
+    procedure FillProvider;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure OpenRecords; override;
+  end;
+
+implementation
+
+uses BisUtils, BisProvider, BisFilterGroups,
+     BisTaxiDataClientEditFm, BisTaxiDataClientGroupEditFm,
+     BisTaxiDataOutMessageInsertExFm;
+
+{$R *.dfm}
+
+type
+  TBisTaxiDataClientsOutMessagesFormIface=class(TBisTaxiDataOutMessageInsertExFormIface)
+  private
+    FFrame: TBisTaxiDataClientsFrame;
+  protected
+    function CreateForm: TBisForm; override;
+  public
+
+    property Frame: TBisTaxiDataClientsFrame read FFrame write FFrame;
+  end;
+
+
+{ TBisTaxiDataClientsOutMessagesFormIface }
+
+function TBisTaxiDataClientsOutMessagesFormIface.CreateForm: TBisForm;
+var
+  B: TBookmark;
+  Form: TBisTaxiDataOutMessageInsertExForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(FFrame) and Assigned(Result) and (Result is TBisTaxiDataOutMessageInsertExForm) then begin
+    B:=FFrame.Provider.GetBookmark;
+    try
+      Form:=TBisTaxiDataOutMessageInsertExForm(Result);
+      FFrame.Provider.First;
+      while not FFrame.Provider.Eof do begin
+        Form.AddRecipient(FFrame.Provider.FieldByName('USER_NAME').AsString,
+                          FFrame.Provider.FieldByName('ID').Value,
+                          False);
+        FFrame.Provider.Next;
+      end;
+    finally
+      if Assigned(B) and FFrame.Provider.BookmarkValid(B) then
+        FFrame.Provider.GotoBookmark(B);
+    end;
+  end;
+end;
+
+{ TBisTaxiDataClientsFrame }
+
+constructor TBisTaxiDataClientsFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FilterClass:=TBisTaxiDataClientFilterFormIface;
+  ViewClass:=TBisTaxiDataClientViewFormIface;
+  InsertClasses.Add(TBisTaxiDataClientInsertFormIface);
+  InsertClasses.Add(TBisTaxiDataClientGroupInsertFormIface);
+  UpdateClass:=TBisTaxiDataClientUpdateFormIface;
+  DeleteClass:=TBisTaxiDataClientDeleteFormIface;
+
+  with Provider.FieldDefs do begin
+    Add('ID',ftString,32);
+    Add('PARENT_ID',ftString,32);
+    Add('NEW_NAME',ftString,100);
+    Add('PARENT_NAME',ftString,100);
+    Add('NAME',ftString,100);
+    Add('DESCRIPTION',ftString,250);
+    Add('PRIORITY',ftInteger);
+    Add('TYPE',ftInteger);
+    Add('LOCKED',ftInteger);
+
+    Add('PHONE',ftString,100);
+    Add('SURNAME',ftString,100);
+    Add('PATRONYMIC',ftString,100);
+    Add('USER_NAME',ftString,100);
+    Add('PASSWORD',ftString,100);
+    Add('LOCALITY_ID',ftString,32);
+    Add('LOCALITY_PREFIX',ftString,10);
+    Add('LOCALITY_NAME',ftString,100);
+    Add('STREET_PREFIX',ftString,10);
+    Add('STREET_NAME',ftString,100);
+    Add('FIRM_ID',ftString,32);
+    Add('FIRM_SMALL_NAME',ftString,250);
+    Add('JOB_TITLE',ftString,250);
+    Add('METHOD_ID',ftString,32);
+    Add('METHOD_NAME',ftString,100);
+    Add('STREET_ID',ftString,32);
+    Add('HOUSE',ftString,10);
+    Add('FLAT',ftString,10);
+    Add('PORCH',ftString,10);
+    Add('INDEX',ftString,10);
+    Add('ADDRESS_DESC',ftString,250);
+    Add('SOURCE_ID',ftString,32);
+    Add('SOURCE_NAME',ftString,100);
+    Add('DATE_BIRTH',ftDate);
+    Add('PLACE_BIRTH',ftString,250);
+    Add('PASSPORT',ftString,250);
+    Add('SEX',ftInteger);
+    Add('CALC_ID',ftString,32);
+    Add('CALC_NAME',ftString,100);
+    Add('MIN_BALANCE',ftFloat);
+
+    Find('NEW_NAME').InternalCalcField:=true;
+  end;
+
+  with Provider.FieldNames do begin
+    AddKey('ID');
+    AddCalculate('NEW_NAME','Группа / Логин',GetNewName,ftString,100,170);
+
+    Add('PHONE','Телефон',80);
+    Add('SURNAME','Фамилия',100);
+    Add('NAME','Имя',100);
+    Add('PATRONYMIC','Отчество',100);
+
+    Add('TYPE','Тип',0).Visible:=false;
+    with AddParentKey('PARENT_ID') do begin
+      Caption:='Ид родителя';
+      Visible:=false;
+    end;
+  end;
+  Provider.CreateTable();
+
+  with CreateFilterMenuItem('Активные') do begin
+    FilterGroups.AddVisible.Filters.Add('LOCKED',fcNotEqual,1);
+    Checked:=true;
+  end;
+
+  with CreateFilterMenuItem('Заблокированные') do begin
+    FilterGroups.AddVisible.Filters.Add('LOCKED',fcEqual,1);
+  end;
+
+  Tree.OnGetImageIndex:=TreeGetImageIndex;
+end;
+
+function TBisTaxiDataClientsFrame.GetCurrentDuplicateClass: TBisDataEditFormIfaceClass;
+var
+  &Type: Integer;
+begin
+  Result:=inherited GetCurrentDuplicateClass;
+  if Provider.Active and not Provider.Empty then begin
+    &Type:=Provider.FieldByName('TYPE').AsInteger;
+    if Boolean(&Type) then
+      Result:=TBisTaxiDataClientInsertFormIface
+    else
+      Result:=TBisTaxiDataClientGroupInsertFormIface;
+  end;
+end;
+
+function TBisTaxiDataClientsFrame.GetCurrentUpdateClass: TBisDataEditFormIfaceClass;
+var
+  &Type: Integer;
+begin
+  Result:=inherited GetCurrentUpdateClass;
+  if Provider.Active and not Provider.Empty then begin
+    &Type:=Provider.FieldByName('TYPE').AsInteger;
+    if Boolean(&Type) then
+      Result:=TBisTaxiDataClientUpdateFormIface
+    else
+      Result:=TBisTaxiDataClientGroupUpdateFormIface;
+  end;
+end;
+
+function TBisTaxiDataClientsFrame.GetCurrentDeleteClass: TBisDataEditFormIfaceClass;
+var
+  &Type: Integer;
+begin
+  Result:=inherited GetCurrentDeleteClass;
+  if Provider.Active and not Provider.Empty then begin
+    &Type:=Provider.FieldByName('TYPE').AsInteger;
+    if Boolean(&Type) then
+      Result:=TBisTaxiDataClientDeleteFormIface
+    else
+      Result:=TBisTaxiDataClientGroupDeleteFormIface;
+  end;
+end;
+
+function TBisTaxiDataClientsFrame.GetCurrentViewClass: TBisDataEditFormIfaceClass;
+var
+  &Type: Integer;
+begin
+  Result:=inherited GetCurrentViewClass;
+  if Provider.Active and not Provider.Empty then begin
+    &Type:=Provider.FieldByName('TYPE').AsInteger;
+    if Boolean(&Type) then
+      Result:=TBisTaxiDataClientViewFormIface
+    else
+      Result:=TBisTaxiDataClientGroupViewFormIface;
+  end;
+end;
+
+function TBisTaxiDataClientsFrame.GetNewName(FieldName: TBisFieldName; DataSet: TDataSet): Variant;
+var
+  &Type: Integer;
+begin
+  Result:=Null;
+  if DataSet.Active and not DataSet.IsEmpty then begin
+    &Type:=VarToIntDef(DataSet.FieldByName('TYPE').Value,0);
+    if Boolean(&Type) then
+      Result:=DataSet.FieldByName('USER_NAME').Value
+    else
+      Result:=DataSet.FieldByName('NAME').Value;
+  end;
+end;
+
+procedure TBisTaxiDataClientsFrame.FillProvider;
+var
+  Id: Variant;
+  PGroup: TBisProvider;
+  PClient: TBisProvider;
+  OldCursor: TCursor;
+begin
+  OldCursor:=Screen.Cursor;
+  Screen.Cursor:=crHourGlass;
+  PGroup:=TBisProvider.Create(nil);
+  PClient:=TBisProvider.Create(nil);
+  try
+    PGroup.WithWaitCursor:=false;
+    PGroup.ProviderName:='S_CLIENT_GROUPS';
+    with PGroup.FieldNames do begin
+      AddInvisible('CLIENT_GROUP_ID');
+      AddInvisible('PARENT_ID');
+      AddInvisible('NAME');
+      AddInvisible('PARENT_NAME');
+      AddInvisible('DESCRIPTION');
+      AddInvisible('PRIORITY');
+    end;
+    with PGroup.Orders do begin
+      Add('LEVEL');
+      Add('PRIORITY');
+    end;
+
+    PClient.WithWaitCursor:=false;
+    PClient.ProviderName:='S_CLIENTS';
+    with PClient.FieldNames do begin
+      AddInvisible('CLIENT_ID');
+      AddInvisible('CLIENT_GROUP_ID');
+      AddInvisible('DESCRIPTION');
+      AddInvisible('LOCKED');
+      AddInvisible('PHONE');
+      AddInvisible('SURNAME');
+      AddInvisible('NAME');
+      AddInvisible('PATRONYMIC');
+      AddInvisible('USER_NAME');
+      AddInvisible('PASSWORD');
+      AddInvisible('LOCALITY_ID');
+      AddInvisible('LOCALITY_PREFIX');
+      AddInvisible('LOCALITY_NAME');
+      AddInvisible('STREET_PREFIX');
+      AddInvisible('STREET_NAME');
+      AddInvisible('FIRM_ID');
+      AddInvisible('FIRM_SMALL_NAME');
+      AddInvisible('JOB_TITLE');
+      AddInvisible('METHOD_ID');
+      AddInvisible('METHOD_NAME');
+      AddInvisible('STREET_ID');
+      AddInvisible('HOUSE');
+      AddInvisible('FLAT');
+      AddInvisible('PORCH');
+      AddInvisible('INDEX');
+      AddInvisible('ADDRESS_DESC');
+      AddInvisible('SOURCE_ID');
+      AddInvisible('SOURCE_NAME');
+      AddInvisible('DATE_BIRTH');
+      AddInvisible('PLACE_BIRTH');
+      AddInvisible('PASSPORT');
+      AddInvisible('SEX');
+      AddInvisible('CALC_ID');
+      AddInvisible('CALC_NAME');
+      AddInvisible('MIN_BALANCE');
+    end;
+    PClient.FilterGroups.CopyFrom(Provider.FilterGroups);
+    PClient.Orders.Add('USER_NAME');
+
+    PGroup.Open;
+    PClient.Open;
+
+    if PGroup.Active and PClient.Active then begin
+      Provider.BeginUpdate;
+      try
+        Provider.EmptyTable;
+        PGroup.First;
+        while not PGroup.Eof do begin
+          Provider.Append;
+          Id:=PGroup.FieldByName('CLIENT_GROUP_ID').Value;
+          Provider.FieldByName('ID').Value:=Id;
+          Provider.FieldByName('PARENT_ID').Value:=PGroup.FieldByName('PARENT_ID').Value;
+          Provider.FieldByName('NAME').Value:=PGroup.FieldByName('NAME').Value;
+          Provider.FieldByName('PARENT_NAME').Value:=PGroup.FieldByName('PARENT_NAME').Value;
+          Provider.FieldByName('DESCRIPTION').Value:=PGroup.FieldByName('DESCRIPTION').Value;
+          Provider.FieldByName('PRIORITY').Value:=PGroup.FieldByName('PRIORITY').Value;
+          Provider.FieldByName('TYPE').Value:=0;
+          Provider.FieldByName('LOCKED').Value:=0;
+          Provider.Post;
+
+          PClient.Filtered:=false;
+          PClient.Filter:=Format('CLIENT_GROUP_ID=%s',[QuotedStr(VarToStrDef(Id,''))]);
+          PClient.Filtered:=true;
+          PClient.First;
+          while not PClient.Eof do begin
+            Provider.Append;
+            Provider.FieldByName('ID').Value:=PClient.FieldByName('CLIENT_ID').Value;
+            Provider.FieldByName('PARENT_ID').Value:=Id;
+            Provider.FieldByName('PARENT_NAME').Value:=PGroup.FieldByName('NAME').Value;
+            Provider.FieldByName('PRIORITY').Value:=Null;
+            Provider.FieldByName('TYPE').Value:=1;
+            Provider.CopyRecord(PClient,false,false);
+            Provider.Post;
+            PClient.Next;
+          end;
+
+          PGroup.Next;
+        end;
+
+        PClient.Filtered:=false;
+        PClient.Filter:='CLIENT_GROUP_ID IS NULL';
+        PClient.Filtered:=true;
+        PClient.First;
+        while not PClient.Eof do begin
+          Provider.Append;
+          Provider.FieldByName('ID').Value:=PClient.FieldByName('CLIENT_ID').Value;
+          Provider.FieldByName('PARENT_ID').Value:=Null;
+          Provider.FieldByName('PARENT_NAME').Value:=Null;
+          Provider.FieldByName('PRIORITY').Value:=Null;
+          Provider.FieldByName('TYPE').Value:=1;
+          Provider.CopyRecord(PClient,false,false);
+          Provider.Post;
+          PClient.Next;
+        end;
+
+        Provider.First;
+      finally
+        Provider.EndUpdate;
+      end;
+    end;
+  finally
+    PClient.Free;
+    PGroup.Free;
+    Screen.Cursor:=OldCursor;
+  end;
+end;
+
+procedure TBisTaxiDataClientsFrame.OpenRecords;
+begin
+  inherited OpenRecords;
+  FillProvider;
+  DoUpdateCounters;
+end;
+
+function TBisTaxiDataClientsFrame.CanSelect: Boolean;
+begin
+  Result:=inherited CanSelect;
+  if Result then begin
+    Result:=Provider.Active and not Provider.Empty;
+    if Result then
+      Result:=Boolean(Provider.FieldByName('TYPE').AsInteger);
+  end;
+end;
+
+procedure TBisTaxiDataClientsFrame.ActionMessagesExecute(Sender: TObject);
+begin
+  Messages;
+end;
+
+procedure TBisTaxiDataClientsFrame.ActionMessagesUpdate(Sender: TObject);
+begin
+  ActionMessages.Enabled:=CanMessages;
+end;
+
+procedure TBisTaxiDataClientsFrame.BeforeIfaceExecute(AIface: TBisDataEditFormIface);
+begin
+  inherited BeforeIfaceExecute(AIface);
+  if Assigned(AIface) then begin
+    if AIface is TBisTaxiDataClientEditFormIface then begin
+      with AIface.Params do begin
+        ParamByName('CLIENT_ID').Duplicates.Add('ID');
+        ParamByName('USER_NAME').Duplicates.Add('NAME');
+        ParamByName('CLIENT_GROUP_ID').Duplicates.Add('PARENT_ID');
+        ParamByName('CLIENT_GROUP_NAME').Duplicates.Add('PARENT_NAME');
+        AddInvisible('TYPE',ptUnknown).Value:=1;
+      end;
+    end;
+    if AIface is TBisTaxiDataClientGroupEditFormIface then begin
+      with AIface.Params do begin
+        ParamByName('CLIENT_GROUP_ID').Duplicates.Add('ID');
+        AddInvisible('TYPE',ptUnknown).Value:=0;
+      end;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDataClientsFrame.TreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind;
+                                                     Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
+var
+  Data: PBisDBTreeNode;
+  &Type: Integer;
+begin
+  Data:=Tree.GetDBNodeData(Node);
+  if Assigned(Data) and Assigned(Data.Values) and (Column=1) then begin
+    &Type:=VarToIntDef(Data.Values.GetValue('TYPE'),0);
+    if &Type=0 then begin
+      ImageIndex:=16;
+      if vsExpanded in Node.States then
+        ImageIndex:=17;
+    end else
+      ImageIndex:=18;
+  end;
+end;
+
+function TBisTaxiDataClientsFrame.CanMessages: Boolean;
+var
+  AIface: TBisTaxiDataOutMessageInsertExFormIface;
+begin
+  Result:=Provider.Active and not Provider.Empty; 
+  if Result then begin
+    AIface:=TBisTaxiDataOutMessageInsertExFormIface.Create(nil);
+    try
+      AIface.Init;
+      Result:=AIface.CanShow;
+    finally
+      AIface.Free;
+    end;
+  end;
+end;
+
+procedure TBisTaxiDataClientsFrame.Messages;
+var
+  AIface: TBisTaxiDataClientsOutMessagesFormIface;
+begin
+  if CanMessages then begin
+    AIface:=TBisTaxiDataClientsOutMessagesFormIface.Create(nil);
+    try
+      AIface.Init;
+      AIface.Permissions.Enabled:=false;
+      AIface.ShowType:=ShowType;
+      AIface.Frame:=Self;
+      AIface.ShowModal;
+    finally
+      AIface.Free;
+    end;
+  end;
+end;
+
+
+end.

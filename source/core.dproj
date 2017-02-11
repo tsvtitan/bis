@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{d423f656-35c2-4eb7-8115-7f5e54e320cd}</ProjectGuid>
+    <MainSource>core.dpk</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>U:\bin\core.bpl</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DcpOutput>U:\source\_dcp</DCC_DcpOutput>
+    <DCC_BplOutput>U:\bin</DCC_BplOutput>
+    <DCC_SYMBOL_DEPRECATED>False</DCC_SYMBOL_DEPRECATED>
+    <DCC_SYMBOL_LIBRARY>False</DCC_SYMBOL_LIBRARY>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_SYMBOL_EXPERIMENTAL>False</DCC_SYMBOL_EXPERIMENTAL>
+    <DCC_UNIT_LIBRARY>False</DCC_UNIT_LIBRARY>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
+    <DCC_UNIT_DEPRECATED>False</DCC_UNIT_DEPRECATED>
+    <DCC_UNIT_EXPERIMENTAL>False</DCC_UNIT_EXPERIMENTAL>
+    <DCC_IMPLICIT_IMPORT>False</DCC_IMPLICIT_IMPORT>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_OutputDRCFile>True</DCC_OutputDRCFile>
+    <DCC_TYPEINFO_IMPLICITLY_ADDED>False</DCC_TYPEINFO_IMPLICITLY_ADDED>
+    <DCC_UnitSearchPath>U:\source\_dcp</DCC_UnitSearchPath>
+    <DCC_ResourcePath>U:\source\_dcp</DCC_ResourcePath>
+    <DCC_ObjPath>U:\source\_dcp</DCC_ObjPath>
+    <DCC_IncludePath>U:\source\_dcp</DCC_IncludePath>
+    <DCC_Define>AUDIT</DCC_Define>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>Package</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="HostApplication">U:\bin\taxi.exe</Parameters><Parameters Name="RunParams">/config imtaxi2.ini /noupdate /920C7934688DE6FCC4392CFF5C7B7A65 1234567890 info.hex</Parameters></Parameters><Package_Options><Package_Options Name="ImplicitBuild">False</Package_Options><Package_Options Name="DesigntimeOnly">False</Package_Options><Package_Options Name="RuntimeOnly">True</Package_Options></Package_Options><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">2</VersionInfo><VersionInfo Name="MinorVer">1</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">18</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">NextSoft</VersionInfoKeys><VersionInfoKeys Name="FileDescription">Core module</VersionInfoKeys><VersionInfoKeys Name="FileVersion">2.1.0.18</VersionInfoKeys><VersionInfoKeys Name="InternalName">core.bpl</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">NextSoft</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks">NextSoft</VersionInfoKeys><VersionInfoKeys Name="OriginalFilename">core.bpl</VersionInfoKeys><VersionInfoKeys Name="ProductName">BIS</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">2.1</VersionInfoKeys><VersionInfoKeys Name="Comments">Core module</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">core.dpk</Source></Source><Language><Language Name="ProjectLang">$00000419</Language><Language Name="RootDir">U:\source\core.bpl\</Language></Language><Excluded_Packages>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <Excluded_Packages Name="$(BDS)\bin\bcboffice2k100.bpl">CodeGear C++Builder Office 2000 Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\bcbofficexp100.bpl">CodeGear C++Builder Office XP Servers Package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dcloffice2k100.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dclofficexp100.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+    </Excluded_Packages>  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <Resource_DLL_Projects>
+      <Resource_DLL_Projects Name="Item0">Русский*$00000419*RUS*RUS</Resource_DLL_Projects>
+    </Resource_DLL_Projects>
+  </Delphi.Personality><ModelSupport>False</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="core.dpk">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="core.bpl\BisAboutFm.pas">
+      <Form>BisAboutForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisAlarmsFm.pas">
+      <Form>BisAlarmsForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisApplication.pas" />
+    <DCCReference Include="core.bpl\BisAudit.pas" />
+    <DCCReference Include="core.bpl\BisBase64.pas" />
+    <DCCReference Include="core.bpl\BisChildFm.pas">
+      <Form>BisChildForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisCmdLine.pas" />
+    <DCCReference Include="core.bpl\BisCompressUtils.pas" />
+    <DCCReference Include="core.bpl\BisConfig.pas" />
+    <DCCReference Include="core.bpl\BisConnectionEditFm.pas">
+      <Form>BisConnectionEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisConnectionModuleIntf.pas" />
+    <DCCReference Include="core.bpl\BisConnectionModules.pas" />
+    <DCCReference Include="core.bpl\BisConnections.pas" />
+    <DCCReference Include="core.bpl\BisConnectionUtils.pas" />
+    <DCCReference Include="core.bpl\BisConsts.pas" />
+    <DCCReference Include="core.bpl\BisControls.pas" />
+    <DCCReference Include="core.bpl\BisCore.pas" />
+    <DCCReference Include="core.bpl\BisCoreIntf.pas" />
+    <DCCReference Include="core.bpl\BisCoreObjects.pas" />
+    <DCCReference Include="core.bpl\BisCoreUtils.pas" />
+    <DCCReference Include="core.bpl\BisCrypter.pas" />
+    <DCCReference Include="core.bpl\BisCryptUtils.pas" />
+    <DCCReference Include="core.bpl\BisDataEditFm.pas">
+      <Form>BisDataEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDataFm.pas">
+      <Form>BisDataForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDataFrm.pas">
+      <Form>BisDataFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDataGridDetailFm.pas">
+      <Form>BisDataGridDetailForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDataGridDetailFrm.pas">
+      <Form>BisDataGridDetailFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDataGridFm.pas">
+      <Form>BisDataGridForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDataGridFrm.pas">
+      <Form>BisDataGridFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDataParams.pas" />
+    <DCCReference Include="core.bpl\BisDataSet.pas" />
+    <DCCReference Include="core.bpl\BisDataTreeFm.pas">
+      <Form>BisDataTreeForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDataTreeFrm.pas">
+      <Form>BisDataTreeFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDB.pas" />
+    <DCCReference Include="core.bpl\BisDBHexEdit.pas" />
+    <DCCReference Include="core.bpl\BisDBImage.pas" />
+    <DCCReference Include="core.bpl\BisDBSynEdit.pas" />
+    <DCCReference Include="core.bpl\BisDBTable.pas" />
+    <DCCReference Include="core.bpl\BisDBTableEditFm.pas">
+      <Form>BisDBTableEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDBTableViewFm.pas">
+      <Form>BisDBTableViewForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDBTree.pas" />
+    <DCCReference Include="core.bpl\BisDeadlocks.pas" />
+    <DCCReference Include="core.bpl\BisDetailMsgFm.pas">
+      <Form>BisDetailMsgForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDialogFm.pas">
+      <Form>BisDialogForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisDialogs.pas" />
+    <DCCReference Include="core.bpl\BisDocumentFm.pas">
+      <Form>BisDocumentForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisEvents.pas" />
+    <DCCReference Include="core.bpl\BisExceptions.pas" />
+    <DCCReference Include="core.bpl\BisExceptNotifier.pas" />
+    <DCCReference Include="core.bpl\BisExecuteDefs.pas" />
+    <DCCReference Include="core.bpl\BisExecuteFm.pas">
+      <Form>BisExecuteForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisExecuteIface.pas" />
+    <DCCReference Include="core.bpl\BisExecuteOptionsFrm.pas">
+      <Form>BisExecuteOptionsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisFieldNames.pas" />
+    <DCCReference Include="core.bpl\BisFieldNamesFm.pas">
+      <Form>BisFieldNamesForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisFileDirs.pas" />
+    <DCCReference Include="core.bpl\BisFilterGroups.pas" />
+    <DCCReference Include="core.bpl\BisFm.pas">
+      <Form>BisForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisFrm.pas">
+      <Form>BisFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisGradient.pas" />
+    <DCCReference Include="core.bpl\BisHexEdit.pas" />
+    <DCCReference Include="core.bpl\BisHint.pas" />
+    <DCCReference Include="core.bpl\BisHintEx.pas" />
+    <DCCReference Include="core.bpl\BisIfaceModules.pas" />
+    <DCCReference Include="core.bpl\BisIfaces.pas" />
+    <DCCReference Include="core.bpl\BisInterfaces.pas" />
+    <DCCReference Include="core.bpl\BisInternetProtocol.pas" />
+    <DCCReference Include="core.bpl\BisLanguage.pas" />
+    <DCCReference Include="core.bpl\BisLeaks.pas" />
+    <DCCReference Include="core.bpl\BisLocalbase.pas" />
+    <DCCReference Include="core.bpl\BisLocks.pas" />
+    <DCCReference Include="core.bpl\BisLogger.pas" />
+    <DCCReference Include="core.bpl\BisLoginFm.pas">
+      <Form>BisLoginForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisLoginStatusFm.pas">
+      <Form>BisLoginStatusForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisMainFm.pas">
+      <Form>BisMainForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisMdiButtonGroup.pas" />
+    <DCCReference Include="core.bpl\BisMdiMainFm.pas">
+      <Form>BisMdiMainForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisMemoFm.pas">
+      <Form>BisMemoForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisMenus.pas" />
+    <DCCReference Include="core.bpl\BisModuleInfo.pas" />
+    <DCCReference Include="core.bpl\BisModuleIntf.pas" />
+    <DCCReference Include="core.bpl\BisModules.pas" />
+    <DCCReference Include="core.bpl\BisNetUtils.pas" />
+    <DCCReference Include="core.bpl\BisNotifyEvents.pas" />
+    <DCCReference Include="core.bpl\BisObject.pas" />
+    <DCCReference Include="core.bpl\BisObjectIntf.pas" />
+    <DCCReference Include="core.bpl\BisObjectModules.pas" />
+    <DCCReference Include="core.bpl\BisObjects.pas" />
+    <DCCReference Include="core.bpl\BisObjectsIntf.pas" />
+    <DCCReference Include="core.bpl\BisOptionsFm.pas">
+      <Form>BisOptionsForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisOptionsFrm.pas">
+      <Form>BisOptionsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisOrders.pas" />
+    <DCCReference Include="core.bpl\BisOrdersFm.pas">
+      <Form>BisOrdersForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisParam.pas" />
+    <DCCReference Include="core.bpl\BisParamCalculate.pas" />
+    <DCCReference Include="core.bpl\BisParamCheckBox.pas" />
+    <DCCReference Include="core.bpl\BisParamColorBox.pas" />
+    <DCCReference Include="core.bpl\BisParamComboBox.pas" />
+    <DCCReference Include="core.bpl\BisParamComboBoxDataSelect.pas" />
+    <DCCReference Include="core.bpl\BisParamEdit.pas" />
+    <DCCReference Include="core.bpl\BisParamEditCalc.pas" />
+    <DCCReference Include="core.bpl\BisParamEditCurrency.pas" />
+    <DCCReference Include="core.bpl\BisParamEditDataSelect.pas" />
+    <DCCReference Include="core.bpl\BisParamEditDate.pas" />
+    <DCCReference Include="core.bpl\BisParamEditDateTime.pas" />
+    <DCCReference Include="core.bpl\BisParamEditFloat.pas" />
+    <DCCReference Include="core.bpl\BisParamEditInteger.pas" />
+    <DCCReference Include="core.bpl\BisParamHotKey.pas" />
+    <DCCReference Include="core.bpl\BisParamImage.pas" />
+    <DCCReference Include="core.bpl\BisParamInvisible.pas" />
+    <DCCReference Include="core.bpl\BisParamKey.pas" />
+    <DCCReference Include="core.bpl\BisParamMemo.pas" />
+    <DCCReference Include="core.bpl\BisParamPopupDataSelect.pas" />
+    <DCCReference Include="core.bpl\BisParamRichEdit.pas" />
+    <DCCReference Include="core.bpl\BisParams.pas" />
+    <DCCReference Include="core.bpl\BisPeriodFm.pas">
+      <Form>BisPeriodForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisPermissions.pas" />
+    <DCCReference Include="core.bpl\BisPicture.pas" />
+    <DCCReference Include="core.bpl\BisPopupEdit.pas" />
+    <DCCReference Include="core.bpl\BisProfile.pas" />
+    <DCCReference Include="core.bpl\BisProgressEvents.pas" />
+    <DCCReference Include="core.bpl\BisProvider.pas" />
+    <DCCReference Include="core.bpl\BisProviderModules.pas" />
+    <DCCReference Include="core.bpl\BisProviders.pas" />
+    <DCCReference Include="core.bpl\BisReportEditorFm.pas">
+      <Form>BisReportEditorForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisReportFm.pas">
+      <Form>BisReportForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisReportFrm.pas">
+      <Form>BisReportFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisReportModules.pas" />
+    <DCCReference Include="core.bpl\BisScriptClass.pas" />
+    <DCCReference Include="core.bpl\BisScriptFuncs.pas" />
+    <DCCReference Include="core.bpl\BisScriptIface.pas" />
+    <DCCReference Include="core.bpl\BisScriptMethod.pas" />
+    <DCCReference Include="core.bpl\BisScriptModules.pas" />
+    <DCCReference Include="core.bpl\BisScriptParams.pas" />
+    <DCCReference Include="core.bpl\BisScriptSymbols.pas" />
+    <DCCReference Include="core.bpl\BisScriptType.pas" />
+    <DCCReference Include="core.bpl\BisScriptTypes.pas" />
+    <DCCReference Include="core.bpl\BisScriptUnits.pas" />
+    <DCCReference Include="core.bpl\BisScriptUtils.pas" />
+    <DCCReference Include="core.bpl\BisScriptVars.pas" />
+    <DCCReference Include="core.bpl\BisServerMainFm.pas">
+      <Form>BisServerMainForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisServerModuleIntf.pas" />
+    <DCCReference Include="core.bpl\BisServerModules.pas" />
+    <DCCReference Include="core.bpl\BisServers.pas" />
+    <DCCReference Include="core.bpl\BisServiceApplication.pas" />
+    <DCCReference Include="core.bpl\BisSizeGrip.pas" />
+    <DCCReference Include="core.bpl\BisSplashFm.pas">
+      <Form>BisSplashForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisSplitter.pas" />
+    <DCCReference Include="core.bpl\BisStandaloneApplication.pas" />
+    <DCCReference Include="core.bpl\BisStatusFm.pas">
+      <Form>BisStatusForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisSvcMgr.pas" />
+    <DCCReference Include="core.bpl\BisSynEdit.pas" />
+    <DCCReference Include="core.bpl\BisSystemInfo.pas" />
+    <DCCReference Include="core.bpl\BisSystemUtils.pas" />
+    <DCCReference Include="core.bpl\BisTasks.pas" />
+    <DCCReference Include="core.bpl\BisThreads.pas" />
+    <DCCReference Include="core.bpl\BisTimedMsgFm.pas">
+      <Form>BisTimedMsgForm</Form>
+    </DCCReference>
+    <DCCReference Include="core.bpl\BisUtils.pas" />
+    <DCCReference Include="core.bpl\BisValues.pas" />
+    <DCCReference Include="core.bpl\BisVariants.pas" />
+    <DCCReference Include="core.bpl\BisVersionInfo.pas" />
+    <DCCReference Include="core.bpl\BisWaitFm.pas" />
+    <DCCReference Include="core.bpl\BisWatchGroups.pas" />
+    <DCCReference Include="dbrtl.dcp" />
+    <DCCReference Include="objects.dcp" />
+    <DCCReference Include="rtl.dcp" />
+    <DCCReference Include="vcl.dcp" />
+    <DCCReference Include="vclimg.dcp" />
+  </ItemGroup>
+</Project>

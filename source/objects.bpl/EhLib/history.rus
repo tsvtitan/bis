@@ -1,0 +1,126 @@
+История EhLib
+
+Версия 3.6c
+
+  * Исправлена прорисовка Inplace редактора Subtitle фильтра в DBGridEh при
+    горизонтальном скролинге.
+  * Исправлена процедура TCustomDBEditEh.Undo и TCustomDBEditEh.Clear.
+  * Исправлена AV ошибка при Master/Detail отношении в DBGridEh подключенному 
+    к Detail DataDataset'у, в режиме, когда поля Detail DataDataset'а 
+    пересоздаются при изменении Master DataDataset'а (Только для Delphi версии 
+    7 и выше).
+  * Исправлена прорисовка 3D ячейки, отображающей состояние ветви дерева, 
+    в режиме TreeView (когда DBGridEh подключен к MemTableEh).
+  * Исправлена AV ошибка при попытки открытия окна редактирования компоненты 
+    TPropStorageEh под Delphi 2005.
+
+  * В AdvTech\MemTableEh: Автоинкрементные поля создаются того же типа что и 
+    и исходные в DataDriver'е.
+    Имзменены типы событий OnBuildDataStruct, OnProduceDataReader, 
+    OnAssignFieldValue, OnReadRecord, OnRefreshRecord, OnUpdateRecord, 
+    OnUpdateError,
+    В TDataDriverEh добавлено свойство DynaSQLParams типа DynaSQLParamsEh.
+    Используется для динамического построения текстов запросов на обновление.
+    Свойство ExternalData переименовано в ExternalMemData.
+    Сортировка данных в TMemTableEh производится на уровне RecordsList, 
+    т.е. физический массив записей TRecordsList не сортируется.
+    Добавлен новый тип поля: TRefObjectField. Используется для хранения в 
+    записях TMemTableEh указателей на TObject.
+
+Версия 3.6b
+
+  * Исправлена прорисовка EditButtons при Ctl3D = False.
+  * Исправлена независимость от верхнего/нижнего регистра букв в 
+	TCustomDBComboBoxEh.KeyItems. Теперь зависит от регистра.
+  * Исправлена ошибка прорисовки ячейки при работе с большими числами в 
+    DBGridEh.
+  * Исправлена ошибка незаполнения ячейки при выборе из MRUList и 
+    установленном dghEnterAsTab.
+  * Выставление оптимальной ширины колонки учитывает картинки из 
+    Column.ImageList.
+  * В компоненте TDBLookupComboboxEh свойство Tooltips вынесено в published.
+  * Исправлена ошибка преобразования типа когда TPreviewBox помещен во Frame.
+
+Версия 3.6
+
+  + Добавлена поддержка Delphi 2005 (Под VCL.Win32 и VCL.NET).
+
+  + Добавлено свойство Tooltips в TDBEditEh, TDBDateTimeEditEh, TDBNumberEditEh,
+     TDBLookupComboboxEh. Позволяет показывать весь текст edit control'а в
+     специальном окне подсказок если текст не умещается в видимую область. Текст
+     выводится когда курсор мыши находится над окном редактирования.
+
+  В TDBGridEh
+    + Добалвены свойства OddRowColor и EvenRowColor для вывода четных и нечетных
+      строк различными цветами. Это работает только когда DataSet поддерживает
+      нумерацию записей (DataSet.IsSequenced = True) и DataSet.RecNo возвращает 
+      правильную информацию.
+
+    + Добавлено значение dghRecordMoving в тип TDBGridEhOption (свойство 
+      OptionsEh). Разрешает перемещать записи в dataset'е. Запись перемещается 
+      нажатием и перемещением мыши над колонной указателя записей. По умолчанию 
+      Grid вызывает TDatasetFeaturesEh.MoveRecords. Код TDatasetFeaturesEh.MoveRecords
+      сохраняет значения полей записи, удаляют запись и добавляет новую запись
+      в позицию, заданную параметром RecNo.
+
+    + Добавлено событие OnMoveRecords типа TGridMoveRecordsEventEh.
+        TGridMoveRecordsEventEh = function(Sender: TObject; BookmarkList: TStrings;
+        ToRecNo: Longint; TreeLevel: Integer; CheckOnly: Boolean): Boolean of object;
+      BookmarkList это список букмарков которые надо переместить. 
+      ToRecNo это номер записи в которую надо переместить.
+      TreeLevel это уровень в дереве в который надо переместить, используется только
+       когда грид поключен к MemTableEh.
+      CheckOnly - определеят что функция должна возвратить результат, возможно ли 
+       переместить букмарки в запись ToRecNo, но не перемещать сами букмарки.
+
+    + Добавлено событие OnSelectionChanged. Происходит, после того как 
+      multiselected область была изменена.
+
+    * В AdvTech\MemTableEh: Добавлена возможность фильтрации данных в режиме дерева,
+      использования общих данных несколькими датасетами и перетаскивание записей 
+      внутри дерева в режиме dghRecordMoving.
+
+Версия 3.5
+
+   + Добавлено свойство HighlightRequired в компоненты TDBEditEh, TDBDateTimeEditEh, 
+     TDBNumberEditEh, TDBLookupComboboxEh и в объект TColumnEh, TColumnDefValuesEh. Свойство 
+     определяет необходимость рисования пунктирной красной линии под редактором ввода текста 
+     для обязательных полей (когда TField.Required = True и поле пусто).
+
+   + Добавлено событие OnCheckDrawRequiredState в TDBEditEh, TDBDateTimeEditEh, 
+     TDBNumberEditEh, TDBLookupComboboxEh и в объект TColumnEh. Событие запрашивает 
+     необходимость рисования состояние RequiredState (пунктирная красная линия под 
+     редактором ввода текста).
+
+   + Добавлено свойство Layout: TTextLayout в TColumnEh. Свойство задает вертикальное 
+     выравнивание текста в ячейке грида.
+
+   + Добавлено свойство HideDuplicates: Boolean в TColumnEh. Свойство определяет скрывать 
+     ли повторяющиеся значения в столбце.
+
+   * Изменено отображение 3D границ в гриде при работе программы в режиме поддержки стилий XP.
+
+   * Процедура ExcecuteDBGridEhFindDialog переименована в ExecuteDBGridEhFindDialog.
+
+   * В AdvTech\MemTableEh: Добавлены индексы и автогененрация списка значений для 
+     выпадающем окна в ачейках фильтра.
+
+Версия 3.4
+
+  + Добавлена поддержка Delphi 8 (VCL.NET).
+
+  В  TDBGridEh
+   + Добавлено свойство ToolTips в Footer и в ColumnDefValues.Footer.
+   + Добавлено свойство SumValue: Variant в TColumnFooterEh.
+
+   + Добавлено свойство ShowImageAndText в TColumnEh. Позволяет выводить Изображение из ImageList 
+     и текст из поля в ячейке грида одновременно. Устанавливайте ImageIndex в событии OnGetCellParams.
+
+  В TCustomDBEditEh
+   + Добавлено свойство Images: TCustomImageList. Изображения из ImageList'а могут выводится в левой 
+    части TDBEditEh, TDBDateTimeEditEh, TDBNumberEditEh or TDBLookupComboboxEh.
+   + Добавлено событие OnGetImageIndex: TGetImageIndexEventEh.
+        TGetImageIndexEventEh = procedure(Sender: TObject; var ImageIndex: Integer) of object;
+     Событие вызывается когда Text or Value в TCustomDBEditEh изменяется. Устанавливайте ImageIndex 
+     в зависимости от Text or Value.
+

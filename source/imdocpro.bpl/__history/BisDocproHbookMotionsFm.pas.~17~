@@ -1,0 +1,72 @@
+unit BisDocproHbookMotionsFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, BisDataGridFm, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList, DBCtrls;
+
+type
+  TBisDocproHbookMotionsForm = class(TBisDataGridForm)
+    PanelControls: TPanel;
+    GroupBoxControls: TGroupBox;
+    PanelDescription: TPanel;
+    DBMemoDescription: TDBMemo;
+  private
+    { Private declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisDocproHbookMotionsFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisDocproHbookMotionsForm: TBisDocproHbookMotionsForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisFilterGroups, BisDocproHbookMotionEditFm;
+
+{ TBisDocproHbookMotionsFormIface }
+
+constructor TBisDocproHbookMotionsFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisDocproHbookMotionsForm;
+  InsertClass:=TBisDocproHbookMotionInsertFormIface;
+  UpdateClass:=TBisDocproHbookMotionUpdateFormIface;
+  DeleteClass:=TBisDocproHbookMotionDeleteFormIface;
+  Permissions.Enabled:=true;
+  Available:=true;
+  ProviderName:='S_MOTIONS';
+  with FieldNames do begin
+    AddKey('MOTION_ID');
+    AddInvisible('POSITION_ID');
+    AddInvisible('DOC_ID');
+    AddInvisible('DESCRIPTION');
+    AddInvisible('ACCOUNT_ID');
+    Add('DOC_FULL_NAME','Документ',200);
+    Add('DATE_ISSUE','Дата передачи',110);
+    Add('DATE_PROCESS','Дата выполнения',110);
+
+  end;
+  Orders.Add('DATE_Motion');
+  Orders.Add('NUM');
+end;
+
+{ TBiDocproHbookMotionsForm }
+
+constructor TBisDocproHbookMotionsForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  if Assigned(DataFrame) then begin
+    DBMemoDescription.DataSource:=DataFrame.DataSource;
+  end;
+end;
+
+end.

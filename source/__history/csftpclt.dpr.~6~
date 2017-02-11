@@ -1,0 +1,16 @@
+library csftpclt;
+
+uses
+  ComServ,
+  BisCsFtpClient in 'csftpclt.dll\BisCsFtpClient.pas';
+
+{$R *.res}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+  
+begin
+end.

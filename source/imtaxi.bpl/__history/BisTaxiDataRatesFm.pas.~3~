@@ -1,0 +1,54 @@
+unit BisTaxiDataRatesFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, BisFm, ActnList,
+  BisDataGridFm;
+
+type                                                                                                    
+  TBisTaxiDataRatesForm = class(TBisDataGridForm)
+  end;
+
+  TBisTaxiDataRatesFormIface=class(TBisDataGridFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisTaxiDataRatesForm: TBisTaxiDataRatesForm;
+
+implementation
+
+{$R *.dfm}
+
+uses BisUtils, BisTaxiDataRateEditFm, BisConsts;
+
+{ TBisTaxiDataRatesFormIface }
+
+constructor TBisTaxiDataRatesFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisTaxiDataRatesForm;
+  FilterClass:=TBisTaxiDataRateFilterFormIface;
+  InsertClass:=TBisTaxiDataRateInsertFormIface;
+  UpdateClass:=TBisTaxiDataRateUpdateFormIface;
+  DeleteClass:=TBisTaxiDataRateDeleteFormIface;
+  Permissions.Enabled:=true;
+//  Available:=true;
+  ProviderName:='S_RATES';
+  with FieldNames do begin
+    AddKey('RATE_ID');
+    AddInvisible('PRIORITY');
+    AddInvisible('TYPE_RATE');
+    AddInvisible('PERIOD');
+    AddInvisible('RATE_SUM');
+    AddInvisible('PROC_NAME');
+    Add('NAME','Наименование',100);
+    Add('DESCRIPTION','Описание',250);
+  end;
+  Orders.Add('PRIORITY');
+end;
+
+end.

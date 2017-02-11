@@ -1,0 +1,32 @@
+// ----------------------------------------------------------------------
+// Test FORMS
+//
+// for TWindow definition, see uDmClasses
+// ----------------------------------------------------------------------
+
+var w: TWindow;
+
+w := TWindow.Create(10, 10, 'Hello World');
+
+ShowMessage('Window opened. Going to change position and size...');
+
+var p: TWindowParams;
+
+p.Left := 200;
+p.Top := 200;
+p.Width := 300;
+p.Height := 50;
+p.Caption := 'Hello world - moved';
+w.SetParams(p);
+
+ShowMessage('Window moved...');
+
+var v: TWindow;
+
+v := TWindow(w.NewInstance);
+
+ShowMessage('Child window created...');
+
+v.Free;
+
+w.Free;

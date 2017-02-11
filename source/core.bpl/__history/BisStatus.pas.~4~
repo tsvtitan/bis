@@ -1,0 +1,18 @@
+unit BisStatus;
+
+interface
+
+type
+
+  TBisStatusProgressEvent=procedure (const AMin,AMax,APosition: Integer; var ABreaked: Boolean) of object;
+
+  TBisStatus=class
+  public
+    procedure Progress(const AMin,AMax,APosition: Integer; var ABreaked: Boolean);
+
+    property OnProgress: T
+  end;
+
+implementation
+
+end.

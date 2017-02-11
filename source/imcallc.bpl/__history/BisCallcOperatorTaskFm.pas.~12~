@@ -1,0 +1,38 @@
+unit BisCallcOperatorTaskFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls,
+  BisCallcTaskFm;
+
+type
+  TBisCallcOperatorTaskForm = class(TBisCallcTaskForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  TBisCallcOperatorTaskFormIface=class(TBisCallcTaskFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisCallcOperatorTaskForm: TBisCallcOperatorTaskForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisCallcOperatorTaskFormIface }
+
+constructor TBisCallcOperatorTaskFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+end;
+
+end.

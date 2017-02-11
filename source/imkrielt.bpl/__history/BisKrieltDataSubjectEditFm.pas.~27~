@@ -1,0 +1,333 @@
+unit BisKrieltDataSubjectEditFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ExtDlgs, ImgList,
+  BisFm, BisDataEditFm, BisParam, BisControls;
+
+type
+  TBisKrieltDataSubjectEditForm = class(TBisDataEditForm)
+    LabelName: TLabel;
+    EditName: TEdit;
+    LabelParent: TLabel;
+    EditParent: TEdit;
+    ButtonParent: TButton;
+    LabelDescription: TLabel;
+    MemoDescription: TMemo;
+    LabelPriority: TLabel;
+    EditPriority: TEdit;
+    OpenPictureDialog: TOpenPictureDialog;
+    SavePictureDialog: TSavePictureDialog;
+    procedure ButtonSaveClick(Sender: TObject);
+  private
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure ChangeParam(Param: TBisParam); override;
+    procedure Execute; override;
+    function ChangesExists: Boolean; override;
+    procedure BeforeShow; override;
+  end;
+
+  TBisKrieltDataSubjectEditFormIface=class(TBisDataEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataSubjectInsertFormIface=class(TBisKrieltDataSubjectEditFormIface)
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataSubjectInsertChildFormIface=class(TBisKrieltDataSubjectEditFormIface)
+  protected
+    function CreateForm: TBisForm; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataSubjectUpdateFormIface=class(TBisKrieltDataSubjectEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+  TBisKrieltDataSubjectDeleteFormIface=class(TBisKrieltDataSubjectEditFormIface)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+var
+  BisKrieltDataSubjectEditForm: TBisKrieltDataSubjectEditForm;
+
+implementation
+
+uses BisProvider,
+     BisFilterGroups, BisUtils, BisCore,
+     BisKrieltDataSubjectsFm;
+
+{$R *.dfm}
+
+{ TBisKrieltDataSubjectEditFormIface }
+
+constructor TBisKrieltDataSubjectEditFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FormClass:=TBisKrieltDataSubjectEditForm;
+  with Params do begin
+    with AddKey('SUBJECT_ID') do begin
+      Older('OLD_SUBJECT_ID');
+    end;
+    AddEditDataSelect('PARENT_ID','EditParent','LabelParent','ButtonParent',
+                      TBisKrieltDataSubjectsFormIface,'PARENT_NAME',false,false,'Subject_ID','NAME');
+    AddEdit('NAME','EditName','LabelName',true);
+    AddMemo('DESCRIPTION','MemoDescription','LabelDescription',false);
+    AddEditInteger('PRIORITY','EditPriority','LabelPriority',true);
+  end;
+end;
+
+{ TBisKrieltDataSubjectInsertFormIface }
+
+constructor TBisKrieltDataSubjectInsertFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_SUBJECT';
+  Caption:='Создать тему';
+end;
+
+function TBisKrieltDataSubjectInsertFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then begin
+    if Assigned(ParentProvider) and ParentProvider.Active and not ParentProvider.IsEmpty then begin
+      with LastForm.Provider do begin
+        Params.ParamByName('PARENT_ID').SetNewValue(ParentProvider.FieldByName('PARENT_ID').Value);
+        Params.ParamByName('PARENT_NAME').SetNewValue(ParentProvider.FieldByName('PARENT_NAME').Value);
+      end;
+    end;
+  end;
+end;
+
+{ TBisKrieltDataSubjectInsertChildFormIface }
+
+constructor TBisKrieltDataSubjectInsertChildFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='I_SUBJECT';
+  Caption:='Создать подтему';
+end;
+
+
+function TBisKrieltDataSubjectInsertChildFormIface.CreateForm: TBisForm;
+begin
+  Result:=inherited CreateForm;
+  if Assigned(Result) then begin
+    if Assigned(ParentProvider) and ParentProvider.Active and not ParentProvider.IsEmpty then begin
+      with LastForm.Provider do begin
+        Params.ParamByName('PARENT_ID').SetNewValue(ParentProvider.FieldByName('SUBJECT_ID').Value);
+        Params.ParamByName('PARENT_NAME').SetNewValue(ParentProvider.FieldByName('NAME').Value);
+      end;
+    end;
+  end;
+end;
+
+{ TBisKrieltDataSubjectUpdateFormIface }
+
+constructor TBisKrieltDataSubjectUpdateFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='U_SUBJECT';
+end;
+
+{ TBisKrieltDataSubjectDeleteFormIface }
+
+constructor TBisKrieltDataSubjectDeleteFormIface.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  ProviderName:='D_SUBJECT';
+end;
+
+{ TBisKrieltDataSubjectEditForm }
+
+constructor TBisKrieltDataSubjectEditForm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+procedure TBisKrieltDataSubjectEditForm.ChangeParam(Param: TBisParam);
+begin
+  inherited ChangeParam(Param);
+end;
+
+function TBisKrieltDataSubjectEditForm.ChangesExists: Boolean;
+begin
+  Result:=inherited ChangesExists;
+end;
+
+procedure TBisKrieltDataSubjectEditForm.BeforeShow;
+begin
+  inherited BeforeShow;
+end;
+
+procedure TBisKrieltDataSubjectEditForm.ButtonSaveClick(Sender: TObject);
+var
+  Param: TBisParam;
+begin
+  Param:=Provider.Params.Find('PICTURE');
+  if Assigned(Param) then begin
+    SavePictureDialog.FileName:=EditName.Text;
+    if SavePictureDialog.Execute then
+      Param.SaveToFile(SavePictureDialog.FileName);
+  end;
+end;
+
+procedure TBisKrieltDataSubjectEditForm.RefreshApplications;
+var
+  P: TBisProvider;
+  Obj: TBisApplicationInfo;
+begin
+  ClearStrings(CheckListBoxApplications.Items);
+  CheckListBoxApplications.Items.BeginUpdate;
+  P:=TBisProvider.Create(nil);
+  try
+    P.ProviderName:='S_APPLICATIONS';
+    with P.FieldNames do begin
+      AddInvisible('APPLICATION_ID');
+      AddInvisible('NAME');
+    end;
+    P.Open;
+    if P.Active then begin
+      P.First;
+      while not P.Eof do begin
+        Obj:=TBisApplicationInfo.Create;
+        Obj.ApplicationId:=P.FieldByName('APPLICATION_ID').Value;
+        CheckListBoxApplications.Items.AddObject(P.FieldByName('NAME').AsString,Obj);
+        P.Next;
+      end;
+    end;
+  finally
+    P.Free;
+    CheckListBoxApplications.Items.EndUpdate;
+  end;
+end;
+
+procedure TBisKrieltDataSubjectEditForm.RefreshApplicationSubjects;
+var
+  P: TBisProvider;
+  Param: TBisParam;
+  ApplicationId: Variant;
+  i: Integer;
+  Obj: TBisApplicationInfo;
+begin
+  Param:=Provider.Params.Find('Subject_ID');
+  if Assigned(Param) and not Param.Empty then begin
+    CheckListBoxApplications.Items.BeginUpdate;
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='S_APPLICATION_SubjectS';
+      P.FieldNames.AddInvisible('APPLICATION_ID');
+      P.FilterGroups.Add.Filters.Add('Subject_ID',fcEqual,Param.Value);
+      P.Open;
+      if P.Active then begin
+        P.First;
+        while not P.Eof do begin
+          ApplicationId:=P.FieldByName('APPLICATION_ID').Value;
+          for i:=0 to CheckListBoxApplications.Items.Count-1 do begin
+            Obj:=TBisApplicationInfo(CheckListBoxApplications.Items.Objects[i]);
+            if VarSameValue(ApplicationId,Obj.ApplicationId) then begin
+              CheckListBoxApplications.Checked[i]:=true;
+            end;
+          end;
+          P.Next;
+        end;
+      end;
+    finally
+      P.Free;
+      CheckListBoxApplications.Items.EndUpdate;
+    end;
+  end;
+end;
+
+procedure TBisKrieltDataSubjectEditForm.DeleteApplicationSubjects;
+var
+  P: TBisProvider;
+  Obj: TBisApplicationInfo;
+  Param: TBisParam;
+  i: Integer;
+begin
+  Param:=Provider.Params.Find('Subject_ID');
+  if Assigned(Param) and not Param.Empty then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='D_APPLICATION_Subject';
+      P.WithWaitCursor:=false;
+      with P.Params do begin
+        AddInvisible('APPLICATION_ID').Older('OLD_APPLICATION_ID');
+        with AddInvisible('Subject_ID') do begin
+          Older('OLD_Subject_ID');
+          SetNewValue(Param.Value);
+        end;
+      end;
+      for i:=0 to CheckListBoxApplications.Items.Count-1 do begin
+        Obj:=TBisApplicationInfo(CheckListBoxApplications.Items.Objects[i]);
+        P.Params.ParamByName('APPLICATION_ID').SetNewValue(Obj.ApplicationId);
+        P.Execute;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+procedure TBisKrieltDataSubjectEditForm.InsertApplicationSubjects;
+var
+  P: TBisProvider;
+  Obj: TBisApplicationInfo;
+  Param: TBisParam;
+  i: Integer;
+begin
+  Param:=Provider.Params.Find('Subject_ID');
+  if Assigned(Param) and not Param.Empty then begin
+    P:=TBisProvider.Create(nil);
+    try
+      P.ProviderName:='I_APPLICATION_Subject';
+      P.WithWaitCursor:=false;
+      with P.Params do begin
+        AddInvisible('APPLICATION_ID');
+        AddInvisible('Subject_ID').SetNewValue(Param.Value);
+      end;
+      for i:=0 to CheckListBoxApplications.Items.Count-1 do begin
+        if CheckListBoxApplications.Checked[i] then begin
+          Obj:=TBisApplicationInfo(CheckListBoxApplications.Items.Objects[i]);
+          P.Params.ParamByName('APPLICATION_ID').SetNewValue(Obj.ApplicationId);
+          P.Execute;
+        end;
+      end;
+    finally
+      P.Free;
+    end;
+  end;
+end;
+
+procedure TBisKrieltDataSubjectEditForm.Execute;
+var
+  OldCursor: TCursor;
+begin
+  OldCursor:=Screen.Cursor;
+  Screen.Cursor:=crHourGlass;
+  try
+    inherited Execute;
+    if Mode in [emUpdate] then
+      DeleteApplicationSubjects;
+    if Mode in [emInsert,emUpdate,emDuplicate] then
+    InsertApplicationSubjects;
+    if CheckBoxRefresh.Checked then
+      Core.RefreshContents;
+  finally
+    Screen.Cursor:=OldCursor;
+  end;
+end;
+
+end.

@@ -1,0 +1,40 @@
+unit BisIngitMapFm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ComCtrls,
+
+  BisMapFm, BisMapFrm;
+
+type
+  TBisIngitMapForm = class(TBisMapForm)
+  private
+    { Private declarations }
+  protected
+    function GetMapFrameClass: TBisMapFrameClass; override;
+  public
+    { Public declarations }
+  end;
+
+  TBisIngitMapFormIface=class(TBisReportFormIface)
+  protected
+    class function GetFormClass: TBisFormClass; override;
+  end;
+
+var
+  BisIngitMapForm: TBisIngitMapForm;
+
+implementation
+
+{$R *.dfm}
+
+{ TBisIngitMapForm }
+
+function TBisIngitMapForm.GetMapFrameClass: TBisMapFrameClass;
+begin
+  Result:=nil;
+end;
+
+end.

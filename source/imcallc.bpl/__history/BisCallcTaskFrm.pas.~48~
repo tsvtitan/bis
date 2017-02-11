@@ -1,0 +1,102 @@
+unit BisCallcTaskFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Dialogs,
+  BisFrm;
+
+type
+  TBisCallcTaskFrame = class(TBisFrame)
+  private
+    FDealId: Variant;
+    FTaskId: Variant;
+    FDealNum: String;
+    FTaskName: String;
+    FActionId: Variant;
+    { Private declarations }
+  protected
+    function DealExists: Boolean;
+    procedure SetDealNum(const Value: String); virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure RefreshControls; virtual;
+    function CheckControls: Boolean; virtual;
+    procedure SaveChanges; virtual;
+    function ExecuteTask(PerformerId: Variant; ResultId: Variant; Description: String;
+                         DateTask: TDateTime; PlanId: Variant): Boolean; virtual;
+
+    property DealId: Variant read FDealId write FDealId;
+    property DealNum: String read FDealNum write SetDealNum;
+    property TaskId: Variant read FTaskId write FTaskId;
+    property TaskName: String read FTaskName write FTaskName;
+    property ActionId: Variant read FActionId write FActionId;
+  end;
+
+  TBisCallcTaskFrameClass=class of TBisCallcTaskFrame;
+
+implementation
+
+uses BisProvider, BisCore, BisUtils;
+
+{$R *.dfm}
+
+{ TBisCallcTaskFrame }
+
+constructor TBisCallcTaskFrame.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FDealId:=Null; 
+end;
+
+function TBisCallcTaskFrame.DealExists: Boolean;
+begin
+  Result:=not VarIsNull(FDealId);
+end;
+
+function TBisCallcTaskFrame.ExecuteTask(PerformerId: Variant; ResultId: Variant; Description: String;
+                                        DateTask: TDateTime; PlanId: Variant): Boolean;
+var
+  P: TBisProvider;                                        
+begin
+  P:=TBisProvider.Create(nil);
+  try
+    P.ProviderName:='EXECUTE_TASK';
+    with P.Params do begin
+      AddInvisible('TASK_ID').Value:=FTaskId;
+      AddInvisible('ACCOUNT_ID').Value:=Core.AccountId;
+      AddInvisible('PERFORMER_ID').Value:=PerformerId;
+      AddInvisible('RESULT_ID').Value:=ResultId;
+      AddInvisible('DESCRIPTION').Value:=iff(Description<>'',Description,NULL);
+      AddInvisible('DATE_TASK').Value:=DateTask;
+      AddInvisible('PLAN_ID').Value:=PlanId;
+    end;
+    P.Execute;
+    Result:=P.Success and Frame.ExecuteTask(APerformerId,Obj.ResultId,MemoDescription.Lines.Text,DateTask,APlanId);
+    FTaskId:=Null;
+  finally
+    P.Free;
+  end;
+end;
+
+procedure TBisCallcTaskFrame.RefreshControls;
+begin
+end;
+
+procedure TBisCallcTaskFrame.SaveChanges;
+begin
+end;
+
+procedure TBisCallcTaskFrame.SetDealNum(const Value: String);
+begin
+  FDealNum := Value;
+end;
+
+function TBisCallcTaskFrame.CheckControls: Boolean;
+begin
+  Result:=true;
+end;
+
+
+end.

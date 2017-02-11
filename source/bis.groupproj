@@ -1,0 +1,324 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{e801eeea-de83-4d78-a6cf-22fc13306764}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="cmhttp.dproj" />
+    <Projects Include="cmibase.dproj" />
+    <Projects Include="cmx.dproj" />
+    <Projects Include="cmxibase.dproj" />
+    <Projects Include="cmxmssql.dproj" />
+    <Projects Include="cmxmysql.dproj" />
+    <Projects Include="cmxora.dproj" />
+    <Projects Include="core.dproj" />
+    <Projects Include="imdesign.dproj" />
+    <Projects Include="imexport.dproj" />
+    <Projects Include="imimport.dproj" />
+    <Projects Include="imreg.dproj" />
+    <Projects Include="imsecure.dproj" />
+    <Projects Include="imtest.dproj" />
+    <Projects Include="imutil.dproj" />
+    <Projects Include="loader.dproj" />
+    <Projects Include="mpmingit.dproj" />
+    <Projects Include="objects.dproj" />
+    <Projects Include="omaudio.dproj" />
+    <Projects Include="omcom.dproj" />
+    <Projects Include="omnet.dproj" />
+    <Projects Include="omstd.dproj" />
+    <Projects Include="omtapi.dproj" />
+    <Projects Include="pmtest.dproj" />
+    <Projects Include="rpmfast.dproj" />
+    <Projects Include="scmdws.dproj" />
+    <Projects Include="smhttp.dproj" />
+    <Projects Include="udfibase.dproj" />
+    <Projects Include="udfmysql.dproj" />
+    <Projects Include="update.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+<BorlandProject xmlns=""><Default.Personality></Default.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="loader">
+    <MSBuild Projects="loader.dproj" Targets="" />
+  </Target>
+  <Target Name="loader:Clean">
+    <MSBuild Projects="loader.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="loader:Make">
+    <MSBuild Projects="loader.dproj" Targets="Make" />
+  </Target>
+  <Target Name="update">
+    <MSBuild Projects="update.dproj" Targets="" />
+  </Target>
+  <Target Name="update:Clean">
+    <MSBuild Projects="update.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="update:Make">
+    <MSBuild Projects="update.dproj" Targets="Make" />
+  </Target>
+  <Target Name="objects">
+    <MSBuild Projects="objects.dproj" Targets="" />
+  </Target>
+  <Target Name="objects:Clean">
+    <MSBuild Projects="objects.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="objects:Make">
+    <MSBuild Projects="objects.dproj" Targets="Make" />
+  </Target>
+  <Target Name="core">
+    <MSBuild Projects="core.dproj" Targets="" />
+  </Target>
+  <Target Name="core:Clean">
+    <MSBuild Projects="core.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="core:Make">
+    <MSBuild Projects="core.dproj" Targets="Make" />
+  </Target>
+  <Target Name="scmdws">
+    <MSBuild Projects="scmdws.dproj" Targets="" />
+  </Target>
+  <Target Name="scmdws:Clean">
+    <MSBuild Projects="scmdws.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="scmdws:Make">
+    <MSBuild Projects="scmdws.dproj" Targets="Make" />
+  </Target>
+  <Target Name="rpmfast">
+    <MSBuild Projects="rpmfast.dproj" Targets="" />
+  </Target>
+  <Target Name="rpmfast:Clean">
+    <MSBuild Projects="rpmfast.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="rpmfast:Make">
+    <MSBuild Projects="rpmfast.dproj" Targets="Make" />
+  </Target>
+  <Target Name="mpmingit">
+    <MSBuild Projects="mpmingit.dproj" Targets="" />
+  </Target>
+  <Target Name="mpmingit:Clean">
+    <MSBuild Projects="mpmingit.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="mpmingit:Make">
+    <MSBuild Projects="mpmingit.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omstd">
+    <MSBuild Projects="omstd.dproj" Targets="" />
+  </Target>
+  <Target Name="omstd:Clean">
+    <MSBuild Projects="omstd.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omstd:Make">
+    <MSBuild Projects="omstd.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omnet">
+    <MSBuild Projects="omnet.dproj" Targets="" />
+  </Target>
+  <Target Name="omnet:Clean">
+    <MSBuild Projects="omnet.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omnet:Make">
+    <MSBuild Projects="omnet.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omcom">
+    <MSBuild Projects="omcom.dproj" Targets="" />
+  </Target>
+  <Target Name="omcom:Clean">
+    <MSBuild Projects="omcom.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omcom:Make">
+    <MSBuild Projects="omcom.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omaudio">
+    <MSBuild Projects="omaudio.dproj" Targets="" />
+  </Target>
+  <Target Name="omaudio:Clean">
+    <MSBuild Projects="omaudio.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omaudio:Make">
+    <MSBuild Projects="omaudio.dproj" Targets="Make" />
+  </Target>
+  <Target Name="omtapi">
+    <MSBuild Projects="omtapi.dproj" Targets="" />
+  </Target>
+  <Target Name="omtapi:Clean">
+    <MSBuild Projects="omtapi.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="omtapi:Make">
+    <MSBuild Projects="omtapi.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmibase">
+    <MSBuild Projects="cmibase.dproj" Targets="" />
+  </Target>
+  <Target Name="cmibase:Clean">
+    <MSBuild Projects="cmibase.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmibase:Make">
+    <MSBuild Projects="cmibase.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmx">
+    <MSBuild Projects="cmx.dproj" Targets="" />
+  </Target>
+  <Target Name="cmx:Clean">
+    <MSBuild Projects="cmx.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmx:Make">
+    <MSBuild Projects="cmx.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmxmysql">
+    <MSBuild Projects="cmxmysql.dproj" Targets="" />
+  </Target>
+  <Target Name="cmxmysql:Clean">
+    <MSBuild Projects="cmxmysql.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmxmysql:Make">
+    <MSBuild Projects="cmxmysql.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmxmssql">
+    <MSBuild Projects="cmxmssql.dproj" Targets="" />
+  </Target>
+  <Target Name="cmxmssql:Clean">
+    <MSBuild Projects="cmxmssql.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmxmssql:Make">
+    <MSBuild Projects="cmxmssql.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmxibase">
+    <MSBuild Projects="cmxibase.dproj" Targets="" />
+  </Target>
+  <Target Name="cmxibase:Clean">
+    <MSBuild Projects="cmxibase.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmxibase:Make">
+    <MSBuild Projects="cmxibase.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmxora">
+    <MSBuild Projects="cmxora.dproj" Targets="" />
+  </Target>
+  <Target Name="cmxora:Clean">
+    <MSBuild Projects="cmxora.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmxora:Make">
+    <MSBuild Projects="cmxora.dproj" Targets="Make" />
+  </Target>
+  <Target Name="cmhttp">
+    <MSBuild Projects="cmhttp.dproj" Targets="" />
+  </Target>
+  <Target Name="cmhttp:Clean">
+    <MSBuild Projects="cmhttp.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="cmhttp:Make">
+    <MSBuild Projects="cmhttp.dproj" Targets="Make" />
+  </Target>
+  <Target Name="pmtest">
+    <MSBuild Projects="pmtest.dproj" Targets="" />
+  </Target>
+  <Target Name="pmtest:Clean">
+    <MSBuild Projects="pmtest.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="pmtest:Make">
+    <MSBuild Projects="pmtest.dproj" Targets="Make" />
+  </Target>
+  <Target Name="smhttp">
+    <MSBuild Projects="smhttp.dproj" Targets="" />
+  </Target>
+  <Target Name="smhttp:Clean">
+    <MSBuild Projects="smhttp.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="smhttp:Make">
+    <MSBuild Projects="smhttp.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imsecure">
+    <MSBuild Projects="imsecure.dproj" Targets="" />
+  </Target>
+  <Target Name="imsecure:Clean">
+    <MSBuild Projects="imsecure.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imsecure:Make">
+    <MSBuild Projects="imsecure.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imdesign">
+    <MSBuild Projects="imdesign.dproj" Targets="" />
+  </Target>
+  <Target Name="imdesign:Clean">
+    <MSBuild Projects="imdesign.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imdesign:Make">
+    <MSBuild Projects="imdesign.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imimport">
+    <MSBuild Projects="imimport.dproj" Targets="" />
+  </Target>
+  <Target Name="imimport:Clean">
+    <MSBuild Projects="imimport.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imimport:Make">
+    <MSBuild Projects="imimport.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imexport">
+    <MSBuild Projects="imexport.dproj" Targets="" />
+  </Target>
+  <Target Name="imexport:Clean">
+    <MSBuild Projects="imexport.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imexport:Make">
+    <MSBuild Projects="imexport.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imutil">
+    <MSBuild Projects="imutil.dproj" Targets="" />
+  </Target>
+  <Target Name="imutil:Clean">
+    <MSBuild Projects="imutil.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imutil:Make">
+    <MSBuild Projects="imutil.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imreg">
+    <MSBuild Projects="imreg.dproj" Targets="" />
+  </Target>
+  <Target Name="imreg:Clean">
+    <MSBuild Projects="imreg.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imreg:Make">
+    <MSBuild Projects="imreg.dproj" Targets="Make" />
+  </Target>
+  <Target Name="imtest">
+    <MSBuild Projects="imtest.dproj" Targets="" />
+  </Target>
+  <Target Name="imtest:Clean">
+    <MSBuild Projects="imtest.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="imtest:Make">
+    <MSBuild Projects="imtest.dproj" Targets="Make" />
+  </Target>
+  <Target Name="udfmysql">
+    <MSBuild Projects="udfmysql.dproj" Targets="" />
+  </Target>
+  <Target Name="udfmysql:Clean">
+    <MSBuild Projects="udfmysql.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="udfmysql:Make">
+    <MSBuild Projects="udfmysql.dproj" Targets="Make" />
+  </Target>
+  <Target Name="udfibase">
+    <MSBuild Projects="udfibase.dproj" Targets="" />
+  </Target>
+  <Target Name="udfibase:Clean">
+    <MSBuild Projects="udfibase.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="udfibase:Make">
+    <MSBuild Projects="udfibase.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="loader;update;objects;core;scmdws;rpmfast;mpmingit;omstd;omnet;omcom;omaudio;omtapi;cmibase;cmx;cmxmysql;cmxmssql;cmxibase;cmxora;cmhttp;pmtest;smhttp;imsecure;imdesign;imimport;imexport;imutil;imreg;imtest;udfmysql;udfibase" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="loader:Clean;update:Clean;objects:Clean;core:Clean;scmdws:Clean;rpmfast:Clean;mpmingit:Clean;omstd:Clean;omnet:Clean;omcom:Clean;omaudio:Clean;omtapi:Clean;cmibase:Clean;cmx:Clean;cmxmysql:Clean;cmxmssql:Clean;cmxibase:Clean;cmxora:Clean;cmhttp:Clean;pmtest:Clean;smhttp:Clean;imsecure:Clean;imdesign:Clean;imimport:Clean;imexport:Clean;imutil:Clean;imreg:Clean;imtest:Clean;udfmysql:Clean;udfibase:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="loader:Make;update:Make;objects:Make;core:Make;scmdws:Make;rpmfast:Make;mpmingit:Make;omstd:Make;omnet:Make;omcom:Make;omaudio:Make;omtapi:Make;cmibase:Make;cmx:Make;cmxmysql:Make;cmxmssql:Make;cmxibase:Make;cmxora:Make;cmhttp:Make;pmtest:Make;smhttp:Make;imsecure:Make;imdesign:Make;imimport:Make;imexport:Make;imutil:Make;imreg:Make;imtest:Make;udfmysql:Make;udfibase:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>
